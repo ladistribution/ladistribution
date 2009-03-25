@@ -1,0 +1,21 @@
+<h2>Site Users</h2>
+
+<?php if (empty($this->users)) : ?>
+    
+    <p>None.</p>
+
+<?php else : ?>
+
+    <ul>
+    <?php foreach($this->users as $user) : ?>
+        <li><?php echo $user['screenname'] ?></li>
+    <?php endforeach ?>
+    </ul>
+
+<?php endif ?>
+
+<h3>You can</h3>
+
+<ul>
+    <li><a href="<?php echo $this->url(array('action' => 'new', 'site' => $this->site->id), 'users-action'); ?>">Add a new user</a></li>
+</ul>

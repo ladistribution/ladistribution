@@ -1,0 +1,14 @@
+<h2>Your sites</h2>
+
+<?php if (empty($this->sites) || count($this->sites) == 0) : ?>
+    <p>None</p>
+<?php else : ?>
+<ul>
+    <?php
+    foreach ($this->sites as $id => $site) {
+        $url = $this->url(array('site' => $id), 'site');
+        printf("<li><a href=\"%s\">%s</a></li>", $url, $site['name']);
+    }
+    ?>
+</ul>
+<?php endif ?>

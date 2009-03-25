@@ -1,0 +1,56 @@
+<?php $this->instanceNavigation() ?>
+
+<h2 class="h6e-entry-title">Extensions</h2>
+
+<?php if (isset($this->extension)) : ?>
+
+    <h3>Install <?php echo $this->package->name ?></h3>
+
+    <?php if (isset($this->installed)) : ?>
+
+        <p>This extension is already installed</p>
+
+    <?php else : ?>
+
+        <p>You are going to install an extension. Are you sure?</p>
+
+        <form method="post" action="<?php echo $this->instanceActionUrl('extensions') ?>">
+            <input type="hidden" name="id" value="<?php echo $this->escape($this->instance->path) ?>"/>
+            <input type="hidden" name="add" value="<?php echo $this->escape($this->extension) ?>"/>
+
+            <?php if (!empty($this->preferences)) : ?>
+                <h3>Preferences</h3>
+                <?php $this->preferencesRenderer($this->preferences, array(), 'preferences'); ?>
+            <?php endif ?>
+
+            <?php if (isset($_SERVER['HTTP_REFERER'])) : ?>
+                <input type="hidden" name="referer" value="<?php echo $this->escape($_SERVER['HTTP_REFERER']) ?>"/>
+            <?php endif ?>
+
+            <input type="submit" class="submit" value="Install"/>
+        </form>
+
+    <?php endif ?>
+
+<?php else : ?>
+    
+    <h3>Install an extension</h3>
+    
+    <?php if (isset($this->extensions) && count($this->extensions) > 0) : ?>
+        
+        <ul>
+        <?php
+        foreach ($this->extensions as $id => $extension) {
+            $url = $this->instanceActionUrl('extensions') . '?add=' . $id;
+            printf("<li><a href=\"%s\">%s</a></li>", $url, $extension->name);
+        }
+        ?>
+        </ul>
+    
+    <?php else : ?>
+        
+        <p>No extension available for installation</p>
+        
+    <?php endif; ?>
+
+<?php endif ?>

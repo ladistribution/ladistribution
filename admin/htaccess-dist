@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteBase {PATH}
+RewriteRule !\.(js|ico|txt|gif|jpg|png|css)$ index.php

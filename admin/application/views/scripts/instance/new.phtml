@@ -1,0 +1,33 @@
+<?php if (empty($this->package)) : ?>
+    
+<h2>Add an application</h2>
+
+<ul class="blocks">
+    <?php
+    foreach ($this->packages as $id => $package) {
+        if ($package->type != 'application') {
+            continue;
+        }
+        if ($package->id == 'admin') {
+            continue;
+        }
+        $url = $this->url(array('action' => 'new', 'site' => $this->site->id), 'instances-action') . '?packageId=' . $id;
+        printf("<li class='" . $id . "'><a href=\"%s\">%s</a></li>", $url, $package->name);
+    }
+    ?>
+</ul>
+
+<?php else : ?>
+
+<h2>Deploy a new <?php echo $this->escape($this->package->name) ?> instance</h2>
+
+<form method="post" action="">
+
+    <?php $this->preferencesRenderer($this->preferences, array(), 'preferences'); ?>
+
+    <input type="hidden" name="packageId" value="<?php echo $this->escape($this->package->id) ?>"/>
+    <input type="submit" class="submit" value="Create"/>
+
+</form>
+
+<?php endif ?>
