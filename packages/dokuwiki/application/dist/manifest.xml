@@ -1,0 +1,46 @@
+<package>
+  <id>dokuwiki</id>
+  <name>DokuWiki</name>
+  <version>2009-02-14-20</version>
+  <type>application</type>
+  <installer name="Installer_Dokuwiki" src="./dist/installer.php" />
+  <source>
+      <version>2009-02-14</version>
+      <type>zip</type>
+      <url>http://www.splitbrain.org/_media/projects/dokuwiki/dokuwiki-2009-02-14.tgz</url>
+  </source>
+  <deploy>
+      <origin>plugins</origin>
+      <destination path="public">./lib/plugins/</destination>
+  </deploy>
+  <install>
+      <preference type="text" label="Admin Full Name" name="admin_fullname" defaultValue="Admin"/>
+      <preference type="text" label="Admin Email" name="admin_email" value=""/>
+      <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
+      <preference type="password" label="Admin Password" name="admin_password" value=""/>
+      <preference type="list" label="Initial ACL policy" name="policy">
+          <option value="0" label="Open Wiki (read, write, upload for everyone)" />
+          <option value="1" label="Public Wiki (read for everyone, write and upload for registered users)" />
+          <option value="2" label="Closed Wiki (read, write, upload for registered users only)" />
+      </preference>
+  </install>
+  <configuration>
+      <preference type="text" label="Wiki title" name="title"/>
+      <preference type="text" label="Start page name" name="start" defaultValue="start"/>
+      <preference type="range" label="Number of breadcrumbs" name="breadcrumbs" defaultValue="10" min="0" step="1" max="20"/>
+      <preference type="list" label="License" name="license">
+          <option value="" label="None"/>
+          <option value="cc-by" label="CC Attribution 3.0 Unported"/>
+          <option value="cc-by-nc" label="CC Attribution-Noncommercial 3.0 Unported"/>
+          <option value="cc-by-nc-nd" label="CC Attribution-Noncommercial-No Derivative Works 3.0 Unported"/>
+          <option value="cc-by-nd" label="CC Attribution-No Derivative Works 3.0 Unported"/>
+          <option value="cc-by-sa" label="CC Attribution-Share Alike 3.0 Unported"/>
+          <option value="publicdomain" label="Public Domain"/>
+          <option value="gnufdl" label="GNU Free Documentation License 1.2"/>
+    </preference>
+  </configuration>
+  <backup>
+      <folder path="public">data</folder>
+      <folder path="public">conf</folder>
+  </backup>
+</package>
