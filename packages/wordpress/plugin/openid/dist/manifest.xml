@@ -1,0 +1,10 @@
+<package release="unstable">
+  <id>wordpress-plugin-openid</id>
+  <name>WordPress OpenID plugin</name>
+  <version>3.2.2-6</version>
+  <type>plugin</type>
+  <extend>wordpress</extend>
+  <need>lib-php-openid</need>
+  <directory>wp-content/plugins/openid</directory>
+  <installer name="Installer_Plugin_Openid" src="./dist/installer.php" />
+</package>

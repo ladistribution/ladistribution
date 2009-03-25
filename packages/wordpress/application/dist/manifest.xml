@@ -1,0 +1,29 @@
+<package release="unstable" >
+  <id>wordpress</id>
+  <name>WordPress</name>
+  <version>2.7.1-14</version>
+  <type>application</type>
+  <installer name="Installer_Wordpress" src="./dist/installer.php" />
+  <upstream>
+      <source version="2.7.1" type="tgz">http://wordpress.org/wordpress-2.7.1.tar.gz</source>
+  </upstream>
+  <db>mysql</db>
+  <deploy>
+      <origin>plugins</origin>
+      <destination path="public">./wp-content/plugins/</destination>
+  </deploy>
+  <install>
+      <preference type="text" label="Admin Email" name="admin_email" value=""/>
+      <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
+      <preference type="password" label="Admin Password" name="admin_password" value=""/>
+  </install>
+  <configuration>
+      <preference type="text" label="Blog Name" name="blogname"/>
+      <preference type="text" label="Blog Description" name="blogdescription"/>
+      <preference type="text" label="Admin Email" name="admin_email"/>
+      <preference type="boolean" label="Anyone can register" name="users_can_register" defaultValue="false"/>
+      <preference type="range" label="Post per page" name="posts_per_page" min="1" max="100" step="1"/>
+      <preference type="boolean" label="Enable Atom" name="enable_app"/>
+      <preference type="boolean" label="Enable XML-RPC" name="enable_xmlrpc"/>
+  </configuration>
+</package>

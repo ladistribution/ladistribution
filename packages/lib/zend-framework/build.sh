@@ -7,7 +7,7 @@ ZIP="$NAME.zip"
 curl http://framework.zend.com/releases/$VERSION/$ZIP > $ZIP
 unzip $ZIP
 rm $ZIP
-mv $NAME/library $FOLDER manifest.xml
+mv $NAME/library $FOLDER
 rm -rf $NAME
 # Create zip package
 zip -rqv $PACKAGE $FOLDER manifest.xml

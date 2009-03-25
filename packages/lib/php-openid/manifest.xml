@@ -1,0 +1,16 @@
+<package release="unstable">
+  <id>lib-php-openid</id>
+  <name>PHP OpenID library</name>
+  <version>2.1.2-2</version>
+  <type>lib</type>
+  <source>
+      <version>2.1.2</version>
+      <type>zip</type>
+      <url>http://openidenabled.com/files/php-openid/packages/php-openid-2.1.2.zip</url>
+      <folder>php-openid-2.1.2</folder>
+  </source>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">./</destination>
+  </deploy>
+</package>
