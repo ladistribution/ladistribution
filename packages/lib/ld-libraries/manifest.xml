@@ -1,0 +1,11 @@
+<package release="unstable">
+  <id>lib-ld</id>
+  <name>La Distribution Client libraries</name>
+  <version>0.1-16</version>
+  <type>lib</type>
+  <need>lib-zend-framework</need>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">./</destination>
+  </deploy>
+</package>
