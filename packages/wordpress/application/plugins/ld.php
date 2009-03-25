@@ -37,10 +37,27 @@ add_action('plugins_loaded', 'ld_disable_version_check');
 
 // can be replaced by skipping wp-admin/includes/update.php
 
-function ld_disable_upgrade_menu()
+function ld_disable_menus()
 {
-	global $submenu;
-	unset($submenu['tools.php'][20]);
+	global $menu, $submenu;
+
+	$disable_menus = array('plugins.php');
+	foreach ($menu as $key => $item) {
+		$script = $item[2];
+		if (!empty($disable_menus) && in_array($script, $disable_menus)) {
+			unset($menu[$key]);
+		}
+	}
+
+	$disable_submenus = array('tools.php', 'themes.php', 'theme-editor.php');
+	foreach ($submenu as $key => $sub) {
+		foreach ($sub as $num => $item) {
+			$script = $item[2];
+			if (!empty($disable_submenus) && in_array($script, $disable_submenus)) {
+				unset($submenu[$key][$num]);
+			}
+		}
+	}
 }
 
-add_action('admin_menu', 'ld_disable_upgrade_menu');
+add_action('admin_menu', 'ld_disable_menus');
