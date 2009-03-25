@@ -142,8 +142,10 @@ class Installer_Wordpress extends Ld_Installer
 		parent::restore($filename, $absolute);
 	    
 		$this->load_wp();
-
-		$this->_copy($this->tmpFolder . '/uploads', $this->absolutePath . '/wp-content/uploads');
+        
+		if (file_exists($this->tmpFolder . '/uploads')) {
+			$this->_copy($this->tmpFolder . '/uploads', $this->absolutePath . '/wp-content/uploads');
+		}
 
 		foreach ($this->wpdb->tables as $table) {
 			$filename = $this->tmpFolder . '/tables/' . $table . '.csv';
@@ -157,8 +159,8 @@ class Installer_Wordpress extends Ld_Installer
 			$result = $this->wpdb->query($query);
 		}
 
-		update_option('siteurl', LD_BASE_URL . $this->instance['path']);
-		update_option('home', LD_BASE_URL . $this->instance['path']);
+		update_option('siteurl', LD_BASE_URL . $this->instance->path);
+		update_option('home', LD_BASE_URL . $this->instance->path);
 
 		wp_cache_flush();
 

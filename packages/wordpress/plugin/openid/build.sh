@@ -12,7 +12,7 @@ svn export $SOURCE $FOLDER
 # rm -rf $FOLDER/Auth
 
 # Create zip package
-zip -rqv $PACKAGE $FOLDER dist
+zip -rqv $PACKAGE $FOLDER dist -x "*/.svn/*"
 mv $PACKAGE ../../../
 # Clean
 rm -rf $FOLDER
