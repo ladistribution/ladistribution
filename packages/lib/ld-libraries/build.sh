@@ -6,7 +6,7 @@ svn export $SOURCE $FOLDER
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 # Create zip package
-zip -rqv $PACKAGE lib
+zip -rqv $PACKAGE $FOLDER
 mv $PACKAGE ../../
 # Clean
 rm -rf $FOLDER
