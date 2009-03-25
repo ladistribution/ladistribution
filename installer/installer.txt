@@ -1,0 +1,198 @@
+<?php
+
+error_reporting(E_ALL);
+
+define('LD_SERVER', 'http://ladistribution.h6e.net/');
+
+$isFreeFr = (bool)strpos($_SERVER["SERVER_NAME"], 'free.fr');
+
+if($isFreeFr) {
+    if (!file_exists('sessions')) {
+        mkdir('sessions', 0777, true);
+    }
+    define('LD_REWRITE', false);
+}
+
+if (!empty($_SERVER["SCRIPT_NAME"])) {
+  $base_path = str_replace('/installer.php', '', $_SERVER["SCRIPT_NAME"]);
+} else {
+  $base_path = '';
+}
+defined('LD_BASE_PATH') OR define('LD_BASE_PATH', $base_path);
+
+function install_if_not_exists_and_require($file, $source)
+{
+    if (!file_exists($file)) {
+        $content = file_get_contents($source);
+        file_put_contents($file, $content);
+    }
+    require($file);
+}
+
+// Creating directories
+
+defined('LD_ROOT') OR define('LD_ROOT', dirname(__FILE__));
+if (!file_exists(LD_ROOT)) {
+    mkdir(LD_ROOT, 0777, true);
+}
+
+$directories = array(
+    'js'     => LD_ROOT . '/js',
+    'css'    => LD_ROOT . '/css',
+    'shared' => LD_ROOT . '/shared',
+    'lib'    => LD_ROOT . '/lib',
+    'dist'   => LD_ROOT . '/dist',
+    'tmp'    => LD_ROOT . '/dist/tmp',
+    'log'    => LD_ROOT . '/dist/log',
+    'admin'  => LD_ROOT . '/admin',
+);
+
+if (@is_writable(LD_ROOT . '/..')) {
+    $directories['dist'] = LD_ROOT . '/../dist';
+    $directories['tmp']  = LD_ROOT . '/../dist/tmp';
+    $directories['log']  = LD_ROOT . '/../dist/log';
+    $directories['lib']  = LD_ROOT . '/../lib';
+}
+
+if ($isFreeFr) {
+    $directories['lib']  = LD_ROOT . '/include';
+}
+
+foreach ($directories as $name => $directory) {
+    if (!file_exists($directory)) {
+        mkdir($directory, 0777, true);
+    }
+    $constantName = strtoupper("LD_" . $name . "_DIR");
+    define($constantName, $directory);
+}
+
+echo '- Directories OK<br>';
+flush();
+
+// LD 'dist' global config file
+
+$cfg  = "<?php\n";
+$constants = array('LD_BASE_PATH', 'LD_SOURCES_URL');
+foreach ($constants as $name) {
+    if (defined($name)) {
+        $cfg .= sprintf("define('%s', '%s');\n", $name, constant($name));
+    }
+}
+if ($isFreeFr) {
+    foreach (array('LD_DIST_DIR', 'LD_LIB_DIR') as $constant) {
+      $cfg .= sprintf("define('%s', '%s');\n", $constant, constant($constant));
+    }
+    $cfg .= "define('LD_REWRITE', false);\n";
+}
+$cfg .= "require_once(dirname(__FILE__) . '/autoconfig.php');\n";
+file_put_contents(LD_DIST_DIR . "/config.php", $cfg);
+
+echo '- Config OK<br>';
+flush();
+
+
+// External Installer files
+
+install_if_not_exists_and_require(LD_DIST_DIR . "/autoconfig.php", LD_SERVER . 'installer/autoconfig.txt');
+
+install_if_not_exists_and_require(LD_DIST_DIR . "/installer.class.php", LD_SERVER . 'installer/installer.class.txt');
+
+echo '- Utilities OK<br>';
+flush();
+
+
+// Clearbricks
+
+function __($e) { return $e; }
+
+$clearbricks_directories = array(
+    'common' => LD_LIB_DIR . '/clearbricks/common',
+    'zip'    => LD_LIB_DIR . '/clearbricks/zip'
+);
+
+foreach ($clearbricks_directories as $directory) {
+    if (!file_exists($directory)) {
+        mkdir($directory, 0777, true);
+    }
+}
+
+$clearbricks_essentials = array(
+    $clearbricks_directories['common'] . '/lib.files.php' => LD_SERVER . 'installer/lib.files.txt',
+    $clearbricks_directories['zip'] . '/class.zip.php'    => LD_SERVER . 'installer/class.zip.txt',
+    $clearbricks_directories['zip'] . '/class.unzip.php'  => LD_SERVER . 'installer/class.unzip.txt'
+);
+
+foreach ($clearbricks_essentials as $file => $source) {
+    install_if_not_exists_and_require($file, $source);
+}
+
+echo '- Clearbricks OK<br>';
+flush();
+
+
+// Zend & Ld libraries
+    
+$base_libs = array();
+
+if (!Installer::is_requirable('Zend/Loader.php')) {
+    $base_libs['zend-framework'] = LD_SERVER . 'repositories/main/lib/lib-zend-framework/lib-zend-framework.zip';
+}
+
+if (!Installer::is_requirable('Ld/Installer.php')) {
+    $base_libs['ld-libraries'] = LD_SERVER . 'repositories/main/lib/lib-ld/lib-ld.zip';
+}
+
+foreach ($base_libs as $name => $source) {
+    $archiveName = LD_TMP_DIR . '/' . $name . '.zip';
+    $targetDirectory = LD_TMP_DIR . '/' . $name;
+    if (!file_exists($targetDirectory)) {
+        $zip = file_get_contents($source);
+        file_put_contents($archiveName, $zip);
+        chmod($archiveName, 0777);
+        $uz = new fileUnzip($archiveName);
+        $uz->unzipAll($targetDirectory);
+    }
+    Installer::copy($targetDirectory . '/lib', LD_LIB_DIR);
+}
+
+echo '- Zend & Ld OK<br>';
+flush();
+
+require_once 'Zend/Loader.php';
+Zend_Loader::registerAutoload();
+
+// Clean TMP
+foreach ($base_libs as $name => $source) {
+    $targetDirectory = LD_TMP_DIR . '/' . $name;
+    Ld_Files::unlink($targetDirectory); 
+}
+
+// Update instances & repositories registry 
+
+$instances = array(
+    array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '0.1-16'),
+    array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.1-16')
+);
+file_put_contents(LD_DIST_DIR . '/instances.json', Zend_Json::encode($instances));
+
+echo '- Registry OK<br>';
+flush();
+
+$cfg = array();
+$cfg['repositories'] = array(
+    'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
+    'endpoint' => 'http://ladistribution.h6e.net/repositories/main')
+);
+file_put_contents(LD_DIST_DIR . '/repositories.json', Zend_Json::encode($cfg));
+
+echo '- Repositories OK<br>';
+flush();
+
+
+// Install LD Manager
+
+$Site = new Ld_Site_Local(array('id' => 'default', 'type' => 'local', 'name' => 'Default', 'slots' => 5));
+
+$Site->createInstance('admin', array('path' => 'admin'));
+
+echo 'Install OK. <a href="' . LD_BASE_URL . 'admin/">Go admin</a>';
