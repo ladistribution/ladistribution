@@ -1,0 +1,13 @@
+Index: store.php
+===================================================================
+--- store.php	(revision 105294)
++++ store.php	(working copy)
+@@ -9,7 +9,7 @@
+ require_once 'Auth/OpenID/Interface.php';
+ require_once 'Auth/OpenID/Association.php';
+ 
+-if (!class_exists('WordPress_OpenID_OptionStore')):
++if (!class_exists('WordPress_OpenID_OptionStore', false)):
+ /**
+  * OpenID store that uses the WordPress options table for storage.  Originally 
+  * written by Simon Willison for use in the mu-open-id plugin.  Modified a fair 

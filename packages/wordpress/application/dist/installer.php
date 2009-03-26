@@ -216,8 +216,6 @@ class Installer_Wordpress extends Ld_Installer
 	{
 		if (empty($this->loaded)) {
 
-			spl_autoload_unregister(array('Zend_Loader', 'autoload'));
-
 			define('WP_INSTALLING', true);
 	
 			global $wpdb, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $is_apache;

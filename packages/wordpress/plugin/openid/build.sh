@@ -6,6 +6,9 @@ PACKAGE="$NAME.zip"
 # Get source
 svn export $SOURCE $FOLDER
 
+# Apply patches
+patch -p0 -d $FOLDER < patches/class_exists_store.diff
+
 # Remove Auth libraries as they are handled as dependencies
 # - but this doesn't works well due to a plugin gotcha
 # - we'll remove the folder when this will be fixed upstream

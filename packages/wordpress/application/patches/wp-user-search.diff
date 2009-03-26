@@ -1,0 +1,13 @@
+Index: wp-admin/includes/user.php
+===================================================================
+--- wp-admin/includes/user.php	(revision 10748)
++++ wp-admin/includes/user.php	(working copy)
+@@ -455,7 +455,7 @@
+ 	$user->remove_all_caps();
+ }
+ 
+-if ( !class_exists('WP_User_Search') ) :
++if ( !class_exists('WP_User_Search', false) ) :
+ /**
+  * WordPress User Search class.
+  *

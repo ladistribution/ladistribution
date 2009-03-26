@@ -18,6 +18,8 @@ rm $FOLDER/wp-rdf.php
 rm $FOLDER/wp-rss.php
 rm $FOLDER/wp-rss2.php
 rm $FOLDER/wp-content/hello.php
+# Apply patches
+patch -p0 -d $FOLDER < patches/wp-user-search.diff
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 # Create zip package
