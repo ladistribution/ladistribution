@@ -60,6 +60,10 @@ if ($isFreeFr) {
 
 foreach ($directories as $name => $directory) {
     if (!file_exists($directory)) {
+        if (!is_writable(dirname($directory))) {
+            $msg = "Can't create folder. Check your permissions.";
+            die($msg);
+        }
         mkdir($directory, 0777, true);
     }
     $constantName = strtoupper("LD_" . $name . "_DIR");
@@ -79,7 +83,7 @@ foreach ($constants as $name) {
     }
 }
 if ($isFreeFr) {
-    foreach (array('LD_DIST_DIR', 'LD_LIB_DIR') as $constant) {
+    foreach (array('LD_LIB_DIR') as $constant) {
       $cfg .= sprintf("define('%s', '%s');\n", $constant, constant($constant));
     }
     $cfg .= "define('LD_REWRITE', false);\n";
