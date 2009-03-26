@@ -1,0 +1,9 @@
+<package release="unstable">
+  <id>dokuwiki-plugin-openid</id>
+  <name>OpenID</name>
+  <version>2.0-beta2-2</version>
+  <type>plugin</type>
+  <extend>dokuwiki</extend>
+  <need>lib-php-openid</need>
+  <directory>lib/plugins/openid</directory>
+</package>
