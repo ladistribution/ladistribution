@@ -1,0 +1,16 @@
+<package release="unstable">
+  <id>dokuwiki-theme-minimal</id>
+  <name>Minimal</name>
+  <version>0.1-20</version>
+  <type>theme</type>
+  <need>css-h6e-minimal</need>
+  <extend>dokuwiki</extend>
+  <directory>lib/tpl/minimal</directory>
+  <configuration>
+      <preference type="text" name="width" label="Width" defaultValue="auto"/>
+      <preference type="text" name="font-size" label="Font Size" defaultValue="1.1em"/>
+      <preference type="color" name="title-color" label="Title Color" defaultValue="#009DFF"/>
+      <preference type="boolean" name="hide-entry-title" label="Hide entry title?" defaultValue="false"/>
+      <preference type="textarea" name="footer-text" label="Footer Text" defaultValue="Powered by &lt;a href=&quot;http://dokuwiki.org/&quot;&gt;DokuWiki&lt;/a&gt; with a touch of &lt;a href=&quot;http://h6e.net/&quot;&gt;h6e&lt;/a&gt; via &lt;a href=&quot;http://ladistribution.h6e.net/&quot;&gt;La Distribution&lt;/a&gt;"/>
+  </configuration>
+</package>
