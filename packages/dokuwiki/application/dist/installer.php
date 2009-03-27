@@ -149,6 +149,9 @@ class Installer_Dokuwiki extends Ld_Installer
                 'name' => $id,
                 'active' => ($template == $id)
             );
+            if (file_exists($this->absolutePath . '/lib/tpl/' . $id . '/screenshot.png')) {
+                $themes[$id]['screenshot'] = LD_BASE_URL . $this->path . '/lib/tpl/' . $id . '/screenshot.png';
+            }
         }
         return $themes;
     }
