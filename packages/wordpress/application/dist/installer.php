@@ -39,6 +39,8 @@ class Installer_Wordpress extends Ld_Installer
 
 		$this->populate_database($user_id);
 
+		$this->populate_sidebar_widgets();
+
 		activate_plugin('ld.php');
 
 		if (isset($preferences['theme'])) {
@@ -50,7 +52,6 @@ class Installer_Wordpress extends Ld_Installer
 
 	function create_config_file()
 	{
-
 		$cfg = "<?php\n";
 
 		$cfg .= "defined('ABSPATH') OR define( 'ABSPATH', dirname(__FILE__) . '/' );\n";
@@ -140,7 +141,7 @@ class Installer_Wordpress extends Ld_Installer
 	public function restore($filename, $absolute = false)
 	{
 		parent::restore($filename, $absolute);
-	    
+
 		$this->load_wp();
         
 		if (file_exists($this->tmpFolder . '/uploads')) {
@@ -185,6 +186,35 @@ class Installer_Wordpress extends Ld_Installer
 		parent::uninstall();
 	}
 
+	public function getPreferences($type)
+	{
+		switch ($type) {
+			case 'theme':
+				return $this->getThemePreferences();
+			default:
+				$preferences = parent::getPreferences($type);
+				return $preferences;
+		}
+	}
+
+	public function getThemePreferences()
+	{
+		$this->load_wp();
+		$wp_themes = get_themes();
+		$current_theme = get_current_theme();
+		foreach ($wp_themes as $theme) {
+			if ($current_theme == $theme['Name']) {
+				$template_dir = $this->absolutePath . '/wp-content' . $theme['Stylesheet Dir'];
+				break;	
+			}
+		}
+		if (file_exists($template_dir) && file_exists($template_dir . '/dist/manifest.xml')) {
+			$template_installer = new Ld_Installer(array('dir' => $template_dir));
+			return $template_installer->getPreferences('configuration');
+		}
+		return array();
+	}
+
 	public function getConfiguration()
 	{
 		$this->load_wp();
@@ -200,7 +230,7 @@ class Installer_Wordpress extends Ld_Installer
 		return $configuration;
 	}
 
-	public function setConfiguration($configuration)
+	public function setConfiguration($configuration, $type = 'general')
 	{
 		$this->load_wp();
 		foreach ($this->getPreferences('configuration') as $preference) {
@@ -265,6 +295,24 @@ class Installer_Wordpress extends Ld_Installer
 		$first_post_guid = get_option('home') . '/?p=1';
 		$wpdb->query("INSERT INTO $wpdb->posts (post_author, post_date, post_date_gmt, post_content, post_excerpt, post_title, post_category, post_name, post_modified, post_modified_gmt, guid, comment_count, to_ping, pinged, post_content_filtered) VALUES ($user_id, '$now', '$now_gmt', '".$wpdb->escape(__('Welcome to WordPress. This is your first post. Edit or delete it, then start blogging!'))."', '', '".$wpdb->escape(__('Hello world!'))."', '0', '".$wpdb->escape(_c('hello-world|Default post slug'))."', '$now', '$now_gmt', '$first_post_guid', '1', '', '', '')");
 		$wpdb->query( "INSERT INTO $wpdb->term_relationships (`object_id`, `term_taxonomy_id`) VALUES (1, 1)" );
+		
+		// Default comment
+		$wpdb->query("INSERT INTO $wpdb->comments (comment_post_ID, comment_author, comment_author_email, comment_author_url, comment_date, comment_date_gmt, comment_content) VALUES ('1', '".$wpdb->escape(__('Mr WordPress'))."', '', 'http://wordpress.org/', '$now', '$now_gmt', '".$wpdb->escape(__('Hi, this is a comment.<br />To delete a comment, just log in and view the post&#039;s comments. There you will have the option to edit or delete them.'))."')");
+
+	}
+
+	function populate_sidebar_widgets()
+	{
+		$defaults = array(
+			'sidebar-1' => array(
+				'search', 'pages', 'archives', 'categories', 'links', 'meta'
+			),
+			'sidebar-2' => array(
+			),
+			'array_version' => 3
+		);
+
+		update_option('sidebars_widgets', $defaults);
 	}
 
 }

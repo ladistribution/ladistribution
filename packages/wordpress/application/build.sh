@@ -9,7 +9,7 @@ curl $SOURCE > $GZ
 tar zxvf $GZ
 rm $GZ
 mv $NAME $FOLDER
-# Remove some useless files
+# Remove some useless (or not desired) files
 rm $FOLDER/wp-atom.php
 rm $FOLDER/wp-commentsrss2.php
 rm $FOLDER/wp-config-sample.php
@@ -17,7 +17,8 @@ rm $FOLDER/wp-feed.php
 rm $FOLDER/wp-rdf.php
 rm $FOLDER/wp-rss.php
 rm $FOLDER/wp-rss2.php
-rm $FOLDER/wp-content/hello.php
+rm $FOLDER/wp-content/plugins/hello.php
+rm -rf $FOLDER/wp-content/plugins/akismet
 # Apply patches
 patch -p0 -d $FOLDER < patches/wp-user-search.diff
 # Remove some unwanted files (mac)

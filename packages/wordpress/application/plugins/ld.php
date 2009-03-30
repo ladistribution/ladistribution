@@ -35,8 +35,6 @@ function ld_disable_version_check()
 
 add_action('plugins_loaded', 'ld_disable_version_check');
 
-// can be replaced by skipping wp-admin/includes/update.php
-
 function ld_disable_menus()
 {
 	global $menu, $submenu;
@@ -49,7 +47,7 @@ function ld_disable_menus()
 		}
 	}
 
-	$disable_submenus = array('tools.php', 'themes.php', 'theme-editor.php');
+	$disable_submenus = array('tools.php', 'themes.php', 'theme-editor.php', 'update-core.php');
 	foreach ($submenu as $key => $sub) {
 		foreach ($sub as $num => $item) {
 			$script = $item[2];
