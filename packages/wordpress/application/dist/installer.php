@@ -233,7 +233,7 @@ class Installer_Wordpress extends Ld_Installer
 	public function setConfiguration($configuration, $type = 'general')
 	{
 		$this->load_wp();
-		foreach ($this->getPreferences('configuration') as $preference) {
+		foreach ($this->getPreferences($type) as $preference) {
 			$preference = $preference->toArray();
 			$option = $preference['name'];
 			$value = isset($configuration[$option]) ? $configuration[$option] : null;
