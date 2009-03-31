@@ -1,0 +1,22 @@
+--- ndxz-studio/defaults.php	2009-03-30 21:22:46.000000000 +0200
++++ ndxz-studio/defaults.php	2009-03-30 21:22:56.000000000 +0200
+@@ -1,5 +1,8 @@
+ <?php if (!defined('SITE')) exit('No direct script access allowed');
+ 
++// ladis prepend
++require_once dirname(__FILE__) . '/../dist/prepend.php';
++
+ // mod_rewrite is being used?
+ // in case the server does not have mod_rewrite
+ define('MODREWRITE', false);
+@@ -15,8 +18,8 @@
+ // darn quotes
+ set_magic_quotes_runtime(0);
+ 
+-// database prefix
+-define('PX', 'ndxz_');
++// database prefix (disabled by ladis patch)
++// define('PX', 'ndxz_');
+ 
+ // version
+ define('VERSION', '0.70d');

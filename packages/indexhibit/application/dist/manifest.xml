@@ -1,0 +1,17 @@
+<package release="unstable" >
+  <id>indexhibit</id>
+  <name>Indexhibit</name>
+  <version>0.70e-13</version>
+  <type>application</type>
+  <installer name="Installer_Indexhibit" src="./dist/installer.php" />
+  <link rel="admin" type="text/html" href="/ndxz-studio/" />
+  <db>mysql</db>
+  <install>
+      <preference type="list" label="Language" name="lang">
+          <option value="en-us" label="English (default)" />
+          <option value="fr-fr" label="Français" />
+      </preference>
+      <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
+      <preference type="password" label="Admin Password" name="admin_password" value=""/>
+  </install>
+</package>
