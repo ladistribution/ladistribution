@@ -3,13 +3,6 @@
 class Ld_Instance_Application_Remote extends Ld_Instance_Application_Abstract
 {
 
-    // public function __construct($path = null)
-    // {
-    //     if (isset($path)) {
-    //         $this->setPath($path);
-    //     }
-    // }
-
     protected function _getRemote($action)
     {
         $this->site->getHttpClient()->setUri($this->site->getBaseUrl() . '/' . $this->path . '/' . $action);

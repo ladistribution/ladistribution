@@ -14,6 +14,7 @@ class Ld_Installer
         $this->instance = isset($params['instance']) ? $params['instance'] : null;
         
         if (isset($this->instance)) {
+            $this->setPath($this->instance->getPath());
             $this->setAbsolutePath($this->instance->getAbsolutePath());
         }
         

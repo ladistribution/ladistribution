@@ -36,7 +36,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     public function save()
     {
         $json = Zend_Json::encode($this->infos);
-        file_put_contents($this->getInstancesJson(), $json);
+        file_put_contents($this->getInstanceJson(), $json);
     }
 
     public function setSite($site)
@@ -84,7 +84,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         $links = array();
         foreach ($manifest->link as $link) {
             $rel = $link['rel'];
-            $href = LD_BASE_URL . $this->path . $link['href'];
+            $href = LD_BASE_URL . $this->getPath() . $link['href'];
             $links[] = compact('rel', 'href');
         }
         return $links;
@@ -122,8 +122,6 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->getInstaller()->setConfiguration($configuration, $type);
     }
 
-    
-    
     public function getExtensions()
     {
         if (isset($this->extensions)) {
@@ -135,24 +133,16 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         $extensions = array();
         if (isset($this->infos['extensions']) && count($this->infos['extensions']) > 0) {
             foreach ($this->infos['extensions'] as $key => $extension) {
-                // print_r($extension);
-                // try {
+                try {
                     $instance = new Ld_Instance_Extension($extension);
                     $instance->setParent($this);
-                    // $extensionInstance->setPath($this->infos['path'] . '/' . $extension['path']);
-                    // we can do better i'm sure
-                    // if (isset($this->site)) {
-                    //           $extensionInstance->setSite($this->site);
-                    //       }
                     $extensions[$key] = $instance;
-                // } catch(Exception $e) {
+                } catch(Exception $e) {
                     // TODO: log this
-                //    echo $e->getMessage();
-                    // unset($this->infos['extensions'][$key]);
-                //}
+                    unset($this->infos['extensions'][$key]);
+                }
             }
         }
-        // print_r($extensions);
         return $this->extensions = $extensions;
     }
 
@@ -198,9 +188,6 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
             'path'      => $extendedPath
         );
 
-        // $extensionInstance = new Ld_Instance_Extension($instance->path . '/' . $params['path']);
-        // $extensionInstance->setInfos($params)->save();
-
         $this->registerExtension($params);
     }
         
@@ -214,15 +201,15 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         
         // Update
         $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
-        // $installer->setPath( $this->path . '/' . $extension->path );
+        $installer->setPath( $this->getPath() . '/' . $extension->getPath() );
         $installer->update();
         
         // Update registry
         // $extension->setInfos(array('version' => $package->version))->save();
         
         // We update application registry instead
-        foreach ($this->infos['extensions'] as $key => $extension) {
-            if ($extension['path'] == $path) {
+        foreach ($this->infos['extensions'] as $key => $infos) {
+            if ($infos['path'] == $extension->getPath()) {
                 $this->infos['extensions'][$key]['version'] = $package->version;
                 $this->save();
                 break;
