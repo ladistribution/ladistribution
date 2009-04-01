@@ -27,7 +27,7 @@ class Ld_Installer_Factory
     public static function getManifest()
     {
         if (isset(self::$instance)) {
-            self::$dir = $dir = self::$instance->absolutePath . '/';
+            self::$dir = $dir = self::$instance->getAbsolutePath() . '/';
         } else {
             $filename = LD_TMP_DIR . '/' . self::$package->id . '-' . self::$package->version . '.zip';
             if (!file_exists($filename)) {
@@ -40,7 +40,7 @@ class Ld_Installer_Factory
                 $uz->unzipAll($dir);
             }
         }
-
+        
         $filename = $dir . '/dist/manifest.xml';
         if (!file_exists($filename)) {
             $filename = $dir . '/manifest.xml'; // alternate name
@@ -58,24 +58,15 @@ class Ld_Installer_Factory
     
     public static function getInstaller($params = array())
     {
-        // echo 'getInstaller:' . "\n";
-        // print_r($params);
-        //   echo '<br>' . "\n";
-        
         if (isset($params['id'])) {
             throw new Exception('getInstallerById is no more supported.');
-            // self::$id == $params['id'];
-            // self::$package = Ld_Packages::getPackage(self::$id);
         } elseif (isset($params['instance'])) {
             self::$instance = $params['instance'];
-            self::$id = self::$instance->package;
-           // self::$package = Ld_Packages::getPackage(self::$id);
+            self::$id = self::$instance->getPackageId();
         } elseif (isset($params['package'])) {
             self::$package = $params['package'];
             self::$id = self::$package->id;
         }
-        
-        // echo self::$id . "<br>\n";
 
         $dbPrefix = isset($params['dbPrefix']) ? $params['dbPrefix'] : null;
         
@@ -94,7 +85,10 @@ class Ld_Installer_Factory
                 if (empty($classFile)) {
                     $className = 'Ld_Installer';
                 } else {
-                    require_once self::$dir . $classFile;
+                    // This may be problematic
+                    if (!class_exists($className, false)) {
+                        require_once self::$dir . $classFile;
+                    }
                 }
                 
                 return new $className(array(

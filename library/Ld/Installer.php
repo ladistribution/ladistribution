@@ -5,6 +5,7 @@ require_once 'Ld/Preference.php';
 
 class Ld_Installer
 {
+    
     public function __construct($params = array())
     {
         $this->dir = $params['dir'];
@@ -13,7 +14,7 @@ class Ld_Installer
         $this->instance = isset($params['instance']) ? $params['instance'] : null;
         
         if (isset($this->instance)) {
-            $this->setPath($this->instance->path);
+            $this->setAbsolutePath($this->instance->getAbsolutePath());
         }
         
         if (empty($params['dbPrefix'])) {
@@ -22,14 +23,22 @@ class Ld_Installer
             $this->dbPrefix = $params['dbPrefix'];
         }
         
-        if (file_exists($this->dir . '/dist/manifest.xml'))
-            $manifestXml = file_get_contents($this->dir . '/dist/manifest.xml');
-        else if (file_exists($this->dir . '/manifest.xml'))
-            $manifestXml = file_get_contents($this->dir . '/manifest.xml');
-        else
+        $filename = $this->dir . '/dist/manifest.xml';
+        if (!file_exists($filename)) {
+            $filename = $this->dir . '/manifest.xml'; // alternate name
+        }
+        if (file_exists($filename)) {
+            $manifestXml = file_get_contents($filename);
+        } else {
             throw new Exception("manifest.xml doesn't exists or is unreadable in $this->dir");
+        }
         
         $this->manifest = new SimpleXMLElement($manifestXml);
+    }
+    
+    public function getManifest()
+    {
+        return $this->manifest;
     }
     
     public function getDependencies()
@@ -140,17 +149,36 @@ class Ld_Installer
         $this->deploy();
     }
     
-    public function uninstall($path = null)
+    public function uninstall()
     {
-        // if (isset($path)) {
-        //     $this->setPath($path);
-        // }
         if (empty($this->absolutePath)) {
             throw new Exception("Path is undefined");
         }
+        
+        // Erase files (would be better to delete one by one)
         foreach ($this->getDeployments() as $deployment) {
             Ld_Files::unlink($deployment['to']);
         }
+        
+        // DROP tables with current prefix
+        if ($this->needDb() && isset($this->instance)) {
+            $dbName = $this->instance->getDb();
+            $dbPrefix = $this->instance->getDbPrefix();
+            require LD_DIST_DIR . '/db/' . $dbName . '.php';
+            $db = Zend_Db::factory('Mysqli', array(
+                'host'     => LD_DB_HOST,
+                'username' => LD_DB_USER,
+                'password' => LD_DB_PASSWORD,
+                'dbname'   => LD_DB_NAME
+            ));
+            $result = $db->fetchCol('SHOW TABLES');
+            foreach ($result as $tablename) {
+                if (strpos($tablename, $dbPrefix) !== false) {
+                    $db->query("DROP TABLE $tablename");
+                }
+            }
+        }
+        
     }
     
     public function backup()
@@ -256,6 +284,11 @@ class Ld_Installer
     {
         $this->path = $path;
         $this->absolutePath = LD_ROOT . '/' . $path;
+    }
+    
+    public function setAbsolutePath($path)
+    {
+        $this->absolutePath = $path;
     }
     
     public function configure() {}

@@ -6,7 +6,7 @@ require_once 'Ld/Site/Abstract.php';
 
 require_once 'Ld/Installer/Factory.php';
 
-require_once 'Ld/Instance/Application.php';
+require_once 'Ld/Instance/Application/Local.php';
 require_once 'Ld/Instance/Extension.php';
 
 class Ld_Site_Local extends Ld_Site_Abstract
@@ -43,7 +43,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getInstance($path)
     {
-        $instance = new Ld_Instance_Application($path);
+        $instance = new Ld_Instance_Application_Local();
+        $instance->setPath($path);
         $instance->setSite($this);
         return $instance;
     }
@@ -135,7 +136,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $this->createInstance($dependency);
             } else {
                 $dependencyPackage = $this->getPackage($dependency);
-                var_dump($dependencyPackage->version);
                 if ($infos['version'] != $dependencyPackage->version) {
                     $this->updateInstance($dependency);
                 }
@@ -171,8 +171,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         // Uninstall
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
-        $installer->setPath($instance->path); // FIXME: should be set automatically
+        $installer = $instance->getInstaller();
         $installer->uninstall();
 
         // Unregister
@@ -192,8 +191,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // Update registry
         $data = array('restricted' => $state);
-        $applicationInstance = new Ld_Instance_Application($instance->path);
-        $applicationInstance->setInfos($data)->save();
+        $instance->setInfos($data)->save();
     }
 
     public function backupInstance($instance)
@@ -206,55 +204,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
         $installer->restore($archive, $absolute);
-    }
-
-    public function addExtension($instance, $extension, $preferences = array())
-    {
-        $package = $this->getPackageExtension($instance->package, $extension);
-
-        // Install
-
-        $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
-
-        foreach ($installer->getDependencies() as $dependency) {
-            if (null === $this->_getLibraryInfos($dependency)) {
-                $this->createInstance($dependency);
-            }
-        }
-
-        $extendedPath = $installer->getExtendedPath();
-        if (empty($extendedPath)) {
-            throw new Exception('Extended path not defined.');
-        } else {
-            $installer->setPath( $instance->path . '/' . $extendedPath );
-        }
-
-        $installer->install($preferences);
-
-        // Register
-
-        $params = array(
-            'package'   => $package->id,
-            'type'      => $package->type,
-            'version'   => $package->version,
-            'path'      => $extendedPath
-        );
-
-        $extensionInstance = new Ld_Instance_Extension($instance->path . '/' . $params['path']);
-        $extensionInstance->setInfos($params)->save();
-
-        $instance->registerExtension($params);
-    }
-
-    protected function _getLibraryInfos($package)
-    {
-        $instances = $this->getInstances();
-        foreach ($instances as $instance) {
-            if ($instance['package'] == $package) {
-                return $instance;
-            }
-        }
-        return null;
     }
 
     public function getInstallPreferences($package)
@@ -293,18 +242,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         return $preferences;
-    }
-
-    public function getThemes($instance)
-    {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
-        return $installer->getThemes();
-    }
-
-    public function setTheme($instance, $theme)
-    {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
-        return $installer->setTheme($theme);
     }
 
     public function getBackups($instance)
@@ -485,15 +422,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $packages;
     }
 
-    public function getPackage($id)
-    {
-        $packages = $this->getPackages();
-        if (isset($packages[$id])) {
-            return $packages[$id];
-        }
-        throw new Exception("Unknown package: $id");
-    }
-
     public function getPackageExtensions($packageId, $type = null)
     {
         $packages = array();
@@ -501,15 +429,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $packages = array_merge($packages, $repository->getPackageExtensions($packageId, $type));
         }
         return $packages;
-    }
-
-    public function getPackageExtension($packageId, $extensionId)
-    {
-        $extensions = $this->getPackageExtensions($packageId);
-        if (isset($extensions[$extensionId])) {
-            return $extensions[$extensionId];
-        }
-        throw new Exception("Unknown extension for $packageId: $extensionId");
     }
 
 }

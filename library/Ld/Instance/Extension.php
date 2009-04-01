@@ -1,11 +1,23 @@
 <?php
 
-class Ld_Instance_Extension extends Ld_Instance
+class Ld_Instance_Extension extends Ld_Instance_Abstract
 {
+    
+    protected $_parent;
     
     public function setPath($path)
     {
-        $this->absolutePath = LD_ROOT . '/' . $path;
-        $this->instanceJson = $this->absolutePath . '/dist/instance.json';
+        $this->path = $path;
     }
+
+    public function getAbsolutePath()
+    {
+        return LD_ROOT . '/' . $this->_parent->getPath() . '/' . $this->path;
+    }
+    
+    public function setParent($parent)
+    {
+        $this->_parent = $parent;
+    }
+
 }
