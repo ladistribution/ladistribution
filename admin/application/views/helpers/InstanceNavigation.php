@@ -13,8 +13,8 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
             echo '<a href="' . $this->view->url(array('site' => $this->view->site->id), 'site') . '">' . $this->view->site->name . '</a>';
             echo " > ";
         }
-        echo $instance->name ;
-        echo ' (<a target="_blank" href="' . $instance->url . '">' . $instance->url . '</a>)';
+        echo $instance->getName();
+        echo ' (<a target="_blank" href="' . $instance->getUrl() . '">' . $instance->getUrl() . '</a>)';
         echo "</p>\n";
         echo "<p>";
         

@@ -13,30 +13,30 @@
         <th>action</th>
     </tr>
     <tr>
-        <td><?php echo $this->instance->package ?></td>
-        <td><?php echo $this->instance->type ?></td>
-        <td><?php echo $this->instance->version ?></td>
-        <td><?php echo $this->instance->update ? 'Need update' : 'Up to date' ?></td>
+        <td><?php echo $this->instance->getPackageId() ?></td>
+        <td><?php echo $this->instance->getType() ?></td>
+        <td><?php echo $this->instance->getVersion() ?></td>
+        <td><?php echo $this->instance->isUpToDate() ? 'Need update' : 'Up to date' ?></td>
         <td>
-        <?php if ($this->instance->update) : ?>
+        <?php if ($this->instance->isUpToDate()) : ?>
             <a href="<?php echo $this->instanceActionUrl('update') ?>?version=<?php echo $this->instance->update ?>">update</a>
         <?php endif ?>
         </td>
     </tr>
-    <?php $extensions = $this->instance->extensions ?>
+    <?php // $extensions = $this->instance->getExtensions() ?>
     <?php if (count($this->extensions) > 0) : ?>
         <tr><td colspan="5"><em>Extensions</em></td></tr>
         <?php foreach($this->extensions as $extension) : ?>
             <tr>
-                <td><?php echo $extension->package ?></td>
-                <td><?php echo $extension->type ?></td>
-                <td><?php echo $extension->version ?></td>
+                <td><?php echo $extension->getPackageId() ?></td>
+                <td><?php echo $extension->getType() ?></td>
+                <td><?php echo $extension->getVersion() ?></td>
                 <td><?php echo $extension->update ? 'Need update' : 'Up to date' ?></td>
                 <td>
                     <?php if ($extension->update) : ?>
-                        <a href="<?php echo $this->instanceActionUrl('extensions') . '?update=' . $extension->path ?>">update</a>
+                        <a href="<?php echo $this->instanceActionUrl('extensions') . '?update=' . $extension->getPath() ?>">update</a>
                     <?php endif ?>
-                    <a href="<?php echo $this->instanceActionUrl('extensions') . '?remove=' . $extension->path ?>">remove</a>
+                    <a href="<?php echo $this->instanceActionUrl('extensions') . '?remove=' . $extension->getPath() ?>">remove</a>
                 </td>
             </tr>
         <?php endforeach ?>
@@ -48,7 +48,7 @@
 <ul>
     <li><a href="<?php echo $this->instanceActionUrl('backup') ?>">Backup this instance</a></li>
     <li><a href="<?php echo $this->instanceActionUrl('restore') ?>">Restore a backup</a></li>
-    <?php if ($this->instance->restricted) : ?>
+    <?php if ($this->instance->isRestricted()) : ?>
         <li><a href="<?php echo $this->instanceActionUrl('configure') ?>?restrict=0">Remove access restriction to this instance.</a></li>
     <?php else : ?>
         <li><a href="<?php echo $this->instanceActionUrl('configure') ?>?restrict=1">Restrict access to this instance.</a></li>

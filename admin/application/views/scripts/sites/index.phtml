@@ -10,11 +10,14 @@
     $i = 0;
     if (!empty($this->instances)) {
       foreach ($this->instances as $instance) {
-          $manageUrl = $this->instanceActionUrl('manage', $instance->path);
-          printf("<li class=\"%s\">", $instance->package);
-          printf("<span>%s<br/>", $instance->name);
+          $manageUrl = $this->instanceActionUrl('manage', $instance->getPath());
+          printf("<li class=\"%s\">", $instance->getPackageId());
+          printf("<span>%s<br/>", $instance->getName());
           printf("- <a href=\"%s\">manage</a><br/>", $manageUrl);
-          printf("- <a target=\"_blank\" href=\"%s\">launch</a>", $instance->url);
+          printf("- <a target=\"_blank\" href=\"%s\">launch</a>", $instance->getUrl());
+          foreach ($instance->getLinks() as $link) {
+              printf("<br/>- <a target=\"_blank\" href=\"%s\">%s</a>", $link['href'], $link['rel']);
+          }
           printf("</span></li>");
           $i++;
       }

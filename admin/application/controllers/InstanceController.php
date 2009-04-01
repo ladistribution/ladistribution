@@ -65,12 +65,12 @@ class InstanceController extends BaseController
                 return;
             }
 
-            $this->view->package = $package = $this->site->getPackageExtension($this->instance->package, $extension);
+            $this->view->package = $package = $this->site->getPackageExtension($this->instance->getPackageId(), $extension);
             $this->view->preferences = $this->site->getInstallPreferences($package);
 
             if ($this->getRequest()->isPost()) {
                 $preferences = $this->_getParam('preferences');
-                $this->site->addExtension($this->instance, $extension, $preferences);
+                $this->instance->addExtension($extension, $preferences);
                 if ($this->_hasParam('referer')) {
                     $this->_redirect($this->_getParam('referer'));
                 } else {
@@ -82,17 +82,21 @@ class InstanceController extends BaseController
         } else if ( $this->_hasParam('update') ) {
             $path = $this->_getParam('update');
             $this->instance->updateExtension($path);
-            $this->render('ok');
+            $this->_redirectToAction('manage');
             return;
 
         } else if ( $this->_hasParam('remove') ) {
             $path = $this->_getParam('remove');
             $this->instance->removeExtension($path);
-            $this->_redirectToAction('manage');
+            if (defined('DEBUG') && constant('DEBUG') === true) {
+                $this->render('ok'); // allow us to view install errors/warning/notices
+            } else {
+                $this->_redirectToAction('manage');
+            }
             return;
         }
 
-        $extensions = $this->site->getPackageExtensions($this->instance->package);
+        $extensions = $this->site->getPackageExtensions($this->instance->getPackageId());
 
         $this->view->extensions = array();
         foreach ($extensions as $id => $extension) {
@@ -107,8 +111,7 @@ class InstanceController extends BaseController
      */
     public function updateAction()
     {
-        // TODO: update only from a POST
-        // $this->instance->update();
+        // TODO: we should update only from a POST
         $this->site->updateInstance($this->instance);
         $this->_redirectToAction('manage');
     }
@@ -119,10 +122,6 @@ class InstanceController extends BaseController
   public function manageAction()
   {
       $this->view->extensions = $this->instance->getExtensions();
-
-      // Need Update ?
-      $package = $this->site->getPackage($this->instance->package);
-      $this->instance->update = $this->instance->version != $package->version ? $package->version : false;
 
       foreach ($this->view->extensions as $id => $extension) {
           $this->view->extensions[$id]->update = $this->_needExtensionUpdate($extension);
@@ -137,7 +136,6 @@ class InstanceController extends BaseController
       if ( $this->_hasParam('restrict') ) {
           $this->site->restrictInstance($this->instance, (bool)$this->_getParam('restrict'));
           $this->_redirectToAction('manage');
-          //$this->render('ok');
       }
       $this->view->preferences = $this->instance->getPreferences('configuration');
       
@@ -155,9 +153,7 @@ class InstanceController extends BaseController
    */
   public function themesAction()
   {
-      $extensions = $this->site->getPackageExtensions($this->instance->package, 'theme');
-      
-      // $extensions = Ld_Packages::getExtensions($this->instance->package, 'theme');
+      $extensions = $this->site->getPackageExtensions($this->instance->getPackageId(), 'theme');
       
       $this->view->extensions = array();
       foreach ($extensions as $extension) {
@@ -173,7 +169,7 @@ class InstanceController extends BaseController
       } else if ($this->getRequest()->isPost()) {
           if ($this->_hasParam('theme')) {
               $theme = $this->_getParam('theme');
-              $this->site->setTheme($this->instance, $theme);
+              $this->instance->setTheme($theme);
           }
           if ($this->_hasParam('configuration')) {
               $configuration = $this->_getParam('configuration');
@@ -183,7 +179,7 @@ class InstanceController extends BaseController
       
       $this->view->preferences = $this->instance->getPreferences('theme');
       
-      $this->view->themes = $this->site->getThemes($this->instance);
+      $this->view->themes = $this->instance->getThemes();
   }
   
   /**
@@ -218,6 +214,7 @@ class InstanceController extends BaseController
           return false;
       }
       
+      // TODO: we should delete only from a POST
       $this->site->deleteInstance($this->instance);
       
       // $this->render('ok');
@@ -240,7 +237,7 @@ class InstanceController extends BaseController
   {
       $extensions = $this->instance->getExtensions();
       foreach ($extensions as $extension) {
-          if ($extension->package == $id) {
+          if ($extension->getPackageId() == $id) {
               return true;
           }
       }
@@ -250,8 +247,8 @@ class InstanceController extends BaseController
   protected function _needExtensionUpdate($extension)
   {
       try {
-          $package = $this->site->getPackageExtension($this->instance->package, $extension->package);
-          return $extension->version != $package->version;
+          $package = $this->site->getPackageExtension($this->instance->getPackageId(), $extension->getPackageId());
+          return $extension->getVersion() != $package->version;
       } catch (Exception $e) {
           return false;
       }
