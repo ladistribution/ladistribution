@@ -136,7 +136,11 @@ class Ld_Site_Remote extends Ld_Site_Abstract
 
     public function getPackageExtensions($packageId, $type = null)
     {
-        $this->httpClient->setUri($this->baseUrl . '/packages/extensions/id/' . $packageId);
+        $uri = $this->baseUrl . '/packages/extensions/id/' . $packageId;
+        if (isset($type)) {
+            $uri .= '?type=' . $type;
+        }
+        $this->httpClient->setUri($uri);
         $response = $this->httpClient->request();
         $result = Zend_Json::decode( $response->getBody() );
         
