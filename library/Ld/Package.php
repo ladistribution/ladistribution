@@ -21,6 +21,7 @@ class Ld_Package
     {
 
         if (isset($params['zip'])) {
+
             // unzip
             $tmpFolder = LD_TMP_DIR . '/package-' . date("d-m-Y-H-i-s");
             $uz = new fileUnzip($params['zip']);
@@ -36,6 +37,7 @@ class Ld_Package
             } else {
                 throw new Exception("manifest.xml doesn't exists or is unreadable in $tmpFolder");
             }
+
             // unlink temporary folder
             Ld_Files::unlink($tmpFolder);
         }
@@ -79,6 +81,64 @@ class Ld_Package
         if (isset($this->manifest)) {
             return $this->manifest;
         }
+    }
+
+    public function getInstaller()
+    {
+        if (empty($this->installer)) {
+            $installer = Ld_Installer_Factory::getInstaller(array('package' => $this));
+            $this->installer = $installer;
+        }
+        return $this->installer;
+    }
+
+    public function getPreferences($type = 'configuration')
+    {
+        $preferences = array();
+
+        if (isset($this->manifest->$type)) {
+            foreach ($this->manifest->$type->preference as $prefXML) {
+                $attr = $prefXML->attributes();
+                $pref = new Ld_Preference((string) $attr['type']);
+                $pref->setName((string) $attr['name']);
+                $pref->setLabel((string) $attr['label']);
+                if (isset($attr['defaultValue'])) {
+                    $pref->setDefaultValue((string) $attr['defaultValue']);
+                }
+                foreach ($prefXML->option as $option) {
+                    if (empty($option['label'])) {
+                        $pref->addListOption((string) $option['value']);
+                    } else {
+                        $pref->addListOption((string) $option['value'], (string) $option['label']);
+                    }
+                }
+                if ($pref->getType() == 'range') {
+                    $pref->setRangeOptions((string) $attr['step'], (string) $attr['min'], (string) $attr['max']);
+                }
+                $preferences[] = $pref;
+            }
+        }
+
+        return $preferences;
+    }
+
+    public function getInstallPreferences()
+    {
+        $preferences = array();
+
+        if ($this->type == 'application') {
+            $preferences[] = array('type' => 'text', 'name' => 'title',
+                    'label' => 'Title', 'defaultValue' => $this->name);
+            $preferences[] = array('type' => 'text', 'name' => 'path',
+                    'label' => 'Path', 'defaultValue' => $this->id);
+        }
+
+        $prefs = $this->getPreferences('install');
+        foreach ($prefs as $pref) {
+            $preferences[] = is_object($pref) ? $pref->toArray() : $pref;
+        }
+
+        return $preferences;
     }
 
 }

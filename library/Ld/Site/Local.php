@@ -60,6 +60,18 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
+        $neededDb = $package->getInstaller()->needDb();
+        if ($neededDb && empty($preferences['db'])) {
+            $availableDbs = $this->getDatabases($neededDb);
+            if (empty($availableDbs)) {
+                throw new Exception('No database available.');
+            } else if (count($availableDbs) == 1) {
+                $preferences['db'] = $availableDbs[0]['id'];
+            } else {
+                throw new Exception('Can not choose Db.');
+            }
+        }
+
         switch ($package->type) {
             case 'bundle':
                 $instance = $this->createInstance($installer->application, $preferences);
@@ -102,7 +114,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
           // Only create an instance file for applications
           if ($params['type'] == 'application') {
               $params['path'] = $installer->path;
-              $instance = new Ld_Instance_Application($params['path']);
+              $instance = new Ld_Instance_Application_Local();
+              $instance->setPath($params['path']);
               $instance->setInfos($params)->save();
           }
 
@@ -123,7 +136,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $packageId = $params;
         } else if (is_object($params)) { // for applications
             $instance = $params;
-            $packageId = $instance->package;
+            $packageId = $instance->getPackageId();
         }
 
         $package = $this->getPackage($packageId);
@@ -144,7 +157,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // Update instance
         if (isset($instance)) {
-            $installer->setPath($instance->path);
+            $installer->setPath($instance->getPath());
         }
         $installer->update();
 
@@ -212,18 +225,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $package = $this->getPackage($package);
         }
 
-        $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
-
         $preferences = array();
 
-        if ($package->type == 'application') {
-            $preferences[] = array('type' => 'text', 'name' => 'title',
-                    'label' => 'Instance title', 'defaultValue' => $package->name);
-            $preferences[] = array('type' => 'text', 'name' => 'path',
-                    'label' => 'Instance path', 'defaultValue' => $package->id);
-        }
-
-        $neededDb = $installer->needDb();
+        $neededDb = $package->getInstaller()->needDb();
         if ($neededDb) {
             $availableDbs = $this->getDatabases($neededDb);
             if (empty($availableDbs)) {
@@ -236,7 +240,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
-        $prefs = $installer->getPreferences('install');
+        $prefs = $package->getInstallPreferences();
         foreach ($prefs as $pref) {
             $preferences[] = is_object($pref) ? $pref->toArray() : $pref;
         }
