@@ -1,7 +1,7 @@
 <package>
   <id>dokuwiki</id>
   <name>DokuWiki</name>
-  <version>2009-02-14-20</version>
+  <version>2009-02-14-33</version>
   <type>application</type>
   <installer name="Installer_Dokuwiki" src="./dist/installer.php" />
   <source>
@@ -13,11 +13,17 @@
       <origin>plugins</origin>
       <destination path="public">./lib/plugins/</destination>
   </deploy>
+  <deploy>
+      <origin>auth</origin>
+      <destination path="public">./inc/auth/</destination>
+  </deploy>
   <install>
+      <!--
       <preference type="text" label="Admin Full Name" name="admin_fullname" defaultValue="Admin"/>
       <preference type="text" label="Admin Email" name="admin_email" value=""/>
       <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
       <preference type="password" label="Admin Password" name="admin_password" value=""/>
+      -->
       <preference type="list" label="Initial ACL policy" name="policy">
           <option value="0" label="Open Wiki (read, write, upload for everyone)" />
           <option value="1" label="Public Wiki (read for everyone, write and upload for registered users)" />

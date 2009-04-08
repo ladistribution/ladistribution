@@ -1,0 +1,12 @@
+*** doku.php	2009-02-14 13:13:24.000000000 +0100
+--- doku.php	2009-04-08 14:17:15.000000000 +0200
+***************
+*** 9,14 ****
+--- 9,15 ----
+  //  xdebug_start_profiling();
+  
+    if(!defined('DOKU_INC')) define('DOKU_INC',dirname(__FILE__).'/');
++   require_once(DOKU_INC.'dist/config.php');
+    require_once(DOKU_INC.'inc/init.php');
+    require_once(DOKU_INC.'inc/common.php');
+    require_once(DOKU_INC.'inc/events.php');

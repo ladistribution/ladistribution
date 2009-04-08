@@ -9,6 +9,8 @@ curl $SOURCE > $GZ
 tar zxvf $GZ
 rm $GZ
 mv $NAME-$VERSION $FOLDER
+# Apply patches
+patch -p0 -d $FOLDER < patches/config.diff
 # Remove installer
 rm $FOLDER/install.php
 # Remove default config files
@@ -43,10 +45,10 @@ mv ./en $FOLDER/lib/plugins/revert/lang/en
 cp -R $FOLDER/lib/plugins/usermanager/lang/en ./en
 rm -rf $FOLDER/lib/plugins/usermanager/lang/*
 mv ./en $FOLDER/lib/plugins/usermanager/lang/en
-# Remove some unwanted files (mac)
+# Remove some unwanted files (osX)
 find . -name '*.DS_Store' -type f -delete
 # Create zip package
-zip -rqv $PACKAGE $FOLDER dist plugins -x "*/.svn/*"
+zip -rqv $PACKAGE $FOLDER dist plugins auth -x "*/.svn/*"
 mv $PACKAGE ../../
 # Clean
 rm -rf $FOLDER

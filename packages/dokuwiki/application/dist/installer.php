@@ -14,7 +14,8 @@ class Installer_Dokuwiki extends Ld_Installer
         'useslash'      => 1,
         'rss_type'      => 'atom1',
         'rss_linkto'    => 'page',
-        'maxtoclevel'   => 0
+        'maxtoclevel'   => 0,
+        'authtype'      => 'ld'
     );
 
     public function install($preferences)
@@ -50,15 +51,15 @@ class Installer_Dokuwiki extends Ld_Installer
         $this->setConfiguration($conf);
 
         // Users
-        $user = array(
-            $preferences['admin_username'],
-            md5($preferences['admin_password']),
-            $preferences['admin_fullname'],
-            $preferences['admin_email'],
-            'admin,user'
-        );
-        $cfg_users = join(":", $user) . "\n";
-        file_put_contents($this->absolutePath . "/conf/users.auth.php", $cfg_users);
+        // $user = array(
+        //     $preferences['admin_username'],
+        //     md5($preferences['admin_password']),
+        //     $preferences['admin_fullname'],
+        //     $preferences['admin_email'],
+        //     'admin,user'
+        // );
+        // $cfg_users = join(":", $user) . "\n";
+        // file_put_contents($this->absolutePath . "/conf/users.auth.php", $cfg_users);
 
         // ACL
         $cfg_acl = '';
@@ -204,6 +205,29 @@ class Installer_Dokuwiki extends Ld_Installer
             }
         }
         return array();
+    }
+
+    public $roles = array('admin', 'user');
+    
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    public function getUserRoles()
+    {
+        $filename = $this->absolutePath . '/dist/roles.json';
+        if (file_exists($filename)) {
+            $json = file_get_contents($filename);
+            return Zend_Json::decode($json);
+        }
+    }
+
+    public function setUserRoles($roles)
+    {
+        $filename = $this->absolutePath . '/dist/roles.json';
+        $json = Zend_Json::encode($roles);
+        file_put_contents($filename, $json);
     }
 
     public function getBackupDirectories()
