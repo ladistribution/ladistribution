@@ -2,7 +2,11 @@
 
 error_reporting(E_ALL);
 
-define('LD_SERVER', 'http://ladistribution.h6e.net/');
+if (file_exists('dist/config.php')) {
+    require_once('dist/config.php');
+}
+
+defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
 
 $isFreeFr = (bool)strpos($_SERVER["SERVER_NAME"], 'free.fr');
 
@@ -59,15 +63,16 @@ if ($isFreeFr) {
 }
 
 foreach ($directories as $name => $directory) {
+    $constantName = strtoupper("LD_" . $name . "_DIR");
+    defined($constantName) OR define($constantName, $directory);
+    $directory = constant($constantName);
     if (!file_exists($directory)) {
         if (!is_writable(dirname($directory))) {
-            $msg = "Can't create folder. Check your permissions.";
+            $msg = "Can't create folder $directory. Check your permissions.";
             die($msg);
         }
         mkdir($directory, 0777, true);
     }
-    $constantName = strtoupper("LD_" . $name . "_DIR");
-    define($constantName, $directory);
 }
 
 echo '- Directories OK<br>';
@@ -75,21 +80,25 @@ flush();
 
 // LD 'dist' global config file
 
-$cfg  = "<?php\n";
-$constants = array('LD_BASE_PATH', 'LD_SOURCES_URL');
-foreach ($constants as $name) {
-    if (defined($name)) {
-        $cfg .= sprintf("define('%s', '%s');\n", $name, constant($name));
-    }
+if (!file_exists('dist/config.php')) {
+
+  $cfg  = "<?php\n";
+  $constants = array('LD_BASE_PATH');
+  foreach ($constants as $name) {
+      if (defined($name)) {
+          $cfg .= sprintf("define('%s', '%s');\n", $name, constant($name));
+      }
+  }
+  if ($isFreeFr) {
+      foreach (array('LD_LIB_DIR') as $constant) {
+        $cfg .= sprintf("define('%s', '%s');\n", $constant, constant($constant));
+      }
+      $cfg .= "define('LD_REWRITE', false);\n";
+  }
+  $cfg .= "require_once(dirname(__FILE__) . '/autoconfig.php');\n";
+  file_put_contents(LD_DIST_DIR . "/config.php", $cfg);
+
 }
-if ($isFreeFr) {
-    foreach (array('LD_LIB_DIR') as $constant) {
-      $cfg .= sprintf("define('%s', '%s');\n", $constant, constant($constant));
-    }
-    $cfg .= "define('LD_REWRITE', false);\n";
-}
-$cfg .= "require_once(dirname(__FILE__) . '/autoconfig.php');\n";
-file_put_contents(LD_DIST_DIR . "/config.php", $cfg);
 
 echo '- Config OK<br>';
 flush();
