@@ -8,6 +8,11 @@ class Installer_Wordpress extends Ld_Installer
 		parent::install($preferences);
 
 		$this->create_config_file();
+	}
+
+	function postInstall($preferences = array())
+	{
+		parent::postInstall($preferences);
 
 		$this->load_wp();
 
@@ -17,16 +22,16 @@ class Installer_Wordpress extends Ld_Installer
 		populate_options();
 		populate_roles();
 
-		$user_name = $preferences['admin_username'];
-		$user_email = $preferences['admin_email'];
+		$user_name     = $preferences['admin_username'];
 		$user_password = $preferences['admin_password'];
+		$user_email    = $preferences['admin_email'];
 
 		$user_id = username_exists($user_name);
 		if ( !$user_id ) {
 			$user_id = wp_create_user($user_name, $user_password, $user_email);
 		}
-		$user = new WP_User($user_id);
-		$user->set_role('administrator');
+
+		$this->setUserRoles(array($user_name => 'administrator'));
 
 		update_option('admin_email', $user_email);
 		update_option('blogname', $preferences['title']);
@@ -42,6 +47,7 @@ class Installer_Wordpress extends Ld_Installer
 		$this->populate_sidebar_widgets();
 
 		activate_plugin('ld.php');
+		activate_plugin('ld-ui.php');
 
 		if (isset($preferences['theme'])) {
 			$this->setTheme($preferences['theme']);
@@ -58,10 +64,6 @@ class Installer_Wordpress extends Ld_Installer
 
 		$cfg .= "require_once(ABSPATH . 'dist/prepend.php');\n";
 
-		$cfg .= "define('DB_NAME', LD_DB_NAME);\n";
-		$cfg .= "define('DB_USER', LD_DB_USER);\n";
-		$cfg .= "define('DB_PASSWORD', LD_DB_PASSWORD);\n";
-		$cfg .= "define('DB_HOST', LD_DB_HOST);\n";
 		$cfg .= "define('DB_CHARSET', 'utf8');\n";
 		$cfg .= "define('DB_COLLATE', '');\n";
 
@@ -69,8 +71,6 @@ class Installer_Wordpress extends Ld_Installer
 		$cfg .= "define('SECURE_AUTH_KEY', '" . $this->_generate_phrase() . "');\n";
 		$cfg .= "define('LOGGED_IN_KEY', '" . $this->_generate_phrase() . "');\n";
 		$cfg .= "define('NONCE_KEY', '" . $this->_generate_phrase() . "');\n";
-
-		$cfg .= '$' . "table_prefix = '" . $this->dbPrefix . "';\n";
 
 		$cfg .= "require_once(ABSPATH . 'wp-settings.php');\n";
 
@@ -232,6 +232,9 @@ class Installer_Wordpress extends Ld_Installer
 
 	public function setConfiguration($configuration, $type = 'general')
 	{
+		if ($type == 'general') {
+			$type = 'configuration';
+		}
 		$this->load_wp();
 		foreach ($this->getPreferences($type) as $preference) {
 			$preference = $preference->toArray();
@@ -240,6 +243,48 @@ class Installer_Wordpress extends Ld_Installer
 			update_option($option, $value);
 		}
 		return $this->getConfiguration();
+	}
+	
+	public $roles = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
+
+	public $defaultRole = 'subscriber';
+
+	public function getRoles()
+	{
+		return $this->roles;
+	}
+
+	public function getUserRoles()
+	{
+		$this->load_wp();
+		$roles = array();
+		$users = Ld_Auth::getUsers();
+		foreach ($users as $user) {
+			$username = $user['username'];
+			$roles[$username] = $defaultRole; // default
+			$userdata = get_userdatabylogin($username);
+			$wp_user = new WP_User($userdata->ID);
+			foreach ($this->roles as $role) {
+				if (isset($wp_user->caps[$role]) && $wp_user->caps[$role]) {
+					$roles[$username] = $role;
+				}
+			}
+		}
+		return $roles;
+	}
+
+	public function setUserRoles($roles)
+	{
+		$this->load_wp();
+		$current_user_roles = $this->getUserRoles();
+		foreach ($roles as $username => $role) {
+			if (isset($current_user_roles[$username]) && $current_user_roles[$username] == $role) {
+				continue;
+			}
+			$userdata = get_userdatabylogin($username);
+			$wp_user = new WP_User($userdata->ID);
+			$wp_user->set_role($role);
+		}
 	}
 
 	function load_wp()

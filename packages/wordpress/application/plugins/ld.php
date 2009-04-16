@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: LD packaging
-Plugin URI: http://h6e.net/wordpress/plugins/ld-packaging
-Description: Disable various update mechanisms & Plugins/Themes handling
-Version: 0.1
+Plugin Name: LD package
+Plugin URI: http://h6e.net/wordpress/plugins/ld-package
+Description: Disable various update mechanisms & Plugins/Themes/Users panels
+Version: 0.2a
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -39,7 +39,7 @@ function ld_disable_menus()
 {
 	global $menu, $submenu;
 
-	$disable_menus = array('plugins.php');
+	$disable_menus = array('plugins.php', 'users.php');
 	foreach ($menu as $key => $item) {
 		$script = $item[2];
 		if (!empty($disable_menus) && in_array($script, $disable_menus)) {
@@ -59,3 +59,5 @@ function ld_disable_menus()
 }
 
 add_action('admin_menu', 'ld_disable_menus');
+
+add_filter('openid_get_user_by_openid', 'ld_get_user_by_openid');
