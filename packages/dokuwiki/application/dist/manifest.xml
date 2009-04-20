@@ -1,9 +1,11 @@
 <package>
   <id>dokuwiki</id>
   <name>DokuWiki</name>
-  <version>2009-02-14-33</version>
+  <version>2009-02-14-39</version>
   <type>application</type>
-  <installer name="Installer_Dokuwiki" src="./dist/installer.php" />
+  <need>lib-geshi</need>
+  <installer name="Installer_Dokuwiki" src="./dist/installer.php"/>
+  <link rel="admin" type="text/html" href="/dokuwiki/start?do=admin"/>
   <source>
       <version>2009-02-14</version>
       <type>zip</type>

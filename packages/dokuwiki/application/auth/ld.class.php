@@ -11,7 +11,6 @@ class auth_ld extends auth_plain
      */    
     function auth_ld()
     {
-        $this->cando['addUser']      = true;
         $this->cando['getUsers']     = true;
         $this->cando['getUserCount'] = true;
     }

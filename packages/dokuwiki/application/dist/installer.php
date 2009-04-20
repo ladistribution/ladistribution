@@ -18,7 +18,7 @@ class Installer_Dokuwiki extends Ld_Installer
         'authtype'      => 'ld'
     );
 
-    public function install($preferences)
+    public function install($preferences = array())
     {
         // Deploy the files
         parent::install($preferences);
@@ -73,6 +73,16 @@ class Installer_Dokuwiki extends Ld_Installer
             $cfg_acl .=  "*               @ALL          8\n";
         }
         file_put_contents($this->absolutePath . "/conf/acl.auth.php", $cfg_acl);
+    }
+
+    function postInstall($preferences = array())
+    {
+        parent::postInstall($preferences);
+
+        if (!empty($preferences['admin_username'])) {
+            $username = $preferences['admin_username'];
+            $this->setUserRoles(array($username => 'admin'));
+        }
     }
 
     public function setConfiguration($configuration, $type = 'general')
@@ -208,7 +218,9 @@ class Installer_Dokuwiki extends Ld_Installer
     }
 
     public $roles = array('admin', 'user');
-    
+
+    public $defaultRole = 'user';
+
     public function getRoles()
     {
         return $this->roles;
@@ -216,11 +228,20 @@ class Installer_Dokuwiki extends Ld_Installer
 
     public function getUserRoles()
     {
+        $userRoles = array();
         $filename = $this->absolutePath . '/dist/roles.json';
         if (file_exists($filename)) {
             $json = file_get_contents($filename);
-            return Zend_Json::decode($json);
+            $userRoles = Zend_Json::decode($json);
         }
+        $users = Ld_Auth::getUsers();
+        foreach ($users as $user) {
+            $username = $user['username'];
+            if (empty($userRoles[$username])) {
+                $userRoles[$username] = $this->defaultRole;
+            }
+        }
+        return $userRoles;
     }
 
     public function setUserRoles($roles)

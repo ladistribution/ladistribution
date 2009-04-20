@@ -11,6 +11,7 @@ rm $GZ
 mv $NAME-$VERSION $FOLDER
 # Apply patches
 patch -p0 -d $FOLDER < patches/config.diff
+patch -p0 -d $FOLDER < patches/geshi.diff
 # Remove installer
 rm $FOLDER/install.php
 # Remove default config files
@@ -45,6 +46,9 @@ mv ./en $FOLDER/lib/plugins/revert/lang/en
 cp -R $FOLDER/lib/plugins/usermanager/lang/en ./en
 rm -rf $FOLDER/lib/plugins/usermanager/lang/*
 mv ./en $FOLDER/lib/plugins/usermanager/lang/en
+# Remove geshi
+rm $FOLDER/inc/geshi.php
+rm -rf $FOLDER/inc/geshi
 # Remove some unwanted files (osX)
 find . -name '*.DS_Store' -type f -delete
 # Create zip package

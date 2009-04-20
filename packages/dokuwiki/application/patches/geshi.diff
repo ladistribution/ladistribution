@@ -1,0 +1,23 @@
+--- inc/parserutils.php	2009-02-14 13:13:25.000000000 +0100
++++ inc/parserutils.php.patched	2009-04-20 01:22:21.000000000 +0200
+@@ -640,16 +640,16 @@
+   $cache = getCacheName($language.$code,".code");
+   $ctime = @filemtime($cache);
+   if($ctime && !$_REQUEST['purge'] &&
+-     $ctime > filemtime(DOKU_INC.'inc/geshi.php') &&                 // geshi changed
+-     $ctime > @filemtime(DOKU_INC.'inc/geshi/'.$language.'.php') &&  // language syntax definition changed
++     $ctime > filemtime(LD_LIB_DIR.'/geshi/geshi.php') &&                 // geshi changed
++     $ctime > @filemtime(LD_LIB_DIR.'/geshi/geshi/'.$language.'.php') &&  // language syntax definition changed
+      $ctime > filemtime(reset($config_cascade['main']['default']))){ // dokuwiki changed
+     $highlighted_code = io_readFile($cache, false);
+ 
+   } else {
+ 
+-    require_once(DOKU_INC . 'inc/geshi.php');
++    require_once(LD_LIB_DIR . '/geshi/geshi.php');
+ 
+-    $geshi = new GeSHi($code, $language, DOKU_INC . 'inc/geshi');
++    $geshi = new GeSHi($code, $language, LD_LIB_DIR . '/geshi/geshi');
+     $geshi->set_encoding('utf-8');
+     $geshi->enable_classes();
+     $geshi->set_header_type(GESHI_HEADER_PRE);
