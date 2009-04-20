@@ -1,0 +1,10 @@
+<package release="unstable">
+  <id>lib-geshi</id>
+  <name>Geshi</name>
+  <version>1.0.8.3-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">./geshi/</destination>
+  </deploy>
+</package>
