@@ -261,7 +261,7 @@ class Installer_Wordpress extends Ld_Installer
 		$users = Ld_Auth::getUsers();
 		foreach ($users as $user) {
 			$username = $user['username'];
-			$roles[$username] = $defaultRole; // default
+			$roles[$username] = $this->defaultRole; // default
 			$userdata = get_userdatabylogin($username);
 			$wp_user = new WP_User($userdata->ID);
 			foreach ($this->roles as $role) {
