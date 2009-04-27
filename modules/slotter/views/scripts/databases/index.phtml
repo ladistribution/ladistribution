@@ -1,0 +1,27 @@
+<h2>Databases</h2>
+
+<?php if (empty($this->databases) || count($this->databases) == 0) : ?>
+    <p>None</p>
+<?php else : ?>
+<ul>
+    <?php
+    foreach ($this->databases as $database) {
+        echo '<li>';
+        echo '<dl class="inline">';
+        echo '<dt>type</dt>';
+        echo '<dd>' . $database['type'] . '</dd>';
+        echo '<dt>host</dt>';
+        echo '<dd>' . $database['host'] . '</dd>';
+        echo '<dt>name</dt>';
+        echo '<dd>' . $database['name'] . '</dd>';
+        echo '</li>';
+    }
+    ?>
+</ul>
+<?php endif ?>
+
+<h3>You can</h3>
+
+<ul>
+    <li><a href="<?php echo $this->url(array('action' => 'new'), 'default'); ?>">Add a database</a></li>
+</ul>

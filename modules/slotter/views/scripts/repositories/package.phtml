@@ -1,0 +1,41 @@
+<h2>Package: <strong><?php echo $this->package ?></strong></h2>
+
+<h3>Releases</h3>
+
+<?php if (empty($this->releases) || count($this->releases) == 0) : ?>
+    
+    <p>None</p>
+    
+<?php else : ?>
+    
+    <ul>
+    <?php foreach ($this->releases as $release) : ?>
+        <?php
+        $params = array('controller' => 'repositories', 'id' => $this->repository->id, 'action' => 'manage');
+        $url = $this->url($params, 'default');
+        ?>
+        <li><a href="<?php echo $url ?>"><?php echo $release ?></a></li>
+    <?php endforeach ?>
+    </ul>
+
+<?php endif ?>
+
+<h3>Extensions</h3>
+
+<?php if (empty($this->extensions) || count($this->extensions) == 0) : ?>
+    
+    <p>None</p>
+    
+<?php else : ?>
+    
+    <ul>
+    <?php foreach ($this->extensions as $extension) : ?>
+        <?php
+        $params = array('controller' => 'repositories', 'id' => $this->repository->id, 'action' => 'manage');
+        $url = $this->url($params, 'default');
+        ?>
+        <li><a href="<?php echo $url ?>"><?php echo $extension->name ?></a></li>
+    <?php endforeach ?>
+    </ul>
+
+<?php endif ?>

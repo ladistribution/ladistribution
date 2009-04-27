@@ -1,0 +1,73 @@
+<h2>Users</h2>
+
+<?php if (empty($this->users)) : ?>
+    
+    <p>None.</p>
+
+<?php else : ?>
+
+<form action="" method="post">
+
+<table class="h6e-data">
+
+   <tr>
+       <th>Username</th>
+       <th>Full Name</th>
+       <?php foreach ($this->applications as $application) : ?>
+           <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
+       <?php endforeach ?>
+       <th>Action</th>
+   </tr>
+
+<?php foreach ($this->users as $user) : ?>
+
+    <tr>
+        <td><?php echo $user['username'] ?></td>
+        <td><?php echo $user['fullname'] ?></td>
+
+        <?php foreach ($this->applications as $application) : ?>
+            <td style="text-align:center">
+            <?php if (!empty($application['roles'])) : ?>
+
+                <select name="roles[<?php echo $application['path'] ?>][<?php echo $user['username'] ?>]">
+                    <?php foreach ($application['roles'] as $role) : ?>
+                        <?php
+                        $username = $user['username'];
+                        $selected = isset($application['userRoles'][$username]) && $application['userRoles'][$username] == $role ?
+                            'selected="selected"' : '';
+                        ?>
+                        <option <?php echo $selected ?> value="<?php echo $role ?>"><?php echo ucfirst($role) ?></option>
+                    <?php endforeach ?>
+                </select>
+
+            <?php else : ?>
+
+                <em style="color:#999">N/A</em>
+
+            <?php endif ?>
+            </td>
+       <?php endforeach ?>
+
+       <td>
+           <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $user['username'] )); ?>">delete</a>
+       </td>
+
+    </tr>
+
+<?php endforeach ?>
+
+</table>
+
+<input type="submit" class="submit button" value="Update"/>
+
+</form>
+
+<?php endif ?>
+
+<br />
+
+<h3>You can</h3>
+
+<ul>
+    <li><a href="<?php echo $this->url(array('action' => 'new')); ?>">Add a new user</a></li>
+</ul>

@@ -1,0 +1,27 @@
+<h2>Login</h2>
+
+<form method="post" action="">
+    
+    <label>Username</label><br/>
+    <input class="text" type="text" name="ld_auth_username" value=""/>
+    <br/>
+    <label>Password</label><br/>
+    <input class="text"  type="password" name="ld_auth_password" value="">
+    <br/>
+    <?php foreach ($this->postParams as $key => $value) : ?>
+        <input type="hidden" name="<?php echo $key ?>" value="<?php echo $value ?>"/>
+    <?php endforeach ?>
+    <input type="hidden" name="ld_auth_action" value="login"/>
+    <input class="button" type="submit" value="Log In"/>
+    
+</form>
+
+<h2>OpenID</h2>
+
+<form method="post" action="">
+    <label>OpenID URL</label><br />
+    <input type="text" name="openid_identifier" value=""/>
+    <br />
+    <input type="hidden" name="openid_action" value="login"/>
+    <input class="button" type="submit" value="Connect"/>
+</form>

@@ -1,0 +1,34 @@
+<h2>OpenID authentication</h2>
+
+<?php if ($this->mode == 'trust') : ?>
+
+    <p>A site identifying as
+    <a href="<?php echo $this->escape($this->siteRoot);?>">
+    <?php echo $this->escape($this->siteRoot);?>
+    </a>
+    has asked us for confirmation that
+    <a href="<?php echo $this->escape($this->openidServer->getLoggedInUser());?>">
+    <?php echo $this->escape($this->openidServer->getLoggedInUser());?>
+    </a>
+    is your identity URL.
+    </p>
+    
+    <form method="post" action="">
+        
+        <input type="checkbox" name="forever">
+        <label for="forever">Remember for this site</label>
+        
+        <br />
+        <br />
+        <input type="hidden" name="openid_action" value="trust">
+        
+        <?php foreach ($this->params as $key => $value) : ?>
+            <input type="hidden" name="<?php echo $key ?>" value="<?php echo $value ?>"/>
+        <?php endforeach ?>
+        
+        <input class="button" type="submit" name="allow" value="Allow">
+        <input class="button" type="submit" name="deny" value="Deny">
+        
+    </form>
+    
+<?php endif ?>

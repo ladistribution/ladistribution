@@ -1,0 +1,45 @@
+<?php
+echo $this->doctype('XHTML1_STRICT')->__tostring() . "\n" ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<?php echo $this->headTitle()->__tostring() . "\n" ?>
+<?php echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . "\n"  ?>
+<?php echo $this->headLink()->__tostring() . "\n" ?>
+<?php echo $this->headStyle()->__tostring() . "\n" ?>
+<?php echo $this->headScript()->__tostring() . "\n" ?>
+</head>
+<body>
+
+<div class="h6e-top-bar"><div class="h6e-top-bar-inner">
+  <div class="a">
+      <a href="<?php echo $this->baseUrl ?>/"><?php echo $this->title ?></a>
+  </div>
+  <div class="b">
+      <?php if ($this->authenticated) : ?>
+          You're authenticated as <strong><?php echo $this->user['fullname'] ?></strong>
+          -
+          <a href="?ld_auth_action=logout">Log Out</a>
+      <?php else : ?>
+          <a class="h6e-login" href="<?php echo $this->url(array('action' => 'auth')) ?>">Log In</a>
+      <?php endif ?>
+  </div>
+</div></div>
+
+<div class="h6e-main-content">
+
+  <!-- <h1 class="h6e-page-title"><a href="<?php echo $this->baseUrl ?>/"><?php echo $this->title ?></a></h1> -->
+
+  <div class="h6e-page-content">
+      <?php echo $this->layout()->content ?>
+  </div>
+
+  <div class="h6e-simple-footer">
+      <p>This is <a href="http://ladistribution.h6e.net/">La Distribution</a></p>
+  </div>
+
+</div>
+
+<?php Ld_Ui::super_bar(); ?>
+
+</body>
+</html>

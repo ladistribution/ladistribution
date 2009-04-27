@@ -1,0 +1,35 @@
+<h2>Add a new database</h2>
+
+<form method="post" action="">
+    
+    <table>
+    <tr>
+        <td><label>Type</label></td>
+        <td>
+            <select name="type">
+                <option value="mysql">MySQL</option>
+                <option value="postgresql">PostgreSQL</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Host</label></td>
+        <td><input type="text" name="host" class="text" value="localhost"/></td>
+    </tr>
+    <tr>
+        <td><label>Name</label></td>
+        <td><input type="text" name="name" class="text" value=""/></td>
+    </tr>
+    <tr>
+        <td><label>User</label></td>
+        <td><input type="text" name="user" class="text" value=""/></td>
+    </tr>
+    <tr>
+        <td><label>Password</label></td>
+        <td><input type="text" name="password" class="text" value=""/></td>
+    </tr>
+    </table>
+     
+    <input type="submit" class="submit" value="Add"/>
+
+</form>
