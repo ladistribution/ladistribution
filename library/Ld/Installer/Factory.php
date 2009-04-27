@@ -51,7 +51,11 @@ class Ld_Installer_Factory
             throw new Exception("manifest.xml doesn't exists or is unreadable in $dir");
         }
 
-        $manifest = new SimpleXMLElement($manifestXml);
+        try {
+            $manifest = new SimpleXMLElement($manifestXml);
+        } catch (Exception $e) {
+            throw new Exception("Can't parse $filename as XML.");
+        }
 
         return $manifest;
     }

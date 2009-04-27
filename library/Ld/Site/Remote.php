@@ -40,6 +40,9 @@ class Ld_Site_Remote extends Ld_Site_Abstract
     {
         $this->httpClient->setUri($this->baseUrl);
         $response = $this->httpClient->request();
+        if ($response->isError()) {
+            throw new Exception("HTTP Error. Maybe authentication issue ?");
+        }
         $result = Zend_Json::decode( $response->getBody() );
         return $result['site'];
     }
@@ -138,7 +141,7 @@ class Ld_Site_Remote extends Ld_Site_Abstract
     {
         $uri = $this->baseUrl . '/packages/extensions/id/' . $packageId;
         if (isset($type)) {
-            $uri .= '?type=' . $type;
+            $uri .= '/type/' . $type;
         }
         $this->httpClient->setUri($uri);
         $response = $this->httpClient->request();

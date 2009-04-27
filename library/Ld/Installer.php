@@ -119,7 +119,7 @@ class Ld_Installer
                 mkdir($this->absolutePath, 0777, true);
             }
         }
-        
+
         foreach ($this->getDeployments() as $deployment) {
             Ld_Files::copy($deployment['from'], $deployment['to']);
         }
@@ -131,32 +131,34 @@ class Ld_Installer
             $preferences['path'] = null;
             // throw new Exception("Path can't be empty.");
         }
+
         $this->deploy($preferences['path']);
-        
+
         // Config
         // FIXME: Only if type=application ?
-        $cfg_ld = "<?php\n";
-        $cfg_ld .= "require_once('" . LD_DIST_DIR . "/config.php');\n";
-        if (isset($preferences['db'])) {
-            $cfg_ld .= "require_once('" . LD_DIST_DIR . "/db/" . $preferences['db'] . ".php');\n";
-        }
         if (!empty($preferences['path'])) {
+            $cfg_ld = "<?php\n";
+            $cfg_ld .= "require_once('" . LD_DIST_DIR . "/config.php');\n";
             file_put_contents($this->absolutePath . "/dist/config.php", $cfg_ld);
         }
     }
-    
+
+    public function postInstall() {}
+
     public function update()
     {
         $this->deploy();
     }
-    
+
+    public function postUpdate() {}
+
     public function uninstall()
     {
         if (empty($this->absolutePath)) {
             throw new Exception("Path is undefined");
         }
         
-        // Erase files (would be better to delete one by one)
+        // Erase files (would be better to delete files one by one)
         foreach ($this->getDeployments() as $deployment) {
             Ld_Files::unlink($deployment['to']);
         }
@@ -165,12 +167,13 @@ class Ld_Installer
         if ($this->needDb() && isset($this->instance)) {
             $dbName = $this->instance->getDb();
             $dbPrefix = $this->instance->getDbPrefix();
-            require LD_DIST_DIR . '/db/' . $dbName . '.php';
+            $databases = $this->instance->getSite()->getDatabases();
+            $db = $databases[$dbName];
             $db = Zend_Db::factory('Mysqli', array(
-                'host'     => LD_DB_HOST,
-                'username' => LD_DB_USER,
-                'password' => LD_DB_PASSWORD,
-                'dbname'   => LD_DB_NAME
+                'host'     => $db['host'],
+                'username' => $db['user'],
+                'password' => $db['password'],
+                'dbname'   => $db['name']
             ));
             $result = $db->fetchCol('SHOW TABLES');
             foreach ($result as $tablename) {
@@ -179,7 +182,7 @@ class Ld_Installer
                 }
             }
         }
-        
+       
     }
     
     public function backup()
@@ -225,25 +228,25 @@ class Ld_Installer
         $uz->unzipAll($this->tmpFolder);
     }
     
-    public function restrict($state = true)
-    {
-        $dir = $this->absolutePath . '/dist/prepend';
-        $filename = $dir . '/restrict.php';
-        if ($state == true) {
-            if (!file_exists($dir)) {
-                mkdir($dir, 0777, true);
-            }
-            $restrict  = "<?php\n";
-            $restrict .= "require_once 'Ld/Auth.php';\n";
-            $restrict .= "Ld_Auth::restricted();\n";
-            file_put_contents($filename, $restrict);
-        } else {
-            if (file_exists($filename)) {
-                Ld_Files::unlink($filename);
-            }
-        }
-    }
-
+    // public function restrict($state = true)
+    // {
+    //     $dir = $this->absolutePath . '/dist/prepend';
+    //     $filename = $dir . '/restrict.php';
+    //     if ($state == true) {
+    //         if (!file_exists($dir)) {
+    //             mkdir($dir, 0777, true);
+    //         }
+    //         $restrict  = "<?php\n";
+    //         $restrict .= "define('LD_RESTRICTED', true);\n";
+    //         file_put_contents($filename, $restrict);
+    //     } else {
+    //         if (file_exists($filename)) {
+    //             Ld_Files::unlink($filename);
+    //         }
+    //     }
+    // }
+    
+    /* DEPRECATED: replaced by $this->package->getPreferences(); OR $this->instance->getPreferences(); */
     public function getPreferences($type = 'configuration')
     {
         $preferences = array();
@@ -299,6 +302,14 @@ class Ld_Installer
     public function getThemes() { return array(); }
     
     public function getBackupDirectories() { return array(); }
+
+    // Roles
+
+    public $defaultRole = 'user';
+
+    public function getRoles() { return array($this->defaultRole); }
+
+    public function getUserRoles() { return array(); }
 
     // Legacy
     

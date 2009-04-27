@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Ld/Instance/Abstract.php';
+
 abstract class Ld_Instance_Application_Abstract extends Ld_Instance_Abstract
 {
 
@@ -22,7 +24,11 @@ abstract class Ld_Instance_Application_Abstract extends Ld_Instance_Abstract
     public function isUpToDate()
     {
         $package = $this->site->getPackage( $this->getPackageId() );
-        return $this->getVersion() != $package->version ? $package->version : false;        
+        if ($package) {
+            return $this->getVersion() != $package->version ? $package->version : false;
+        }
+        // package is unknown, it can only be 'up to date' then
+        return false;
     }
 
     public function isRestricted()

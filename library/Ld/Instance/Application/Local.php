@@ -1,12 +1,24 @@
 <?php
 
+require_once 'Ld/Instance/Application/Abstract.php';
+
 class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 {
 
     protected $absolutePath;
 
     protected $instanceJson;
-
+    
+    public function __construct($params = array())
+    {
+        if (is_string($params) && is_dir($params) && file_exists($params . '/dist/instance.json')) {
+            require_once 'Zend/Json.php';
+            $params = Zend_Json::decode( file_get_contents($params . '/dist/instance.json') );
+        }
+        
+        parent::__construct($params);
+    }
+    
     public function getInfos()
     {
         if (empty($this->infos)) {
@@ -44,6 +56,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         $this->site = $site;
     }
 
+    public function getSite()
+    {
+        return $this->site;
+    }
+
     public function setPath($path)
     {
         $this->path = $path;
@@ -67,14 +84,18 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function getDbPrefix()
     {
-        return $this->db_prefix;
+        $infos = $this->getInfos();
+        if (isset($infos['db_prefix'])) {
+            return $infos['db_prefix'];
+        }
+        return null;
     }
 
     /* From Installer */
 
     public function getInstaller()
     {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $this));
+        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $this, 'dbPrefix' => $this->getDbPrefix()));
         return $installer;
     }
 
@@ -120,6 +141,29 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     public function setConfiguration($configuration, $type = 'general')
     {
         return $this->getInstaller()->setConfiguration($configuration, $type);
+    }
+
+    public function getRoles()
+    {
+        $installer = $this->getInstaller();
+        if (method_exists($installer, 'getRoles')) {
+            return $installer->getRoles();
+        }
+        return array();
+    }
+        
+    public function getUserRoles()
+    {
+        $installer = $this->getInstaller();
+        if (method_exists($installer, 'getUserRoles')) {
+            return $installer->getUserRoles();
+        }
+        return array();
+    }
+
+    public function setUserRoles($roles)
+    {
+        return $this->getInstaller()->setUserRoles($roles);
     }
 
     public function getExtensions()

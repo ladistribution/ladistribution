@@ -5,7 +5,12 @@ class Ld_Instance_Application_Remote extends Ld_Instance_Application_Abstract
 
     protected function _getRemote($action)
     {
-        $this->site->getHttpClient()->setUri($this->site->getBaseUrl() . '/' . $this->path . '/' . $action);
+        $uri = $this->site->getBaseUrl() . '/' . $this->path . '/' . $action;
+        
+        // $client = new Ld_Http_Client($uri);
+        // return $client->getJson();
+        
+        $this->site->getHttpClient()->setUri($uri);
         $response = $this->site->getHttpClient()->request();
         $result = Zend_Json::decode( $response->getBody() );
         return $result;
@@ -13,14 +18,16 @@ class Ld_Instance_Application_Remote extends Ld_Instance_Application_Abstract
 
     protected function _postRemote($action, $parameters = array())
     {
+        $uri = $this->site->getBaseUrl() . '/' . $this->path . '/' . $action;
+        
+        // $client = new Ld_Http_Client($uri);
+        // return $client->postJson($parameters);
+        
         $this->site->getHttpClient()
-            ->setUri($this->site->getBaseUrl() . '/' . $this->path . '/' . $action)
+            ->setUri($uri)
             ->setRawData(Zend_Json::encode($parameters), 'application/json');
-
         $response = $this->site->getHttpClient()->request('POST');
-
         $result = Zend_Json::decode( $response->getBody() );
-
         return $result;
     }
 
@@ -119,10 +126,12 @@ class Ld_Instance_Application_Remote extends Ld_Instance_Application_Abstract
         
         $result = $this->_getRemote('manage');
         
-        foreach ($result['extensions'] as $infos) {
-            $instance = new Ld_Instance_Extension();
-            $instance->setInfos($infos);
-            $extensions[] = $instance;
+        if (isset($result['extensions'])) {
+            foreach ($result['extensions'] as $infos) {
+                $instance = new Ld_Instance_Extension();
+                $instance->setInfos($infos);
+                $extensions[] = $instance;
+            }
         }
         
         return $extensions;

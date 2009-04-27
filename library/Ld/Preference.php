@@ -73,7 +73,7 @@ class Ld_Preference
      */
     public function __construct($type)
     {
-        if (in_array((string) $type, array('text', 'password', 'boolean', 'hidden', 'range', 'list', 'color', 'textarea'))) {
+        if (in_array((string) $type, array('text', 'password', 'boolean', 'hidden', 'range', 'list', 'color', 'textarea', 'email'))) {
             $this->_type = (string) $type;
         } else {
             $this->_type = 'text';

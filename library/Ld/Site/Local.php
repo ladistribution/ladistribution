@@ -11,13 +11,25 @@ require_once 'Ld/Instance/Extension.php';
 
 class Ld_Site_Local extends Ld_Site_Abstract
 {
-
+    
+    public $id = 'default';
+    
+    public $type = 'local';
+    
+    public $path = '';
+    
+    public $name = 'Local';
+    
+    public $slots = 10;
+    
     public function __construct($params = array())
     {
-        $this->id = $params['id'];
-        $this->type = $params['type'];
-        $this->name = $params['name'];
-        $this->slots = $params['slots'];
+        $properties = array('id', 'type', 'name', 'slots');
+        foreach ($properties as $key) {
+            if (isset($params[$key])) {
+                $this->$key = $params[$key];
+            }
+        }
     }
 
     public function getInstances($type = null)
@@ -41,12 +53,19 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $instances;
     }
 
-    public function getInstance($path)
+    public function getInstance($id)
     {
+        $instances = $this->getInstances();
         $instance = new Ld_Instance_Application_Local();
-        $instance->setPath($path);
         $instance->setSite($this);
-        return $instance;
+        if (isset($instances[$id])) {
+            $instance->setPath($instances[$id]['path']);
+            return $instance;
+        } elseif (file_exists(LD_ROOT . '/' . $id)) {
+            $instance->setPath($id);
+            return $instance;
+        }
+        throw new Exception("No application registered with this id.");
     }
 
     public function createInstance($packageId, $preferences = array())
@@ -83,6 +102,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             case 'application':
                 $installer->install($preferences);
                 $this->registerInstance($installer, $preferences);
+                $installer->postInstall($preferences);
                 $instance = $this->getInstance($installer->path);
                 return $instance;
             default:
@@ -120,7 +140,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
           }
 
           $instances = $this->getInstances();
-          $instances[] = array(
+          $instances[uniqid()] = array(
               'package' => $params['package'],
               'version' => $params['version'],
               'type'    => $params['type'],
@@ -233,8 +253,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if (empty($availableDbs)) {
                 throw new Exception('No database available.');
             } else if (count($availableDbs) == 1) {
-                $db = $availableDbs[0];
-                $preferences[] = array('name' => 'db', 'type' => 'hidden', 'defaultValue' => $db['id']);
+                $keys = array_keys($availableDbs);
+                $id = $keys[0];
+                $preferences[] = array('name' => 'db', 'type' => 'hidden', 'defaultValue' => $id);
             } else {
                 throw new Exception('Case not handled yet.');
             }
@@ -268,80 +289,47 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getDatabases($type = null)
     {
-        $dbs = array();
-        if (file_exists(LD_DIST_DIR . '/db')) {
-            $dh = opendir(LD_DIST_DIR . '/db');
-            while (false !== ($obj = readdir($dh))) {
-                if (substr($obj, 0, 1) == '.') {
-                    continue;
-                }
-                $id = str_replace('.php', '', $obj);
-                $array = explode('-', $id);
-                if (empty($type) || $type == $array[0]) {
-                    $dbs[] = array('id' => $id, 'type' => $array[0], 'host' => $array[1], 'name' => $array[2]);
+        $databases = array();
+        $filename = LD_DIST_DIR . '/databases.json';
+        if (file_exists($filename)) {
+            $databases = Zend_Json::decode(file_get_contents($filename));
+            // Filter
+            if (isset($type)) {
+                foreach ($databases as $key => $db) {
+                    if ($db['type'] != $type) {
+                        unset($databases[$key]);
+                    }
                 }
             }
         }
-        return $dbs;
+        return $databases;
     }
 
     public function addDatabase($params)
     {
-        $filename = $params['type'] . '-' . $params['host'] . '-' . $params['name'] . '.php';
-
-        $cfg  = '<?php' . "\n";
-        $cfg .= "define('LD_DB_HOST', '" . $params['host'] . "');\n";
-        $cfg .= "define('LD_DB_NAME', '" . $params['name'] . "');\n";
-        $cfg .= "define('LD_DB_USER', '" . $params['user'] . "');\n";
-        $cfg .= "define('LD_DB_PASSWORD', '" . $params['password'] . "');\n";
-
-        if (!file_exists(LD_DIST_DIR . '/db')) {
-            mkdir(LD_DIST_DIR . '/db', 0777, true);
-        }
-        file_put_contents(LD_DIST_DIR . '/db/' . $filename, $cfg);
+        $databases = $this->getDatabases();
+        
+        $databases[uniqid()] = $params;
+        
+        $filename = LD_DIST_DIR . '/databases.json';
+        Ld_Files::put($filename, Zend_Json::encode($databases));
     }
 
     // Users
 
     public function getUsers()
     {
-        if (file_exists(LD_DIST_DIR . '/users.php')) {
-            $users = array();
-            $file = file_get_contents(LD_DIST_DIR . '/users.php');
-            $lines = explode("\n", $file);
-            foreach ($lines as $line) {
-                $user = explode(":", trim($line));
-                if (!empty($user[0])) {
-                    $username = $user[0];
-                    $users[$username] = array(
-                        'username'   => $user[0],
-                        'password'   => $user[1],
-                        'screenname' => $user[2],
-                        'email'      => $user[3]
-                    );
-                }
-            }
-            return $users;
-        }
-        return array();
+        return Ld_Auth::getUsers();
     }
 
     public function addUser($user)
     {
-        $user['password'] = sha1($user['password']);
-        $username = $user['username'];
+        return Ld_Auth::addUser($user);
+    }
 
-        $users = $this->getUsers();
-        $users[$username] = $user;
-
-        $file = '';
-        $htpasswd = '';
-        foreach ($users as $user) {
-            $file .= implode(":", $user) . "\n";
-            // $htpasswd .= $user['username'] . ':' . $user['password'] . "\n";
-        }
-        file_put_contents(LD_DIST_DIR . '/users.php', $file);
-        // file_put_contents(LD_DIST_DIR . '/.htpasswd', $htpasswd);
+    public function deleteUser($username)
+    {
+        return Ld_Auth::deleteUser($username);
     }
 
     // Repositories
