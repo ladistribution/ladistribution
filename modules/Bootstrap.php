@@ -17,8 +17,9 @@ class Bootstrap
     function prepare()
     {
         // Zend Framework
-        require_once 'Zend/Loader.php';
-        Zend_Loader::registerAutoload();
+        require_once 'Zend/Loader/Autoloader.php';
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->registerNamespace('Ld_');
 
         // Clearbricks
         require_once 'clearbricks/common/lib.files.php';
