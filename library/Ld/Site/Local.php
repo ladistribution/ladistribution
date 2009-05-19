@@ -12,7 +12,7 @@ require_once 'Ld/Instance/Extension.php';
 class Ld_Site_Local extends Ld_Site_Abstract
 {
     
-    public $id = 'default';
+    public $id = null;
     
     public $type = 'local';
     
@@ -101,9 +101,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 break;
             case 'application':
                 $installer->install($preferences);
-                $this->registerInstance($installer, $preferences);
+                $id = $this->registerInstance($installer, $preferences);
                 $installer->postInstall($preferences);
                 $instance = $this->getInstance($installer->path);
+                $instance->id = $id;
                 return $instance;
             default:
                 $installer->install($preferences);
@@ -139,8 +140,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
               $instance->setInfos($params)->save();
           }
 
+          $id = uniqid();
+
           $instances = $this->getInstances();
-          $instances[uniqid()] = array(
+          $instances[$id] = array(
               'package' => $params['package'],
               'version' => $params['version'],
               'type'    => $params['type'],
@@ -148,6 +151,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
               'name'    => isset($params['name']) ? $params['name'] : null
           );
           file_put_contents(LD_DIST_DIR . '/instances.json', Zend_Json::encode($instances));
+
+          return $id;
     }
 
     public function updateInstance($params)
