@@ -39,7 +39,7 @@ class Ld_Auth
             throw new Exception("User with this username already exists.");
         }
 
-        $users = $this->getUsers();
+        $users = self::getUsers();
         $users[uniqid()] = $user;
 
         self::_writeUsers($users);
