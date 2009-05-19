@@ -127,7 +127,7 @@ class Ld_Installer
     
     public function install($preferences = array())
     {
-        if (empty($preferences['path'])) {
+        if (!isset($preferences['path'])) {
             $preferences['path'] = null;
             // throw new Exception("Path can't be empty.");
         }
@@ -136,7 +136,7 @@ class Ld_Installer
 
         // Config
         // FIXME: Only if type=application ?
-        if (!empty($preferences['path'])) {
+        if (isset($preferences['path'])) {
             $cfg_ld = "<?php\n";
             $cfg_ld .= "require_once('" . LD_DIST_DIR . "/config.php');\n";
             file_put_contents($this->absolutePath . "/dist/config.php", $cfg_ld);
