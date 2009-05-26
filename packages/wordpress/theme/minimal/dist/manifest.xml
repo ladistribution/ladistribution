@@ -1,7 +1,7 @@
 <package release="unstable">
   <id>wordpress-theme-minimal</id>
   <name>Minimal</name>
-  <version>0.2a-3</version>
+  <version>0.2a-5</version>
   <type>theme</type>
   <need>css-h6e-minimal</need>
   <extend>wordpress</extend>

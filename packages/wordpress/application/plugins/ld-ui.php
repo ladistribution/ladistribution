@@ -10,20 +10,18 @@ Author URI: http://h6e.net/
 
 function ld_admin_head()
 {
-	echo '<link rel="stylesheet" type="text/css" href="' . LD_BASE_URL . '/css/ld-ui/ld-bars.css' .'" />'."\n";
-	echo '<style type="text/css"> #footer { display:none }</style>'."\n";
+	$site = Zend_Registry::get('site');
+	echo '<link rel="stylesheet" type="text/css" href="' . $site->getBaseUrl() . '/css/ld-ui/ld-bars.css' .'" />'."\n";
+	echo '<style type="text/css"> #footer { display:none; }</style>'."\n";
 }
 
 add_action('admin_head', 'ld_admin_head');
 
 function ld_template_head()
 {
-	?>
-	<script type="text/javascript" src="<?php echo LD_JS_URL ?>jquery/jquery.js"></script>
-	<script type="text/javascript" src="<?php echo LD_JS_URL ?>ld/ld.js"></script>
-	<?php
-	echo '<link rel="stylesheet" type="text/css" href="' . LD_BASE_URL . '/css/ld-ui/ld-bars.css' .'" />'."\n";
-	echo '<link rel="stylesheet" type="text/css" href="' . LD_BASE_URL . '/css/ld-ui/ld-dialog.css' .'" />'."\n";
+	$site = Zend_Registry::get('site');
+	echo '<link rel="stylesheet" type="text/css" href="' . $site->getBaseUrl() . '/css/ld-ui/ld-bars.css' .'" />'."\n";
+	echo '<style type="text/css"> body { margin-bottom:50px; }</style>'."\n";
 }
 
 add_action('wp_head', 'ld_template_head');
@@ -67,21 +65,6 @@ function ld_top_bar()
          <?php endif; ?>
       </div>
     </div></div>
-    
-    <script type="text/javascript">
-    (function($) {
-        $(document).ready(function($){
-            $(".h6e-top-bar a[href$='wp-login.php']").click(function() {
-                return Ld.handleLogin({
-                    'href': $(this).attr('href'),
-                    'action': $(this).attr('href'),
-                    'baseUrl': '<?php echo LD_ADMIN_URL ?>',
-                    'wrapper': "#wrapper"
-                });
-            });
-        });
-    })(jQuery);
-    </script>
 
     <?php
 

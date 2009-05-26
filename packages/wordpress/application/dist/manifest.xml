@@ -1,8 +1,9 @@
 <package release="unstable" >
   <id>wordpress</id>
   <name>WordPress</name>
-  <version>2.7.1-35</version>
+  <version>2.7.1-58</version>
   <type>application</type>
+  <need>css-ld-ui</need>
   <installer name="Installer_Wordpress" src="./dist/installer.php" />
   <upstream>
       <source version="2.7.1" type="tgz">http://wordpress.org/wordpress-2.7.1.tar.gz</source>
@@ -13,6 +14,9 @@
       <origin>plugins</origin>
       <destination path="public">./wp-content/plugins/</destination>
   </deploy>
+  <install>
+      <preference type="user" label="Administrator" name="administrator" value=""/>
+  </install>
   <!--
   <install>
       <preference type="email" label="Admin Email" name="admin_email" value=""/>

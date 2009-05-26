@@ -1,14 +1,10 @@
 <?php
 
-if (file_exists(dirname(__FILE__) . '/config.php')) {
-	require_once dirname(__FILE__) . '/config.php';
-}
+require_once dirname(__FILE__) . '/config.php';
 
-require_once 'Ld/Site/Local.php';
-$site = new Ld_Site_Local();
+$site = Zend_Registry::get('site');
 
-require_once 'Ld/Instance/Application/Local.php';
-$application = new Ld_Instance_Application_Local( dirname(__FILE__) . '/..' );
+$application = $site->getInstance( dirname(__FILE__) . '/..' );
 
 $databases = $site->getDatabases();
 $db = $databases[ $application->getDb() ];

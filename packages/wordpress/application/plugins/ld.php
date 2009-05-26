@@ -59,5 +59,3 @@ function ld_disable_menus()
 }
 
 add_action('admin_menu', 'ld_disable_menus');
-
-add_filter('openid_get_user_by_openid', 'ld_get_user_by_openid');

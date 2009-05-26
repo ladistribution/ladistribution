@@ -22,6 +22,12 @@ class Installer_Wordpress extends Ld_Installer
 		populate_options();
 		populate_roles();
 
+		if (isset($preferences['administrator'])) {
+			$preferences['admin_username'] = $preferences['administrator']['username'];
+			$preferences['admin_email'] = $preferences['administrator']['email'];
+			$preferences['admin_password'] = '';
+		}
+
 		$user_name     = $preferences['admin_username'];
 		$user_password = $preferences['admin_password'];
 		$user_email    = $preferences['admin_email'];
@@ -35,8 +41,8 @@ class Installer_Wordpress extends Ld_Installer
 
 		update_option('admin_email', $user_email);
 		update_option('blogname', $preferences['title']);
-		update_option('siteurl', LD_BASE_URL . $preferences['path']);
-		update_option('home', LD_BASE_URL . $preferences['path']);
+		update_option('siteurl', $this->site->getBaseUrl() . $preferences['path']);
+		update_option('home', $this->site->getBaseUrl() . $preferences['path']);
 
 		if (true === LD_REWRITE) {
 			$this->enable_clean_urls();
@@ -46,8 +52,11 @@ class Installer_Wordpress extends Ld_Installer
 
 		$this->populate_sidebar_widgets();
 
+		update_option('active_plugins', array());
+
 		activate_plugin('ld.php');
 		activate_plugin('ld-ui.php');
+		activate_plugin('ld-auth.php');
 
 		if (isset($preferences['theme'])) {
 			$this->setTheme($preferences['theme']);
@@ -74,7 +83,7 @@ class Installer_Wordpress extends Ld_Installer
 
 		$cfg .= "require_once(ABSPATH . 'wp-settings.php');\n";
 
-		file_put_contents($this->absolutePath . "/wp-config.php", $cfg);
+		Ld_Files::put($this->absolutePath . "/wp-config.php", $cfg);
 	}
 
 	public function getThemes()
@@ -86,7 +95,7 @@ class Installer_Wordpress extends Ld_Installer
 		foreach ($wp_themes as $theme) {
 			$id = $theme['Stylesheet'];
 			$name = $theme['Name'];
-			$screenshot = LD_BASE_URL . $this->path . '/wp-content' . $theme['Stylesheet Dir'] . '/' . $theme['Screenshot'];
+			$screenshot = $this->site->getBaseUrl() . $this->path . '/wp-content' . $theme['Stylesheet Dir'] . '/' . $theme['Screenshot'];
 			$active = $current_theme == $theme['Name'];
 			$themes[$id] = compact('name', 'screenshot', 'active');
 		}
@@ -160,8 +169,8 @@ class Installer_Wordpress extends Ld_Installer
 			$result = $this->wpdb->query($query);
 		}
 
-		update_option('siteurl', LD_BASE_URL . $this->instance->path);
-		update_option('home', LD_BASE_URL . $this->instance->path);
+		update_option('siteurl', $this->site->getBaseUrl() . $this->instance->path);
+		update_option('home', $this->site->getBaseUrl() . $this->instance->path);
 
 		wp_cache_flush();
 
@@ -174,17 +183,17 @@ class Installer_Wordpress extends Ld_Installer
 		switch_theme($theme, $theme);
 	}
 
-	public function uninstall()
-	{
-		$this->load_wp();
-
-		foreach ($this->wpdb->tables as $table) {
-			$tablename = $this->wpdb->$table;
-			$result = $this->wpdb->query("DROP TABLE $tablename;");
-		}
-
-		parent::uninstall();
-	}
+	// public function uninstall()
+	// {
+	// 	$this->load_wp();
+	// 	
+	// 	foreach ($this->wpdb->tables as $table) {
+	// 		$tablename = $this->wpdb->$table;
+	// 		$result = $this->wpdb->query("DROP TABLE $tablename;");
+	// 	}
+	// 
+	// 	parent::uninstall();
+	// }
 
 	public function getPreferences($type)
 	{
@@ -244,7 +253,7 @@ class Installer_Wordpress extends Ld_Installer
 		}
 		return $this->getConfiguration();
 	}
-	
+
 	public $roles = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
 
 	public $defaultRole = 'subscriber';
@@ -258,7 +267,7 @@ class Installer_Wordpress extends Ld_Installer
 	{
 		$this->load_wp();
 		$roles = array();
-		$users = Ld_Auth::getUsers();
+		$users = $this->site->getUsers();
 		foreach ($users as $user) {
 			$username = $user['username'];
 			$roles[$username] = $this->defaultRole; // default
@@ -316,7 +325,7 @@ class Installer_Wordpress extends Ld_Installer
 			$wp_rewrite->set_permalink_structure('/%year%/%monthnum%/%postname%/');
 			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
 			insert_with_markers($this->absolutePath . "/.htaccess", 'WordPress', $rules );
-		}	
+		}
 	}
 
 	function populate_database($user_id)
