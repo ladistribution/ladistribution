@@ -32,7 +32,7 @@ class Ld_Installer_Factory
             $filename = LD_TMP_DIR . '/' . self::$package->id . '-' . self::$package->version . '.zip';
             if (!file_exists($filename)) {
                 $file = self::getPackage();
-                file_put_contents($filename, $file);
+                Ld_Files::put($filename, $file);
             }
             self::$dir = $dir = LD_TMP_DIR . '/' . self::$package->id . '-' . self::$package->version . '/';
             if (!file_exists($dir)) {

@@ -67,13 +67,21 @@ class Ld_Preference
     protected $_rangeOptions;
 
     /**
+     * Supported types
+     *
+     * @var array
+     */    
+    protected $_supportedTypes = array('text', 'password', 'boolean', 'hidden',
+        'range', 'list', 'color', 'textarea', 'email', 'user');
+
+    /**
      * Preference constructor.
      *
      * @param string $type
      */
     public function __construct($type)
     {
-        if (in_array((string) $type, array('text', 'password', 'boolean', 'hidden', 'range', 'list', 'color', 'textarea', 'email'))) {
+        if (in_array((string) $type, $this->_supportedTypes)) {
             $this->_type = (string) $type;
         } else {
             $this->_type = 'text';

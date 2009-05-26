@@ -15,12 +15,13 @@ class Ld_Auth_Adapter_File implements Zend_Auth_Adapter_Interface
 
     public function authenticate()
     {
-        $users = Ld_Auth::getUsers();
+        $hasher = new Ld_Auth_Hasher(8, TRUE);
+        $users = Zend_Registry::get('site')->getUsers();
         if (empty($users)) {
             throw new Exception("No user defined."); 
         }
         foreach ($users as $user) {
-            if ($this->_username == $user['username'] && sha1($this->_password) == $user['hash']) {
+            if ($this->_username == $user['username'] && $hasher->CheckPassword($this->_password, $user['hash'])) {
                 return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this->_username);
             }
         }

@@ -139,7 +139,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
     {
     }
 
-    public function importPackage($filename)
+    public function importPackage($filename, $clean = true)
     {
         $package = new Ld_Package(array('zip' => $filename));
 
@@ -151,9 +151,13 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
         Ld_Files::put($dir . "/manifest.xml", $package->getManifestXml());
 
-        Ld_Files::unlink($filename);
+        if ($clean) {
+            Ld_Files::unlink($filename);
+        }
 
         $this->generatePackageList();
+
+        return $package;
     }
 
     public function getDirectory($params)

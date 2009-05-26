@@ -21,8 +21,8 @@ abstract class Ld_Site_Abstract
         if (isset($packages[$id])) {
             return $packages[$id];
         }
-        return null;
-        // throw new Exception("Unknown package: $id");
+        //return null;
+        throw new Exception("Unknown package '$id'");
     }
 
     abstract public function getPackageExtensions($packageId, $type = null);

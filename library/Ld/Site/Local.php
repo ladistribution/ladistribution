@@ -16,25 +16,109 @@ class Ld_Site_Local extends Ld_Site_Abstract
     
     public $type = 'local';
     
+    public $dir = '';
+    
     public $path = '';
     
-    public $name = 'Local';
+    public $basePath = '';
+    
+    public $name = '';
     
     public $slots = 10;
     
     public function __construct($params = array())
     {
-        $properties = array('id', 'type', 'name', 'slots');
+        $properties = array('id', 'dir', 'basePath', 'type', 'name', 'slots');
         foreach ($properties as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
             }
         }
+
+        $this->directories = array(
+            'js'     => $this->dir . '/js',
+            'css'    => $this->dir . '/css',
+            'shared' => $this->dir . '/shared',
+            'lib'    => $this->dir . '/lib',
+            'dist'   => $this->dir . '/dist',
+            'tmp'    => $this->dir . '/dist/tmp',
+            'log'    => $this->dir . '/dist/log',
+            'admin'  => $this->dir . '/admin',
+        );
+
+        // transitional code
+        defined('LD_ROOT') OR define('LD_ROOT', $this->dir);
+        defined('LD_BASE_PATH') OR define('LD_BASE_PATH', $this->basePath);
+        defined('LD_BASE_URL') OR define('LD_BASE_URL', 'http://' . LD_HOST . LD_BASE_PATH . '/');
+    }
+
+    public function init()
+    {
+        $this->_checkDirectories();
+        $this->_checkConfig();
+        $this->_checkRepositories();
+    }
+
+    protected function _checkDirectories()
+    {
+        if (!file_exists($this->dir)) {
+            mkdir($this->dir, 0777, true);
+        }
+
+        foreach ($this->directories as $name => $directory) {
+            $constantName = strtoupper("LD_" . $name . "_DIR");
+            defined($constantName) OR define($constantName, $directory);
+            $directory = constant($constantName);
+            if (!file_exists($directory)) {
+                if (!is_writable(dirname($directory))) {
+                    $msg = "Can't create folder $directory. Check your permissions.";
+                    die($msg);
+                }
+                mkdir($directory, 0777, true);
+            }
+        }
+    }
+
+    protected function _checkConfig()
+    {
+        if (file_exists('dist/config.php')) {
+            return true;
+        }
+
+        $cfg  = "<?php\n";
+        $constants = array('LD_BASE_PATH');
+        foreach ($constants as $name) {
+          if (defined($name)) {
+              $cfg .= sprintf("define('%s', '%s');\n", $name, constant($name));
+          }
+        }
+        $cfg .= "require_once(dirname(__FILE__) . '/autoconfig.php');\n";
+        Ld_Files::put($this->directories['dist'] . "/config.php", $cfg);
+    }
+
+    protected function _checkRepositories()
+    {
+        $cfg = array();
+        $cfg['repositories'] = array(
+            'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
+            'endpoint' => LD_SERVER . 'repositories/main')
+        );
+        Ld_Files::put($this->directories['dist'] . '/repositories.json', Zend_Json::encode($cfg));
+    }
+
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
+    public function getBaseUrl()
+    {
+        return 'http://' . LD_HOST . $this->basePath . '/';
     }
 
     public function getInstances($type = null)
     {
-        $json = file_get_contents(LD_DIST_DIR . '/instances.json');
+        $json = file_get_contents($this->directories['dist'] . '/instances.json');
         $instances = Zend_json::decode($json);
 
         if (empty($instances)) {
@@ -56,22 +140,29 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getInstance($id)
     {
         $instances = $this->getInstances();
-        $instance = new Ld_Instance_Application_Local();
-        $instance->setSite($this);
-        if (isset($instances[$id])) {
-            $instance->setPath($instances[$id]['path']);
-            return $instance;
-        } elseif (file_exists(LD_ROOT . '/' . $id)) {
-            $instance->setPath($id);
+
+        if (file_exists($id) && file_exists($id . '/dist')) {
+            $dir = $id;
+        } else if (file_exists(LD_ROOT . '/' . $id) && file_exists(LD_ROOT . '/' . $id . '/dist')) {
+            $dir = LD_ROOT . '/' . $id;
+        } else if (isset($instances[$id])) {
+            $dir = LD_ROOT . '/' . $instances[$id]['path'];
+        }
+
+        if (isset($dir)) {
+            $instance = new Ld_Instance_Application_Local($dir);
+            $instance->setSite($this);
             return $instance;
         }
-        throw new Exception("No application registered with this id.");
+
+        throw new Exception("can't get instance with id or path '$id'");
     }
 
     public function createInstance($packageId, $preferences = array())
     {
         $package = $this->getPackage($packageId);
         $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
+        $installer->setSite($this);
 
         foreach ($installer->getDependencies() as $dependency) {
             if (null === $this->_getLibraryInfos($dependency)) {
@@ -85,10 +176,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if (empty($availableDbs)) {
                 throw new Exception('No database available.');
             } else if (count($availableDbs) == 1) {
-                $preferences['db'] = $availableDbs[0]['id'];
+                $keys = array_keys($availableDbs);
+                $preferences['db'] = $keys[0];
             } else {
                 throw new Exception('Can not choose Db.');
             }
+        }
+
+        if (isset($preferences['administrator'])) {
+            $preferences['administrator'] = $this->getUser($preferences['administrator']);
         }
 
         switch ($package->type) {
@@ -101,11 +197,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 break;
             case 'application':
                 $installer->install($preferences);
-                $id = $this->registerInstance($installer, $preferences);
+                $installer->instance = $this->registerInstance($installer, $preferences);
                 $installer->postInstall($preferences);
-                $instance = $this->getInstance($installer->path);
-                $instance->id = $id;
-                return $instance;
+                return $installer->instance;
             default:
                 $installer->install($preferences);
                 $this->registerInstance($installer, $preferences);
@@ -150,16 +244,24 @@ class Ld_Site_Local extends Ld_Site_Abstract
               'path'    => isset($params['path']) ? $params['path'] : null,
               'name'    => isset($params['name']) ? $params['name'] : null
           );
-          file_put_contents(LD_DIST_DIR . '/instances.json', Zend_Json::encode($instances));
-
-          return $id;
+          Ld_Files::put($this->directories['dist'] . '/instances.json', Zend_Json::encode($instances));
+          
+          $instance = $this->getInstance($id);
+          $instance->id = $id;
+          return $instance;
     }
 
     public function updateInstance($params)
     {
-        if (is_string($params)) { // for libraries
+        // print_r($params);
+        // exit;
+
+        if (is_string($params) && file_exists(LD_ROOT . '/' . $params)) { // for applications (by path)
+            $instance = $this->getInstance($params);
+            $packageId = $instance->getPackageId();
+        } else if (is_string($params)) { // for libraries
             $packageId = $params;
-        } else if (is_object($params)) { // for applications
+        } else if (is_object($params)) { // for applications (by object)
             $instance = $params;
             $packageId = $instance->getPackageId();
         }
@@ -183,6 +285,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Update instance
         if (isset($instance)) {
             $installer->setPath($instance->getPath());
+            $installer->setAbsolutePath($instance->getAbsolutePath());
         }
         $installer->update();
 
@@ -198,12 +301,22 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $registeredInstances[$key]['version'] = $package->version;
                 }
             }
-            file_put_contents(LD_DIST_DIR . '/instances.json', Zend_Json::encode($registeredInstances));
+            Ld_Files::put($this->directories['dist'] . '/instances.json', Zend_Json::encode($registeredInstances));
         }
+        
+        if (isset($instance)) {
+            return $instance;
+        }
+        
+        // we should return an object for libraries too ...
     }
 
     public function deleteInstance($instance)
     {
+        if (is_string($instance)) {
+            $instance = $this->getInstance($instance);
+        }
+
         if (empty($instance->path)) {
             throw new Exception("Path can't be empty.");
         }
@@ -219,7 +332,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 unset($instances[$key]);
             }
         }
-        file_put_contents(LD_DIST_DIR . '/instances.json', Zend_Json::encode($instances));
+        Ld_Files::put($this->directories['dist'] . '/instances.json', Zend_Json::encode($instances));
     }
 
     public function restrictInstance($instance, $state = true)
@@ -252,6 +365,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         $preferences = array();
 
+        // DB
         $neededDb = $package->getInstaller()->needDb();
         if ($neededDb) {
             $availableDbs = $this->getDatabases($neededDb);
@@ -268,7 +382,17 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         $prefs = $package->getInstallPreferences();
         foreach ($prefs as $pref) {
-            $preferences[] = is_object($pref) ? $pref->toArray() : $pref;
+            $preference = is_object($pref) ? $pref->toArray() : $pref;
+            // Special Type: user
+            if ($preference['type'] == 'user') {
+                $preference['type'] = 'list';
+                $preference['options'] = array();
+                foreach ($this->getUsers() as $id => $user) {
+                    $preference['options'][] = array('value' => $user['username'], 'label' => $user['username']);
+                }
+                
+            }
+            $preferences[] = $preference;
         }
 
         return $preferences;
@@ -295,7 +419,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getDatabases($type = null)
     {
         $databases = array();
-        $filename = LD_DIST_DIR . '/databases.json';
+        $filename = $this->directories['dist'] . '/databases.json';
         if (file_exists($filename)) {
             $databases = Zend_Json::decode(file_get_contents($filename));
             // Filter
@@ -316,7 +440,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         
         $databases[uniqid()] = $params;
         
-        $filename = LD_DIST_DIR . '/databases.json';
+        $filename = $this->directories['dist'] . '/databases.json';
         Ld_Files::put($filename, Zend_Json::encode($databases));
     }
 
@@ -324,17 +448,63 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getUsers()
     {
-        return Ld_Auth::getUsers();
+        $users = array();
+        $filename = $this->directories['dist'] . '/users.json';
+        if (file_exists($filename)) {
+            $users = Zend_Json::decode(file_get_contents($filename));
+            foreach ($users as $key => $user) {
+                $users[$key]['id'] = $key;
+                $users[$key]['identities'] = array($this->getBaseUrl() . 'identity/' . $user['username']);
+            }
+        }
+        return $users;
+    }
+
+    public function getUser($username)
+    {
+        $users = $this->getUsers();
+        foreach ($users as $user) {
+            if ($user['username'] == $username) {
+                return $user;
+            }
+        }
+        return null;
     }
 
     public function addUser($user)
     {
-        return Ld_Auth::addUser($user);
+        $hasher = new Ld_Auth_Hasher(8, TRUE);
+
+        $user['hash'] = $hasher->HashPassword($user['password']);
+        $username = $user['username'];
+
+        if ($exists = $this->getUser($username)) {
+            throw new Exception("User with this username already exists.");
+        }
+
+        $users = $this->getUsers();
+        $users[uniqid()] = $user;
+
+        $this->_writeUsers($users);
     }
 
     public function deleteUser($username)
     {
-        return Ld_Auth::deleteUser($username);
+        if (!$user = $this->getUser($username)) {
+            throw new Exception("User with this username doesn't exists.");
+        }
+
+        $id = $user['id'];
+
+        $users = $this->getUsers();
+        unset($users[$id]);
+
+        $this->_writeUsers($users);
+    }
+
+    protected function _writeUsers($users)
+    {
+        Ld_Files::put($this->directories['dist'] . '/users.json', Zend_Json::encode($users));
     }
 
     // Repositories
@@ -356,7 +526,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getRepositoriesConfiguration()
     {
-        $filename = LD_DIST_DIR . '/repositories.json';
+        $filename = $this->directories['dist'] . '/repositories.json';
         if (file_exists($filename)) {
             $cfg = Zend_Json::decode(file_get_contents($filename));
         } else {
@@ -370,8 +540,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function saveRepositoriesConfiguration($cfg)
     {
-        $filename = LD_DIST_DIR . '/repositories.json';
-        file_put_contents($filename, Zend_Json::encode($cfg));  
+        $filename = $this->directories['dist'] . '/repositories.json';
+        Ld_Files::put($filename, Zend_Json::encode($cfg));  
     }
 
     protected function _getRepository($config)

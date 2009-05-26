@@ -19,7 +19,6 @@ class Ld_Package
 
     public function __construct($params = array())
     {
-
         if (isset($params['zip'])) {
 
             // unzip
@@ -56,7 +55,6 @@ class Ld_Package
                 $this->extend = (string)$this->manifest->extend;
             }
         }
-
     }
 
     public function setInfos($params = array())

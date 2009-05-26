@@ -5,7 +5,7 @@ require_once 'Ld/Preference.php';
 
 class Ld_Installer
 {
-    
+
     public function __construct($params = array())
     {
         $this->dir = $params['dir'];
@@ -29,14 +29,29 @@ class Ld_Installer
             $filename = $this->dir . '/manifest.xml'; // alternate name
         }
         if (file_exists($filename)) {
-            $manifestXml = file_get_contents($filename);
+            $this->package = new Ld_Package(array('manifest' => $filename));
+            $this->manifest = $this->package->getManifest();
         } else {
             throw new Exception("manifest.xml doesn't exists or is unreadable in $this->dir");
         }
-        
-        $this->manifest = new SimpleXMLElement($manifestXml);
     }
-    
+
+    public function setSite($site)
+    {
+        $this->site = $site;
+    }
+
+    public function getDirectory($dir = null)
+    {
+        if (empty($this->site)) {
+            throw new Exception("site is undefined.");
+        }
+        if (isset($dir)) {
+            return $this->site->directories[$dir];
+        }
+        return $this->site->dir;
+    }
+
     public function getManifest()
     {
         return $this->manifest;
@@ -87,10 +102,10 @@ class Ld_Installer
                     $to = LD_LIB_DIR . "/" . $rule['destination'];
                     break;
                 case 'css':
-                    $to = LD_CSS_DIR . "/" . $rule['destination'];
+                    $to = $this->getDirectory('css') . "/" . $rule['destination'];
                     break;
                 case 'shared':
-                    $to = LD_SHARED_DIR . "/" . $rule['destination'];
+                    $to = $this->getDirectory('shared') . "/" . $rule['destination'];
                     break;
                 case 'public':
                     $to = $this->absolutePath . "/" . $rule['destination'];
@@ -138,8 +153,8 @@ class Ld_Installer
         // FIXME: Only if type=application ?
         if (isset($preferences['path'])) {
             $cfg_ld = "<?php\n";
-            $cfg_ld .= "require_once('" . LD_DIST_DIR . "/config.php');\n";
-            file_put_contents($this->absolutePath . "/dist/config.php", $cfg_ld);
+            $cfg_ld .= "require_once('" . $this->getDirectory('dist') . "/config.php');\n";
+            Ld_Files::put($this->absolutePath . "/dist/config.php", $cfg_ld);
         }
     }
 
@@ -157,24 +172,16 @@ class Ld_Installer
         if (empty($this->absolutePath)) {
             throw new Exception("Path is undefined");
         }
-        
+
         // Erase files (would be better to delete files one by one)
         foreach ($this->getDeployments() as $deployment) {
             Ld_Files::unlink($deployment['to']);
         }
-        
+
         // DROP tables with current prefix
         if ($this->needDb() && isset($this->instance)) {
-            $dbName = $this->instance->getDb();
+            $db = $this->instance->getDbConnection();
             $dbPrefix = $this->instance->getDbPrefix();
-            $databases = $this->instance->getSite()->getDatabases();
-            $db = $databases[$dbName];
-            $db = Zend_Db::factory('Mysqli', array(
-                'host'     => $db['host'],
-                'username' => $db['user'],
-                'password' => $db['password'],
-                'dbname'   => $db['name']
-            ));
             $result = $db->fetchCol('SHOW TABLES');
             foreach ($result as $tablename) {
                 if (strpos($tablename, $dbPrefix) !== false) {
@@ -182,7 +189,6 @@ class Ld_Installer
                 }
             }
         }
-       
     }
     
     public function backup()
@@ -227,53 +233,12 @@ class Ld_Installer
         $uz = new fileUnzip($filename);
         $uz->unzipAll($this->tmpFolder);
     }
-    
-    // public function restrict($state = true)
-    // {
-    //     $dir = $this->absolutePath . '/dist/prepend';
-    //     $filename = $dir . '/restrict.php';
-    //     if ($state == true) {
-    //         if (!file_exists($dir)) {
-    //             mkdir($dir, 0777, true);
-    //         }
-    //         $restrict  = "<?php\n";
-    //         $restrict .= "define('LD_RESTRICTED', true);\n";
-    //         file_put_contents($filename, $restrict);
-    //     } else {
-    //         if (file_exists($filename)) {
-    //             Ld_Files::unlink($filename);
-    //         }
-    //     }
-    // }
-    
-    /* DEPRECATED: replaced by $this->package->getPreferences(); OR $this->instance->getPreferences(); */
+
+    // Legacy
+
     public function getPreferences($type = 'configuration')
     {
-        $preferences = array();
-        
-        if (isset($this->manifest->$type)) {
-            foreach ($this->manifest->$type->preference as $prefXML) {
-                $attr = $prefXML->attributes();
-                $pref = new Ld_Preference((string) $attr['type']);
-                $pref->setName((string) $attr['name']);
-                $pref->setLabel((string) $attr['label']);
-                if (isset($attr['defaultValue'])) {
-                    $pref->setDefaultValue((string) $attr['defaultValue']);
-                }
-                foreach ($prefXML->option as $option) {
-                    if (empty($option['label'])) {
-                        $pref->addListOption((string) $option['value']);
-                    } else {
-                        $pref->addListOption((string) $option['value'], (string) $option['label']);
-                    }
-                }
-                if ($pref->getType() == 'range') {
-                    $pref->setRangeOptions((string) $attr['step'], (string) $attr['min'], (string) $attr['max']);
-                }
-                $preferences[] = $pref;
-            }
-        }
-        return $preferences;
+        return $this->package->getPreferences($type);
     }
 
     public function needDb()
@@ -287,7 +252,9 @@ class Ld_Installer
     public function setPath($path)
     {
         $this->path = $path;
-        $this->absolutePath = LD_ROOT . '/' . $path;
+        
+        // to be removed
+        try { $this->absolutePath = $this->getDirectory() . '/' . $path; } catch(Exception $e) {};
     }
     
     public function setAbsolutePath($path)
@@ -319,6 +286,7 @@ class Ld_Installer
     
     protected function _getDirectories($dir) { return Ld_Files::getDirectories($dir); }
     
+    // Utility
     
     protected function _generate_phrase($length = 64)
     {

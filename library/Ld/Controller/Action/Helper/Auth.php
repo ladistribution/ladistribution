@@ -9,8 +9,11 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
     {
         $baseUrl = $this->getRequest()->getBaseUrl();
 
-        $authStorage = new Ld_Auth_Storage_Session( /* namespace */ null );
-        $authStorage->setDurationSeconds(30 * 60);
+        if (Zend_Registry::isRegistered('authStorage')) {
+            $authStorage = Zend_Registry::get('authStorage');
+        } else {
+            $authStorage = new Zend_Auth_Storage_Session( /* namespace */ null );
+        }
 
         $this->_auth = Zend_Auth::getInstance();
         $this->_auth->setStorage($authStorage);
@@ -81,7 +84,7 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
         $adapter->setCredentials($this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'));
         return $this->_auth->authenticate($adapter);
     }
-    
+
     protected function _authenticateWithOauth()
     {
         require_once 'OAuth/OAuthRequestVerifier.php';
@@ -99,7 +102,7 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
 
     protected function _getUserByOpenid($openid)
     {
-        $users = Ld_Auth::getUsers();
+        $users = Zend_Registry::get('site')->getUsers();
         foreach ($users as $id => $user) {
             foreach ($user['identities'] as $identity) {
                 if ($identity == $openid) {
@@ -112,7 +115,7 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
 
     protected function _getUserByUsername($username)
     {
-        $users = Ld_Auth::getUsers();
+        $users = Zend_Registry::get('site')->getUsers();
         foreach ($users as $id => $user) {
             if ($user['username'] == $username) {
                 return $user;
