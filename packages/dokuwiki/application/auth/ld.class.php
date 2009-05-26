@@ -23,9 +23,9 @@ class auth_ld extends auth_plain
     function _loadUserData()
     {
       parent::_loadUserData();
-
-      require_once 'Ld/Auth.php';
-      $users = Ld_Auth::getUsers();
+      
+      $site = Zend_Registry::get('site');
+      $users = $site->getUsers();
 
       if (file_exists(DOKU_INC . '/dist/roles.json')) {
           $json = file_get_contents(DOKU_INC . '/dist/roles.json');
@@ -54,7 +54,7 @@ class auth_ld extends auth_plain
      *
      * @return  bool
      */
-    function checkPass($user,$pass)
+    function checkPass($user, $pass)
     {
         $userinfo = $this->getUserData($user);
         if ($userinfo === false) return false;
@@ -62,6 +62,12 @@ class auth_ld extends auth_plain
         if ($pass == $this->users[$user]['pass']) {
             return true;
         }
+
+        $hasher = new Ld_Auth_Hasher(8, TRUE);
+        if ($hasher->CheckPassword($pass, $this->users[$user]['pass'])) {
+            return true;
+        }
+
         return auth_verifyPassword($pass,$this->users[$user]['pass']);
     }
 

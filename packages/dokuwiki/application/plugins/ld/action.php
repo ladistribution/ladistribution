@@ -66,36 +66,13 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 
 	function tpl_metaheader_output(&$event, $param)
 	{
-		$scripts = array(
-			array('type' => 'text/javascript', '_data' => '', 'src' => LD_JS_URL . 'jquery/jquery.js'),
-			array('type' => 'text/javascript', '_data' => '', 'src' => LD_JS_URL . 'ld/ld.js')
-		);
-		$event->data['script'] = array_merge($scripts, $event->data['script']);
-
 		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>LD_CSS_URL.'ld-ui/ld-bars.css');
-		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>LD_CSS_URL.'ld-ui/ld-dialog.css');
 	}
 
 	function template(&$event, $param)
 	{
 		require_once('Ld/Ui.php');
 		Ld_Ui::super_bar();
-		?>
-		<script type="text/javascript">
-		(function($) {
-			$(document).ready(function($){
-				$(".h6e-top-bar .action.login").click(function() {
-					return Ld.handleLogin({
-						'href': $(this).attr('href'),
-						'baseUrl': '<?php echo LD_ADMIN_URL ?>',
-						'wrapper': ".dokuwiki",
-						'data': { 'id': '<?php echo $ID ?>', 'do': 'openid', 'mode': 'login' }
-					});
-				});
-			});
-		})(jQuery);
-		</script>
-		<?php
 	}
 
 }
