@@ -122,145 +122,141 @@ class Ld_Cookie
         return ($this);
     }
 
-  /**
-   * Send a secure cookie
-   *
-   * @param string $name cookie name
-   * @param string $value cookie value
-   * @param string $username user name (or ID)
-   * @param integer $expire expiration time
-   * @param string $path cookie path
-   * @param string $domain cookie domain
-   * @param bool $secure when TRUE, send the cookie only on a secure connection
-   * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
-   */
-  public function		setCookie($cookiename, $value, $username, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
-  {
-    $secureValue = $this->_secureCookieValue($value, $username, $expire);
-    $this->setClassicCookie($cookiename, $secureValue, $expire, $path, $domain, $secure, $httponly);
-  }
+    /**
+     * Send a secure cookie
+     *
+     * @param string $name cookie name
+     * @param string $value cookie value
+     * @param string $username user name (or ID)
+     * @param integer $expire expiration time
+     * @param string $path cookie path
+     * @param string $domain cookie domain
+     * @param bool $secure when TRUE, send the cookie only on a secure connection
+     * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
+     */
+    public function setCookie($cookiename, $value, $username, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
+    {
+        $secureValue = $this->_secureCookieValue($value, $username, $expire);
+        $this->setClassicCookie($cookiename, $secureValue, $expire, $path, $domain, $secure, $httponly);
+    }
 
-  /**
-   * Delete a cookie
-   *
-   * @param string $name cookie name
-   * @param string $path cookie path
-   * @param string $domain cookie domain
-   * @param bool $secure when TRUE, send the cookie only on a secure connection
-   * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
-   */
-  public function		deleteCookie($name, $path = '/', $domain = '', $secure = false, $httponly = null)
-  {
-    /* 1980-01-01 */
-    $expire = 315554400;
-    setcookie($name, '', $expire, $path, $domain, $secure, $httponly);
-  }
+    /**
+     * Delete a cookie
+     *
+     * @param string $name cookie name
+     * @param string $path cookie path
+     * @param string $domain cookie domain
+     * @param bool $secure when TRUE, send the cookie only on a secure connection
+     * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
+     */
+    public function deleteCookie($name, $path = '/', $domain = '', $secure = false, $httponly = null)
+    {
+        /* 1980-01-01 */
+        $expire = 315554400;
+        setcookie($name, '', $expire, $path, $domain, $secure, $httponly);
+    }
 
+    /**
+     * Get a secure cookie value
+     *
+     * Verify the integrity of cookie data and decrypt it.
+     * If the cookie is invalid, it can be automatically destroyed (default behaviour)
+     *
+     * @param string $cookiename cookie name
+     * @param bool $deleteIfInvalid destroy the cookie if invalid
+     */
+    public function getCookieValue($cookiename, $deleteIfInvalid = true)
+    {
+        if ($this->cookieExists($cookiename)) {
+            $cookieValues = explode('|', $_COOKIE[$cookiename]);
+            if ((count($cookieValues) === 4) && ($cookieValues[1] == 0 || $cookieValues[1] >= time())) {
+                $key = hash_hmac('sha1', $cookieValues[0].$cookieValues[1], $this->_secret);
+                $cookieData = base64_decode($cookieValues[2]);
+                if ($this->getHighConfidentiality()) {
+                    $data = $this->_decrypt($cookieData, $key, md5($cookieValues[1]));
+                } else {
+                    $data = $cookieData;
+                }
+                if ($this->_ssl && isset($_SERVER['SSL_SESSION_ID'])) {
+                    $verifKey = hash_hmac('sha1', $cookieValues[0].$cookieValues[1].$data.$_SERVER['SSL_SESSION_ID'], $key);
+                } else {
+                    $verifKey = hash_hmac('sha1', $cookieValues[0].$cookieValues[1].$data, $key);
+                }
+                if ($verifKey == $cookieValues[3]) {
+                    return ($data);
+                }
+            }
+        }
+        if ($deleteIfInvalid) {
+            $this->deleteCookie($cookiename);
+        }
+        return (false);
+    }
 
-  /**
-   * Get a secure cookie value
-   *
-   * Verify the integrity of cookie data and decrypt it.
-   * If the cookie is invalid, it can be automatically destroyed (default behaviour)
-   *
-   * @param string $cookiename cookie name
-   * @param bool $deleteIfInvalid destroy the cookie if invalid
-   */
-  public function		getCookieValue($cookiename, $deleteIfInvalid = true)
-  {
-    if ($this->cookieExists($cookiename))
-      {
-	$cookieValues = explode('|', $_COOKIE[$cookiename]);
-	if ((count($cookieValues) === 4) &&
-	    ($cookieValues[1] == 0 || $cookieValues[1] >= time()))
-	  {
-	    $key = hash_hmac('sha1', $cookieValues[0].$cookieValues[1], $this->_secret);
-	    $cookieData = base64_decode($cookieValues[2]);
-	    if ($this->getHighConfidentiality())
-	      $data = $this->_decrypt($cookieData, $key, md5($cookieValues[1]));
-	    else
-	      $data = $cookieData;
+    /**
+     * Send a classic (unsecure) cookie
+     *
+     * @param string $name cookie name
+     * @param string $value cookie value
+     * @param integer $expire expiration time
+     * @param string $path cookie path
+     * @param string $domain cookie domain
+     * @param bool $secure when TRUE, send the cookie only on a secure connection
+     * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
+     */
+    public function setClassicCookie($cookiename, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
+    {
+        /* httponly option is only available for PHP version >= 5.2 */
+        if ($httponly === null) {
+            setcookie($cookiename, $value, $expire, $path, $domain, $secure);
+        } else {
+            setcookie($cookiename, $value, $expire, $path, $domain, $secure, $httponly);
+        }
+    }
 
-	    if ($this->_ssl && isset($_SERVER['SSL_SESSION_ID']))
-	      $verifKey = hash_hmac('sha1', $cookieValues[0].$cookieValues[1].$data.$_SERVER['SSL_SESSION_ID'], $key);
-	    else
-	      $verifKey = hash_hmac('sha1', $cookieValues[0].$cookieValues[1].$data, $key);
+    /**
+     * Verify if a cookie exists
+     *
+     * @param string $cookiename
+     * @return bool TRUE if cookie exist, or FALSE if not
+     */
+    public function cookieExists($cookiename)
+    {
+        return (isset($_COOKIE[$cookiename]));
+    }
 
-	    if ($verifKey == $cookieValues[3])
-	      return ($data);
-	  }
-      }
-    if ($deleteIfInvalid)
-      $this->deleteCookie($cookiename);
-    return (false);
-  }
+    /**
+     * Secure a cookie value
+     *
+     * The initial value is transformed with this protocol :
+     *
+     *  secureValue = username|expire|base64((value)k,expire)|HMAC(user|expire|value,k)
+     *  where k = HMAC(user|expire, sk)
+     *  and sk is server's secret key
+     *  (value)k,md5(expire) is the result an cryptographic function (ex: AES256) on "value" with key k and initialisation vector = md5(expire)
+     *
+     * @param string $value unsecure value
+     * @param string $username user name (or ID)
+     * @param integer $expire expiration time
+     * @return string secured value
+    */
 
-
-  /**
-   * Send a classic (unsecure) cookie
-   *
-   * @param string $name cookie name
-   * @param string $value cookie value
-   * @param integer $expire expiration time
-   * @param string $path cookie path
-   * @param string $domain cookie domain
-   * @param bool $secure when TRUE, send the cookie only on a secure connection
-   * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
-   */
-  public function		setClassicCookie($cookiename, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
-  {
-    /* httponly option is only available for PHP version >= 5.2 */
-    if ($httponly === null)
-      setcookie($cookiename, $value, $expire, $path, $domain, $secure);
-    else
-      setcookie($cookiename, $value, $expire, $path, $domain, $secure, $httponly);
-  }
-
-
-  /**
-   * Verify if a cookie exists
-   *
-   * @param string $cookiename
-   * @return bool TRUE if cookie exist, or FALSE if not
-   */
-  public function		cookieExists($cookiename)
-  {
-    return (isset($_COOKIE[$cookiename]));
-  }
-
-  /**
-   * Secure a cookie value
-   *
-   * The initial value is transformed with this protocol :
-   *
-   *  secureValue = username|expire|base64((value)k,expire)|HMAC(user|expire|value,k)
-   *  where k = HMAC(user|expire, sk)
-   *  and sk is server's secret key
-   *  (value)k,md5(expire) is the result an cryptographic function (ex: AES256) on "value" with key k and initialisation vector = md5(expire)
-   *
-   * @param string $value unsecure value
-   * @param string $username user name (or ID)
-   * @param integer $expire expiration time
-   * @return string secured value
-   */
-
-  protected function		_secureCookieValue($value, $username, $expire)
-  {
-    $key = hash_hmac('sha1', $username.$expire, $this->_secret);
-    if ($this->getHighConfidentiality())
-      $encryptedValue = base64_encode($this->_encrypt($value, $key, md5($expire)));
-    else
-      $encryptedValue = base64_encode($value);
-
-
-    if ($this->_ssl && isset($_SERVER['SSL_SESSION_ID']))
-      $verifKey = hash_hmac('sha1', $username . $expire . $value . $_SERVER['SSL_SESSION_ID'], $key);
-    else
-      $verifKey = hash_hmac('sha1', $username . $expire . $value, $key);
-
-    $result = array($username, $expire, $encryptedValue, $verifKey);
-    return(implode('|', $result));
-  }
+    protected function _secureCookieValue($value, $username, $expire)
+    {
+        $key = hash_hmac('sha1', $username.$expire, $this->_secret);
+        if ($this->getHighConfidentiality()) {
+            $encryptedValue = base64_encode($this->_encrypt($value, $key, md5($expire)));
+        } else {
+            $encryptedValue = base64_encode($value);
+        }
+        if ($this->_ssl && isset($_SERVER['SSL_SESSION_ID'])) {
+            $verifKey = hash_hmac('sha1', $username . $expire . $value . $_SERVER['SSL_SESSION_ID'], $key);
+        } else {
+            $verifKey = hash_hmac('sha1', $username . $expire . $value, $key);
+        }
+        $result = array($username, $expire, $encryptedValue, $verifKey);
+        return(implode('|', $result));
+    }
 
     /**
      * Encrypt a given data with a given key and a given initialisation vector
@@ -274,11 +270,9 @@ class Ld_Cookie
     {
         $iv = $this->_validateIv($iv);
         $key = $this->_validateKey($key);
-
         mcrypt_generic_init($this->_cryptModule, $key, $iv);
         $res = mcrypt_generic($this->_cryptModule, $data);
         mcrypt_generic_deinit($this->_cryptModule);
-
         return ($res);
     }
 
