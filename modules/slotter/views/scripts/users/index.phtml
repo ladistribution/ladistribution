@@ -13,9 +13,11 @@
    <tr>
        <th>Username</th>
        <th>Full Name</th>
+       <?php /*
        <?php foreach ($this->applications as $application) : ?>
            <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
        <?php endforeach ?>
+       */ ?>
        <th>Action</th>
    </tr>
 
@@ -24,7 +26,8 @@
     <tr>
         <td><?php echo $user['username'] ?></td>
         <td><?php echo $user['fullname'] ?></td>
-
+        
+        <?php /*
         <?php foreach ($this->applications as $application) : ?>
             <td style="text-align:center">
             <?php if (!empty($application['roles'])) : ?>
@@ -47,7 +50,8 @@
             <?php endif ?>
             </td>
        <?php endforeach ?>
-
+       */ ?>
+       
        <td>
            <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $user['username'] )); ?>">delete</a>
        </td>

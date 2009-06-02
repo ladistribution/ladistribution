@@ -12,26 +12,26 @@ class Slotter_UsersController extends BaseController
     {
         $applications = $this->site->getInstances('application');
 
-        if ($this->getRequest()->isPost()) {
-            $roles = $this->_getParam('roles');
-            foreach ($applications as $id => $application) {
-                $path = $application['path'];
-                if (isset($roles[$path])) {
-                    $instance = $this->site->getInstance($path);
-                    $instance->setUserRoles($roles[$path]);
-                }
-            }
-        }
+        // if ($this->getRequest()->isPost()) {
+        //     $roles = $this->_getParam('roles');
+        //     foreach ($applications as $id => $application) {
+        //         $path = $application['path'];
+        //         if (isset($roles[$path])) {
+        //             $instance = $this->site->getInstance($path);
+        //             $instance->setUserRoles($roles[$path]);
+        //         }
+        //     }
+        // }
 
         $this->view->users = $this->site->getUsers();
 
-        foreach ($applications as $id => $application) {
-            $instance = $this->site->getInstance($application['path']);
-            $applications[$id]['roles'] = $instance->getRoles();
-            $applications[$id]['userRoles'] = $instance->getUserRoles();
-        }
-
-        $this->view->applications = $applications;
+        // foreach ($applications as $id => $application) {
+        //     $instance = $this->site->getInstance($application['path']);
+        //     $applications[$id]['roles'] = $instance->getRoles();
+        //     $applications[$id]['userRoles'] = $instance->getUserRoles();
+        // }
+        // 
+        // $this->view->applications = $applications;
     }
 
     public function newAction()
