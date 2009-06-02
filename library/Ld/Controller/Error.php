@@ -22,7 +22,7 @@ class Ld_Controller_Error extends Zend_Controller_Action
             $log_message = get_class($e) . ': error ' . $e->getCode() . ': ' . $e->getMessage() .
                 ' (file ' .  $e->getFile() . ') (line ' . $e->getLine() . ')';
 
-            if (DEBUG) {
+            if (defined('LD_DEBUG') && constant('LD_DEBUG') === true) {
                 $this->view->details .= '<li>' . $log_message . '<pre>' . $e->getTraceAsString() . '</pre>' . '</li>';
             } else {
                 error_log($log_message);

@@ -12,7 +12,7 @@ class Ld_Instance_Extension extends Ld_Instance_Abstract
 
     public function getAbsolutePath()
     {
-        return LD_ROOT . '/' . $this->_parent->getPath() . '/' . $this->path;
+        return $this->_parent->getAbsolutePath() . '/' . $this->path;
     }
     
     public function setParent($parent)

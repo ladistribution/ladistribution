@@ -20,15 +20,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
     
     public $path = '';
     
-    public $basePath = '';
-    
     public $name = '';
     
     public $slots = 10;
     
     public function __construct($params = array())
     {
-        $properties = array('id', 'dir', 'basePath', 'type', 'name', 'slots');
+        $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots');
         foreach ($properties as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
@@ -36,20 +34,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         $this->directories = array(
-            'js'     => $this->dir . '/js',
-            'css'    => $this->dir . '/css',
-            'shared' => $this->dir . '/shared',
-            'lib'    => $this->dir . '/lib',
-            'dist'   => $this->dir . '/dist',
-            'tmp'    => $this->dir . '/dist/tmp',
-            'log'    => $this->dir . '/dist/log',
-            'admin'  => $this->dir . '/admin',
+            'js'     => 'js',
+            'css'    => 'css',
+            'shared' => 'shared',
+            'lib'    => 'lib',
+            'dist'   => 'dist',
+            'tmp'    => 'tmp'
         );
-
-        // transitional code
-        defined('LD_ROOT') OR define('LD_ROOT', $this->dir);
-        defined('LD_BASE_PATH') OR define('LD_BASE_PATH', $this->basePath);
-        defined('LD_BASE_URL') OR define('LD_BASE_URL', 'http://' . LD_HOST . LD_BASE_PATH . '/');
     }
 
     public function init()
@@ -66,9 +57,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         foreach ($this->directories as $name => $directory) {
-            $constantName = strtoupper("LD_" . $name . "_DIR");
-            defined($constantName) OR define($constantName, $directory);
-            $directory = constant($constantName);
+            $directory = $this->getDirectory($name);
             if (!file_exists($directory)) {
                 if (!is_writable(dirname($directory))) {
                     $msg = "Can't create folder $directory. Check your permissions.";
@@ -76,24 +65,35 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 }
                 mkdir($directory, 0777, true);
             }
+            
+            if ($name == 'dist') {
+                $htaccess = $directory . '/.htaccess';
+                if (!file_exists($htaccess)) {
+                    Ld_Files::put($htaccess, "Deny from all");
+                }
+            }
         }
     }
 
     protected function _checkConfig()
     {
-        if (file_exists('dist/config.php')) {
-            return true;
+        if (!file_exists($this->getDirectory('dist') . '/site.php')) {
+            $cfg  = "<?php\n";
+            $cfg .= '$loader = dirname(__FILE__) . "/../lib/Ld/Loader.php";' . "\n";
+            $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
+            $cfg .= "Ld_Loader::loadSite(dirname(__FILE__) . '/..');\n";
+            Ld_Files::put($this->getDirectory('dist') . "/site.php", $cfg);
         }
 
-        $cfg  = "<?php\n";
-        $constants = array('LD_BASE_PATH');
-        foreach ($constants as $name) {
-          if (defined($name)) {
-              $cfg .= sprintf("define('%s', '%s');\n", $name, constant($name));
-          }
+        if (!file_exists($this->getDirectory('dist') . '/config.json')) {
+            $config = array();
+            foreach (array('host', 'path') as $key) {
+                if (isset($this->$key)) {
+                    $config[$key] = $this->$key;
+                }
+            }
+            Ld_Files::put($this->getDirectory('dist') . "/config.json", Zend_Json::encode($config));
         }
-        $cfg .= "require_once(dirname(__FILE__) . '/autoconfig.php');\n";
-        Ld_Files::put($this->directories['dist'] . "/config.php", $cfg);
     }
 
     protected function _checkRepositories()
@@ -103,22 +103,48 @@ class Ld_Site_Local extends Ld_Site_Abstract
             'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
             'endpoint' => LD_SERVER . 'repositories/main')
         );
-        Ld_Files::put($this->directories['dist'] . '/repositories.json', Zend_Json::encode($cfg));
+        Ld_Files::put($this->getDirectory('dist') . '/repositories.json', Zend_Json::encode($cfg));
+    }
+
+    public function getHost()
+    {
+        return $this->host;
     }
 
     public function getBasePath()
     {
-        return $this->basePath;
+        return $this->path;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
     }
 
     public function getBaseUrl()
     {
-        return 'http://' . LD_HOST . $this->basePath . '/';
+        return 'http://' . $this->getHost() . $this->getPath() . '/';
+    }
+
+    public function getDirectory($dir = null)
+    {
+        if (isset($dir)) {
+            return $this->dir . '/' . $this->directories[$dir];
+        }
+        return $this->dir;
+    }
+
+    public function getUrl($dir = null)
+    {
+        if (isset($dir)) {
+            return 'http://' . $this->getHost() . $this->getPath() . '/' . $this->directories[$dir];
+        }
+        return 'http://' . $this->getHost() . $this->getPath() . '/';
     }
 
     public function getInstances($type = null)
     {
-        $json = file_get_contents($this->directories['dist'] . '/instances.json');
+        $json = file_get_contents($this->getDirectory('dist') . '/instances.json');
         $instances = Zend_json::decode($json);
 
         if (empty($instances)) {
@@ -143,10 +169,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (file_exists($id) && file_exists($id . '/dist')) {
             $dir = $id;
-        } else if (file_exists(LD_ROOT . '/' . $id) && file_exists(LD_ROOT . '/' . $id . '/dist')) {
-            $dir = LD_ROOT . '/' . $id;
+        } else if (file_exists($this->getDirectory() . '/' . $id) && file_exists($this->getDirectory() . '/' . $id . '/dist')) {
+            $dir = $this->getDirectory() . '/' . $id;
         } else if (isset($instances[$id])) {
-            $dir = LD_ROOT . '/' . $instances[$id]['path'];
+            $dir = $this->getDirectory() . '/' . $instances[$id]['path'];
         }
 
         if (isset($dir)) {
@@ -244,7 +270,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
               'path'    => isset($params['path']) ? $params['path'] : null,
               'name'    => isset($params['name']) ? $params['name'] : null
           );
-          Ld_Files::put($this->directories['dist'] . '/instances.json', Zend_Json::encode($instances));
+          Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($instances));
           
           $instance = $this->getInstance($id);
           $instance->id = $id;
@@ -256,7 +282,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // print_r($params);
         // exit;
 
-        if (is_string($params) && file_exists(LD_ROOT . '/' . $params)) { // for applications (by path)
+        if (is_string($params) && file_exists($this->getDirectory() . '/' . $params)) { // for applications (by path)
             $instance = $this->getInstance($params);
             $packageId = $instance->getPackageId();
         } else if (is_string($params)) { // for libraries
@@ -301,7 +327,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $registeredInstances[$key]['version'] = $package->version;
                 }
             }
-            Ld_Files::put($this->directories['dist'] . '/instances.json', Zend_Json::encode($registeredInstances));
+            Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($registeredInstances));
         }
         
         if (isset($instance)) {
@@ -332,7 +358,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 unset($instances[$key]);
             }
         }
-        Ld_Files::put($this->directories['dist'] . '/instances.json', Zend_Json::encode($instances));
+        Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($instances));
     }
 
     public function restrictInstance($instance, $state = true)
@@ -380,7 +406,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
-        $prefs = $package->getInstallPreferences();
+        $prefs = $package->getInstaller()->getPackage()->getInstallPreferences(); // WAOW WAOW WAOW !!! :-)
         foreach ($prefs as $pref) {
             $preference = is_object($pref) ? $pref->toArray() : $pref;
             // Special Type: user
@@ -419,7 +445,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getDatabases($type = null)
     {
         $databases = array();
-        $filename = $this->directories['dist'] . '/databases.json';
+        $filename = $this->getDirectory('dist') . '/databases.json';
         if (file_exists($filename)) {
             $databases = Zend_Json::decode(file_get_contents($filename));
             // Filter
@@ -440,7 +466,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         
         $databases[uniqid()] = $params;
         
-        $filename = $this->directories['dist'] . '/databases.json';
+        $filename = $this->getDirectory('dist') . '/databases.json';
         Ld_Files::put($filename, Zend_Json::encode($databases));
     }
 
@@ -449,7 +475,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getUsers()
     {
         $users = array();
-        $filename = $this->directories['dist'] . '/users.json';
+        $filename = $this->getDirectory('dist') . '/users.json';
         if (file_exists($filename)) {
             $users = Zend_Json::decode(file_get_contents($filename));
             foreach ($users as $key => $user) {
@@ -504,7 +530,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _writeUsers($users)
     {
-        Ld_Files::put($this->directories['dist'] . '/users.json', Zend_Json::encode($users));
+        Ld_Files::put($this->getDirectory('dist') . '/users.json', Zend_Json::encode($users));
     }
 
     // Repositories
@@ -526,7 +552,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getRepositoriesConfiguration()
     {
-        $filename = $this->directories['dist'] . '/repositories.json';
+        $filename = $this->getDirectory('dist') . '/repositories.json';
         if (file_exists($filename)) {
             $cfg = Zend_Json::decode(file_get_contents($filename));
         } else {
@@ -540,7 +566,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function saveRepositoriesConfiguration($cfg)
     {
-        $filename = $this->directories['dist'] . '/repositories.json';
+        $filename = $this->getDirectory('dist') . '/repositories.json';
         Ld_Files::put($filename, Zend_Json::encode($cfg));  
     }
 

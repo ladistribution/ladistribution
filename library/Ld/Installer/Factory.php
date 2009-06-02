@@ -1,8 +1,5 @@
 <?php
 
-// require_once 'Ld/Packages.php';
-require_once 'Ld/Installer.php';
-
 class Ld_Installer_Factory
 {
     public static $id = null;

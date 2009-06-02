@@ -9,14 +9,12 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
     {
         $baseUrl = $this->getRequest()->getBaseUrl();
 
+        $this->_auth = Zend_Auth::getInstance();
+
         if (Zend_Registry::isRegistered('authStorage')) {
             $authStorage = Zend_Registry::get('authStorage');
-        } else {
-            $authStorage = new Zend_Auth_Storage_Session( /* namespace */ null );
+            $this->_auth->setStorage($authStorage);
         }
-
-        $this->_auth = Zend_Auth::getInstance();
-        $this->_auth->setStorage($authStorage);
 
         $this->handle();
     }
@@ -25,6 +23,7 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
     {
         if ($this->_getParam('ld_auth_action') == 'logout') {
             $this->logout();
+            $this->_redirect( Zend_Registry::get('site')->getUrl() );
         } else if ($this->_getParam('ld_auth_action') == 'login') {
             $this->_authenticateWithUsernameAndPassword();
         }
@@ -129,4 +128,10 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
         return $this->getRequest()->getParam($id);
     }
 
+    protected function _redirect($url)
+    {
+        header("Location:$url");
+        exit;
+    }
+    
 }

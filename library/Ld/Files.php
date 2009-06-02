@@ -45,10 +45,13 @@ class Ld_Files
 
     public static function copy( $source, $target )
     {
-        // echo "copy:$source:$target<br>\n";
+        // echo "copy:$source:$target\n";
         if ( is_dir( $source ) ) {
             if (!file_exists($target)) {
                 mkdir( $target, 0777, true);
+                if (defined('LD_UNIX_USER')) {
+                    chown($target, LD_UNIX_USER);
+                }
             }
             $d = dir( $source );
             while ( FALSE !== ( $entry = $d->read() ) ) {
@@ -61,10 +64,16 @@ class Ld_Files
                     continue;
                 }
                 copy( $Entry, $target . '/' . $entry );
+                if (defined('LD_UNIX_USER')) {
+                    chown($target . '/' . $entry, LD_UNIX_USER);
+                }
             }
             $d->close();
         } else {
             copy( $source, $target );
+            if (defined('LD_UNIX_USER')) {
+                chown($target, LD_UNIX_USER);
+            }
         }
     }
 
@@ -80,7 +89,7 @@ class Ld_Files
         return $result['files'];
     }
 
-    public function scanDir($dir, $exclude = array())
+    public static function scanDir($dir, $exclude = array())
     {
         $exclude = array_merge(array('.', '..'), (array)$exclude);
 
@@ -139,14 +148,14 @@ class Ld_Files
         return false;
     }
 
-    public function createDirIfNotExists($dir)
+    public static function createDirIfNotExists($dir)
     {
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
     }
 
-    public function put($file, $content)
+    public static function put($file, $content)
     {
         file_put_contents($file, $content);
     }

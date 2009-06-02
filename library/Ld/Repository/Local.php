@@ -17,7 +17,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
             $this->name = $params['name'];
         }
 
-        $this->dir = LD_ROOT . '/repositories/' . $this->id;
+        $this->dir = $this->getSite()->getDirectory() . '/repositories/' . $this->id;
 
         Ld_Files::createDirIfNotExists($this->dir);
     }
@@ -25,6 +25,14 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
     public function getDir()
     {
         return $this->dir;
+    }
+
+    public function getSite()
+    {
+        if (isset($this->site)) {
+            return $this->site;
+        }
+        return Zend_Registry::get('site');
     }
 
     public function getPackages($type = null)
@@ -112,7 +120,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
         $package = new Ld_Package(array('manifest' => $manifestFile));
 
-        $base_url = str_replace(LD_ROOT . '/', LD_BASE_URL, $dir);
+        $base_url = str_replace($this->getSite()->getDirectory() . '/', $this->getSite()->getUrl(), $dir);
         $package->url = $base_url . "/$package->id.zip";
 
         return $package;
@@ -164,7 +172,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
     {
         if (is_array($params)) {
             extract($params); // id, type, extend
-        } elseif (is_a($params, 'Ld_Package')) {
+        } elseif ($params instanceof Ld_Package) {
             $id = $params->id;
             $type = $params->type;
             $extend = $params->extend;

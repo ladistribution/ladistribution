@@ -60,18 +60,21 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function getSite()
     {
-        return $this->site;
+        if (isset($this->site)) {
+            return $this->site;
+        }
+        return Zend_Registry::get('site');
     }
 
     public function setPath($path)
     {
         $this->path = $path;
-        $this->absolutePath = LD_ROOT . '/' . $path;
+        $this->absolutePath = $this->getSite()->getDirectory() . '/' . $path;
     }
 
     public function getAbsolutePath()
     {
-        return $this->absolutePath = LD_ROOT . '/' . $this->path;
+        return $this->absolutePath = $this->getSite()->getDirectory() . '/' . $this->path;
     }
     
     public function getInstanceJson()
@@ -207,13 +210,14 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->extensions = $extensions;
     }
 
-    public function getExtension($path)
+    public function getExtension($id)
     {
         foreach ($this->getExtensions() as $extension) {
-            if ($path == $extension->getPath()) {
+            if ($id == $extension->getPath() || $id == $extension->getPackageId()) {
                  return $extension;
             }
         }
+        throw new Exception("Can't find extension with criteria '$id'.");
         return null;
     }
 
@@ -251,6 +255,9 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         );
 
         $this->registerExtension($params);
+
+        // TODO: would be better to return an object instead
+        return true;
     }
         
     public function updateExtension($extension)
@@ -285,13 +292,15 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         if (is_string($extension)) {
             $extension = $this->getExtension($extension);
         }
-        
+
         // Uninstall
         $installer = Ld_Installer_Factory::getInstaller(array('instance' => $extension));
         $installer->uninstall();
 
         // Unregister
         $this->unregisterExtension( $extension->getPath() );
+
+        return true;
     }
 
     public function registerExtension($params)
