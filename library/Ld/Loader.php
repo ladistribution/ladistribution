@@ -64,7 +64,10 @@ class Ld_Loader
             $authStorage = new Zend_Auth_Storage_Session($namespace);
         }
         Zend_Registry::set('authStorage', $authStorage);
-        
+
+        $auth = Zend_Auth::getInstance();
+        $auth->setStorage($authStorage);
+
         // Legacy CSS Constants
         defined('LD_CSS_URL') OR define('LD_CSS_URL', $site->getUrl('css'));
         defined('H6E_CSS') OR define('H6E_CSS', LD_CSS_URL);

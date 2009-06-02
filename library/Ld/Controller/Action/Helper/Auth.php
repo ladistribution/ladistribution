@@ -11,11 +11,6 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
 
         $this->_auth = Zend_Auth::getInstance();
 
-        if (Zend_Registry::isRegistered('authStorage')) {
-            $authStorage = Zend_Registry::get('authStorage');
-            $this->_auth->setStorage($authStorage);
-        }
-
         $this->handle();
     }
 
