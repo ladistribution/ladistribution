@@ -1,3 +1,7 @@
 <h2>Ok</h2>
 
-<p>ok</p>
+<?php if (isset($this->redirectUrl)) : ?>
+    
+<p><a href="<?php echo $this->escape($this->redirectUrl) ?>">Continue</a></p>
+
+<?php endif ?>

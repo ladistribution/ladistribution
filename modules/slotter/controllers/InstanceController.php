@@ -28,31 +28,18 @@ class Slotter_InstanceController extends BaseController
     */
     public function newAction()
     {
-        if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost() && $this->_hasParam('packageId')) {
             $packageId = $this->_getParam('packageId');
             $preferences = $this->_getParam('preferences');
 
             // TODO: valid every parameters
             $preferences['path'] = Ld_Files::cleanpath($preferences['path']);
 
-            $currentUser = $this->_helper->auth->getUser();
-
-            // FIXME: It may not be the best place to do that ...
-            if (empty($preferences['admin_username']))
-                $preferences['admin_username'] = $currentUser['username'];
-            if (empty($preferences['admin_email']))
-                $preferences['admin_email'] = $currentUser['email'];
-            if (empty($preferences['admin_password']))
-                $preferences['admin_password'] = '';
-
             $this->view->instance = $this->instance = $this->site->createInstance($packageId, $preferences);
-            if (defined('DEBUG') && constant('DEBUG') === true) {
-                $this->render('ok'); // allow us to view install errors/warning/notices
-            } else {
-                $this->_redirectToAction('manage');
-            }
 
-        } else if ($this->getRequest()->isGet()) {
+            $this->_redirectToAction('manage', $this->instance->id);
+
+        } else {
             if ($this->_hasParam('packageId')) {
                 $packageId = $this->_getParam('packageId');
                 $this->view->package = $this->site->getPackage($packageId);
@@ -84,7 +71,7 @@ class Slotter_InstanceController extends BaseController
                 $preferences = $this->_getParam('preferences');
                 $this->instance->addExtension($extension, $preferences);
                 if ($this->_hasParam('referer')) {
-                    $this->_redirect($this->_getParam('referer'));
+                    $this->_redirectTo($this->_getParam('referer'));
                 } else {
                     $this->_redirectToAction('manage');
                 }
@@ -100,11 +87,7 @@ class Slotter_InstanceController extends BaseController
         } else if ( $this->_hasParam('remove') ) {
             $path = $this->_getParam('remove');
             $this->instance->removeExtension($path);
-            if (defined('DEBUG') && constant('DEBUG') === true) {
-                $this->render('ok'); // allow us to view install errors/warning/notices
-            } else {
-                $this->_redirectToAction('manage');
-            }
+            $this->_redirectToAction('manage');
             return;
         }
 
@@ -275,11 +258,20 @@ class Slotter_InstanceController extends BaseController
       }
   }
 
-  protected function _redirectToAction($action)
-  {
-      $url = $this->view->instanceActionUrl($action);
-      $this->_redirect($url, array('prependBase' => false));
-      $this->render('ok');
-  }
+    protected function _redirectToAction($action = 'manage', $id = null)
+    {
+        $url = $this->view->instanceActionUrl($action, $id);
+        $this->_redirectTo($url);
+    }
+
+    protected function _redirectTo($url)
+    {
+        if (constant('LD_DEBUG')) {
+            $this->view->redirectUrl = $url;
+            $this->render('ok');
+        } else {
+            $this->_redirector->gotoUrl($url);
+        }
+    }
 
 }

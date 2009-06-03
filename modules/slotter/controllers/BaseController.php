@@ -18,8 +18,6 @@ class BaseController extends Ld_Controller_Action
 
         $this->view->site = $this->site = $this->_registry['site'];
 
-        $this->view->headLink()->appendStylesheet(LD_CSS_URL . 'ld-ui/ld-slotter.css', 'screen');
-
         $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
         $this->view->baseUrl = $this->view->url(
@@ -30,6 +28,11 @@ class BaseController extends Ld_Controller_Action
 
     public function restrict()
     {
+        $users = $this->site->getUsers();
+        if (empty($users)) {
+            return true;
+        }
+
         if ($this->authenticated == false) {
             $this->_forward('index', 'auth', 'default');
             return true;
@@ -41,6 +44,8 @@ class BaseController extends Ld_Controller_Action
      */
     public function preDispatch()
     {
+        $this->restrict();
+
         if ($this->getRequest()->isPost()) {
             $this->_contentType = $_SERVER['CONTENT_TYPE'];
             // TEMP: handle a particular context when interacting with requests in oAuth library

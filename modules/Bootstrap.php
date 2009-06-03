@@ -7,28 +7,16 @@ class Bootstrap
 
     protected static $_registry;
 
-    function run()
+    public static function run()
     {
         self::prepare();
 
         self::dispatch();
     }
 
-    function prepare()
+    public static function prepare()
     {
-        // Zend Framework
-        require_once 'Zend/Loader/Autoloader.php';
-        $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->registerNamespace('Ld_');
-
-        // Clearbricks
-        require_once 'clearbricks/common/lib.files.php';
-        require_once 'clearbricks/zip/class.zip.php';
-        require_once 'clearbricks/zip/class.unzip.php';
-
         self::$_registry = Zend_Registry::getInstance();
-
-        self::$_registry['site'] = new Ld_Site_Local();
 
         self::setupMvc();
         self::setupRoutes();
@@ -37,23 +25,25 @@ class Bootstrap
 
     public static function setupMvc()
     {
-        $mvc = Zend_Layout::startMvc(array('layoutPath' => dirname(__FILE__) . '/default/views/layouts'));
+        $site = self::$_registry['site'];
 
-        $mvc->getView()->headLink()->appendStylesheet(LD_CSS_URL . '/h6e-minimal/h6e-minimal.css', 'screen');
-        $mvc->getView()->headLink()->appendStylesheet(LD_CSS_URL . '/ld-ui/ld-bars.css', 'screen');
+        $mvc = Zend_Layout::startMvc(array('layoutPath' => $site->getDirectory('shared') . '/modules/default/views/layouts'));
+
+        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/h6e-minimal/h6e-minimal.css', 'screen');
+        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/ld-ui/ld-bars.css', 'screen');
 
         self::$_front = Zend_Controller_Front::getInstance();
 
         self::$_front->addControllerDirectory(
-            dirname(__FILE__) . '/slotter/controllers', 'slotter'
+            $site->getDirectory('shared') . '/modules/slotter/controllers', 'slotter'
         );
 
         self::$_front->addControllerDirectory(
-            dirname(__FILE__) . '/identity/controllers', 'identity'
+            $site->getDirectory('shared') . '/modules/identity/controllers', 'identity'
         );
 
         self::$_front->addControllerDirectory(
-            dirname(__FILE__) . '/default/controllers', 'default'
+            $site->getDirectory('shared') . '/modules/default/controllers', 'default'
         );
     }
 
@@ -76,18 +66,20 @@ class Bootstrap
 
     public static function setupCache()
     {
-        Ld_Files::createDirIfNotExists(LD_TMP_DIR . '/cache/');
+        $cacheDirectory = LD_TMP_DIR . '/cache/';
 
-        $frontendOptions = array(
-           'lifetime' => 60, // cache lifetime of 1 minute
-           'automatic_serialization' => true
-        );
+        Ld_Files::createDirIfNotExists($cacheDirectory);
 
-        $backendOptions = array(
-            'cache_dir' => LD_TMP_DIR . '/cache/'
-        );
-
-        self::$_registry['cache'] = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        if (file_exists($cacheDirectory) && is_writable($cacheDirectory)) {
+            $frontendOptions = array(
+               'lifetime' => 60, // cache lifetime of 1 minute
+               'automatic_serialization' => true
+            );
+            $backendOptions = array(
+                'cache_dir' => $cacheDirectory
+            );
+            self::$_registry['cache'] = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        }
     }
 
     /**

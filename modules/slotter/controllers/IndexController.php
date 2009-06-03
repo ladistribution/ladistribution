@@ -13,8 +13,6 @@ class Slotter_IndexController extends BaseController
     */
     public function indexAction()
     {
-        $this->restrict();
-
         $this->view->instances = array();
 
         $instances = $this->site->getInstances('application');

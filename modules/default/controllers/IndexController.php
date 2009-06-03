@@ -3,7 +3,7 @@
 require_once 'Ld/Controller/Action.php';
 
 /**
- * Error controller
+ * Index controller
  */
 class IndexController extends Ld_Controller_Action
 {
@@ -12,7 +12,7 @@ class IndexController extends Ld_Controller_Action
     {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
 
-        $this->_setTitle('Index');
+        $this->_redirector->goto('index', 'index', 'slotter');
     }
 
 }
