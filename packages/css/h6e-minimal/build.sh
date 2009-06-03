@@ -1,5 +1,4 @@
 SOURCE="git://github.com/znarf/h6e-minimal.git"
-GZ="h6e-minimal.tar.gz"
 FOLDER="css"
 PACKAGE="css-h6e-minimal.zip"
 # Get source

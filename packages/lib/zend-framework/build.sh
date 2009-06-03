@@ -1,6 +1,6 @@
 FOLDER="lib"
 PACKAGE="lib-zend-framework.zip"
-VERSION="ZendFramework-1.7.4"
+VERSION="ZendFramework-1.8.2"
 NAME="$VERSION-minimal"
 ZIP="$NAME.zip"
 # Get source
