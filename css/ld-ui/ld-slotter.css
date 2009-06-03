@@ -1,0 +1,116 @@
+h2, h2 a, h2 a:visited, h2:hover {
+  color:#FF6448;
+}
+
+.h6e-entry-title a { text-decoration:none; }
+.h6e-entry-title a:hover { text-decoration:underline; }
+
+.h6e-main-content {
+  width:75em;
+  margin-bottom:2.5em;
+}
+
+.h6e-page-title {
+  margin-bottom:1em;
+}
+
+.h6e-page-content ul, .h6e-page-content p {
+  font-size:1.1em;
+}
+
+.h6e-simple-footer {
+  padding-top:0.5em;
+}
+
+table {
+  width:auto;
+}
+
+table.h6e-data {
+  border-collapse:collapse;
+}
+
+table.h6e-data  td, table.h6e-data  th {
+  border:1px solid #ccc;
+}
+
+ul.blocks {
+  width:100%;
+  overflow:hidden;
+  margin:1em 0;
+}
+
+ul.blocks li {
+  display:block;
+  float:left;
+  border:1px solid #ccc;
+  border-radius:15px;
+  -moz-border-radius:15px;
+  -webkit-border-radius:15px;
+  width:125px;
+  height:125px;
+  padding:10px;
+  margin-right:10px;
+  margin-bottom:10px;
+}
+
+ul.blocks li.empty {
+  border:1px dashed #ccc;
+}
+
+ul.blocks li.empty, ul.blocks li.empty a, ul.blocks li.empty a:visited {
+  color:#777;	
+}
+
+ul li.wordpress {
+   background:url(img/wp100.png) center center no-repeat;
+}
+
+ul li.dotclear {
+  background:url(img/dc100.png) center center no-repeat;
+}
+
+ul li.dokuwiki {
+  background:url(img/dw100.png) center center no-repeat;
+}
+
+ul li.spip {
+  background:url(img/sp100.png) center center no-repeat;
+}
+
+ul li.habari {
+  background:url(img/hb100.png) center center no-repeat;
+}
+
+ul li.laconica {
+  background:url(img/lc100.png) center center no-repeat;
+}
+
+dl.inline, dl.inline dt, dl.inline dd {
+  display:inline;
+}
+
+dl.inline dt:after {
+  content:": ";
+}
+
+dl.inline dd {
+  margin-left:0;
+  margin-right:0.5em;
+}
+
+.themes {
+  overflow:hidden;
+}
+
+.theme {
+  width:240px;
+  margin-right:2.5em;
+  float:left;
+}
+
+.theme img {
+  margin-bottom:0.5em;
+  display:block;
+  border:1px solid #4E5368;
+}
