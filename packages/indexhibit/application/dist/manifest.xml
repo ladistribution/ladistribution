@@ -1,7 +1,7 @@
 <package release="unstable" >
   <id>indexhibit</id>
   <name>Indexhibit</name>
-  <version>0.70e-13</version>
+  <version>0.70e-23-2</version>
   <type>application</type>
   <installer name="Installer_Indexhibit" src="./dist/installer.php" />
   <link rel="admin" type="text/html" href="/ndxz-studio/" />

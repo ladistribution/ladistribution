@@ -66,7 +66,8 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 
 	function tpl_metaheader_output(&$event, $param)
 	{
-		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>LD_CSS_URL.'ld-ui/ld-bars.css');
+		$css_url = Zend_Registry::get('site')->getUrl('css');
+		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>$css_url.'/ld-ui/ld-bars.css');
 	}
 
 	function template(&$event, $param)

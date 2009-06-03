@@ -1,0 +1,10 @@
+<package release="unstable">
+  <id>lib-clearbricks</id>
+  <name>Clearbricks</name>
+  <version>0.210-2</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">./clearbricks/</destination>
+  </deploy>
+</package>

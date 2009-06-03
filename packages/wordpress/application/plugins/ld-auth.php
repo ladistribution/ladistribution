@@ -8,24 +8,10 @@ Author: h6e
 Author URI: http://h6e.net/
 */
 
-function ld_get_auth()
-{
-	if (Zend_Registry::isRegistered('authStorage')) {
-		$authStorage = Zend_Registry::get('authStorage');
-	} else {
-		$authStorage = new Zend_Auth_Storage_Session( /* namespace */ null );
-	}
-
-	$auth = Zend_Auth::getInstance();
-	$auth->setStorage($authStorage);
-	
-	return $auth;
-}
-
 function ld_autologin_user()
 {
 	if (!is_user_logged_in()) {
-		$auth = ld_get_auth();
+		$auth = Zend_Auth::getInstance();
 		if ($auth->hasIdentity()) {
 			$user = get_userdatabylogin($auth->getIdentity());
 			if (isset($user)) {
@@ -33,14 +19,13 @@ function ld_autologin_user()
 			}
 		}
 	}
-	
 }
 
 add_action('init', 'ld_autologin_user');
 
 function ld_logout()
 {
-	$auth = ld_get_auth();
+	$auth = Zend_Auth::getInstance();
 	if ($auth->hasIdentity()) {
 		$auth->clearIdentity();
 	}
@@ -48,15 +33,38 @@ function ld_logout()
 
 add_action('wp_logout', 'ld_logout');
 
+class Ld_Auth_Adapter_File_Wordpress implements Zend_Auth_Adapter_Interface
+{
+	public function authenticate()
+	{
+		if (is_user_logged_in()) {
+			$user = wp_get_current_user();
+			return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $user->user_login);
+		}
+		return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
+	}
+}
+
+function ld_handle_current_user()
+{
+	$auth = Zend_Auth::getInstance();
+	if (is_user_logged_in() && !$auth->hasIdentity()) {
+		$adapter = new Ld_Auth_Adapter_File_Wordpress();
+		$auth->authenticate($adapter);
+	}	
+}
+
+add_action('set_current_user', 'ld_handle_current_user');
+
 if ( !function_exists('auth_redirect') ) :
 function auth_redirect()
 {
-	$user = wp_get_current_user();
-	if (isset($user)) {
+	if (is_user_logged_in()) {
 		return;
 	}
 	$login_url = site_url('wp-login.php', 'login');
 	wp_redirect($login_url);
+	exit();
 }
 endif;
 
@@ -72,8 +80,7 @@ function get_userdata( $user_id )
 	if ( !$wp_user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE ID = %d LIMIT 1", $user_id)) )
 		return false;
 
-	$site = Zend_Registry::get('site');
-	foreach ($site->getUsers() as $ld_user) {
+	foreach (Zend_Registry::get('site')->getUsers() as $ld_user) {
 
 		if ($ld_user['username'] == $wp_user->user_login) {
 
@@ -104,8 +111,7 @@ function get_userdatabylogin( $user_login )
 	if ( empty( $user_login ) )
 		return false;
 
-    $site = Zend_Registry::get('site');
-	foreach ($site->getUsers() as $ld_user) {
+	foreach (Zend_Registry::get('site')->getUsers() as $ld_user) {
 
 		if ($ld_user['username'] == $user_login) {
 
@@ -130,9 +136,7 @@ endif;
 
 function ld_get_user_by_openid( $openid , $id = null )
 {
-	$site = Zend_Registry::get('site');
-
-	foreach ($site->getUsers() as $ld_user) {
+	foreach (Zend_Registry::get('site')->getUsers() as $ld_user) {
 		foreach ($ld_user['identities'] as $identity) {
 			if ($identity == $openid) {
 				$user = get_userdatabylogin($ld_user['username']);

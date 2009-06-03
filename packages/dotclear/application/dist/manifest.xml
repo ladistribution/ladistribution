@@ -1,0 +1,17 @@
+<package release="unstable" >
+  <id>dotclear</id>
+  <name>Dotclear</name>
+  <version>2.1.5-23-7</version>
+  <type>application</type>
+  <installer name="Installer_Dotclear" src="./dist/installer.php" />
+  <db>mysql</db>
+  <need>lib-clearbricks</need>
+  <link rel="admin" type="text/html" href="/admin/" />
+  <install>
+      <preference type="text" label="Admin Firstname" name="admin_firstname" value=""/>
+      <preference type="text" label="Admin Name" name="admin_name" value=""/>
+      <preference type="text" label="Admin Email" name="admin_email" value=""/>
+      <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
+      <preference type="password" label="Admin Password" name="admin_password" value=""/>
+  </install>
+</package>

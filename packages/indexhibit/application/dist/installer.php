@@ -3,24 +3,15 @@
 class Installer_Indexhibit extends Ld_Installer
 {
 
-	function install($preferences = array())
+	public function postInstall($preferences = array())
 	{
-		parent::install($preferences);
-
 		$this->preferences = $preferences;
 
 		$this->adminAbsolutePath = $this->absolutePath . '/ndxz-studio';
 
-		if (!file_exists("$this->absolutePath/files") || !file_exists("$this->absolutePath/files/gimgs")) {
-			mkdir("$this->absolutePath/files/gimgs", 0777, true);
-		}
+		Ld_Files::createDirIfNotExists("$this->absolutePath/files/gimgs");
 
-		if (!file_exists($this->adminAbsolutePath . '/config')) {
-			mkdir($this->adminAbsolutePath . '/config', 0777, true);
-		}
-
-		$this->_createPrependFile();
-		require_once $this->absolutePath . '/dist/prepend.php';
+		Ld_Files::createDirIfNotExists("$this->adminAbsolutePath/config");
 
 		$this->_performWebInstall();
 
@@ -28,34 +19,25 @@ class Installer_Indexhibit extends Ld_Installer
 
 		$this->_updateDatabase();
 
-		// We don't need the web installer anymore
-		$this->_unlink($this->adminAbsolutePath . '/install.php');
-	}
-
-	private function _createPrependFile()
-	{
-		$prepend  = "<?php\n";
-		$prepend .= "require_once dirname(__FILE__) . '/config.php';\n";
-		$prepend .= "define('PX', '$this->dbPrefix');\n";
-		file_put_contents($this->absolutePath . '/dist/prepend.php', $prepend);
+		Ld_Files::unlink($this->adminAbsolutePath . '/install.php');
 	}
 
 	private function _createConfigFile()
 	{
 		$cfg  = "<?php\n";
 		$cfg .= "require_once dirname(__FILE__) . '/../../dist/prepend.php';\n";
-		$cfg .= '$indx["db"]   = LD_DB_NAME;' . "\n";
-		$cfg .= '$indx["user"] = LD_DB_USER;' . "\n";
-		$cfg .= '$indx["pass"] = LD_DB_PASSWORD;' . "\n";
-		$cfg .= '$indx["host"] = LD_DB_HOST;' . "\n";
+		$cfg .= '$indx["db"]   = $db["name"];' . "\n";
+		$cfg .= '$indx["user"] = $db["user"];' . "\n";
+		$cfg .= '$indx["pass"] = $db["password"];' . "\n";
+		$cfg .= '$indx["host"] = $db["host"];' . "\n";
 		$cfg .= '$indx["sql"]  = "mysql";' . "\n";
-		file_put_contents($this->adminAbsolutePath . '/config/config.php', $cfg);
+		Ld_Files::put($this->adminAbsolutePath . '/config/config.php', $cfg);
 	}
     
 	private function _performWebInstall()
 	{
-		$adminUrl = LD_BASE_URL . $this->preferences['path'] . '/ndxz-studio';
-        
+		$adminUrl = $this->instance->getUrl() . 'ndxz-studio';
+
 		// Set Lang
 		$this->httpClient = new Zend_Http_Client();
 		$this->httpClient->setCookieJar();
@@ -66,23 +48,26 @@ class Installer_Indexhibit extends Ld_Installer
 		));
 		$response = $this->httpClient->request('POST');
 
-		if (defined('DEBUG') && DEBUG === true) {
+		if (constant('LD_DEBUG')) {
 			echo $response->getBody();
 		}
+
+		$databases = $this->site->getDatabases();
+		$db = $databases[ $this->instance->getDb() ];
 
 		// Perform SQL Install
 		$this->httpClient->setUri("$adminUrl/install.php?page=2");
 		$this->httpClient->setParameterPost(array(
 			'n_submit' => 'submit',
-			'n_host' => LD_DB_HOST,
-			'n_name' => LD_DB_NAME,
-			'n_user' => LD_DB_USER,
-			'n_pwd'  => LD_DB_PASSWORD,
+			'n_host' => $db['host'],
+			'n_name' => $db['name'],
+			'n_user' => $db['user'],
+			'n_pwd'  => $db['password'],
 			'n_site' => $this->preferences['title']
 		));
 		$response = $this->httpClient->request('POST');
 
-		if (defined('DEBUG') && DEBUG === true) {
+		if (constant('LD_DEBUG')) {
 			echo $response->getBody();
 		}
 	}
@@ -110,7 +95,7 @@ class Installer_Indexhibit extends Ld_Installer
 		$db->query("UPDATE $users_table SET userid = '$username', PASSWORD = '$password' WHERE userid = 'index1'");
 
 		// We update Exhibit title
-		$db->query("UPDATE $objects_prefs SET obj_name = '$title' WHERE obj_id = 1");	
+		$db->query("UPDATE $objects_prefs_table SET obj_name = '$title' WHERE obj_id = 1");	
 	}
 
 }

@@ -1,0 +1,30 @@
+<package release="unstable" >
+  <id>spip</id>
+  <name>Spip</name>
+  <version>2.0.8-23-8</version>
+  <type>application</type>
+  <installer name="Installer_Spip" src="./dist/installer.php" />
+  <link rel="admin" type="text/html" href="/ecrire/" />
+  <db>mysql</db>
+  <install>
+      <preference type="text" label="Admin Full Name" name="admin_fullname" defaultValue="Admin"/>
+      <preference type="text" label="Admin Email" name="admin_email" value=""/>
+      <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
+      <preference type="password" label="Admin Password" name="admin_password" value=""/>
+      <!--
+      <preference type="list" label="Language" name="lang">
+          <option value="en-us" label="English (default)" />
+          <option value="fr-fr" label="Français" />
+      </preference>
+      -->
+      <!--
+      <preference type="list" label="Type URLs" name="urls">
+          <option value="html" label="html" />
+          <option value="propres" label="propres" />
+          <option value="propres2" label="propres2" />
+          <option value="propres-qs" label="propres-qs" />
+          <option value="standard" label="standard" />
+      </preference>
+      -->
+  </install>
+</package>

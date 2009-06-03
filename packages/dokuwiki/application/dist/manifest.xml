@@ -1,7 +1,7 @@
 <package>
   <id>dokuwiki</id>
   <name>DokuWiki</name>
-  <version>2009-02-14-56</version>
+  <version>2009-02-14-60</version>
   <type>application</type>
   <need>css-ld-ui</need>
   <need>lib-geshi</need>

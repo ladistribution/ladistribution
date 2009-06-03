@@ -1,0 +1,30 @@
+--- zip/class.unzip.php	2008-08-23 12:12:05.000000000 +0200
++++ zip/class.unzip.php.modified	2009-06-03 10:20:05.000000000 +0200
+@@ -100,14 +100,14 @@
+ 			throw new Exception(sprintf(__('Trying to unzip a folder name %s'),$file_name));
+ 		}
+ 		
+-		if (!$details['uncompressed_size']) {
+-			return $this->putContent('',$target);
+-		}
+-		
+ 		if ($target) {
+ 			$this->testTargetDir(dirname($target));
+ 		}
+ 		
++		if (!$details['uncompressed_size']) {
++			return $this->putContent('',$target);
++		}
++		
+ 		fseek($this->fp(),$details['contents_start_offset']);
+ 		
+ 		$this->memoryAllocate($details['compressed_size']);
+@@ -204,7 +204,7 @@
+ 	protected function putContent($content,$target=false)
+ 	{
+ 		if ($target) {
+-			$r = @file_put_contents($target,$content);
++			$r = file_put_contents($target,$content);
+ 			if ($r === false) {
+ 				throw new Exception(__('Unable to write destination file.'));
+ 			}

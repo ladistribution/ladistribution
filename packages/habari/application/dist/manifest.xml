@@ -1,0 +1,16 @@
+<package release="unstable" >
+  <id>habari</id>
+  <name>Habari</name>
+  <version>0.6.2-14</version>
+  <type>application</type>
+  <db>mysql</db>
+  <installer name="Ld_Installer_Habari" src="./dist/installer.php" />
+  <install>
+      <preference type="user" label="Administrator" name="administrator" value=""/>
+  </install>
+  <deploy>
+      <origin>plugins</origin>
+      <destination path="public">./system/plugins/</destination>
+  </deploy>
+  <link rel="admin" type="text/html" href="/admin/" />
+</package>

@@ -25,7 +25,7 @@ class Installer_Dokuwiki extends Ld_Installer
 
         // Rewrite Rules
         if (true === LD_REWRITE) {
-            $path = LD_BASE_PATH . '/' . $this->path . '/';
+            $path = $this->site->getBasePath() . '/' . $this->path . '/';
             $htaccess  = "RewriteEngine on\n";
             $htaccess .= "RewriteBase $path\n";
             $htaccess .= "RewriteRule ^_media/(.*)              lib/exe/fetch.php?media=$1  [QSA,L]\n";
@@ -75,7 +75,7 @@ class Installer_Dokuwiki extends Ld_Installer
         Ld_Files::put($this->absolutePath . "/conf/acl.auth.php", $cfg_acl);
     }
 
-    function postInstall($preferences = array())
+    public function postInstall($preferences = array())
     {
         parent::postInstall($preferences);
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plugin>
+	<name>Ld</name>
+	<url>http://h6e.net/habari/plugins/ld</url>
+	<author>h6e</author>
+	<authorurl>http://h6e.net/</authorurl>
+	<version>1.0</version>
+	<description>Authentication and UI for La Distribution</description>
+	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License 2.0</license>
+	<copyright>2008</copyright>
+</plugin>
