@@ -1,28 +1,10 @@
 <?php
 
-error_reporting(E_ALL);
+// Configuration
 
-if (file_exists('dist/config.php')) {
-    require_once('dist/config.php');
-}
+date_default_timezone_set('UTC');
 
-defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
-
-$isFreeFr = (bool)strpos($_SERVER["SERVER_NAME"], 'free.fr');
-
-if($isFreeFr) {
-    if (!file_exists('sessions')) {
-        mkdir('sessions', 0777, true);
-    }
-    define('LD_REWRITE', false);
-}
-
-if (!empty($_SERVER["SCRIPT_NAME"])) {
-  $base_path = str_replace('/installer.php', '', $_SERVER["SCRIPT_NAME"]);
-} else {
-  $base_path = '';
-}
-defined('LD_BASE_PATH') OR define('LD_BASE_PATH', $base_path);
+// Functions
 
 function install_if_not_exists_and_require($file, $source)
 {
@@ -33,39 +15,52 @@ function install_if_not_exists_and_require($file, $source)
     require($file);
 }
 
-// Creating directories
-
-defined('LD_ROOT') OR define('LD_ROOT', dirname(__FILE__));
-if (!file_exists(LD_ROOT)) {
-    mkdir(LD_ROOT, 0777, true);
+function is_requirable($lib)
+{
+    $paths = explode(PATH_SEPARATOR, get_include_path());
+    foreach($paths as $path) {
+        if (@file_exists("$path/$lib")) {
+            return true;
+        }
+    }
+    return false;
 }
+
+function ld_copy( $source, $target )
+{
+    if ( is_dir( $source ) ) {
+        if (!file_exists($target)) {
+            mkdir( $target, 0777, true);
+        }
+        $d = dir( $source );
+        while ( FALSE !== ( $entry = $d->read() ) ) {
+            if ( $entry == '.' || $entry == '..' ) {
+                continue;
+            }
+            $Entry = $source . '/' . $entry;
+            if ( is_dir( $Entry ) ) {
+                ld_copy( $Entry, $target . '/' . $entry );
+                continue;
+            }
+            copy( $Entry, $target . '/' . $entry );
+        }
+        $d->close();
+    } else {
+        copy( $source, $target );
+    }
+}
+
+// Directories
+
+$root = dirname(__FILE__);
 
 $directories = array(
-    'js'     => LD_ROOT . '/js',
-    'css'    => LD_ROOT . '/css',
-    'shared' => LD_ROOT . '/shared',
-    'lib'    => LD_ROOT . '/lib',
-    'dist'   => LD_ROOT . '/dist',
-    'tmp'    => LD_ROOT . '/dist/tmp',
-    'log'    => LD_ROOT . '/dist/log',
-    'admin'  => LD_ROOT . '/admin',
+    'lib'    => $root . '/lib',
+    'dist'   => $root . '/dist',
+    'tmp'    => $root . '/tmp',
 );
 
-if (@is_writable(LD_ROOT . '/..')) {
-    $directories['dist'] = LD_ROOT . '/../dist';
-    $directories['tmp']  = LD_ROOT . '/../dist/tmp';
-    $directories['log']  = LD_ROOT . '/../dist/log';
-    $directories['lib']  = LD_ROOT . '/../lib';
-}
-
-if ($isFreeFr) {
-    $directories['lib']  = LD_ROOT . '/include';
-}
-
 foreach ($directories as $name => $directory) {
-    $constantName = strtoupper("LD_" . $name . "_DIR");
-    defined($constantName) OR define($constantName, $directory);
-    $directory = constant($constantName);
     if (!file_exists($directory)) {
         if (!is_writable(dirname($directory))) {
             $msg = "Can't create folder $directory. Check your permissions.";
@@ -75,52 +70,16 @@ foreach ($directories as $name => $directory) {
     }
 }
 
-echo '- Directories OK<br>';
-flush();
+set_include_path( get_include_path() . PATH_SEPARATOR . $directories['lib'] );
 
-// LD 'dist' global config file
-
-if (!file_exists('dist/config.php')) {
-
-  $cfg  = "<?php\n";
-  $constants = array('LD_BASE_PATH');
-  foreach ($constants as $name) {
-      if (defined($name)) {
-          $cfg .= sprintf("define('%s', '%s');\n", $name, constant($name));
-      }
-  }
-  if ($isFreeFr) {
-      foreach (array('LD_LIB_DIR') as $constant) {
-        $cfg .= sprintf("define('%s', '%s');\n", $constant, constant($constant));
-      }
-      $cfg .= "define('LD_REWRITE', false);\n";
-  }
-  $cfg .= "require_once(dirname(__FILE__) . '/autoconfig.php');\n";
-  file_put_contents(LD_DIST_DIR . "/config.php", $cfg);
-
-}
-
-echo '- Config OK<br>';
-flush();
-
-
-// External Installer files
-
-install_if_not_exists_and_require(LD_DIST_DIR . "/autoconfig.php", LD_SERVER . 'installer/autoconfig.txt');
-
-install_if_not_exists_and_require(LD_DIST_DIR . "/installer.class.php", LD_SERVER . 'installer/installer.class.txt');
-
-echo '- Utilities OK<br>';
-flush();
-
+// echo '- Directories OK<br>';
+// flush();
 
 // Clearbricks
 
-function __($e) { return $e; }
-
 $clearbricks_directories = array(
-    'common' => LD_LIB_DIR . '/clearbricks/common',
-    'zip'    => LD_LIB_DIR . '/clearbricks/zip'
+    'common' => $directories['lib'] . '/clearbricks/common',
+    'zip'    => $directories['lib'] . '/clearbricks/zip'
 );
 
 foreach ($clearbricks_directories as $directory) {
@@ -139,25 +98,24 @@ foreach ($clearbricks_essentials as $file => $source) {
     install_if_not_exists_and_require($file, $source);
 }
 
-echo '- Clearbricks OK<br>';
-flush();
-
+// echo '- Clearbricks OK<br>';
+// flush();
 
 // Zend & Ld libraries
     
 $base_libs = array();
 
-if (!Installer::is_requirable('Zend/Loader.php')) {
+if (!is_requirable('Zend/Loader.php')) {
     $base_libs['zend-framework'] = LD_SERVER . 'repositories/main/lib/lib-zend-framework/lib-zend-framework.zip';
 }
 
-if (!Installer::is_requirable('Ld/Installer.php')) {
+if (!is_requirable('Ld/Installer.php')) {
     $base_libs['ld-libraries'] = LD_SERVER . 'repositories/main/lib/lib-ld/lib-ld.zip';
 }
 
 foreach ($base_libs as $name => $source) {
-    $archiveName = LD_TMP_DIR . '/' . $name . '.zip';
-    $targetDirectory = LD_TMP_DIR . '/' . $name;
+    $archiveName = $directories['tmp'] . '/' . $name . '.zip';
+    $targetDirectory = $directories['tmp'] . '/' . $name;
     if (!file_exists($targetDirectory)) {
         $zip = file_get_contents($source);
         file_put_contents($archiveName, $zip);
@@ -165,47 +123,51 @@ foreach ($base_libs as $name => $source) {
         $uz = new fileUnzip($archiveName);
         $uz->unzipAll($targetDirectory);
     }
-    Installer::copy($targetDirectory . '/lib', LD_LIB_DIR);
+    ld_copy($targetDirectory . '/lib', $directories['lib']);
 }
 
-echo '- Zend & Ld OK<br>';
-flush();
+// echo '- Zend & Ld OK<br>';
+// flush();
 
-require_once 'Zend/Loader.php';
-Zend_Loader::registerAutoload();
+// Load Site
+
+$loader = $directories['lib'] . '/Ld/Loader.php';
+if (file_exists($loader)) { require_once $loader; } else { require_once 'Ld/Loader.php'; }
+$site = Ld_Loader::loadSite(dirname(__FILE__));
+
+// Detect base path
+if (!empty($_SERVER["SCRIPT_NAME"])) {
+  $site->path = str_replace('/installer.php', '', $_SERVER["SCRIPT_NAME"]);
+}
+
+// Init
+
+$site->init();
+
+echo " - Init OK<br>\n";
 
 // Clean TMP
 foreach ($base_libs as $name => $source) {
-    $targetDirectory = LD_TMP_DIR . '/' . $name;
+    $targetDirectory = $directories['tmp'] . '/' . $name;
     Ld_Files::unlink($targetDirectory); 
 }
 
-// Update instances & repositories registry 
+// Instances registry
 
-$instances = array(
-    array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '0.1-16'),
-    array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.1-16')
-);
-file_put_contents(LD_DIST_DIR . '/instances.json', Zend_Json::encode($instances));
+if (!file_exists($directories['dist'] . '/instances.json')) {
+	$instances = array(
+		array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.1-1'),
+		array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-22')
+	);
+	Ld_Files::put($directories['dist'] . '/instances.json', Zend_Json::encode($instances));
+}
 
 echo '- Registry OK<br>';
 flush();
 
-$cfg = array();
-$cfg['repositories'] = array(
-    'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
-    'endpoint' => 'http://ladistribution.h6e.net/repositories/main')
-);
-file_put_contents(LD_DIST_DIR . '/repositories.json', Zend_Json::encode($cfg));
+// Install Admin
 
-echo '- Repositories OK<br>';
+$admin = $site->createInstance('admin', array('path' => 'admin'));
+
+echo 'Install OK. <a href="' . $admin->getUrl() . '">Go admin</a>';
 flush();
-
-
-// Install LD Manager
-
-$Site = new Ld_Site_Local(array('id' => 'default', 'type' => 'local', 'name' => 'Default', 'slots' => 5));
-
-$Site->createInstance('admin', array('path' => 'admin'));
-
-echo 'Install OK. <a href="' . LD_BASE_URL . 'admin/">Go admin</a>';
