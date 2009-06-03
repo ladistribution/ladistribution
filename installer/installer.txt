@@ -4,6 +4,10 @@
 
 date_default_timezone_set('UTC');
 
+define('LD_SESSION', false);
+
+defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
+
 // Functions
 
 function install_if_not_exists_and_require($file, $source)
@@ -72,8 +76,8 @@ foreach ($directories as $name => $directory) {
 
 set_include_path( get_include_path() . PATH_SEPARATOR . $directories['lib'] );
 
-// echo '- Directories OK<br>';
-// flush();
+echo '- Directories OK<br>';
+flush();
 
 // Clearbricks
 
@@ -98,8 +102,8 @@ foreach ($clearbricks_essentials as $file => $source) {
     install_if_not_exists_and_require($file, $source);
 }
 
-// echo '- Clearbricks OK<br>';
-// flush();
+echo '- Clearbricks OK<br>';
+flush();
 
 // Zend & Ld libraries
     
@@ -126,8 +130,8 @@ foreach ($base_libs as $name => $source) {
     ld_copy($targetDirectory . '/lib', $directories['lib']);
 }
 
-// echo '- Zend & Ld OK<br>';
-// flush();
+echo '- Zend & Ld OK<br>';
+flush();
 
 // Load Site
 
