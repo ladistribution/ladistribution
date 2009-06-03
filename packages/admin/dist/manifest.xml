@@ -1,0 +1,14 @@
+<package release="unstable">
+  <id>admin</id>
+  <name>La Distribution admin</name>
+  <version>0.2-23-10</version>
+  <type>application</type>
+  <need>lib-ld</need>
+  <need>css-h6e-minimal</need>
+  <need>css-ld-ui</need>
+  <installer name="Ld_Installer_Admin" src="./dist/installer.php" />
+  <deploy>
+      <origin>modules</origin>
+      <destination path="shared">./modules/</destination>
+  </deploy>
+</package>
