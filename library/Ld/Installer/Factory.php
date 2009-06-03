@@ -79,9 +79,14 @@ class Ld_Installer_Factory
                 return new Ld_Installer_Bundle(array('id' => self::$id, 'dir' => self::$dir));
             
             default:
-            
-                $className = (string)$manifest->installer['name'];
-                $classFile = (string)$manifest->installer['src'];
+                
+                if (isset($manifest->installer)) {
+                    $className = (string)$manifest->installer['name'];
+                    $classFile = (string)$manifest->installer['src'];
+                } elseif (file_exists(self::$dir . 'dist/installer.php')) {
+                    $classFile = 'dist/installer.php';
+                    $className = 'Ld_Installer_' . ucfirst(self::$id);
+                }
                 
                 if (empty($classFile)) {
                     $className = 'Ld_Installer';
