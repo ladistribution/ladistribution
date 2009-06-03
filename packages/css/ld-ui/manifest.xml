@@ -1,0 +1,10 @@
+<package release="unstable">
+  <id>css-ld-ui</id>
+  <name>La Distribution UI libraries</name>
+  <version>0.2-23-2</version>
+  <type>css</type>
+  <deploy>
+      <origin>css</origin>
+      <destination path="css">./ld-ui/</destination>
+  </deploy>
+</package>
