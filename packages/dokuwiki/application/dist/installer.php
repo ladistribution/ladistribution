@@ -24,7 +24,7 @@ class Installer_Dokuwiki extends Ld_Installer
         parent::install($preferences);
 
         // Rewrite Rules
-        if (true === LD_REWRITE) {
+        if (constant('LD_REWRITE')) {
             $path = $this->site->getBasePath() . '/' . $this->path . '/';
             $htaccess  = "RewriteEngine on\n";
             $htaccess .= "RewriteBase $path\n";
@@ -40,7 +40,7 @@ class Installer_Dokuwiki extends Ld_Installer
 
         // Configuration file
         $conf = $this->defaultConfiguration;
-        if (true === LD_REWRITE) {
+        if (constant('LD_REWRITE')) {
             $conf['userewrite'] = 1;
         }
         foreach (array('title', 'template', 'lang') as $key) {
@@ -150,7 +150,7 @@ class Installer_Dokuwiki extends Ld_Installer
 
     public function getThemes()
     {
-        $dirs = $this->_getDirectories($this->absolutePath . '/lib/tpl/');
+        $dirs = Ld_Files::getDirectories($this->absolutePath . '/lib/tpl/');
 
         $template = $this->getCurrentTheme();
 
@@ -161,7 +161,7 @@ class Installer_Dokuwiki extends Ld_Installer
                 'active' => ($template == $id)
             );
             if (file_exists($this->absolutePath . '/lib/tpl/' . $id . '/screenshot.png')) {
-                $themes[$id]['screenshot'] = LD_BASE_URL . $this->path . '/lib/tpl/' . $id . '/screenshot.png';
+                $themes[$id]['screenshot'] = $this->instance->getUrl() . 'lib/tpl/' . $id . '/screenshot.png';
             }
         }
         return $themes;
@@ -186,7 +186,7 @@ class Installer_Dokuwiki extends Ld_Installer
 
     public function _getLangPreference()
     {
-        $dirs = $this->_getDirectories($this->absolutePath . '/inc/lang/');
+        $dirs = Ld_Files::getDirectories($this->absolutePath . '/inc/lang/');
         $options = array();
         foreach ($dirs as $lang) {
             if ($lang == 'dist') {
@@ -263,12 +263,12 @@ class Installer_Dokuwiki extends Ld_Installer
     {
         parent::restore($filename, $absolute);
 
-        $this->_unlink($this->absolutePath . '/data');
+        Ld_Files::unlink($this->absolutePath . '/data');
 
-        $this->_copy($this->tmpFolder . '/data', $this->absolutePath . '/data');
-        $this->_copy($this->tmpFolder . '/conf', $this->absolutePath . '/conf');
+        Ld_Files::copy($this->tmpFolder . '/data', $this->absolutePath . '/data');
+        Ld_Files::copy($this->tmpFolder . '/conf', $this->absolutePath . '/conf');
 
-        $this->_unlink($this->tmpFolder);
+        Ld_Files::unlink($this->tmpFolder);
     }
 
 }
