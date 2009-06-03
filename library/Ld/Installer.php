@@ -110,7 +110,7 @@ class Ld_Installer
             $from = $this->dir . $rule['origin'];
             switch ($rule['path']) {
                 case 'lib':
-                    $to = LD_LIB_DIR . "/" . $rule['destination'];
+                    $to = $this->getSite()->getDirectory('lib') . "/" . $rule['destination'];
                     break;
                 case 'css':
                     $to = $this->getSite()->getDirectory('css') . "/" . $rule['destination'];
