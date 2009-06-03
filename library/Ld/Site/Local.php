@@ -1,29 +1,22 @@
 <?php
 
-require_once 'Zend/Json.php';
-
-require_once 'Ld/Site/Abstract.php';
-
-require_once 'Ld/Installer/Factory.php';
-
-require_once 'Ld/Instance/Application/Local.php';
-require_once 'Ld/Instance/Extension.php';
-
 class Ld_Site_Local extends Ld_Site_Abstract
 {
-    
+
     public $id = null;
-    
+
     public $type = 'local';
-    
+
     public $dir = '';
-    
+
+    public $host = '';
+
     public $path = '';
-    
+
     public $name = '';
-    
+
     public $slots = 10;
-    
+
     public function __construct($params = array())
     {
         $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots');
@@ -65,8 +58,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 }
                 mkdir($directory, 0777, true);
             }
-            
-            if ($name == 'dist') {
+
+            if (in_array($name, array('dist', 'lib', 'tmp'))) {
                 $htaccess = $directory . '/.htaccess';
                 if (!file_exists($htaccess)) {
                     Ld_Files::put($htaccess, "Deny from all");
@@ -144,8 +137,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getInstances($type = null)
     {
-        $json = file_get_contents($this->getDirectory('dist') . '/instances.json');
-        $instances = Zend_json::decode($json);
+        $filename = $this->getDirectory('dist') . '/instances.json';
+        if (file_exists($filename)) {
+            $json = file_get_contents($filename);
+            $instances = Zend_json::decode($json);
+        }
 
         if (empty($instances)) {
             return array();
@@ -181,7 +177,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
             return $instance;
         }
 
-        throw new Exception("can't get instance with id or path '$id'");
+        return null;
+
+        // throw new Exception("can't get instance with id or path '$id'");
     }
 
     public function createInstance($packageId, $preferences = array())
@@ -582,12 +580,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function addRepository($params)
     {
         $cfg = $this->getRepositoriesConfiguration();
-        $id = strtolower($params['name']);
-        if (isset($cfg['repositories'][$id])) {
-            throw new Exception('Repository with this id is already existing.');
-        }
+        $id = uniqid();
         $cfg['repositories'][$id] = array(
-            'id'        => $params['id'],
+            'id'        => $id,
             'type'      => $params['type'],
             'name'      => $params['name'],
             'endpoint'  => $params['endpoint']
