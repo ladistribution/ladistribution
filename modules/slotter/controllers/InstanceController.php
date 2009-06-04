@@ -217,6 +217,16 @@ class Slotter_InstanceController extends BaseController
   
   public function rolesAction()
   {
+      $methods = array('getRoles', 'getUserRoles', 'setUserRoles');
+      
+      $installer = $this->instance->getInstaller();
+      foreach ($methods as $method) {
+          if (!method_exists($installer, $method)) {
+              $this->view->supported = false;
+              return;
+          }
+      }
+      
       if ($this->getRequest()->isPost()) {
           $roles = $this->_getParam('roles');
           $this->instance->getInstaller()->setUserRoles($roles);

@@ -2,6 +2,12 @@
 
 <h2>Roles</h2>
 
+<?php if (isset($this->supported) && $this->supported == false) : ?>
+
+    <p>Not supported.</p>
+
+<?php else : ?>
+    
 <form action="" method="post">
     
 <table class="h6e-data">
@@ -38,3 +44,5 @@
 <input type="submit" class="submit button" value="Update"/>
 
 </form>
+
+<?php endif ?>
