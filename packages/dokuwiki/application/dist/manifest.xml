@@ -1,13 +1,12 @@
 <package>
   <id>dokuwiki</id>
   <name>DokuWiki</name>
-  <version>2009-02-14-62</version>
+  <version>2009-02-14-64</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>
   <need>lib-geshi</need>
-  <installer name="Installer_Dokuwiki" src="./dist/installer.php"/>
-  <link rel="admin" type="text/html" href="/dokuwiki/start?do=admin"/>
+  <link rel="admin" type="text/html" href="/?do=admin"/>
   <source>
       <version>2009-02-14</version>
       <type>zip</type>

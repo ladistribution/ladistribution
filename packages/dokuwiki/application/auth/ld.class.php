@@ -13,6 +13,14 @@ class auth_ld extends auth_plain
     {
         $this->cando['getUsers']     = true;
         $this->cando['getUserCount'] = true;
+
+        $this->cando['external'] = true;
+        $this->cando['logoff'] = true;
+
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $_REQUEST['u'] = $auth->getIdentity();
+        }
     }
 
     /**
@@ -23,9 +31,8 @@ class auth_ld extends auth_plain
     function _loadUserData()
     {
       parent::_loadUserData();
-      
-      $site = Zend_Registry::get('site');
-      $users = $site->getUsers();
+
+      $users = Zend_Registry::get('site')->getUsers();
 
       if (file_exists(DOKU_INC . '/dist/roles.json')) {
           $json = file_get_contents(DOKU_INC . '/dist/roles.json');
@@ -71,4 +78,72 @@ class auth_ld extends auth_plain
         return auth_verifyPassword($pass,$this->users[$user]['pass']);
     }
 
+    /**
+     * Log off the current user
+     *
+     * Is run in addition to the ususal logoff method. Should
+     * only be needed when trustExternal is implemented.
+     */    
+    function logOff()
+    {
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $auth->clearIdentity();
+        }
+    }
+    
+    function logIn($user)
+    {
+        global $USERINFO;
+
+        $USERINFO = $this->getUserData($user);
+        if ($USERINFO === false) return false;
+
+        $_SERVER['REMOTE_USER'] = $user;
+        $_SESSION[DOKU_COOKIE]['auth']['user'] = $user;
+        $_SESSION[DOKU_COOKIE]['auth']['pass'] = 'XXXX';
+        $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
+
+        return true;
+    }
+
+    function trustExternal($user,$pass,$sticky=false)
+    {
+        global $USERINFO;
+
+        $userinfo = $this->getUserData($user);
+        if ($userinfo === false) return false;
+
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity() && $user == $auth->getIdentity()) {
+
+            $this->logIn($user);
+
+            return true;
+
+        } else if ($this->checkPass($user,$pass)) {
+
+            $this->logIn($user);
+
+            $auth = Zend_Auth::getInstance();
+            if (!$auth->hasIdentity()) {
+                $adapter = new Ld_Auth_Adapter_File_Dokuwiki();
+                $auth->authenticate($adapter);
+            }
+
+            return true;
+        }
+    }
+
+}
+
+class Ld_Auth_Adapter_File_Dokuwiki implements Zend_Auth_Adapter_Interface
+{
+    public function authenticate()
+    {
+        if (isset($_SERVER['REMOTE_USER'])) {
+            return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $_SERVER['REMOTE_USER']);
+        }
+        return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
+    }
 }
