@@ -124,9 +124,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         $manifest = $this->getInstaller()->getManifest();
         $links = array();
         foreach ($manifest->link as $link) {
-            $rel = $link['rel'];
+            $title = (string)$link['title'];
+            $rel = (string)$link['rel'];
+            $type = (string)$link['type'];
             $href = $this->site->getBaseUrl() . $this->getPath() . $link['href'];
-            $links[] = compact('rel', 'href');
+            $links[] = compact('title', 'rel', 'href', 'type');
         }
         return $links;
     }
