@@ -2,6 +2,10 @@
   margin-top:2em;
 }
 
+
+/* Top Bar & Super Bar
+-------------------------------------------------------------- */
+
 .h6e-top-bar {
   width:100%;
   overflow:hidden;
@@ -14,7 +18,7 @@
   position:fixed;
   bottom:0;
   clear:both;
-  z-index:999;
+  z-index:9999;
   margin:auto;
   left:0;
 }
@@ -55,3 +59,58 @@
 
 .h6e-top-bar-inner   { border-top:0; -moz-border-radius-bottomleft:5px; -moz-border-radius-bottomright:5px; }
 .h6e-super-bar-inner { border-bottom:0; -moz-border-radius-topleft:5px; -moz-border-radius-topright:5px; }
+
+
+/* Super Bar Menu
+-------------------------------------------------------------- */
+
+.ld-super-bar-menu {
+  border:1px solid #CCCCCC;
+  left:0;
+  bottom:20px;
+  position:fixed;
+  z-index:9998;
+  width:150px;
+  margin:0 10%;
+  background:white;
+  font-size:12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align:left;
+}
+
+.ld-super-bar-menu, .ld-super-bar-menu a {
+  color:#4E5368 !important;
+}
+
+.ld-super-bar-menu ul {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+
+.ld-super-bar-menu li {
+  border-bottom:1px dotted #CCCCCC;
+}
+
+.ld-super-bar-menu li a {
+  padding:0.5em;
+  display:block;
+}
+
+.ld-super-bar-menu li a:hover {
+  background:#F1F1F1;
+}
+
+.ld-super-bar-main-menu-button {
+  margin:0.25em;
+  border-right:1px solid #999;
+  padding-right:0.5em;
+  margin-right:0.5em;
+}
+
+.ld-super-bar-notification-menu-button {
+  margin:0.25em;
+  border-left:1px solid #999;
+  padding-left:0.5em;
+  margin-left:0.5em;
+}
