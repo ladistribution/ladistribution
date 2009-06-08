@@ -3,7 +3,7 @@
 Plugin Name: LD package
 Plugin URI: http://h6e.net/wordpress/plugins/ld-package
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.2a
+Version: 0.2-24-1
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -47,7 +47,7 @@ function ld_disable_menus()
 		}
 	}
 
-	$disable_submenus = array('tools.php', 'themes.php', 'theme-editor.php', 'update-core.php');
+	$disable_submenus = array('tools.php', 'themes.php', 'theme-editor.php', 'theme-install.php', 'update-core.php');
 	foreach ($submenu as $key => $sub) {
 		foreach ($sub as $num => $item) {
 			$script = $item[2];
@@ -59,3 +59,18 @@ function ld_disable_menus()
 }
 
 add_action('admin_menu', 'ld_disable_menus');
+
+/**
+ * Don't load default widgets when interacting from Ld Installer.
+ *
+ * This was causing problem with the $wp_widget_factory global.
+ */
+function ld_load_default_widgets($default = true)
+{
+	if (defined('WP_LD_INSTALLER') && constant('WP_LD_INSTALLER')) {
+		return false;
+	}
+	return $default;
+}
+
+add_filter('load_default_widgets', 'ld_load_default_widgets');

@@ -3,7 +3,7 @@
 Plugin Name: LD ui
 Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.2a
+Version: 0.2-24-1
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -52,10 +52,12 @@ function ld_top_bar()
          <?php if ( is_user_logged_in() ) : ?>
 
              <?php printf(
-             __('Howdy, <a href="%1$s" title="Edit your profile">%2$s</a> (%3$s)'),
-             admin_url('profile.php'), $current_user->display_name, $current_user->user_login
+             __('Howdy, <a href="%1$s" title="Edit your profile">%2$s</a>'),
+             admin_url('profile.php'), $current_user->display_name
              ) ?>
+             |
              <a href="<?php echo admin_url() ?>" title="<?php _e('Admin') ?>"><?php _e('Admin'); ?></a>
+             |
              <a href="<?php echo wp_logout_url() ?>" title="<?php _e('Log Out') ?>"><?php _e('Log Out'); ?></a>
 
          <?php else : ?>

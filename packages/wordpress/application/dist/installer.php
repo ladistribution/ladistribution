@@ -1,6 +1,6 @@
 <?php
 
-class Installer_Wordpress extends Ld_Installer
+class Ld_Installer_Wordpress extends Ld_Installer
 {
 
 	function install($preferences = array())
@@ -13,6 +13,8 @@ class Installer_Wordpress extends Ld_Installer
 	function postInstall($preferences = array())
 	{
 		parent::postInstall($preferences);
+
+		define('WP_INSTALLING', true);
 
 		$this->load_wp();
 
@@ -44,11 +46,11 @@ class Installer_Wordpress extends Ld_Installer
 		update_option('siteurl', $this->site->getBaseUrl() . $preferences['path']);
 		update_option('home', $this->site->getBaseUrl() . $preferences['path']);
 
-		if (true === LD_REWRITE) {
+		if (constant('LD_REWRITE')) {
 			$this->enable_clean_urls();
 		}
 
-		$this->populate_database($user_id);
+		$this->install_defaults($user_id);
 
 		$this->populate_sidebar_widgets();
 
@@ -154,7 +156,7 @@ class Installer_Wordpress extends Ld_Installer
 		$this->load_wp();
         
 		if (file_exists($this->tmpFolder . '/uploads')) {
-			$this->_copy($this->tmpFolder . '/uploads', $this->absolutePath . '/wp-content/uploads');
+			Ld_Files::copy($this->tmpFolder . '/uploads', $this->absolutePath . '/wp-content/uploads');
 		}
 
 		foreach ($this->wpdb->tables as $table) {
@@ -174,7 +176,7 @@ class Installer_Wordpress extends Ld_Installer
 
 		wp_cache_flush();
 
-		$this->_unlink($this->tmpFolder);
+		Ld_Files::unlink($this->tmpFolder);
 	}
 	
 	public function setTheme($theme)
@@ -300,8 +302,8 @@ class Installer_Wordpress extends Ld_Installer
 	{
 		if (empty($this->loaded)) {
 
-			define('WP_INSTALLING', true);
-	
+			define('WP_LD_INSTALLER', true);
+
 			global $wpdb, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $is_apache;
 
 			require_once $this->absolutePath . "/wp-load.php";
@@ -328,31 +330,9 @@ class Installer_Wordpress extends Ld_Installer
 		}
 	}
 
-	function populate_database($user_id)
+	function install_defaults($user_id)
 	{
-		$wpdb = $this->wpdb;
-
-		// Default category
-		$cat_name = $wpdb->escape(__('Uncategorized'));
-		$cat_slug = sanitize_title(_c('Uncategorized|Default category slug'));
-		$wpdb->query("INSERT INTO $wpdb->terms (name, slug, term_group) VALUES ('$cat_name', '$cat_slug', '0')");
-		$wpdb->query("INSERT INTO $wpdb->term_taxonomy (term_id, taxonomy, description, parent, count) VALUES ('1', 'category', '', '0', '1')");
-		// Default link category
-		$cat_name = $wpdb->escape(__('Blogroll'));
-		$cat_slug = sanitize_title(_c('Blogroll|Default link category slug'));
-		$wpdb->query("INSERT INTO $wpdb->terms (name, slug, term_group) VALUES ('$cat_name', '$cat_slug', '0')");
-		$wpdb->query("INSERT INTO $wpdb->term_taxonomy (term_id, taxonomy, description, parent, count) VALUES ('2', 'link_category', '', '0', '7')");
-
-		// First post
-		$now = date('Y-m-d H:i:s');
-		$now_gmt = gmdate('Y-m-d H:i:s');
-		$first_post_guid = get_option('home') . '/?p=1';
-		$wpdb->query("INSERT INTO $wpdb->posts (post_author, post_date, post_date_gmt, post_content, post_excerpt, post_title, post_category, post_name, post_modified, post_modified_gmt, guid, comment_count, to_ping, pinged, post_content_filtered) VALUES ($user_id, '$now', '$now_gmt', '".$wpdb->escape(__('Welcome to WordPress. This is your first post. Edit or delete it, then start blogging!'))."', '', '".$wpdb->escape(__('Hello world!'))."', '0', '".$wpdb->escape(_c('hello-world|Default post slug'))."', '$now', '$now_gmt', '$first_post_guid', '1', '', '', '')");
-		$wpdb->query( "INSERT INTO $wpdb->term_relationships (`object_id`, `term_taxonomy_id`) VALUES (1, 1)" );
-		
-		// Default comment
-		$wpdb->query("INSERT INTO $wpdb->comments (comment_post_ID, comment_author, comment_author_email, comment_author_url, comment_date, comment_date_gmt, comment_content) VALUES ('1', '".$wpdb->escape(__('Mr WordPress'))."', '', 'http://wordpress.org/', '$now', '$now_gmt', '".$wpdb->escape(__('Hi, this is a comment.<br />To delete a comment, just log in and view the post&#039;s comments. There you will have the option to edit or delete them.'))."')");
-
+		wp_install_defaults($user_id);
 	}
 
 	function populate_sidebar_widgets()
