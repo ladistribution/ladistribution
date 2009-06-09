@@ -12,7 +12,16 @@ class IndexController extends Ld_Controller_Action
     {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
 
-        $this->_redirector->goto('index', 'index', 'slotter');
+        $directories = $this->getFrontController()->getDispatcher()->getControllerDirectory();
+        $modules = array_keys($directories);
+
+        foreach ($modules as $module) {
+            if ($module != 'default') {
+                 $this->_redirector->goto('index', 'index', $module);
+                 return;
+            }
+        }
+
     }
 
 }

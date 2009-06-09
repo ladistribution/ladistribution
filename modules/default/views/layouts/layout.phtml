@@ -1,5 +1,4 @@
 <?php
-$this->headLink()->appendStylesheet(Zend_Registry::get('site')->getUrl('css') . '/ld-ui/ld-slotter.css', 'screen');
 echo $this->doctype('XHTML1_STRICT')->__tostring() . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,23 +12,20 @@ echo $this->doctype('XHTML1_STRICT')->__tostring() . "\n" ?>
 
 <div class="h6e-top-bar"><div class="h6e-top-bar-inner">
   <div class="a">
-      La Distribution > 
       <a href="<?php echo $this->baseUrl ?>/"><?php echo $this->title ?></a>
   </div>
   <div class="b">
       <?php if ($this->authenticated && !empty($this->user)) : ?>
-          You're authenticated as <strong><?php echo $this->user['fullname'] ?></strong>
+          Salut <?php echo $this->user['fullname'] ?>!
           -
           <a href="?ld_auth_action=logout">Log Out</a>
       <?php elseif (!$this->authenticated) : ?>
-          <a class="h6e-login" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth')) ?>">Log In</a>
+          <a class="h6e-login" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'login')) ?>">Log In</a>
       <?php endif ?>
   </div>
 </div></div>
 
 <div class="h6e-main-content">
-
-  <!-- <h1 class="h6e-page-title"><a href="<?php echo $this->baseUrl ?>/"><?php echo $this->title ?></a></h1> -->
 
   <div class="h6e-page-content">
       <?php echo $this->layout()->content ?>

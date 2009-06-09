@@ -9,6 +9,18 @@ class Slotter_IndexController extends BaseController
 {
 
     /**
+     * preDispatch
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!$this->_acl->isAllowed($this->userRole, 'instances', 'view')) {
+            $this->_disallow();
+        }
+    }
+
+    /**
     * Index action.
     */
     public function indexAction()
@@ -23,15 +35,11 @@ class Slotter_IndexController extends BaseController
             }
         }
 
-        $this->site->availableSlots = (int)$this->site->slots - count($this->view->instances);
-
         $this->view->databases = $this->site->getDatabases();
-
-        $this->view->repositories = $this->site->getRepositories('local');
 
         $this->view->users = $this->site->getUsers();
 
-        $this->view->packages = $this->site->getPackages();
+        $this->view->canAdminInstances = $this->_acl->isAllowed($this->userRole, null, 'admin');
     }
 
 }

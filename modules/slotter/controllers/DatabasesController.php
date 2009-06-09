@@ -9,6 +9,18 @@ class Slotter_DatabasesController extends BaseController
 {
 
     /**
+     * preDispatch
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+            $this->_disallow();
+        }
+    }
+
+    /**
      * Index action.
      */
     public function indexAction()

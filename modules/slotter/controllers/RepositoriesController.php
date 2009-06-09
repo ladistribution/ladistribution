@@ -23,6 +23,18 @@ class Slotter_RepositoriesController extends BaseController
     }
 
     /**
+     * preDispatch
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+            $this->_disallow();
+        }
+    }
+
+    /**
      * Index action.
      */
     public function indexAction()

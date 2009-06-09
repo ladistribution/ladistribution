@@ -7,16 +7,18 @@ class Bootstrap
 
     protected static $_registry;
 
-    public static function run()
+    public static function run($dir = null)
     {
-        self::prepare();
+        self::prepare($dir);
 
         self::dispatch();
     }
 
-    public static function prepare()
+    public static function prepare($dir)
     {
         self::$_registry = Zend_Registry::getInstance();
+
+        self::$_registry['instance'] = self::$_registry['site']->getInstance($dir);
 
         self::setupMvc();
         self::setupRoutes();
@@ -31,6 +33,7 @@ class Bootstrap
 
         $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/h6e-minimal/h6e-minimal.css', 'screen');
         $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/ld-ui/ld-bars.css', 'screen');
+        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/ld-ui/ld-slotter.css', 'screen');
 
         self::$_front = Zend_Controller_Front::getInstance();
 

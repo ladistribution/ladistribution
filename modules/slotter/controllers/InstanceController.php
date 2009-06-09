@@ -19,8 +19,10 @@ class Slotter_InstanceController extends BaseController
         if (isset($id)) {
             $this->view->instance = $this->instance = $this->site->getInstance($id);
         }
-        
-        $this->restrict();
+
+        if (!$this->_acl->isAllowed($this->userRole, 'instances', 'admin')) {
+            $this->_disallow();
+        }
     }
 
     /**
@@ -128,10 +130,6 @@ class Slotter_InstanceController extends BaseController
    */
   public function configureAction()
   {
-      if ( $this->_hasParam('restrict') ) {
-          $this->site->restrictInstance($this->instance, (bool)$this->_getParam('restrict'));
-          $this->_redirectToAction('manage');
-      }
       $this->view->preferences = $this->instance->getPreferences('configuration');
       
       if ($this->getRequest()->isGet()) {

@@ -1,35 +1,34 @@
 <h2>Applications</h2>
 
-<p>Welcome!
-    You own <strong><?php echo $this->site->slots ?></strong> slots on this site
-    and <strong><?php echo $this->site->availableSlots ?></strong> slots are currently available.
-</p>
-
 <ul class="blocks">
     <?php
     $i = 0;
     if (!empty($this->instances)) {
       foreach ($this->instances as $id => $instance) {
-          $manageUrl = $this->url(array('controller' => 'instance', 'id' => $id, 'action' => 'manage'), 'default');
           printf("<li class=\"%s\">", $instance->getPackageId());
           printf("<span>%s<br/>", $instance->getName());
           printf("- <a href=\"%s\">home</a>", $instance->getUrl());
           foreach ($instance->getLinks() as $link) {
-              printf("<br/>- <a href=\"%s\">%s</a>", $link['href'], $link['rel']);
+              if ($link['type'] == 'text/html') {
+                  printf("<br/>- <a href=\"%s\">%s</a>", $link['href'], $link['title']);
+              }
           }
-          printf("<br/>- <a href=\"%s\">settings</a><br/>", $manageUrl);
+          if ($this->canAdminInstances) {
+              $manageUrl = $this->url(array('controller' => 'instance', 'id' => $id, 'action' => 'manage'), 'default');
+              printf("<br/>- <a href=\"%s\">settings</a><br/>", $manageUrl);
+          }
           printf("</span></li>");
           $i++;
       }
     }
     ?>
-    <?php for ($j = $i; $j < $this->site->slots; $j++ ) : ?>
+    <?php if ($this->canAdminInstances) : for ($j = $i; $j < $this->site->slots; $j++ ) : ?>
     <li class="empty">
         <a href="<?php echo $this->url(array('controller' => 'instance', 'action' => 'new')) ?>">
             Add an application
         </a>
     </li>
-    <?php endfor ?>
+    <?php endfor; endif; ?>
 </ul>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
@@ -44,6 +43,7 @@
 
 <?php endif ?>
 
+<?php /*
 <h2>Also</h2>
 
 <ul>
@@ -51,3 +51,4 @@
     <li><a href="<?php echo $this->url(array('controller' => 'databases')) ?>">Manage Databases</a></li>
     <li><a href="<?php echo $this->url(array('controller' => 'users')) ?>">Manage Users</a></li>
 </ul>
+*/ ?>

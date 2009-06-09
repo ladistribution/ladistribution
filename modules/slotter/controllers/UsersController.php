@@ -8,6 +8,18 @@ require_once 'BaseController.php';
 class Slotter_UsersController extends BaseController
 {
 
+    /**
+     * preDispatch
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+            $this->_disallow();
+        }
+    }
+
     public function indexAction()
     {
         $applications = $this->site->getInstances('application');
@@ -53,6 +65,22 @@ class Slotter_UsersController extends BaseController
         $this->view->username = $id = $this->_getParam('id');
         if ($this->getRequest()->isPost()) {
             $this->site->deleteUser($id);
+            $this->_redirector->gotoSimple('index', 'users');
+        }
+    }
+
+    public function editAction()
+    {
+        $id = $this->_getParam('id');
+        $this->view->user = $user = $this->site->getUser($id);
+        if ($this->getRequest()->isPost()) {
+            $params = array(
+                // 'username'   => $this->_getParam('username'),
+                // 'password'   => $this->_getParam('password'),
+                'fullname'   => $this->_getParam('fullname'),
+                'email'      => $this->_getParam('email')
+            );
+            $this->site->updateUser($id, $params);
             $this->_redirector->gotoSimple('index', 'users');
         }
     }

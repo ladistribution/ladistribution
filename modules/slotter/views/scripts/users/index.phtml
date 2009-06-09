@@ -18,7 +18,7 @@
            <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
        <?php endforeach ?>
        */ ?>
-       <th>Action</th>
+       <th colspan="2">Action</th>
    </tr>
 
 <?php foreach ($this->users as $user) : ?>
@@ -53,6 +53,9 @@
        */ ?>
        
        <td>
+           <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $user['username'] )); ?>">edit</a>
+       </td>
+       <td>
            <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $user['username'] )); ?>">delete</a>
        </td>
 
@@ -62,7 +65,9 @@
 
 </table>
 
+<?php /*
 <input type="submit" class="submit button" value="Update"/>
+*/ ?>
 
 </form>
 

@@ -23,20 +23,53 @@ class BaseController extends Ld_Controller_Action
         $this->view->baseUrl = $this->view->url(
             array('module' => 'slotter', 'controller' => 'index', 'action' => 'index'), 'default', true);
 
-        $this->_setTitle('Slotter');
+        $this->_setTitle('LD Slotter');
+
+        $this->_initAcl();
     }
 
-    public function restrict()
+    protected function _initAcl()
     {
-        $users = $this->site->getUsers();
-        if (empty($users)) {
-            return true;
-        }
+        $this->_acl = new Zend_Acl();
 
-        if ($this->authenticated == false) {
-            $this->_forward('index', 'auth', 'default');
-            return true;
+        $guest = new Zend_Acl_Role('guest');
+        $this->_acl->addRole($guest);
+        $user = new Zend_Acl_Role('user');
+        $this->_acl->addRole($user, $guest);
+        $admin = new Zend_Acl_Role('admin');
+        $this->_acl->addRole($admin, $user);
+
+        $instances = new Zend_Acl_Resource('instances');
+        $this->_acl->add($instances);
+        
+        $this->_acl->allow('admin', null, 'admin');
+        $this->_acl->allow('user', 'instances', 'view');
+        $this->_acl->allow('admin', 'instances', 'admin');
+        
+        $users = $this->site->getUsers();
+        
+        if (empty($users)) {
+            $this->userRole = 'admin';
+        } else if (isset($this->user)) {
+            $username = $this->user['username'];
+            $roles = $this->_registry['instance']->getUserRoles();
+            if (isset($roles[$username])) {
+                $this->userRole = $roles[$username];
+            } else {
+                $this->userRole = 'user';
+            }
+        } else {
+            $this->userRole = 'guest';
         }
+    }
+
+    protected function _disallow()
+    {
+        if ($this->authenticated) {
+             $this->_forward('disallow', 'auth', 'default');
+         } else {
+             $this->_forward('login', 'auth', 'default');
+         }
     }
 
     /**
@@ -44,8 +77,6 @@ class BaseController extends Ld_Controller_Action
      */
     public function preDispatch()
     {
-        $this->restrict();
-
         if ($this->getRequest()->isPost()) {
             $this->_contentType = $_SERVER['CONTENT_TYPE'];
             // TEMP: handle a particular context when interacting with requests in oAuth library

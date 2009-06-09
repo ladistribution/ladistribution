@@ -8,13 +8,17 @@ require_once 'Ld/Controller/Action.php';
 class AuthController extends Ld_Controller_Action
 {
 
-    function indexAction()
+    function loginAction()
     {
-        if ($this->authenticated) {
-            $this->_redirect( Zend_Registry::get('site')->getInstance('admin')->getUrl() );
-        }
         $this->view->postParams = $_POST;
-        $this->render('login');
+
+        if ($this->getRequest()->isPost() && Zend_Auth::getInstance()->hasIdentity()) {
+            $this->_forward('index', 'index', 'default');
+        }
+    }
+
+    function disallowAction()
+    {
     }
 
 }
