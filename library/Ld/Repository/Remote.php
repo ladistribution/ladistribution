@@ -16,12 +16,22 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
             $this->endpoint = $params['endpoint'];
         }
 
+        if (Zend_registry::isRegistered('cache')) {
+            $this->_cache = Zend_registry::get('cache');
+        }
+
         $this->httpClient = new Zend_Http_Client();
         $this->httpClient->setHeaders('Accept', 'application/json');
     }
 
     public function getPackages()
     {
+        $cacheKey = 'Ld_Repository_Remote_Packages_' . md5($this->endpoint);
+
+        if (isset($this->_cache)) {
+            $this->packages = $this->_cache->load($cacheKey);
+        }
+
         if (empty($this->packages)) {
 
             $this->packages = array();
@@ -32,6 +42,10 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
 
             foreach ($result as $id => $params) {
                 $this->packages[$id] = $this->getPackage($params);
+            }
+
+            if (isset($this->_cache)) {
+                $this->_cache->save($this->packages, $cacheKey); 
             }
 
         }
