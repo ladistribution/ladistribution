@@ -1,0 +1,37 @@
+<h2>Update a database</h2>
+
+<form method="post" action="">
+
+    <table>
+    <tr>
+        <td><label>Type</label></td>
+        <td>
+            <select name="type">
+                <option value="mysql">MySQL</option>
+                <option <?php if ($this->db['type'] == 'postgresql') echo 'selected="selected"' ?> value="postgresql">PostgreSQL</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Host</label></td>
+        <td><input type="text" name="host" class="text" value="<?php echo $this->escape($this->db['host']) ?>"/></td>
+    </tr>
+    <tr>
+        <td><label>Name</label></td>
+        <td><input type="text" name="name" class="text" value="<?php echo $this->escape($this->db['name']) ?>"/></td>
+    </tr>
+    <tr>
+        <td><label>User</label></td>
+        <td><input type="text" name="user" class="text" value="<?php echo $this->escape($this->db['user']) ?>"/></td>
+    </tr>
+    <tr>
+        <td><label>Password</label></td>
+        <td><input type="text" name="password" class="text" value="<?php echo $this->escape($this->db['password']) ?>"/></td>
+    </tr>
+    </table>
+
+    <input type="hidden" name="id" value="<?php echo $this->escape($this->id) ?>"/>
+
+    <input type="submit" class="submit" value="Update"/>
+
+</form>

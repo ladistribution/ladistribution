@@ -46,4 +46,41 @@ class Slotter_DatabasesController extends BaseController
         }
     }
 
+    /**
+     * Edit action.
+     */
+    public function editAction()
+    {
+        $this->view->id = $id = $this->_getParam('id');
+        $databases = $this->site->getDatabases();
+        if (empty($databases[$id])) {
+            throw new Exception('Unknown database.');
+        }
+        $this->view->db = $databases[$id];
+
+        if ($this->getRequest()->isPost()) {
+            $params = array(
+                'type' => $this->_getParam('type'),
+                'host' => $this->_getParam('host'),
+                'name' => $this->_getParam('name'),
+                'user' => $this->_getParam('user'),
+                'password' => $this->_getParam('password')
+            );
+            $this->site->updateDatabase($id, $params);
+            $this->_forward('index');
+        }
+    }
+
+    /**
+     * Delete action.
+     */
+    public function deleteAction()
+    {
+        $this->view->id = $id = $this->_getParam('id');
+        if ($this->getRequest()->isPost()) {
+            $this->site->deleteDatabase($id);
+            $this->_forward('index');
+        }
+    }
+
 }

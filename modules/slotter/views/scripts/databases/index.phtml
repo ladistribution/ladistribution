@@ -1,23 +1,38 @@
 <h2>Databases</h2>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
+
     <p>None</p>
+
 <?php else : ?>
-<ul>
-    <?php
-    foreach ($this->databases as $database) {
-        echo '<li>';
-        echo '<dl class="inline">';
-        echo '<dt>type</dt>';
-        echo '<dd>' . $database['type'] . '</dd>';
-        echo '<dt>host</dt>';
-        echo '<dd>' . $database['host'] . '</dd>';
-        echo '<dt>name</dt>';
-        echo '<dd>' . $database['name'] . '</dd>';
-        echo '</li>';
-    }
-    ?>
-</ul>
+
+    <table class="h6e-data">
+
+    <tr>
+       <th>Type</th>
+       <th>Host</th>
+       <th>Name</th>
+       <th colspan="2">Action</th>
+    </tr>
+
+    <?php foreach ($this->databases as $id => $database) : ?>
+
+        <tr>
+            <td><?php echo $this->escape($database['type']) ?></td>
+            <td><?php echo $this->escape($database['host']) ?></td>
+            <td><?php echo $this->escape($database['name']) ?></td>
+            <td>
+                <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $id )); ?>">edit</a>
+            </td>
+            <td>
+                <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $id )); ?>">delete</a>
+            </td>
+        </tr>
+
+    <?php endforeach ?>
+
+    </table>
+
 <?php endif ?>
 
 <h3>You can</h3>
