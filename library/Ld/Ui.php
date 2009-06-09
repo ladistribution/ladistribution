@@ -30,6 +30,11 @@ class Ld_Ui
             if (isset($userRoles[$username]) && $userRoles[$username] == 'admin') {
                 $isAdmin = true;
             }
+        } else {
+            $users = $site->getUsers();
+            if (empty($users)) {
+                $isAdmin = true;
+            }
         }
         ?>
 
