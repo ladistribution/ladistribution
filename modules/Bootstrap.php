@@ -23,6 +23,20 @@ class Bootstrap
         self::setupMvc();
         self::setupRoutes();
         self::setupCache();
+
+        if ( get_magic_quotes_gpc() ) {
+            $fn = array('Bootstrap', '_stripslashesDeep');
+            $_GET = array_map($fn, $_GET);
+            $_POST = array_map($fn, $_POST);
+            $_COOKIE = array_map($fn, $_COOKIE);
+            $_REQUEST = array_map($fn, $_REQUEST);
+        }
+    }
+
+    protected static function _stripslashesDeep($value)
+    {
+        $value = is_array($value) ? array_map(array('Bootstrap', '_stripslashesDeep'), $value) : stripslashes($value);
+        return $value;
     }
 
     public static function setupMvc()
