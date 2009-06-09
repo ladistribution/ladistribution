@@ -386,10 +386,16 @@ class Ld_Site_Local extends Ld_Site_Abstract
             } else if (count($availableDbs) == 1) {
                 $keys = array_keys($availableDbs);
                 $id = $keys[0];
-                $preferences[] = array('name' => 'db', 'type' => 'hidden', 'defaultValue' => $id);
+                $preference = array('name' => 'db', 'type' => 'hidden', 'defaultValue' => $id);
             } else {
-                throw new Exception('Case not handled yet.');
+                $preference = array('name' => 'db', 'type' => 'list', 'label' => 'Database');
+                $preference['options'] = array();
+                foreach ($availableDbs as $id => $db) {
+                    $label = sprintf("%s", $db['name']);
+                    $preference['options'][] = array('value' => $id, 'label' => $label);
+                }
             }
+            $preferences[] = $preference;
         }
 
         $prefs = $package->getInstaller()->getPackage()->getInstallPreferences(); // WAOW WAOW WAOW !!! :-)
@@ -452,9 +458,26 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function addDatabase($params)
     {
         $databases = $this->getDatabases();
-        
         $databases[uniqid()] = $params;
-        
+        $this->_writeDatabases($databases);
+    }
+
+    public function updateDatabase($id, $params)
+    {
+        $databases = $this->getDatabases();
+        $databases[$id] = array_merge($databases[$id], $params);
+        $this->_writeDatabases($databases);
+    }
+
+    public function deleteDatabase($id)
+    {
+        $databases = $this->getDatabases();
+        unset($databases[$id]);
+        $this->_writeDatabases($databases);
+    }
+
+    protected function _writeDatabases($databases)
+    {
         $filename = $this->getDirectory('dist') . '/databases.json';
         Ld_Files::put($filename, Zend_Json::encode($databases));
     }
