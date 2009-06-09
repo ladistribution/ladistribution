@@ -277,9 +277,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function updateInstance($params)
     {
-        // print_r($params);
-        // exit;
-
         if (is_string($params) && file_exists($this->getDirectory() . '/' . $params)) { // for applications (by path)
             $instance = $this->getInstance($params);
             $packageId = $instance->getPackageId();
@@ -292,6 +289,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         $package = $this->getPackage($packageId);
         $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
+        $installer->setSite($this);
 
         // Check and eventually Update dependencies
         foreach ($installer->getDependencies() as $dependency) {
@@ -359,25 +357,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
         Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($instances));
     }
 
-    public function restrictInstance($instance, $state = true)
-    {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
-        $installer->restrict($state);
-
-        // Update registry
-        $data = array('restricted' => $state);
-        $instance->setInfos($data)->save();
-    }
-
     public function backupInstance($instance)
     {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
+        $installer = $instance->getInstaller();
         $installer->backup();
     }
 
     public function restoreBackup($instance, $archive, $absolute = false)
     {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
+        $installer = $instance->getInstaller();
         $installer->restore($archive, $absolute);
     }
 
@@ -414,7 +402,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 foreach ($this->getUsers() as $id => $user) {
                     $preference['options'][] = array('value' => $user['username'], 'label' => $user['username']);
                 }
-                
+                $auth = Zend_Auth::getInstance();
+                if ($auth->hasIdentity()) {
+                    $preference['defaultValue'] = $auth->getIdentity();
+                }
             }
             $preferences[] = $preference;
         }
@@ -476,7 +467,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $filename = $this->getDirectory('dist') . '/users.json';
         if (file_exists($filename)) {
             $users = Zend_Json::decode(file_get_contents($filename));
-            foreach ($users as $key => $user) {
+            foreach ((array)$users as $key => $user) {
                 $users[$key]['id'] = $key;
                 $users[$key]['identities'] = array($this->getBaseUrl() . 'identity/' . $user['username']);
             }
@@ -508,6 +499,24 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         $users = $this->getUsers();
         $users[uniqid()] = $user;
+
+        $this->_writeUsers($users);
+    }
+
+    public function updateUser($username, $infos = array())
+    {
+        if (!$user = $this->getUser($username)) {
+            throw new Exception("User with this username doesn't exists.");
+        }
+        
+        $id = $user['id'];
+
+        foreach ($infos as $key => $value) {
+            $user[$key] = $value;
+        }
+
+        $users = $this->getUsers();
+        $users[$id] = $user;
 
         $this->_writeUsers($users);
     }

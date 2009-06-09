@@ -16,15 +16,24 @@ class Ld_Ui
         return null;
     }
 
-    function super_bar($a = '', $b = '')
+    function super_bar($params = array())
     {
         $auth = Zend_Auth::getInstance();
         $site = Zend_Registry::get('site');
         $applications = $site->getInstances('application');
         $admin = self::getInstanceByPackageId('admin');
+
+        $isAdmin = false;
+        if ($auth->hasIdentity() && isset($admin)) {
+            $username = $auth->getIdentity();
+            $userRoles = $admin->getUserRoles();
+            if (isset($userRoles[$username]) && $userRoles[$username] == 'admin') {
+                $isAdmin = true;
+            }
+        }
         ?>
 
-        <?php if ($auth->hasIdentity() && isset($admin)) : ?>
+        <?php if ($isAdmin) : ?>
             <div class="ld-super-bar-menu" style="display:none">
                 <ul>
                     <?php foreach ($admin->getLinks() as $link) : ?>
@@ -37,14 +46,11 @@ class Ld_Ui
         <div class="h6e-super-bar">
             <div class="h6e-super-bar-inner">
                 <div class="a">
-                    <?php // to be replaced by something like "isAdmin"
-                    if ($auth->hasIdentity() && isset($admin)) {
-                        ?>
+                    <?php if ($isAdmin) { ?>
                         <span class="ld-super-bar-main-menu-button">
-                            <a href="<?php echo $admin->getUrl() ?>"> ★ La Distribution admin</a>
+                            <a href="<?php echo $admin->getUrl() ?>"> ★ <?php echo $admin->getName() ?></a>
                         </span>
-                        <?php
-                    }
+                    <?php }
                     foreach ($applications as $id => $application) {
                         if ($application['package'] == 'admin') {
                             continue;
@@ -59,15 +65,13 @@ class Ld_Ui
                     ?>
                 </div>
                 <div class="b">
-                    <?php
-                    // to be replaced by something like "isAdmin"
-                    if ($auth->hasIdentity() && isset($admin)) {
+                    <?php if ($isAdmin) {
                         foreach ($applications as $id => $application) {
                             $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application['path'] ) !== false ;
                             $settings = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/instance/id/' . $id ) !== false ;
                             if ($current || $settings) {
                                 if ($settings) echo '<strong>';
-                                echo '<a href="' . $admin->getUrl() . 'slotter/instance/id/' . $id . '">Settings</a>';
+                                echo '<a href="' . $admin->getUrl() . 'slotter/instance/id/' . $id . '">◆ Settings</a>';
                                 if ($settings) echo '</strong>';
                                 break;
                             }
@@ -78,8 +82,10 @@ class Ld_Ui
             </div>
         </div>
 
-        <script type="text/javascript" src="<?php echo $site->getUrl('js') ?>/jquery/jquery.js"></script>
-        
+        <?php if (!isset($params['jquery']) || $params['jquery'] === true ) : ?>
+            <script type="text/javascript" src="<?php echo $site->getUrl('js') ?>/jquery/jquery.js"></script>
+        <?php endif ?>
+
         <script type="text/javascript">
         (function($) {
             $(document).ready(function($){

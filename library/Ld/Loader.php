@@ -35,6 +35,7 @@ class Ld_Loader
 
         // TODO: to be replaced by an Autoloader
         require_once 'clearbricks/common/lib.files.php';
+        require_once 'clearbricks/zip/class.zip.php';
         require_once 'clearbricks/zip/class.unzip.php';
 
         // Site configuration

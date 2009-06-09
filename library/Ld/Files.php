@@ -160,4 +160,9 @@ class Ld_Files
         file_put_contents($file, $content);
     }
 
+    public static function get($file)
+    {
+        return file_get_contents($file);
+    }
+
 }

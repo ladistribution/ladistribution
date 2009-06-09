@@ -264,9 +264,30 @@ class Ld_Installer
 
     public $defaultRole = 'user';
 
-    public function getRoles() { return array($this->defaultRole); }
+    public function getUserRoles()
+    {
+        $userRoles = array();
+        $filename = $this->absolutePath . '/dist/roles.json';
+        if (file_exists($filename)) {
+            $json = Ld_Files::get($filename);
+            $userRoles = Zend_Json::decode($json);
+        }
+        $users = $this->site->getUsers();
+        foreach ($users as $user) {
+            $username = $user['username'];
+            if (empty($userRoles[$username])) {
+                $userRoles[$username] = $this->defaultRole;
+            }
+        }
+        return $userRoles;
+    }
 
-    public function getUserRoles() { return array(); }
+    public function setUserRoles($roles)
+    {
+        $filename = $this->absolutePath . '/dist/roles.json';
+        $json = Zend_Json::encode($roles);
+        Ld_Files::put($filename, $json);
+    }
 
     // Legacy
     public function getPreferences($type) { return $this->package->getPreferences($type); }

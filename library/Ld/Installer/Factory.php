@@ -64,9 +64,11 @@ class Ld_Installer_Factory
         } elseif (isset($params['instance'])) {
             self::$instance = $params['instance'];
             self::$id = self::$instance->getPackageId();
+            self::$package = null;
         } elseif (isset($params['package'])) {
             self::$package = $params['package'];
             self::$id = self::$package->id;
+            self::$instance = null;
         }
 
         $dbPrefix = isset($params['dbPrefix']) ? $params['dbPrefix'] : null;
