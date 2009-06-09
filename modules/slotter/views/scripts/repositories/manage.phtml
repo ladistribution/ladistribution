@@ -44,20 +44,16 @@
 
 <?php endif ?>
 
-<?php if ($this->repository->type == 'local') : ?>
+<h3>Upload a new package</h3>
 
-    <h3>Upload a new package</h3>
+<p>Zip file please.</p>
 
-    <p>Zip file please.</p>
-
-    <form method="post" enctype="multipart/form-data" action="">
-        <p>
-            <input type="file" name="file"/>
-            <input name="upload" class="submit" type="submit" value="Upload"/>
-        </p>
-    </form>
-
-<?php endif ?>
+<form method="post" enctype="multipart/form-data" action="">
+    <p>
+        <input type="file" name="file"/>
+        <input name="upload" class="submit" type="submit" value="Upload"/>
+    </p>
+</form>
 
 <h3>Actions</h3>
 

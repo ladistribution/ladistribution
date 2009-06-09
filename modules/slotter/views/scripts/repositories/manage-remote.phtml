@@ -1,0 +1,43 @@
+<h2>Browse <strong><?php echo $this->repository->name ?></strong> repository</h2>
+
+<h3>Applications</h3>
+
+<?php if (empty($this->applications) || count($this->applications) == 0) : ?>
+    
+    <p>None</p>
+    
+<?php else : ?>
+    
+    <ul>
+    <?php foreach ($this->applications as $application) : ?>
+        <li><?php echo $application->name ?></li>
+    <?php endforeach ?>
+    </ul>
+
+<?php endif ?>
+
+<h3>Libraries</h3>
+
+<?php if (empty($this->libraries) || count($this->libraries) == 0) : ?>
+    
+    <p>None</p>
+    
+<?php else : ?>
+    
+    <ul>
+    <?php foreach ($this->libraries as $library) : ?>
+        <li><?php echo $library->name ?></li>
+    <?php endforeach ?>
+    </ul>
+
+<?php endif ?>
+
+<h3>Actions</h3>
+
+<ul>
+    <li>
+        <a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'delete', 'id' => $this->repository->id), 'default') ?>">
+        Remove this repository
+        </a>
+    </li>
+</ul>

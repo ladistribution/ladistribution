@@ -117,19 +117,9 @@ class Slotter_RepositoriesController extends BaseController
         
         $this->view->libraries = $this->repository->getLibraries();
         
-        // $libraryTypes = array(
-        //     'shared' => array('name' => 'Mixed (shared)'),
-        //     'lib'    => array('name' => 'PHP (lib)'),
-        //     'css'    => array('name' => 'CSS'),
-        //     'js'     => array('name' => 'JS')
-        // );
-        // 
-        // foreach ($libraryTypes as $id => $type) {
-        //     $libraryTypes[$id]['libraries'] = $this->repository->getLibraries($id);
-        // }
-        // 
-        // $this->view->libraryTypes = $libraryTypes;
-
+        if ($this->repository->type != 'local') {
+            $this->render('manage-remote');
+        }
     }
 
 }
