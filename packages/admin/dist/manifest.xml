@@ -1,12 +1,16 @@
 <package release="unstable">
   <id>admin</id>
   <name>La Distribution admin</name>
-  <version>0.2-23-10</version>
+  <version>0.2-24-2</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
   <need>css-ld-ui</need>
-  <installer name="Ld_Installer_Admin" src="./dist/installer.php" />
+  <need>js-jquery</need>
+  <link title="Applications" rel="index" type="text/html" href="/slotter/" />
+  <link title="Repositories" rel="section" type="text/html" href="/slotter/repositories" />
+  <link title="Databases" rel="section" type="text/html" href="/slotter/databases" />
+  <link title="Users" rel="section" type="text/html" href="/slotter/users" />
   <deploy>
       <origin>modules</origin>
       <destination path="shared">./modules/</destination>

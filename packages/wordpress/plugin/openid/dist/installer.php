@@ -3,7 +3,9 @@
 class Installer_Plugin_Openid extends Ld_Installer
 {
 
-	function load_wp()
+	public $plugin_file = 'openid/openid.php';
+
+	private function load_wp()
 	{
 		if (empty($this->loaded)) {
 
@@ -21,13 +23,25 @@ class Installer_Plugin_Openid extends Ld_Installer
 		}
 	}
 
-	function install($preferences = array())
+	public function install($preferences = array())
 	{
 		parent::install($preferences);
 
 		$this->load_wp();
 
-		activate_plugin('openid/openid.php');
+		activate_plugin($this->plugin_file);
+	}
+
+	public function uninstall()
+	{
+		$this->load_wp();
+
+		deactivate_plugins($this->plugin_file);
+
+		// this doesn't work right now ...
+		// uninstall_plugin($this->plugin_file);
+
+		parent::uninstall();
 	}
 
 }

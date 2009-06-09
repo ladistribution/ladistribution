@@ -1,7 +1,9 @@
 <?php
 
-require_once(dirname(__FILE__) . '/dist/config.php');
+$dir = dirname(__FILE__);
 
-require_once(dirname(__FILE__) . '/Bootstrap.php');
+require_once($dir . '/dist/config.php');
 
-Bootstrap::run();
+require_once($dir . '/Bootstrap.php');
+
+Bootstrap::run($dir);

@@ -160,8 +160,8 @@ foreach ($base_libs as $name => $source) {
 
 if (!file_exists($directories['dist'] . '/instances.json')) {
 	$instances = array(
-		array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.1-1'),
-		array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-22')
+		array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1'),
+		array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-24-3')
 	);
 	Ld_Files::put($directories['dist'] . '/instances.json', Zend_Json::encode($instances));
 }
@@ -171,7 +171,7 @@ flush();
 
 // Install Admin
 
-$admin = $site->createInstance('admin', array('path' => 'admin'));
+$admin = $site->createInstance('admin', array('title' => 'La Distribution Admin', 'path' => 'admin'));
 
 echo 'Install OK. <a href="' . $admin->getUrl() . '">Go admin</a>';
 flush();
