@@ -45,22 +45,24 @@ class BaseController extends Ld_Controller_Action
         $this->_acl->allow('admin', null, 'admin');
         $this->_acl->allow('user', 'instances', 'view');
         $this->_acl->allow('admin', 'instances', 'admin');
-        
+
+        $this->userRole = $this->_getCurrentUserRole();
+    }
+
+    protected function _getCurrentUserRole()
+    {
         $users = $this->site->getUsers();
-        
         if (empty($users)) {
-            $this->userRole = 'admin';
+            return 'admin';
         } else if (isset($this->user)) {
             $username = $this->user['username'];
             $roles = $this->_registry['instance']->getUserRoles();
             if (isset($roles[$username])) {
-                $this->userRole = $roles[$username];
-            } else {
-                $this->userRole = 'user';
+                return $roles[$username];
             }
-        } else {
-            $this->userRole = 'guest';
+            return 'user';
         }
+        return 'guest';
     }
 
     protected function _disallow()
