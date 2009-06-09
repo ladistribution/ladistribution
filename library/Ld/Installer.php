@@ -115,6 +115,9 @@ class Ld_Installer
                 case 'css':
                     $to = $this->getSite()->getDirectory('css') . "/" . $rule['destination'];
                     break;
+                case 'js':
+                    $to = $this->getSite()->getDirectory('js') . "/" . $rule['destination'];
+                    break;
                 case 'shared':
                     $to = $this->getSite()->getDirectory('shared') . "/" . $rule['destination'];
                     break;
