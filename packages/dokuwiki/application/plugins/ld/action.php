@@ -68,12 +68,15 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 	{
 		$css_url = Zend_Registry::get('site')->getUrl('css');
 		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>$css_url.'/ld-ui/ld-bars.css');
+		$js_url = Zend_Registry::get('site')->getUrl('js');
+		$jquery = array( 'type'=>'text/javascript', '_data' => '', 'src'=>$js_url.'/jquery/jquery.js');
+		$event->data['script'] = array_merge(array($jquery), $event->data['script']);
 	}
 
 	function template(&$event, $param)
 	{
 		require_once('Ld/Ui.php');
-		Ld_Ui::super_bar();
+		Ld_Ui::super_bar(array('jquery' => false));
 	}
 
 }

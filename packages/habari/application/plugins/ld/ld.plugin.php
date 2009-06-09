@@ -47,7 +47,28 @@ class Ld extends Plugin
 
 	public function footer()
 	{
-		Ld_Ui::super_bar();
+		Ld_Ui::super_bar(array('jquery' => false));
+	}
+
+	public function action_init()
+	{
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity()) {
+			$username = $auth->getIdentity();
+			$ld_user = Zend_Registry::get('site')->getUser($username);
+			if (isset($ld_user)) {
+				$habari_user = $this->get_habari_user($ld_user);
+				if (!empty($habari_user)) {
+					$_SESSION['user_id'] = $habari_user->id;
+					$_SESSION['ld_user_id'] = true;
+				}
+			}
+		} else {
+			if (isset($_SESSION['ld_user_id'])) {
+				unset($_SESSION['ld_user_id']);
+				unset($_SESSION['user_id']);
+			}
+		}
 	}
 
 	public function filter_user_authenticate($user, $who, $pw)
@@ -56,13 +77,7 @@ class Ld extends Plugin
 
 		if (isset($ld_user)) {
 
-			$habari_user = User::get_by_name( $who );
-			if (empty($habari_user)) {
-				$habari_user = User::create(array(
-					'username' => $ld_user['username'],
-					'email' =>  $ld_user['email']
-				));
-			}
+			$habari_user = $this->get_habari_user($ld_user);
 
 			$auth = Zend_Auth::getInstance();
 			$adapter = new Ld_Auth_Adapter_File();
@@ -77,6 +92,18 @@ class Ld extends Plugin
 		}
 
 		return $user;
+	}
+	
+	protected function get_habari_user($ld_user)
+	{
+		$habari_user = User::get_by_name($ld_user['username']);
+		if (empty($habari_user)) {
+			$habari_user = User::create(array(
+				'username' => $ld_user['username'],
+				'email' =>  $ld_user['email']
+			));
+		}
+		return $habari_user;
 	}
 
 	public function action_user_logout()

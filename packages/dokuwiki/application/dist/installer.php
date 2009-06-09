@@ -1,6 +1,6 @@
 <?php
 
-class Installer_Dokuwiki extends Ld_Installer
+class Ld_Installer_Dokuwiki extends Ld_Installer
 {
 
     public $defaultConfiguration = array(
@@ -224,31 +224,6 @@ class Installer_Dokuwiki extends Ld_Installer
     public function getRoles()
     {
         return $this->roles;
-    }
-
-    public function getUserRoles()
-    {
-        $userRoles = array();
-        $filename = $this->absolutePath . '/dist/roles.json';
-        if (file_exists($filename)) {
-            $json = file_get_contents($filename);
-            $userRoles = Zend_Json::decode($json);
-        }
-        $users = $this->site->getUsers();
-        foreach ($users as $user) {
-            $username = $user['username'];
-            if (empty($userRoles[$username])) {
-                $userRoles[$username] = $this->defaultRole;
-            }
-        }
-        return $userRoles;
-    }
-
-    public function setUserRoles($roles)
-    {
-        $filename = $this->absolutePath . '/dist/roles.json';
-        $json = Zend_Json::encode($roles);
-        Ld_Files::put($filename, $json);
     }
 
     public function getBackupDirectories()

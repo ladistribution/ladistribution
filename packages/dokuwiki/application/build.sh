@@ -11,6 +11,7 @@ rm $GZ
 mv $NAME-$VERSION $FOLDER
 # Apply patches
 patch -p0 -d $FOLDER < patches/config.diff
+patch -p0 -d $FOLDER < patches/config-feed.diff
 patch -p0 -d $FOLDER < patches/geshi.diff
 # Remove installer
 rm $FOLDER/install.php
