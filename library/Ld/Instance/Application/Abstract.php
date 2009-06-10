@@ -7,8 +7,6 @@ abstract class Ld_Instance_Application_Abstract extends Ld_Instance_Abstract
 
     public $name;
 
-    protected $site;
-
     public function getName()
     {
         $infos = $this->getInfos();
