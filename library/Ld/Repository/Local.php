@@ -17,7 +17,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
             $this->name = $params['name'];
         }
 
-        $this->dir = $this->getSite()->getDirectory() . '/repositories/' . $this->id;
+        $this->dir = $this->getSite()->getDirectory() . '/repositories/' . $this->name;
 
         Ld_Files::createDirIfNotExists($this->dir);
     }

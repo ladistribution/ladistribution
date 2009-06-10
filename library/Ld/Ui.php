@@ -65,7 +65,6 @@ class Ld_Ui
                         if ($current || $settings) echo '<strong>';
                         echo '<a href="' . $site->getUrl() . $application['path'] . '/">' . $application['name'] . '</a>';
                         if ($current || $settings)  echo '</strong>';
-                        echo ' &nbsp; ';
                     }
                     ?>
                 </div>

@@ -110,7 +110,7 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
     protected function _getUserByUsername($username)
     {
         $users = Zend_Registry::get('site')->getUsers();
-        foreach ($users as $id => $user) {
+        foreach ((array)$users as $id => $user) {
             if ($user['username'] == $username) {
                 return $user;
             }

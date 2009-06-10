@@ -51,19 +51,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function setSite($site)
     {
-        $this->site = $site;
-        
+        parent::setSite($site);
+
         if ($this->type == 'application' && isset($this->path)) {
             $this->infos['url'] = $this->url = $this->site->getBaseUrl() . $this->path . '/';
         }
-    }
-
-    public function getSite()
-    {
-        if (isset($this->site)) {
-            return $this->site;
-        }
-        return Zend_Registry::get('site');
     }
 
     public function setPath($path)
@@ -76,7 +68,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         return $this->absolutePath = $this->getSite()->getDirectory() . '/' . $this->path;
     }
-    
+
     public function getInstanceJson()
     {
         return $this->getAbsolutePath() . '/dist/instance.json';

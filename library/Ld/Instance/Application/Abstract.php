@@ -21,25 +21,6 @@ abstract class Ld_Instance_Application_Abstract extends Ld_Instance_Abstract
         return $infos['url'];
     }
 
-    public function isUpToDate()
-    {
-        $package = $this->site->getPackage( $this->getPackageId() );
-        if ($package) {
-            return $this->getVersion() != $package->version ? $package->version : false;
-        }
-        // package is unknown, it can only be 'up to date' then
-        return false;
-    }
-
-    public function isRestricted()
-    {
-        $infos = $this->getInfos();
-        if (isset($infos['restricted'])) {
-            return $infos['restricted'];
-        }
-        return false;
-    }
-
     abstract public function getLinks();
 
     abstract public function getPreferences($type = 'preferences');

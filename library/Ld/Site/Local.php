@@ -403,9 +403,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $preference = is_object($pref) ? $pref->toArray() : $pref;
             // Special Type: user
             if ($preference['type'] == 'user') {
+                $users = $this->getUsers();
+                if (empty($users)) {
+                    throw new Exception('No user available.');
+                }
                 $preference['type'] = 'list';
                 $preference['options'] = array();
-                foreach ($this->getUsers() as $id => $user) {
+                foreach ($users as $id => $user) {
                     $preference['options'][] = array('value' => $user['username'], 'label' => $user['username']);
                 }
                 $auth = Zend_Auth::getInstance();

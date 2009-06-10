@@ -13,6 +13,8 @@ abstract class Ld_Instance_Abstract
 
     protected $infos = array();
 
+    public $site;
+
     public function __construct($infos = null)
     {
         if (isset($infos) && is_array($infos)) {
@@ -65,6 +67,38 @@ abstract class Ld_Instance_Abstract
        }
        
        return $this;
+    }
+
+    public function setSite($site)
+    {
+        $this->site = $site;
+    }
+
+    public function getSite()
+    {
+        if (isset($this->site)) {
+            return $this->site;
+        }
+        return Zend_Registry::get('site');
+    }
+
+    public function getPackage()
+    {
+        return $this->getSite()->getPackage( $this->getPackageId() );
+    }
+
+    public function hasUpdate()
+    {
+        try {
+            $package = $this->getPackage();
+        } catch (Exception $e) {
+            $package = null;
+        }
+        if ($package) {
+            return version_compare($package->version, $this->getVersion(), '>') ? $package->version : false;
+        }
+        // package is unknown, it can only be 'up to date' then
+        return false;
     }
 
 }
