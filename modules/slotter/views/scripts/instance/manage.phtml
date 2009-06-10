@@ -16,10 +16,10 @@
         <td><?php echo $this->instance->getPackageId() ?></td>
         <td><?php echo $this->instance->getType() ?></td>
         <td><?php echo $this->instance->getVersion() ?></td>
-        <td><?php echo $this->instance->isUpToDate() ? 'Need update' : 'Up to date' ?></td>
+        <td><?php echo ($this->instance->hasUpdate = $this->instance->hasUpdate()) ? 'Need update' : 'Up to date' ?></td>
         <td>
-        <?php if ($this->instance->isUpToDate()) : ?>
-            <a href="<?php echo $this->instanceActionUrl('update') ?>?version=<?php echo $this->instance->isUpToDate() ?>">update</a>
+        <?php if ($this->instance->hasUpdate) : ?>
+            <a href="<?php echo $this->instanceActionUrl('update') ?>?version=<?php echo $this->instance->hasUpdate ?>">update</a>
         <?php endif ?>
         </td>
     </tr>

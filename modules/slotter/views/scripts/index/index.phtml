@@ -3,12 +3,12 @@
 <ul class="blocks">
     <?php
     $i = 0;
-    if (!empty($this->instances)) {
-      foreach ($this->instances as $id => $instance) {
-          printf("<li class=\"%s\">", $instance->getPackageId());
-          printf("<span>%s<br/>", $instance->getName());
-          printf("- <a href=\"%s\">home</a>", $instance->getUrl());
-          foreach ($instance->getLinks() as $link) {
+    if (!empty($this->applications)) {
+      foreach ($this->applications as $id => $application) {
+          printf("<li class=\"%s\">", $application->getPackageId());
+          printf("<span>%s<br/>", $application->getName());
+          printf("- <a href=\"%s\">home</a>", $application->getUrl());
+          foreach ($application->getLinks() as $link) {
               if ($link['type'] == 'text/html') {
                   printf("<br/>- <a href=\"%s\">%s</a>", $link['href'], $link['title']);
               }
@@ -39,16 +39,14 @@
 
 <?php if (empty($this->users) || count($this->users) == 0) : ?>
 
-    <p><strong>Notice:</strong> You don't have any user registered yet. Registering users is necessary to password protect this admin and others applications.</p>
+    <p><strong>Notice:</strong> You don't have any user registered yet. Registering users is necessary to password protect this admin and install others applications.</p>
 
 <?php endif ?>
 
-<?php /*
-<h2>Also</h2>
+<?php if ($this->hasUpdate) : ?>
 
-<ul>
-    <li><a href="<?php echo $this->url(array('controller' => 'repositories')) ?>">Manage Repositories</a></li>
-    <li><a href="<?php echo $this->url(array('controller' => 'databases')) ?>">Manage Databases</a></li>
-    <li><a href="<?php echo $this->url(array('controller' => 'users')) ?>">Manage Users</a></li>
-</ul>
-*/ ?>
+    <?php $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update'); ?>
+
+    <p><strong>Notice:</strong> There is some updates available. It's recommended to <a href="<?php echo $updateUrl ?>">upgrade now.</a></p>
+
+<?php endif ?>

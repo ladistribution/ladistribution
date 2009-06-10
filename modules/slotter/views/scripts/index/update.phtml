@@ -1,0 +1,77 @@
+<h2>Update</h2>
+
+<?php if (empty($this->libraries) && empty($this->applications)) : ?>
+
+    <p>Everything seems up to date.</p>
+
+<?php else : ?>
+    
+<form action="" method="post">
+    
+<table class="h6e-data">
+    <?php if (!empty($this->libraries)) : ?>
+        <tr>
+            <td colspan="6"><strong>Libraries</strong></td>
+        </tr>
+        <tr>
+            <td></td>
+            <th colspan="3">package</th>
+            <th>current version</th>
+            <th>new version</th>
+        </tr>
+    
+        <?php foreach ($this->libraries as $library) : ?>
+            <tr>
+                <td><input type="checkbox" checked="checked" name="libraries[<?php echo $library->getPackageId() ?>]" /></td>
+                <td colspan="3"><?php echo $library->getPackageId() ?></td>
+                <td><?php echo $library->getVersion() ?></td>
+                <td><?php echo $library->hasUpdate ? $library->hasUpdate : '<em>None</em>' ?></td>
+            </tr>
+        <?php endforeach ?>
+    <?php endif ?>
+    <?php if (!empty($this->applications)) : ?>
+        <tr>
+            <td colspan="6"><strong>Applications</strong></td>
+        </tr>
+        <tr>
+            <td></td>
+            <th>name</th>
+            <th>path</th>
+            <th>package</th>
+            <th>current version</th>
+            <th>new version</th>
+        </tr>
+        <?php foreach ($this->applications as $id => $application) : ?>
+            <tr>
+                <td>
+                    <?php // if ($application->hasUpdate && $application->hasUpdate !== true) : ?>
+                        <input type="checkbox" checked="checked" name="applications[<?php echo $id ?>]" />
+                    <?php // endif ?>
+                </td>
+                <td><?php echo $application->getName() ?></td>
+                <td><?php echo $application->getPath() ?></td>
+                <td><?php echo $application->getPackageId() ?></td>
+                <td><?php echo $application->getVersion() ?></td>
+                <td><?php echo $application->hasUpdate && $application->hasUpdate !== true ? $application->hasUpdate : '<em>None</em>' ?></td>
+            </tr>
+            <?php foreach ($application->getExtensions() as $extension) : ?>
+                <?php if (($extension->hasUpdate = $extension->hasUpdate()) || $this->all) : ?>
+                    <tr>
+                        <td><input type="checkbox" checked="checked"
+                            name="extensions[<?php echo $id ?>][<?php echo $extension->getPackageId() ?>]" /></td>
+                        <th colspan="2"></th>
+                        <td><?php echo $extension->getPackageId() ?></td>
+                        <td><?php echo $extension->getVersion() ?></td>
+                        <td><?php echo $extension->hasUpdate ? $extension->hasUpdate : '<em>None</em>' ?></td>
+                    </tr>
+                <?php endif ?>
+            <?php endforeach ?>
+        <?php endforeach ?>
+    <?php endif ?>
+</table>
+
+<input type="submit" class="submit button" value="Update selected"/>
+
+</form>
+
+<?php endif ?>

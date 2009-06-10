@@ -75,6 +75,12 @@ class Bootstrap
         $router->addRoute('instance-action', $route);
 
         $route = new Zend_Controller_Router_Route(
+            'slotter/update',
+            array('module' => 'slotter', 'controller' => 'index', 'action' => 'update')
+        );
+        $router->addRoute('update', $route);
+
+        $route = new Zend_Controller_Router_Route(
             'identity/:id',
             array('module' => 'identity', 'controller' => 'openid', 'action' => 'profile')
         );
