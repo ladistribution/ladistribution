@@ -60,20 +60,17 @@ class Slotter_IndexController extends BaseController
             $instances = $this->site->getInstances();
             $libraries = (array)$this->_getParam('libraries');
             foreach ($libraries as $packageId => $state) {
-                print_r($packageId); echo '<br>';
                 $this->site->updateInstance($packageId);
             }
             $applications = (array)$this->_getParam('applications');
             $extensions = (array)$this->_getParam('extensions');
             foreach ($applications as $id => $state) {
                 $instance = $this->site->getInstance($id);
-                print_r($id); echo '<br>';
                 if ($instance->hasUpdate()) {
                     $this->site->updateInstance($instance);
                 }
                 if (isset($extensions[$id])) {
                     foreach ($extensions[$id] as $packageId => $state) {
-                        print_r($packageId); echo '<br>';
                         $instance->updateExtension($packageId);
                     }
                 }
