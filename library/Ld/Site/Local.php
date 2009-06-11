@@ -45,9 +45,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _checkDirectories()
     {
-        if (!file_exists($this->dir)) {
-            mkdir($this->dir, 0777, true);
-        }
+        Ld_Files::createDirIfNotExists($this->dir);
 
         foreach ($this->directories as $name => $directory) {
             $directory = $this->getDirectory($name);
@@ -357,18 +355,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($instances));
     }
 
-    public function backupInstance($instance)
-    {
-        $installer = $instance->getInstaller();
-        $installer->backup();
-    }
-
-    public function restoreBackup($instance, $archive, $absolute = false)
-    {
-        $installer = $instance->getInstaller();
-        $installer->restore($archive, $absolute);
-    }
-
     public function getInstallPreferences($package)
     {
         if (is_string($package)) {
@@ -421,22 +407,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         return $preferences;
-    }
-
-    public function getBackups($instance)
-    {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $instance));
-        $archives = array();
-        if (file_exists($installer->absolutePath . '/backups/')) {
-            $dh = opendir($installer->absolutePath . '/backups/');
-            while (false !== ($obj = readdir($dh))) {
-                if (substr($obj, 0, 1) == '.') {
-                    continue;
-                }
-                $archives[] = $obj;
-            }
-        }
-        return $archives;
     }
 
     // Databases

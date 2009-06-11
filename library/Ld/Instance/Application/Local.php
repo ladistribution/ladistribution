@@ -157,6 +157,8 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->getInstaller()->setConfiguration($configuration, $type);
     }
 
+    // Roles
+
     public function getRoles()
     {
         $installer = $this->getInstaller();
@@ -179,6 +181,8 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         return $this->getInstaller()->setUserRoles($roles);
     }
+
+    // Extensions
 
     public function getExtensions()
     {
@@ -319,6 +323,35 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         }
         if (isset($found) && $found) {
             $this->save();
+        }
+    }
+
+    // Backups
+
+    public function doBackup()
+    {
+        return $this->getInstaller()->backup();
+    }
+
+    public function restoreBackup($archive, $absolute = false)
+    {
+        return $this->getInstaller()->restore($archive, $absolute);
+    }
+
+    public function getBackups()
+    {
+        $archives = array();
+        if (file_exists($this->getAbsolutePath() . '/backups/')) {
+            $archives = Ld_Files::getFiles($this->getAbsolutePath() . '/backups/');
+        }
+        return $archives;
+    }
+
+    public function deleteBackup($backup)
+    {
+        $filename = $this->getAbsolutePath() . '/backups/' . $backup;
+        if (file_exists($filename)) {
+            Ld_Files::unlink($filename);
         }
     }
 
