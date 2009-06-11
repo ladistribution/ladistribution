@@ -307,6 +307,9 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 			global $wpdb, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $is_apache;
 
+			// fix 'Wrong datatype for second argument in wp-includes/widgets.php on line 607, 695'
+			global $_wp_deprecated_widgets_callbacks;
+
 			require_once $this->absolutePath . "/wp-load.php";
 			require_once $this->absolutePath . "/wp-admin/includes/upgrade.php";
 			require_once $this->absolutePath . "/wp-admin/includes/plugin.php";
