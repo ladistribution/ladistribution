@@ -184,7 +184,7 @@ class Slotter_InstanceController extends BaseController
       // Do backup
       if ($this->getRequest()->isPost() && $this->_hasParam('dobackup')) {
           $this->instance->doBackup();
-          return $this->_redirectToAction('backup');
+          return $this->_redirectToAction('backups');
       }
 
       // Download
@@ -203,13 +203,13 @@ class Slotter_InstanceController extends BaseController
       // Delete
       if ($this->_hasParam('delete')) {
           $this->instance->deleteBackup( $this->_getParam('delete') );
-          return $this->_redirectToAction('backup');
+          return $this->_redirectToAction('backups');
       }
 
       // Restore
       if ($this->_hasParam('restore')) {
           $this->instance->restoreBackup( $this->_getParam('restore') );
-          return $this->_redirectToAction('backup');
+          return $this->_redirectToAction('backups');
       }
 
       // Upload
@@ -219,7 +219,7 @@ class Slotter_InstanceController extends BaseController
           $adapter = new Zend_File_Transfer_Adapter_Http();
           $adapter->setDestination($dir);
           $result = $adapter->receive();
-          return $this->_redirectToAction('backup');
+          return $this->_redirectToAction('backups');
       }
 
       $this->view->backups = $availableBackups;
