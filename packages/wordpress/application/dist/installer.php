@@ -107,7 +107,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	public function getBackupDirectories()
 	{
 		$this->load_wp();
-		
+
 		function escape($string)
 		{
 			$string = str_replace('\\', '\\\\', $string);
@@ -115,9 +115,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			return '"' . $string . '"';
 		}
 
-		if (!file_exists($this->tmpFolder . '/tables')) {
-			mkdir($this->tmpFolder . '/tables', 0777, true);
-		}
+		Ld_Files::createDirIfNotExists($this->tmpFolder . '/tables');
 
 		// Generate SQL schema
 		$fp = fopen($this->tmpFolder . "/tables/schema.sql", "w");
@@ -252,6 +250,9 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			$option = $preference['name'];
 			$value = isset($configuration[$option]) ? $configuration[$option] : null;
 			update_option($option, $value);
+		}
+		if (isset($configuration['blogname'])) {
+			$this->instance->setInfos(array('name' => $configuration['blogname']))->save();
 		}
 		return $this->getConfiguration();
 	}
