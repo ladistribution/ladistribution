@@ -177,7 +177,7 @@ class Slotter_InstanceController extends BaseController
   /**
    * Backup action.
    */
-  public function backupAction()
+  public function backupsAction()
   {
       $availableBackups = $this->instance->getBackups();
 
@@ -223,8 +223,6 @@ class Slotter_InstanceController extends BaseController
       }
 
       $this->view->backups = $availableBackups;
-
-      $this->render('restore');
   }
 
   /**
