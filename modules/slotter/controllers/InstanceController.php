@@ -48,7 +48,6 @@ class Slotter_InstanceController extends BaseController
                 $this->view->preferences = $this->site->getInstallPreferences($packageId);
             } else {
                 $this->view->packages = $this->site->getPackages();
-                
             }
         }
     }
@@ -121,7 +120,7 @@ class Slotter_InstanceController extends BaseController
       $this->view->extensions = $this->instance->getExtensions();
 
       foreach ($this->view->extensions as $id => $extension) {
-          $this->view->extensions[$id]->update = $this->_needExtensionUpdate($extension);
+          $this->view->extensions[$id]->hasUpdate = $extension->hasUpdate();
       }
   }
 
@@ -180,24 +179,54 @@ class Slotter_InstanceController extends BaseController
    */
   public function backupAction()
   {
-      $this->site->backupInstance($this->instance);
-      $this->_redirectToAction('manage');
+      $availableBackups = $this->instance->getBackups();
+
+      // Do backup
+      if ($this->getRequest()->isPost() && $this->_hasParam('dobackup')) {
+          $this->instance->doBackup();
+          return $this->_redirectToAction('backup');
+      }
+
+      // Download
+      if ($this->_hasParam('download')) {
+          $backup = $this->_getParam('download');
+          if (in_array($backup, $availableBackups)) {
+              $filename =  $this->instance->getAbsolutePath() . '/backups/' . $backup;
+              header('Content-Type: application/zip');
+              header('Content-Disposition: attachment; filename="' . $backup . '"');
+              echo file_get_contents($filename);
+              exit;
+          }
+          throw new Exception('Non existing backup.');
+      }
+
+      // Delete
+      if ($this->_hasParam('delete')) {
+          $this->instance->deleteBackup( $this->_getParam('delete') );
+          return $this->_redirectToAction('backup');
+      }
+
+      // Restore
+      if ($this->_hasParam('restore')) {
+          $this->instance->restoreBackup( $this->_getParam('restore') );
+          return $this->_redirectToAction('backup');
+      }
+
+      // Upload
+      if ($this->_hasParam('upload')) {
+          $dir = $this->instance->getAbsolutePath() . '/backups/';
+          Ld_Files::createDirIfNotExists($dir);
+          $adapter = new Zend_File_Transfer_Adapter_Http();
+          $adapter->setDestination($dir);
+          $result = $adapter->receive();
+          return $this->_redirectToAction('backup');
+      }
+
+      $this->view->backups = $availableBackups;
+
+      $this->render('restore');
   }
 
-  /**
-   * Restore action.
-   */
-  public function restoreAction()
-  {
-      $archive = $this->_getParam('archive');
-      if (isset($archive)) {
-          $this->site->restoreBackup($this->instance, $archive);
-          $this->_redirectToAction('manage');
-      } else {
-          $this->view->archives = $this->site->getBackups($this->instance);
-      }
-  }
-  
   /**
    * Delete action.
    */
@@ -254,16 +283,6 @@ class Slotter_InstanceController extends BaseController
           }
       }
       return false;
-  }
-
-  protected function _needExtensionUpdate($extension)
-  {
-      try {
-          $package = $this->site->getPackageExtension($this->instance->getPackageId(), $extension->getPackageId());
-          return $extension->getVersion() != $package->version;
-      } catch (Exception $e) {
-          return false;
-      }
   }
 
     protected function _redirectToAction($action = 'manage', $id = null)

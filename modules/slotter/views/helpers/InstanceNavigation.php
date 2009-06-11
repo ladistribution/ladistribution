@@ -25,7 +25,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         // 
         // echo ' (<a href="' . $instance->getUrl() . '">' . $instance->getUrl() . '</a>) > ';
         
-        $actions = array('manage', 'configure', 'themes', 'extensions', 'roles');
+        $actions = array('manage', 'configure', 'themes', 'extensions', 'roles', 'backup');
         foreach ($actions as $action) {
             $url = $this->view->url(array('controller' => 'instance', 'id' => $this->view->id, 'action' => $action), 'instance-action');
             echo '<a href="' . $url . '">' . $action . '</a>';

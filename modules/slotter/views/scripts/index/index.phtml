@@ -43,7 +43,7 @@
 
 <?php endif ?>
 
-<?php if ($this->hasUpdate) : ?>
+<?php if ($this->canAdminInstances && $this->hasUpdate) : ?>
 
     <?php $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update'); ?>
 

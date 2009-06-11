@@ -1,22 +1,47 @@
-<?php if (isset($this->archive)) : ?>
+<?php $this->instanceNavigation() ?>
 
-    <p>You should not see this for now.</p>
+<h2>Backups</h2>
 
+<h3>Existing</h3>
+
+<?php if (empty($this->backups) || count($this->backups) == 0) : ?>
+    <p>None available</p>
 <?php else : ?>
-
-    <h2>Restore an archive</h2>
-    
-    <?php if (empty($this->archives) || count($this->archives) == 0) : ?>
-        <p>None available</p>
-    <?php else : ?>
-        <ul>
-        <?php
-        foreach ($this->archives as $filename) {
-            $url = $this->instanceActionUrl('restore') . '?archive=' .  $filename;
-            printf("<li><a href=\"%s\">%s</a></li>", $url, $filename);
-        }
+    <table class="h6e-data">
+        <tr>
+            <th>File</th>
+            <th colspan="3">Actions</th>
+        </tr>
+    <?php
+    foreach ($this->backups as $filename) {
+        $downloadUrl = $this->instanceActionUrl('backup') . '?download=' .  $filename;
+        $restoreUrl = $this->instanceActionUrl('backup') . '?restore=' .  $filename;
+        $deleteUrl = $this->instanceActionUrl('backup') . '?delete=' .  $filename;
         ?>
-        </ul>
-    <?php endif ?>
-
+        <tr>
+            <td><?php echo $filename?></td>
+            <td><a href="<?php echo $downloadUrl ?>">Download</a></td>
+            <td><a href="<?php echo $restoreUrl ?>">Restore</a></td>
+            <td><a href="<?php echo $deleteUrl ?>">Delete</a></td>
+        </tr>
+        <?php
+    }
+    ?>
+    </table>
 <?php endif ?>
+
+<h3>New</h3>
+
+<form action="" method="post">
+    <input type="hidden" name="dobackup" value="now" />
+    <input type="submit" class="button" value="Do a backup now" />
+</form>
+
+<br />
+
+<h3>Upload</h3>
+
+<form action="" method="post" enctype="multipart/form-data">
+    <input type="file" name="archive" />
+    <input name="upload" type="submit" class="button" value="Upload" />
+</form>
