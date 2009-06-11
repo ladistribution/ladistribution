@@ -151,6 +151,8 @@ class Ld_Cookie
      */
     public function deleteCookie($name, $path = '/', $domain = '', $secure = false, $httponly = null)
     {
+        // delete cookie only once
+        if (isset($this->deleted)) return; else $this->deleted = true;
         /* 1980-01-01 */
         $expire = 315554400;
         setcookie($name, '', $expire, $path, $domain, $secure, $httponly);
