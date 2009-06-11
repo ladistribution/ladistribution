@@ -1,0 +1,8 @@
+<package release="unstable">
+  <id>dokuwiki-theme-monobook</id>
+  <name>Monobook</name>
+  <version>0.1-3</version>
+  <type>theme</type>
+  <extend>dokuwiki</extend>
+  <directory>lib/tpl/monobook</directory>
+</package>
