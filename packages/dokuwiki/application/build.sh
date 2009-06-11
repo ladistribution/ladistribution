@@ -9,6 +9,8 @@ curl $SOURCE > $GZ
 tar zxvf $GZ
 rm $GZ
 mv $NAME-$VERSION $FOLDER
+# Default screenshot
+cp screenshot.png $FOLDER/lib/tpl/default/
 # Apply patches
 patch -p0 -d $FOLDER < patches/config.diff
 patch -p0 -d $FOLDER < patches/config-feed.diff
