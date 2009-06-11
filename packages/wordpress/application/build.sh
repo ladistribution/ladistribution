@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="2.7.1"
+VERSION="2.8"
 GZ="$NAME.tar.gz"
 SOURCE="http://wordpress.org/$NAME-$VERSION.tar.gz"
 FOLDER="application"
