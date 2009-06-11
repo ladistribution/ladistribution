@@ -14,9 +14,17 @@ class Slotter_IndexController extends BaseController
     public function preDispatch()
     {
         parent::preDispatch();
-
-        if (!$this->_acl->isAllowed($this->userRole, 'instances', 'view')) {
-            $this->_disallow();
+        
+        switch ($this->getRequest()->action) {
+            case 'index':
+                if (!$this->_acl->isAllowed($this->userRole, 'instances', 'view')) {
+                    $this->_disallow();
+                }
+                break;
+            default:
+                if (!$this->_acl->isAllowed($this->userRole, 'instances', 'admin')) {
+                    $this->_disallow();
+                }
         }
     }
 

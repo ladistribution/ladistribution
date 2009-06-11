@@ -31,9 +31,9 @@
                 <td><?php echo $extension->getPackageId() ?></td>
                 <td><?php echo $extension->getType() ?></td>
                 <td><?php echo $extension->getVersion() ?></td>
-                <td><?php echo $extension->update ? 'Need update' : 'Up to date' ?></td>
+                <td><?php echo $extension->hasUpdate ? 'Need update' : 'Up to date' ?></td>
                 <td>
-                    <?php if ($extension->update) : ?>
+                    <?php if ($extension->hasUpdate) : ?>
                         <a href="<?php echo $this->instanceActionUrl('extensions') . '?update=' . $extension->getPath() ?>">update</a>
                     <?php endif ?>
                     <a href="<?php echo $this->instanceActionUrl('extensions') . '?remove=' . $extension->getPath() ?>">remove</a>
@@ -47,6 +47,6 @@
 
 <ul>
     <li><a href="<?php echo $this->instanceActionUrl('backup') ?>">Backup this instance</a></li>
-    <li><a href="<?php echo $this->instanceActionUrl('restore') ?>">Restore a backup</a></li>
+    <li><a href="<?php echo $this->instanceActionUrl('restore') ?>">Browse backups</a></li>
     <li><a href="<?php echo $this->instanceActionUrl('delete') ?>">Delete this instance</a></li>
 </ul>
