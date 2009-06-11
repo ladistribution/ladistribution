@@ -1,0 +1,8 @@
+<package release="unstable">
+  <id>wordpress-theme-simpla</id>
+  <name>Simpla</name>
+  <version>1.0.1-1</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/simpla</directory>
+</package>

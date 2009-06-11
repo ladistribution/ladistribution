@@ -1,0 +1,8 @@
+<package release="unstable">
+  <id>wordpress-theme-whiteasmilk</id>
+  <name>White As Milk</name>
+  <version>1.8-1</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/whiteasmilk</directory>
+</package>

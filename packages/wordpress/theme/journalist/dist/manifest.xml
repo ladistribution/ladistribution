@@ -1,0 +1,8 @@
+<package release="unstable">
+  <id>wordpress-theme-journalist</id>
+  <name>Journalist</name>
+  <version>1.9-2</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/journalist</directory>
+</package>
