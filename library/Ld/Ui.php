@@ -3,14 +3,11 @@
 class Ld_Ui
 {
 
-    public static function getInstanceByPackageId($packageId)
+    public static function getInstanceByPackageId($packageId, $instances = array())
     {
-        $site = Zend_Registry::get('site');
-        $applications = $site->getInstances('application');
-        foreach ($applications as $id => $infos) {
-            $application = $site->getInstance($id);
-            if ($application->getPackageId() == $packageId) {
-                return $application;
+        foreach ($instances as $instance) {
+            if ($instance->getPackageId() == $packageId) {
+                return $instance;
             }
         }
         return null;
@@ -20,8 +17,13 @@ class Ld_Ui
     {
         $auth = Zend_Auth::getInstance();
         $site = Zend_Registry::get('site');
-        $applications = $site->getInstances('application');
-        $admin = self::getInstanceByPackageId('admin');
+
+        $applications = array();
+        foreach ($site->getInstances('application') as $id => $infos) {
+            $applications[$id] = $site->getInstance($id);
+        }
+
+        $admin = self::getInstanceByPackageId('admin', $applications);
 
         $isAdmin = false;
         if ($auth->hasIdentity() && isset($admin)) {
@@ -48,7 +50,7 @@ class Ld_Ui
             </div>
         <?php endif ?>
 
-        <div class="h6e-super-bar">
+        <div id="ld-super-bar" class="h6e-super-bar">
             <div class="h6e-super-bar-inner">
                 <div class="a">
                     <?php if ($isAdmin) { ?>
@@ -57,22 +59,21 @@ class Ld_Ui
                         </span>
                     <?php }
                     foreach ($applications as $id => $application) {
-                        if ($application['package'] == 'admin') {
+                        if ($application->getPackageId() == 'admin') {
                             continue;
                         }
-                        $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application['path'] ) !== false;
-                        $settings = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/slotter/instance/manage/id/' . $id ) !== false;
-                        if ($current || $settings) echo '<strong>';
-                        echo '<a href="' . $site->getUrl() . $application['path'] . '/">' . $application['name'] . '</a>';
-                        if ($current || $settings)  echo '</strong>';
+                        $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application->getPath() ) !== false;
+                        if ($current) echo '<strong>';
+                        echo '<a href="' . $site->getUrl() . $application->getPath() . '/">' . $application->getName() . '</a>';
+                        if ($current)  echo '</strong>';
                     }
                     ?>
                 </div>
                 <div class="b">
                     <?php if ($isAdmin) {
                         foreach ($applications as $id => $application) {
-                            $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application['path'] ) !== false ;
-                            $settings = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/instance/id/' . $id ) !== false ;
+                            $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application->getPath() ) !== false ;
+                            $settings = strpos( $_SERVER["REQUEST_URI"], 'slotter/instance/id/' . $id ) !== false ;
                             if ($current || $settings) {
                                 if ($settings) echo '<strong>';
                                 echo '<a href="' . $admin->getUrl() . 'slotter/instance/id/' . $id . '">◆ Settings</a>';
