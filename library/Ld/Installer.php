@@ -145,9 +145,7 @@ class Ld_Installer
         if (isset($path)) {
             $this->setPath($path);
             $this->setAbsolutePath($this->getSite()->getDirectory() . '/' . $path);
-            if (!file_exists($this->absolutePath)) {
-                mkdir($this->absolutePath, 0777, true);
-            }
+            Ld_Files::createDirIfNotExists($this->absolutePath);
         }
 
         foreach ($this->getDeployments() as $deployment) {
@@ -208,13 +206,9 @@ class Ld_Installer
     {
         $timestamp = date("d-m-Y-H-i-s");
         $this->tmpFolder = LD_TMP_DIR . '/backup-' . $timestamp;
-        if (!file_exists($this->tmpFolder)) {
-            mkdir($this->tmpFolder . '/dist', 0777, true);
-        }
-        
-        if (!file_exists($this->absolutePath . '/backups')) {
-            mkdir($this->absolutePath . '/backups', 0777, true);
-        }
+        Ld_Files::createDirIfNotExists($this->tmpFolder . '/dist');
+
+        Ld_Files::createDirIfNotExists($this->absolutePath . '/backups');
 
         $directories = array('dist' => $this->absolutePath . '/dist/');
         $directories = array_merge($directories, $this->getBackupDirectories());
