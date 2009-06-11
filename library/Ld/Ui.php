@@ -3,7 +3,7 @@
 class Ld_Ui
 {
 
-    function getInstanceByPackageId($packageId)
+    public static function getInstanceByPackageId($packageId)
     {
         $site = Zend_Registry::get('site');
         $applications = $site->getInstances('application');
@@ -16,7 +16,7 @@ class Ld_Ui
         return null;
     }
 
-    function super_bar($params = array())
+    public static function super_bar($params = array())
     {
         $auth = Zend_Auth::getInstance();
         $site = Zend_Registry::get('site');
