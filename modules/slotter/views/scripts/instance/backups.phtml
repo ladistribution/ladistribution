@@ -14,9 +14,9 @@
         </tr>
     <?php
     foreach ($this->backups as $filename) {
-        $downloadUrl = $this->instanceActionUrl('backup') . '?download=' .  $filename;
-        $restoreUrl = $this->instanceActionUrl('backup') . '?restore=' .  $filename;
-        $deleteUrl = $this->instanceActionUrl('backup') . '?delete=' .  $filename;
+        $downloadUrl = $this->instanceActionUrl('backups') . '?download=' .  $filename;
+        $restoreUrl = $this->instanceActionUrl('backups') . '?restore=' .  $filename;
+        $deleteUrl = $this->instanceActionUrl('backups') . '?delete=' .  $filename;
         ?>
         <tr>
             <td><?php echo $filename?></td>
