@@ -11,7 +11,7 @@ Author URI: http://h6e.net/
 function ld_admin_head()
 {
 	$site = Zend_Registry::get('site');
-	echo '<link rel="stylesheet" type="text/css" href="' . $site->getBaseUrl() . '/css/ld-ui/ld-bars.css' .'" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . $site->getUrl('css') . '/ld-ui/ld-bars.css' .'" />'."\n";
 	echo '<style type="text/css"> #footer { display:none; }</style>'."\n";
 }
 
@@ -20,7 +20,7 @@ add_action('admin_head', 'ld_admin_head');
 function ld_template_head()
 {
 	$site = Zend_Registry::get('site');
-	echo '<link rel="stylesheet" type="text/css" href="' . $site->getBaseUrl() . '/css/ld-ui/ld-bars.css' .'" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . $site->getUrl('css') . '/ld-ui/ld-bars.css' .'" />'."\n";
 	echo '<style type="text/css"> body { margin-bottom:50px; }</style>'."\n";
 }
 

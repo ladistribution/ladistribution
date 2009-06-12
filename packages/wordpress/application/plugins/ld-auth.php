@@ -56,15 +56,16 @@ function ld_handle_current_user()
 
 add_action('set_current_user', 'ld_handle_current_user');
 
-if ( !function_exists('auth_redirect') ) :
-function auth_redirect()
-{
-	if (is_user_logged_in()) {
-		return;
+if ( !function_exists('wp_validate_auth_cookie') ) :
+function wp_validate_auth_cookie($cookie = '', $scheme = '') {
+	$auth = Zend_Auth::getInstance();
+	if ($auth->hasIdentity()) {
+		$user = get_userdatabylogin($auth->getIdentity());
+		if (isset($user)) {
+			return $user->ID;
+		}
 	}
-	$login_url = site_url('wp-login.php', 'login');
-	wp_redirect($login_url);
-	exit();
+	return null;
 }
 endif;
 
