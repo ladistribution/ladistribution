@@ -18,9 +18,12 @@
                     $theme['screenshot'] : 'http://h6e.net/releases/wp-minimal-screenshot.png' ?>
 
                 <div class="theme">
+                <label for="theme-<?php echo $id ?>">
                 <img src="<?php echo $screenshot ?>" width="240" height="180" alt="" />
-                <input <?php echo ($theme['active'] ? 'checked="checked"' : '') ?> type="radio" name="theme" value="<?php echo $id ?>" />
+                <input id="theme-<?php echo $id ?>" <?php echo ($theme['active'] ? 'checked="checked"' : '') ?>
+                    type="radio" name="theme" value="<?php echo $id ?>" />
                 <?php echo $theme['name'] ?>
+                </label>
                 </div>
 
             <?php endforeach ?>
