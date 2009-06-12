@@ -295,7 +295,7 @@ class Slotter_InstanceController extends BaseController
             $this->view->redirectUrl = $url;
             $this->render('ok');
         } else {
-            $this->_redirector->gotoUrl($url);
+            $this->_redirector->gotoUrl($url, array('prependBase' => false));
         }
     }
 
