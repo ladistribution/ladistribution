@@ -107,7 +107,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         }
         Ld_Files::put($this->absolutePath . "/conf/local.php", $cfg_local);
 
-        if (isset($configuration['title'])) {
+        if (isset($configuration['title']) && isset($this->instance)) {
             $this->instance->setInfos(array('name' => $configuration['title']))->save();
         }
 

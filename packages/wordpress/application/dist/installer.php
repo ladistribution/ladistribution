@@ -251,7 +251,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			$value = isset($configuration[$option]) ? $configuration[$option] : null;
 			update_option($option, $value);
 		}
-		if (isset($configuration['blogname'])) {
+		if (isset($configuration['blogname']) && isset($this->instance)) {
 			$this->instance->setInfos(array('name' => $configuration['blogname']))->save();
 		}
 		return $this->getConfiguration();
