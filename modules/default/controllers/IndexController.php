@@ -10,8 +10,6 @@ class IndexController extends Ld_Controller_Action
 
     function indexAction()
     {
-        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-
         $directories = $this->getFrontController()->getDispatcher()->getControllerDirectory();
         $modules = array_keys($directories);
 

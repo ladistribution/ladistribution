@@ -18,6 +18,27 @@ class Slotter_UsersController extends BaseController
         if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
             $this->_disallow();
         }
+
+        $this->_handleNavigation();
+    }
+
+    protected function _handleNavigation()
+    {
+        $usersPage = $this->_container->findOneByLabel('Users');
+        $usersPage->addPage(array(
+            'label' => 'New', 'module'=> 'slotter', 'controller' => 'users', 'action' => 'new'
+        ));
+        if ($this->_hasParam('id')) {
+            $action = $this->getRequest()->action;
+            $usersPage->addPage(array(
+                'label' => ucfirst($action),
+                'module'=> 'slotter',
+                'route' => 'default',
+                'controller' => 'users',
+                'action' => $action,
+                'params' => array('id' => $this->_getParam('id'))
+            ));
+        }
     }
 
     public function indexAction()

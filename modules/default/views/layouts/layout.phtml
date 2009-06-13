@@ -12,7 +12,7 @@ echo $this->doctype('XHTML1_STRICT')->__tostring() . "\n" ?>
 
 <div class="h6e-top-bar"><div class="h6e-top-bar-inner">
   <div class="a">
-      <a href="<?php echo $this->baseUrl ?>/"><?php echo $this->title ?></a>
+      <?php echo $this->navigation()->breadcrumbs(); ?>
   </div>
   <div class="b">
       <?php if ($this->authenticated && !empty($this->user)) : ?>

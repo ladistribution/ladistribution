@@ -32,6 +32,27 @@ class Slotter_RepositoriesController extends BaseController
         if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
             $this->_disallow();
         }
+
+        $this->_handleNavigation();
+    }
+
+    protected function _handleNavigation()
+    {
+        $repositoriesPage = $this->_container->findOneByLabel('Repositories');
+        $repositoriesPage->addPage(array(
+            'label' => 'New', 'module'=> 'slotter', 'controller' => 'repositories', 'action' => 'new'
+        ));
+        if ($this->_hasParam('id')) {
+            $action = $this->getRequest()->action;
+            $repositoriesPage->addPage(array(
+                'label' => ucfirst($action),
+                'module'=> 'slotter',
+                'route' => 'default',
+                'controller' => 'repositories',
+                'action' => $action,
+                'params' => array('id' => $this->_getParam('id'))
+            ));
+        }
     }
 
     /**
@@ -58,7 +79,7 @@ class Slotter_RepositoriesController extends BaseController
             $this->_redirector->setGotoSimple('index');
             $this->_redirector->redirectAndExit();
         }
-        
+
         if ($this->getRequest()->isGet()) {
             $this->view->type = $this->_getParam('type', 'local');
         }
@@ -76,7 +97,7 @@ class Slotter_RepositoriesController extends BaseController
         $this->_redirector->setGotoSimple('index');
         $this->_redirector->redirectAndExit();
     }
-    
+
     /**
      * Manage action.
      */
@@ -88,7 +109,7 @@ class Slotter_RepositoriesController extends BaseController
                 return $this->_newPackage($type);
             }
         }
-        
+
         if ($this->_hasParam('upload')) {
             
             $dir = LD_TMP_DIR . '/uploads';
@@ -100,7 +121,7 @@ class Slotter_RepositoriesController extends BaseController
 
             $this->repository->importPackage( $adapter->getFileName() );
         }
-        
+
         if ($this->_hasParam('package')) {
             
             $type = $this->_getParam('type', 'application');

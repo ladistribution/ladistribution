@@ -20,12 +20,27 @@ class BaseController extends Ld_Controller_Action
 
         $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
-        $this->view->baseUrl = $this->view->url(
-            array('module' => 'slotter', 'controller' => 'index', 'action' => 'index'), 'default', true);
-
-        $this->_setTitle('LD Slotter');
+        $this->_setTitle('La Distribution Admin');
 
         $this->_initAcl();
+
+        $this->_initNavigation();
+    }
+
+    protected function _initNavigation()
+    {
+        $pages = array(
+            array( 'label' => 'Admin', 'module' => 'default', 'route' => 'default',
+                'pages' => array(
+                    array( 'label' => 'Applications', 'module'=> 'slotter', 'route' => 'default' ),
+                    array( 'label' => 'Repositories', 'module' => 'slotter', 'controller' => 'repositories' ),
+                    array( 'label' => 'Databases', 'module' => 'slotter', 'controller' => 'databases' ),
+                    array( 'label' => 'Users', 'module' => 'slotter', 'controller' => 'users' )
+            ))
+        );
+
+        $this->_container = new Zend_Navigation($pages);
+        $this->view->navigation($this->_container);        
     }
 
     protected function _initAcl()
@@ -94,7 +109,7 @@ class BaseController extends Ld_Controller_Action
                 }
             }
         }
-        
+
         $this->_handleFormat();
     }
     

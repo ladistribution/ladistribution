@@ -23,6 +23,34 @@ class Slotter_InstanceController extends BaseController
         if (!$this->_acl->isAllowed($this->userRole, 'instances', 'admin')) {
             $this->_disallow();
         }
+
+        $this->_handleNavigation();
+    }
+
+    protected function _handleNavigation()
+    {
+        $applicationsPage = $this->_container->findOneByLabel('Applications');
+        $applicationsPage->addPage(array(
+            'label' => 'New', 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'new'
+        ));
+        if (isset($this->id, $this->instance)) {
+            $action = $this->getRequest()->action;
+            $instancePage = new Zend_Navigation_Page_Mvc(array(
+                'label' => $this->instance->getName(),
+                'module'=> 'slotter',
+                'route' => 'instance-action',
+                'controller' => 'instance',
+                'params' => array('id' => $this->id)
+            ));
+            $instancePage->addPage(array(
+                'label' => ucfirst($action),
+                'module'=> 'slotter',
+                'route' => 'instance-action',
+                'controller' => 'instance',
+                'action' => $action
+            ));
+            $applicationsPage->addPage($instancePage);
+        }
     }
 
     /**

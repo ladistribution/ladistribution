@@ -26,6 +26,16 @@ class Slotter_IndexController extends BaseController
                     $this->_disallow();
                 }
         }
+        
+        $this->_handleNavigation();
+    }
+
+    protected function _handleNavigation()
+    {
+        $applicationsPage = $this->_container->findOneByLabel('Applications');
+        $applicationsPage->addPage(array(
+            'label' => 'Update', 'module'=> 'slotter', 'controller' => 'index', 'action' => 'update'
+        ));
     }
 
     /**

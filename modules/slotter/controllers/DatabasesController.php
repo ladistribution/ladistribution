@@ -18,6 +18,27 @@ class Slotter_DatabasesController extends BaseController
         if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
             $this->_disallow();
         }
+
+        $this->_handleNavigation();
+    }
+
+    protected function _handleNavigation()
+    {
+        $databasesPage = $this->_container->findOneByLabel('Databases');
+        $databasesPage->addPage(array(
+            'label' => 'New', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'new'
+        ));
+        if ($this->_hasParam('id')) {
+            $action = $this->getRequest()->action;
+            $databasesPage->addPage(array(
+                'label' => ucfirst($action),
+                'module'=> 'slotter',
+                'route' => 'default',
+                'controller' => 'databases',
+                'action' => $action,
+                'params' => array('id' => $this->_getParam('id'))
+            ));
+        }
     }
 
     /**
