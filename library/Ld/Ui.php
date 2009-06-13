@@ -62,7 +62,7 @@ class Ld_Ui
                         if ($application->getPackageId() == 'admin') {
                             continue;
                         }
-                        $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application->getPath() ) !== false;
+                        $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application->getPath() ) === 0;
                         if ($current) echo '<strong>';
                         echo '<a href="' . $site->getUrl() . $application->getPath() . '/">' . $application->getName() . '</a>';
                         if ($current)  echo '</strong>';
@@ -72,7 +72,7 @@ class Ld_Ui
                 <div class="b">
                     <?php if ($isAdmin) {
                         foreach ($applications as $id => $application) {
-                            $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application->getPath() ) !== false ;
+                            $current = strpos( $_SERVER["REQUEST_URI"], $site->getPath() . '/' . $application->getPath() ) === 0;
                             $settings = strpos( $_SERVER["REQUEST_URI"], 'slotter/instance/id/' . $id ) !== false ;
                             if ($current || $settings) {
                                 if ($settings) echo '<strong>';
