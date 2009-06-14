@@ -16,8 +16,8 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
             $this->endpoint = $params['endpoint'];
         }
 
-        if (Zend_registry::isRegistered('cache')) {
-            $this->_cache = Zend_registry::get('cache');
+        if (Zend_Registry::isRegistered('cache')) {
+            $this->_cache = Zend_Registry::get('cache');
         }
 
         $this->httpClient = new Zend_Http_Client();
