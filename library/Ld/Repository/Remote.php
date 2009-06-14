@@ -24,6 +24,11 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
         $this->httpClient->setHeaders('Accept', 'application/json');
     }
 
+    public function getUrl()
+    {
+        return $this->endpoint;
+    }
+
     public function getPackages()
     {
         $cacheKey = 'Ld_Repository_Remote_Packages_' . md5($this->endpoint);
@@ -74,14 +79,24 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
 
     public function getLibraries()
     {
+        return $this->getPackagesByType('libraries');
+    }
+
+    public function getExtensions()
+    {
+        return $this->getPackagesByType('extensions');
+    }
+
+    protected function getPackagesByType($type)
+    {
         $packages = $this->getPackages();
-        $libraries = array();
+        $list = array();
         foreach ($packages as $id => $package) {
-            if (in_array($package->type, $this->types['libraries'])) {
-                $libraries[$id] = $package;
+            if (in_array($package->type, $this->types[$type])) {
+                $list[$id] = $package;
             }
         }
-        return $libraries;
+        return $list;
     }
 
     public function getPackageExtensions($packageId, $type = null)

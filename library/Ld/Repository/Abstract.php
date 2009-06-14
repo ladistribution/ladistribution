@@ -14,4 +14,6 @@ abstract class Ld_Repository_Abstract
         'extensions' => array('theme', 'plugin')
     );
 
+    abstract public function getUrl();
+
 }

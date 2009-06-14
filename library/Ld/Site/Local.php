@@ -83,7 +83,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $config[$key] = $this->$key;
                 }
             }
-            Ld_Files::put($this->getDirectory('dist') . "/config.json", Zend_Json::encode($config));
+            Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
         }
     }
 
@@ -94,7 +94,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
             'endpoint' => LD_SERVER . 'repositories/main')
         );
-        Ld_Files::put($this->getDirectory('dist') . '/repositories.json', Zend_Json::encode($cfg));
+        Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
     }
 
     public function getHost()
@@ -135,11 +135,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getInstances($type = null)
     {
-        $filename = $this->getDirectory('dist') . '/instances.json';
-        if (file_exists($filename)) {
-            $json = file_get_contents($filename);
-            $instances = Zend_json::decode($json);
-        }
+        $instances = Ld_Files::getJson($this->getDirectory('dist') . '/instances.json');
 
         if (empty($instances)) {
             return array();
@@ -266,7 +262,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
               'path'    => isset($params['path']) ? $params['path'] : null,
               'name'    => isset($params['name']) ? $params['name'] : null
           );
-          Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($instances));
+          Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
           
           $instance = $this->getInstance($id);
           $instance->id = $id;
@@ -321,7 +317,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $registeredInstances[$key]['version'] = $package->version;
                 }
             }
-            Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($registeredInstances));
+            Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $registeredInstances);
         }
         
         if (isset($instance)) {
@@ -352,7 +348,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 unset($instances[$key]);
             }
         }
-        Ld_Files::put($this->getDirectory('dist') . '/instances.json', Zend_Json::encode($instances));
+        Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
     }
 
     public function getInstallPreferences($package)
@@ -413,16 +409,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getDatabases($type = null)
     {
-        $databases = array();
-        $filename = $this->getDirectory('dist') . '/databases.json';
-        if (file_exists($filename)) {
-            $databases = Zend_Json::decode(file_get_contents($filename));
-            // Filter
-            if (isset($type)) {
-                foreach ($databases as $key => $db) {
-                    if ($db['type'] != $type) {
-                        unset($databases[$key]);
-                    }
+        $databases = Ld_Files::getJson($this->getDirectory('dist') . '/databases.json');
+        // Filter
+        if (isset($type)) {
+            foreach ($databases as $key => $db) {
+                if ($db['type'] != $type) {
+                    unset($databases[$key]);
                 }
             }
         }
@@ -431,6 +423,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function addDatabase($params)
     {
+        $this->_testDatabase($params);
         $databases = $this->getDatabases();
         $databases[uniqid()] = $params;
         $this->_writeDatabases($databases);
@@ -438,6 +431,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function updateDatabase($id, $params)
     {
+        $this->_testDatabase($params);
         $databases = $this->getDatabases();
         $databases[$id] = array_merge($databases[$id], $params);
         $this->_writeDatabases($databases);
@@ -452,22 +446,32 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _writeDatabases($databases)
     {
-        $filename = $this->getDirectory('dist') . '/databases.json';
-        Ld_Files::put($filename, Zend_Json::encode($databases));
+        Ld_Files::putJson($this->getDirectory('dist') . '/databases.json', $databases);
+    }
+
+    protected function _testDatabase($params)
+    {
+        try {
+            $con = Zend_Db::factory('Mysqli', array(
+                'host'     => $params['host'],
+                'username' => $params['user'],
+                'password' => $params['password'],
+                'dbname'   => $params['name']
+            ));
+            $result = $con->fetchCol('SHOW TABLES');
+        } catch (Exception $e) {
+            throw new Exception("Database parameters are incorrect.");
+        }
     }
 
     // Users
 
     public function getUsers()
     {
-        $users = array();
-        $filename = $this->getDirectory('dist') . '/users.json';
-        if (file_exists($filename)) {
-            $users = Zend_Json::decode(file_get_contents($filename));
-            foreach ((array)$users as $key => $user) {
-                $users[$key]['id'] = $key;
-                $users[$key]['identities'] = array($this->getBaseUrl() . 'identity/' . $user['username']);
-            }
+        $users = Ld_Files::getJson($this->getDirectory('dist') . '/users.json');
+        foreach ((array)$users as $key => $user) {
+            $users[$key]['id'] = $key;
+            $users[$key]['identities'] = array($this->getBaseUrl() . 'identity/' . $user['username']);
         }
         return $users;
     }
@@ -534,7 +538,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _writeUsers($users)
     {
-        Ld_Files::put($this->getDirectory('dist') . '/users.json', Zend_Json::encode($users));
+        Ld_Files::putJson($this->getDirectory('dist') . '/users.json', $users);
     }
 
     // Repositories
@@ -556,12 +560,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getRepositoriesConfiguration()
     {
-        $filename = $this->getDirectory('dist') . '/repositories.json';
-        if (file_exists($filename)) {
-            $cfg = Zend_Json::decode(file_get_contents($filename));
-        } else {
-            $cfg = array();
-        }
+        $cfg = Ld_Files::getJson($this->getDirectory('dist') . '/repositories.json');
         if (empty($cfg['repositories'])) {
             $cfg['repositories'] = array();
         }
@@ -570,8 +569,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function saveRepositoriesConfiguration($cfg)
     {
-        $filename = $this->getDirectory('dist') . '/repositories.json';
-        Ld_Files::put($filename, Zend_Json::encode($cfg));  
+        Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);  
     }
 
     protected function _getRepository($config)

@@ -35,6 +35,11 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return Zend_Registry::get('site');
     }
 
+    public function getUrl()
+    {
+        return $this->getSite()->getUrl() . 'repositories/' . $this->name . '/';
+    }
+
     public function getPackages($type = null)
     {
         $applications = $this->getApplications();
@@ -102,6 +107,15 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         foreach ($dirs as $name) {
             $extension = $this->getPackage(array('id' => $name, 'type' => $type, 'extend' => $packageId));
             $extensions[$extension->id] = $extension;
+        }
+        return $extensions;
+    }
+
+    public function getExtensions()
+    {
+        $extensions = array();
+        foreach ($this->getApplications() as $application) {
+            $extensions = array_merge($extensions, $this->getPackageExtensions($application->id));
         }
         return $extensions;
     }
@@ -204,9 +218,13 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
             }
         }
 
-        $json = Zend_Json::encode($packages);
-        $filename = $this->dir . '/packages.json';
-        Ld_Files::put($filename, $json);
+        // Generate Json Index
+        Ld_Files::putJson($this->dir . '/packages.json', $packages);
+
+        // Generate HTML Index
+        if (!file_exists($this->dir . '/index.html')) {
+            Ld_Files::put($this->dir . '/index.html', "This is a La Distribution repository.");
+        }
     }
 
 }

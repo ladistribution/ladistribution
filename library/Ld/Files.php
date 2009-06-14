@@ -160,9 +160,26 @@ class Ld_Files
         file_put_contents($file, $content);
     }
 
+    public static function putJson($file, $content)
+    {
+        self::put($file, Zend_Json::encode($content));  
+    }
+
     public static function get($file)
     {
-        return file_get_contents($file);
+        if (file_exists($file)) {
+            return file_get_contents($file);
+        }
+        return null;
+    }
+
+    public static function getJson($file)
+    {
+        $content = self::get($file);
+        if (isset($content)) {
+            return Zend_Json::decode($content);
+        }
+        return array();
     }
 
 }

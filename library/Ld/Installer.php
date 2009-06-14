@@ -270,7 +270,7 @@ class Ld_Installer
             $userRoles = Zend_Json::decode($json);
         }
         $users = $this->site->getUsers();
-        foreach ($users as $user) {
+        foreach ((array)$users as $user) {
             $username = $user['username'];
             if (empty($userRoles[$username])) {
                 $userRoles[$username] = $this->defaultRole;
