@@ -14,6 +14,10 @@ function install_if_not_exists_and_require($file, $source)
 {
     if (!file_exists($file)) {
         $content = file_get_contents($source);
+        if (empty($content)) {
+            $msg = "- Failure. Can't retrieve file $source.";
+            die($msg);
+        }
         file_put_contents($file, $content);
     }
     require($file);
@@ -67,7 +71,7 @@ $directories = array(
 foreach ($directories as $name => $directory) {
     if (!file_exists($directory)) {
         if (!is_writable(dirname($directory))) {
-            $msg = "Can't create folder $directory. Check your permissions.";
+            $msg = "- Failure. Can't create folder $directory. Check your permissions.";
             die($msg);
         }
         mkdir($directory, 0777, true);
@@ -159,11 +163,11 @@ foreach ($base_libs as $name => $source) {
 // Instances registry
 
 if (!file_exists($directories['dist'] . '/instances.json')) {
-	$instances = array(
-		array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1'),
-		array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-24-3')
-	);
-	Ld_Files::put($directories['dist'] . '/instances.json', Zend_Json::encode($instances));
+    $instances = array(
+        array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1'),
+        array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-24-12')
+    );
+    Ld_Files::put($directories['dist'] . '/instances.json', Zend_Json::encode($instances));
 }
 
 echo '- Registry OK<br>';
