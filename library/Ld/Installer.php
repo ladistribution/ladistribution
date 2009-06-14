@@ -291,19 +291,6 @@ class Ld_Installer
     protected function _copy($from, $to) { return Ld_Files::copy($from, $to); }
     protected function _unlink($src) { return Ld_Files::unlink($src); }
     protected function _getDirectories($dir) { return Ld_Files::getDirectories($dir); }
-
-    // Utility
-
-    protected function _generate_phrase($length = 64)
-    {
-        $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $i = 0;
-        $password = "";
-        while ($i <= $length) {
-            $password .= $chars{mt_rand(0,strlen($chars)-1)};
-            $i++;
-        }
-        return $password;
-    }
+    protected function _generate_phrase($length = 64) { return Ld_Auth::generatePhrase($length); }
 
 }

@@ -39,12 +39,7 @@ class Ld_Loader
         require_once 'clearbricks/zip/class.unzip.php';
 
         // Site configuration
-        $configFilename = $dir . '/dist/config.json';
-        if (file_exists($configFilename)) {
-            $config = Zend_Json::decode(file_get_contents($configFilename));
-        } else {
-            $config = array();
-        }
+        $config = Ld_Files::getJson($dir . '/dist/config.json');
         if (empty($config['dir'])) {
             $config['dir'] = $dir;
         }
@@ -60,8 +55,8 @@ class Ld_Loader
 
             Zend_Session::start();
 
-            if (function_exists('mcrypt_ecb')) {
-                $cookieManager = new Ld_Cookie('SECRET_KEY', array('cookiePath' => $site->getPath()));
+            if (function_exists('mcrypt_ecb') && isset($config['secret'])) {
+                $cookieManager = new Ld_Cookie($config['secret'], array('cookiePath' => $site->getPath()));
                 $authStorage = new Ld_Auth_Storage_Cookie($cookieManager);
             } else {
                 $path = $site->getPath();

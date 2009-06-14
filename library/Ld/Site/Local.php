@@ -83,6 +83,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $config[$key] = $this->$key;
                 }
             }
+            $config['secret'] = Ld_Auth::generatePhrase();
             Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
         }
     }
@@ -181,6 +182,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $package = $this->getPackage($packageId);
         $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
         $installer->setSite($this);
+
+        foreach ($this->getInstances('application') as $application) {
+            if ($application['path'] == $preferences['path']) {
+                throw new Exception('An application is already installed on this path.');
+            }
+        }
 
         foreach ($installer->getDependencies() as $dependency) {
             if (null === $this->_getLibraryInfos($dependency)) {
