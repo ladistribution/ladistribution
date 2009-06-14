@@ -152,12 +152,18 @@ class Ld_Files
     {
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
+            if (defined('LD_UNIX_USER')) {
+                chown($dir, LD_UNIX_USER);
+            }
         }
     }
 
     public static function put($file, $content)
     {
         file_put_contents($file, $content);
+        if (defined('LD_UNIX_USER')) {
+            chown($file, LD_UNIX_USER);
+        }
     }
 
     public static function putJson($file, $content)

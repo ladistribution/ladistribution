@@ -54,7 +54,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $msg = "Can't create folder $directory. Check your permissions.";
                     die($msg);
                 }
-                mkdir($directory, 0777, true);
+                Ld_Files::createDirIfNotExists($directory);
             }
 
             if (in_array($name, array('dist', 'lib', 'tmp'))) {
