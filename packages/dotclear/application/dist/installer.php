@@ -1,6 +1,6 @@
 <?php
 
-class Installer_Dotclear extends Ld_Installer
+class Ld_Installer_Dotclear extends Ld_Installer
 {
 
 	function install($preferences = array())
@@ -55,7 +55,7 @@ class Installer_Dotclear extends Ld_Installer
 	{
 		$file = file($filename);
 		$file[11] = "\n" . "require_once '" . $this->absolutePath . "/dist/prepend.php';" . "\n";
-		file_put_contents($filename, implode("", $file));
+		Ld_Files::put($filename, implode("", $file));
 	}
 
 	function postInstall($preferences = array())
@@ -75,9 +75,9 @@ class Installer_Dotclear extends Ld_Installer
 			'u_pwd2'       => $preferences['admin_password'],
 		));
 		$response = $this->httpClient->request('POST');
-		if (constant('LD_DEBUG')) {
-			echo $response->getBody();
-		} 
+        // if (constant('LD_DEBUG')) {
+        //  echo $response->getBody();
+        // } 
 
 		// We need to log in to really finish install
 		$this->httpClient->setUri($this->instance->getUrl() . '/admin/auth.php');
@@ -86,9 +86,9 @@ class Installer_Dotclear extends Ld_Installer
 			'user_pwd' => $preferences['admin_password']
 		));
 		$response = $this->httpClient->request('POST');
-		if (constant('LD_DEBUG')) {
-			echo $response->getBody();
-		}
+        // if (constant('LD_DEBUG')) {
+        //  echo $response->getBody();
+        // }
 
 		if (constant('LD_REWRITE')) {
 

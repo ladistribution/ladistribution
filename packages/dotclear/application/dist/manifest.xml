@@ -1,12 +1,11 @@
 <package release="unstable" >
   <id>dotclear</id>
   <name>Dotclear</name>
-  <version>2.1.5-23-7</version>
+  <version>2.1.5-23-8</version>
   <type>application</type>
-  <installer name="Installer_Dotclear" src="./dist/installer.php" />
   <db>mysql</db>
   <need>lib-clearbricks</need>
-  <link rel="admin" type="text/html" href="/admin/" />
+  <link title="admin" rel="section" type="text/html" href="/admin/"/>
   <install>
       <preference type="text" label="Admin Firstname" name="admin_firstname" value=""/>
       <preference type="text" label="Admin Name" name="admin_name" value=""/>
