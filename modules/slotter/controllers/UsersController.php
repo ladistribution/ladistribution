@@ -80,8 +80,8 @@ class Slotter_UsersController extends Slotter_BaseController
 
             // if it's the first user, make him administrator.
             $users = $this->site->getUsers();
-            if (count($users) == 1 && Zend_registry::isRegistered('instance')) {
-                $instance = Zend_registry::get('instance');
+            if (count($users) == 1 && Zend_Registry::isRegistered('instance')) {
+                $instance = Zend_Registry::get('instance');
                 $instance->setUserRoles(array($user['username'] => 'admin'));
             }
 
