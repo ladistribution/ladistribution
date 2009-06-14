@@ -5,7 +5,7 @@ require_once 'BaseController.php';
 /**
  * Index controller
  */
-class Slotter_DatabasesController extends BaseController
+class Slotter_DatabasesController extends Slotter_BaseController
 {
 
     /**

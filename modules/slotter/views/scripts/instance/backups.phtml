@@ -32,9 +32,15 @@
 
 <h3>New</h3>
 
+<?php /*
+<ul>
+    <li><a href="<?php echo $this->instanceActionUrl('backups') ?>?dobackup=now">Do a backup now</a></li>
+</ul>
+*/ ?>
+
 <form action="" method="post">
     <input type="hidden" name="dobackup" value="now" />
-    <input type="submit" class="button" value="Do a backup now" />
+    <input type="submit" value="Do a backup now" />
 </form>
 
 <br />

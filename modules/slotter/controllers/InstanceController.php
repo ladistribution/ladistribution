@@ -5,7 +5,7 @@ require_once 'BaseController.php';
 /**
  * Index controller
  */
-class Slotter_InstanceController extends BaseController
+class Slotter_InstanceController extends Slotter_BaseController
 {
 
     /**
@@ -124,7 +124,7 @@ class Slotter_InstanceController extends BaseController
 
         $this->view->extensions = array();
         foreach ($extensions as $id => $extension) {
-            if (!$this->_isExtensionInstalled($id)) {
+            if (!$this->_isExtensionInstalled($id) && $extension->type != 'theme') {
                 $this->view->extensions[$id] = $extension;
             }
         }
@@ -138,6 +138,11 @@ class Slotter_InstanceController extends BaseController
         // TODO: we should update only from a POST
         $this->site->updateInstance($this->instance);
         $this->_redirectToAction('manage');
+    }
+
+    public function statusAction()
+    {
+        $this->_forward('manage');
     }
 
   /**

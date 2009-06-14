@@ -5,7 +5,7 @@ require_once 'Zend/Controller/Action.php';
 /**
  * Base controller
  */
-class BaseController extends Ld_Controller_Action
+class Slotter_BaseController extends Ld_Controller_Action
 {
 
     protected static $_accept = array(

@@ -8,11 +8,11 @@
 
 <?php echo $this->partial('repositories/list.phtml', array('repositories' => $this->localRepositories)); ?>
 
-<h3>Also</h3>
+<h3>You can:</h3>
 
 <ul>
     <li><a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'new'), 'default') ?>?type=local">
-        Create a new repository
+        Create a local repository
     </a></li>
     <li><a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'new'), 'default') ?>?type=remote">
         Add a remote repository

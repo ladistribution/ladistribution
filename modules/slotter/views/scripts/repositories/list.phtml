@@ -4,13 +4,16 @@
     
 <?php else : ?>
 
-    <ul>
+    <table class="h6e-data">
+        <tr><th>Url</th><th colspan="2">Actions</th></tr>
     <?php
     foreach ($this->repositories as $id => $repository) {
-        $url = $this->url(array('controller' => 'repositories', 'id' => $id, 'action' => 'manage'), 'default');
-        printf("<li><a href=\"%s\">%s</a></li>\n", $url, $repository->name);
+        $manageUrl = $this->url(array('controller' => 'repositories', 'id' => $id, 'action' => 'manage'), 'default');
+        $removeUrl = $this->url(array('controller' => 'repositories', 'id' => $id, 'action' => 'delete'), 'default');
+        printf("<tr><td>%s</td><td><a href=\"%s\">%s</a></td><td><a href=\"%s\">remove</a></td></tr>\n",
+            $repository->getUrl(), $manageUrl, $repository->type == 'local' ? 'manage' : 'browse', $removeUrl);
     }
     ?>
-    </ul>
+    </table>
 
 <?php endif ?>

@@ -70,7 +70,7 @@ class Bootstrap
 
         $route = new Zend_Controller_Router_Route(
             'slotter/instance/id/:id/:action',
-            array('module' => 'slotter', 'controller' => 'instance', 'action' => 'manage')
+            array('module' => 'slotter', 'controller' => 'instance', 'action' => 'status')
         );
         $router->addRoute('instance-action', $route);
 

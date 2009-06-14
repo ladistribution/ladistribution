@@ -1,0 +1,31 @@
+<p><strong>Repository URL:</strong> <?php echo $this->repository->getUrl() ?></p>
+
+<?php if (empty($this->applications) &&  empty($this->libraries) && empty($this->extensions)) : ?>
+
+    <p>This repository is empty</p>
+
+<?php else : ?>
+
+<table class="h6e-data">
+    <?php foreach(array('applications', 'libraries', 'extensions') as $type) : ?>
+        <?php if (!empty($this->$type)) : ?>
+            <tr>
+                <td colspan="3"><strong><Libraries><?php echo ucfirst($type) ?></strong></td>
+            </tr>
+            <tr>
+                <th>name</th>
+                <th>package</th>
+                <th>version</th>
+            </tr>
+            <?php foreach ($this->$type as $package) : ?>
+                <tr>
+                    <td><?php echo $package->name ?></td>
+                    <td><?php echo $package->id ?></td>
+                    <td><?php echo $package->version ?></td>
+                </tr>
+            <?php endforeach ?>
+        <?php endif ?>
+    <?php endforeach ?>
+</table>
+
+<?php endif ?>

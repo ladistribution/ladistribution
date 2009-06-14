@@ -5,7 +5,7 @@ require_once 'BaseController.php';
 /**
  * Users controller
  */
-class Slotter_RepositoriesController extends BaseController
+class Slotter_RepositoriesController extends Slotter_BaseController
 {
 
     /**
@@ -14,7 +14,7 @@ class Slotter_RepositoriesController extends BaseController
     public function init()
     {
         parent::init();
-        
+
         if ($this->_hasParam('id')) {
             $id = $this->_getParam('id');
             $repositories = $this->site->getRepositories();
@@ -43,9 +43,11 @@ class Slotter_RepositoriesController extends BaseController
             'label' => 'New', 'module'=> 'slotter', 'controller' => 'repositories', 'action' => 'new'
         ));
         if ($this->_hasParam('id')) {
+            $id = $this->repository->type == 'local' ? $this->repository->name : $this->repository->getUrl();
+            $label = sprintf("%s (%s)", $id, $this->repository->type);
             $action = $this->getRequest()->action;
             $repositoriesPage->addPage(array(
-                'label' => ucfirst($action),
+                'label' => $label,
                 'module'=> 'slotter',
                 'route' => 'default',
                 'controller' => 'repositories',
@@ -90,12 +92,11 @@ class Slotter_RepositoriesController extends BaseController
      */
     public function deleteAction()
     {
-        $this->site->removeRepository($this->repository->id);
-        // TODO: replace by a redirect
-        // $this->_forward('index');
-        
-        $this->_redirector->setGotoSimple('index');
-        $this->_redirector->redirectAndExit();
+        if ($this->getRequest()->isPost()) {
+            $this->site->removeRepository($this->repository->id);
+            $this->_redirector->setGotoSimple('index');
+            $this->_redirector->redirectAndExit();
+        }
     }
 
     /**
@@ -111,10 +112,10 @@ class Slotter_RepositoriesController extends BaseController
         }
 
         if ($this->_hasParam('upload')) {
-            
+
             $dir = LD_TMP_DIR . '/uploads';
             Ld_Files::createDirIfNotExists($dir);
-            
+
             $adapter = new Zend_File_Transfer_Adapter_Http();
             $adapter->setDestination($dir);
             $result = $adapter->receive();
@@ -123,21 +124,21 @@ class Slotter_RepositoriesController extends BaseController
         }
 
         if ($this->_hasParam('package')) {
-            
+
             $type = $this->_getParam('type', 'application');
             $package = $this->_getParam('package');
-            
+
             $this->view->package = $package;
             $this->view->releases = $this->repository->getReleases($package, $type);
             $this->view->extensions = $this->repository->getPackageExtensions($package);
 
             $this->render('package');
         }
-        
+
         $this->view->applications = $this->repository->getApplications();
-        
+        $this->view->extensions = $this->repository->getExtensions();
         $this->view->libraries = $this->repository->getLibraries();
-        
+
         if ($this->repository->type != 'local') {
             $this->render('manage-remote');
         }

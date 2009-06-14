@@ -6,8 +6,6 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
     {
         $instance = $this->view->instance;
         
-        // echo '<h1 class="h6e-page-title">' . $instance->getName() . '</h1>';
-        
         echo "<div>\n";
         
         echo "<p>";
@@ -21,11 +19,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         
         echo "<p>";
         
-        // echo "<strong>" . $instance->getName() . "</strong> ";
-        // 
-        // echo ' (<a href="' . $instance->getUrl() . '">' . $instance->getUrl() . '</a>) > ';
-        
-        $actions = array('manage', 'configure', 'themes', 'extensions', 'roles', 'backups');
+        $actions = array('status', 'configure', 'themes', 'extensions', 'roles', 'backups');
         foreach ($actions as $action) {
             $url = $this->view->url(array('controller' => 'instance', 'id' => $this->view->id, 'action' => $action), 'instance-action');
             echo '<a href="' . $url . '">' . $action . '</a>';

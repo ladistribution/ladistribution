@@ -1,48 +1,6 @@
-<h2>Manage <strong><?php echo $this->repository->name ?></strong> repository</h2>
+<h2>Manage repository</h2>
 
-<h3>Applications</h3>
-
-<?php if (empty($this->applications) || count($this->applications) == 0) : ?>
-    
-    <p>None</p>
-    
-<?php else : ?>
-    
-    <ul>
-    <?php foreach ($this->applications as $application) : ?>
-        <?php
-        $params = array(
-            'controller' => 'repositories', 'id' => $this->repository->id,
-            'action' => 'manage', 'package' => $application->id
-        );
-        ?>
-        <li><a href="<?php echo $this->url($params, 'default') ?>"><?php echo $application->name ?></a></li>
-    <?php endforeach ?>
-    </ul>
-
-<?php endif ?>
-
-<h3>Libraries</h3>
-
-<?php if (empty($this->libraries) || count($this->libraries) == 0) : ?>
-    
-    <p>None</p>
-    
-<?php else : ?>
-    
-    <ul>
-    <?php foreach ($this->libraries as $library) : ?>
-        <?php
-        $params = array(
-            'controller' => 'repositories', 'id' => $this->repository->id,
-            'action' => 'manage', 'type' => $library->type, 'package' => $library->id
-        );
-        ?>
-        <li><a href="<?php echo $this->url($params, 'default') ?>"><?php echo $library->name ?></a></li>
-    <?php endforeach ?>
-    </ul>
-
-<?php endif ?>
+<?php require('repository.phtml') ?>
 
 <h3>Upload a new package</h3>
 
