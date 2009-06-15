@@ -183,9 +183,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
         $installer->setSite($this);
 
-        foreach ($this->getInstances('application') as $application) {
-            if ($application['path'] == $preferences['path']) {
-                throw new Exception('An application is already installed on this path.');
+        if ($package->type == 'application') {
+            foreach ($this->getInstances('application') as $application) {
+                if ($application['path'] == $preferences['path']) {
+                    throw new Exception('An application is already installed on this path.');
+                }
             }
         }
 
