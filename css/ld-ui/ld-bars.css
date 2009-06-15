@@ -39,7 +39,7 @@
   border:1px solid #CCCCCC;
   font:11px/12px "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding:5px 10px;
-  height:15px;
+  height:10px;
 }
 
 .h6e-super-bar-inner, .h6e-top-bar-inner, .h6e-super-bar-inner a, .h6e-top-bar-inner a {
@@ -98,7 +98,7 @@
 }
 
 .ld-super-bar-menu li a {
-  padding:1em 0.5em !important;
+  padding:0.75em 0.5em !important;
   display:block;
 }
 
