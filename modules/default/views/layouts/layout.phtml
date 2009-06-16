@@ -1,18 +1,24 @@
-<?php
-echo $this->doctype('XHTML1_STRICT')->__tostring() . "\n" ?>
+<?php echo $this->doctype('XHTML1_STRICT') . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php echo $this->headTitle()->__tostring() . "\n" ?>
+<?php echo $this->headTitle() . "\n" ?>
 <?php echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . "\n"  ?>
-<?php echo $this->headLink()->__tostring() . "\n" ?>
-<?php echo $this->headStyle()->__tostring() . "\n" ?>
-<?php echo $this->headScript()->__tostring() . "\n" ?>
+<?php echo $this->headLink() . "\n" ?>
+<?php echo $this->headStyle() . "\n" ?>
+<?php echo $this->headScript() . "\n" ?>
 </head>
 <body>
 
 <div class="h6e-top-bar"><div class="h6e-top-bar-inner">
   <div class="a">
-      <?php echo $this->navigation()->breadcrumbs(); ?>
+      <?php
+      $bc = $this->navigation()->breadcrumbs()->__toString();
+      if (empty($bc)) {
+          echo $this->title;
+      } else {
+          echo $bc;
+      }
+      ?>
   </div>
   <div class="b">
       <?php if ($this->authenticated && !empty($this->user)) : ?>

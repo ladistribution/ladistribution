@@ -10,6 +10,8 @@ class IndexController extends Ld_Controller_Action
 
     function indexAction()
     {
+        $this->_setTitle('La Distribution Index');
+
         $directories = $this->getFrontController()->getDispatcher()->getControllerDirectory();
         $modules = array_keys($directories);
 
