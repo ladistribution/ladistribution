@@ -62,11 +62,9 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         foreach ($dirs as $name) {
             try {
                 $package = $this->getPackage($name);
+                $applications[$package->id] = $package;
             } catch (Exception $e) {
-                $package = new Ld_Package();
-                $package->setInfos(array('id' => $name, 'name' => $name));
             }
-            $applications[$package->id] = $package;
         }
         return $applications;
     }
@@ -113,9 +111,10 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
     public function getExtensions()
     {
+        $dirs = Ld_Files::getDirectories($this->dir, array('lib', 'css', 'js', 'shared'));
         $extensions = array();
-        foreach ($this->getApplications() as $application) {
-            $extensions = array_merge($extensions, $this->getPackageExtensions($application->id));
+        foreach ($dirs as $id) {
+            $extensions = array_merge($extensions, $this->getPackageExtensions($id));
         }
         return $extensions;
     }
@@ -210,20 +209,12 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
     {
         $packages = $this->getPackages();
 
-        // remove package that are not really existing
-        // applications that have extensions in this repository but that are not in this repository
-        foreach ($packages as $id => $package) {
-            if (empty($package->url)) {
-                unset($packages[$id]);
-            }
-        }
-
         // Generate Json Index
         Ld_Files::putJson($this->dir . '/packages.json', $packages);
 
         // Generate HTML Index
         if (!file_exists($this->dir . '/index.html')) {
-            Ld_Files::put($this->dir . '/index.html', "This is a La Distribution repository.");
+            Ld_Files::put($this->dir . '/index.html', 'This is a <a href="http://ladistribution.net/">La Distribution</a> repository.');
         }
     }
 
