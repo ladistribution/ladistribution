@@ -114,7 +114,7 @@ function get_userdata( $user_id )
 		if ($ld_user['username'] == $wp_user->user_login) {
 
 			$wp_user->user_pass  		= $ld_user['hash'];
-			$wp_user->user_nicename		= $ld_user['fullname'];
+			$wp_user->user_nicename		= $ld_user['username'];
 			$wp_user->display_name		= $ld_user['fullname'];
 			$wp_user->nickname			= $ld_user['username'];
 			$wp_user->user_email		= $ld_user['email'];
