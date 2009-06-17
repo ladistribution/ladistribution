@@ -67,7 +67,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
             $this->view->instance = $this->instance = $this->site->createInstance($packageId, $preferences);
 
-            $this->_redirectToAction('manage', $this->instance->id);
+            $this->_redirectToAction('status', $this->instance->id);
 
         } else {
             if ($this->_hasParam('packageId')) {
@@ -102,7 +102,7 @@ class Slotter_InstanceController extends Slotter_BaseController
                 if ($this->_hasParam('referer')) {
                     $this->_redirectTo($this->_getParam('referer'));
                 } else {
-                    $this->_redirectToAction('manage');
+                    $this->_redirectToAction('status');
                 }
                 return;
             }
@@ -110,13 +110,13 @@ class Slotter_InstanceController extends Slotter_BaseController
         } else if ( $this->_hasParam('update') ) {
             $path = $this->_getParam('update');
             $this->instance->updateExtension($path);
-            $this->_redirectToAction('manage');
+            $this->_redirectToAction('status');
             return;
 
         } else if ( $this->_hasParam('remove') ) {
             $path = $this->_getParam('remove');
             $this->instance->removeExtension($path);
-            $this->_redirectToAction('manage');
+            $this->_redirectToAction('status');
             return;
         }
 
@@ -137,25 +137,24 @@ class Slotter_InstanceController extends Slotter_BaseController
     {
         // TODO: we should update only from a POST
         $this->site->updateInstance($this->instance);
-        $this->_redirectToAction('manage');
+        $this->_redirectToAction('status');
     }
 
+    /**
+    * Status action.
+    */
     public function statusAction()
     {
-        $this->_forward('manage');
+        $this->view->extensions = $this->instance->getExtensions();
+        foreach ($this->view->extensions as $id => $extension) {
+            $this->view->extensions[$id]->hasUpdate = $extension->hasUpdate();
+        }
     }
 
-  /**
-   * Manage action.
-   */
-  public function manageAction()
-  {
-      $this->view->extensions = $this->instance->getExtensions();
-
-      foreach ($this->view->extensions as $id => $extension) {
-          $this->view->extensions[$id]->hasUpdate = $extension->hasUpdate();
-      }
-  }
+    public function manageAction()
+    {
+        $this->_forward('status');
+    }
 
   /**
    * Configure action.
@@ -258,21 +257,20 @@ class Slotter_InstanceController extends Slotter_BaseController
       $this->view->backups = $availableBackups;
   }
 
-  /**
-   * Delete action.
-   */
-  public function deleteAction()
-  {   
-      if (empty($this->instance)) {
-          return false;
-      }
-      
-      // TODO: we should delete only from a POST
-      $this->site->deleteInstance($this->instance);
-      
-      $this->_redirector->setGotoSimple('index', 'index');
-  }
-  
+    /**
+     * Delete action.
+     */
+    public function deleteAction()
+    {
+        if (empty($this->instance)) {
+            return false;
+        }
+        if ($this->getRequest()->isPost()) {
+            $this->site->deleteInstance($this->instance);
+            $this->_redirector->setGotoSimple('index', 'index');
+        }
+    }
+
   public function rolesAction()
   {
       $methods = array('getRoles', 'getUserRoles', 'setUserRoles');
@@ -316,7 +314,7 @@ class Slotter_InstanceController extends Slotter_BaseController
       return false;
   }
 
-    protected function _redirectToAction($action = 'manage', $id = null)
+    protected function _redirectToAction($action = 'status', $id = null)
     {
         $url = $this->view->instanceActionUrl($action, $id);
         $this->_redirectTo($url);
