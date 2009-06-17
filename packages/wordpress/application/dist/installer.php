@@ -78,10 +78,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		$cfg .= "define('DB_CHARSET', 'utf8');\n";
 		$cfg .= "define('DB_COLLATE', '');\n";
 
-		$cfg .= "define('AUTH_KEY', '" . $this->_generate_phrase() . "');\n";
-		$cfg .= "define('SECURE_AUTH_KEY', '" . $this->_generate_phrase() . "');\n";
-		$cfg .= "define('LOGGED_IN_KEY', '" . $this->_generate_phrase() . "');\n";
-		$cfg .= "define('NONCE_KEY', '" . $this->_generate_phrase() . "');\n";
+		$cfg .= "define('AUTH_KEY', '" . Ld_Auth::generatePhrase() . "');\n";
+		$cfg .= "define('SECURE_AUTH_KEY', '" . Ld_Auth::generatePhrase() . "');\n";
+		$cfg .= "define('LOGGED_IN_KEY', '" . Ld_Auth::generatePhrase() . "');\n";
+		$cfg .= "define('NONCE_KEY', '" . Ld_Auth::generatePhrase() . "');\n";
 
 		$cfg .= "require_once(ABSPATH . 'wp-settings.php');\n";
 

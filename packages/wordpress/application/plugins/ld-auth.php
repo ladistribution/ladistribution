@@ -3,7 +3,7 @@
 Plugin Name: LD auth
 Plugin URI: http://h6e.net/wordpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.2-24-1
+Version: 0.2-25-3
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -56,16 +56,44 @@ function ld_handle_current_user()
 
 add_action('set_current_user', 'ld_handle_current_user');
 
-if ( !function_exists('wp_validate_auth_cookie') ) :
-function wp_validate_auth_cookie($cookie = '', $scheme = '') {
+if ( !function_exists('auth_redirect') ) :
+function auth_redirect()
+{
+	if (is_user_logged_in()) {
+		return;
+	}
+	$login_url = site_url('wp-login.php', 'login');
+	wp_redirect($login_url);
+	exit();
+}
+endif;
+
+if ( !function_exists('get_currentuserinfo') ) :
+function get_currentuserinfo($cookie = '', $scheme = '') {
+	global $current_user;
+
+	if ( defined('XMLRPC_REQUEST') && XMLRPC_REQUEST )
+		return false;
+
+	if ( ! empty($current_user) )
+		return;
+
 	$auth = Zend_Auth::getInstance();
 	if ($auth->hasIdentity()) {
 		$user = get_userdatabylogin($auth->getIdentity());
 		if (isset($user)) {
-			return $user->ID;
+			wp_set_current_user($user->ID);
 		}
 	}
-	return null;
+
+	if ( ! $user = wp_validate_auth_cookie() ) {
+		 if ( empty($_COOKIE[LOGGED_IN_COOKIE]) || !$user = wp_validate_auth_cookie($_COOKIE[LOGGED_IN_COOKIE], 'logged_in') ) {
+		 	wp_set_current_user(0);
+		 	return false;
+		 }
+	}
+
+	wp_set_current_user($user);
 }
 endif;
 
