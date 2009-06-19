@@ -22,7 +22,10 @@ class Ld_Controller_Action extends Zend_Controller_Action
         // Authentication
         $this->view->authenticated = $this->authenticated = $this->_helper->auth->authenticate();
         if ($this->authenticated) {
+            // old, deprecated
             $this->view->user = $this->user = $this->_helper->auth->getUser();
+            // new
+            $this->view->currentUser = $this->currentUser = $this->_helper->auth->getUser();
         }
     }
 

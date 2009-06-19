@@ -19,7 +19,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function __construct($params = array())
     {
-        $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots');
+        $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'defaultModule');
         foreach ($properties as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
@@ -518,11 +518,16 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (!$user = $this->getUser($username)) {
             throw new Exception("User with this username doesn't exists.");
         }
-        
+
         $id = $user['id'];
 
         foreach ($infos as $key => $value) {
-            $user[$key] = $value;
+            if ($key == 'password') {
+                $hasher = new Ld_Auth_Hasher(8, TRUE);
+                $user['hash'] = $hasher->HashPassword($value);
+            } else {
+                $user[$key] = $value;
+            }
         }
 
         $users = $this->getUsers();
