@@ -1,6 +1,8 @@
-<h2>Edit an user</h2>
+<h2>Edit user infos</h2>
 
 <form method="post" action="">
+
+    <h3>Infos</h3>
 
     <table>
     <tr>
@@ -12,6 +14,31 @@
         <td><input type="text" name="email" class="text" value="<?php if (isset($this->user['email'])) echo $this->escape($this->user['email']) ?>"/></td>
     </tr>
     </table>
+
+    <?php if ($this->currentUser['username'] == $this->user['username']) : ?>
+
+    <h3>Change password</h3>
+
+    <p><em>If you would like to change the password type a new one. Otherwise leave this blank.</em></p>
+
+    <table>
+    <!--
+    <tr>
+        <td><label>Current password</label></td>
+        <td><input type="password" name="current_password" class="text" value=""/></td>
+    </tr>
+    -->
+    <tr>
+        <td><label>New password</label></td>
+        <td><input type="password" name="new_password" class="text" value=""/></td>
+    </tr>
+    <tr>
+        <td><label>New password again</label></td>
+        <td><input type="password" name="new_password_again" class="text" value=""/></td>
+    </tr>
+    </table>
+
+    <?php endif ?>
 
     <input type="hidden" name="id" value="<?php echo $this->escape($this->username) ?>"/>
 

@@ -104,11 +104,14 @@ class Slotter_UsersController extends Slotter_BaseController
         $this->view->user = $user = $this->site->getUser($id);
         if ($this->getRequest()->isPost()) {
             $params = array(
-                // 'username'   => $this->_getParam('username'),
-                // 'password'   => $this->_getParam('password'),
                 'fullname'   => $this->_getParam('fullname'),
                 'email'      => $this->_getParam('email')
             );
+            $new_password = $this->_getParam('new_password');
+            $new_password_again = $this->_getParam('new_password_again');
+            if (!empty($new_password) && $new_password === $new_password_again) {
+                $params['password'] = $new_password;
+            }
             $this->site->updateUser($id, $params);
             $this->_redirector->gotoSimple('index', 'users');
         }
