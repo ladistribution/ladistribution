@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Repository
+ * @author     François Hodierne <francois@hodierne.net>
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
+ */
+
 class Ld_Repository_Local extends Ld_Repository_Abstract
 {
 
@@ -45,11 +56,8 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         $applications = $this->getApplications();
 
         $libraries = $this->getLibraries();
-        
-        $extensions = array();
-        foreach ($applications as $id => $application) {
-           $extensions = array_merge($extensions, $this->getPackageExtensions($id));
-        }
+
+        $extensions = $this->getExtensions();
 
         return array_merge($applications, $libraries, $extensions);
     }

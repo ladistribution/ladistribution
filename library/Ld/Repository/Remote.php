@@ -1,6 +1,15 @@
 <?php
 
-require_once 'Ld/Repository/Abstract.php';
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Repository
+ * @author     François Hodierne <francois@hodierne.net>
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
+ */
 
 class Ld_Repository_Remote extends Ld_Repository_Abstract
 {
@@ -67,27 +76,20 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
 
     public function getApplications()
     {
-        $packages = $this->getPackages();
-        $applications = array();
-        foreach ($packages as $id => $package) {
-            if ($package->type == 'application') {
-                $applications[$id] = $package;
-            }
-        }
-        return $applications;
+        return $this->_getPackagesByType('applications');
     }
 
     public function getLibraries()
     {
-        return $this->getPackagesByType('libraries');
+        return $this->_getPackagesByType('libraries');
     }
 
     public function getExtensions()
     {
-        return $this->getPackagesByType('extensions');
+        return $this->_getPackagesByType('extensions');
     }
 
-    protected function getPackagesByType($type)
+    protected function _getPackagesByType($type)
     {
         $packages = $this->getPackages();
         $list = array();
