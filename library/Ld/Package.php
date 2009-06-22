@@ -124,7 +124,7 @@ class Ld_Package
     {
         $preferences = array();
 
-        if ($this->type == 'application') {
+        if ($this->type == 'application' || $this->type == 'bundle') {
             $preferences[] = array('type' => 'text', 'name' => 'title',
                     'label' => 'Title', 'defaultValue' => $this->name);
             $preferences[] = array('type' => 'text', 'name' => 'path',

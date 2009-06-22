@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Site
+ * @author     François Hodierne <francois@hodierne.net>
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
+ */
+
 class Ld_Site_Local extends Ld_Site_Abstract
 {
 
@@ -210,17 +221,18 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
-        if (isset($preferences['administrator'])) {
+        if (isset($preferences['administrator']) && is_string($preferences['administrator'])) {
             $preferences['administrator'] = $this->getUser($preferences['administrator']);
         }
 
         switch ($package->type) {
             case 'bundle':
-                $instance = $this->createInstance($installer->application, $preferences);
+                $installer->instance = $this->createInstance($installer->application, $preferences);
                 foreach ($installer->extensions as $extension) {
-                    $this->addExtension($instance, $extension);
+                    $installer->instance->addExtension($extension);
                 }
-                return $instance;
+                $installer->postInstall($preferences);
+                return $installer->instance;
                 break;
             case 'application':
                 $installer->install($preferences);
