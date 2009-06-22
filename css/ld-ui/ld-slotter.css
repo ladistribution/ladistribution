@@ -86,6 +86,10 @@ ul li.laconica {
   background:url(img/lc100.png) center center no-repeat;
 }
 
+ul li.bbpress {
+  background:url(img/bp100.png) center center no-repeat;
+}
+
 dl.inline, dl.inline dt, dl.inline dd {
   display:inline;
 }
