@@ -1,0 +1,8 @@
+<package release="unstable">
+  <id>wordpress-theme-bmpress-minimal</id>
+  <name>bmPress Minimal</name>
+  <version>0.1-10</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/bmpress-minimal</directory>
+</package>

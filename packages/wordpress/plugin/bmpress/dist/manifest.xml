@@ -1,0 +1,9 @@
+<package release="unstable">
+  <id>wordpress-plugin-bmpress</id>
+  <name>bmPress</name>
+  <version>0.1.2-2</version>
+  <type>plugin</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/plugins/bmpress</directory>
+  <installer name="Ld_Installer_Wordpress_Plugin_Bmpress" src="./dist/installer.php" />
+</package>
