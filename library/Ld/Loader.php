@@ -5,11 +5,9 @@ class Ld_Loader
 
     public static function defineConstants($dir)
     {
-        error_reporting( E_ALL /* | E_NOTICE | E_STRICT */ );
-
         date_default_timezone_set('UTC');
 
-        defined('LD_DEBUG') OR define('LD_DEBUG', true);
+        defined('LD_DEBUG') OR define('LD_DEBUG', false);
 
         defined('LD_REWRITE') OR define('LD_REWRITE', true);
 
@@ -20,6 +18,10 @@ class Ld_Loader
         defined('LD_LIB_DIR') or define('LD_LIB_DIR', realpath( $dir ) . '/lib' );
 
         defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
+
+        if (constant('LD_DEBUG')) {
+            error_reporting( E_ALL /* | E_NOTICE | E_STRICT */ );
+        }
 
         set_include_path( get_include_path() . PATH_SEPARATOR . LD_LIB_DIR );
     }

@@ -22,7 +22,7 @@ class Ld_Controller_Error extends Zend_Controller_Action
             $log_message = get_class($e) . ': error ' . $e->getCode() . ': ' . $e->getMessage() .
                 ' (file ' .  $e->getFile() . ') (line ' . $e->getLine() . ')';
 
-            if (defined('LD_DEBUG') && constant('LD_DEBUG') === true) {
+            if (constant('LD_DEBUG')) {
                 $this->view->details .= '<li>' . $log_message . '<pre>' . $e->getTraceAsString() . '</pre>' . '</li>';
             } else {
                 error_log($log_message);
@@ -35,7 +35,7 @@ class Ld_Controller_Error extends Zend_Controller_Action
                     break;
                 default:
                     $this->view->status = 'An error occured';
-                    $this->view->message = 'You can contact the server administrator about this problem.';
+                    $this->view->message = $e->getMessage();
             }
         }
         
