@@ -1,6 +1,6 @@
 <?php
 
-class Installer_Indexhibit extends Ld_Installer
+class Ld_Installer_Indexhibit extends Ld_Installer
 {
 
 	public function postInstall($preferences = array())
@@ -48,9 +48,9 @@ class Installer_Indexhibit extends Ld_Installer
 		));
 		$response = $this->httpClient->request('POST');
 
-		if (constant('LD_DEBUG')) {
-			echo $response->getBody();
-		}
+        // if (constant('LD_DEBUG')) {
+        //  echo $response->getBody();
+        // }
 
 		$databases = $this->site->getDatabases();
 		$db = $databases[ $this->instance->getDb() ];
@@ -67,9 +67,11 @@ class Installer_Indexhibit extends Ld_Installer
 		));
 		$response = $this->httpClient->request('POST');
 
-		if (constant('LD_DEBUG')) {
-			echo $response->getBody();
-		}
+        // if (constant('LD_DEBUG')) {
+        //  echo $response->getBody();
+        // }
+
+		Ld_Files::unlink($this->adminAbsolutePath . '/ndxz-studio/install.php');
 	}
 
 	private function _updateDatabase()

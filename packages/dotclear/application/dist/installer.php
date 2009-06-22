@@ -31,7 +31,7 @@ class Ld_Installer_Dotclear extends Ld_Installer
 	{
 		$cfg = "<?php\n";
 		$cfg .= 'define("DC_DBPERSIST", false);' . "\n";
-		$cfg .= "define('DC_MASTER_KEY', '" . $this->_generate_phrase() . "');\n";
+		$cfg .= "define('DC_MASTER_KEY', '" . Ld_Auth::generatePhrase() . "');\n";
 		$cfg .= "define('DC_SESSION_NAME', '" . 'dcxd' . "');\n";
 		$cfg .= "define('DC_PLUGINS_ROOT',dirname(__FILE__).'/../plugins');\n";
 		$cfg .= "define('DC_TPL_CACHE',dirname(__FILE__).'/../cache');\n";

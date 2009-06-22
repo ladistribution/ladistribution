@@ -30,19 +30,23 @@ add_action('login_head', 'ld_template_head');
 
 function ld_footer()
 {
-	require_once 'Ld/Ui.php';
-	Ld_Ui::super_bar();
+	Ld_Ui::super_bar(array('jquery' => true));
+}
+
+function ld_admin_footer()
+{
+	Ld_Ui::super_bar(array('jquery' => false));
 }
 
 add_action('wp_footer', 'ld_footer');
 
-add_action('admin_footer', 'ld_footer');
+add_action('admin_footer', 'ld_admin_footer');
 
 add_action('login_form', 'ld_footer');
 
 function ld_top_bar()
 {
-	global $current_user;
+    global $current_user;
     ?>
     <div class="h6e-top-bar"><div class="h6e-top-bar-inner">
       <div class="a">
