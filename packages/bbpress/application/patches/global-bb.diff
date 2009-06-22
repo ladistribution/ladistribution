@@ -1,0 +1,11 @@
+--- bb-load.php	2009-06-21 14:52:01.000000000 +0200
++++ bb-load.php.patched	2009-06-21 14:54:07.000000000 +0200
+@@ -139,6 +139,8 @@
+ // Initialise $bb object
+ $bb = new StdClass();
+ 
++$GLOBALS['bb'] = $bb;
++
+ if ( file_exists( BB_PATH . 'bb-config.php') ) {
+ 
+ 	// The config file resides in BB_PATH

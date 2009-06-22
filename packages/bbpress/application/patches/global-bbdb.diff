@@ -1,0 +1,20 @@
+--- bb-settings.php	2009-06-19 18:29:17.000000000 +0200
++++ bb-settings.php.patched	2009-06-19 18:28:17.000000000 +0200
+@@ -193,6 +193,8 @@
+ ) );
+ unset( $bbdb_class );
+ 
++$GLOBALS['bbdb'] = $bbdb;
++
+ /**
+  * bbPress tables
+  */
+@@ -940,6 +942,8 @@
+ 	unset( $cookies );
+ }
+ 
++$GLOBALS['wp_auth_object'] = $wp_auth_object;
++
+ /**
+  * Current user object
+  */
