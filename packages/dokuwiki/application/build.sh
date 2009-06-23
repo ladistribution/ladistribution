@@ -15,6 +15,7 @@ cp screenshot.png $FOLDER/lib/tpl/default/
 patch -p0 -d $FOLDER < patches/config.diff
 patch -p0 -d $FOLDER < patches/config-feed.diff
 patch -p0 -d $FOLDER < patches/geshi.diff
+patch -p0 -d $FOLDER < patches/init.diff
 # Remove installer
 rm $FOLDER/install.php
 # Remove default config files
