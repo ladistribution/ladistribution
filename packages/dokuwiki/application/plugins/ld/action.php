@@ -75,6 +75,13 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 
 	function template(&$event, $param)
 	{
+		global $conf;
+		if (isset($conf['superbar']) && $conf['superbar'] == 'never') {
+			return;
+		}
+		if (isset($conf['superbar']) && $conf['superbar'] == 'connected' && empty($_SERVER['REMOTE_USER'])) {
+			return;
+		}
 		require_once('Ld/Ui.php');
 		Ld_Ui::super_bar(array('jquery' => false));
 	}
