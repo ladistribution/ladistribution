@@ -165,6 +165,22 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $instances;
     }
 
+    protected function _sortInstances($a, $b)
+    {
+        if (isset($a['order']) && isset($b['order'])) {
+            return ($a['order'] < $b['order']) ? -1 : 1;
+        } else if (isset($a['order'])) {
+            return -1;
+        }
+        return 1;
+    }
+
+    public function updateInstances($instances)
+    {
+        uasort($instances, array($this, "_sortInstances"));
+        Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
+    }
+
     public function getInstance($id)
     {
         $instances = $this->getInstances();
@@ -452,9 +468,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function updateDatabase($id, $params)
     {
-        $this->_testDatabase($params);
         $databases = $this->getDatabases();
         $databases[$id] = array_merge($databases[$id], $params);
+        $this->_testDatabase($databases[$id]);
         $this->_writeDatabases($databases);
     }
 
@@ -633,9 +649,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getPackages()
     {
+        return $this->_getFromRepositories('packages');
+    }
+
+    public function getApplications()
+    {
+        return $this->_getFromRepositories('applications');
+    }
+
+    protected function _getFromRepositories($type)
+    {
+        $method = 'get' . ucfirst($type);
         $packages = array();
         foreach ($this->getRepositories() as $id => $repository) {
-            $packages = array_merge($repository->getPackages(), $packages);
+            $packages = array_merge($repository->$method(), $packages);
         }
         return $packages;
     }
