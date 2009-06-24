@@ -77,16 +77,17 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return $applications;
     }
 
-    public function getLibraries($type = null)
+    public function getLibraries()
     {
-        if ($type == null) {
-            $libraries = array();
-            foreach ($this->types['libraries'] as $type) {
-                $libraries = array_merge($libraries, $this->getLibraries($type));
-            }
-            return $libraries;
+        $libraries = array();
+        foreach ($this->types['libraries'] as $type) {
+            $libraries = array_merge($libraries, $this->_getLibrariesByType($type));
         }
+        return $libraries;
+    }
 
+    protected function _getLibrariesByType($type)
+    {
         $dirs = Ld_Files::getDirectories($this->dir . '/' . $type);
 
         $libraries = array();

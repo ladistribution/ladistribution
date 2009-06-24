@@ -28,4 +28,14 @@ abstract class Ld_Repository_Abstract
 
     abstract public function getUrl();
 
+    abstract public function getPackages();
+
+    abstract public function getApplications();
+
+    abstract public function getLibraries();
+
+    abstract public function getExtensions();
+
+    abstract public function getPackageExtensions($packageId, $type = null);
+
 }
