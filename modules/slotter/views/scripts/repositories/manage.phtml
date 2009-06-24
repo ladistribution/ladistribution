@@ -1,6 +1,6 @@
 <h2>Manage repository</h2>
 
-<?php require('repository.phtml') ?>
+<p><strong>Repository URL:</strong> <?php echo $this->repository->getUrl() ?></p>
 
 <h3>Upload a new package</h3>
 
@@ -12,6 +12,10 @@
         <input name="upload" class="submit" type="submit" value="Upload"/>
     </p>
 </form>
+
+<h3>Packages</h3>
+
+<?php require('repository.phtml') ?>
 
 <h3>Actions</h3>
 

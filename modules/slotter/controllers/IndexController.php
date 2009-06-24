@@ -67,6 +67,24 @@ class Slotter_IndexController extends Slotter_BaseController
     }
 
     /**
+     * Order action. 
+     */
+    public function orderAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->isPost() && $this->_hasParam('app')) {
+            $instances = $this->site->getInstances();
+            foreach ($this->_getParam('app') as $order => $id) {
+                $instances[$id]['order'] = $order;
+            }
+            $this->site->updateInstances($instances);
+            // NoRender
+            $this->_helper->viewRenderer->setNoRender(true);
+            Zend_Layout::getMvcInstance()->disableLayout();
+            $this->getResponse()->appendBody('ok');
+        }
+    }
+
+    /**
     * Update action.
     */
     public function updateAction()

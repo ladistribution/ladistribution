@@ -18,9 +18,13 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->view->site = $this->site = $this->_registry['site'];
 
+        if (empty($this->_registry['instance'])) {
+            throw new Exception('No Instance defined.');
+        }
+
         $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
-        $this->_setTitle('La Distribution Admin');
+        $this->_setTitle('Admin');
 
         $this->_initAcl();
 
@@ -56,7 +60,7 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $instances = new Zend_Acl_Resource('instances');
         $this->_acl->add($instances);
-        
+
         $this->_acl->allow('admin', null, 'admin');
         $this->_acl->allow('user', 'instances', 'view');
         $this->_acl->allow('admin', 'instances', 'admin');

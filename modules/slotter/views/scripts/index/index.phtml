@@ -5,7 +5,7 @@
     $i = 0;
     if (!empty($this->applications)) {
       foreach ($this->applications as $id => $application) {
-          printf("<li class=\"%s\">", $application->getPackageId());
+          printf('<li id="app_%s" class="%s">', $id, $application->getPackageId());
           printf("<span>%s<br/>", $application->getName());
           printf("- <a href=\"%s\">home</a>", $application->getUrl());
           foreach ($application->getLinks() as $link) {
@@ -14,7 +14,7 @@
               }
           }
           if ($this->canAdminInstances) {
-              $manageUrl = $this->url(array('controller' => 'instance', 'id' => $id, 'action' => 'manage'), 'default');
+              $manageUrl = $this->url(array('controller' => 'instance', 'id' => $id, 'action' => 'status'), 'default');
               printf("<br/>- <a href=\"%s\">settings</a><br/>", $manageUrl);
           }
           printf("</span></li>");
@@ -31,9 +31,28 @@
     <?php endfor; endif; ?>
 </ul>
 
+<?php
+
+$this->headScript()->offsetSetFile('jquery-ui', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery-ui.js');
+
+?>
+
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($){
+        $(".blocks").sortable({
+            update: function() {
+                $.post("<?php echo $this->url(array('action' => 'order')) ?>", $(".blocks").sortable('serialize'));
+            }
+        });
+    });
+})(jQuery);
+
+</script>
+
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
-    <p><strong>Notice:</strong> You don't registered any database connection yet. A database is often needed to deploy new web application. Add a new one now.</p>
+    <p><strong>Notice:</strong> You don't registered any database connection yet. A database is often needed to deploy new web application.</p>
 
 <?php endif ?>
 

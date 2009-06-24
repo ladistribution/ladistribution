@@ -10,7 +10,7 @@ class AuthController extends Ld_Controller_Action
 
     function loginAction()
     {
-        $this->_setTitle('La Distribution Login');
+        $this->_setTitle('Login');
 
         $this->view->postParams = array();
         foreach ($_POST as $key => $value) {

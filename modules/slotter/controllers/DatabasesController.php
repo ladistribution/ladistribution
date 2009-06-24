@@ -63,7 +63,7 @@ class Slotter_DatabasesController extends Slotter_BaseController
                 'password' => $this->_getParam('password')
             );
             $this->site->addDatabase($db);
-            $this->_forward('index');
+            $this->_redirector->goto('index');
         }
     }
 
@@ -84,11 +84,14 @@ class Slotter_DatabasesController extends Slotter_BaseController
                 'type' => $this->_getParam('type'),
                 'host' => $this->_getParam('host'),
                 'name' => $this->_getParam('name'),
-                'user' => $this->_getParam('user'),
-                'password' => $this->_getParam('password')
+                'user' => $this->_getParam('user')
             );
+            $password = $this->_getParam('password');
+            if (!empty($password)) {
+                $params['password'] = $password;
+            }
             $this->site->updateDatabase($id, $params);
-            $this->_forward('index');
+            $this->_redirector->goto('index');
         }
     }
 
@@ -100,7 +103,7 @@ class Slotter_DatabasesController extends Slotter_BaseController
         $this->view->id = $id = $this->_getParam('id');
         if ($this->getRequest()->isPost()) {
             $this->site->deleteDatabase($id);
-            $this->_forward('index');
+            $this->_redirector->goto('index');
         }
     }
 

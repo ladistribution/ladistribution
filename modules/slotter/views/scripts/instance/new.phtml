@@ -5,9 +5,6 @@
 <ul class="blocks">
     <?php
     foreach ($this->packages as $id => $package) {
-        if ($package->type != 'application') {
-            continue;
-        }
         if ($package->id == 'admin') {
             continue;
         }
