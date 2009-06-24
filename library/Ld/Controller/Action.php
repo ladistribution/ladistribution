@@ -32,7 +32,7 @@ class Ld_Controller_Action extends Zend_Controller_Action
     function _setTitle($title)
     {
         $this->view->title = $title;
-        $this->view->headTitle($title);
+        $this->view->headTitle($title, 'SET');
     }
 
 }
