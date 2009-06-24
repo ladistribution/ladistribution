@@ -1,0 +1,10 @@
+<package release="unstable">
+  <id>js-jquery-ui</id>
+  <name>jQuery UI</name>
+  <version>1.7.2-1</version>
+  <type>js</type>
+  <deploy>
+      <origin>js</origin>
+      <destination path="js">./jquery/</destination>
+  </deploy>
+</package>
