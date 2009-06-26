@@ -1,0 +1,9 @@
+<package release="unstable">
+  <id>wordpress-theme-hemingway</id>
+  <name>Hemingway</name>
+  <description></description>
+  <version>0.20-1</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/hemingway</directory>
+</package>
