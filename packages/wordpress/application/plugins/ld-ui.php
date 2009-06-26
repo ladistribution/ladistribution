@@ -30,11 +30,22 @@ add_action('login_head', 'ld_template_head');
 
 function ld_footer()
 {
+	$superbar = get_option('superbar');
+	if ($superbar == 'never') {
+		return;
+	}
+	if ($superbar == 'connected' && !is_user_logged_in()) {
+		return;
+	}
 	Ld_Ui::super_bar(array('jquery' => true));
 }
 
 function ld_admin_footer()
 {
+	$superbar = get_option('superbar');
+	if ($superbar == 'never') {
+		return;
+	}
 	Ld_Ui::super_bar(array('jquery' => false));
 }
 
