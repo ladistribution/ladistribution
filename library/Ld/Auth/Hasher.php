@@ -1,4 +1,5 @@
 <?php
+
 #
 # Portable PHP password hashing framework.
 #
@@ -24,6 +25,17 @@
 # Obviously, since this code is in the public domain, the above are not
 # requirements (there can be none), but merely suggestions.
 #
+
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Auth
+ * @author     Solar Designer <solar at openwall.com>
+ * @license    Public domain.
+ * @version    $Id$
+ */
+
 class Ld_Auth_Hasher {
 	var $itoa64;
 	var $iteration_count_log2;

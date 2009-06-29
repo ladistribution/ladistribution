@@ -1,10 +1,21 @@
 <?php
 
-require_once 'Zend/Controller/Action.php';
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Controller
+ * @author     François Hodierne <francois@hodierne.net>
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
+ */
 
 /**
- * Error controller
+ * @see Zend_Controller_Action
  */
+require_once 'Zend/Controller/Action.php';
+
 class Ld_Controller_Error extends Zend_Controller_Action
 {
 

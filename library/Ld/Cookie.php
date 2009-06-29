@@ -1,9 +1,14 @@
 <?php
 
 /**
- * Based on BigOrNot_CookieManager
- * http://bigornot.blogspot.com/
- * Copyleft 2008, Matthieu Huguet
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Cookie
+ * @author     Matthieu Huguet (http://bigornot.blogspot.com/)
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
  */
 
 class Ld_Cookie

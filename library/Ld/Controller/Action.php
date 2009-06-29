@@ -1,10 +1,21 @@
 <?php
 
-require_once 'Zend/Controller/Action.php';
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Controller
+ * @author     François Hodierne <francois@hodierne.net>
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
+ */
 
 /**
- * Ld Base Controller
+ * @see Zend_Controller_Action
  */
+require_once 'Zend/Controller/Action.php';
+
 class Ld_Controller_Action extends Zend_Controller_Action
 {
 
@@ -14,7 +25,7 @@ class Ld_Controller_Action extends Zend_Controller_Action
         $this->_registry = Zend_Registry::getInstance();
 
         // Controller Action Helpers
-        $this->_helper->addPath(LD_LIB_DIR . '/Ld/Controller/Action/Helper/', 'Ld_Controller_Action_Helper_');
+        $this->_helper->addPath('Ld/Controller/Action/Helper/', 'Ld_Controller_Action_Helper_');
 
         // Redirector Helper
         $this->_redirector = $this->_helper->getHelper('Redirector');

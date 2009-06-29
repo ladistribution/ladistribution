@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2008 Netvibes (http://www.netvibes.org/).
  *
@@ -18,10 +19,16 @@
  * along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ /**
+  * La Distribution PHP libraries
+  *
+  * @category   Ld
+  * @package    Ld_Preference
+  * @copyright  Copyright (c) 2008 Netvibes (http://www.netvibes.org/)
+  * @license    Licensed under the LGPL license.
+  * @version    $Id$
+  */
 
-/**
- * Preference.
- */
 class Ld_Preference
 {
     /**

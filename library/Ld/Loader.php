@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Loader
+ * @author     François Hodierne <francois@hodierne.net>
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
+ */
+
 class Ld_Loader
 {
 
@@ -20,7 +31,7 @@ class Ld_Loader
         defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
 
         if (constant('LD_DEBUG')) {
-            error_reporting( E_ALL /* | E_NOTICE | E_STRICT */ );
+            error_reporting( E_ALL | E_NOTICE | E_STRICT );
         }
 
         set_include_path( get_include_path() . PATH_SEPARATOR . LD_LIB_DIR );
