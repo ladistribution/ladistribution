@@ -45,9 +45,11 @@ $this->headScript()->offsetSetFile('jquery-ui', Zend_Registry::get('site')->getU
                 $.post("<?php echo $this->url(array('action' => 'order')) ?>", $(".blocks").sortable('serialize'));
             }
         });
+        $(".blocks a").mousedown(function(e){
+            e.stopPropagation();
+        });
     });
 })(jQuery);
-
 </script>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
