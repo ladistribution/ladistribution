@@ -30,6 +30,8 @@ class Ld_Loader
 
         defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
 
+        defined('LD_RELEASE') OR define('LD_RELEASE', 'barbes');
+
         if (constant('LD_DEBUG')) {
             error_reporting( E_ALL | E_NOTICE | E_STRICT );
         }

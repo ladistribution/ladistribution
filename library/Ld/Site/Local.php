@@ -104,7 +104,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $cfg = array();
         $cfg['repositories'] = array(
             'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
-            'endpoint' => LD_SERVER . 'repositories/main')
+            'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/main')
         );
         Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
     }
