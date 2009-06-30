@@ -1,3 +1,7 @@
+cd admin
+./build.sh
+cd ..
+
 cd css
 
   cd h6e-minimal
