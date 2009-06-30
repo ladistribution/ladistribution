@@ -1,8 +1,25 @@
 <?php
 
+/**
+ * La Distribution PHP libraries
+ *
+ * @category   Ld
+ * @package    Ld_Files
+ * @author     François Hodierne <francois@hodierne.net>
+ * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @license    Dual licensed under the MIT and GPL licenses.
+ * @version    $Id$
+ */
+
 class Ld_Files
 {
 
+    /**
+     * Include all files in a given directory
+     *
+     * @param string $dir Directory name
+     * @return null
+     */
     public static function includes($dir)
     {
         $result = self::scanDir($dir);
@@ -11,18 +28,26 @@ class Ld_Files
         }
     }
 
-    // from http://fr.php.net/unlink
+    /**
+     * Recursively delete a directory
+     *
+     * Original: http://fr.php.net/manual/en/function.unlink.php#87045
+     *
+     * @param string $dir Directory name
+     * @param boolean $deleteRootToo Delete the directory itself or not
+     * @return null
+     */
     public static function unlink($dir, $deleteRootToo = true)
     {
         if (is_file($dir)) {
             unlink($dir);
             return;
         }
-        if(!file_exists($dir) || !$dh = opendir($dir)) {
+        if (!file_exists($dir) || !$dh = opendir($dir)) {
             return;
         }
         while (false !== ($obj = readdir($dh))) {
-            if($obj == '.' || $obj == '..') {
+            if ($obj == '.' || $obj == '..') {
                 continue;
             }
             if (is_dir($dir . '/' . $obj)) {
@@ -33,20 +58,23 @@ class Ld_Files
         }
         closedir($dh);
         if ($deleteRootToo) {
-            // free.fr
             if (is_dir($dir)) {
                 $result = rmdir($dir);
                 if (!$result) unlink($dir);
             }
-            // @rename($dir, "deleted"); 
         }
-        return;
     }
 
-    public static function copy( $source, $target )
+    /**
+     * Copy files recursively from $source to $target
+     *
+     * @param string $source Directory name
+     * @param string $target Directory name
+     * @return null
+     */
+    public static function copy($source, $target)
     {
-        // echo "copy:$source:$target\n";
-        if ( is_dir( $source ) ) {
+        if (is_dir($source)) {
             if (!file_exists($target)) {
                 mkdir( $target, 0777, true);
                 if (defined('LD_UNIX_USER')) {
@@ -55,22 +83,22 @@ class Ld_Files
             }
             $d = dir( $source );
             while ( FALSE !== ( $entry = $d->read() ) ) {
-                if ( $entry == '.' || $entry == '..' ) {
+                if ($entry == '.' || $entry == '..') {
                     continue;
                 }
                 $Entry = $source . '/' . $entry;
-                if ( is_dir( $Entry ) ) {
-                    self::copy( $Entry, $target . '/' . $entry );
+                if (is_dir($Entry)) {
+                    self::copy($Entry, $target . '/' . $entry);
                     continue;
                 }
-                copy( $Entry, $target . '/' . $entry );
+                copy($Entry, $target . '/' . $entry);
                 if (defined('LD_UNIX_USER')) {
                     chown($target . '/' . $entry, LD_UNIX_USER);
                 }
             }
             $d->close();
         } else {
-            copy( $source, $target );
+            copy($source, $target);
             if (defined('LD_UNIX_USER')) {
                 chown($target, LD_UNIX_USER);
             }
@@ -116,7 +144,7 @@ class Ld_Files
     // http://fr2.php.net/manual/en/function.realpath.php
     public static function realpath($path)
     {
-        $out=array();
+        $out = array();
         foreach (explode('/', $path) as $i => $fold) {
             if ($fold == '' || $fold == '.') {
                 continue;
@@ -140,7 +168,7 @@ class Ld_Files
     public static function is_requirable($file)
     {
         $paths = explode(PATH_SEPARATOR, get_include_path());
-        foreach($paths as $path) {
+        foreach ($paths as $path) {
             if (@file_exists("$path/$file")) {
                 return true;
             }
