@@ -528,10 +528,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $hasher = new Ld_Auth_Hasher(8, TRUE);
 
-        $user['hash'] = $hasher->HashPassword($user['password']);
-        $username = $user['username'];
+        if (isset($user['password'])) {
+            $user['hash'] = $hasher->HashPassword($user['password']);
+        }
 
-        if ($exists = $this->getUser($username)) {
+        if ($exists = $this->getUser($user['username'])) {
             throw new Exception("User with this username already exists.");
         }
 
