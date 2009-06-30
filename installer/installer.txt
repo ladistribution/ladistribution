@@ -6,7 +6,9 @@ date_default_timezone_set('UTC');
 
 define('LD_SESSION', false);
 
-defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
+defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
+
+defined('LD_RELEASE') OR define('LD_RELEASE', 'barbes');
 
 // Functions
 
@@ -32,6 +34,12 @@ function is_requirable($lib)
         }
     }
     return false;
+}
+
+// Test PHP version
+
+if (!version_compare(PHP_VERSION, '5.2.0', '>=')) {
+    die ( '- Failure. La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.' );
 }
 
 // Directories
@@ -92,11 +100,11 @@ flush();
 $base_libs = array();
 
 if (!is_requirable('Zend/Loader.php')) {
-    $base_libs['zend-framework'] = LD_SERVER . 'repositories/main/lib/lib-zend-framework/lib-zend-framework.zip';
+    $base_libs['zend-framework'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-zend-framework/lib-zend-framework.zip';
 }
 
 if (!is_requirable('Ld/Installer.php')) {
-    $base_libs['ld-libraries'] = LD_SERVER . 'repositories/main/lib/lib-ld/lib-ld.zip';
+    $base_libs['ld-libraries'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-ld/lib-ld.zip';
 }
 
 foreach ($base_libs as $name => $source) {
@@ -142,7 +150,7 @@ foreach ($base_libs as $name => $source) {
 if (!file_exists($directories['dist'] . '/instances.json')) {
     $instances = array(
         array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1'),
-        array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-26-3')
+        array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-27-2')
     );
     Ld_Files::put($directories['dist'] . '/instances.json', Zend_Json::encode($instances));
 }
