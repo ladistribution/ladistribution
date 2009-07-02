@@ -94,6 +94,10 @@ cd dokuwiki
     ./build.sh
     cd ..
 
+    cd monobook
+    ./build.sh
+    cd ..
+
   cd ..
 
 cd ..
