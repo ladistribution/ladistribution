@@ -1,0 +1,8 @@
+<package release="unstable">
+  <id>dokuwiki-plugin-css</id>
+  <name>Custom CSS Editor</name>
+  <version>2009-06-23-1</version>
+  <type>plugin</type>
+  <extend>dokuwiki</extend>
+  <directory>lib/plugins/css</directory>
+</package>

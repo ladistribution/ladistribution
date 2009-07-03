@@ -86,6 +86,10 @@ cd dokuwiki
     ./build.sh
     cd ..
 
+    cd css
+    ./build.sh
+    cd ..
+
   cd ..
 
   cd theme
