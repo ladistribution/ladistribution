@@ -341,6 +341,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $installer->setAbsolutePath($instance->getAbsolutePath());
         }
         $installer->update();
+        $installer->postUpdate();
 
         // Update local registry (for applications)
         if (isset($instance) && $instance->type == 'application') {
