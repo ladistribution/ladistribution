@@ -15,7 +15,13 @@ defined('LD_RELEASE') OR define('LD_RELEASE', 'barbes');
 function install_if_not_exists_and_require($file, $source)
 {
     if (!file_exists($file)) {
-        $content = file_get_contents($source);
+        $context = stream_context_create(array(
+            'http' => array(
+                'method'  => 'GET',
+                'header'  => "User-Agent: La Distribution Installer\r\n"
+            )
+        ));
+        $content = file_get_contents($source, false, $context);
         if (empty($content)) {
             $msg = "- Failure. Can't retrieve file $source.";
             die($msg);
@@ -62,7 +68,7 @@ foreach ($directories as $name => $directory) {
     }
 }
 
-set_include_path( get_include_path() . PATH_SEPARATOR . $directories['lib'] );
+set_include_path( $directories['lib'] . PATH_SEPARATOR . get_include_path() );
 
 echo '- Directories OK<br>';
 flush();

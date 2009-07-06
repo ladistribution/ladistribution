@@ -36,9 +36,9 @@ class Ld_Loader
             error_reporting( E_ALL | E_NOTICE | E_STRICT );
         }
 
-        set_include_path( get_include_path() . PATH_SEPARATOR . LD_LIB_DIR );
+        set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
     }
-    
+
     public static function loadSite($dir)
     {
         self::defineConstants($dir);
