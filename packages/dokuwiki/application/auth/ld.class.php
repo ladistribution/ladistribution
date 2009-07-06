@@ -36,11 +36,7 @@ class auth_ld extends auth_plain
 
       $users = Zend_Registry::get('site')->getUsers();
 
-      if (file_exists(DOKU_INC . '/dist/roles.json')) {
-          $json = file_get_contents(DOKU_INC . '/dist/roles.json');
-          require_once 'Zend/Json.php';
-          $roles = Zend_Json::decode($json);
-      }
+      $roles = Ld_Files::getJson(DOKU_INC . '/dist/roles.json');
 
       foreach ($users as $user) {
           $id = $user['username'];
@@ -111,29 +107,31 @@ class auth_ld extends auth_plain
 
     function trustExternal($user,$pass,$sticky=false)
     {
-        global $USERINFO;
-
-        $userinfo = $this->getUserData($user);
-        if ($userinfo === false) return false;
-
         $auth = Zend_Auth::getInstance();
+
+        // if a valid Zend_Auth session is currently active
         if ($auth->hasIdentity() && $user == $auth->getIdentity()) {
-
             $this->logIn($user);
-
             return true;
-
+        
+        // in case user and password are provided
         } else if ($this->checkPass($user,$pass)) {
-
             $this->logIn($user);
-
-            $auth = Zend_Auth::getInstance();
-            if (!$auth->hasIdentity()) {
-                $adapter = new Ld_Auth_Adapter_File_Dokuwiki();
-                $auth->authenticate($adapter);
-            }
-
+            $this->handle_ld_session();
             return true;
+        }
+
+        // fallback to dokuwiki authentication
+        auth_login($_REQUEST['u'], $_REQUEST['p']);
+        $this->handle_ld_session();
+    }
+
+    function handle_ld_session()
+    {
+        $auth = Zend_Auth::getInstance();
+        if (!$auth->hasIdentity()) {
+            $adapter = new Ld_Auth_Adapter_File_Dokuwiki();
+            $auth->authenticate($adapter);
         }
     }
 
