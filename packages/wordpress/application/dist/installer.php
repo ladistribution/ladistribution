@@ -70,6 +70,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	function postUpdate()
 	{
+		$this->load_wp();
 		activate_plugin('ld-css.php');
 	}
 
