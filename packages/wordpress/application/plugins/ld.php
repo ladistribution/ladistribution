@@ -19,7 +19,8 @@ function ld_get_disabled_admin_capabilities()
 		// 'activate_plugins',
 		'edit_plugins', 'install_plugins', 'delete_plugins', 'update_plugins',
 		// themes
-		'edit_themes', 'install_themes', 'delete_themes', 'update_themes',
+		// 'edit_themes',
+		'install_themes', 'delete_themes', 'update_themes',
 		// users
 		'create_users', 'edit_users', 'delete_users'
 	);
@@ -59,7 +60,7 @@ function ld_disable_version_check()
 {
 	remove_action( 'init', 'wp_version_check' );
 
-    remove_action( 'load-plugins.php', 'wp_update_plugins' );
+	remove_action( 'load-plugins.php', 'wp_update_plugins' );
 	remove_action( 'load-update.php', 'wp_update_plugins' );
 	remove_action( 'admin_init', '_maybe_update_plugins' );
 	remove_action( 'wp_update_plugins', 'wp_update_plugins' );

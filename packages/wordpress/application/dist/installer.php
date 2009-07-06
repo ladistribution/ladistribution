@@ -59,6 +59,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		activate_plugin('ld.php');
 		activate_plugin('ld-ui.php');
 		activate_plugin('ld-auth.php');
+		activate_plugin('ld-css.php');
 
 		if (isset($preferences['theme'])) {
 			$this->setTheme($preferences['theme']);
@@ -66,6 +67,11 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		wp_cache_flush();
     }
+
+	function postUpdate()
+	{
+		activate_plugin('ld-css.php');
+	}
 
 	function create_config_file()
 	{

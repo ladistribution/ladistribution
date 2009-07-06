@@ -1,18 +1,12 @@
 NAME="wordpress"
 VERSION="2.8"
 GZ="$NAME.tar.gz"
-SOURCE="http://wordpress.org/$NAME-$VERSION.tar.gz"
+SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
 # Get source
-curl $SOURCE > $GZ
-tar zxvf $GZ
-rm $GZ
-mv $NAME $FOLDER
-
-# Alternative
-# svn export http://svn.automattic.com/wordpress/trunk/ $FOLDER
+svn export $SOURCE $FOLDER
 
 # Remove some useless (or not desired) files
 rm $FOLDER/wp-atom.php
@@ -36,7 +30,7 @@ rm $FOLDER/wp-admin/import/utw.php
 rm $FOLDER/wp-admin/import/wp-cat2tag.php
 
 # Apply patches
-patch -p0 -d $FOLDER < patches/wp-user-search.diff
+# patch -p0 -d $FOLDER < patches/wp-user-search.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
