@@ -11,6 +11,8 @@ class auth_ld extends auth_plain
      */    
     function auth_ld()
     {
+        $this->cando['addUser']      = true;
+
         $this->cando['getUsers']     = true;
         $this->cando['getUserCount'] = true;
 
@@ -133,6 +135,18 @@ class auth_ld extends auth_plain
 
             return true;
         }
+    }
+
+    function createUser($user,$pwd,$name,$mail,$grps=null)
+    {
+        $user = array(
+            'password'  => $pwd,
+            'username'  => $user,
+            'fullname'  => $name,
+            'email'     => $mail
+        );
+        Zend_Registry::get('site')->addUser($user);
+        return true;
     }
 
 }

@@ -15,7 +15,8 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         'rss_type'      => 'atom1',
         'rss_linkto'    => 'page',
         'maxtoclevel'   => 0,
-        'authtype'      => 'ld'
+        'authtype'      => 'ld',
+        'autopasswd'    => 0 // autogenerate passwords ?
     );
 
     public function install($preferences = array())
