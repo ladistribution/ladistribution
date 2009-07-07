@@ -1,0 +1,22 @@
+--- openid.php	2009-04-19 19:14:39.000000000 +0200
++++ openid.php.patched	2009-04-19 19:16:09.000000000 +0200
+@@ -23,6 +23,11 @@
+ 	$openid_include_path .= PATH_SEPARATOR . dirname(__FILE__) . '/openid';
+ }
+ 
++function openid_require_library($file)
++{
++	require_once($file);
++}
++
+ // check source of randomness
+ if (!@is_readable('/dev/urandom')) define( 'Auth_OpenID_RAND_SOURCE', null );
+ 
+@@ -34,7 +39,6 @@
+ require_once 'login.php';
+ require_once 'server.php';
+ require_once 'store.php';
+-restore_include_path();
+ 
+ // register activation (and similar) hooks
+ register_activation_hook('openid/openid.php', 'openid_activate_plugin');

@@ -1,49 +1,26 @@
---- openid.php	2009-04-19 19:14:39.000000000 +0200
-+++ openid.php.patched	2009-04-19 19:16:09.000000000 +0200
-@@ -23,6 +23,11 @@
- 	$openid_include_path .= PATH_SEPARATOR . dirname(__FILE__) . '/openid';
- }
- 
-+function openid_require_library($file)
-+{
-+	require_once($file);
-+}
-+
- // check source of randomness
- if (!@is_readable('/dev/urandom')) define( 'Auth_OpenID_RAND_SOURCE', null );
- 
-@@ -34,7 +39,6 @@
- require_once 'login.php';
- require_once 'server.php';
- require_once 'store.php';
--restore_include_path();
- 
- // register activation (and similar) hooks
- register_activation_hook('openid/openid.php', 'openid_activate_plugin');
-
 --- common.php	2009-03-20 03:09:15.000000000 +0100
-+++ common.php.patched	2009-04-19 19:10:33.000000000 +0200
++++ common.php.patched	2009-07-07 10:53:10.000000000 +0200
 @@ -40,7 +40,6 @@
  }
-
-
+ 
+ 
 -
  /**
   * Set the textdomain for this plugin so we can support localizations.
   */
 @@ -92,9 +91,7 @@
  	static $consumer;
-
+ 
  	if (!$consumer) {
 -		set_include_path( dirname(__FILE__) . PATH_SEPARATOR . get_include_path() );
 -		require_once 'Auth/OpenID/Consumer.php';
 -		restore_include_path();
 +		openid_require_library('Auth/OpenID/Consumer.php');
-
+ 
  		$store = openid_getStore();
  		$consumer = new Auth_OpenID_Consumer($store);
 @@ -404,8 +401,7 @@
-
+ 
  		if (is_email($url)) {
  			$_SESSION['openid_login_email'] = $url;
 -			set_include_path( dirname(__FILE__) . PATH_SEPARATOR . get_include_path() );
@@ -60,7 +37,7 @@
 -		require_once('Auth/OpenID/AX.php');
 -		restore_include_path();
 +		openid_require_library('Auth/OpenID/AX.php');
-
+ 
  		if ($auth_request->endpoint->usesExtension(Auth_OpenID_AX_NS_URI)) {
  			$ax_request = new Auth_OpenID_AX_FetchRequest();
 @@ -516,9 +510,7 @@
@@ -71,7 +48,7 @@
 -		require_once('Auth/OpenID/SReg.php');
 -		restore_include_path();
 +		openid_require_library('Auth/OpenID/SReg.php');
-
+ 
  		if ($auth_request->endpoint->usesExtension(Auth_OpenID_SREG_NS_URI_1_0) || $auth_request->endpoint->usesExtension(Auth_OpenID_SREG_NS_URI_1_1)) {
  			$extensions[] = Auth_OpenID_SRegRequest::build(array(),array('nickname','email','fullname'));
 @@ -698,9 +690,7 @@
@@ -82,18 +59,15 @@
 -	require_once('Auth/OpenID/AX.php');
 -	restore_include_path();
 +	openid_require_library('Auth/OpenID/AX.php');
-
+ 
  	$response = openid_response();
  	$ax = Auth_OpenID_AX_FetchResponse::fromSuccessResponse($response);
-
---- admin_panels.php	2009-03-20 03:09:15.000000000 +0100
-+++ admin_panels.php.patched	2009-04-19 19:10:53.000000000 +0200
-@@ -811,8 +811,7 @@
- 		openid_status('success');
-
- 		// ensure that profile URL is still a verified OpenID
--		set_include_path( dirname(__FILE__) . PATH_SEPARATOR . get_include_path() );
--		require_once 'Auth/OpenID.php';
-+		openid_require_library('Auth/OpenID.php');
- 		@include_once(ABSPATH . WPINC . '/registration.php');	// WP < 2.3
- 		@include_once(ABSPATH . 'wp-admin/includes/admin.php');	// WP >= 2.3
+@@ -739,7 +729,7 @@
+  * @see get_user_data
+  */
+ function openid_get_user_data_sreg($data, $identity_url) {
+-	require_once(dirname(__FILE__) . '/Auth/OpenID/SReg.php');
++	openid_require_library('Auth/OpenID/SReg.php');
+ 	$response = openid_response();
+ 	$sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
+ 	$sreg = $sreg_resp->contents();

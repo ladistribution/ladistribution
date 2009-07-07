@@ -7,9 +7,10 @@ PACKAGE="$NAME.zip"
 svn export $SOURCE $FOLDER
 
 # Apply patches
-patch -p0 -d $FOLDER < patches/class_exists_store.diff
 patch -p0 -d $FOLDER < patches/get_user_by_openid_filter.diff
-patch -p0 -d $FOLDER < patches/openid_require_library.diff
+patch -p0 -d $FOLDER < patches/openid_require_library_openid.diff
+patch -p0 -d $FOLDER < patches/openid_require_library_common.diff
+patch -p0 -d $FOLDER < patches/openid_require_library_admin_panels.diff
 
 # Remove Auth libraries as they are handled as dependencies
 # - but this doesn't works well due to a plugin gotcha

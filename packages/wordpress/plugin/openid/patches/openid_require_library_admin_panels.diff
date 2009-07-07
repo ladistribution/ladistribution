@@ -1,0 +1,32 @@
+--- admin_panels.php	2009-03-20 03:09:15.000000000 +0100
++++ admin_panels.php.patched	2009-07-07 11:15:38.000000000 +0200
+@@ -811,8 +811,7 @@
+ 		openid_status('success');
+ 
+ 		// ensure that profile URL is still a verified OpenID
+-		set_include_path( dirname(__FILE__) . PATH_SEPARATOR . get_include_path() );
+-		require_once 'Auth/OpenID.php';
++		openid_require_library('Auth/OpenID.php');
+ 		@include_once(ABSPATH . WPINC . '/registration.php');	// WP < 2.3
+ 		@include_once(ABSPATH . 'wp-admin/includes/admin.php');	// WP >= 2.3
+ 
+@@ -851,8 +850,7 @@
+ 			$message = 3;
+ 			
+ 			// ensure that profile URL is a verified OpenID
+-			set_include_path( dirname(__FILE__) . PATH_SEPARATOR . get_include_path() );
+-			require_once 'Auth/OpenID.php';
++			openid_require_library('Auth/OpenID.php');
+ 			if ($GLOBALS['wp_version'] >= '2.3') {
+ 				require_once(ABSPATH . 'wp-admin/includes/admin.php');
+ 			} else {
+@@ -912,8 +910,7 @@
+ 	$identities = get_user_openids($user->ID);
+ 	if (empty($identities)) return true;
+ 
+-	set_include_path( dirname(__FILE__) . PATH_SEPARATOR . get_include_path() );
+-	require_once 'Auth/OpenID.php';
++	openid_require_library('Auth/OpenID.php');
+ 
+ 	if ($url == null) $url = $user->user_url;
+ 	$url = Auth_OpenID::normalizeUrl($url);

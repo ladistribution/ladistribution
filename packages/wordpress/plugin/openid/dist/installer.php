@@ -1,6 +1,6 @@
 <?php
 
-class Installer_Plugin_Openid extends Ld_Installer
+class Ld_Installer_Wordpress_Plugin_Openid extends Ld_Installer
 {
 
 	public $plugin_file = 'openid/openid.php';
