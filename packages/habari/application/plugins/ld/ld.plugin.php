@@ -10,7 +10,7 @@ class Ld extends Plugin
 			'url' => 'http://h6e.net/habari/plugins/ld',
 			'author' => 'h6e',
 			'authorurl' => 'http://h6e.net/',
-			'version' => '1.0',
+			'version' => '0.2.28.1',
 			'description' => 'Authentication and UI for La Distribution',
 			'license' => 'Apache License 2.0',
 		);
@@ -37,11 +37,23 @@ class Ld extends Plugin
 
 	public function action_template_footer()
 	{
+		$superbar = Options::get('superbar');
+		if ($superbar == 'never') {
+			return;
+		}
+		$auth = Zend_Auth::getInstance();
+		if ($superbar == 'connected' && !$auth->hasIdentity()) {
+			return;
+		}
 		$this->footer();
 	}
 
 	public function action_admin_footer()
 	{
+		$superbar = Options::get('superbar');
+		if ($superbar == 'never') {
+			return;
+		}
 		$this->footer();
 	}
 

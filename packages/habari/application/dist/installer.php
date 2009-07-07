@@ -93,6 +93,38 @@ class Ld_Installer_Habari extends Ld_Installer
         Ld_Files::put($this->absolutePath . "/config.php", $cfg);
     }
 
+    // Configuration
+
+    public function getConfiguration()
+    {
+        $configuration = array();
+        $this->load_habari();
+        $results = DB::get_results( 'SELECT name, value, type FROM {options}', array(), 'QueryRecord' );
+        foreach($results as $result) {
+            if ( $result->type == 1 ) {
+                continue;
+            }
+            $configuration[$result->name] = $result->value;
+        }
+        return $configuration;
+    }
+
+    public function setConfiguration($configuration, $type = 'general')
+    {
+        if ($type == 'general') { $type = 'configuration'; }
+        $this->load_habari();
+        foreach ($this->getPreferences($type) as $preference) {
+            $preference = $preference->toArray();
+            $option = $preference['name'];
+            $value = isset($configuration[$option]) ? $configuration[$option] : null;
+            Options::set($option, $value);
+        }
+        if (isset($configuration['title']) && isset($this->instance)) {
+            $this->instance->setInfos(array('name' => $configuration['title']))->save();
+        }
+        return $this->getConfiguration();
+    }
+
     // Themes
 
     public function getThemes()
@@ -152,9 +184,46 @@ class Ld_Installer_Habari extends Ld_Installer
         return $user_roles;
     }
 
-    public function setUserRoles()
+    public function setUserRoles($roles)
     {
+        $this->load_habari();
+        $current_user_roles = $this->getUserRoles();
+        foreach ($roles as $username => $role) {
+            if (isset($current_user_roles[$username]) && $current_user_roles[$username] == $role) {
+                continue;
+            }
+            $habari_user = User::get_by_name($username);
+            if (empty($habari_user)) {
+                $habari_user = User::create(array('username' => $username)); 
+            }
+            foreach ($this->getRoles() as $availableRole) {
+                if ($habari_user->in_group($availableRole)) {
+                    $habari_user->remove_from_group($availableRole);
+                }
+            }
+            $habari_user->add_to_group($role);
+        }
+    }
 
+    // Backup / Restore
+
+    public function getBackupDirectories()
+    {
+        return array(
+            'user' => $this->absolutePath . '/user/'
+        );
+    }
+
+    public function restore($filename, $absolute = false)
+    {
+        parent::restore($filename, $absolute);
+
+        if (file_exists($this->tmpFolder . '/user')) {
+            if (file_exists($this->tmpFolder . '/user/cache')) {
+                Ld_Files::unlink($this->tmpFolder . '/user/cache');
+            }
+            Ld_Files::copy($this->tmpFolder . '/user', $this->absolutePath . '/user');
+        }
     }
 
     protected static function id_from_file( $file )
