@@ -24,51 +24,23 @@ class Ld_Package
 
     public $extend = null;
 
-    protected $manifest = null;
+    public $url = null;
 
-    protected $manifestXml = null;
+    protected $_manifest = null;
+
+    protected $_installer = null;
 
     public function __construct($params = array())
     {
-        if (isset($params['zip'])) {
-
-            // unzip
-            $tmpFolder = LD_TMP_DIR . '/package-' . date("d-m-Y-H-i-s");
-            $uz = new fileUnzip($params['zip']);
-            $uz->unzipAll($tmpFolder);
-
-            // parse manifest
-            $filename = $tmpFolder . '/dist/manifest.xml';
-            if (!file_exists($filename)) {
-                $filename = $tmpFolder . '/manifest.xml'; // alternate name
-            }
-            if (file_exists($filename)) {
-                $this->manifestXml = file_get_contents($filename);
-            } else {
-                throw new Exception("manifest.xml doesn't exists or is unreadable in $tmpFolder");
-            }
-
-            // unlink temporary folder
-            Ld_Files::unlink($tmpFolder);
+        if ($params instanceof Ld_Manifest) {
+            $this->_manifest = $params;
+            $params = $this->_manifest->getInfos();
         }
 
-        if (isset($params['manifest'])) {
-            $this->manifestXml = file_get_contents($params['manifest']);
-        }
-
-        if (isset($this->manifestXml)) {
-            $this->manifest = new SimpleXMLElement($this->manifestXml);
-            $this->id = (string)$this->manifest->id;
-            $this->version = (string)$this->manifest->version;
-            $this->type = (string)$this->manifest->type;
-            $this->name = (string)$this->manifest->name;
-            if (in_array($this->type, array('theme', 'plugin'))) {
-                $this->extend = (string)$this->manifest->extend;
-            }
-        }
+        $this->setParams($params);
     }
 
-    public function setInfos($params = array())
+    public function setParams($params = array())
     {
         $infos = array('id', 'name', 'type', 'version', 'extend', 'url');
         foreach ($infos as $key) {
@@ -78,57 +50,89 @@ class Ld_Package
         }
     }
 
-    public function getManifestXml()
+    public function setSite($site)
     {
-        if (isset($this->manifestXml)) {
-            return $this->manifestXml;
+        $this->site = $site;
+    }
+
+    public function getSite()
+    {
+        if (isset($this->site)) {
+            return $this->site;
         }
+        return Zend_Registry::get('site');
+    }
+
+    public function getArchive()
+    {
+        $filename = LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '.zip';
+        if (!file_exists($filename)) {
+            $httpClient = new Zend_Http_Client($this->url);
+            $response = $httpClient->request();
+            if ($response->isError()) {
+                $message = 'HTTP Error with ' . $this->url . ' - ' . $response->getStatus() . ' : ' . $response->getMessage();
+                throw new Exception($message);
+            }
+            $zip = $response->getBody();
+            Ld_Files::put($filename, $zip);
+        }
+        return $filename;
+    }
+
+    public function fetchFiles()
+    {
+        $dir = LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '/';
+        if (!file_exists($dir)) {
+            $archive = $this->getArchive();
+            $uz = new fileUnzip($archive);
+            $uz->unzipAll($dir);
+        }
+        return $dir;
     }
 
     public function getManifest()
     {
-        if (isset($this->manifest)) {
-            return $this->manifest;
+        if (empty($this->_manifest)) {
+            $dir = $this->fetchFiles();
+            $this->_manifest = Ld_Manifest::loadFromDirectory($dir);
         }
+        return $this->_manifest;
     }
 
     public function getInstaller()
     {
-        if (empty($this->installer)) {
-            $installer = Ld_Installer_Factory::getInstaller(array('package' => $this));
-            $this->installer = $installer;
+        if (empty($this->_installer)) {
+            $dir = $this->fetchFiles();
+            $classFile = $dir . '/dist/installer.php';
+            $className = $this->getManifest()->getClassName();
+            if (!file_exists($classFile)) {
+                $className = 'Ld_Installer';
+            } else {
+                require_once($classFile);
+            }
+            $this->_installer = new $className(array('package' => $this));
         }
-        return $this->installer;
+        return $this->_installer;
     }
 
-    public function getPreferences($type = 'configuration')
+    public function getId()
     {
-        $preferences = array();
+        return $this->id;
+    }
 
-        if (isset($this->manifest->$type)) {
-            foreach ($this->manifest->$type->preference as $prefXML) {
-                $attr = $prefXML->attributes();
-                $pref = new Ld_Preference((string) $attr['type']);
-                $pref->setName((string) $attr['name']);
-                $pref->setLabel((string) $attr['label']);
-                if (isset($attr['defaultValue'])) {
-                    $pref->setDefaultValue((string) $attr['defaultValue']);
-                }
-                foreach ($prefXML->option as $option) {
-                    if (empty($option['label'])) {
-                        $pref->addListOption((string) $option['value']);
-                    } else {
-                        $pref->addListOption((string) $option['value'], (string) $option['label']);
-                    }
-                }
-                if ($pref->getType() == 'range') {
-                    $pref->setRangeOptions((string) $attr['step'], (string) $attr['min'], (string) $attr['max']);
-                }
-                $preferences[] = $pref;
-            }
-        }
+    public function getType()
+    {
+        return $this->type;
+    }
 
-        return $preferences;
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     public function getInstallPreferences()
@@ -142,12 +146,19 @@ class Ld_Package
                     'label' => 'Path', 'defaultValue' => $this->id);
         }
 
-        $prefs = $this->getPreferences('install');
+        $prefs = $this->getManifest()->getPreferences('install');
         foreach ($prefs as $pref) {
             $preferences[] = is_object($pref) ? $pref->toArray() : $pref;
         }
 
         return $preferences;
+    }
+
+    // Legacy
+
+    public function getPreferences($type = 'configuration')
+    {
+        return $this->getManifest()->getPreferences($type);
     }
 
 }

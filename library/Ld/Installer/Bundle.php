@@ -18,10 +18,10 @@ class Ld_Installer_Bundle extends Ld_Installer
     {
         parent::__construct($params);
 
-        $this->application = (string)$this->manifest->application;
+        $this->application = (string)$this->getManifest()->xml->application;
 
         $this->extensions = array();
-        foreach ($this->manifest->extension as $extension) {
+        foreach ($this->getManifest()->xml->extension as $extension) {
             $this->extensions[] = (string)$extension;
         }
     }

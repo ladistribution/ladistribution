@@ -114,11 +114,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $this->host;
     }
 
-    public function getBasePath()
-    {
-        return $this->path;
-    }
-
     public function getPath()
     {
         return $this->path;
@@ -147,11 +142,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getInstances($type = null)
     {
-        $instances = Ld_Files::getJson($this->getDirectory('dist') . '/instances.json');
-
-        if (empty($instances)) {
-            return array();
+        if (empty($this->_instances)) {
+            $this->_instances = Ld_Files::getJson($this->getDirectory('dist') . '/instances.json');
         }
+
+        $instances = $this->_instances;
 
         // Filter by type
         if (isset($type)) {
@@ -185,32 +180,38 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $instances = $this->getInstances();
 
+        // by global path
         if (file_exists($id) && file_exists($id . '/dist')) {
             $dir = $id;
+
+        // by local path
         } else if (file_exists($this->getDirectory() . '/' . $id) && file_exists($this->getDirectory() . '/' . $id . '/dist')) {
             $dir = $this->getDirectory() . '/' . $id;
+
+        // by id
         } else if (isset($instances[$id])) {
             $dir = $this->getDirectory() . '/' . $instances[$id]['path'];
         }
 
         if (isset($dir)) {
-            $instance = new Ld_Instance_Application_Local($dir);
-            $instance->setSite($this);
-            return $instance;
+
+            $instance = Ld_Instance_Application_Local::loadFromDir($dir);
+            if (isset($instance)) {
+                $instance->setSite($this);
+                return $instance;
+            }
         }
 
         return null;
-
-        // throw new Exception("can't get instance with id or path '$id'");
     }
 
     public function createInstance($packageId, $preferences = array())
     {
         $package = $this->getPackage($packageId);
-        $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
-        $installer->setSite($this);
 
-        if ($package->type == 'application') {
+        $installer = $package->getInstaller();
+
+        if ($package->getType() == 'application') {
             foreach ($this->getInstances('application') as $application) {
                 if ($application['path'] == $preferences['path']) {
                     throw new Exception('An application is already installed on this path.');
@@ -218,13 +219,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
-        foreach ($installer->getDependencies() as $dependency) {
+        foreach ($package->getManifest()->getDependencies() as $dependency) {
             if (null === $this->_getLibraryInfos($dependency)) {
                 $this->createInstance($dependency);
             }
         }
 
-        $neededDb = $package->getInstaller()->needDb();
+        $neededDb = $package->getManifest()->getDb();
         if ($neededDb && empty($preferences['db'])) {
             $availableDbs = $this->getDatabases($neededDb);
             if (empty($availableDbs)) {
@@ -241,7 +242,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $preferences['administrator'] = $this->getUser($preferences['administrator']);
         }
 
-        switch ($package->type) {
+        switch ($package->getType()) {
             case 'bundle':
                 $installer->instance = $this->createInstance($installer->application, $preferences);
                 foreach ($installer->extensions as $extension) {
@@ -252,24 +253,24 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 break;
             case 'application':
                 $installer->install($preferences);
-                $installer->instance = $this->registerInstance($installer, $preferences);
+                $installer->instance = $this->registerInstance($package, $preferences);
                 $installer->postInstall($preferences);
                 return $installer->instance;
             default:
                 $installer->install($preferences);
-                $this->registerInstance($installer, $preferences);
+                $this->registerInstance($package, $preferences);
                 break;
         }
     }
 
-    public function registerInstance($installer, $preferences = array())
+    public function registerInstance($package, $preferences = array())
     {
-          $package = $this->getPackage($installer->id);
+          $installer = $package->getInstaller();
 
           $params = array(
-              'package'   => $package->id,
-              'type'      => $package->type,
-              'version'   => $package->version
+              'package'   => $package->getId(),
+              'type'      => $package->getType(),
+              'version'   => $package->getVersion()
           );
 
           if (isset($preferences['title'])) {
@@ -278,7 +279,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
           if (isset($preferences['db'])) {
               $params['db'] = $preferences['db'];
-              $params['db_prefix'] = $installer->dbPrefix;
+              $params['db_prefix'] = $installer->getDbPrefix();
           }
 
           // Only create an instance file for applications
@@ -301,6 +302,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
           );
           Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
           
+          // Reset stored instances list
+          unset($this->_instances);
+
           $instance = $this->getInstance($id);
           $instance->id = $id;
           return $instance;
@@ -319,16 +323,17 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         $package = $this->getPackage($packageId);
-        $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
-        $installer->setSite($this);
+
+        $installer = $package->getInstaller();
 
         // Check and eventually Update dependencies
-        foreach ($installer->getDependencies() as $dependency) {
+        foreach ($package->getManifest()->getDependencies() as $dependency) {
             $infos = $this->_getLibraryInfos($dependency);
             if (null === $infos) {
                 $this->createInstance($dependency);
             } else {
                 $dependencyPackage = $this->getPackage($dependency);
+                // FIXME: this test is weak
                 if ($infos['version'] != $dependencyPackage->version) {
                     $this->updateInstance($dependency);
                 }
@@ -398,7 +403,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $preferences = array();
 
         // DB
-        $neededDb = $package->getInstaller()->needDb();
+        $neededDb = $package->getManifest()->getDb();
         if ($neededDb) {
             $availableDbs = $this->getDatabases($neededDb);
             if (empty($availableDbs)) {
@@ -417,8 +422,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
             $preferences[] = $preference;
         }
-
-        $prefs = $package->getInstaller()->getPackage()->getInstallPreferences(); // WAOW WAOW WAOW !!! :-)
+        
+        // Prefs
+        $prefs = $package->getInstallPreferences();
         foreach ($prefs as $pref) {
             $preference = is_object($pref) ? $pref->toArray() : $pref;
             // Special Type: user
@@ -531,6 +537,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (isset($user['password'])) {
             $user['hash'] = $hasher->HashPassword($user['password']);
+            unset($user['password']);
         }
 
         if ($exists = $this->getUser($user['username'])) {
@@ -677,5 +684,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
         return $packages;
     }
+    
+    // Legacy
+
+    public function getBasePath() { return $this->path; }
 
 }

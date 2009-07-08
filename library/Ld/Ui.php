@@ -31,7 +31,10 @@ class Ld_Ui
 
         $applications = array();
         foreach ($site->getInstances('application') as $id => $infos) {
-            $applications[$id] = $site->getInstance($id);
+            $instance = $site->getInstance($id);
+            if (isset($instance)) {
+                $applications[$id] = $instance;
+            }
         }
 
         $admin = self::getInstanceByPackageId('admin', $applications);

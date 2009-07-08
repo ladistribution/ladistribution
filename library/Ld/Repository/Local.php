@@ -135,15 +135,11 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         }
 
         $dir = $this->getDirectory($params);
-        $manifestFile =  $dir . '/manifest.xml';
-        if (!file_exists($manifestFile)) {
-            throw new Exception("Can't find manifest in $dir.");
-        }
+        $manifest = Ld_Manifest::loadFromDirectory($dir);
+        $package =  new Ld_Package($manifest);
 
-        $package = new Ld_Package(array('manifest' => $manifestFile));
-
-        $base_url = str_replace($this->getSite()->getDirectory() . '/', $this->getSite()->getUrl(), $dir);
-        $package->url = $base_url . "/$package->id.zip";
+        $baseUrl = str_replace($this->getSite()->getDirectory() . '/', $this->getSite()->getUrl(), $dir);
+        $package->url = $baseUrl . "/$package->id.zip";
 
         return $package;
     }
@@ -171,7 +167,8 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
     public function importPackage($filename, $clean = true)
     {
-        $package = new Ld_Package(array('zip' => $filename));
+        $manifest = Ld_Manifest::loadFromZip($filename);
+        $package = new Ld_Package($manifest);
 
         $dir = $this->getDirectory($package);
         Ld_Files::createDirIfNotExists($dir);
@@ -179,7 +176,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         Ld_Files::copy($filename, $dir . "/$package->id.zip");
         Ld_Files::copy($filename, $dir . "/$package->id-$package->version.zip");
 
-        Ld_Files::put($dir . "/manifest.xml", $package->getManifestXml());
+        Ld_Files::put($dir . "/manifest.xml", $manifest->getRawXml());
 
         if ($clean) {
             Ld_Files::unlink($filename);

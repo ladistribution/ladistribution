@@ -11,7 +11,6 @@
  * @version    $Id$
  */
 
-
 abstract class Ld_Instance_Abstract
 {
 
@@ -111,6 +110,31 @@ abstract class Ld_Instance_Abstract
         }
         // package is unknown, it can only be 'up to date' then
         return false;
+    }
+
+    public function getInstaller()
+    {
+        if (empty($this->_installer)) {
+            $classFile = $this->getAbsolutePath() . '/dist/installer.php';
+            $className = $this->getManifest()->getClassName();
+            if (!file_exists($classFile)) {
+                $className = 'Ld_Installer';
+            } else {
+                if (!class_exists($className, false)) {
+                    require_once($classFile);
+                }
+            }
+            $this->_installer = new $className(array('instance' => $this));
+        }
+        return $this->_installer;
+    }
+
+    public function getManifest()
+    {
+        if (empty($this->_manifest)) {
+            $this->_manifest = Ld_Manifest::loadFromDirectory($this->getAbsolutePath());
+        }
+        return $this->_manifest;
     }
 
 }

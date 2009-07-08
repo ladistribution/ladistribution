@@ -28,9 +28,10 @@ abstract class Ld_Site_Abstract
     {
         $packages = $this->getPackages();
         if (isset($packages[$id])) {
-            return $packages[$id];
+            $package = $packages[$id];
+            $package->setSite($this);
+            return $package;
         }
-        //return null;
         throw new Exception("Unknown package '$id'");
     }
 

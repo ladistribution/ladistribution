@@ -69,8 +69,7 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
 
     public function getPackage($params = array())
     {
-        $package = new Ld_Package();
-        $package->setInfos($params);
+        $package = new Ld_Package($params);
         return $package;
     }
 

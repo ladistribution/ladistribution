@@ -18,17 +18,16 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     protected $absolutePath;
 
     protected $instanceJson;
-    
-    public function __construct($params = array())
+
+    public static function loadFromDir($directory)
     {
-        if (is_string($params) && is_dir($params) && file_exists($params . '/dist/instance.json')) {
-            require_once 'Zend/Json.php';
-            $params = Zend_Json::decode( file_get_contents($params . '/dist/instance.json') );
+        $params = Ld_Files::getJson($directory . '/dist/instance.json');
+        if (!empty($params)) {
+            return new Ld_Instance_Application_Local($params);
         }
-        
-        parent::__construct($params);
+        return null;
     }
-    
+
     public function getInfos()
     {
         if (empty($this->infos)) {
@@ -55,8 +54,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function save()
     {
-        $json = Zend_Json::encode($this->infos);
-        Ld_Files::put($this->getInstanceJson(), $json);
+        Ld_Files::putJson($this->getInstanceJson(), $this->infos);
     }
 
     public function setSite($site)
@@ -112,25 +110,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $con;
     }
 
-    /* From Installer */
-
-    public function getInstaller()
-    {
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $this, 'dbPrefix' => $this->getDbPrefix()));
-        $installer->setSite($this->site);
-        return $installer;
-    }
-
     public function getLinks()
     {
-        $manifest = $this->getInstaller()->getManifest();
-        $links = array();
-        foreach ($manifest->link as $link) {
-            $title = (string)$link['title'];
-            $rel = (string)$link['rel'];
-            $type = (string)$link['type'];
-            $href = $this->site->getBaseUrl() . $this->getPath() . $link['href'];
-            $links[] = compact('title', 'rel', 'href', 'type');
+        $links = $this->getManifest()->getLinks();
+        foreach ($links as $id => $link) {
+            $links[$id]['href'] = $this->getSite()->getBaseUrl() . $this->getPath() . $link['href'];
         }
         return $links;
     }
@@ -139,7 +123,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         $preferences = array();
         
-        $prefs = $this->getInstaller()->getPreferences($type);
+        $prefs = $this->getManifest()->getPreferences($type);
         foreach ($prefs as $pref) {
             $preferences[] = is_object($pref) ? $pref->toArray() : $pref;
         }
@@ -233,19 +217,18 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         $package = $this->site->getPackageExtension($this->getPackageId(), $extension);
 
-        // Install
+        $this->getInstaller(); // include the application installer
+        $installer = $package->getInstaller();
 
-        $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
-
-        foreach ($installer->getDependencies() as $dependency) {
-            if (null === $this->site->_getLibraryInfos($dependency)) {
-                $this->site->createInstance($dependency);
+        foreach ($package->getManifest()->getDependencies() as $dependency) {
+            if (null === $this->getSite()->_getLibraryInfos($dependency)) {
+                $this->getSite()->createInstance($dependency);
             }
         }
 
-        $extendedPath = $installer->getExtendedPath();
+        $extendedPath = $package->getManifest()->getDirectory();
         if (empty($extendedPath)) {
-            throw new Exception('Extended path not defined.');
+            throw new Exception('extendedPath not defined.');
         } else {
             $installer->setPath( $this->getPath() . '/' . $extendedPath );
             $installer->setAbsolutePath( $this->getAbsolutePath() . '/' . $extendedPath );
@@ -256,9 +239,9 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         // Register
 
         $params = array(
-            'package'   => $package->id,
-            'type'      => $package->type,
-            'version'   => $package->version,
+            'package'   => $package->getId(),
+            'type'      => $package->getType(),
+            'version'   => $package->getVersion(),
             'path'      => $extendedPath
         );
 
@@ -273,11 +256,14 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         if (is_string($extension)) {
             $extension = $this->getExtension($extension);
         }
-        
+
         $package = $this->site->getPackageExtension($this->getPackageId(), $extension->package);
-        
+
+        // Get Installer
+        $this->getInstaller(); // include the application installer
+        $installer = $package->getInstaller();
+
         // Update
-        $installer = Ld_Installer_Factory::getInstaller(array('package' => $package));
         $installer->setPath( $this->getPath() . '/' . $extension->getPath() );
         $installer->setAbsolutePath( $this->getAbsolutePath() . '/' . $extension->getPath() );
         $installer->update();
@@ -301,8 +287,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
             $extension = $this->getExtension($extension);
         }
 
+        // Get Installer
+        $this->getInstaller(); // include the application installer
+        $installer = $extension->getInstaller();
+
         // Uninstall
-        $installer = Ld_Installer_Factory::getInstaller(array('instance' => $extension));
         $installer->uninstall();
 
         // Unregister

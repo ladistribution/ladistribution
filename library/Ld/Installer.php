@@ -16,32 +16,19 @@ class Ld_Installer
 
     public function __construct($params = array())
     {
-        $this->dir = $params['dir'];
-
-        $this->id = isset($params['id']) ? $params['id'] : null;
-        $this->instance = isset($params['instance']) ? $params['instance'] : null;
-
-        if (isset($this->instance)) {
+        if (isset($params['package'])) {
+            $this->package = $params['package'];
+            $this->manifest = $this->package->getManifest();
+        } elseif (isset($params['instance'])) {
+            $this->instance = $params['instance'];
+            $this->manifest = $this->instance->getManifest();
             $this->setPath($this->instance->getPath());
             $this->setAbsolutePath($this->instance->getAbsolutePath());
         }
 
-        if (empty($params['dbPrefix'])) {
-            $this->dbPrefix = str_replace('-', '_', $this->id) . '_' . uniqid() . '_';
-        } else {
-            $this->dbPrefix = $params['dbPrefix'];
-        }
-
-        $filename = $this->dir . '/dist/manifest.xml';
-        if (!file_exists($filename)) {
-            $filename = $this->dir . '/manifest.xml'; // alternate name
-        }
-        if (file_exists($filename)) {
-            $this->package = new Ld_Package(array('manifest' => $filename));
-            $this->manifest = $this->package->getManifest();
-        } else {
-            throw new Exception("manifest.xml doesn't exists or is unreadable in $this->dir");
-        }
+        // TEMP: should be removed safely in upcoming release
+        $this->site = $this->getSite();
+        $this->dbPrefix = $this->getDbPrefix();
     }
 
     public function setPath($path)
@@ -54,22 +41,77 @@ class Ld_Installer
         $this->absolutePath = $path;
     }
 
+    // Instance / Package
+
     public function getSite()
     {
-        if (isset($this->site)) {
-            return $this->site;
+        if (isset($this->instance)) {
+            return $this->instance->getSite();
+        } elseif (isset($this->package)) {
+            return $this->package->getSite();
         }
         return Zend_Registry::get('site');
     }
 
-    public function setSite($site)
+    public function getId()
     {
-        $this->site = $site;
+        if (isset($this->instance)) {
+            return $this->instance->getPackageId();
+        } elseif (isset($this->package)) {
+            return $this->package->getId();
+        }
+        return null;
+    }
+
+    public function getDir()
+    {
+        return $this->package->getTmpDir();
     }
 
     public function getPackage()
     {
-        return $this->package;
+        if (isset($this->package)) {
+            return $this->package;
+        }
+        throw new Exception("package is undefined.");
+    }
+
+    public function getInstance()
+    {
+        if (isset($this->instance)) {
+            return $this->instance;
+        }
+        throw new Exception("instance is undefined.");
+    }
+
+    public function getPath()
+    {
+        if (isset($this->path)) {
+            return $this->path;
+        } else if (isset($this->instance)) {
+            return $this->instance->getPath();
+        }
+        throw new Exception("path is undefined.");
+    }
+
+    public function getAbsolutePath()
+    {
+        if (isset($this->absolutePath)) {
+            return $this->absolutePath;
+        } else if (isset($this->instance)) {
+            return $this->instance->getAbsolutePath();
+        }
+        throw new Exception("absolutePath is undefined.");
+    }
+
+    public function getDbPrefix()
+    {
+        if (isset($this->dbPrefix)) {
+            return $this->dbPrefix;
+        } if (isset($this->instance) && $this->instance->getType() == 'application') {
+            return $this->instance->getDbPrefix();
+        }
+        return $this->dbPrefix = str_replace('-', '_', $this->getId()) . '_' . uniqid() . '_';
     }
 
     public function getManifest()
@@ -77,45 +119,12 @@ class Ld_Installer
         return $this->manifest;
     }
 
-    public function getDependencies()
+    public function getDeployments($type = null)
     {
-        $dependencies = array();
-        foreach ($this->manifest->need as $need) {
-            $dependencies[] = (string)$need;
-        }
-        return $dependencies;
-    }
-
-    public function getDeployments()
-    {
-        // Default Rules
-
-        $type = (string)$this->manifest->type;
-
-        $rules = array();
-
-        switch ($type) {
-            case 'application':
-            case 'theme':
-            case 'plugin':
-            case 'locale':
-                $rules[$type] = array('origin' => $type, 'path' => 'public', 'destination' => '');
-                $rules['dist'] = array('origin' => 'dist', 'path' => 'public', 'destination' => 'dist');
-            default:
-        }
-
-        foreach ($this->manifest->deploy as $deploy) {
-            $id = (string)$deploy->origin;
-            $rules[$id] = array(
-                'origin' => (string)$deploy->origin,
-                'path' => (string)$deploy->destination['path'],
-                'destination' => (string)$deploy->destination
-            );
-        }
+        $rules = $this->getManifest()->getDeploymentRules();
 
         $deployments = array();
         foreach ($rules as $rule) {
-            $from = $this->dir . $rule['origin'];
             switch ($rule['path']) {
                 case 'lib':
                     $to = $this->getSite()->getDirectory('lib') . "/" . $rule['destination'];
@@ -130,30 +139,29 @@ class Ld_Installer
                     $to = $this->getSite()->getDirectory('shared') . "/" . $rule['destination'];
                     break;
                 case 'public':
-                    $to = $this->absolutePath . "/" . $rule['destination'];
+                    $to = $this->getAbsolutePath() . "/" . $rule['destination'];
                     break;
                 default:
                     throw new Exception('Path scheme not known.');
             }
-            $deployments[] = compact('from', 'to');
+            if ($type == 'to') {
+                $deployments[] = $to;
+            } else {
+                $from = $this->getDir() . $rule['origin'];
+                $deployments[] = compact('from', 'to');
+            }
         }
         return $deployments;
     }
 
-    public function getExtendedPath()
-    {
-        if (isset($this->manifest->directory)) {
-            return (string)$this->manifest->directory;
-        }
-        return null;
-    }
-
     public function deploy($path = null)
     {
+        $this->getPackage()->fetchFiles();
+
         if (isset($path)) {
             $this->setPath($path);
             $this->setAbsolutePath($this->getSite()->getDirectory() . '/' . $path);
-            Ld_Files::createDirIfNotExists($this->absolutePath);
+            Ld_Files::createDirIfNotExists($this->getAbsolutePath());
         }
 
         foreach ($this->getDeployments() as $deployment) {
@@ -173,7 +181,7 @@ class Ld_Installer
         if (isset($preferences['path'])) {
             $cfg_ld = "<?php\n";
             $cfg_ld .= "require_once('" . realpath($this->getSite()->getDirectory('dist')) . "/site.php');\n";
-            Ld_Files::put($this->absolutePath . "/dist/config.php", $cfg_ld);
+            Ld_Files::put($this->getAbsolutePath() . "/dist/config.php", $cfg_ld);
         }
     }
 
@@ -184,21 +192,22 @@ class Ld_Installer
         $this->deploy();
     }
 
-    public function postUpdate($preferences = array()) {}
+    public function postUpdate() {}
 
     public function uninstall()
     {
-        if (empty($this->absolutePath)) {
-            throw new Exception("Path is undefined");
+        $absolutePath = $this->getAbsolutePath();
+        if (empty($absolutePath)) {
+            throw new Exception("absolutePath is undefined.");
         }
 
         // Erase files (would be better to delete files one by one)
-        foreach ($this->getDeployments() as $deployment) {
-            Ld_Files::unlink($deployment['to']);
+        foreach ($this->getDeployments('to') as $deployment) {
+            Ld_Files::unlink($deployment);
         }
 
         // DROP tables with current prefix
-        if ($this->needDb() && isset($this->instance)) {
+        if ($this->getManifest()->getDb() && isset($this->instance)) {
             $db = $this->instance->getDbConnection();
             $dbPrefix = $this->instance->getDbPrefix();
             $result = $db->fetchCol('SHOW TABLES');
@@ -210,20 +219,24 @@ class Ld_Installer
         }
     }
 
+    // Backup / Restore
+
+    public function getBackupDirectories() { return array(); }
+
     public function backup()
     {
         $timestamp = date("d-m-Y-H-i-s");
         $this->tmpFolder = LD_TMP_DIR . '/backup-' . $timestamp;
         Ld_Files::createDirIfNotExists($this->tmpFolder . '/dist');
 
-        Ld_Files::createDirIfNotExists($this->absolutePath . '/backups');
+        Ld_Files::createDirIfNotExists($this->getAbsolutePath() . '/backups');
 
-        $directories = array('dist' => $this->absolutePath . '/dist/');
+        $directories = array('dist' => $this->getAbsolutePath() . '/dist/');
         $directories = array_merge($directories, $this->getBackupDirectories());
 
         $filename = 'backup-' . $timestamp . '.zip';
 
-        $fp = fopen($this->absolutePath . '/backups/' . $filename, 'wb');
+        $fp = fopen($this->getAbsolutePath() . '/backups/' . $filename, 'wb');
         $zip = new fileZip($fp);
         foreach ($directories as $name => $directory) {
             if (file_exists($directory)) {
@@ -242,28 +255,22 @@ class Ld_Installer
         $this->tmpFolder = LD_TMP_DIR . '/backup-' . $timestamp;
 
         if ($absolute == false) {
-            $filename = $this->absolutePath . '/backups/' . $filename;
+            $filename = $this->getAbsolutePath() . '/backups/' . $filename;
         }
 
         $uz = new fileUnzip($filename);
         $uz->unzipAll($this->tmpFolder);
     }
 
-    public function needDb()
-    {
-        if (isset($this->manifest->db)) {
-            return (string) $this->manifest->db;
-        }
-        return false;
-    }
+    // Configuration
 
     public function configure() {}
 
     public function getConfiguration() { return array(); }
 
-    public function getThemes() { return array(); }
+    // Themes
 
-    public function getBackupDirectories() { return array(); }
+    public function getThemes() { return array(); }
 
     // Roles
 
@@ -271,13 +278,8 @@ class Ld_Installer
 
     public function getUserRoles()
     {
-        $userRoles = array();
-        $filename = $this->absolutePath . '/dist/roles.json';
-        if (file_exists($filename)) {
-            $json = Ld_Files::get($filename);
-            $userRoles = Zend_Json::decode($json);
-        }
-        $users = $this->site->getUsers();
+        $userRoles = Ld_Files::getJson($this->absolutePath . '/dist/roles.json');
+        $users = $this->getSite()->getUsers();
         foreach ((array)$users as $user) {
             $username = $user['username'];
             if (empty($userRoles[$username])) {
@@ -289,13 +291,13 @@ class Ld_Installer
 
     public function setUserRoles($roles)
     {
-        $filename = $this->absolutePath . '/dist/roles.json';
-        $json = Zend_Json::encode($roles);
-        Ld_Files::put($filename, $json);
+        Ld_Files::putJson($this->getAbsolutePath() . '/dist/roles.json', $roles);
     }
 
     // Legacy
-    public function getPreferences($type) { return $this->package->getPreferences($type); }
+    public function getDependencies() { return $this->getManifest()->getDependencies(); }
+    public function needDb() { return $this->getManifest()->getDb(); }
+    public function getPreferences($type) { return $this->getManifest()->getPreferences($type); }
     protected function _copy($from, $to) { return Ld_Files::copy($from, $to); }
     protected function _unlink($src) { return Ld_Files::unlink($src); }
     protected function _getDirectories($dir) { return Ld_Files::getDirectories($dir); }

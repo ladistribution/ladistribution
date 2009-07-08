@@ -139,8 +139,7 @@ class Ld_Site_Remote extends Ld_Site_Abstract
         
         $packages = array();
         foreach ($result['packages'] as $id => $infos) {
-            $package = new Ld_Package();
-            $package->setInfos($infos);
+            $package = new Ld_Package($infos);
             $packages[$id] = $package;
         }
         return $packages;
@@ -158,8 +157,7 @@ class Ld_Site_Remote extends Ld_Site_Abstract
         
         $packages = array();
         foreach ($result['packages'] as $id => $infos) {
-            $package = new Ld_Package();
-            $package->setInfos($infos);
+            $package = new Ld_Package($infos);
             $packages[$id] = $package;
         }
         return $packages;
