@@ -79,9 +79,14 @@ class Ld_Package
         return $filename;
     }
 
+    public function getTmpDir()
+    {
+        return LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '/';
+    }
+
     public function fetchFiles()
     {
-        $dir = LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '/';
+        $dir = $this->getTmpDir();
         if (!file_exists($dir)) {
             $archive = $this->getArchive();
             $uz = new fileUnzip($archive);
