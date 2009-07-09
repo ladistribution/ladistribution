@@ -1,0 +1,10 @@
+<package release="unstable">
+  <id>wordpress-plugin-codecolorer</id>
+  <name>Code Colorer</name>
+  <version>0.7.3.4</version>
+  <type>plugin</type>
+  <extend>wordpress</extend>
+  <need>lib-geshi</need>
+  <directory>wp-content/plugins/codecolorer</directory>
+  <installer name="Ld_Installer_Wordpress_Plugin_Codecolorer" src="./dist/installer.php" />
+</package>
