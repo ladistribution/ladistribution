@@ -1,0 +1,9 @@
+<package>
+    <id>moonmoon</id>
+    <name>Moonmoon</name>
+    <version>8.12-28-5</version>
+    <type>application</type>
+    <install>
+        <preference type="password" label="Admin Password" name="admin_password" value=""/>
+    </install>
+</package>
