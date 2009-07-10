@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="2.8"
+VERSION="2.8.1"
 GZ="$NAME.tar.gz"
 SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
@@ -28,9 +28,6 @@ rm $FOLDER/wp-admin/import/greymatter.php
 rm $FOLDER/wp-admin/import/stp.php
 rm $FOLDER/wp-admin/import/utw.php
 rm $FOLDER/wp-admin/import/wp-cat2tag.php
-
-# Apply patches
-# patch -p0 -d $FOLDER < patches/wp-user-search.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
