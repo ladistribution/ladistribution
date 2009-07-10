@@ -15,6 +15,8 @@
 class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 {
 
+    protected $_dbConnections = array();
+
     protected $absolutePath;
 
     protected $instanceJson;
@@ -96,18 +98,44 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return null;
     }
 
-    public function getDbConnection()
+    public function getDbTables()
     {
-        $dbName = $this->getDb();
-        $databases = $this->getSite()->getDatabases();
-        $db = $databases[$dbName];
-        $con = Zend_Db::factory('Mysqli', array(
-            'host'     => $db['host'],
-            'username' => $db['user'],
-            'password' => $db['password'],
-            'dbname'   => $db['name']
-        ));
-        return $con;
+        $tables = array();
+        if ($this->getManifest()->getDb()) {
+            $db = $this->getDbConnection();
+            $dbPrefix = $this->getDbPrefix();
+            $result = $db->fetchCol('SHOW TABLES');
+            foreach ($result as $tablename) {
+                if (strpos($tablename, $dbPrefix) !== false) {
+                    $id = str_replace($dbPrefix, '', $tablename);
+                    $tables[$id] = $tablename;
+                }
+            }
+        }
+        return $tables;
+    }
+
+    public function getDbConnection($type = null)
+    {
+        if (empty($this->dbConnections[$type])) {
+            $dbName = $this->getDb();
+            $databases = $this->getSite()->getDatabases();
+            $db = $databases[$dbName];
+            switch ($type) {
+                 case 'php':
+                    $con = new mysqli($db['host'], $db['user'], $db['password'], $db['name']);
+                    break;
+                 case 'zend':
+                 default:
+                    $params = array(
+                        'host' => $db['host'], 'username' => $db['user'],
+                        'password' => $db['password'], 'dbname' => $db['name']
+                    );
+                    $con = Zend_Db::factory('Mysqli', $params);
+            }
+            $this->dbConnections[$type] = $con;
+        }
+        return $this->dbConnections[$type];
     }
 
     public function getLinks()

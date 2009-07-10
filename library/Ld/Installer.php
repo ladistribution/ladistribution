@@ -14,6 +14,8 @@
 class Ld_Installer
 {
 
+    protected $_backupDirectories = array();
+
     public function __construct($params = array())
     {
         if (isset($params['package'])) {
@@ -206,35 +208,81 @@ class Ld_Installer
             Ld_Files::unlink($deployment);
         }
 
-        // DROP tables with current prefix
-        if ($this->getManifest()->getDb() && isset($this->instance)) {
-            $db = $this->instance->getDbConnection();
-            $dbPrefix = $this->instance->getDbPrefix();
-            $result = $db->fetchCol('SHOW TABLES');
-            foreach ($result as $tablename) {
-                if (strpos($tablename, $dbPrefix) !== false) {
-                    $db->query("DROP TABLE $tablename");
-                }
+        // DROP tables
+        if ($this->getManifest()->getDb()) {
+            foreach ($this->getInstance()->getDbTables() as $tablename) {
+                $db = $this->getInstance()->getDbConnection();
+                $db->query("DROP TABLE $tablename");
             }
         }
     }
 
     // Backup / Restore
 
-    public function getBackupDirectories() { return array(); }
+    protected function _escapeCsv($string)
+    {
+        $string = str_replace('\\', '\\\\', $string);
+        $string = addcslashes($string, '"');
+        return '"' . $string . '"';
+    }
+
+    public function getBackupDirectories()
+    {
+        if ($this->getManifest()->getDb() && $dbConnection = $this->getInstance()->getDbConnection('php')) {
+
+            Ld_Files::createDirIfNotExists($this->getBackupFolder() . '/tables');
+            
+            // Generate SQL schema
+            $fp = fopen($this->getBackupFolder() . "/tables/schema.sql", "w");
+            foreach ($this->getInstance()->getDbTables() as $tablename) {
+                $drop = "DROP TABLE IF EXISTS `" . $tablename . "`;\n";
+                $result = $dbConnection->query("SHOW CREATE TABLE $tablename")->fetch_array();
+                $create = $result[1] . ";\n";
+                fwrite($fp, $drop);
+                fwrite($fp, $create);
+            }
+            fclose($fp);
+
+            // Generate data CSVs
+            foreach ($this->getInstance()->getDbTables() as $id => $tablename) {
+                $result = $dbConnection->query("SELECT * FROM $tablename");
+                if (!empty($result)) {
+                    $csv = '';
+                    while ($row = $result->fetch_assoc()) {
+                        $row = array_map(array($this, '_escapeCsv'), $row);
+                        $csv .= implode(";", $row) . "\n";
+                    }
+                    if (!empty($csv)) {
+                        Ld_Files::put($this->getBackupFolder() . "/tables/$id.csv", $csv);
+                    }
+                }
+            }
+
+            $this->_backupDirectories['tables'] = $this->getBackupFolder() . '/tables/';
+
+        }
+
+        $this->_backupDirectories['dist'] = $this->getAbsolutePath() . '/dist/';
+
+        return $this->_backupDirectories;
+    }
+
+    public function getBackupFolder()
+    {
+        if (empty($this->tmpFolder)) {
+            $this->tmpFolder = LD_TMP_DIR . '/backup-' . date("d-m-Y-H-i-s");
+        }
+        return $this->tmpFolder;
+    }
 
     public function backup()
     {
-        $timestamp = date("d-m-Y-H-i-s");
-        $this->tmpFolder = LD_TMP_DIR . '/backup-' . $timestamp;
-        Ld_Files::createDirIfNotExists($this->tmpFolder . '/dist');
-
         Ld_Files::createDirIfNotExists($this->getAbsolutePath() . '/backups');
 
         $directories = array('dist' => $this->getAbsolutePath() . '/dist/');
         $directories = array_merge($directories, $this->getBackupDirectories());
 
-        $filename = 'backup-' . $timestamp . '.zip';
+        $filename = 'backup-' . date("d-m-Y-H-i-s") . '.zip';
 
         $fp = fopen($this->getAbsolutePath() . '/backups/' . $filename, 'wb');
         $zip = new fileZip($fp);
@@ -246,20 +294,36 @@ class Ld_Installer
         $zip->write();
         unset($zip);
 
-        Ld_Files::unlink($this->tmpFolder);
+        Ld_Files::unlink($this->getBackupFolder());
     }
 
     public function restore($filename, $absolute = false)
     {
-        $timestamp = date("d-m-Y-H-i-s");
-        $this->tmpFolder = LD_TMP_DIR . '/backup-' . $timestamp;
-
         if ($absolute == false) {
             $filename = $this->getAbsolutePath() . '/backups/' . $filename;
         }
 
         $uz = new fileUnzip($filename);
-        $uz->unzipAll($this->tmpFolder);
+        $uz->unzipAll($this->getBackupFolder());
+
+        if ($this->getManifest()->getDb() && $dbConnection = $this->getInstance()->getDbConnection('php')) {
+
+            foreach ($this->getInstance()->getDbTables() as $id => $tablename) {
+                $filename = $this->getBackupFolder() . '/tables/' . $id . '.csv';
+                $query = "LOAD DATA LOCAL INFILE '$filename'
+                REPLACE INTO TABLE $tablename
+                FIELDS TERMINATED BY ';'
+                ENCLOSED BY '\"'
+                ESCAPED BY '\\\\'
+                LINES TERMINATED BY '\n'"; // IGNORE 1 LINES;
+                $result = $dbConnection->query($query);
+                if (!$result) {
+                    throw new Exception($dbConnection->error);
+                }
+            }
+
+        }
+
     }
 
     // Configuration

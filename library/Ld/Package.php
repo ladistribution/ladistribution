@@ -113,7 +113,9 @@ class Ld_Package
             if (!file_exists($classFile)) {
                 $className = 'Ld_Installer';
             } else {
-                require_once($classFile);
+                if (!class_exists($className, false)) {
+                    require_once($classFile);
+                }
             }
             $this->_installer = new $className(array('package' => $this));
         }

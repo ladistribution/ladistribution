@@ -86,12 +86,18 @@ class Ld_Manifest
 
     public function getId()
     {
-        return (string)$this->xml->id;
+        if (isset($this->xml->id)) {
+            return (string)$this->xml->id;
+        }
+        throw new Exception("id is undefined.");
     }
 
     public function getType()
     {
-        return (string)$this->xml->type;
+        if (isset($this->xml->type)) {
+            return (string)$this->xml->type;
+        }
+        throw new Exception("type is undefined.");
     }
 
     public function getPreferences($type = 'configuration')
