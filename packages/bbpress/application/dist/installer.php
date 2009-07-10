@@ -50,8 +50,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		$this->httpClient->setUri($this->instance->getUrl() . '/bb-admin/install.php');
 		$this->httpClient->setParameterPost($params);
 		$response = $this->httpClient->request('POST');
-		// echo $response->getBody();
-		
+
 		$activate_plugins = array('core#ld.ui.php', 'core#ld.auth.php');
 		foreach ($activate_plugins as $plugin) {
 			bb_activate_plugin($plugin);
@@ -79,12 +78,15 @@ class Ld_Installer_Bbpress extends Ld_Installer
 	public function load_bp()
 	{
 		if (empty($this->loaded)) {
+			global $bbdb, $wp_users_object;
 			require_once($this->absolutePath . '/bb-load.php');
 			require_once($this->absolutePath . '/bb-admin/includes/functions.bb-plugin.php');
 			$this->bbdb = $bbdb;
 			$this->loaded = true;
 		}
 	}
+
+	// Configuration
 
 	public function getPreferences($type)
 	{
@@ -130,6 +132,8 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		return $this->getConfiguration();
 	}
 
+	// Themes
+
 	public function getThemes()
 	{
 		$this->load_bp();
@@ -153,6 +157,52 @@ class Ld_Installer_Bbpress extends Ld_Installer
 	{
 		$this->load_bp();
 		bb_update_option('bb_active_theme', $theme);
+	}
+
+	// Roles
+
+	public $roles = array('keymaster', 'administrator', 'moderator', 'member', 'inactive');
+
+	public $defaultRole = 'member';
+
+	public function getRoles()
+	{
+		return $this->roles;
+	}
+
+	public function getUserRoles()
+	{
+		$this->load_bp();
+		$roles = array();
+		$users = $this->getSite()->getUsers();
+		foreach ($users as $user) {
+			$username = $user['username'];
+			$roles[$username] = $this->defaultRole; // default
+			$userdata = get_bb_user_by_login($username);
+			if ($userdata) {
+				$bb_user = new BP_User($userdata->ID);
+				foreach ($this->roles as $role) {
+					if (isset($bb_user->caps[$role]) && $bb_user->caps[$role]) {
+						$roles[$username] = $role;
+					}
+				}
+			}
+		}
+		return $roles;
+	}
+
+	public function setUserRoles($roles)
+	{
+		$this->load_bp();
+		$current_user_roles = $this->getUserRoles();
+		foreach ($roles as $username => $role) {
+			if (isset($current_user_roles[$username]) && $current_user_roles[$username] == $role) {
+				continue;
+			}
+			$userdata = get_bb_user_by_login($username);
+			$bb_user = new BP_User($userdata->ID);
+			$bb_user->set_role($role);
+		}
 	}
 
 }

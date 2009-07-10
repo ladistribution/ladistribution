@@ -1,13 +1,11 @@
 NAME="bbpress"
-VERSION="1.0.2"
-GZ="$NAME.tar.gz"
-#SOURCE="http://wordpress.org/$NAME-$VERSION.tar.gz"
+VERSION="1.0.1"
+SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
-# rm -rf $FOLDER
-
-svn export http://svn.automattic.com/bbpress/tags/1.0-rc-3/ $FOLDER
+# Get Source
+svn export $SOURCE $FOLDER --force
 
 # Apply patches
 patch -p0 -d $FOLDER < patches/global-bb.diff
