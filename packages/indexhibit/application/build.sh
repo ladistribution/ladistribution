@@ -13,7 +13,7 @@ mv $NAME $FOLDER
 rm -rf $FOLDER/files
 rm $FOLDER/htaccess
 rm $FOLDER/ndxz-studio/config/config.example.php
-rf -rf __MACOSX
+rm -rf __MACOSX
 # Apply patches
 patch -p0 -d $FOLDER < patches/defaults.diff
 # Create zip package
