@@ -3,7 +3,7 @@
 Plugin Name: LD auth
 Plugin URI: http://h6e.net/wordpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.2-27-1
+Version: 0.2-29-1
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -11,9 +11,8 @@ Author URI: http://h6e.net/
 function ld_autologin_user()
 {
 	if (!is_user_logged_in()) {
-		$auth = Zend_Auth::getInstance();
-		if ($auth->hasIdentity()) {
-			$user = get_userdatabylogin($auth->getIdentity());
+		if (Ld_Auth::isAuthenticated()) {
+			$user = get_userdatabylogin(Ld_Auth::getUsername());
 			if (isset($user)) {
 				wp_set_current_user($user->ID, $user->user_login);
 			}
@@ -25,10 +24,7 @@ add_action('init', 'ld_autologin_user');
 
 function ld_logout()
 {
-	$auth = Zend_Auth::getInstance();
-	if ($auth->hasIdentity()) {
-		$auth->clearIdentity();
-	}
+    Ld_Auth::logout();
 }
 
 add_action('wp_logout', 'ld_logout');
@@ -47,8 +43,9 @@ class Ld_Auth_Adapter_File_Wordpress implements Zend_Auth_Adapter_Interface
 
 function ld_handle_current_user()
 {
-	$auth = Zend_Auth::getInstance();
-	if (is_user_logged_in() && !$auth->hasIdentity()) {
+    /* authenticate on the Ld session if not connected in Ld but in WP */
+	if (is_user_logged_in() && !Ld_Auth::isAuthenticated()) {
+		$auth = Zend_Auth::getInstance();
 		$adapter = new Ld_Auth_Adapter_File_Wordpress();
 		$auth->authenticate($adapter);
 	}	
@@ -78,9 +75,8 @@ function get_currentuserinfo($cookie = '', $scheme = '') {
 	if ( ! empty($current_user) )
 		return;
 
-	$auth = Zend_Auth::getInstance();
-	if ($auth->hasIdentity()) {
-		$user = get_userdatabylogin($auth->getIdentity());
+	if (Ld_Auth::isAuthenticated()) {
+		$user = get_userdatabylogin(Ld_Auth::getUsername());
 		if (isset($user)) {
 			wp_set_current_user($user->ID);
 		}
@@ -185,7 +181,7 @@ function ld_get_wp_user($user_id)
 
 	$user = array(
 		'hash' 		=> $wp_user->user_pass,
-		'username' 	=> $wp_user->user_nicename,
+		'username' 	=> $wp_user->user_login,
 		'fullname' 	=> $wp_user->display_name,
 		'email'		=> $wp_user->user_email
 	);

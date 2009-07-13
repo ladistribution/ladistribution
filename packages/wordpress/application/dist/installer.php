@@ -43,8 +43,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		update_option('admin_email', $user_email);
 		update_option('blogname', $preferences['title']);
-		update_option('siteurl', $this->site->getBaseUrl() . $preferences['path']);
-		update_option('home', $this->site->getBaseUrl() . $preferences['path']);
+		update_option('siteurl', $this->getSite()->getBaseUrl() . $preferences['path']);
+		update_option('home', $this->getSite()->getBaseUrl() . $preferences['path']);
 
 		if (constant('LD_REWRITE')) {
 			$this->enable_clean_urls();
@@ -92,7 +92,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		$cfg .= "require_once(ABSPATH . 'wp-settings.php');\n";
 
-		Ld_Files::put($this->absolutePath . "/wp-config.php", $cfg);
+		Ld_Files::put($this->getAbsolutePath() . "/wp-config.php", $cfg);
 	}
 
 	public function getThemes()
@@ -104,7 +104,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		foreach ($wp_themes as $theme) {
 			$id = $theme['Stylesheet'];
 			$name = $theme['Name'];
-			$screenshot = $this->site->getBaseUrl() . $this->path . '/wp-content' . $theme['Stylesheet Dir'] . '/' . $theme['Screenshot'];
+			$screenshot = $this->getSite()->getBaseUrl() . $this->getPath() .
+			    '/wp-content' . $theme['Stylesheet Dir'] . '/' . $theme['Screenshot'];
 			$active = $current_theme == $theme['Name'];
 			$themes[$id] = compact('name', 'screenshot', 'active');
 		}
@@ -113,75 +114,27 @@ class Ld_Installer_Wordpress extends Ld_Installer
     
 	public function getBackupDirectories()
 	{
-		$this->load_wp();
-
-		function escape($string)
-		{
-			$string = str_replace('\\', '\\\\', $string);
-			$string = addcslashes($string, '"');
-			return '"' . $string . '"';
-		}
-
-		Ld_Files::createDirIfNotExists($this->tmpFolder . '/tables');
-
-		// Generate SQL schema
-		$fp = fopen($this->tmpFolder . "/tables/schema.sql", "w");
-		foreach ($this->wpdb->tables as $table) {
-			$tablename = $this->wpdb->$table;
-			$drop = "DROP TABLE IF EXISTS `" . $tablename . "`;\n";
-			$result = $this->wpdb->get_results("SHOW CREATE TABLE $tablename", ARRAY_N);
-			$create = $result[0][1] . ";\n";
-			fwrite($fp, $drop);
-			fwrite($fp, $create);
-		}
-		fclose($fp);
-
-		// Generate data CSVs
-		foreach ($this->wpdb->tables as $table) {
-			$results = $this->wpdb->get_results("SELECT * FROM " . $this->wpdb->$table, ARRAY_N);
-			$fp = fopen($this->tmpFolder . "/tables/$table.csv", "w");
-			foreach ( (array) $results as $result) {
-				$result = array_map("escape", $result);
-				$line = implode(";", $result) . "\n";
-				fwrite($fp, $line);
-			}
-			fclose($fp);
-		}
-		
-		return array(
-			'tables' => $this->tmpFolder . '/tables/',
-			'uploads' => $this->absolutePath . '/wp-content/uploads/'
-		);
+		parent::getBackupDirectories();
+		$this->_backupDirectories['uploads'] = $this->getAbsolutePath() . '/wp-content/uploads/';
+		return $this->_backupDirectories;
 	}
 
 	public function restore($filename, $absolute = false)
 	{
 		parent::restore($filename, $absolute);
 
+		if (file_exists($this->getBackupFolder() . '/uploads')) {
+			Ld_Files::copy($this->getBackupFolder() . '/uploads', $this->getAbsolutePath() . '/wp-content/uploads');
+		}
+
 		$this->load_wp();
-        
-		if (file_exists($this->tmpFolder . '/uploads')) {
-			Ld_Files::copy($this->tmpFolder . '/uploads', $this->absolutePath . '/wp-content/uploads');
-		}
 
-		foreach ($this->wpdb->tables as $table) {
-			$filename = $this->tmpFolder . '/tables/' . $table . '.csv';
-			$tablename = $this->wpdb->$table;
-			$query = "LOAD DATA LOCAL INFILE '$filename'
-			REPLACE INTO TABLE $tablename
-			FIELDS TERMINATED BY ';'
-			ENCLOSED BY '\"'
-			ESCAPED BY '\\\\'
-			LINES TERMINATED BY '\n'"; //  IGNORE 1 LINES;
-			$result = $this->wpdb->query($query);
-		}
-
-		update_option('siteurl', $this->site->getBaseUrl() . $this->instance->path);
-		update_option('home', $this->site->getBaseUrl() . $this->instance->path);
+		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getPath());
+		update_option('home', $this->getSite()->getBaseUrl() . $this->getPath());
 
 		wp_cache_flush();
 
-		Ld_Files::unlink($this->tmpFolder);
+		Ld_Files::unlink($this->getBackupFolder());
 	}
 	
 	public function setTheme($theme)
@@ -220,7 +173,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		$current_theme = get_current_theme();
 		foreach ($wp_themes as $theme) {
 			if ($current_theme == $theme['Name']) {
-				$template_dir = $this->absolutePath . '/wp-content' . $theme['Stylesheet Dir'];
+				$template_dir = $this->getAbsolutePath() . '/wp-content' . $theme['Stylesheet Dir'];
 				break;	
 			}
 		}
@@ -277,7 +230,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	{
 		$this->load_wp();
 		$roles = array();
-		$users = $this->site->getUsers();
+		$users = $this->getSite()->getUsers();
 		foreach ($users as $user) {
 			$username = $user['username'];
 			$roles[$username] = $this->defaultRole; // default
@@ -317,10 +270,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			// fix 'Wrong datatype for second argument in wp-includes/widgets.php on lines 607, 695'
 			global $_wp_deprecated_widgets_callbacks;
 
-			require_once $this->absolutePath . "/wp-load.php";
-			require_once $this->absolutePath . "/wp-admin/includes/upgrade.php";
-			require_once $this->absolutePath . "/wp-admin/includes/plugin.php";
-			require_once $this->absolutePath . "/wp-includes/theme.php";
+			require_once $this->getAbsolutePath() . "/wp-load.php";
+			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
+			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
+			require_once $this->getAbsolutePath() . "/wp-includes/theme.php";
 
 			$this->wp_rewrite = $wp_rewrite;
 			$this->wpdb = $wpdb;
@@ -337,7 +290,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		if (got_mod_rewrite()) {
 			$wp_rewrite->set_permalink_structure('/%year%/%monthnum%/%postname%/');
 			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
-			insert_with_markers($this->absolutePath . "/.htaccess", 'WordPress', $rules );
+			insert_with_markers($this->getAbsolutePath() . "/.htaccess", 'WordPress', $rules );
 		}
 	}
 
@@ -358,6 +311,37 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		);
 
 		update_option('sidebars_widgets', $defaults);
+	}
+
+}
+
+class Ld_Installer_Wordpress_Plugin extends Ld_Installer
+{
+
+	private function load_wp()
+	{
+		if (empty($this->loaded)) {
+			define('WP_LD_INSTALLER', true);
+			global $wpdb, $wp_version, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $wp_roles;
+			global $_wp_deprecated_widgets_callbacks;
+			require_once $this->absolutePath . "/../../../wp-load.php";
+			require_once $this->absolutePath . "/../../../wp-admin/includes/plugin.php";
+			$this->loaded = true;
+		}
+	}
+
+	public function install($preferences = array())
+	{
+		parent::install($preferences);
+		$this->load_wp();
+		activate_plugin($this->plugin_file);
+	}
+
+	public function uninstall()
+	{
+		$this->load_wp();
+		deactivate_plugins($this->plugin_file);
+		parent::uninstall();
 	}
 
 }
