@@ -1,4 +1,4 @@
-SOURCE="http://ladistribution.h6e.net/svn/trunk/library/"
+SOURCE="http://ladistribution.net/svn/trunk/library/"
 FOLDER="lib"
 PACKAGE="lib-ld.zip"
 # Export from SVN

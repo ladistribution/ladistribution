@@ -1,9 +1,12 @@
-SOURCE="http://ladistribution.h6e.net/svn/trunk/modules/"
+SOURCE="http://ladistribution.net/svn/trunk/"
 FOLDER="application"
 PACKAGE="admin.zip"
 
 # Export from SVN
-svn export $SOURCE modules
+svn export "$SOURCE/js" js
+
+# Export from SVN
+svn export "$SOURCE/modules" modules
 
 # Move bootstrap
 mv modules/Bootstrap.php $FOLDER
@@ -16,5 +19,6 @@ zip -rqv $PACKAGE $FOLDER modules dist -x "*/.svn/*"
 mv $PACKAGE ../
 
 # Clean
+rm -rf js
 rm -rf modules
 rm -rf $FOLDER/Bootstrap.php

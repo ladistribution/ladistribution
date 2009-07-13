@@ -1,4 +1,4 @@
-SOURCE="http://ladistribution.h6e.net/svn/trunk/css/ld-ui"
+SOURCE="http://ladistribution.net/svn/trunk/css/ld-ui"
 FOLDER="css"
 PACKAGE="css-ld-ui.zip"
 # Export from SVN

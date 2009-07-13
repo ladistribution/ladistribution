@@ -1,0 +1,6 @@
+<package release="unstable">
+  <id>js-jquery-tablednd</id>
+  <name>jQuery Table DnD</name>
+  <version>0.5-2</version>
+  <type>js</type>
+</package>

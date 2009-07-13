@@ -24,6 +24,10 @@ cd js
   ./build.sh
   cd ..
 
+  cd jquery-tablednd
+  ./build.sh
+  cd ..
+
 cd ..
 
 cd wordpress

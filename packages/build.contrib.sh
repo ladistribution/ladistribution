@@ -53,3 +53,31 @@ cd spip
   cd ..
 
 cd ..
+
+cd wordpress
+
+  cd plugin
+
+    cd codecolorer
+    ./build.sh
+    cd ..
+
+  cd ..
+
+cd ..
+
+cd gallery
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..
+
+cd moonmoon
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..

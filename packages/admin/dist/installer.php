@@ -14,13 +14,13 @@ class Ld_Installer_Admin extends Ld_Installer
 
 	private function create_htaccess()
 	{
-		$path = $this->site->getBasePath() . '/' . $this->path . '/';
+		$path = $this->getSite()->getPath() . '/' . $this->getPath() . '/';
 		$htaccess  = "RewriteEngine on\n";
 		$htaccess .= "RewriteBase $path\n";
 		$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 		$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
 		$htaccess .= "RewriteRule (.*) index.php\n";
-		Ld_Files::put($this->absolutePath . "/.htaccess", $htaccess);
+		Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 	}
 
 	public $roles = array('admin', 'user');
