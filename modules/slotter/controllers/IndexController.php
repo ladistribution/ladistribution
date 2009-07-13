@@ -14,7 +14,7 @@ class Slotter_IndexController extends Slotter_BaseController
     public function preDispatch()
     {
         parent::preDispatch();
-        
+
         switch ($this->getRequest()->action) {
             case 'index':
                 if (!$this->_acl->isAllowed($this->userRole, 'instances', 'view')) {
@@ -26,7 +26,7 @@ class Slotter_IndexController extends Slotter_BaseController
                     $this->_disallow();
                 }
         }
-        
+
         $this->_handleNavigation();
     }
 
@@ -51,6 +51,9 @@ class Slotter_IndexController extends Slotter_BaseController
 
         foreach ($applications as $id => $application) {
             $instance = $this->site->getInstance($id);
+            if (empty($instance)) {
+                continue;
+            }
             if ($instance->hasUpdate = $instance->hasUpdate()) {
                 $this->view->hasUpdate = true;
             }
@@ -77,9 +80,7 @@ class Slotter_IndexController extends Slotter_BaseController
                 $instances[$id]['order'] = $order;
             }
             $this->site->updateInstances($instances);
-            // NoRender
-            $this->_helper->viewRenderer->setNoRender(true);
-            Zend_Layout::getMvcInstance()->disableLayout();
+            $this->noRender();
             $this->getResponse()->appendBody('ok');
         }
     }

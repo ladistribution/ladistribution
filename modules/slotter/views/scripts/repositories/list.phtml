@@ -4,16 +4,50 @@
     
 <?php else : ?>
 
-    <table class="h6e-data">
-        <tr><th>Url</th><th colspan="2">Actions</th></tr>
+    <?php
+    $this->headScript()->offsetSetFile('jquery-tablednd', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery.tablednd.js');
+    $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js');
+    ?>
+
+    <table id="repositories" class="h6e-data">
+    <tr>
+        <th></th>
+        <th>Url</th>
+        <th>Type</type>
+        <th colspan="2">Actions</th>
+    </tr>
+    <tbody>
     <?php
     foreach ($this->repositories as $id => $repository) {
         $manageUrl = $this->url(array('controller' => 'repositories', 'id' => $id, 'action' => 'manage'), 'default');
         $removeUrl = $this->url(array('controller' => 'repositories', 'id' => $id, 'action' => 'delete'), 'default');
-        printf("<tr><td>%s</td><td><a href=\"%s\">%s</a></td><td><a href=\"%s\">remove</a></td></tr>\n",
-            $repository->getUrl(), $manageUrl, $repository->type == 'local' ? 'manage' : 'browse', $removeUrl);
+        ?>
+        <tr id="<?php echo $id ?>">
+            <td class="move"></td>
+            <td><?php echo $repository->getUrl() ?></td>
+            <td><?php echo $repository->type ?></td>
+            <td><a href="<?php echo $manageUrl ?>"><?php echo $repository->type == 'local' ? 'manage' : 'browse' ?></a></td>
+            <td><a href="<?php echo $removeUrl ?>">remove</a></td>
+        </tr>
+        <?php
     }
     ?>
+    </tbody>
     </table>
+
+    <script type="text/javascript">
+    (function($) {
+        $(document).ready(function() {
+            $("#repositories").tableDnD({
+                onDragClass: "dragging",
+                onDrop: function(table, row) {
+                    $.post("<?php echo $this->url(array('action' => 'order')) ?>", $("#repositories").tableDnDSerialize());
+                    $("#repositories tr").removeClass('even');
+                    $("#repositories tr:even").addClass('even');
+                },
+            });
+        });
+    })(jQuery);
+    </script>
 
 <?php endif ?>

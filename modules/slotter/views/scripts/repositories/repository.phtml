@@ -4,17 +4,20 @@
 
 <?php else : ?>
 
+<?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
+
 <table class="h6e-data">
     <?php foreach(array('applications', 'libraries', 'extensions') as $type) : ?>
         <?php if (!empty($this->$type)) : ?>
             <tr>
-                <td colspan="3"><strong><Libraries><?php echo ucfirst($type) ?></strong></td>
+                <th colspan="3"><strong><?php echo ucfirst($type) ?></strong></th>
             </tr>
-            <tr>
+            <tr class="th2">
                 <th>name</th>
                 <th>package</th>
                 <th>version</th>
             </tr>
+            <tbody>
             <?php foreach ($this->$type as $package) : ?>
                 <tr>
                     <td><?php echo $package->name ?></td>
@@ -22,6 +25,7 @@
                     <td><?php echo $package->version ?></td>
                 </tr>
             <?php endforeach ?>
+            </tbody>
         <?php endif ?>
     <?php endforeach ?>
 </table>

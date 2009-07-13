@@ -62,8 +62,29 @@ class Slotter_RepositoriesController extends Slotter_BaseController
      */
     public function indexAction()
     {
-        $this->view->localRepositories = $this->site->getRepositories('local');
-        $this->view->remoteRepositories = $this->site->getRepositories('remote');
+        $this->view->repositories = $this->site->getRepositories();
+    }
+
+    /**
+     * Order action. 
+     */
+    public function orderAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->isPost() && $this->_hasParam('repositories')) {
+
+            $repositories = $this->site->getRepositoriesConfiguration();
+            $order = 0;
+            foreach ($this->_getParam('repositories') as $id) {
+                if (isset($repositories[$id])) {
+                    $repositories[$id]['order'] = $order;
+                    $order ++;
+                }
+            }
+            $this->site->saveRepositoriesConfiguration($repositories);
+
+            $this->noRender();
+            $this->getResponse()->appendBody('ok');
+        }
     }
 
     /**

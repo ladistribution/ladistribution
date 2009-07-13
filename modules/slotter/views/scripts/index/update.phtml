@@ -5,21 +5,23 @@
     <p>Everything seems up to date.</p>
 
 <?php else : ?>
-    
+
 <form action="" method="post">
-    
+
+<?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
+
 <table class="h6e-data">
     <?php if (!empty($this->libraries)) : ?>
         <tr>
-            <td colspan="6"><strong>Libraries</strong></td>
+            <th colspan="6"><strong>Libraries</strong></td>
         </tr>
-        <tr>
-            <td></td>
+        <tr class="th2">
+            <th></th>
             <th colspan="3">package</th>
             <th>current version</th>
             <th>new version</th>
         </tr>
-    
+
         <?php foreach ($this->libraries as $library) : ?>
             <tr>
                 <td><input type="checkbox" checked="checked" name="libraries[<?php echo $library->getPackageId() ?>]" /></td>
@@ -31,10 +33,10 @@
     <?php endif ?>
     <?php if (!empty($this->applications)) : ?>
         <tr>
-            <td colspan="6"><strong>Applications</strong></td>
+            <th colspan="6"><strong>Applications</strong></td>
         </tr>
-        <tr>
-            <td></td>
+        <tr class="th2">
+            <th></th>
             <th>name</th>
             <th>path</th>
             <th>package</th>
@@ -59,7 +61,7 @@
                     <tr>
                         <td><input type="checkbox" checked="checked"
                             name="extensions[<?php echo $id ?>][<?php echo $extension->getPackageId() ?>]" /></td>
-                        <th colspan="2"></th>
+                        <td colspan="2">&nbsp;</td>
                         <td><?php echo $extension->getPackageId() ?></td>
                         <td><?php echo $extension->getVersion() ?></td>
                         <td><?php echo $extension->hasUpdate ? $extension->hasUpdate : '<em>None</em>' ?></td>

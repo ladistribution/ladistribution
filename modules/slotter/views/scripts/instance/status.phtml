@@ -4,6 +4,8 @@
 
 <h3>Overview</h3>
 
+<?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
+
 <table class="h6e-data">
     <tr>
         <th>package</th>
@@ -12,6 +14,7 @@
         <th>status</th>
         <th>action</th>
     </tr>
+    <tbody>
     <tr>
         <td><?php echo $this->instance->getPackageId() ?></td>
         <td><?php echo $this->instance->getType() ?></td>
@@ -23,9 +26,10 @@
         <?php endif ?>
         </td>
     </tr>
-    <?php // $extensions = $this->instance->getExtensions() ?>
+    </tbody>
     <?php if (count($this->extensions) > 0) : ?>
-        <tr><td colspan="5"><em>Extensions</em></td></tr>
+        <tr class="th2"><th colspan="5"><em>Extensions</em></th></tr>
+        <tbody>
         <?php foreach($this->extensions as $extension) : ?>
             <tr>
                 <td><?php echo $extension->getPackageId() ?></td>
@@ -40,6 +44,7 @@
                 </td>
             </tr>
         <?php endforeach ?>
+        </tbody>
     <?php endif ?>
 </table>
 

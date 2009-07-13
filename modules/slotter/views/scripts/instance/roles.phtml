@@ -9,11 +9,13 @@
 <?php elseif (empty($this->users)) : ?>
 
     <p>No user available.</p>
-        
+
 <?php else : ?>
-    
+
 <form action="" method="post">
-    
+
+<?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
+
 <table class="h6e-data">
 
     <tr>

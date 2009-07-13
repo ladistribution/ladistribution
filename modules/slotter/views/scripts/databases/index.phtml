@@ -6,6 +6,8 @@
 
 <?php else : ?>
 
+    <?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
+
     <table class="h6e-data">
 
     <tr>
@@ -14,6 +16,8 @@
        <th>Name</th>
        <th colspan="2">Action</th>
     </tr>
+
+    <tbody>
 
     <?php foreach ($this->databases as $id => $database) : ?>
 
@@ -30,6 +34,8 @@
         </tr>
 
     <?php endforeach ?>
+
+    </tbody>
 
     </table>
 
