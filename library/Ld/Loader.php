@@ -28,7 +28,7 @@ class Ld_Loader
 
         defined('LD_LIB_DIR') or define('LD_LIB_DIR', realpath( $dir ) . '/lib' );
 
-        defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.h6e.net/');
+        defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 
         defined('LD_RELEASE') OR define('LD_RELEASE', 'barbes');
 
