@@ -112,6 +112,7 @@ class Slotter_IndexController extends Slotter_BaseController
                     }
                 }
             }
+            $this->view->update = true;
         }
 
         $instances = $this->site->getInstances();

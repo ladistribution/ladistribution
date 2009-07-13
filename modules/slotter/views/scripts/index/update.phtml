@@ -1,6 +1,10 @@
 <h2>Update</h2>
 
-<?php if (empty($this->libraries) && empty($this->applications)) : ?>
+<?php if (isset($this->update) && $this->update) : ?>
+
+    <p>Update done.</p>
+
+<?php elseif (empty($this->libraries) && empty($this->applications)) : ?>
 
     <p>Everything seems up to date.</p>
 
