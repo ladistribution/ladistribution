@@ -105,6 +105,12 @@ class Ld_Ui
             <script type="text/javascript" src="<?php echo $site->getUrl('js') ?>/jquery/jquery.js"></script>
         <?php endif ?>
 
+        <?php if (isset($params['style']) && $params['style'] === true ) : ?>
+            <style type="text/css">
+                @import "<?php echo $site->getUrl('css') ?>/ld-ui/ld-bars.css";
+            </style>
+        <?php endif ?>
+
         <script type="text/javascript">
         (function($) {
             $(document).ready(function($){

@@ -189,7 +189,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         }
         return array();
     }
-        
+
     public function getUserRoles()
     {
         $installer = $this->getInstaller();
@@ -202,6 +202,17 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     public function setUserRoles($roles)
     {
         return $this->getInstaller()->setUserRoles($roles);
+    }
+
+    public function getUserRole($username = null)
+    {
+        if (empty($username)) {
+            $auth = Zend_Auth::getInstance();
+            if ($auth->hasIdentity()) {
+                 $username = $auth->getIdentity();
+            }
+        }
+        return $this->getInstaller()->getUserRole($username);
     }
 
     // Extensions
@@ -365,18 +376,26 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->getInstaller()->restore($archive, $absolute);
     }
 
+    public function getBackupPath()
+    {
+        return $this->getAbsolutePath() . '/backups';
+    }
+
     public function getBackups()
     {
-        $archives = array();
-        if (file_exists($this->getAbsolutePath() . '/backups/')) {
-            $archives = Ld_Files::getFiles($this->getAbsolutePath() . '/backups/');
+        $backups = array();
+        $archives = Ld_Files::getFiles($this->getBackupPath());
+        foreach ($archives as $filename) {
+            $absoluteFileName = $this->getBackupPath() . '/' . $filename;
+            $size = round( filesize($absoluteFileName) / 1024 ) . ' ko';
+            $backups[] = compact('filename', 'absoluteFileName', 'size');
         }
-        return $archives;
+        return $backups;
     }
 
     public function deleteBackup($backup)
     {
-        $filename = $this->getAbsolutePath() . '/backups/' . $backup;
+        $filename = $this->getBackupPath() . '/' . $backup;
         if (file_exists($filename)) {
             Ld_Files::unlink($filename);
         }

@@ -67,7 +67,7 @@ class Ld_Installer
 
     public function getDir()
     {
-        return $this->package->getTmpDir();
+        return $this->getPackage()->getTmpDir();
     }
 
     public function getPackage()
@@ -356,6 +356,15 @@ class Ld_Installer
     public function setUserRoles($roles)
     {
         Ld_Files::putJson($this->getAbsolutePath() . '/dist/roles.json', $roles);
+    }
+
+    public function getUserRole($username)
+    {
+        $userRoles = $this->getUserRoles();
+        if (isset($username) && isset($userRoles[$username])) {
+            return $userRoles[$username];
+        }
+        return $this->defaultRole;
     }
 
     // Legacy

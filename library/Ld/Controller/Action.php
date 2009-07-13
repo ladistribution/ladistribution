@@ -46,4 +46,10 @@ class Ld_Controller_Action extends Zend_Controller_Action
         $this->view->headTitle($title, 'SET');
     }
 
+    function noRender()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        Zend_Layout::getMvcInstance()->disableLayout();        
+    }
+
 }

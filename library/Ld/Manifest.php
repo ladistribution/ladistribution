@@ -181,6 +181,13 @@ class Ld_Manifest
             case 'locale':
                 $rules[$type] = array('origin' => $type, 'path' => 'public', 'destination' => '');
                 $rules['dist'] = array('origin' => 'dist', 'path' => 'public', 'destination' => 'dist');
+                break;
+            case 'lib':
+            case 'css':
+            case 'js':
+            case 'shared':
+                $rules[$type] = array('origin' => $type, 'path' => $type, 'destination' => '');
+                break;
             default:
         }
 

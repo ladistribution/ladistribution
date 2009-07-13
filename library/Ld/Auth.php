@@ -26,4 +26,25 @@ class Ld_Auth
         return $phrase;
     }
 
+    public static function logout()
+    {
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $auth->clearIdentity();
+        }
+    }
+
+    public static function isAuthenticated()
+    {
+        return Zend_Auth::getInstance()->hasIdentity();
+    }
+
+    public static function getUsername()
+    {
+        if (self::isAuthenticated()) {
+            return Zend_Auth::getInstance()->getIdentity();
+        }
+        return null;
+    }
+
 }

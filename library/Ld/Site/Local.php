@@ -160,7 +160,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $instances;
     }
 
-    protected function _sortInstances($a, $b)
+    protected function _sortByOrder($a, $b)
     {
         if (isset($a['order']) && isset($b['order'])) {
             return ($a['order'] < $b['order']) ? -1 : 1;
@@ -172,8 +172,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function updateInstances($instances)
     {
-        uasort($instances, array($this, "_sortInstances"));
+        uasort($instances, array($this, "_sortByOrder"));
         Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
+        // Reset stored instances list
+        unset($this->_instances);
     }
 
     public function getInstance($id)
@@ -300,10 +302,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
               'path'    => isset($params['path']) ? $params['path'] : null,
               'name'    => isset($params['name']) ? $params['name'] : null
           );
-          Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
-          
-          // Reset stored instances list
-          unset($this->_instances);
+          $this->updateInstances($instances);
 
           $instance = $this->getInstance($id);
           $instance->id = $id;
@@ -360,9 +359,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $registeredInstances[$key]['version'] = $package->version;
                 }
             }
-            Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $registeredInstances);
+            $this->updateInstances($registeredInstances);
         }
-        
+
         if (isset($instance)) {
             return $instance;
         }
@@ -391,7 +390,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 unset($instances[$key]);
             }
         }
-        Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
+
+        $this->updateInstances($instances);
     }
 
     public function getInstallPreferences($package)
@@ -598,9 +598,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $repositories = array();
 
-        $cfg = $this->getRepositoriesConfiguration();
-
-        foreach ($cfg['repositories'] as $id => $config) {
+        foreach ($this->getRepositoriesConfiguration() as $id => $config) {
             if (empty($type) || $config['type'] == $type) {
                 $repositories[$id] = $this->_getRepository($config);
             }
@@ -612,14 +610,16 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getRepositoriesConfiguration()
     {
         $cfg = Ld_Files::getJson($this->getDirectory('dist') . '/repositories.json');
-        if (empty($cfg['repositories'])) {
-            $cfg['repositories'] = array();
-        }
+
+        // LEGACY: transitional code
+        if (isset($cfg['repositories'])) { $cfg = $cfg['repositories']; }
+
         return $cfg;
     }
 
     public function saveRepositoriesConfiguration($cfg)
     {
+        uasort($cfg, array($this, "_sortByOrder"));
         Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);  
     }
 
@@ -634,24 +634,24 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function addRepository($params)
     {
-        $cfg = $this->getRepositoriesConfiguration();
+        $repositories = $this->getRepositoriesConfiguration();
         $id = uniqid();
-        $cfg['repositories'][$id] = array(
+        $repositories[$id] = array(
             'id'        => $id,
             'type'      => $params['type'],
             'name'      => $params['name'],
             'endpoint'  => $params['endpoint']
         );
-        $this->saveRepositoriesConfiguration($cfg);
+        $this->saveRepositoriesConfiguration($repositories);
     }
 
     public function removeRepository($id)
     {
-        $cfg = $this->getRepositoriesConfiguration();
-        if (isset($cfg['repositories'][$id])) {
-            unset($cfg['repositories'][$id]);
+        $repositories = $this->getRepositoriesConfiguration();
+        if (isset($repositories[$id])) {
+            unset($repositories[$id]);
         }
-        $this->saveRepositoriesConfiguration($cfg);
+        $this->saveRepositoriesConfiguration($repositories);
     }
 
     // Packages
