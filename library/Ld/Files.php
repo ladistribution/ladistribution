@@ -80,6 +80,13 @@ class Ld_Files
                 if (defined('LD_UNIX_USER')) {
                     chown($target, LD_UNIX_USER);
                 }
+                if (defined('LD_UNIX_PERMS')) {
+                    chmod($target, LD_UNIX_PERMS);
+                }
+            }
+            if (!is_writable($target)) {
+                echo "<b>Skipped</b>: $target (not writable).<br/><br/>";
+                return false;
             }
             $d = dir( $source );
             while ( FALSE !== ( $entry = $d->read() ) ) {
@@ -91,9 +98,12 @@ class Ld_Files
                     self::copy($Entry, $target . '/' . $entry);
                     continue;
                 }
-                copy($Entry, $target . '/' . $entry);
+                $result = copy($Entry, $target . '/' . $entry);
                 if (defined('LD_UNIX_USER')) {
                     chown($target . '/' . $entry, LD_UNIX_USER);
+                }
+                if (defined('LD_UNIX_PERMS')) {
+                    chmod($target . '/' . $entry, LD_UNIX_PERMS);
                 }
             }
             $d->close();
@@ -101,6 +111,9 @@ class Ld_Files
             copy($source, $target);
             if (defined('LD_UNIX_USER')) {
                 chown($target, LD_UNIX_USER);
+            }
+            if (defined('LD_UNIX_PERMS')) {
+                chmod($target, LD_UNIX_PERMS);
             }
         }
     }
