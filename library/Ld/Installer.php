@@ -328,9 +328,15 @@ class Ld_Installer
 
     // Configuration
 
-    public function configure() {}
+    public function getConfiguration()
+    {
+        return Ld_Files::getJson($this->getAbsolutePath() . '/dist/configuration.json');
+    }
 
-    public function getConfiguration() { return array(); }
+    public function setConfiguration($configuration)
+    {
+        return Ld_Files::putJson($this->getAbsolutePath() . '/dist/configuration.json', $configuration);
+    }
 
     // Themes
 
