@@ -6,10 +6,10 @@ PACKAGE="admin.zip"
 svn export "$SOURCE/js" js
 
 # Export from SVN
-svn export "$SOURCE/modules" modules
+svn export "$SOURCE/shared/modules" modules
 
-# Move bootstrap
-mv modules/Bootstrap.php $FOLDER
+# Export from SVN
+svn export "$SOURCE/admin/" $FOLDER --force
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
@@ -21,4 +21,4 @@ mv $PACKAGE ../
 # Clean
 rm -rf js
 rm -rf modules
-rm -rf $FOLDER/Bootstrap.php
+rm -rf $FOLDER/*
