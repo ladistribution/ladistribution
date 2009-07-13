@@ -15,7 +15,7 @@ mv modules/Bootstrap.php $FOLDER
 find . -name '*.DS_Store' -type f -delete
 
 # Create zip package
-zip -rqv $PACKAGE $FOLDER modules dist -x "*/.svn/*"
+zip -rqv $PACKAGE $FOLDER js modules dist -x "*/.svn/*"
 mv $PACKAGE ../
 
 # Clean
