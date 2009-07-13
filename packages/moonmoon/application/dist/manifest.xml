@@ -1,9 +1,29 @@
 <package>
     <id>moonmoon</id>
     <name>Moonmoon</name>
-    <version>8.12-28-5</version>
+    <version>8.12-29-18</version>
     <type>application</type>
+    <need>lib-ld</need>
+    <need>css-ld-ui</need>
     <install>
-        <preference type="password" label="Admin Password" name="admin_password" value=""/>
+        <preference type="user" label="Administrator" name="administrator" value=""/>
     </install>
+    <deploy>
+        <origin>admin</origin>
+        <destination path="public">admin</destination>
+    </deploy>
+    <deploy>
+        <origin>theme</origin>
+        <destination path="public">custom/views/default</destination>
+    </deploy>
+    <configuration>
+        <preference type="text" label="Title" name="name" value="Moonmoon"/>
+        <preference type="range" label="Items per page" name="items" min="5" max="100" step="5"/>
+        <preference type="list" label="Display the bottom bar" name="superbar" defaultValue="everyone">
+            <option value="everyone" label="For everyone"/>
+            <option value="connected" label="For connected users"/>
+            <option value="never" label="Never"/>
+        </preference>
+    </configuration>
+    <link title="admin" rel="section" type="text/html" href="/admin/"/>
 </package>
