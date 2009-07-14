@@ -10,6 +10,8 @@ defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 
 defined('LD_RELEASE') OR define('LD_RELEASE', 'barbes');
 
+defined('LD_DEBUG') OR define('LD_DEBUG', false);
+
 // Functions
 
 function install_if_not_exists_and_require($file, $source)
@@ -47,6 +49,10 @@ function is_requirable($lib)
 if (!version_compare(PHP_VERSION, '5.2.0', '>=')) {
     die ( '- Failure. La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.' );
 }
+
+// Try
+
+try {
 
 // Directories
 
@@ -183,3 +189,11 @@ if (empty($admin)) {
 
 echo 'Everything OK. <a href="' . $admin->getUrl() . '">Go admin</a>.';
 flush();
+
+// Catch
+
+} catch (Exception $e) {
+
+echo '- FAIL: ' . $e->getMessage() . '<br>';
+
+}

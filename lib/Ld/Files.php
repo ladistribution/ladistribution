@@ -81,12 +81,20 @@ class Ld_Files
             echo "<b>Copy</b>: $source -> $target<br/>";
         }
         if (is_dir($source)) {
-            if (!file_exists($target)) {
+            if (!file_exists($target) && is_writable(dirname($target))) {
                 mkdir( $target, 0777, true);
                 self::updatePermissions($target);
             }
             if (!is_writable($target)) {
-                self::skip($target);
+                if (file_exists($target)) {
+                    self::skip($target);
+                } else {
+                    if (constant('LD_DEBUG')) {
+                        echo "<b>Warning</b>: Can't write $target.<br/>";
+                    } else {
+                        throw new Exception("Can't write $target.");
+                    }
+                }
                 return false;
             }
             $d = dir( $source );
@@ -261,14 +269,14 @@ class Ld_Files
     {
         foreach (self::getFiles(LD_TMP_DIR, array('.htaccess')) as $file) {
             $filemtime = filemtime(LD_TMP_DIR . '/' . $file);
-            $age = mktime() - $filemtime;
+            $age = time() - $filemtime;
             if ($age > $maxAge) {
                 Ld_Files::unlink(LD_TMP_DIR . '/' . $file);
             }
         }
         foreach (self::getDirectories(LD_TMP_DIR, array('cache')) as $dir) {
             $filemtime = filemtime(LD_TMP_DIR . '/' . $dir);
-            $age = mktime() - $filemtime;
+            $age = time() - $filemtime;
             if ($age > $maxAge) {
                 Ld_Files::unlink(LD_TMP_DIR . '/' . $dir);
             }

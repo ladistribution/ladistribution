@@ -310,8 +310,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
           $this->updateInstances($instances);
 
           $instance = $this->getInstance($id);
-          $instance->id = $id;
-          return $instance;
+          if (isset($instance)) {
+              $instance->id = $id;
+              return $instance;
+          }
     }
 
     public function updateInstance($params)
