@@ -386,9 +386,9 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         $backups = array();
         $archives = Ld_Files::getFiles($this->getBackupPath());
         foreach ($archives as $filename) {
-            $absoluteFileName = $this->getBackupPath() . '/' . $filename;
-            $size = round( filesize($absoluteFileName) / 1024 ) . ' ko';
-            $backups[] = compact('filename', 'absoluteFileName', 'size');
+            $absoluteFilename = $this->getBackupPath() . '/' . $filename;
+            $size = round( filesize($absoluteFilename) / 1024 ) . ' ko';
+            $backups[] = compact('filename', 'absoluteFilename', 'size');
         }
         return $backups;
     }

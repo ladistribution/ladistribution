@@ -109,6 +109,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
         Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
     }
 
+    public function getUniqId()
+    {
+        return uniqid();
+    }
+
     public function getHost()
     {
         return $this->host;
@@ -140,7 +145,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return 'http://' . $this->getHost() . $this->getPath() . '/';
     }
 
-    public function getInstances($type = null)
+    public function getInstances($filterValue = null, $filterKey = 'type')
     {
         if (empty($this->_instances)) {
             $this->_instances = Ld_Files::getJson($this->getDirectory('dist') . '/instances.json');
@@ -149,9 +154,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $instances = $this->_instances;
 
         // Filter by type
-        if (isset($type)) {
+        if (isset($filterValue)) {
             foreach ($instances as $key => $instance) {
-                if (empty($instance['type']) || $type != $instance['type']) {
+                if (empty($instance[$filterKey]) || $filterValue != $instance[$filterKey]) {
                     unset($instances[$key]);
                 }
             }
@@ -286,13 +291,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
           // Only create an instance file for applications
           if ($params['type'] == 'application') {
-              $params['path'] = $installer->path;
+              $params['path'] = $installer->getPath();
               $instance = new Ld_Instance_Application_Local();
               $instance->setPath($params['path']);
               $instance->setInfos($params)->save();
           }
 
-          $id = uniqid();
+          $id = $this->getUniqId();
 
           $instances = $this->getInstances();
           $instances[$id] = array(
@@ -469,7 +474,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $this->_testDatabase($params);
         $databases = $this->getDatabases();
-        $databases[uniqid()] = $params;
+        $databases[$this->getUniqId()] = $params;
         $this->_writeDatabases($databases);
     }
 
@@ -545,7 +550,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         $users = $this->getUsers();
-        $users[uniqid()] = $user;
+        $users[$this->getUniqId()] = $user;
 
         $this->_writeUsers($users);
     }
@@ -635,7 +640,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function addRepository($params)
     {
         $repositories = $this->getRepositoriesConfiguration();
-        $id = uniqid();
+        $id = $this->getUniqId();
         $repositories[$id] = array(
             'id'        => $id,
             'type'      => $params['type'],

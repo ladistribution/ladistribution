@@ -88,6 +88,7 @@ class Ld_Package
     {
         $dir = $this->getTmpDir();
         if (!file_exists($dir)) {
+            Ld_Files::purgeTmpDir();
             $archive = $this->getArchive();
             $uz = new fileUnzip($archive);
             $uz->unzipAll($dir);

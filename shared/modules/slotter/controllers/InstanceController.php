@@ -18,6 +18,9 @@ class Slotter_InstanceController extends Slotter_BaseController
         $id = $this->view->id = $this->id = $this->_getParam('id');
         if (isset($id)) {
             $this->view->instance = $this->instance = $this->site->getInstance($id);
+            if (empty($this->instance)) {
+                throw new Exception('Non existing instance.');
+            }
         }
 
         if (!$this->_acl->isAllowed($this->userRole, 'instances', 'admin')) {
@@ -222,12 +225,13 @@ class Slotter_InstanceController extends Slotter_BaseController
       // Download
       if ($this->_hasParam('download')) {
           $backup = $this->_getParam('download');
-          if (in_array($backup, $availableBackups)) {
-              $filename =  $this->instance->getAbsolutePath() . '/backups/' . $backup;
-              header('Content-Type: application/zip');
-              header('Content-Disposition: attachment; filename="' . $backup . '"');
-              echo file_get_contents($filename);
-              exit;
+          foreach ($availableBackups as $backup) {
+              if ($backup['filename'] = $this->_getParam('download')) {
+                  header('Content-Type: application/zip');
+                  header('Content-Disposition: attachment; filename="' . $backup['filename'] . '"');
+                  echo Ld_Files::get($backup['absoluteFilename']);
+                  exit;
+              }
           }
           throw new Exception('Non existing backup.');
       }
@@ -267,7 +271,8 @@ class Slotter_InstanceController extends Slotter_BaseController
         }
         if ($this->getRequest()->isPost()) {
             $this->site->deleteInstance($this->instance);
-            $this->_redirector->setGotoSimple('index', 'index');
+            $url = $this->view->url(array('controller' => 'index', 'action' => 'index', 'id' => null));
+            $this->_redirectTo($url);
         }
     }
 

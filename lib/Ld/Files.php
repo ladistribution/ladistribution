@@ -37,8 +37,11 @@ class Ld_Files
      * @param boolean $deleteRootToo Delete the directory itself or not
      * @return null
      */
-    public static function unlink($dir, $deleteRootToo = true)
+    public static function unlink($dir, $deleteRootToo = true, $initial = true)
     {
+        if ($initial && constant('LD_DEBUG')) {
+            echo "<b>Unlink</b>: $dir<br/>";
+        }
         if (is_file($dir)) {
             unlink($dir);
             return;
@@ -51,7 +54,7 @@ class Ld_Files
                 continue;
             }
             if (is_dir($dir . '/' . $obj)) {
-               self::unlink($dir.'/'.$obj, true);
+               self::unlink($dir.'/'.$obj, true, false);
             } else {
                unlink($dir . '/' . $obj);
             }
@@ -72,20 +75,18 @@ class Ld_Files
      * @param string $target Directory name
      * @return null
      */
-    public static function copy($source, $target)
+    public static function copy($source, $target, $initial = true)
     {
+        if ($initial && constant('LD_DEBUG')) {
+            echo "<b>Copy</b>: $source -> $target<br/>";
+        }
         if (is_dir($source)) {
             if (!file_exists($target)) {
                 mkdir( $target, 0777, true);
-                if (defined('LD_UNIX_USER')) {
-                    chown($target, LD_UNIX_USER);
-                }
-                if (defined('LD_UNIX_PERMS')) {
-                    chmod($target, LD_UNIX_PERMS);
-                }
+                self::updatePermissions($target);
             }
             if (!is_writable($target)) {
-                echo "<b>Skipped</b>: $target (not writable).<br/><br/>";
+                self::skip($target);
                 return false;
             }
             $d = dir( $source );
@@ -93,28 +94,23 @@ class Ld_Files
                 if ($entry == '.' || $entry == '..') {
                     continue;
                 }
-                $Entry = $source . '/' . $entry;
-                if (is_dir($Entry)) {
-                    self::copy($Entry, $target . '/' . $entry);
+                $origin = $source . '/' . $entry;
+                $destination = $target . '/' . $entry;
+                if (is_dir($origin)) {
+                    self::copy($origin, $destination, false);
                     continue;
                 }
-                $result = copy($Entry, $target . '/' . $entry);
-                if (defined('LD_UNIX_USER')) {
-                    chown($target . '/' . $entry, LD_UNIX_USER);
+                if (file_exists($destination) && !is_writable($destination)) {
+                    self::skip($destination);
+                    continue;
                 }
-                if (defined('LD_UNIX_PERMS')) {
-                    chmod($target . '/' . $entry, LD_UNIX_PERMS);
-                }
+                $result = copy($origin, $destination);
+                self::updatePermissions($destination);
             }
             $d->close();
         } else {
             copy($source, $target);
-            if (defined('LD_UNIX_USER')) {
-                chown($target, LD_UNIX_USER);
-            }
-            if (defined('LD_UNIX_PERMS')) {
-                chmod($target, LD_UNIX_PERMS);
-            }
+            self::updatePermissions($target);
         }
     }
 
@@ -193,18 +189,14 @@ class Ld_Files
     {
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
-            if (defined('LD_UNIX_USER')) {
-                chown($dir, LD_UNIX_USER);
-            }
+            self::updatePermissions($dir);
         }
     }
 
     public static function put($file, $content)
     {
         file_put_contents($file, $content);
-        if (defined('LD_UNIX_USER')) {
-            chown($file, LD_UNIX_USER);
-        }
+        self::updatePermissions($file);
     }
 
     public static function putJson($file, $content)
@@ -223,10 +215,64 @@ class Ld_Files
     public static function getJson($file)
     {
         $content = self::get($file);
-        if (isset($content)) {
+        if (!empty($content)) {
             return Zend_Json::decode($content);
         }
         return array();
+    }
+
+    public static function updatePermissions($target)
+    {
+        if (defined('LD_UNIX_USER')) {
+            chown($target, LD_UNIX_USER);
+        }
+        if (defined('LD_UNIX_PERMS')) {
+            chmod($target, LD_UNIX_PERMS);
+        }
+    }
+
+    public static function skip($target)
+    {
+        if (constant('LD_DEBUG')) {
+            echo "<b>Skipped</b>: $target (not writable)<br/>";
+        }
+    }
+
+    public static function scanInstances($root, $ignore = array())
+    {
+        $instances = array();
+        $ignore = array_merge(array('dist', '.svn'), $ignore);
+        foreach (self::getDirectories($root, $ignore) as $directory) {
+            $dist = $root . '/' . $directory . '/dist';
+            if (file_exists($dist)) {
+                $instance = self::getJson($dist . '/instance.json');
+                if (!empty($instance)) {
+                    $instances[] = $instance;
+                }
+            } else {
+                $otherInstances = self::scanInstances($root . '/' . $directory);
+                $instances = array_merge($instances, $otherInstances);
+            }
+        }
+        return $instances;
+    }
+
+    public static function purgeTmpDir($maxAge = 43200)
+    {
+        foreach (self::getFiles(LD_TMP_DIR, array('.htaccess')) as $file) {
+            $filemtime = filemtime(LD_TMP_DIR . '/' . $file);
+            $age = mktime() - $filemtime;
+            if ($age > $maxAge) {
+                Ld_Files::unlink(LD_TMP_DIR . '/' . $file);
+            }
+        }
+        foreach (self::getDirectories(LD_TMP_DIR, array('cache')) as $dir) {
+            $filemtime = filemtime(LD_TMP_DIR . '/' . $dir);
+            $age = mktime() - $filemtime;
+            if ($age > $maxAge) {
+                Ld_Files::unlink(LD_TMP_DIR . '/' . $dir);
+            }
+        }
     }
 
 }

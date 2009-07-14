@@ -153,20 +153,33 @@ foreach ($base_libs as $name => $source) {
 
 // Instances registry
 
-if (!file_exists($directories['dist'] . '/instances.json')) {
-    $instances = array(
-        array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1'),
-        array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-27-2')
-    );
-    Ld_Files::put($directories['dist'] . '/instances.json', Zend_Json::encode($instances));
+$instances = $site->getInstances();
+if (empty($instances)) {
+    $instances = array();
+    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-29-1');
+    $site->updateInstances($instances);
 }
 
 echo '- Registry OK<br>';
 flush();
 
-// Install Admin
+// Install or Update Admin
 
-$admin = $site->createInstance('admin', array('title' => 'La Distribution Admin', 'path' => 'admin'));
+foreach ($site->getInstances() as $id => $infos) {
+    if ($infos['package'] == 'admin') {
+        $admin = $site->getInstance($id);
+        break;
+    }
+}
 
-echo 'Install OK. <a href="' . $admin->getUrl() . '">Go admin</a>';
+if (empty($admin)) {
+    $admin = $site->createInstance('admin', array('title' => 'La Distribution Admin', 'path' => 'admin'));
+    echo '- Install Admin OK<br>';
+} else {
+    $site->updateInstance($admin);
+    echo '- Update Admin OK<br>';
+}
+
+echo 'Everything OK. <a href="' . $admin->getUrl() . '">Go admin</a>.';
 flush();
