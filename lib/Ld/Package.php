@@ -65,6 +65,10 @@ class Ld_Package
 
     public function getArchive()
     {
+        if (isset($this->absoluteFilename)) {
+            return $this->absoluteFilename;
+        }
+
         $filename = LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '.zip';
         if (!file_exists($filename)) {
             $httpClient = new Zend_Http_Client($this->url);
