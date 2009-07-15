@@ -18,7 +18,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 
 		$params = array(
 			'name' => $preferences['title'],
-			'uri' => $this->site->getBaseUrl() . $preferences['path'],
+			'uri' => $this->getSite()->getBaseUrl() . $preferences['path'],
 			'keymaster_user_login' => $preferences['administrator']['username'],
 			'keymaster_user_email' => $preferences['administrator']['email'],
 			'keymaster_user_type' => 'new',
@@ -51,12 +51,12 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		$this->httpClient->setParameterPost($params);
 		$response = $this->httpClient->request('POST');
 
-		$activate_plugins = array('core#ld.ui.php', 'core#ld.auth.php');
+		$activate_plugins = array('core#ld.php', 'core#ld.ui.php', 'core#ld.auth.php', 'core#ld.css.php');
 		foreach ($activate_plugins as $plugin) {
 			bb_activate_plugin($plugin);
 		}
 		bb_update_option( 'active_plugins', $activate_plugins );
-    }
+	}
 
 	public function create_config_file()
 	{
@@ -72,32 +72,21 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		$cfg .= "define('BB_LOGGED_IN_KEY', '" . Ld_Auth::generatePhrase() . "');\n";
 		$cfg .= "define('BB_NONCE_KEY', '" . Ld_Auth::generatePhrase() . "');\n";
 
-		Ld_Files::put($this->absolutePath . "/bb-config.php", $cfg);
+		Ld_Files::put($this->getAbsolutePath() . "/bb-config.php", $cfg);
 	}
 
 	public function load_bp()
 	{
 		if (empty($this->loaded)) {
 			global $bbdb, $wp_users_object;
-			require_once($this->absolutePath . '/bb-load.php');
-			require_once($this->absolutePath . '/bb-admin/includes/functions.bb-plugin.php');
+			require_once($this->getAbsolutePath() . '/bb-load.php');
+			require_once($this->getAbsolutePath() . '/bb-admin/includes/functions.bb-plugin.php');
 			$this->bbdb = $bbdb;
 			$this->loaded = true;
 		}
 	}
 
 	// Configuration
-
-	public function getPreferences($type)
-	{
-		switch ($type) {
-			case 'theme':
-				return array();
-			default:
-				$preferences = parent::getPreferences($type);
-				return $preferences;
-		}
-	}
 
 	public function getConfiguration()
 	{
@@ -146,7 +135,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		foreach ($bb_themes as $id) {
 			list($type, $name) = explode('#', $id);
 			$folder = $type == 'user' ? 'my-templates' : 'bb-templates';
-			$screenshot = $this->site->getBaseUrl() . $this->path . '/' . $folder . '/' . $name . '/screenshot.png';
+			$screenshot = $this->site->getBaseUrl() . $this->getPath() . '/' . $folder . '/' . $name . '/screenshot.png';
 			$active = $activetheme == $id;
 			$themes[$id] = compact('name', 'screenshot', 'active');
 		}

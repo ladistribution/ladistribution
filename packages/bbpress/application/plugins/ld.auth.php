@@ -53,9 +53,8 @@ function bb_get_current_user() {
 	global $current_user;
 
 	// LD authentication
-	$auth = Zend_Auth::getInstance();
-	if ($auth->hasIdentity()) {
-		$bb_user = get_bb_user_by_login( $auth->getIdentity() );
+	if (Ld_Auth::isAuthenticated()) {
+		$bb_user = get_bb_user_by_login( Ld_Auth::getUsername() );
 		// set the current user
 		if (isset($bb_user)) {
 			global $current_user;
@@ -113,10 +112,7 @@ endif;
 
 function ld_logout()
 {
-	$auth = Zend_Auth::getInstance();
-	if ($auth->hasIdentity()) {
-		$auth->clearIdentity();
-	}
+	Ld_Auth::logout();
 }
 
 add_action('bb_user_logout', 'ld_logout');
