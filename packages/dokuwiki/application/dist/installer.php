@@ -26,7 +26,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
         // Rewrite Rules
         if (constant('LD_REWRITE')) {
-            $path = $this->site->getBasePath() . '/' . $this->path . '/';
+            $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
             $htaccess  = "RewriteEngine on\n";
             $htaccess .= "RewriteBase $path\n";
             $htaccess .= "RewriteRule ^_media/(.*)              lib/exe/fetch.php?media=$1  [QSA,L]\n";
@@ -36,7 +36,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
             $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-f\n";
             $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-d\n";
             $htaccess .= "RewriteRule (.*)                      doku.php?id=$1  [QSA,L]\n";
-            file_put_contents($this->absolutePath . "/.htaccess", $htaccess);
+            file_put_contents($this->getAbsolutePath() . "/.htaccess", $htaccess);
         }
 
         // Configuration file
@@ -73,7 +73,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         } else {
             $cfg_acl .=  "*               @ALL          8\n";
         }
-        Ld_Files::put($this->absolutePath . "/conf/acl.auth.php", $cfg_acl);
+        Ld_Files::put($this->getAbsolutePath() . "/conf/acl.auth.php", $cfg_acl);
     }
 
     public function postInstall($preferences = array())
@@ -106,7 +106,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
                 $cfg_local .= '$' . "conf['$key'] = " . $this->_getValueString($value) . ";\n";
             }
         }
-        Ld_Files::put($this->absolutePath . "/conf/local.php", $cfg_local);
+        Ld_Files::put($this->getAbsolutePath() . "/conf/local.php", $cfg_local);
 
         if (isset($configuration['title']) && isset($this->instance)) {
             $this->instance->setInfos(array('name' => $configuration['title']))->save();
@@ -132,8 +132,8 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     public function getConfiguration($type = 'general')
     {
         $conf = array();
-        if (file_exists($this->absolutePath . "/conf/local.php")) {
-            include $this->absolutePath . "/conf/local.php";
+        if (file_exists($this->getAbsolutePath() . "/conf/local.php")) {
+            include $this->getAbsolutePath() . "/conf/local.php";
         }
 
         if ($type == 'theme') {
@@ -155,19 +155,14 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
     public function getThemes()
     {
-        $dirs = Ld_Files::getDirectories($this->absolutePath . '/lib/tpl/');
-
-        $template = $this->getCurrentTheme();
+        $dirs = Ld_Files::getDirectories($this->getAbsolutePath() . '/lib/tpl/');
 
         $themes = array();
-        foreach ($dirs as $id) {
-            $themes[$id] = array(
-                'name' => $id,
-                'active' => ($template == $id)
-            );
-            if (file_exists($this->absolutePath . '/lib/tpl/' . $id . '/screenshot.png')) {
-                $themes[$id]['screenshot'] = $this->instance->getUrl() . 'lib/tpl/' . $id . '/screenshot.png';
-            }
+        foreach ($dirs as $name) {
+            $dir = $this->getAbsolutePath() . '/lib/tpl/' . $name;
+            $active = $id == $this->getCurrentTheme();
+            $screenshot = $dir . '/screenshot.png';
+            $themes[$name] = compact('name', 'dir', 'active', 'screenshot');
         }
         return $themes;
     }
@@ -191,7 +186,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
     public function _getLangPreference()
     {
-        $dirs = Ld_Files::getDirectories($this->absolutePath . '/inc/lang/');
+        $dirs = Ld_Files::getDirectories($this->getAbsolutePath() . '/inc/lang/');
         $options = array();
         foreach ($dirs as $lang) {
             if ($lang == 'dist') {
@@ -209,19 +204,6 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         return $template;
     }
 
-    public function getThemePreferences()
-    {
-        $template = $this->getCurrentTheme();
-        if ($template != 'default') {
-            $template_dir = $this->absolutePath . '/lib/tpl/' . $template;
-            if (file_exists($template_dir) && file_exists($template_dir . '/dist/manifest.xml')) {
-                $template_installer = new Ld_Installer(array('dir' => $template_dir));
-                return $template_installer->getPreferences('configuration');
-            }
-        }
-        return array();
-    }
-
     public $roles = array('admin', 'user');
 
     public $defaultRole = 'user';
@@ -234,21 +216,21 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     public function getBackupDirectories()
     {
         return array(
-            'data' => $this->absolutePath . '/data/',
-            'conf' => $this->absolutePath . '/conf/'
+            'data' => $this->getAbsolutePath() . '/data/',
+            'conf' => $this->getAbsolutePath() . '/conf/'
         );
     }
 
-    public function restore($filename, $absolute = false)
+    public function restore($restoreFolder)
     {
-        parent::restore($filename, $absolute);
+        parent::restore($restoreFolder);
 
-        Ld_Files::unlink($this->absolutePath . '/data');
+        Ld_Files::unlink($this->getAbsolutePath() . '/data');
 
-        Ld_Files::copy($this->tmpFolder . '/data', $this->absolutePath . '/data');
-        Ld_Files::copy($this->tmpFolder . '/conf', $this->absolutePath . '/conf');
+        Ld_Files::copy($this->getRestoreFolder() . '/data', $this->getAbsolutePath() . '/data');
+        Ld_Files::copy($this->getRestoreFolder() . '/conf', $this->getAbsolutePath() . '/conf');
 
-        Ld_Files::unlink($this->tmpFolder);
+        Ld_Files::unlink($this->getRestoreFolder());
     }
 
 }
