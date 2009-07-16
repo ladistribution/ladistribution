@@ -266,12 +266,9 @@ class Slotter_InstanceController extends Slotter_BaseController
      */
     public function deleteAction()
     {
-        if (empty($this->instance)) {
-            return false;
-        }
         if ($this->getRequest()->isPost()) {
             $this->site->deleteInstance($this->instance);
-            $url = $this->view->url(array('controller' => 'index', 'action' => 'index', 'id' => null));
+            $url = $this->view->url(array('controller' => 'index', 'action' => 'index'), 'default', true);
             $this->_redirectTo($url);
         }
     }
