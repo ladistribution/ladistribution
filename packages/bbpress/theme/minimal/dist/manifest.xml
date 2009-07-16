@@ -1,7 +1,7 @@
 <package release="unstable">
-  <id>wordpress-theme-minimal</id>
+  <id>bbpress-theme-minimal</id>
   <name>Minimal</name>
-  <version>0.2-29-5</version>
+  <version>0.2-29-6</version>
   <type>theme</type>
   <need>css-h6e-minimal</need>
   <extend>bbpress</extend>
