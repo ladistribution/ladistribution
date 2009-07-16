@@ -14,6 +14,14 @@
     ?>
 </ul>
 
+<p>You can also:</p>
+
+<ul>
+<li><a href="<?php echo $this->url(array('controller' => 'instance', 'action' => 'clone')) ?>">
+    Clone an application from a backup.
+</a></li>
+</ul>
+
 <?php else : ?>
 
 <h2>Deploy a new <?php echo $this->escape($this->package->name) ?> instance</h2>

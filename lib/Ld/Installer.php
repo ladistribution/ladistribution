@@ -118,7 +118,10 @@ class Ld_Installer
 
     public function getManifest()
     {
-        return $this->manifest;
+        if (isset($this->manifest)) {
+            return $this->manifest;
+        }
+        throw new Exception("manifest is undefined.");
     }
 
     public function getDeployments($type = null)
@@ -275,6 +278,14 @@ class Ld_Installer
         return $this->tmpFolder;
     }
 
+    public function getRestoreFolder()
+    {
+        if (empty($this->restoreFolder)) {
+            $this->restoreFolder = LD_TMP_DIR . '/clone-' . date("d-m-Y-H-i-s");
+        }
+        return $this->restoreFolder;
+    }
+
     public function backup()
     {
         Ld_Files::createDirIfNotExists($this->getAbsolutePath() . '/backups');
@@ -297,28 +308,27 @@ class Ld_Installer
         Ld_Files::unlink($this->getBackupFolder());
     }
 
-    public function restore($filename, $absolute = false)
+    public function restore($restoreFolder)
     {
-        if ($absolute == false) {
-            $filename = $this->getAbsolutePath() . '/backups/' . $filename;
-        }
-
-        $uz = new fileUnzip($filename);
-        $uz->unzipAll($this->getBackupFolder());
+        $this->restoreFolder = $this->tmpFolder = $restoreFolder;
 
         if ($this->getManifest()->getDb() && $dbConnection = $this->getInstance()->getDbConnection('php')) {
 
             foreach ($this->getInstance()->getDbTables() as $id => $tablename) {
-                $filename = $this->getBackupFolder() . '/tables/' . $id . '.csv';
-                $query = "LOAD DATA LOCAL INFILE '$filename'
-                REPLACE INTO TABLE $tablename
-                FIELDS TERMINATED BY ';'
-                ENCLOSED BY '\"'
-                ESCAPED BY '\\\\'
-                LINES TERMINATED BY '\n'"; // IGNORE 1 LINES;
-                $result = $dbConnection->query($query);
-                if (!$result) {
-                    throw new Exception($dbConnection->error);
+                $result = $dbConnection->query("TRUNCATE TABLE  $tablename");
+                $filename = $this->getRestoreFolder() . '/tables/' . $id . '.csv';
+                if (file_exists($filename)) {
+                    $query = "LOAD DATA LOCAL INFILE '$filename'
+                    REPLACE INTO TABLE $tablename
+                    CHARACTER SET utf8
+                    FIELDS TERMINATED BY ';'
+                    ENCLOSED BY '\"'
+                    ESCAPED BY '\\\\'
+                    LINES TERMINATED BY '\n'"; // IGNORE 1 LINES;
+                    $result = $dbConnection->query($query);
+                    if (!$result) {
+                        throw new Exception($dbConnection->error);
+                    }
                 }
             }
 
@@ -341,6 +351,32 @@ class Ld_Installer
     // Themes
 
     public function getThemes() { return array(); }
+
+    public function getPreferences($type)
+    {
+        try {
+            switch ($type) {
+                case 'theme':
+                    return $this->getThemePreferences();
+                default:
+                    $manifest = $this->getManifest();
+                    return $manifest->getPreferences($type);
+            }
+        } catch (Exception $e) {
+            return array();
+        }
+    }
+
+    public function getThemePreferences()
+    {
+        foreach ($this->getThemes() as $theme) {
+            if ($theme['active']) {
+                $manifest = Ld_Manifest::loadFromDirectory($theme['dir']);
+                return $manifest->getPreferences();
+            }
+        }
+        return array();
+    }
 
     // Roles
 
@@ -376,7 +412,6 @@ class Ld_Installer
     // Legacy
     public function getDependencies() { return $this->getManifest()->getDependencies(); }
     public function needDb() { return $this->getManifest()->getDb(); }
-    public function getPreferences($type) { return $this->getManifest()->getPreferences($type); }
     protected function _copy($from, $to) { return Ld_Files::copy($from, $to); }
     protected function _unlink($src) { return Ld_Files::unlink($src); }
     protected function _getDirectories($dir) { return Ld_Files::getDirectories($dir); }

@@ -181,7 +181,7 @@ class Slotter_InstanceController extends Slotter_BaseController
   public function themesAction()
   {
       $extensions = $this->site->getPackageExtensions($this->instance->getPackageId(), 'theme');
-      
+
       $this->view->extensions = array();
       foreach ($extensions as $extension) {
           if ($this->_isExtensionInstalled($extension->id)) {
@@ -189,10 +189,10 @@ class Slotter_InstanceController extends Slotter_BaseController
           }
           $this->view->extensions[] = $extension;
       }
-      
+
       if ($this->getRequest()->isGet()) {
          $this->view->configuration = $this->instance->getConfiguration('theme');
-         
+
       } else if ($this->getRequest()->isPost()) {
           if ($this->_hasParam('theme')) {
               $theme = $this->_getParam('theme');
@@ -203,9 +203,9 @@ class Slotter_InstanceController extends Slotter_BaseController
               $this->view->configuration = $this->instance->setConfiguration($configuration, 'theme');
           }
       }
-      
-      $this->view->preferences = $this->instance->getPreferences('theme');
-      
+
+      $this->view->preferences = $this->instance->getInstaller()->getPreferences('theme');
+
       $this->view->themes = $this->instance->getThemes();
   }
   
@@ -276,48 +276,59 @@ class Slotter_InstanceController extends Slotter_BaseController
         }
     }
 
-  public function rolesAction()
-  {
-      $methods = array('getRoles', 'getUserRoles', 'setUserRoles');
-      
-      $installer = $this->instance->getInstaller();
-      foreach ($methods as $method) {
-          if (!method_exists($installer, $method)) {
-              $this->view->supported = false;
-              return;
-          }
-      }
-      
-      if ($this->getRequest()->isPost()) {
-          $roles = $this->_getParam('roles');
-          $this->instance->getInstaller()->setUserRoles($roles);
-      }
-      
-      $this->view->users = $this->site->getUsers();
-      $this->view->roles = $this->instance->getInstaller()->getRoles();
-      $this->view->userRoles = $this->instance->getInstaller()->getUserRoles();
-  }
-  
-  // public function cloneAction()
-  // {
-  //         $preferences = $this->_getParam('preferences');
-  //         $this->view->instance = $instance = $this->site->createInstance($packageId, $preferences);
-  //         foreach ($extensions as $extension) {
-  //             $this->site->extendInstance($instance, $extension['package']);
-  //         }
-  //         $this->site->restoreBackup($instance, $archive, true);
-  // }
+    public function rolesAction()
+    {
+        $methods = array('getRoles', 'getUserRoles', 'setUserRoles');
 
-  protected function _isExtensionInstalled($id)
-  {
-      $extensions = $this->instance->getExtensions();
-      foreach ($extensions as $extension) {
-          if ($extension->getPackageId() == $id) {
-              return true;
-          }
-      }
-      return false;
-  }
+        $installer = $this->instance->getInstaller();
+        foreach ($methods as $method) {
+            if (!method_exists($installer, $method)) {
+                $this->view->supported = false;
+                return;
+            }
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $roles = $this->_getParam('roles');
+            $this->instance->getInstaller()->setUserRoles($roles);
+        }
+
+        $this->view->users = $this->site->getUsers();
+        $this->view->roles = $this->instance->getInstaller()->getRoles();
+        $this->view->userRoles = $this->instance->getInstaller()->getUserRoles();
+    }
+
+    public function cloneAction()
+    {
+        if ($this->getRequest()->isPost() && $this->_hasParam('upload')) {
+
+            $dir = LD_TMP_DIR . '/uploads';
+            Ld_Files::createDirIfNotExists($dir);
+
+            $adapter = new Zend_File_Transfer_Adapter_Http();
+            $adapter->setDestination($dir);
+            $result = $adapter->receive();
+
+            $preferences = $this->_getParam('preferences');
+            $preferences['path'] = Ld_Files::cleanpath($preferences['path']);
+
+            $instance = $this->site->cloneInstance($adapter->getFileName(), $preferences);
+
+            $this->_redirectToAction('status', $instance->id);
+
+        }
+    }
+
+    protected function _isExtensionInstalled($id)
+    {
+        $extensions = $this->instance->getExtensions();
+        foreach ($extensions as $extension) {
+            if ($extension->getPackageId() == $id) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     protected function _redirectToAction($action = 'status', $id = null)
     {

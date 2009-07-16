@@ -23,6 +23,9 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 	{
 		echo '<table>';
 		foreach ($preferences as $preference) {
+			if (is_object($preference)) {
+				$preference = $preference->toArray();
+			}
 			$name = $preference['name'];
 			$inputName = isset($ns) ? "$ns" . "[$name]" : $name;
 			$value = isset($configuration[$name]) ? $configuration[$name] : null;

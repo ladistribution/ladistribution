@@ -149,14 +149,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function getPreferences($type = 'preferences')
     {
-        $preferences = array();
-        
-        $prefs = $this->getManifest()->getPreferences($type);
-        foreach ($prefs as $pref) {
-            $preferences[] = is_object($pref) ? $pref->toArray() : $pref;
-        }
-        
-        return $preferences;
+        return $this->getInstaller()->getPreferences($type);
     }
 
     public function getThemes()
@@ -371,9 +364,9 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->getInstaller()->backup();
     }
 
-    public function restoreBackup($archive, $absolute = false)
+    public function restoreBackup($folder)
     {
-        return $this->getInstaller()->restore($archive, $absolute);
+        return $this->getInstaller()->restore($folder);
     }
 
     public function getBackupPath()

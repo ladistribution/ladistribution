@@ -113,7 +113,7 @@ class Ld_Package
     {
         if (empty($this->_installer)) {
             $dir = $this->fetchFiles();
-            $classFile = $dir . '/dist/installer.php';
+            $classFile = $dir . 'dist/installer.php';
             $className = $this->getManifest()->getClassName();
             if (!file_exists($classFile)) {
                 $className = 'Ld_Installer';

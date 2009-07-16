@@ -393,12 +393,33 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Unregister
         $instances = $this->getInstances();
         foreach ($instances as $key => $registeredInstance) {
-            if ($instance->path == $registeredInstance['path']) {
+            if (isset($registeredInstance['path']) && $instance->getPath() == $registeredInstance['path']) {
                 unset($instances[$key]);
             }
         }
 
         $this->updateInstances($instances);
+    }
+
+    public function cloneInstance($archive, $preferences = array())
+    {
+        $cloneId = 'clone-' . date("d-m-Y-H-i-s");
+
+        $restoreFolder = LD_TMP_DIR . '/' . $cloneId;
+        $uz = new fileUnzip($archive);
+        $uz->unzipAll($restoreFolder);
+
+        $instanceInfos = Ld_Files::getJson($restoreFolder . '/dist/instance.json');
+
+        $preferences['title'] = $instanceInfos['name'];
+
+        $instance = $this->createInstance($instanceInfos['package'], $preferences);
+        foreach ($instanceInfos['extensions'] as $extension) {
+            $instance->addExtension($extension['package']);
+        }
+        $instance->restoreBackup($restoreFolder);
+
+        return $instance;
     }
 
     public function getInstallPreferences($package)
@@ -445,9 +466,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 foreach ($users as $id => $user) {
                     $preference['options'][] = array('value' => $user['username'], 'label' => $user['username']);
                 }
-                $auth = Zend_Auth::getInstance();
-                if ($auth->hasIdentity()) {
-                    $preference['defaultValue'] = $auth->getIdentity();
+                if (Ld_Auth::isAuthenticated()) {
+                    $preference['defaultValue'] = Ld_Auth::getUsername();
                 }
             }
             $preferences[] = $preference;
