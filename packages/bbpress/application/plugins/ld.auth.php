@@ -57,7 +57,6 @@ function bb_get_current_user() {
 		$bb_user = get_bb_user_by_login( Ld_Auth::getUsername() );
 		// set the current user
 		if (isset($bb_user)) {
-			global $current_user;
 			if (empty($current_user)) {
 				$current_user = $bb_user;
 			}

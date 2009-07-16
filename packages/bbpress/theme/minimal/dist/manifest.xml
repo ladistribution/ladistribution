@@ -1,9 +1,16 @@
 <package release="unstable">
   <id>wordpress-theme-minimal</id>
   <name>Minimal</name>
-  <version>0.2-26-1</version>
+  <version>0.2-29-5</version>
   <type>theme</type>
   <need>css-h6e-minimal</need>
   <extend>bbpress</extend>
   <directory>my-templates/minimal</directory>
+  <configuration>
+      <preference type="list" label="Display the top bar" name="topbar">
+          <option value="everyone" label="For everyone"/>
+          <option value="connected" label="For connected users"/>
+          <option value="never" label="Never"/>
+      </preference>
+  </configuration>
 </package>

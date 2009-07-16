@@ -28,11 +28,26 @@ add_action('bb_head', 'ld_template_head');
 
 function ld_footer()
 {
-	require_once 'Ld/Ui.php';
-	Ld_Ui::super_bar();
+	$superbar = bb_get_option('superbar');
+	if ($superbar == 'never') {
+		return;
+	}
+	if ($superbar == 'connected' && !bb_is_user_logged_in()) {
+		return;
+	}
+	Ld_Ui::super_bar(array('jquery' => true));
 }
 
-add_action( 'bb_admin_footer', 'ld_footer' );
+function ld_admin_footer()
+{
+	$superbar = bb_get_option('superbar');
+	if ($superbar == 'never') {
+		return;
+	}
+	Ld_Ui::super_bar(array('jquery' => false));
+}
+
+add_action( 'bb_admin_footer', 'ld_admin_footer' );
 
 add_action( 'bb_foot', 'ld_footer' );
 

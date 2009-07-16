@@ -136,8 +136,9 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			list($type, $name) = explode('#', $id);
 			$folder = $type == 'user' ? 'my-templates' : 'bb-templates';
 			$screenshot = $this->site->getBaseUrl() . $this->getPath() . '/' . $folder . '/' . $name . '/screenshot.png';
+			$dir = $this->getAbsolutePath() . '/' . $folder . '/' . $name;
 			$active = $activetheme == $id;
-			$themes[$id] = compact('name', 'screenshot', 'active');
+			$themes[$id] = compact('name', 'dir', 'screenshot', 'active');
 		}
 		return $themes;
 	}
