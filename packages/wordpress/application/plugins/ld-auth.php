@@ -139,7 +139,11 @@ function get_userdatabylogin( $user_login )
 		$query = $wpdb->prepare("SELECT * FROM $wpdb->users WHERE user_login = %s LIMIT 1", $ld_user['username']);
 
 		if ( !$wp_user = $wpdb->get_row($query) ) {
-			$data = array('user_login' => $ld_user['username']);
+			$data = array(
+				'user_login' => $ld_user['username'],
+				'user_email' => $ld_user['email'],
+				'user_pass'  => $ld_user['hash']
+			);
 			$wpdb->insert( $wpdb->users, $data);
 			$user_id = (int) $wpdb->insert_id;
 

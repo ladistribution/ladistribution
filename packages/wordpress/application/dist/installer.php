@@ -104,10 +104,12 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		foreach ($wp_themes as $theme) {
 			$id = $theme['Stylesheet'];
 			$name = $theme['Name'];
-			$screenshot = $this->getSite()->getBaseUrl() . $this->getPath() .
-			    '/wp-content' . $theme['Stylesheet Dir'] . '/' . $theme['Screenshot'];
+			$folder = 'wp-content' . $theme['Stylesheet Dir'];
+			$dir = $this->getAbsolutePath() . '/' . $folder;
+			$screenshot = $this->getSite()->getBaseUrl() .
+				$this->getPath() . '/' . $folder . '/' . $theme['Screenshot'];
 			$active = $current_theme == $theme['Name'];
-			$themes[$id] = compact('name', 'screenshot', 'active');
+			$themes[$id] = compact('name', 'dir', 'screenshot', 'active');
 		}
 		return $themes;
 	}
@@ -119,12 +121,16 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $this->_backupDirectories;
 	}
 
-	public function restore($filename, $absolute = false)
+	public function restore($restoreFolder)
 	{
-		parent::restore($filename, $absolute);
+		parent::restore($restoreFolder);
 
-		if (file_exists($this->getBackupFolder() . '/uploads')) {
-			Ld_Files::copy($this->getBackupFolder() . '/uploads', $this->getAbsolutePath() . '/wp-content/uploads');
+		$this->_fixDb();
+
+		wp_cache_flush();
+
+		if (file_exists($this->getRestoreFolder() . '/uploads')) {
+			Ld_Files::copy($this->getRestoreFolder() . '/uploads', $this->getAbsolutePath() . '/wp-content/uploads');
 		}
 
 		$this->load_wp();
@@ -132,9 +138,31 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getPath());
 		update_option('home', $this->getSite()->getBaseUrl() . $this->getPath());
 
-		wp_cache_flush();
-
 		Ld_Files::unlink($this->getBackupFolder());
+	}
+	
+	protected function _fixDb()
+	{
+		$infos = Ld_Files::getJson($this->getRestoreFolder() . '/dist/instance.json');
+		$oldDbPrefix = $infos['db_prefix'];
+
+		$dbPrefix = $this->getInstance()->getDbPrefix();
+		$dbConnection = $this->getInstance()->getDbConnection('php');
+
+		foreach (array('usermeta' => 'meta_key', 'options' => 'option_name') as $table => $key) {
+			$tablename = $dbPrefix . $table;
+			$result = $dbConnection->query("SELECT $key FROM $tablename WHERE $key LIKE '$oldDbPrefix%'");
+			if (!empty($result)) {
+				while ($row = $result->fetch_assoc()) {
+					$oldKey = $row[$key];
+					$newKey = str_replace($oldDbPrefix, $dbPrefix, $oldKey);
+					$update = $dbConnection->query("UPDATE $tablename SET $key = '$newKey' WHERE $key = '$oldKey'");
+					if (!$update) {
+						echo mysql_error();
+					}
+				}
+			}
+		}
 	}
 	
 	public function setTheme($theme)
@@ -154,35 +182,6 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	// 
 	// 	parent::uninstall();
 	// }
-
-	public function getPreferences($type)
-	{
-		switch ($type) {
-			case 'theme':
-				return $this->getThemePreferences();
-			default:
-				$preferences = parent::getPreferences($type);
-				return $preferences;
-		}
-	}
-
-	public function getThemePreferences()
-	{
-		$this->load_wp();
-		$wp_themes = get_themes();
-		$current_theme = get_current_theme();
-		foreach ($wp_themes as $theme) {
-			if ($current_theme == $theme['Name']) {
-				$template_dir = $this->getAbsolutePath() . '/wp-content' . $theme['Stylesheet Dir'];
-				break;	
-			}
-		}
-		if (file_exists($template_dir) && file_exists($template_dir . '/dist/manifest.xml')) {
-			$template_installer = new Ld_Installer(array('dir' => $template_dir));
-			return $template_installer->getPreferences('configuration');
-		}
-		return array();
-	}
 
 	public function getConfiguration()
 	{
