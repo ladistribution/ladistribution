@@ -30,7 +30,7 @@ class Ld_Loader
 
         defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 
-        defined('LD_RELEASE') OR define('LD_RELEASE', 'barbes');
+        defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
         if (constant('LD_DEBUG')) {
             error_reporting( E_ALL | E_NOTICE | E_STRICT );

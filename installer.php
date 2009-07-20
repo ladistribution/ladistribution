@@ -1,6 +1,22 @@
 <?php
 
-// Configuration
+// User Configuration
+
+// Uncomment this line if you want to turn debug infos on
+// define('LD_DEBUG', true);
+
+// Uncomment this line if your web server isn't Apache or if mod_rewrite is not available
+// define('LD_REWRITE', false);
+
+// Uncomment & modify this line if you want to target a specific release
+// instead of the default one (edge)
+// define('LD_RELEASE', 'barbes');
+
+// Uncomment & modify this line if you want the installer talk to antoher server
+// eg: 'http://localhost/ld/'
+// define('LD_SERVER', 'http://ladistribution.net/');
+
+// Default Configuration
 
 date_default_timezone_set('UTC');
 
@@ -8,7 +24,7 @@ define('LD_SESSION', false);
 
 defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 
-defined('LD_RELEASE') OR define('LD_RELEASE', 'barbes');
+defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
 defined('LD_DEBUG') OR define('LD_DEBUG', false);
 
@@ -163,7 +179,7 @@ $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
     $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-29-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-30-1');
     $site->updateInstances($instances);
 }
 
