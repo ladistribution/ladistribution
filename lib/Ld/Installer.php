@@ -124,6 +124,17 @@ class Ld_Installer
         throw new Exception("manifest is undefined.");
     }
 
+    public function getLinks()
+    {
+        $baseUrl = $this->getSite()->getBaseUrl() . $this->getPath();
+
+        $links = $this->getManifest()->getLinks();
+        foreach ($links as $id => $link) {
+            $links[$id]['href'] = $baseUrl . $link['href'];
+        }
+        return $links;
+    }
+
     public function getDeployments($type = null)
     {
         $rules = $this->getManifest()->getDeploymentRules();

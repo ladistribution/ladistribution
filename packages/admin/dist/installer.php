@@ -23,6 +23,20 @@ class Ld_Installer_Admin extends Ld_Installer
 		Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 	}
 
+	public function getLinks()
+	{
+		$baseUrl = $this->getSite()->getBaseUrl() . $this->getPath();
+		if (constant('LD_REWRITE') == false) {
+			$baseUrl .= '/index.php';
+		}
+
+		$links = $this->getManifest()->getLinks();
+		foreach ($links as $id => $link) {
+			$links[$id]['href'] = $baseUrl . $link['href'];
+		}
+		return $links;
+	}
+
 	public $roles = array('admin', 'user');
 
 	public $defaultRole = 'user';

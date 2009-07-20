@@ -42,6 +42,7 @@ class Bootstrap
     public static function setupMvc()
     {
         $site = self::$_registry['site'];
+        $instance = self::$_registry['instance'];
 
         $mvc = Zend_Layout::startMvc(array('layoutPath' => $site->getDirectory('shared') . '/modules/default/views/layouts'));
 
@@ -62,6 +63,10 @@ class Bootstrap
         self::$_front->addControllerDirectory(
             $site->getDirectory('shared') . '/modules/default/controllers', 'default'
         );
+
+        if (constant('LD_REWRITE') == false) {
+            self::$_front->setBaseUrl( $site->getPath() . '/' . $instance->getPath() . '/index.php');
+        }
     }
 
     public static function setupRoutes()

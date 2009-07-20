@@ -140,11 +140,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function getLinks()
     {
-        $links = $this->getManifest()->getLinks();
-        foreach ($links as $id => $link) {
-            $links[$id]['href'] = $this->getSite()->getBaseUrl() . $this->getPath() . $link['href'];
-        }
-        return $links;
+        return $this->getInstaller()->getLinks();
     }
 
     public function getPreferences($type = 'preferences')
