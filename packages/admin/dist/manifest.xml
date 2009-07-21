@@ -1,7 +1,7 @@
 <package release="unstable">
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.2-30-1</version>
+  <version>0.2-30-2</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>

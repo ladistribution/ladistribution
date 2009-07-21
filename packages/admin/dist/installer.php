@@ -19,7 +19,7 @@ class Ld_Installer_Admin extends Ld_Installer
 		$htaccess .= "RewriteBase $path\n";
 		$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 		$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-		$htaccess .= "RewriteRule (.*) index.php\n";
+		$htaccess .= "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php\n";
 		Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 	}
 
