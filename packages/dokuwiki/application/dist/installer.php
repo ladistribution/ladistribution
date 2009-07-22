@@ -160,8 +160,8 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         $themes = array();
         foreach ($dirs as $name) {
             $dir = $this->getAbsolutePath() . '/lib/tpl/' . $name;
-            $active = $id == $this->getCurrentTheme();
-            $screenshot = $dir . '/screenshot.png';
+            $active = $name == $this->getCurrentTheme();
+            $screenshot = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/lib/tpl/' . $name . '/screenshot.png';
             $themes[$name] = compact('name', 'dir', 'active', 'screenshot');
         }
         return $themes;

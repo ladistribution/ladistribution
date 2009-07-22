@@ -382,8 +382,11 @@ class Ld_Installer
     {
         foreach ($this->getThemes() as $theme) {
             if ($theme['active']) {
-                $manifest = Ld_Manifest::loadFromDirectory($theme['dir']);
-                return $manifest->getPreferences();
+                if (file_exists($theme['dir'] . '/dist')) {
+                    $manifest = Ld_Manifest::loadFromDirectory($theme['dir']);
+                    return $manifest->getPreferences();
+                }
+                return array();
             }
         }
         return array();
