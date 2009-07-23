@@ -56,8 +56,8 @@ class Ld_Installer_Moonmoon extends Ld_Installer
 		require_once($this->getAbsolutePath() . '/app/classes/Planet.class.php');
 		$planet_config = new PlanetConfig($config);
 		Ld_Files::put($this->getAbsolutePath() . '/custom/config.yml', $planet_config->toYaml());
-		if (isset($configuration['name']) && isset($this->instance)) {
-			$this->instance->setInfos(array('name' => $configuration['name']))->save();
+		if (isset($config['name']) && isset($this->instance)) {
+			$this->instance->setInfos(array('name' => $config['name']))->save();
 		}
 		return $config;
 	}
