@@ -1,0 +1,27 @@
+#!/usr/bin/php
+<?php
+
+error_reporting( E_ALL | E_NOTICE | E_STRICT );
+
+define('LD_CLI', true);
+
+define('LD_DIR', realpath( dirname(__FILE__) . '/..' ) );
+
+define('LD_LIB_DIR', LD_DIR . '/lib');
+
+set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
+
+// Zend Loader
+require_once 'Zend/Loader/Autoloader.php';
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->registerNamespace('Ld_');
+
+try {
+    $cli = new Ld_Cli();
+    $cli->dispatch();
+} catch (Exception $e) {
+    fwrite(STDOUT, 'Error: ' . $e->getMessage() . PHP_EOL);
+    if (constant('LD_DEBUG')) {
+        fwrite(STDOUT, $e->getTraceAsString() . PHP_EOL);
+    }
+}
