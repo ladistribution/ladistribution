@@ -21,7 +21,7 @@ try {
     $cli->dispatch();
 } catch (Exception $e) {
     fwrite(STDOUT, 'Error: ' . $e->getMessage() . PHP_EOL);
-    if (constant('LD_DEBUG')) {
+    if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
         fwrite(STDOUT, $e->getTraceAsString() . PHP_EOL);
     }
 }
