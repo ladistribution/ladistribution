@@ -110,6 +110,22 @@ cd dokuwiki
 
 cd ..
 
+cd bbpress
+
+  cd application
+  ./build.sh
+  cd ..
+
+  cd theme
+
+    cd minimal
+    ./build.sh
+    cd ..
+
+ cd ..
+
+cd ..
+
 cd lib
 
   cd clearbricks

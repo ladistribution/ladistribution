@@ -1,19 +1,3 @@
-cd bbpress
-
-  cd application
-  ./build.sh
-  cd ..
-
-  cd theme
-
-    cd minimal
-    ./build.sh
-    cd ..
-
- cd ..
-
-cd ..
-
 cd dotclear
 
   cd application
