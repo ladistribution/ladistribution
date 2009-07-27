@@ -226,7 +226,7 @@ class Slotter_InstanceController extends Slotter_BaseController
       if ($this->_hasParam('download')) {
           $backup = $this->_getParam('download');
           foreach ($availableBackups as $backup) {
-              if ($backup['filename'] = $this->_getParam('download')) {
+              if ($backup['filename'] == $this->_getParam('download')) {
                   header('Content-Type: application/zip');
                   header('Content-Disposition: attachment; filename="' . $backup['filename'] . '"');
                   echo Ld_Files::get($backup['absoluteFilename']);
