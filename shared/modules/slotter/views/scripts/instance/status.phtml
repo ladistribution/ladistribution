@@ -1,10 +1,10 @@
+<?php $this->instancesList(false) ?>
+
+<div class="ld-panel">
+
 <?php $this->instanceNavigation() ?>
 
-<h2 class="h6e-entry-title">Manage</h2>
-
-<h3>Overview</h3>
-
-<?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
+<div class="ld-panel-content">
 
 <table class="h6e-data">
     <tr>
@@ -53,3 +53,7 @@
 <ul>
     <li><a href="<?php echo $this->instanceActionUrl('delete') ?>">Delete this application</a></li>
 </ul>
+
+</div> <!-- .ld-panel-content -->
+
+</div> <!-- .ld-panel -->

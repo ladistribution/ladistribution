@@ -4,8 +4,6 @@
 
 <?php else : ?>
 
-<?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
-
 <table class="h6e-data">
     <?php foreach(array('applications', 'libraries', 'extensions') as $type) : ?>
         <?php if (!empty($this->$type)) : ?>

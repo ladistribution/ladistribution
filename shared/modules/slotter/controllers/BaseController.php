@@ -24,6 +24,8 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
+        $this->view->action = $this->getRequest()->getActionName();
+
         $this->_setTitle('Admin');
 
         $this->_initAcl();
@@ -34,9 +36,9 @@ class Slotter_BaseController extends Ld_Controller_Action
     protected function _initNavigation()
     {
         $pages = array(
-            array( 'label' => 'Admin', 'module' => 'default', 'route' => 'default',
+            array( 'label' => 'Home', 'module' => 'default', 'route' => 'default',
                 'pages' => array(
-                    array( 'label' => 'Applications', 'module'=> 'slotter', 'route' => 'default' ),
+                    array( 'label' => 'Applications', 'module'=> 'slotter', 'route' => 'default'),
                     array( 'label' => 'Repositories', 'module' => 'slotter', 'controller' => 'repositories' ),
                     array( 'label' => 'Databases', 'module' => 'slotter', 'controller' => 'databases' ),
                     array( 'label' => 'Users', 'module' => 'slotter', 'controller' => 'users' )
@@ -44,7 +46,7 @@ class Slotter_BaseController extends Ld_Controller_Action
         );
 
         $this->_container = new Zend_Navigation($pages);
-        $this->view->navigation($this->_container);        
+        $this->view->navigation($this->_container);
     }
 
     protected function _initAcl()

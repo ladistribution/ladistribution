@@ -1,4 +1,6 @@
 <?php $this->headScript()->offsetSetFile('jquery', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery.js'); ?>
+<?php $this->headScript()->offsetSetFile('jquery-ui', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery-ui.js'); ?>
+<?php $this->headScript()->offsetSetFile('ld', Zend_Registry::get('site')->getUrl('js') . '/ld/ld.js'); ?>
 <?php echo $this->doctype('XHTML1_STRICT') . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -8,31 +10,19 @@
 <?php echo $this->headStyle() . "\n" ?>
 <?php echo $this->headScript() . "\n" ?>
 </head>
-<body>
+<body class="ld-layout">
 
-<div class="h6e-top-bar"><div class="h6e-top-bar-inner">
-  <div class="a">
-      <?php
-      $bc = $this->navigation()->breadcrumbs()->__toString();
-      if (empty($bc)) {
-          echo $this->title;
-      } else {
-          echo $bc;
-      }
-      ?>
-  </div>
-  <div class="b">
-      <?php if ($this->authenticated && !empty($this->user)) : ?>
-          Salut <?php echo $this->user['fullname'] ?>!
-          -
-          <a href="?ld_auth_action=logout">Log Out</a>
-      <?php elseif (!$this->authenticated) : ?>
-          <a class="h6e-login" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'login')) ?>">Log In</a>
-      <?php endif ?>
-  </div>
-</div></div>
+<?php Ld_Ui::top_bar(); ?>
 
 <div class="h6e-main-content">
+
+  <?php $bc = $this->navigation()->breadcrumbs()->__toString(); ?>
+  
+  <?php if (!empty($bc)) : ?>
+  <div class="h6e-bread-crumbs">
+      <?php echo $bc ?>
+  </div>
+  <?php endif ?>
 
   <div class="h6e-page-content">
       <?php echo $this->layout()->content ?>
@@ -44,9 +34,15 @@
 
 </div>
 
-<?php
-Ld_Ui::super_bar(array('jquery' => false));
-?>
+<?php Ld_Ui::super_bar(array('jquery' => false, 'ld-js' => false)); ?>
+
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($){
+        if(Ld) Ld.init($);
+    });
+})(jQuery);
+</script>
 
 </body>
 </html>

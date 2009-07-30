@@ -25,7 +25,7 @@ class Bootstrap
         self::setupCache();
 
         if ( get_magic_quotes_gpc() ) {
-            $fn = array('Bootstrap', '_stripslashesDeep');
+            $fn = array('self', '_stripslashesDeep');
             $_GET = array_map($fn, $_GET);
             $_POST = array_map($fn, $_POST);
             $_COOKIE = array_map($fn, $_COOKIE);
@@ -47,8 +47,7 @@ class Bootstrap
         $mvc = Zend_Layout::startMvc(array('layoutPath' => $site->getDirectory('shared') . '/modules/default/views/layouts'));
 
         $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/h6e-minimal/h6e-minimal.css', 'screen');
-        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/ld-ui/ld-bars.css', 'screen');
-        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/ld-ui/ld-slotter.css', 'screen');
+        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/ld-ui/ld-ui.css', 'screen');
 
         self::$_front = Zend_Controller_Front::getInstance();
 
@@ -71,25 +70,9 @@ class Bootstrap
 
     public static function setupRoutes()
     {
+        $config = new Zend_Config_Ini(dirname(__FILE__)  .'/routes.ini');
         $router = self::$_front->getRouter();
-
-        $route = new Zend_Controller_Router_Route(
-            'slotter/instance/id/:id/:action',
-            array('module' => 'slotter', 'controller' => 'instance', 'action' => 'status')
-        );
-        $router->addRoute('instance-action', $route);
-
-        $route = new Zend_Controller_Router_Route(
-            'slotter/update',
-            array('module' => 'slotter', 'controller' => 'index', 'action' => 'update')
-        );
-        $router->addRoute('update', $route);
-
-        $route = new Zend_Controller_Router_Route(
-            'identity/:id',
-            array('module' => 'identity', 'controller' => 'openid', 'action' => 'profile')
-        );
-        $router->addRoute('identity', $route);
+        $router->addConfig($config);
     }
 
     public static function setupCache()

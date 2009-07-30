@@ -1,56 +1,33 @@
 <h2>Applications</h2>
 
-<ul class="blocks">
-    <?php
-    $i = 0;
-    if (!empty($this->applications)) {
-      foreach ($this->applications as $id => $application) {
-          printf('<li id="app_%s" class="%s">', $id, $application->getPackageId());
-          printf("<span>%s<br/>", $application->getName());
-          printf("- <a href=\"%s\">home</a>", $application->getUrl());
-          foreach ($application->getLinks() as $link) {
-              if ($link['type'] == 'text/html') {
-                  printf("<br/>- <a href=\"%s\">%s</a>", $link['href'], $link['title']);
-              }
-          }
-          if ($this->canAdminInstances) {
-              $manageUrl = $this->url(array('controller' => 'instance', 'id' => $id, 'action' => 'status'), 'default');
-              printf("<br/>- <a href=\"%s\">settings</a><br/>", $manageUrl);
-          }
-          printf("</span></li>");
-          $i++;
-      }
-    }
-    ?>
-    <?php if ($this->canAdminInstances) : for ($j = $i; $j < $this->site->slots; $j++ ) : ?>
-    <li class="empty">
-        <a href="<?php echo $this->url(array('controller' => 'instance', 'action' => 'new')) ?>">
-            Add an application
-        </a>
-    </li>
-    <?php endfor; endif; ?>
-</ul>
+<?php $this->instancesList() ?>
 
-<?php
+<?php if ($this->canAdmin) : ?>
 
-$this->headScript()->offsetSetFile('jquery-ui', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery-ui.js');
+<div style="width:100%;overflow:hidden">
 
-?>
+    <div style="float:left;padding-right:25px;margin-right:25px;border-right:1px dotted #ccc">
+        <h2>Manage</h2>
+        <ul>
+            <li><a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'index')) ?>">Users</a></li>
+            <li><a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'index')) ?>">Repositories</a></li>
+            <li><a href="<?php echo $this->url(array('controller' => 'databases', 'action' => 'index')) ?>">Databases</a></li>
+        </ul>
+    </div>
 
-<script type="text/javascript">
-(function($) {
-    $(document).ready(function($){
-        $(".blocks").sortable({
-            update: function() {
-                $.post("<?php echo $this->url(array('action' => 'order')) ?>", $(".blocks").sortable('serialize'));
-            }
-        });
-        $(".blocks a").mousedown(function(e){
-            e.stopPropagation();
-        });
-    });
-})(jQuery);
-</script>
+    <div style="float:left">
+        <h2>Updates</h2>
+        <?php if ($this->canAdminInstances && $this->hasUpdate) : ?>
+            <?php $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update'); ?>
+            <p>There is some updates available. It's recommended to <a href="<?php echo $updateUrl ?>">upgrade now.</a></p>
+        <?php else: ?>
+            <p>Everything is up to date.</p>
+        <?php endif ?>
+    </div>
+
+</div>
+
+<?php endif ?>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
@@ -61,13 +38,5 @@ $this->headScript()->offsetSetFile('jquery-ui', Zend_Registry::get('site')->getU
 <?php if (empty($this->users) || count($this->users) == 0) : ?>
 
     <p><strong>Notice:</strong> You don't have any user registered yet. Registering users is necessary to password protect this admin and install others applications.</p>
-
-<?php endif ?>
-
-<?php if ($this->canAdminInstances && $this->hasUpdate) : ?>
-
-    <?php $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update'); ?>
-
-    <p><strong>Notice:</strong> There is some updates available. It's recommended to <a href="<?php echo $updateUrl ?>">upgrade now.</a></p>
 
 <?php endif ?>

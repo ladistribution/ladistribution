@@ -21,7 +21,7 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 
 	function render($preferences = array(), $configuration = array(), $ns = null)
 	{
-		echo '<table>';
+		echo '<table class="ld-preferences">';
 		foreach ($preferences as $preference) {
 			if (is_object($preference)) {
 				$preference = $preference->toArray();
@@ -33,7 +33,7 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 				$value = $preference['defaultValue'];
 			}
 			if ($preference['type'] != 'hidden') {
-				echo '<tr><td><label>' . $preference['label'] . '</label></td><td>' . "\n";
+				echo '<tr><th><label>' . $preference['label'] . '</label></th><td>' . "\n";
 			}
 			switch ($preference['type']) {
 				case 'boolean':
@@ -62,6 +62,9 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 				case 'hidden':
 					echo '<input type="hidden" name="' . $inputName . '" value="' . $this->view->escape($value) . '" />' . "\n";
 					break;
+    			case 'textarea':
+    				echo '<textarea cols="46" rows="5" name="' . $inputName . '">' . $this->view->escape($value) . '</textarea>' . "\n";
+    				break;
 				case 'text':
 				default:
 				    echo '<input class="text" size="45" type="text" name="' . $inputName . '" value="' . $this->view->escape($value) . '" />' . "\n";

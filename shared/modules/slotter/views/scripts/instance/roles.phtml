@@ -1,6 +1,10 @@
+<?php $this->instancesList(false) ?>
+
+<div class="ld-panel">
+
 <?php $this->instanceNavigation() ?>
 
-<h2>Roles</h2>
+<div class="ld-panel-content">
 
 <?php if (isset($this->supported) && $this->supported == false) : ?>
 
@@ -12,9 +16,7 @@
 
 <?php else : ?>
 
-<form action="" method="post">
-
-<?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
+<form action="<?php echo $this->url() ?>" method="post">
 
 <table class="h6e-data">
 
@@ -52,3 +54,7 @@
 </form>
 
 <?php endif ?>
+
+</div> <!-- .ld-panel-content -->
+
+</div> <!-- .ld-panel -->

@@ -1,12 +1,10 @@
-<h2>Databases Connections</h2>
+<h2>Databases connections</h2>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
     <p>None</p>
 
 <?php else : ?>
-
-    <?php $this->headScript()->offsetSetFile('ld-data', Zend_Registry::get('site')->getUrl('js') . '/ld/ld-data.js'); ?>
 
     <table class="h6e-data">
 

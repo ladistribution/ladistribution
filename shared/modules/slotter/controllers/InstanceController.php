@@ -28,6 +28,21 @@ class Slotter_InstanceController extends Slotter_BaseController
         }
 
         $this->_handleNavigation();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            Zend_Layout::getMvcInstance()->disableLayout();
+        }
+    }
+
+    /**
+     * postDispatch
+     */
+    public function postDispatch()
+    {
+        if ($this->getRequest()->isPost() && $this->_hasParam('referer')) {
+            $this->_redirectTo($this->_getParam('referer'));
+            return;
+        }
     }
 
     protected function _handleNavigation()
@@ -127,7 +142,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
         $this->view->extensions = array();
         foreach ($extensions as $id => $extension) {
-            if (!$this->_isExtensionInstalled($id) && $extension->type != 'theme') {
+            if (!$this->_isExtensionInstalled($id)) {
                 $this->view->extensions[$id] = $extension;
             }
         }
