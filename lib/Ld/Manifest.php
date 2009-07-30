@@ -178,9 +178,11 @@ class Ld_Manifest
             case 'application':
             case 'theme':
             case 'plugin':
-            case 'locale':
                 $rules[$type] = array('origin' => $type, 'path' => 'public', 'destination' => '');
                 $rules['dist'] = array('origin' => 'dist', 'path' => 'public', 'destination' => 'dist');
+                break;
+            case 'locale':
+                $rules[$type] = array('origin' => $type, 'path' => 'public', 'destination' => '');
                 break;
             case 'lib':
             case 'css':

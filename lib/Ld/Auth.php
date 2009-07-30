@@ -34,6 +34,18 @@ class Ld_Auth
         }
     }
 
+    public static function authenticate($username, $password)
+    {
+        $auth = Zend_Auth::getInstance();
+        $adapter = new Ld_Auth_Adapter_File();
+        $adapter->setCredentials($username, $password);
+        $result = $auth->authenticate($adapter);
+        if ($result->isValid()) {
+            return true;
+        }
+        return false;
+    }
+
     public static function isAuthenticated()
     {
         return Zend_Auth::getInstance()->hasIdentity();
@@ -45,6 +57,11 @@ class Ld_Auth
             return Zend_Auth::getInstance()->getIdentity();
         }
         return null;
+    }
+
+    public static function getUser()
+    {
+        return Zend_Registry::get('site')->getUser(self::getUsername());
     }
 
 }

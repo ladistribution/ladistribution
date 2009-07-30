@@ -54,7 +54,7 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
             $response = $this->httpClient->request();
             $result = Zend_Json::decode( $response->getBody() );
 
-            foreach ($result as $id => $params) {
+            foreach ((array)$result as $id => $params) {
                 $this->packages[$id] = $this->getPackage($params);
             }
 

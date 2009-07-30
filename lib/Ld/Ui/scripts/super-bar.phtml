@@ -1,0 +1,104 @@
+<div id="ld-super-bar" class="h6e-super-bar">
+
+    <div class="ld-panel" style="display:none">
+    </div>
+
+    <div class="h6e-super-bar-inner">
+
+        <div class="a">
+            <ul class="instances">
+
+            <?php
+
+            foreach ($this->applications as $id => $application) {
+
+                $settingsUrl = Ld_Ui::getAdminUrl(array(
+                    'module' => 'slotter', 'controller' => 'instance', 'action' => 'status', 'id' => $id
+                ), 'instance-action');
+                $settings = strpos($_SERVER["REQUEST_URI"], $settingsUrl) !== false;
+
+                foreach ($application->getLinks() as $link) {
+                      if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
+                          $adminUrl = $link['href'];
+                          break;
+                      }
+                }
+                $admin = isset($adminUrl) && strpos($_SERVER["REQUEST_URI"], $adminUrl) !== false;
+
+                $className = $application->getPackageId();
+
+                printf('<li id="app_%s" class="%s">', $id, $className);
+
+                if ($application->isCurrent() && !$settings && !$admin) {
+                    printf('<strong><a href="%s">%s</a></strong>', $application->getUrl(), $application->getName());
+                } else {
+                    printf('<a href="%s">%s</a>', $application->getUrl(), $application->getName());
+                }
+
+                if ($this->isAdmin && $id != 'admin' && ($application->isCurrent() || $settings || $admin)) {
+                    if (isset($adminUrl) || isset($settingsUrl)) {
+                        echo "&nbsp; • &nbsp;";
+                    }
+                    if (isset($adminUrl)) {
+                        if ($admin) {
+                            printf('<strong><a href="%s">Admin</a></strong> | ', $adminUrl);
+                        } else {
+                            printf('<a href="%s">Admin</a> | ', $adminUrl);
+                        }
+                    }
+                    if (isset($settingsUrl)) {
+                        if ($settings) {
+                            printf('<strong><a href="%s">Settings</a></strong>', $settingsUrl);
+                        } else {
+                            printf('<a href="%s">Settings</a>', $settingsUrl);
+                        }
+                    }
+                }
+
+                printf("</li>");
+
+            }
+
+            ?>
+
+            </ul>
+        </div>
+
+        <div class="b">
+        
+        </div>
+
+    </div>
+
+</div>
+
+<?php if (!isset($this->params['jquery']) || $this->params['jquery'] === true ) : ?>
+    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/jquery/jquery.js"></script>
+<?php endif ?>
+
+<?php if (!isset($this->params['ld-js']) || $this->params['ld-js'] === true ) : ?>
+    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/ld/ld.js"></script>
+<?php endif ?>
+
+<!--
+<style type="text/css">
+    @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-bars.css";
+    @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-slotter.css";
+    @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-panel.css";
+</style>
+-->
+
+<!--
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($){
+        $('a.ld-settings').click(function(e) {
+            $(".ld-panel").show().load($(this).attr('href') + " .ld-panel > *", null, function() {
+                Ld.instanceMenu($);
+            });
+            return false;
+        });
+    });
+})(jQuery);
+</script>
+-->

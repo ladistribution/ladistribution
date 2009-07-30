@@ -98,6 +98,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return null;
     }
 
+    public function isCurrent()
+    {
+        return strpos( $_SERVER["REQUEST_URI"], $this->getSite()->getPath() . '/' . $this->getPath() ) === 0;
+    }
+
     public function getDbTables()
     {
         $tables = array();

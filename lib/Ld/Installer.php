@@ -126,7 +126,7 @@ class Ld_Installer
 
     public function getLinks()
     {
-        $baseUrl = $this->getSite()->getBaseUrl() . $this->getPath();
+        $baseUrl = $this->getSite()->getPath() . '/' .  $this->getPath();
 
         $links = $this->getManifest()->getLinks();
         foreach ($links as $id => $link) {
@@ -328,10 +328,12 @@ class Ld_Installer
             foreach ($this->getInstance()->getDbTables() as $id => $tablename) {
                 $result = $dbConnection->query("TRUNCATE TABLE  $tablename");
                 $filename = $this->getRestoreFolder() . '/tables/' . $id . '.csv';
+                // not yet clear when we have to use
+                // CHARACTER SET utf8
+                // or not :-/
                 if (file_exists($filename)) {
                     $query = "LOAD DATA LOCAL INFILE '$filename'
                     REPLACE INTO TABLE $tablename
-                    CHARACTER SET utf8
                     FIELDS TERMINATED BY ';'
                     ENCLOSED BY '\"'
                     ESCAPED BY '\\\\'

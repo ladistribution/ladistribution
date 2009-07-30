@@ -39,8 +39,8 @@ class Ld_Files
      */
     public static function unlink($dir, $deleteRootToo = true, $initial = true)
     {
-        if ($initial && constant('LD_DEBUG')) {
-            echo "<b>Unlink</b>: $dir<br/>";
+        if ($initial) {
+            self::log('unlink', $dir);
         }
         if (is_file($dir)) {
             unlink($dir);
@@ -77,8 +77,8 @@ class Ld_Files
      */
     public static function copy($source, $target, $initial = true)
     {
-        if ($initial && constant('LD_DEBUG')) {
-            echo "<b>Copy</b>: $source -> $target<br/>";
+        if ($initial) {
+            self::log('copy', "$source -> $target");
         }
         if (is_dir($source)) {
             if (!file_exists($target) && is_writable(dirname($target))) {
@@ -87,10 +87,10 @@ class Ld_Files
             }
             if (!is_writable($target)) {
                 if (file_exists($target)) {
-                    self::skip($target);
+                    self::log('skipped', "$target (not writable)");
                 } else {
                     if (constant('LD_DEBUG')) {
-                        echo "<b>Warning</b>: Can't write $target.<br/>";
+                        self::log('warning', "Can't write $target.");
                     } else {
                         throw new Exception("Can't write $target.");
                     }
@@ -109,7 +109,7 @@ class Ld_Files
                     continue;
                 }
                 if (file_exists($destination) && !is_writable($destination)) {
-                    self::skip($destination);
+                    self::log('skipped', "$destination (not writable)");
                     continue;
                 }
                 $result = copy($origin, $destination);
@@ -203,6 +203,9 @@ class Ld_Files
 
     public static function put($file, $content)
     {
+        if (file_exists($file) && !is_writable($file)) {
+            throw new Exception("Can't write $file.");
+        }
         file_put_contents($file, $content);
         self::updatePermissions($file);
     }
@@ -239,13 +242,6 @@ class Ld_Files
         }
     }
 
-    public static function skip($target)
-    {
-        if (constant('LD_DEBUG')) {
-            echo "<b>Skipped</b>: $target (not writable)<br/>";
-        }
-    }
-
     public static function scanInstances($root, $ignore = array())
     {
         $instances = array();
@@ -279,6 +275,18 @@ class Ld_Files
             $age = time() - $filemtime;
             if ($age > $maxAge) {
                 Ld_Files::unlink(LD_TMP_DIR . '/' . $dir);
+            }
+        }
+    }
+
+    public static function log($action, $message)
+    {
+        if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
+            if (defined('LD_CLI') && constant('LD_CLI')) {
+                fwrite(STDOUT, "# $action: $message");
+                fwrite(STDOUT, PHP_EOL);
+            } else {
+                echo "<b>$action</b>: $message<br/>\n";
             }
         }
     }

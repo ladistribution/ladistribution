@@ -23,7 +23,7 @@ abstract class Ld_Repository_Abstract
     public $types = array(
         'applications'  => array('application', 'bundle'),
         'libraries'     => array('shared', 'lib', 'css', 'js'),
-        'extensions'    => array('theme', 'plugin')
+        'extensions'    => array('theme', 'plugin', 'locale')
     );
 
     abstract public function getUrl();

@@ -171,6 +171,21 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $instances;
     }
 
+    public function getApplicationsInstances()
+    {
+        $applications = array();
+        foreach ($this->getInstances('application') as $id => $application) {
+            $instance = $this->getInstance($id);
+            if (empty($instance)) {
+                continue;
+            }
+            if ($application['package'] != 'admin') {
+                $applications[$id] = $instance;
+            }
+        }
+        return $applications;
+    }
+
     protected function _sortByOrder($a, $b)
     {
         if (isset($a['order']) && isset($b['order'])) {
@@ -253,6 +268,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (isset($preferences['administrator']) && is_string($preferences['administrator'])) {
             $preferences['administrator'] = $this->getUser($preferences['administrator']);
+            if (empty($preferences['administrator'])) {
+                throw new Exception("Invalid administrator given.");
+            }
         }
 
         switch ($package->getType()) {
@@ -713,7 +731,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $packages = array();
         foreach ($this->getRepositories() as $id => $repository) {
-            $packages = array_merge($packages, $repository->getPackageExtensions($packageId, $type));
+            $packages = array_merge($repository->getPackageExtensions($packageId, $type), $packages);
         }
         return $packages;
     }

@@ -1,0 +1,26 @@
+<div class="h6e-top-bar">
+    <div class="h6e-top-bar-inner">
+        <div class="a">
+            <a class="logo" href="<?php echo $this->site->getBaseUrl() ?>admin/">La Distribution</a>
+        </div>
+        <div class="b">
+        <?php
+        $user = Ld_Auth::getUser();
+        if ($user) {
+            $userUrl = Ld_Ui::getAdminUrl(array(
+                    'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => $user['username']
+            ));
+        }
+        $loginUrl = Ld_Ui::getAdminUrl(array(
+              'module' => 'default', 'controller' => 'auth', 'action' => 'login'
+        ));
+        ?>
+        <?php if (Ld_Auth::isAuthenticated() && $user) : ?>
+            <a href="<?php echo $userUrl ?>"><?php echo $user['fullname'] ?></a>
+            <a href="?ld_auth_action=logout">Log Out</a>
+        <?php else : ?>
+            <a class="h6e-login" href="<?php echo $loginUrl ?>">Log In</a>
+        <?php endif ?>
+        </div>
+    </div>
+</div>
