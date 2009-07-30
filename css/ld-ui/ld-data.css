@@ -1,0 +1,38 @@
+table.h6e-data {
+  width:auto;
+  border-collapse:collapse;
+}
+
+table.h6e-data th {
+  font-weight:bold;
+  background:#ddd;
+}
+
+table.h6e-data th, table.h6e-data td, table.h6e-data caption {
+  padding: 4px 10px 4px 5px;
+}
+
+table.h6e-data tr.th2 th {
+  background:#eee;
+}
+
+table.h6e-data td, table.h6e-data th {
+  border:1px solid #ccc;
+}
+
+table.h6e-data tr.even td {
+  background:#f5f5f5;
+}
+
+table.h6e-data tr td.move {
+  padding:10px;
+  background:url(img/move.gif) center center no-repeat;
+}
+
+table.h6e-data tr.dragging td {
+  opacity:0.5;
+  background:transparent;
+  /* http://www.quirksmode.org/css/opacity.html */
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+}

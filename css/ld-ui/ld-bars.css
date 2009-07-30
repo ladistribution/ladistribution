@@ -1,7 +1,3 @@
-.h6e-main-content {
-  margin-top:2em;
-}
-
 
 /* Top Bar & Super Bar
 -------------------------------------------------------------- */
@@ -16,11 +12,11 @@
 .h6e-super-bar {
   width:100%;
   position:fixed;
+  left:0;
   bottom:0;
   clear:both;
-  z-index:9999;
+  z-index:9990;
   margin:auto;
-  left:0;
 }
 
 .h6e-top-bar .a, .h6e-super-bar .a {
@@ -32,50 +28,139 @@
 }
 
 .h6e-super-bar-inner, .h6e-top-bar-inner {
-  width:80%;
+  width:928px;
   margin:auto;
   overflow:hidden;
   background:#EDEDED;
   border:1px solid #CCCCCC;
   font:11px/12px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding:5px 10px;
-  height:10px;
+}
+
+.h6e-top-bar-inner {
+  padding:0;
+  border-top:0;
+  -moz-border-radius-bottomleft:5px;
+  -moz-border-radius-bottomright:5px;
+  -webkit-border-bottom-left-radius:5px;
+  -webkit-border-bottom-right-radius:5px;
+}
+
+.h6e-super-bar-inner {
+  padding:0.5em 0.5em 0;
+  border-bottom:0;
+  -moz-border-radius-topleft:5px;
+  -moz-border-radius-topright:5px;
+  -webkit-border-top-left-radius:5px;
+  -webkit-border-top-right-radius:5px;
 }
 
 .h6e-super-bar-inner, .h6e-top-bar-inner, .h6e-super-bar-inner a, .h6e-top-bar-inner a {
-	color:#4E5368 !important;
+  color:#4E5368 !important;
 }
 
 .h6e-super-bar-inner a, .h6e-top-bar-inner a {
-	text-decoration:none;
-	border-bottom:0;
-	background:none;
+  text-decoration:none;
+  border-bottom:0;
+  background:none;
 }
 
 .h6e-super-bar-inner a:hover, .h6e-top-bar-inner a:hover {
-	text-decoration:underline;
+  text-decoration:underline;
 }
 
-.h6e-top-bar-inner   { border-top:0; -moz-border-radius-bottomleft:5px; -moz-border-radius-bottomright:5px; }
-.h6e-super-bar-inner { border-bottom:0; -moz-border-radius-topleft:5px; -moz-border-radius-topright:5px; }
-
-.h6e-super-bar .a a {
-  border-right:1px solid #999;
-  padding-right:0.5em;
-  margin-right:0.5em;
+.h6e-top-bar-inner, .h6e-super-bar-inner  {
+  /*
+  background-color:#daf812;
+  border-color:#bfd04a;
+  */
 }
+
+.h6e-top-bar .logo {
+  display:block;
+  width:106px;
+  height:18px;
+  background:#EDEDED url(img/ld.png) center left no-repeat;
+  text-indent: -9999px;	
+  margin:3px 10px;
+}
+
+.h6e-top-bar-inner .b {
+  line-height:1.8em;
+  margin-right:10px;
+}
+
+.h6e-top-bar-inner .b a {
+  float:left;
+  display:block;
+  padding:3px 5px;
+  height:100%;
+}
+
+/* Super Bar Instances
+-------------------------------------------------------------- */
+
+.h6e-super-bar ul.instances {
+  width:100%;
+  overflow:hidden;
+  margin:0;
+  padding:0;
+  -moz-padding-start:0;
+}
+
+.h6e-super-bar ul.instances li {
+  display:block;
+  float:left;
+
+  width:auto;
+  height:auto;
+  margin:0 0 0.5em 0.5em;
+  padding:0.5em;
+
+  border:1px solid #ddd;
+  border-radius:5px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+
+  font-size:11px;
+  height:1.2em;
+  line-height:1.2em;
+
+  background:white 3px 3px no-repeat;
+}
+
+.h6e-super-bar ul.instances li.current {
+  border-color:#555;
+  background-color:#888;
+}
+
+.h6e-super-bar ul.instances li.active {
+  border-color:#333;
+  background-color:#666;
+}
+
+.h6e-super-bar ul.instances li.extra-link {
+  font-size:10px;
+  line-height:1em;
+  margin-left:0;
+  margin-top:1px;
+}
+
+.h6e-super-bar ul.instances li.wordpress { padding-left:25px; background-image:url(img/wp16.png); }
+.h6e-super-bar ul.instances li.dokuwiki  { padding-left:25px; background-image:url(img/dw16.png); }
+.h6e-super-bar ul.instances li.bbpress   { padding-left:25px; background-image:url(img/bp16.png); }
 
 /* Super Bar Menu
 -------------------------------------------------------------- */
 
+/*
 .ld-super-bar-menu {
   border:1px solid #CCCCCC;
   left:0;
   bottom:20px;
   position:fixed;
-  z-index:9998;
+  z-index:9991;
   width:150px;
-  margin:0 10%;
+  margin:0 10px;
   background:white;
   font:12px/12px "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   text-align:left;
@@ -105,3 +190,25 @@
 .ld-super-bar-menu li a:hover {
   background:#F1F1F1;
 }
+*/
+
+/* Inner Panel
+-------------------------------------------------------------- */
+
+/*
+.h6e-super-bar .ld-panel {
+  width:850px;
+  margin:auto;
+  overflow:hidden;
+  bottom:20px;
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  -moz-border-radius-topleft:5px;
+  -moz-border-radius-topright:5px;
+}
+
+.h6e-super-bar .ld-panel-content {
+  background:white;
+  border-bottom:0;
+  height:300px;
+}
+*/
