@@ -67,7 +67,7 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 	function tpl_metaheader_output(&$event, $param)
 	{
 		$css_url = Zend_Registry::get('site')->getUrl('css');
-		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>$css_url.'/ld-ui/ld-bars.css');
+		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>$css_url.'/ld-ui/ld-ui.css');
 		$js_url = Zend_Registry::get('site')->getUrl('js');
 		$jquery = array( 'type'=>'text/javascript', '_data' => '', 'src'=>$js_url.'/jquery/jquery.js');
 		$event->data['script'] = array_merge(array($jquery), $event->data['script']);
@@ -86,25 +86,4 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 		Ld_Ui::super_bar(array('jquery' => false));
 	}
 
-}
-
-function ld_top_bar()
-{
-	global $conf;
-	?>
-	<div class="h6e-top-bar">
-		<div class="h6e-top-bar-inner">
-			<div class="a">
-				<?php echo $conf['title'] ?>
-			</div>
-			<div class="b">
-				<?php tpl_userinfo()?>
-				<?php tpl_actionlink('subscription') ?>
-				<?php tpl_actionlink('profile') ?>
-				<?php tpl_actionlink('admin') ?>
-				<?php tpl_actionlink('login'); ?>
-			</div>
-		</div>
-	</div>
-	<?php
 }

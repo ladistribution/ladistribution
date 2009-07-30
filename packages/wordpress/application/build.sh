@@ -20,6 +20,10 @@ rm $FOLDER/wp-register.php
 rm $FOLDER/wp-content/plugins/hello.php
 rm -rf $FOLDER/wp-content/plugins/akismet
 
+rm -rf $FOLDER/wp-content/themes/classic
+rm -rf $FOLDER/wp-content/themes/default
+svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "$FOLDER/wp-content/themes/default"
+
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php
 rm $FOLDER/wp-admin/import/btt.php

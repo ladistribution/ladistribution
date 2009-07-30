@@ -29,7 +29,7 @@ function ld_logout()
 
 add_action('wp_logout', 'ld_logout');
 
-class Ld_Auth_Adapter_File_Wordpress implements Zend_Auth_Adapter_Interface
+class Ld_Auth_Adapter_Wordpress implements Zend_Auth_Adapter_Interface
 {
 	public function authenticate()
 	{
@@ -46,7 +46,7 @@ function ld_handle_current_user()
     /* authenticate on the Ld session if not connected in Ld but in WP */
 	if (is_user_logged_in() && !Ld_Auth::isAuthenticated()) {
 		$auth = Zend_Auth::getInstance();
-		$adapter = new Ld_Auth_Adapter_File_Wordpress();
+		$adapter = new Ld_Auth_Adapter_Wordpress();
 		$auth->authenticate($adapter);
 	}	
 }

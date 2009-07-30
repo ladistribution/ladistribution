@@ -19,9 +19,8 @@ class auth_ld extends auth_plain
         $this->cando['external'] = true;
         $this->cando['logoff'] = true;
 
-        $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity()) {
-            $_REQUEST['u'] = $auth->getIdentity();
+        if (Ld_Auth::isAuthenticated()) {
+            $_REQUEST['u'] = Ld_Auth::getUsername();
         }
     }
 
@@ -68,8 +67,7 @@ class auth_ld extends auth_plain
             return true;
         }
 
-        $hasher = new Ld_Auth_Hasher(8, TRUE);
-        if ($hasher->CheckPassword($pass, $this->users[$user]['pass'])) {
+        if (Ld_Auth::authenticate($user, $pass)) {
             return true;
         }
 
@@ -84,12 +82,9 @@ class auth_ld extends auth_plain
      */    
     function logOff()
     {
-        $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity()) {
-            $auth->clearIdentity();
-        }
+        Ld_Auth::logout();
     }
-    
+
     function logIn($user)
     {
         global $USERINFO;
@@ -107,10 +102,8 @@ class auth_ld extends auth_plain
 
     function trustExternal($user,$pass,$sticky=false)
     {
-        $auth = Zend_Auth::getInstance();
-
         // if a valid Zend_Auth session is currently active
-        if ($auth->hasIdentity() && $user == $auth->getIdentity()) {
+        if (Ld_Auth::isAuthenticated() && $user == Ld_Auth::getUsername()) {
             $this->logIn($user);
             return true;
         
@@ -128,9 +121,9 @@ class auth_ld extends auth_plain
 
     function handle_ld_session()
     {
-        $auth = Zend_Auth::getInstance();
-        if (!$auth->hasIdentity()) {
-            $adapter = new Ld_Auth_Adapter_File_Dokuwiki();
+        if (!Ld_Auth::isAuthenticated()) {
+            $auth = Zend_Auth::getInstance();
+            $adapter = new Ld_Auth_Adapter_Dokuwiki();
             $auth->authenticate($adapter);
         }
     }
@@ -149,7 +142,7 @@ class auth_ld extends auth_plain
 
 }
 
-class Ld_Auth_Adapter_File_Dokuwiki implements Zend_Auth_Adapter_Interface
+class Ld_Auth_Adapter_Dokuwiki implements Zend_Auth_Adapter_Interface
 {
     public function authenticate()
     {
