@@ -1,6 +1,6 @@
 
 .ld-layout h2 {
-	margin:0px 0 15px;
+  margin:0px 0 15px;
 }
 
 .ld-layout h2, .ld-layout h2 a, .ld-layout h2 a:visited {
@@ -11,6 +11,10 @@
 	margin-bottom:1em;
 	margin-top:2em;
 	width:900px;
+}
+
+.h6e-page-title {
+	margin:0.5em 0 0.75em;
 }
 
 .h6e-bread-crumbs {

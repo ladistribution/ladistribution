@@ -17,11 +17,11 @@
 
     <div style="float:left">
         <h2>Updates</h2>
-        <?php if ($this->canAdminInstances && $this->hasUpdate) : ?>
+        <?php if ($this->canAdmin && $this->hasUpdate) : ?>
             <?php $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update'); ?>
             <p>There is some updates available. It's recommended to <a href="<?php echo $updateUrl ?>">upgrade now.</a></p>
         <?php else: ?>
-            <p>Everything is up to date.</p>
+            <p>Everything fine, nothing to update.</p>
         <?php endif ?>
     </div>
 
@@ -29,14 +29,14 @@
 
 <?php endif ?>
 
-<?php if (empty($this->databases) || count($this->databases) == 0) : ?>
+<?php if (empty($this->users) || count($this->users) == 0) : $this->canAdmin = true; ?>
 
-    <p><strong>Notice:</strong> You didn't registered any database connection yet. A database is often needed to deploy new web application.</p>
+    <p><strong>Warning:</strong> You don't have any user registered yet. Registering users is necessary to password protect this admin and install others applications.</p>
 
 <?php endif ?>
 
-<?php if (empty($this->users) || count($this->users) == 0) : ?>
+<?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
-    <p><strong>Notice:</strong> You don't have any user registered yet. Registering users is necessary to password protect this admin and install others applications.</p>
+    <p><strong>Notice:</strong> You didn't registered any database connection yet. A database is often needed to deploy new web application.</p>
 
 <?php endif ?>
