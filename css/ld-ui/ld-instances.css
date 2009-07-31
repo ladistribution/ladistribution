@@ -69,6 +69,10 @@ ul.blocks.mini li {
   line-height:1.2em;
 }
 
+ul.blocks.mini li .name {
+  float:left;
+}
+
 ul.blocks.mini li .links {
   font-size:11px;
   padding-left:10px;

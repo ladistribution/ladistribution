@@ -27,6 +27,11 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
             printf('<li id="app_%s" class="%s">', $id, $className);
 
+            printf('<div class="name">');
+            printf('<a class="manage" href="%s">%s</a><br />', $application->getUrl(), $application->getName());
+            printf('<span class="path">/%s/</span>', $application->getPath());
+            printf('</div>');
+
             printf('<div class="links">');
             foreach ($application->getLinks() as $link) {
                   if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
@@ -35,9 +40,6 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             }
             printf('<a class="view" href="%s">Settings</a><br/>',  $manageUrl);
             printf('</div>');
-
-            printf('<a class="manage" href="%s">%s</a><br />', $application->getUrl(), $application->getName());
-            printf('<span class="path">/%s/</span>', $application->getPath());
 
             printf("</li>");
         }
