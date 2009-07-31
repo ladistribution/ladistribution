@@ -1,3 +1,17 @@
+<?php if (!isset($this->params['jquery']) || $this->params['jquery'] === true ) : ?>
+    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/jquery/jquery.js"></script>
+<?php endif ?>
+
+<?php if (!isset($this->params['ld-js']) || $this->params['ld-js'] === true ) : ?>
+    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/ld/ld.js"></script>
+<?php endif ?>
+
+<?php if (isset($this->params['style']) && $this->params['style'] === true ) : ?>
+    <style type="text/css">
+        @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-bars.css";
+    </style>
+<?php endif ?>
+
 <div id="ld-super-bar" class="h6e-super-bar">
 
     <div class="ld-panel" style="display:none">
@@ -71,22 +85,6 @@
     </div>
 
 </div>
-
-<?php if (!isset($this->params['jquery']) || $this->params['jquery'] === true ) : ?>
-    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/jquery/jquery.js"></script>
-<?php endif ?>
-
-<?php if (!isset($this->params['ld-js']) || $this->params['ld-js'] === true ) : ?>
-    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/ld/ld.js"></script>
-<?php endif ?>
-
-<!--
-<style type="text/css">
-    @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-bars.css";
-    @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-slotter.css";
-    @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-panel.css";
-</style>
--->
 
 <!--
 <script type="text/javascript">
