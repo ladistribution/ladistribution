@@ -114,7 +114,7 @@ class Slotter_IndexController extends Slotter_BaseController
                     }
                 }
             }
-            $this->view->update = true;
+            $this->_redirector->gotoSimple('update', 'index');
         }
 
         $instances = $this->site->getInstances();
