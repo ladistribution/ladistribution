@@ -57,7 +57,6 @@ ul.blocks.mini li {
 
   width:auto;
   height:auto;
-  overflow:hidden;
 
   background:#EDEDED center left no-repeat;
 
@@ -75,11 +74,16 @@ ul.blocks.mini li .name {
 
 ul.blocks.mini li .links {
   font-size:11px;
-  padding-left:10px;
   float:right;
   margin-left:10px;
   border-left:1px dotted #ccc;
+  padding-left:10px;
 }
+
+/* Fix a display issue with Firefox 3.5 */
+ul.blocks.mini li.ui-sortable-helper,
+ul.blocks.mini li.ui-sortable-placeholder { height:33px !important; }
+ul.blocks.mini li.ui-sortable-helper .links { display:none; }
 
 ul.blocks.mini li.empty {
   padding-left:10px;
