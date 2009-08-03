@@ -107,6 +107,7 @@ ul.blocks.mini li .path, ul.blocks.mini li .manage  {
   white-space:nowrap;
 }
 
+ul.blocks.mini li      { background-image:url(img/default48.png); }
 ul.blocks.mini li.wordpress { background-image:url(img/wp48.png); }
 ul.blocks.mini li.dokuwiki  { background-image:url(img/dw48.png); }
 ul.blocks.mini li.bbpress   { background-image:url(img/bp48.png); }
