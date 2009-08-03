@@ -12,7 +12,7 @@ $conf = $application->getInstaller()->getConfiguration();
 if (isset($conf['superbar']) && $conf['superbar'] == 'never') {
     // nothing
 } elseif (isset($conf['superbar']) && $conf['superbar'] == 'connected' && Ld_Auth::isAuthenticated()) {
-    // nothing
+    Ld_Ui::super_bar(array('jquery' => true));
 } else {
     Ld_Ui::super_bar(array('jquery' => true));
 }

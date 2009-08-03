@@ -38,6 +38,7 @@ class Ld_Installer_Moonmoon extends Ld_Installer
     
 	public function update()
 	{
+		/* prevent erasing people.opml when updating */
 		Ld_Files::unlink($this->getDir() . 'application/custom/people.opml');
 
 		parent::update();
