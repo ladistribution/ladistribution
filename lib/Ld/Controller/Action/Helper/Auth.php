@@ -20,122 +20,93 @@ require_once 'Zend/Controller/Action/Helper/Abstract.php';
 class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abstract
 {
 
-    public function init()
-    {
-        $baseUrl = $this->getRequest()->getBaseUrl();
-
-        $this->_auth = Zend_Auth::getInstance();
-
-        $this->handle();
-    }
-
-    public function handle()
+    public function authenticate()
     {
         if ($this->_getParam('ld_auth_action') == 'logout') {
+
             $this->logout();
             $this->_redirect( Zend_Registry::get('site')->getUrl() );
+
         } else if ($this->_getParam('ld_auth_action') == 'login') {
-            $this->_authenticateWithUsernameAndPassword();
+
+            $result = Ld_Auth::authenticate($this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'));
+
+            // if authentication Fail, we try to log in with OpenID
+            if (!$result->isValid() && Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
+                $this->_setParam('openid_action', 'login');
+                $this->_setParam('openid_identifier', $this->_getParam('ld_auth_username'));
+            } else {
+                return $result;
+            }
         }
 
         if ($this->_getParam('openid_action') || $this->_getParam('openid_mode')) {
-            $this->_authenticateWithOpenid();
-        }
-    }
-
-    public function logout()
-    {
-        $this->_auth->clearIdentity();
-    }
-
-    public function authenticate()
-    {
-        if ($this->_auth->hasIdentity()) {
-            if ($user = $this->getUser()) {
-                return true;
+            if ($this->_getParam('action') != 'add-identity') {
+                return $this->_authenticateWithOpenid();
             }
-            $identity = $this->_auth->getIdentity();
-            $this->_auth->clearIdentity();
-            throw new Exception( sprintf("Unknown user: %s.", $identity) );
         }
-        return false;
-    }
 
-    public function getUser()
-    {
-        if ($this->_auth->hasIdentity()) {
-            $identity = $this->_auth->getIdentity();
-            if (substr($identity, 0, 7 == 'http://') || substr($identity, 0, 7 == 'https://')) {
-                return $this->_getUserByOpenid($identity);
-            }
-            return $this->_getUserByUsername($identity);
-        }
         return null;
     }
 
     protected function _authenticateWithOpenid()
     {
+        $auth = Zend_Auth::getInstance();
+
         $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
 
-        $adapter = new Zend_Auth_Adapter_OpenId( $this->_getParam('openid_identifier'), null, null, $root);
+        $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), null, null, $root);
 
         if ($this->_getParam('openid_action') == 'login' && $this->_getParam('openid_identifier')) {
-            return $this->_auth->authenticate($adapter);
+
+            // we start the OpenID process
+            // this should likely redirect to the OpenID provider
+            return $auth->authenticate($adapter);
 
         } else if ($this->_getParam('openid_mode') == 'id_res') {
-            return $this->_auth->authenticate($adapter);
-        }
-    }
 
-    protected function _authenticateWithUsernameAndPassword()
-    {
-        $adapter = new Ld_Auth_Adapter_File();
-        $adapter->setCredentials($this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'));
-        return $this->_auth->authenticate($adapter);
-    }
+            $result = $auth->authenticate($adapter);
 
-    protected function _authenticateWithOauth()
-    {
-        require_once 'OAuth/OAuthRequestVerifier.php';
-        if (OAuthRequestVerifier::requestIsSigned()) {
-            try {
-                $req = new OAuthRequestVerifier();
-                $this->username = $req->verify();
-                return $this->username;
-            } catch (OAuthException $e) {
-                $message = $e->getMessage();
-                Ld_Auth::unauthorized($message);
-            }
-        }
-    }
-
-    protected function _getUserByOpenid($openid)
-    {
-        $users = Zend_Registry::get('site')->getUsers();
-        foreach ($users as $id => $user) {
-            foreach ($user['identities'] as $identity) {
-                if ($identity == $openid) {
-                    return $user;
+            // if user is correctly authenticated with OpenID
+            // but with an identity not attached to a local account
+            // we clear the identity to cancel the authentication
+            // and return an authentication failure
+            if ($result->isValid()) {
+                $user = Ld_Auth::getUser();
+                if (empty($user)) {
+                    $auth->clearIdentity();
+                    return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, null);
                 }
             }
+
+            return $result;
+
         }
-        return null;
     }
 
-    protected function _getUserByUsername($username)
-    {
-        $users = Zend_Registry::get('site')->getUsers();
-        foreach ((array)$users as $id => $user) {
-            if ($user['username'] == $username) {
-                return $user;
-            }
-        }
-        return null;
-    }
+    // protected function _authenticateWithOauth()
+    // {
+    //     require_once 'OAuth/OAuthRequestVerifier.php';
+    //     if (OAuthRequestVerifier::requestIsSigned()) {
+    //         try {
+    //             $req = new OAuthRequestVerifier();
+    //             $this->username = $req->verify();
+    //             return $this->username;
+    //         } catch (OAuthException $e) {
+    //             $message = $e->getMessage();
+    //             Ld_Auth::unauthorized($message);
+    //         }
+    //     }
+    // }
 
     protected function _getParam($id)
     {
         return $this->getRequest()->getParam($id);
+    }
+
+    protected function _setParam($id, $value)
+    {
+        return $this->getRequest()->setParam($id, $value);
     }
 
     protected function _redirect($url)
@@ -143,5 +114,11 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
         header("Location:$url");
         exit;
     }
+
+    public function logout() { Ld_Auth::logout(); }
+
+    public function getUser() { return Ld_Auth::getUser(); }
+
+    public function isAuthenticated() { return Ld_Auth::isAuthenticated(); }
 
 }

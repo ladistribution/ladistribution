@@ -201,10 +201,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     public function getUserRole($username = null)
     {
         if (empty($username)) {
-            $auth = Zend_Auth::getInstance();
-            if ($auth->hasIdentity()) {
-                 $username = $auth->getIdentity();
-            }
+            $username = Ld_Auth::getUsername();
         }
         return $this->getInstaller()->getUserRole($username);
     }

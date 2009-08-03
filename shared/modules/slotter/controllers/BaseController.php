@@ -67,7 +67,7 @@ class Slotter_BaseController extends Ld_Controller_Action
         $this->_acl->allow('user', 'instances', 'view');
         $this->_acl->allow('admin', 'instances', 'admin');
 
-        $this->userRole = $this->_getCurrentUserRole();
+        $this->view->userRole = $this->userRole = $this->_getCurrentUserRole();
     }
 
     protected function _getCurrentUserRole()

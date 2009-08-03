@@ -30,12 +30,12 @@ class Ld_Auth_Adapter_File implements Zend_Auth_Adapter_Interface
         $hasher = new Ld_Auth_Hasher(8, TRUE);
         $user = Zend_Registry::get('site')->getUser($this->_username);
         if (empty($user)) {
-            throw new Exception("Not existing user."); 
+            return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, null);
         }
         if ($hasher->CheckPassword($this->_password, $user['hash'])) {
             return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this->_username);
         }
-        return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
+        return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, null);
     }
 
 }

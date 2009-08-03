@@ -67,7 +67,8 @@ class auth_ld extends auth_plain
             return true;
         }
 
-        if (Ld_Auth::authenticate($user, $pass)) {
+        $result = Ld_Auth::authenticate($user, $pass);
+        if ($result->isValid()) {
             return true;
         }
 

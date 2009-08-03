@@ -91,10 +91,7 @@ endif;
 if ( !function_exists('bb_login') ) :
 function bb_login( $login, $password, $remember = false ) {
 	// LD login
-	$auth = Zend_Auth::getInstance();
-	$adapter = new Ld_Auth_Adapter_File();
-	$adapter->setCredentials($login, $password);
-	$result = $auth->authenticate($adapter);
+    $result = Ld_Auth::authenticate($login, $password);
 	if ($result->isValid()) {
 		return bb_get_current_user();
 	}

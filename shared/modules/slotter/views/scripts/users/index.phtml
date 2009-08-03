@@ -18,7 +18,11 @@
            <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
        <?php endforeach ?>
        */ ?>
-       <th colspan="2">Action</th>
+
+       <?php if ($this->userRole == 'admin') : ?>
+           <th colspan="2">Action</th>
+       <?php endif ?>
+
    </tr>
 
 <?php foreach ($this->users as $user) : ?>
@@ -52,12 +56,14 @@
        <?php endforeach ?>
        */ ?>
        
-       <td>
-           <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $user['username'] )); ?>">edit</a>
-       </td>
-       <td>
-           <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $user['username'] )); ?>">delete</a>
-       </td>
+       <?php if ($this->userRole == 'admin') : ?>
+           <td>
+               <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $user['username'] )); ?>">edit</a>
+           </td>
+           <td>
+               <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $user['username'] )); ?>">delete</a>
+           </td>
+       <?php endif ?>
 
     </tr>
 

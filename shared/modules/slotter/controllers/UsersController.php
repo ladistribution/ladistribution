@@ -15,8 +15,20 @@ class Slotter_UsersController extends Slotter_BaseController
     {
         parent::preDispatch();
 
-        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
-            $this->_disallow();
+        switch ($this->_getParam('action')) {
+            case 'edit':
+            case 'add-identity':
+                if ($this->_getParam('id') != $this->currentUser['username']) {
+                    $this->_disallow();
+                }
+                break;
+            case 'index':
+                // allow
+                break;
+            default:
+                if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+                    $this->_disallow();
+                }
         }
 
         $this->_handleNavigation();
@@ -115,6 +127,29 @@ class Slotter_UsersController extends Slotter_BaseController
             $this->site->updateUser($id, $params);
             $this->_redirector->gotoSimple('index', 'users');
         }
+    }
+
+    public function addIdentityAction()
+    {
+        $auth = Zend_Auth::getInstance();
+
+        $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
+
+        $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), null, null, $root);
+
+        $result = $auth->authenticate($adapter);
+
+        if ($result->isValid()) {
+            $id = $this->_getParam('id');
+            $user = $this->site->getUser($id);
+            if (empty($user['identities'])) {
+                $user['identities'] = array();
+            }
+            $user['identities'][] = $auth->getIdentity();
+            $this->site->updateUser($id, $user);
+            $this->_redirector->gotoSimple('index', 'users');
+        }
+
     }
 
 }

@@ -8,7 +8,11 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
         ?>
 
         <div class="ld-instance-list">
-          <ul class="blocks sortables mini">
+          <?php if ($this->view->userRole == 'admin') : ?>
+              <ul class="blocks sortables mini">
+          <?php else : ?>
+              <ul class="blocks mini">
+          <?php endif ?>
 
         <?php
 
@@ -38,15 +42,17 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
                       printf("<a class=\"view\" href=\"%s\">%s</a><br/>", $link['href'], ucfirst($link['title']));
                   }
             }
-            printf('<a class="view" href="%s">Settings</a><br/>',  $manageUrl);
+            if ($this->view->userRole == 'admin') {
+                printf('<a class="view" href="%s">Settings</a><br/>',  $manageUrl);
+            }
             printf('</div>');
 
-            printf("</li>");
+            printf("</li>\n");
         }
-        
+
         ?>
-        
-        <?php if ($all) : ?>
+
+        <?php if ($all && $this->view->userRole == 'admin') : ?>
         <li class="empty new">
             <a href="<?php echo $this->view->url(array('controller' => 'instance', 'action' => 'new')) ?>">
                 Add a new application
@@ -66,6 +72,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             });
         })(jQuery);
         </script>
+
         <?php
     }
 

@@ -37,3 +37,20 @@
   padding-top:0.5em;
   clear:both;
 }
+
+/* Notifications
+-------------------------------------------------------------- */
+
+.ld-error, .ld-notice, .ld-success {
+	padding:5px 10px;
+	margin-bottom:1em;
+	border:1px solid #ddd;
+}
+
+.ld-error   { background:#FBE3E4; color:#8a1f11; border-color:#FBC2C4; }
+.ld-notice  { background:#FFF6BF; color:#514721; border-color:#FFD324; }
+.ld-success { background:#E6EFC2; color:#264409; border-color:#C6D880; }
+
+.ld-error   a { color:#8a1f11; }
+.ld-notice  a { color:#514721; }
+.ld-success a { color:#264409; }

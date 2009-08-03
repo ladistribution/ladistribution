@@ -31,7 +31,8 @@ class Ld_Controller_Action extends Zend_Controller_Action
         $this->_redirector = $this->_helper->getHelper('Redirector');
 
         // Authentication
-        $this->view->authenticated = $this->authenticated = $this->_helper->auth->authenticate();
+        $this->view->authentication = $this->authentication = $this->_helper->auth->authenticate();
+        $this->view->authenticated = $this->authenticated = $this->_helper->auth->isAuthenticated();
         if ($this->authenticated) {
             // old, deprecated
             $this->view->user = $this->user = $this->_helper->auth->getUser();
@@ -49,7 +50,7 @@ class Ld_Controller_Action extends Zend_Controller_Action
     function noRender()
     {
         $this->_helper->viewRenderer->setNoRender(true);
-        Zend_Layout::getMvcInstance()->disableLayout();        
+        Zend_Layout::getMvcInstance()->disableLayout();
     }
 
 }

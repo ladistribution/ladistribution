@@ -1,29 +1,66 @@
-<h2>Login</h2>
+<div id="ld-login">
 
-<form method="post" action="">
-    
-    <label>Username</label><br/>
-    <input class="text" type="text" name="ld_auth_username" value=""/>
-    <br/>
-    <label>Password</label><br/>
-    <input class="text"  type="password" name="ld_auth_password" value="">
-    <br/>
-    <?php foreach ($this->postParams as $key => $value) : ?>
-        <input type="hidden" name="<?php echo $key ?>" value="<?php echo $value ?>"/>
-    <?php endforeach ?>
-    <input type="hidden" name="ld_auth_action" value="login"/>
-    <input class="button" type="submit" value="Log In"/>
-    
-</form>
+  <div id="ld-login-box">
 
-<?php /*
-<h2>OpenID</h2>
+    <h2>Login</h2>
 
-<form method="post" action="">
-    <label>OpenID URL</label><br />
-    <input type="text" name="openid_identifier" value=""/>
-    <br />
-    <input type="hidden" name="openid_action" value="login"/>
-    <input class="button" type="submit" value="Connect"/>
-</form>
-*/ ?>
+    <?php
+
+    if (isset($this->authentication)) {
+        switch ($this->authentication->getCode()) {
+            case Zend_Auth_Result::SUCCESS:
+                // everything OK
+                break;
+            case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
+                echo '<div class="ld-error"><b>Error</b>: ' . "Invalid username." . '</div>';
+                break;
+            case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
+                echo '<div class="ld-error"><b>Error</b>: ' . "Incorrect password." . '</div>';
+                break;
+            default:
+                $messages = $this->authentication->getMessages();
+                echo '<div class="ld-error"><b>Error</b>: ' . $messages[0] . '</div>';
+                break;
+        }
+    }
+    ?>
+
+    <form method="post" action="">
+
+        <label for="ld-auth-username">Username:</label>
+        <input id="ld-auth-username" class="text" type="text" name="ld_auth_username" value=""/>
+
+        <label for="ld-auth-password">Password:</label>
+        <input id="ld-auth-password" class="text"  type="password" name="ld_auth_password" value="">
+
+        <?php foreach ($this->postParams as $key => $value) : ?>
+            <input type="hidden" name="<?php echo $key ?>" value="<?php echo $value ?>"/>
+        <?php endforeach ?>
+
+        <input type="hidden" name="ld_auth_action" value="login"/>
+
+        <input class="button" type="submit" value="Log In"/>
+
+    </form>
+
+    <div style="display:none">
+
+    <h2>OpenID</h2>
+
+    <form method="post" action="">
+        <label>OpenID URL</label><br />
+        <input type="text" name="openid_identifier" value=""/>
+        <br />
+        <input type="hidden" name="openid_action" value="login"/>
+        <input class="button" type="submit" value="Connect"/>
+    </form>
+
+    </div>
+
+    <div style="display:none" class="links">
+      <a href="/ld/admin/auth/register">Register</a> | <a href="/ld/admin/auth/lost-password">Lost your password?</a>
+    </div>
+
+  </div>
+
+</div>

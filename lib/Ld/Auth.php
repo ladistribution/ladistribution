@@ -40,10 +40,7 @@ class Ld_Auth
         $adapter = new Ld_Auth_Adapter_File();
         $adapter->setCredentials($username, $password);
         $result = $auth->authenticate($adapter);
-        if ($result->isValid()) {
-            return true;
-        }
-        return false;
+        return $result;
     }
 
     public static function isAuthenticated()
@@ -54,14 +51,34 @@ class Ld_Auth
     public static function getUsername()
     {
         if (self::isAuthenticated()) {
-            return Zend_Auth::getInstance()->getIdentity();
+            $user = self::getUser();
+            if ($user) {
+                return $user['username'];
+            }
         }
         return null;
     }
 
     public static function getUser()
     {
-        return Zend_Registry::get('site')->getUser(self::getUsername());
+        if (self::isAuthenticated()) {
+            $identity = Zend_Auth::getInstance()->getIdentity();
+            if (substr($identity, 0, 7) == 'http://' || substr($identity, 0, 8) == 'https://') {
+                $user = Zend_Registry::get('site')->getUserByUrl($identity);
+                // if user is authenticated with OpenID
+                // with an identity not attached to a local account
+                // we clear the identity to cancel the authentication
+                // if (isset($user)) {
+                //     return $user;
+                // } else {
+                //     self::logout();
+                //     return null;
+                // }
+                return $user;
+            }
+            return Zend_Registry::get('site')->getUser($identity);
+        }
+        return null;
     }
 
 }

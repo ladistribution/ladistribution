@@ -1,0 +1,44 @@
+/* --------------------------------------------------------------
+   
+   LD UI - Login Box
+   
+-------------------------------------------------------------- */
+
+#ld-login-box {
+  margin:25px auto;
+  width:250px;
+  border:1px solid #ccc;
+  -moz-border-radius:10px;
+  padding:20px 20px;
+  background:#f5f5f5;
+}
+
+#ld-login-box form {
+  width:100%;
+  overflow:hidden;
+}
+
+#ld-login-box label {
+  font-weight:bold;
+  display:block;
+}
+
+#ld-login-box input.text {
+  width:238px; /* 250 - 1 * 2 - 5 * 2 */
+  display:block;
+  padding:2px 5px;
+  margin:0;
+  margin-bottom:10px;
+}
+
+#ld-login-box input.button {
+  padding:2px 5px;
+  float:right;
+  margin:0;
+  margin-top:10px;
+}
+
+#ld-login-box .links {
+  font-size:12px;
+  margin-top:20px;
+}

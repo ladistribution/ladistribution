@@ -566,7 +566,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $users = Ld_Files::getJson($this->getDirectory('dist') . '/users.json');
         foreach ((array)$users as $key => $user) {
             $users[$key]['id'] = $key;
-            $users[$key]['identities'] = array($this->getBaseUrl() . 'identity/' . $user['username']);
         }
         return $users;
     }
@@ -577,6 +576,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
         foreach ($users as $user) {
             if ($user['username'] == $username) {
                 return $user;
+            }
+        }
+        return null;
+    }
+
+    public function getUserByUrl($url)
+    {
+        foreach (self::getUsers() as $id => $user) {
+            if (!empty($user['identities'])) {
+                foreach ($user['identities'] as $identity) {
+                    if ($identity == $url) {
+                        return $user;
+                    }
+                }
             }
         }
         return null;

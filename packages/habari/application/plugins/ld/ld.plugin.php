@@ -91,10 +91,7 @@ class Ld extends Plugin
 
 			$habari_user = $this->get_habari_user($ld_user);
 
-			$auth = Zend_Auth::getInstance();
-			$adapter = new Ld_Auth_Adapter_File();
-			$adapter->setCredentials($who, $pw);
-			$result = $auth->authenticate($adapter);
+			$result = Ld_Auth::authenticate($who, $pw);
 			if ($result->isValid()) {
 				return $habari_user;
 			}
@@ -105,7 +102,7 @@ class Ld extends Plugin
 
 		return $user;
 	}
-	
+
 	protected function get_habari_user($ld_user)
 	{
 		$habari_user = User::get_by_name($ld_user['username']);
@@ -120,10 +117,7 @@ class Ld extends Plugin
 
 	public function action_user_logout()
 	{
-		$auth = Zend_Auth::getInstance();
-		if ($auth->hasIdentity()) {
-			$auth->clearIdentity();
-		}
+		Ld_Auth::logout();
 	}
 
 }

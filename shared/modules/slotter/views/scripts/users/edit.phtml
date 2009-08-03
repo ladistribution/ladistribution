@@ -4,13 +4,13 @@
 
     <h3>Infos</h3>
 
-    <table>
+    <table class="ld-form">
     <tr>
-        <td><label>Full Name</label></td>
+        <th><label>Full Name</label></td>
         <td><input type="text" name="fullname" class="text" value="<?php if (isset($this->user['fullname'])) echo $this->escape($this->user['fullname']) ?>"/></td>
     </tr>
     <tr>
-        <td><label>Email</label></td>
+        <th><label>Email</label></td>
         <td><input type="text" name="email" class="text" value="<?php if (isset($this->user['email'])) echo $this->escape($this->user['email']) ?>"/></td>
     </tr>
     </table>
@@ -21,7 +21,7 @@
 
     <p><em>If you would like to change the password type a new one. Otherwise leave this blank.</em></p>
 
-    <table>
+    <table class="ld-form">
     <!--
     <tr>
         <td><label>Current password</label></td>
@@ -29,11 +29,11 @@
     </tr>
     -->
     <tr>
-        <td><label>New password</label></td>
+        <th><label>New password</label></td>
         <td><input type="password" name="new_password" class="text" value=""/></td>
     </tr>
     <tr>
-        <td><label>New password again</label></td>
+        <th><label>New password again</label></td>
         <td><input type="password" name="new_password_again" class="text" value=""/></td>
     </tr>
     </table>
@@ -43,5 +43,38 @@
     <input type="hidden" name="id" value="<?php echo $this->escape($this->username) ?>"/>
 
     <input type="submit" class="submit" value="Update"/>
+
+</form>
+
+<div class="separator" style="border-top:1px solid #ccc;padding-top:20px;margin-top:20px"></div>
+
+<h3>Identities</h3>
+
+<?php if (isset($this->user['identities']) && count($this->user['identities']) > 0) : ?>
+
+    <ul>
+    <?php foreach ($this->user['identities'] as $identity) : ?>
+        <li><?php echo $this->escape($identity) ?></li>
+    <?php endforeach ?>
+    </ul>
+
+<?php else : ?>
+
+    <p><em>You don't have any other identities registered yet. You can add new OpenID identities with the form below.</em></p>
+
+<?php endif ?>
+
+<!-- <h4>Add another identity</h4> -->
+
+<form method="post" action="<?php echo $this->url(array('action' => 'add-identity')) ?>">
+
+    <table class="ld-form">
+        <tr>
+            <th><label>Add another identity</label></th>
+            <td><input type="text" name="openid_identifier" value="" /></td>
+        </tr>
+    </table>
+
+    <input type="submit" value="Add"/>
 
 </form>
