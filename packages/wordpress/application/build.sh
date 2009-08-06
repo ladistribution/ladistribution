@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="2.8.2"
+VERSION="2.8.3"
 GZ="$NAME.tar.gz"
 SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
