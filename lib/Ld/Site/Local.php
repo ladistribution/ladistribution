@@ -372,6 +372,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // Update instance
         if (isset($instance)) {
+            $installer->setInstance($instance);
             $installer->setPath($instance->getPath());
             $installer->setAbsolutePath($instance->getAbsolutePath());
         }
@@ -566,6 +567,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $users = Ld_Files::getJson($this->getDirectory('dist') . '/users.json');
         foreach ((array)$users as $key => $user) {
             $users[$key]['id'] = $key;
+            if (empty($users[$key]['fullname'])) {
+                $users[$key]['fullname'] = $users[$key]['username'];
+            }
         }
         return $users;
     }

@@ -78,6 +78,11 @@ class Ld_Installer
         throw new Exception("package is undefined.");
     }
 
+    public function setInstance($instance)
+    {
+        $this->instance = $instance;
+    }
+
     public function getInstance()
     {
         if (isset($this->instance)) {
@@ -358,7 +363,8 @@ class Ld_Installer
 
     public function setConfiguration($configuration)
     {
-        return Ld_Files::putJson($this->getAbsolutePath() . '/dist/configuration.json', $configuration);
+        Ld_Files::putJson($this->getAbsolutePath() . '/dist/configuration.json', $configuration);
+        return $configuration;
     }
 
     // Themes
