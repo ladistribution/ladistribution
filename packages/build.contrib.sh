@@ -65,3 +65,11 @@ cd moonmoon
   cd ..
 
 cd ..
+
+cd roundcube
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..

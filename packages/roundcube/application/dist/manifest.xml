@@ -1,0 +1,18 @@
+<package>
+  <id>roundcube</id>
+  <name>RoundCube</name>
+  <version>0.3.0.18</version>
+  <type>application</type>
+  <db>mysql</db>
+  <deploy>
+      <origin>plugins</origin>
+      <destination path="public">plugins</destination>
+  </deploy>
+  <deploy>
+      <origin>skins</origin>
+      <destination path="public">skins</destination>
+  </deploy>
+  <configuration>
+      <preference type="text" label="Default Host" name="default_host"/>
+  </configuration>
+</package>

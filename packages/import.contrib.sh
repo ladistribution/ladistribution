@@ -15,5 +15,6 @@ $IMPORT spip.zip
 $IMPORT indexhibit.zip
 $IMPORT moonmoon.zip
 $IMPORT gallery.zip
+$IMPORT roundcube.zip
 
 $IMPORT wordpress-plugin-codecolorer.zip
