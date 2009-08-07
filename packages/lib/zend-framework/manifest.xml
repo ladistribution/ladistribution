@@ -1,16 +1,6 @@
 <package release="unstable">
   <id>lib-zend-framework</id>
   <name>Zend Framework</name>
-  <version>1.8.2-1</version>
+  <version>1.9.0-1</version>
   <type>lib</type>
-  <source>
-      <version>1.8.2</version>
-      <type>zip</type>
-      <url>http://framework.zend.com/releases/ZendFramework-1.8.2/ZendFramework-1.8.2-minimal.zip</url>
-      <folder>ZendFramework-1.8.2-minimal/library</folder>
-  </source>
-  <deploy>
-      <origin>lib</origin>
-      <destination path="lib">./</destination>
-  </deploy>
 </package>
