@@ -148,6 +148,10 @@ cd lib
   ./build.sh
   cd ..
 
+  cd htmlpurifier
+  ./build.sh
   cd ..
+
+cd ..
 
 cd ..
