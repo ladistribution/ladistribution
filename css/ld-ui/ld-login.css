@@ -8,6 +8,7 @@
   margin:25px auto;
   width:250px;
   border:1px solid #ccc;
+  -webkit-border-radius:10px;
   -moz-border-radius:10px;
   padding:20px 20px;
   background:#f5f5f5;
