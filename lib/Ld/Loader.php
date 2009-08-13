@@ -33,7 +33,7 @@ class Ld_Loader
         defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
         if (constant('LD_DEBUG')) {
-            error_reporting( E_ALL | E_NOTICE | E_STRICT );
+            error_reporting( E_ALL | E_NOTICE /* | E_STRICT */ );
         }
 
         set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
@@ -66,23 +66,16 @@ class Ld_Loader
         $site = new Ld_Site_Local($config);
         Zend_Registry::set('site', $site);
 
-        if (constant('LD_SESSION')) {
-
-            Zend_Session::start();
-
-            if (function_exists('mcrypt_ecb') && isset($config['secret'])) {
-                $cookieManager = new Ld_Cookie($config['secret'], array('cookiePath' => $site->getPath()));
-                $authStorage = new Ld_Auth_Storage_Cookie($cookieManager);
-            } else {
-                $path = $site->getPath();
-                $namespace = empty($path) ? 'default' : $path;
-                $authStorage = new Zend_Auth_Storage_Session($namespace);
-            }
-
-            $auth = Zend_Auth::getInstance();
-            $auth->setStorage($authStorage);
-
+        // Setup Authentication
+        if (function_exists('mcrypt_ecb') && isset($config['secret'])) {
+            $cookieManager = new Ld_Cookie($config['secret']);
+        } else {
+            $cookieManager = new Ld_Cookie_Simple();
         }
+        $cookieConfig = array('cookieName' => 'ld-auth', 'cookiePath' => $site->getPath());
+        $authStorage = new Ld_Auth_Storage_Cookie($cookieManager, $cookieConfig);
+        $auth = Zend_Auth::getInstance();
+        $auth->setStorage($authStorage);
 
         // Legacy CSS Constant
         defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));

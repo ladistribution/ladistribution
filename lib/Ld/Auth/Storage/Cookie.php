@@ -48,7 +48,7 @@ class Ld_Auth_Storage_Cookie implements Zend_Auth_Storage_Interface
      * @param Ld_Cookie $cookieManager the secure cookie manager
      * @param array|Zend_Config $config configuration
      */
-    public function __construct(Ld_Cookie $cookieManager, $config = array())
+    public function __construct($cookieManager, $config = array())
     {
         $this->_cookieManager = $cookieManager;
 
