@@ -1,0 +1,10 @@
+<package>
+  <id>lib-htmlpurifier</id>
+  <name>HTML Purifier</name>
+  <version>4.0.0-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">HTMLPurifier</destination>
+  </deploy>
+</package>
