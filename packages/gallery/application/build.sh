@@ -4,7 +4,7 @@ VERSION="3.0-beta-2"
 ZIP="gallery-$VERSION.zip"
 SOURCE="http://freefr.dl.sourceforge.net/project/gallery/$NAME/$VERSION/$ZIP"
 FOLDER="application"
-PACKAGE="$NAME.zip"
+PACKAGE="gallery.zip"
 
 # Get source GIT
 # git clone $SOURCE $FOLDER
