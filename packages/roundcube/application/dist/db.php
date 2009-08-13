@@ -2,9 +2,9 @@
 
 require_once(dirname(__FILE__) . '/prepend.php');
 
-$databases = Ld_Registry::get('site')->getDatabases();
-$db = $databases[ Ld_Registry::get('instance')->getDb() ];
-$prefix = Ld_Registry::get('instance')->getDbPrefix();
+$databases = Zend_Registry::get('site')->getDatabases();
+$db = $databases[ Zend_Registry::get('instance')->getDb() ];
+$prefix = Zend_Registry::get('instance')->getDbPrefix();
 
 $rcmail_config = array();
 $rcmail_config['db_dsnw'] = sprintf('mysql://%s:%s@%s/%s', $db['user'], $db['password'], $db['host'], $db['name']);

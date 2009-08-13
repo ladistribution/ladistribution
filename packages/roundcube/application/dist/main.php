@@ -10,7 +10,7 @@ $rcmail_config['plugins'] = array('ld');
 
 $rcmail_config['temp_dir'] = LD_TMP_DIR;
 
-$configuration = Ld_Registry::get('instance')->getInstaller()->getConfiguration();
+$configuration = Zend_Registry::get('instance')->getInstaller()->getConfiguration();
 foreach ($configuration as $key => $value) {
     $rcmail_config[$key] = $value;
 }
