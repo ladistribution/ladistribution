@@ -1,6 +1,5 @@
 NAME="wordpress"
-VERSION="2.8.3"
-GZ="$NAME.tar.gz"
+VERSION="2.8.4"
 SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
@@ -22,7 +21,7 @@ rm -rf $FOLDER/wp-content/plugins/akismet
 
 rm -rf $FOLDER/wp-content/themes/classic
 rm -rf $FOLDER/wp-content/themes/default
-svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "$FOLDER/wp-content/themes/default"
+svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "$FOLDER/themes"
 
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php

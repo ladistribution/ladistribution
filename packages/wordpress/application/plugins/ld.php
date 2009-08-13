@@ -88,7 +88,12 @@ function ld_disable_menus()
 		}
 	}
 
-	$disable_submenus = array('tools.php', 'themes.php', 'theme-editor.php', 'theme-install.php', 'update-core.php');
+	$disable_submenus = array(
+		'tools.php',
+		'themes.php', 'theme-editor.php', 'theme-install.php',
+		'update-core.php',
+		'options-misc.php'
+	);
 	foreach ($submenu as $key => $sub) {
 		foreach ($sub as $num => $item) {
 			$script = $item[2];
