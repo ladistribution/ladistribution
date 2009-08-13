@@ -1,0 +1,12 @@
+--- index.php	2009-08-11 12:14:32.000000000 +0200
++++ index.php	2009-08-11 14:18:40.000000000 +0200
+@@ -17,6 +17,9 @@
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
+  */
++
++require_once (dirname(__FILE__) . '/dist/config.php');
++
+ // Set this to true to disable demo/debugging controllers
+ define("IN_PRODUCTION", true);
+ 

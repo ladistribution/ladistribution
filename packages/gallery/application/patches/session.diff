@@ -1,0 +1,11 @@
+--- system/libraries/Session.php	2009-08-11 12:14:33.000000000 +0200
++++ system/libraries/Session.php	2009-08-11 14:18:16.000000000 +0200
+@@ -259,7 +259,7 @@
+ 	 */
+ 	public function destroy()
+ 	{
+-		if (session_id() !== '')
++		if (session_id() !== '' && session_name() != 'PHPSESSID')
+ 		{
+ 			// Get the session name
+ 			$name = session_name();
