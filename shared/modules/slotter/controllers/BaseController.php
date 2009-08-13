@@ -22,6 +22,10 @@ class Slotter_BaseController extends Ld_Controller_Action
             throw new Exception('No Instance defined.');
         }
 
+        if ($this->_hasParam('ld-lang')) {
+            setCookie('ld-lang', $this->_getParam('ld-lang'), mktime() + 365 * 24 * 60 * 60, $this->site->getPath());
+        }
+
         $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
         $this->view->action = $this->getRequest()->getActionName();
@@ -30,18 +34,22 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->_initAcl();
 
+        $this->_initLang();
+
         $this->_initNavigation();
     }
 
     protected function _initNavigation()
     {
+        $translator = $this->getTranslator();
+
         $pages = array(
-            array( 'label' => 'Home', 'module' => 'default', 'route' => 'default',
+            array( 'label' => $translator->translate('Home'), 'module' => 'default', 'route' => 'default',
                 'pages' => array(
-                    array( 'label' => 'Applications', 'module'=> 'slotter', 'route' => 'default'),
-                    array( 'label' => 'Repositories', 'module' => 'slotter', 'controller' => 'repositories' ),
-                    array( 'label' => 'Databases', 'module' => 'slotter', 'controller' => 'databases' ),
-                    array( 'label' => 'Users', 'module' => 'slotter', 'controller' => 'users' )
+                    array( 'label' => $translator->translate('Applications'), 'module'=> 'slotter', 'route' => 'default'),
+                    array( 'label' => $translator->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
+                    array( 'label' => $translator->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
+                    array( 'label' => $translator->translate('Users'), 'module' => 'slotter', 'controller' => 'users' )
             ))
         );
 
@@ -84,6 +92,19 @@ class Slotter_BaseController extends Ld_Controller_Action
             return 'user';
         }
         return 'guest';
+    }
+
+    protected function _initLang()
+    {
+        if ($this->_hasParam('ld-lang')) {
+            $locale = $this->_getParam('ld-lang');
+        } else if ($this->getRequest()->getCookie('ld-lang')) {
+            $locale = $this->getRequest()->getCookie('ld-lang');
+        }
+        if (isset($locale) &&  Zend_Registry::isRegistered('Zend_Translate')) {
+            $translate = Zend_Registry::get('Zend_Translate');
+            $translate->setLocale($locale);
+        }
     }
 
     protected function _disallow()

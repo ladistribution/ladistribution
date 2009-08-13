@@ -1,6 +1,6 @@
 <?php $this->instancesList(false) ?>
 
-<p>Are you sure you want to delete this application?</p>
+<p><?php echo $this->translate('Are you sure you want to delete this application?') ?></p>
 
 <?php if ($this->instance->package == 'admin') : ?>
     <p><strong>Notice:</strong> deleting the admin application is not a good idea!</p>
@@ -8,6 +8,6 @@
 
 <form method="post" action="<?php echo $this->url() ?>">
 
-    <input type="submit" class="submit" value="Delete"/>
+    <input type="submit" class="submit" value="<?php echo $this->translate('Delete') ?>"/>
 
 </form>

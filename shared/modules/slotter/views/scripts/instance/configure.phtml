@@ -14,13 +14,13 @@
     
     <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
     
-    <input type="submit" class="submit button" value="Update"/>
+    <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 
 </form>
 
 <?php else : ?>
 
-<p>No preferences available for this application.</p>
+<p><?php echo $this->translate('No preference available for this application.') ?></p>
 
 <?php endif ?>
 

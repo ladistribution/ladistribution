@@ -1,0 +1,38 @@
+<div id="ld-login">
+
+  <div id="ld-login-box">
+
+    <h2>Register</h2>
+
+    <form method="post" action="">
+
+        <label for="ld-register-username">Username:</label>
+        <input id="ld-register-username" class="text" type="text" name="ld_register_username" value=""/>
+
+        <label for="ld-register-email">Email:</label>
+        <input id="ld-register-email" class="text" type="text" name="ld_register_email" value=""/>
+
+        <label for="ld-register-password">Password:</label>
+        <input id="ld-register-password" class="text"  type="password" name="ld_register_password" value="">
+
+        <label for="ld-register-password-again">Password again:</label>
+        <input id="ld-register-password-again" class="text" type="password" name="ld_register_password_again" value=""/>
+
+        <!--
+        <label for="ld-register-fullname">Full Name:</label>
+        <input id="ld-register-fullname" class="text" type="text" name="ld_register_fullname" value=""/>
+        -->
+        
+        <input type="hidden" name="ld_auth_action" value="register"/>
+
+        <input class="button" type="submit" value="Register"/>
+
+    </form>
+
+    <div class="links">
+      <a href="<?php echo $this->url(array('module' => 'default', 'action' => 'login', 'controller' => 'auth')); ?>">Log In</a>
+    </div>
+
+  </div>
+
+</div>

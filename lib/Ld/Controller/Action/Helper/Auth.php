@@ -17,22 +17,34 @@
  */
 require_once 'Zend/Controller/Action/Helper/Abstract.php';
 
-class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abstract
+class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstract
 {
 
     public function authenticate()
     {
+        $referer = $this->_getReferer();
+
         if ($this->_getParam('ld_auth_action') == 'logout') {
 
             $this->logout();
-            $this->_redirect( Zend_Registry::get('site')->getUrl() );
+
+            if (isset($referer)) {
+                $this->_redirect($referer);
+            } else {
+                $this->_redirect( Zend_Registry::get('site')->getUrl() );
+            }
 
         } else if ($this->_getParam('ld_auth_action') == 'login') {
 
             $result = Ld_Auth::authenticate($this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'));
 
+            if ($result->isValid()) {
+                if (isset($referer)) {
+                    $this->_redirect($referer);
+                }
+                return $result;
             // if authentication Fail, we try to log in with OpenID
-            if (!$result->isValid() && Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
+            } else if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
                 $this->_setParam('openid_action', 'login');
                 $this->_setParam('openid_identifier', $this->_getParam('ld_auth_username'));
             } else {
@@ -99,14 +111,13 @@ class Ld_Controller_Action_Helper_Auth extends Zend_Controller_Action_Helper_Abs
     //     }
     // }
 
-    protected function _getParam($id)
+    protected function _getReferer()
     {
-        return $this->getRequest()->getParam($id);
-    }
-
-    protected function _setParam($id, $value)
-    {
-        return $this->getRequest()->setParam($id, $value);
+        if ($this->_hasParam('ld_referer')) {
+            return $this->_getParam('ld_referer');
+        } else {
+            return $this->getRequest()->getServer('HTTP_REFERER');
+        }
     }
 
     protected function _redirect($url)

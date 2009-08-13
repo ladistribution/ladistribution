@@ -38,7 +38,10 @@ class Slotter_RepositoriesController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $repositoriesPage = $this->_container->findOneByLabel('Repositories');
+        $translator = $this->getTranslator();
+
+        $repositoriesPage = $this->_container->findOneByLabel( $translator->translate('Repositories') );
+
         $repositoriesPage->addPage(array(
             'label' => 'New', 'module'=> 'slotter', 'controller' => 'repositories', 'action' => 'new'
         ));

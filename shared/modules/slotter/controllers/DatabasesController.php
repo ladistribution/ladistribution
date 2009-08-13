@@ -24,7 +24,10 @@ class Slotter_DatabasesController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $databasesPage = $this->_container->findOneByLabel('Databases');
+        $translator = $this->getTranslator();
+
+        $databasesPage = $this->_container->findOneByLabel( $translator->translate('Databases') );
+
         $databasesPage->addPage(array(
             'label' => 'New', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'new'
         ));

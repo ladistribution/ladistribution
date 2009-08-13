@@ -7,21 +7,34 @@
 <div style="width:100%;overflow:hidden">
 
     <div style="float:left;padding-right:25px;margin-right:25px;border-right:1px dotted #ccc">
-        <h2>Manage</h2>
+        <h2><?php echo $this->translate->translate("Manage") ?></h2>
+        <?php
+        $pages = array(
+            array('controller' => 'users', 'label' => "Users"),
+            array('controller' => 'repositories', 'label' => "Repositories"),
+            array('controller' => 'databases', 'label' => "Databases")
+        );
+        ?>
         <ul>
-            <li><a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'index')) ?>">Users</a></li>
-            <li><a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'index')) ?>">Repositories</a></li>
-            <li><a href="<?php echo $this->url(array('controller' => 'databases', 'action' => 'index')) ?>">Databases</a></li>
+            <?php foreach ($pages as $page) :
+                $label = $this->translate($page['label']);
+                $url = $this->url(array('controller' => $page['controller'], 'action' => 'index'));
+            ?>
+            <li><a href="<?php echo $url ?>"><?php echo $label ?></a></li>
+            <?php endforeach ?>
         </ul>
     </div>
 
     <div style="float:left">
-        <h2>Updates</h2>
-        <?php if ($this->canAdmin && $this->hasUpdate) : ?>
-            <?php $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update'); ?>
-            <p>There is some updates available. It's recommended to <a href="<?php echo $updateUrl ?>">upgrade now.</a></p>
+        <h2><?php echo $this->translate("Updates") ?></h2>
+        <?php if ($this->canAdmin && $this->hasUpdate) :
+            $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update');
+            $updateString = $this->translate(
+                "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>");
+            ?>
+            <p><?php printf($updateString, $updateUrl); ?></p>
         <?php else: ?>
-            <p>Everything fine, nothing to update.</p>
+            <p><?php echo $this->translate("Everything fine, nothing to update.") ?></p>
         <?php endif ?>
     </div>
 

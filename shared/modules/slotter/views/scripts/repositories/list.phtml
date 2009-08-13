@@ -11,22 +11,23 @@
     <table id="repositories" class="h6e-data">
     <tr>
         <th></th>
-        <th>Url</th>
-        <th>Type</type>
-        <th colspan="2">Actions</th>
+        <th><?php echo $this->translate("URL") ?></th>
+        <th><?php echo $this->translate("Type") ?></type>
+        <th colspan="2"><?php echo $this->translate("Actions") ?></th>
     </tr>
     <tbody>
     <?php
     foreach ($this->repositories as $id => $repository) {
-        $manageUrl = $this->url(array('controller' => 'repositories', 'id' => $id, 'action' => 'manage'), 'default');
-        $removeUrl = $this->url(array('controller' => 'repositories', 'id' => $id, 'action' => 'delete'), 'default');
+        $manageUrl = $this->url(array('id' => $id, 'action' => 'manage'));
+        $removeUrl = $this->url(array('id' => $id, 'action' => 'delete'));
         ?>
         <tr id="<?php echo $id ?>">
             <td class="move"></td>
             <td><?php echo $repository->getUrl() ?></td>
             <td><?php echo $repository->type ?></td>
-            <td><a href="<?php echo $manageUrl ?>"><?php echo $repository->type == 'local' ? 'manage' : 'browse' ?></a></td>
-            <td><a href="<?php echo $removeUrl ?>">remove</a></td>
+            <td><a href="<?php echo $manageUrl ?>"><?php echo $repository->type == 'local' ?
+                $this->translate('manage') : $this->translate('browse') ?></a></td>
+            <td><a href="<?php echo $removeUrl ?>"><?php echo $this->translate("remove") ?></a></td>
         </tr>
         <?php
     }

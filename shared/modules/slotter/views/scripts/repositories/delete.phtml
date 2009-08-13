@@ -1,10 +1,10 @@
-<h2>Remove a repository</h2>
+<h2><?php echo $this->translate("Remove a repository") ?></h2>
 
-<p>Are you sure you want to remove this repository?</p>
+<p><?php echo $this->translate("Are you sure you want to remove this repository?") ?></p>
 
 <form method="post" action="">
     
     <input type="hidden" name="id" value="<?php echo $this->escape($this->repository->id) ?>"/>
-    <input type="submit" class="submit" value="Remove"/>
+    <input type="submit" class="submit" value="<?php echo $this->translate("Remove") ?>"/>
 
 </form>

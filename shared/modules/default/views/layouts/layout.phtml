@@ -29,7 +29,19 @@
   </div>
 
   <div class="h6e-simple-footer">
-      <p>This is <a href="http://ladistribution.net/">La Distribution</a></p>
+      <p>
+          <?php printf($this->translate('This is <a href="%s">La Distribution</a>!'), 'http://ladistribution.net/') ?>
+          <!--
+          <form class="inline" action="" method="post">
+              <label><?php echo $this->translate("Language:") ?></label>
+              <select name="ld-lang">
+                  <option value="en_US">Anglais (USA)</option>
+                  <option value="fr_FR">Français (France)</option>
+               </select>
+               <input type="submit" value="Ok"/>
+          </form>
+          -->
+      </p>
   </div>
 
 </div>

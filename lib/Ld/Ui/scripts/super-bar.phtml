@@ -31,12 +31,14 @@
                 ), 'instance-action');
                 $settings = strpos($_SERVER["REQUEST_URI"], $settingsUrl) !== false;
 
+                $adminUrl = null;
                 foreach ($application->getLinks() as $link) {
                       if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
                           $adminUrl = $link['href'];
                           break;
                       }
                 }
+
                 $admin = isset($adminUrl) && strpos($_SERVER["REQUEST_URI"], $adminUrl) !== false;
 
                 $className = $application->getPackageId();
@@ -54,17 +56,19 @@
                         echo "&nbsp; • &nbsp;";
                     }
                     if (isset($adminUrl)) {
+                        $link = sprintf('<a href="%s">%s</a>', $adminUrl, $this->translate("Admin"));
                         if ($admin) {
-                            printf('<strong><a href="%s">Admin</a></strong> | ', $adminUrl);
+                            printf('<strong>%s</strong> | ', $link);
                         } else {
-                            printf('<a href="%s">Admin</a> | ', $adminUrl);
+                            printf('%s | ', $link);
                         }
                     }
                     if (isset($settingsUrl)) {
+                        $link = sprintf('<a href="%s">%s</a>', $settingsUrl, $this->translate("Settings"));
                         if ($settings) {
-                            printf('<strong><a href="%s">Settings</a></strong>', $settingsUrl);
+                            printf('<strong>%s</strong>', $link);
                         } else {
-                            printf('<a href="%s">Settings</a>', $settingsUrl);
+                            printf('%s', $link);
                         }
                     }
                 }

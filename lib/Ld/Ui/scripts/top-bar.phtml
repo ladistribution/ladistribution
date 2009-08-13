@@ -14,12 +14,15 @@
         $loginUrl = Ld_Ui::getAdminUrl(array(
               'module' => 'default', 'controller' => 'auth', 'action' => 'login'
         ));
+        $logoutUrl = Ld_Ui::getAdminUrl(array(
+              'module' => 'default', 'controller' => 'auth', 'action' => 'logout'
+        ));
         ?>
         <?php if (Ld_Auth::isAuthenticated() && $user) : ?>
             <a href="<?php echo $userUrl ?>"><?php echo $user['fullname'] ?></a>
-            <a href="?ld_auth_action=logout">Log Out</a>
+            <a href="<?php echo $logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>
         <?php else : ?>
-            <a class="h6e-login" href="<?php echo $loginUrl ?>">Log In</a>
+            <a class="h6e-login" href="<?php echo $loginUrl ?>"><?php echo $this->translate("Log In") ?></a>
         <?php endif ?>
         </div>
     </div>

@@ -1,22 +1,22 @@
-<h2>Add a new repository</h2>
+<h2><?php echo $this->translate("Add a new repository") ?></h2>
 
 <form method="post" action="">
     
     <table>
     <?php if ($this->type == 'local') : ?>
     <tr>
-        <td><label>Name</label></td>
+        <td><label><?php echo $this->translate("Name") ?></label></td>
         <td><input type="text" name="name" class="text" value=""/></td>
     </tr>
     <?php elseif ($this->type == 'remote') : ?>
         <tr>
-            <td><label>Url</label></td>
+            <td><label><?php echo $this->translate("URL") ?></label></td>
             <td><input type="text" name="endpoint" class="text" value="" size="50"/></td>
         </tr>
     <?php endif ?>
     </table>
     
     <input type="hidden" name="type" value="<?php echo $this->type ?>" />
-    <input type="submit" class="submit" value="Add"/>
+    <input type="submit" class="submit" value="<?php echo $this->translate("Add") ?>"/>
 
 </form>

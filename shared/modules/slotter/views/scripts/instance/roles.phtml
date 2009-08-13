@@ -8,11 +8,11 @@
 
 <?php if (isset($this->supported) && $this->supported == false) : ?>
 
-    <p>Not supported.</p>
+    <p><?php echo $this->translate('Not supported.') ?></p>
 
 <?php elseif (empty($this->users)) : ?>
 
-    <p>No user available.</p>
+    <p><?php echo $this->translate('No user available.') ?></p>
 
 <?php else : ?>
 
@@ -21,9 +21,9 @@
 <table class="h6e-data">
 
     <tr>
-        <th>Username</th>
-        <th>Full Name</th>
-        <th>Role</th>
+        <th><?php echo $this->translate('Username') ?></th>
+        <th><?php echo $this->translate('Full Name') ?></th>
+        <th><?php echo $this->translate('Role') ?></th>
     </tr>
 
 <?php foreach ($this->users as $user) : ?>
@@ -49,7 +49,7 @@
 
 </table>
 
-<input type="submit" class="submit button" value="Update"/>
+<input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 
 </form>
 

@@ -1,8 +1,8 @@
-<h2>Users</h2>
+<h2><?php echo $this->translate("Users") ?></h2>
 
 <?php if (empty($this->users)) : ?>
-    
-    <p>None.</p>
+
+    <p><?php echo $this->translate("None|masc") ?></p>
 
 <?php else : ?>
 
@@ -11,8 +11,8 @@
 <table class="h6e-data">
 
    <tr>
-       <th>Username</th>
-       <th>Full Name</th>
+       <th><?php echo $this->translate("Username") ?></th>
+       <th><?php echo $this->translate("Full Name") ?></th>
        <?php /*
        <?php foreach ($this->applications as $application) : ?>
            <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
@@ -20,7 +20,7 @@
        */ ?>
 
        <?php if ($this->userRole == 'admin') : ?>
-           <th colspan="2">Action</th>
+           <th colspan="2"><?php echo $this->translate("Actions") ?></th>
        <?php endif ?>
 
    </tr>
@@ -58,10 +58,14 @@
        
        <?php if ($this->userRole == 'admin') : ?>
            <td>
-               <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $user['username'] )); ?>">edit</a>
+               <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $user['username'] )); ?>"><?php
+                   echo $this->translate("edit");
+               ?></a>
            </td>
            <td>
-               <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $user['username'] )); ?>">delete</a>
+               <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $user['username'] )); ?>"><?php
+                   echo $this->translate("delete");
+               ?></a>
            </td>
        <?php endif ?>
 
@@ -81,8 +85,8 @@
 
 <br />
 
-<h3>You can</h3>
+<h3><?php echo $this->translate("You can:") ?></h3>
 
 <ul>
-    <li><a href="<?php echo $this->url(array('action' => 'new')); ?>">Add a new user</a></li>
+    <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php echo $this->translate("Add a new user") ?></a></li>
 </ul>

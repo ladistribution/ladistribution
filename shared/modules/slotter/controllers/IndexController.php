@@ -32,9 +32,11 @@ class Slotter_IndexController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $applicationsPage = $this->_container->findOneByLabel('Applications');
+        $translator = $this->getTranslator();
+
+        $applicationsPage = $this->_container->findOneByLabel( $translator->translate('Applications') );
         $applicationsPage->addPage(array(
-            'label' => 'Update', 'module'=> 'slotter', 'controller' => 'index', 'action' => 'update'
+            'label' =>  $translator->translate('Update'), 'module'=> 'slotter', 'controller' => 'index', 'action' => 'update'
         ));
     }
 

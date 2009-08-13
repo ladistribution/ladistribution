@@ -1,6 +1,6 @@
-<h2>Browse repository</h2>
+<h2><?php echo $this->translate("Browse repository") ?></h2>
 
-<p><strong>Repository URL:</strong> <?php echo $this->repository->getUrl() ?></p>
+<p><strong><?php echo $this->translate("Repository URL:") ?></strong> <?php echo $this->repository->getUrl() ?></p>
 
 <?php require('repository.phtml') ?>
 
@@ -8,8 +8,8 @@
 
 <ul>
     <li>
-        <a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'delete', 'id' => $this->repository->id), 'default') ?>">
-        Remove this repository
+        <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $this->repository->id)) ?>">
+        <?php echo $this->translate("Remove this repository") ?>
         </a>
     </li>
 </ul>

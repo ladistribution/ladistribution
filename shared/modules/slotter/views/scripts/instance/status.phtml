@@ -8,21 +8,24 @@
 
 <table class="h6e-data">
     <tr>
-        <th>package</th>
-        <th>type</th>
-        <th>version</th>
-        <th>status</th>
-        <th>action</th>
+        <th><?php echo $this->translate('Package') ?></th>
+        <th><?php echo $this->translate('Type') ?></th>
+        <th><?php echo $this->translate('Version') ?></th>
+        <th><?php echo $this->translate('Status') ?></th>
+        <th><?php echo $this->translate('Actions') ?></th>
     </tr>
     <tbody>
     <tr>
         <td><?php echo $this->instance->getPackageId() ?></td>
         <td><?php echo $this->instance->getType() ?></td>
         <td><?php echo $this->instance->getVersion() ?></td>
-        <td><?php echo ($this->instance->hasUpdate = $this->instance->hasUpdate()) ? 'Need update' : 'Up to date' ?></td>
+        <td><?php echo ($this->instance->hasUpdate = $this->instance->hasUpdate()) ?
+            $this->translate('Update available') : $this->translate('up to date') ?></td>
         <td>
         <?php if ($this->instance->hasUpdate) : ?>
-            <a href="<?php echo $this->instanceActionUrl('update') ?>?version=<?php echo $this->instance->hasUpdate ?>">update</a>
+            <a href="<?php echo $this->instanceActionUrl('update') ?>?version=<?php echo $this->instance->hasUpdate ?>"><?php
+                echo $this->translate('update')
+            ?></a>
         <?php endif ?>
         </td>
     </tr>
@@ -35,12 +38,17 @@
                 <td><?php echo $extension->getPackageId() ?></td>
                 <td><?php echo $extension->getType() ?></td>
                 <td><?php echo $extension->getVersion() ?></td>
-                <td><?php echo $extension->hasUpdate ? 'Need update' : 'Up to date' ?></td>
+                <td><?php echo $extension->hasUpdate ?
+                    $this->translate('Update available') : $this->translate('up to date') ?></td>
                 <td>
                     <?php if ($extension->hasUpdate) : ?>
-                        <a href="<?php echo $this->instanceActionUrl('extensions') . '?update=' . $extension->getPath() ?>">update</a>
+                        <a href="<?php echo $this->instanceActionUrl('extensions') . '?update=' . $extension->getPath() ?>"><?php
+                            echo $this->translate('update')
+                        ?></a>
                     <?php endif ?>
-                    <a href="<?php echo $this->instanceActionUrl('extensions') . '?remove=' . $extension->getPath() ?>">remove</a>
+                    <a href="<?php echo $this->instanceActionUrl('extensions') . '?remove=' . $extension->getPath() ?>"><?php
+                        echo $this->translate('uninstall')
+                    ?></a>
                 </td>
             </tr>
         <?php endforeach ?>
@@ -48,10 +56,10 @@
     <?php endif ?>
 </table>
 
-<p>You can also:</p>
+<p><?php echo $this->translate('You can also:') ?></p>
 
 <ul>
-    <li><a href="<?php echo $this->instanceActionUrl('delete') ?>">Delete this application</a></li>
+    <li><a href="<?php echo $this->instanceActionUrl('delete') ?>"><?php echo $this->translate('Delete this application') ?></a></li>
 </ul>
 
 </div> <!-- .ld-panel-content -->

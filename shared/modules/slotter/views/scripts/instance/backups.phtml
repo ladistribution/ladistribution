@@ -6,19 +6,19 @@
 
 <div class="ld-panel-content">
 
-<h3>Existing backups</h3>
+<h3><?php echo $this->translate('Existing backups') ?></h3>
 
 <?php if (empty($this->backups) || count($this->backups) == 0) : ?>
 
-    <p>None available</p>
+    <p><?php echo $this->translate('None available') ?></p>
 
 <?php else : ?>
 
     <table class="h6e-data">
         <tr class="th1">
-            <th>File</th>
-            <th>Size</th>
-            <th colspan="3">Actions</th>
+            <th><?php echo $this->translate('File') ?></th>
+            <th><?php echo $this->translate('Size') ?></th>
+            <th colspan="3"><?php echo $this->translate('Actions') ?></th>
         </tr>
     <?php
     foreach ($this->backups as $backup) {
@@ -29,9 +29,9 @@
         <tr>
             <td><?php echo $backup['filename'] ?></td>
             <td><?php echo $backup['size'] ?></td>
-            <td><a href="<?php echo $downloadUrl ?>">Download</a></td>
-            <td><a href="<?php echo $restoreUrl ?>">Restore</a></td>
-            <td><a href="<?php echo $deleteUrl ?>">Delete</a></td>
+            <td><a href="<?php echo $downloadUrl ?>"><?php echo $this->translate('download') ?></a></td>
+            <td><a href="<?php echo $restoreUrl ?>"><?php echo $this->translate('restore') ?></a></td>
+            <td><a href="<?php echo $deleteUrl ?>"><?php echo $this->translate('delete') ?></a></td>
         </tr>
         <?php
     }
@@ -40,21 +40,25 @@
 
 <?php endif ?>
 
-<h3>New</h3>
+<h3><?php echo $this->translate('New backup') ?></h3>
 
 <form action="<?php echo $this->url() ?>" method="post">
     <input type="hidden" name="dobackup" value="now" />
-    <input type="submit" value="Make a backup now" />
+    <input type="submit" value="<?php echo $this->translate('Backup now') ?>" />
 </form>
 
 <br />
 
-<h3>Upload</h3>
+<!--
+    
+<h3><?php echo $this->translate('Upload') ?></h3>
 
 <form action="<?php echo $this->url() ?>" method="post" enctype="multipart/form-data">
     <input type="file" name="archive" />
-    <input name="upload" type="submit" class="submit" value="Upload" />
+    <input name="upload" type="submit" class="submit" value="<?php echo $this->translate('Upload') ?>" />
 </form>
+
+-->
 
 </div> <!-- .ld-panel-content -->
 

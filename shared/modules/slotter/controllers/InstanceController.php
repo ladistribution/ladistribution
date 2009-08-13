@@ -47,9 +47,11 @@ class Slotter_InstanceController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $applicationsPage = $this->_container->findOneByLabel('Applications');
+        $translator = $this->getTranslator();
+
+        $applicationsPage = $this->_container->findOneByLabel( $translator->translate('Applications') );
         $applicationsPage->addPage(array(
-            'label' => 'New', 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'new'
+            'label' => $translator->translate("New"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'new'
         ));
         if (isset($this->id, $this->instance)) {
             $action = $this->getRequest()->action;
@@ -61,7 +63,7 @@ class Slotter_InstanceController extends Slotter_BaseController
                 'params' => array('id' => $this->id)
             ));
             $instancePage->addPage(array(
-                'label' => ucfirst($action),
+                'label' => ucfirst($translator->translate($action)),
                 'module'=> 'slotter',
                 'route' => 'instance-action',
                 'controller' => 'instance',

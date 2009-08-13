@@ -1,18 +1,18 @@
-<h2>Databases connections</h2>
+<h2><?php echo $this->translate("Databases connections") ?></h2>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
-    <p>None</p>
+    <p><?php echo $this->translate("None") ?></p>
 
 <?php else : ?>
 
     <table class="h6e-data">
 
     <tr>
-       <th>Type</th>
-       <th>Host</th>
-       <th>Name</th>
-       <th colspan="2">Action</th>
+       <th><?php echo $this->translate("Type") ?></th>
+       <th><?php echo $this->translate("Host") ?></th>
+       <th><?php echo $this->translate("Name") ?></th>
+       <th colspan="2"><?php echo $this->translate("Actions") ?></th>
     </tr>
 
     <tbody>
@@ -24,10 +24,14 @@
             <td><?php echo $this->escape($database['host']) ?></td>
             <td><?php echo $this->escape($database['name']) ?></td>
             <td>
-                <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $id )); ?>">edit</a>
+                <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $id )); ?>"><?php
+                    echo $this->translate("edit");
+                ?></a>
             </td>
             <td>
-                <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $id )); ?>">delete</a>
+                <a href="<?php echo $this->url(array('action' => 'delete', 'id' => $id )); ?>"><?php
+                    echo $this->translate("delete");
+                ?></a>
             </td>
         </tr>
 
@@ -39,8 +43,10 @@
 
 <?php endif ?>
 
-<h3>You can</h3>
+<h3><?php echo $this->translate("You can:") ?></h3>
 
 <ul>
-    <li><a href="<?php echo $this->url(array('action' => 'new'), 'default'); ?>">Add a new database connection</a></li>
+    <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php
+        echo $this->translate("Add a new database connection");
+    ?></a></li>
 </ul>

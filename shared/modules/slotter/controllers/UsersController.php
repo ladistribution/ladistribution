@@ -18,8 +18,10 @@ class Slotter_UsersController extends Slotter_BaseController
         switch ($this->_getParam('action')) {
             case 'edit':
             case 'add-identity':
-                if ($this->_getParam('id') != $this->currentUser['username']) {
-                    $this->_disallow();
+                if (empty($this->currentUser) || $this->_getParam('id') != $this->currentUser['username']) {
+                    if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+                        $this->_disallow();
+                    }
                 }
                 break;
             case 'index':
@@ -36,7 +38,10 @@ class Slotter_UsersController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $usersPage = $this->_container->findOneByLabel('Users');
+        $translator = $this->getTranslator();
+
+        $usersPage = $this->_container->findOneByLabel( $translator->translate('Users') );
+
         $usersPage->addPage(array(
             'label' => 'New', 'module'=> 'slotter', 'controller' => 'users', 'action' => 'new'
         ));

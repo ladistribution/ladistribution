@@ -1,6 +1,6 @@
-<h2>Package: <strong><?php echo $this->package ?></strong></h2>
+<h2><?php echo $this->translate("Package:") ?> <strong><?php echo $this->package ?></strong></h2>
 
-<h3>Releases</h3>
+<h3><?php echo $this->translate("Releases") ?></h3>
 
 <?php if (empty($this->releases) || count($this->releases) == 0) : ?>
     
@@ -11,8 +11,8 @@
     <ul>
     <?php foreach ($this->releases as $release) : ?>
         <?php
-        $params = array('controller' => 'repositories', 'id' => $this->repository->id, 'action' => 'manage');
-        $url = $this->url($params, 'default');
+        $params = array('id' => $this->repository->id, 'action' => 'manage');
+        $url = $this->url($params);
         ?>
         <li><a href="<?php echo $url ?>"><?php echo $release ?></a></li>
     <?php endforeach ?>
@@ -20,19 +20,19 @@
 
 <?php endif ?>
 
-<h3>Extensions</h3>
+<h3><?php echo $this->translate("Extensions") ?></h3>
 
 <?php if (empty($this->extensions) || count($this->extensions) == 0) : ?>
     
-    <p>None</p>
+    <p><?php echo $this->translate("None|fem") ?></p>
     
 <?php else : ?>
     
     <ul>
     <?php foreach ($this->extensions as $extension) : ?>
         <?php
-        $params = array('controller' => 'repositories', 'id' => $this->repository->id, 'action' => 'manage');
-        $url = $this->url($params, 'default');
+        $params = array('id' => $this->repository->id, 'action' => 'manage');
+        $url = $this->url($params);
         ?>
         <li><a href="<?php echo $url ?>"><?php echo $extension->name ?></a></li>
     <?php endforeach ?>

@@ -62,6 +62,10 @@ class Ld_Ui
     {
         $admin = self::getAdmin();
 
+        if (empty($admin)) {
+            return null;
+        }
+
         $router = new Zend_Controller_Router_Rewrite();
         $config = new Zend_Config_Ini($admin->getAbsolutePath()  .'/routes.ini');
         $router->addDefaultRoutes();
@@ -91,7 +95,7 @@ class Ld_Ui
         $applications = $site->getApplicationsInstances();
 
         $isAdmin = false;
-        if ($admin->getUserRole() == 'admin') {
+        if ($admin && $admin->getUserRole() == 'admin') {
             $isAdmin = true;
         } else {
             $users = $site->getUsers();

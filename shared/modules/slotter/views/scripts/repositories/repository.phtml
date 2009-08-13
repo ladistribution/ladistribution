@@ -1,6 +1,6 @@
 <?php if (empty($this->applications) &&  empty($this->libraries) && empty($this->extensions)) : ?>
 
-    <p>This repository is empty</p>
+    <p><?php echo $this->translate("This repository is empty.") ?></p>
 
 <?php else : ?>
 
@@ -8,12 +8,12 @@
     <?php foreach(array('applications', 'libraries', 'extensions') as $type) : ?>
         <?php if (!empty($this->$type)) : ?>
             <tr>
-                <th colspan="3"><strong><?php echo ucfirst($type) ?></strong></th>
+                <th colspan="3"><strong><?php echo $this->translate(ucfirst($type)) ?></strong></th>
             </tr>
             <tr class="th2">
-                <th>name</th>
-                <th>package</th>
-                <th>version</th>
+                <th><?php echo $this->translate("Name") ?></th>
+                <th><?php echo $this->translate("Package") ?></th>
+                <th><?php echo $this->translate("Version") ?></th>
             </tr>
             <tbody>
             <?php foreach ($this->$type as $package) : ?>

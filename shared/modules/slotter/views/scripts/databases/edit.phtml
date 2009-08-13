@@ -1,10 +1,10 @@
-<h2>Update a database connection</h2>
+<h2><?php echo $this->translate("Update a connection") ?></h2>
 
 <form method="post" action="">
 
-    <table>
+    <table class="ld-form">
     <tr>
-        <td><label>Type</label></td>
+        <th><label><?php echo $this->translate("Type") ?></label></th>
         <td>
             <select name="type">
                 <option value="mysql">MySQL</option>
@@ -13,25 +13,25 @@
         </td>
     </tr>
     <tr>
-        <td><label>Host</label></td>
+        <th><label><?php echo $this->translate("Host") ?></label></th>
         <td><input type="text" name="host" class="text" value="<?php echo $this->escape($this->db['host']) ?>"/></td>
     </tr>
     <tr>
-        <td><label>Name</label></td>
+        <th><label><?php echo $this->translate("Name") ?></label></th>
         <td><input type="text" name="name" class="text" value="<?php echo $this->escape($this->db['name']) ?>"/></td>
     </tr>
     <tr>
-        <td><label>User</label></td>
+        <th><label><?php echo $this->translate("Username") ?></label></th>
         <td><input type="text" name="user" class="text" value="<?php echo $this->escape($this->db['user']) ?>"/></td>
     </tr>
     <tr>
-        <td><label>Password</label></td>
-        <td><input type="password" name="password" class="text" value=""/></td>
+        <th><label><?php echo $this->translate("Password") ?></label></th>
+        <td><input type="password" name="password" class="text" value="" autocomplete="off"/></td>
     </tr>
     </table>
 
     <input type="hidden" name="id" value="<?php echo $this->escape($this->id) ?>"/>
 
-    <input type="submit" class="submit" value="Update"/>
+    <input type="submit" class="submit" value="<?php echo $this->translate("Update") ?>"/>
 
 </form>

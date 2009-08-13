@@ -1,8 +1,8 @@
-<h2>Update</h2>
+<h2><?php echo $this->translate('Update') ?></h2>
 
 <?php if (empty($this->libraries) && empty($this->applications)) : ?>
 
-    <p>Everything is up to date.</p>
+    <p><?php echo $this->translate('Everything is up to date.') ?></p>
 
 <?php else : ?>
 
@@ -11,13 +11,13 @@
 <table class="h6e-data">
     <?php if (!empty($this->libraries)) : ?>
         <tr>
-            <th colspan="6"><strong>Libraries</strong></td>
+            <th colspan="6"><strong><?php echo $this->translate('Libraries') ?></strong></td>
         </tr>
         <tr class="th2">
             <th></th>
-            <th colspan="3">package</th>
-            <th>current version</th>
-            <th>new version</th>
+            <th colspan="3"><?php echo $this->translate('package') ?></th>
+            <th><?php echo $this->translate('current version') ?></th>
+            <th><?php echo $this->translate('new version') ?></th>
         </tr>
 
         <?php foreach ($this->libraries as $library) : ?>
@@ -25,21 +25,22 @@
                 <td><input type="checkbox" checked="checked" name="libraries[<?php echo $library->getPackageId() ?>]" /></td>
                 <td colspan="3"><?php echo $library->getPackageId() ?></td>
                 <td><?php echo $library->getVersion() ?></td>
-                <td><?php echo $library->hasUpdate ? $library->hasUpdate : '<em>None</em>' ?></td>
+                <td><?php echo $library->hasUpdate ? $library->hasUpdate :
+                    '<em>' . $this->translate('none') . '</em>' ?></td>
             </tr>
         <?php endforeach ?>
     <?php endif ?>
     <?php if (!empty($this->applications)) : ?>
         <tr>
-            <th colspan="6"><strong>Applications</strong></td>
+            <th colspan="6"><strong><?php echo $this->translate('Applications') ?></strong></td>
         </tr>
         <tr class="th2">
             <th></th>
-            <th>name</th>
-            <th>path</th>
-            <th>package</th>
-            <th>current version</th>
-            <th>new version</th>
+            <th><?php echo $this->translate('name') ?></th>
+            <th><?php echo $this->translate('path') ?></th>
+            <th><?php echo $this->translate('package') ?></th>
+            <th><?php echo $this->translate('current version') ?></th>
+            <th><?php echo $this->translate('new version') ?></th>
         </tr>
         <?php foreach ($this->applications as $id => $application) : ?>
             <tr>
@@ -52,7 +53,8 @@
                 <td><?php echo $application->getPath() ?></td>
                 <td><?php echo $application->getPackageId() ?></td>
                 <td><?php echo $application->getVersion() ?></td>
-                <td><?php echo $application->hasUpdate && $application->hasUpdate !== true ? $application->hasUpdate : '<em>None</em>' ?></td>
+                <td><?php echo $application->hasUpdate && $application->hasUpdate !== true ?
+                    $application->hasUpdate : '<em>' . $this->translate('none') . '</em>' ?></td>
             </tr>
             <?php foreach ($application->getExtensions() as $extension) : ?>
                 <?php if (($extension->hasUpdate = $extension->hasUpdate()) || $this->all) : ?>
@@ -62,7 +64,8 @@
                         <td colspan="2">&nbsp;</td>
                         <td><?php echo $extension->getPackageId() ?></td>
                         <td><?php echo $extension->getVersion() ?></td>
-                        <td><?php echo $extension->hasUpdate ? $extension->hasUpdate : '<em>None</em>' ?></td>
+                        <td><?php echo $extension->hasUpdate ?
+                            $extension->hasUpdate : '<em>' . $this->translate('none') . '</em>' ?></td>
                     </tr>
                 <?php endif ?>
             <?php endforeach ?>
@@ -70,7 +73,7 @@
     <?php endif ?>
 </table>
 
-<input type="submit" class="submit button" value="Update selected"/>
+<input type="submit" class="submit button" value="<?php echo $this->translate('Update selected') ?>"/>
 
 </form>
 

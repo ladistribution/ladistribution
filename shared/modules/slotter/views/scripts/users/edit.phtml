@@ -1,25 +1,25 @@
-<h2>Edit user infos</h2>
+<h2><?php echo $this->translate("Edit user infos") ?></h2>
 
 <form method="post" action="">
 
-    <h3>Infos</h3>
+    <h3><?php echo $this->translate("Infos") ?></h3>
 
     <table class="ld-form">
     <tr>
-        <th><label>Full Name</label></td>
+        <th><label><?php echo $this->translate("Full Name") ?></label></td>
         <td><input type="text" name="fullname" class="text" value="<?php if (isset($this->user['fullname'])) echo $this->escape($this->user['fullname']) ?>"/></td>
     </tr>
     <tr>
-        <th><label>Email</label></td>
+        <th><label><?php echo $this->translate("Email") ?></label></td>
         <td><input type="text" name="email" class="text" value="<?php if (isset($this->user['email'])) echo $this->escape($this->user['email']) ?>"/></td>
     </tr>
     </table>
 
     <?php if ($this->currentUser['username'] == $this->user['username']) : ?>
 
-    <h3>Change password</h3>
+    <h3><?php echo $this->translate("Change password") ?></h3>
 
-    <p><em>If you would like to change the password type a new one. Otherwise leave this blank.</em></p>
+    <p><em><?php echo $this->translate("If you would like to change the password type a new one. Otherwise leave this blank.") ?></em></p>
 
     <table class="ld-form">
     <!--
@@ -29,12 +29,12 @@
     </tr>
     -->
     <tr>
-        <th><label>New password</label></td>
-        <td><input type="password" name="new_password" class="text" value=""/></td>
+        <th><label><?php echo $this->translate("New password") ?></label></td>
+        <td><input type="password" name="new_password" class="text" value="" autocomplete="off"/></td>
     </tr>
     <tr>
-        <th><label>New password again</label></td>
-        <td><input type="password" name="new_password_again" class="text" value=""/></td>
+        <th><label><?php echo $this->translate("New password again") ?></label></td>
+        <td><input type="password" name="new_password_again" class="text" value="" autocomplete="off"/></td>
     </tr>
     </table>
 
@@ -42,13 +42,13 @@
 
     <input type="hidden" name="id" value="<?php echo $this->escape($this->username) ?>"/>
 
-    <input type="submit" class="submit" value="Update"/>
+    <input type="submit" class="submit" value="<?php echo $this->translate("Update") ?>"/>
 
 </form>
 
 <div class="separator" style="border-top:1px solid #ccc;padding-top:20px;margin-top:20px"></div>
 
-<h3>Identities</h3>
+<h3><?php echo $this->translate("Identities") ?></h3>
 
 <?php if (isset($this->user['identities']) && count($this->user['identities']) > 0) : ?>
 
@@ -75,6 +75,6 @@
         </tr>
     </table>
 
-    <input type="submit" value="Add"/>
+    <input type="submit" value="<?php echo $this->translate("Add") ?>"/>
 
 </form>

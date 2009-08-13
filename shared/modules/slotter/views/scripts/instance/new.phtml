@@ -1,6 +1,6 @@
 <?php if (empty($this->package)) : ?>
     
-<h2>Add a new application</h2>
+<h2><?php echo $this->translate("Add a new application") ?></h2>
 
 <ul class="blocks">
     <?php
@@ -14,24 +14,24 @@
     ?>
 </ul>
 
-<p>You can also:</p>
+<p><?php echo $this->translate("You can also:") ?></p>
 
 <ul>
 <li><a href="<?php echo $this->url(array('controller' => 'instance', 'action' => 'clone')) ?>">
-    Clone an application from a backup.
+    <?php echo $this->translate("Clone an application from a backup") ?>
 </a></li>
 </ul>
 
 <?php else : ?>
 
-<h2>Deploy a new <?php echo $this->escape($this->package->name) ?> instance</h2>
+<h2><?php printf($this->translate("Deploy a new % instance "), $this->escape($this->package->name)) ?></h2>
 
 <form method="post" action="">
 
     <?php $this->preferencesRenderer($this->preferences, array(), 'preferences'); ?>
 
     <input type="hidden" name="packageId" value="<?php echo $this->escape($this->package->id) ?>"/>
-    <input type="submit" class="submit" value="Create"/>
+    <input type="submit" class="submit" value="<?php echo $this->translate("Create") ?>"/>
 
 </form>
 

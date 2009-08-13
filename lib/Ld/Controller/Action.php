@@ -41,6 +41,12 @@ class Ld_Controller_Action extends Zend_Controller_Action
         }
     }
 
+    function getTranslator()
+    {
+        $translator = $this->view->getHelper('translate');
+        return $translator;
+    }
+
     function _setTitle($title)
     {
         $this->view->title = $title;

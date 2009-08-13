@@ -9,13 +9,30 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
 
         echo '<ul class="ld-instance-menu">' . "\n";
 
-        $actions = array('status', 'configure', 'themes', 'extensions', 'roles', 'backups');
-        foreach ($actions as $action) {
-            $url = $this->view->url(array('controller' => 'instance', 'id' => $this->view->id, 'action' => $action), 'instance-action');
+        $actions = array(
+            'status'     => $this->translate('status'),
+            'configure'  => $this->translate('configure'),
+            'themes'     => $this->translate('themes'),
+            'extensions' => $this->translate('extensions'),
+            'roles'      => $this->translate('roles'),
+            'backups'    => $this->translate('backups')
+        );
+
+        foreach ($actions as $action => $label) {
+            $url = $this->view->instanceActionUrl($this->view->id, $action);
             $current = $this->view->action == $action;
-            echo '<li' . ($current ? ' class="current"' : '') . '><a href="' . $url . '">' . $action . '</a></li>' . "\n";
+            echo '<li' . ($current ? ' class="current"' : '') . '><a href="' . $url . '">' . $label . '</a></li>' . "\n";
         }
         echo "</ul>\n";
+    }
+
+    protected function translate($string)
+    {
+        if (empty($this->view->translate)) {
+            $this->view->translate = $this->view->getHelper('translate');
+        }
+
+        return $this->view->translate->translate($string);
     }
 
 }

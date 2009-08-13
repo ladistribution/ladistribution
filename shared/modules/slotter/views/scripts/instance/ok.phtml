@@ -1,7 +1,7 @@
-<h2>Ok</h2>
+<h2><?php echo $this->translate('Ok') ?></h2>
 
 <?php if (isset($this->redirectUrl)) : ?>
     
-<p><a href="<?php echo $this->escape($this->redirectUrl) ?>">Continue</a></p>
+<p><a href="<?php echo $this->escape($this->redirectUrl) ?>"><?php echo $this->translate('Continue') ?></a></p>
 
 <?php endif ?>

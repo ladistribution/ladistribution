@@ -1,14 +1,14 @@
-<h2>Repositories</h2>
+<h2><?php echo $this->translate("Repositories") ?></h2>
 
 <?php echo $this->partial('repositories/list.phtml', array('repositories' => $this->repositories)); ?>
 
-<h3>Also:</h3>
+<h3><?php echo $this->translate("You can:") ?></h3>
 
 <ul>
-    <li><a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'new'), 'default') ?>?type=local">
-        Create a local repository
+    <li><a href="<?php echo $this->url(array('action' => 'new', 'type' => 'local')) ?>">
+        <?php echo $this->translate("Create a local repository") ?>
     </a></li>
-    <li><a href="<?php echo $this->url(array('controller' => 'repositories', 'action' => 'new'), 'default') ?>?type=remote">
-        Add a remote repository
+    <li><a href="<?php echo $this->url(array('action' => 'new', 'type' => 'remote')) ?>">
+        <?php echo $this->translate("Add a remote repository") ?>
     </a></li>
 </ul>

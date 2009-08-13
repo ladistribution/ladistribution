@@ -1,35 +1,35 @@
-<h2>Add a new database connection</h2>
+<h2><?php echo $this->translate("Add a new connection") ?></h2>
 
 <form method="post" action="">
-    
-    <table>
+
+    <table class="ld-form">
     <tr>
-        <td><label>Type</label></td>
+        <th><label for="ld-db-add-type"><?php echo $this->translate("Type") ?></label></th>
         <td>
-            <select name="type">
+            <select id="ld-db-add-type" name="type">
                 <option value="mysql">MySQL</option>
                 <option value="postgresql">PostgreSQL</option>
             </select>
         </td>
     </tr>
     <tr>
-        <td><label>Host</label></td>
-        <td><input type="text" name="host" class="text" value="localhost"/></td>
+        <th><label for="ld-db-add-host"><?php echo $this->translate("Host") ?></label></th>
+        <td><input id="ld-db-add-host" type="text" name="host" class="text" value="localhost"/></td>
     </tr>
     <tr>
-        <td><label>Name</label></td>
-        <td><input type="text" name="name" class="text" value=""/></td>
+        <th><label for="ld-db-add-name"><?php echo $this->translate("DB Name") ?></label></th>
+        <td><input id="ld-db-add-name" type="text" name="name" class="text" value=""/></td>
     </tr>
     <tr>
-        <td><label>User</label></td>
-        <td><input type="text" name="user" class="text" value=""/></td>
+        <th><label for="ld-db-add-user"><?php echo $this->translate("Username") ?></label></th>
+        <td><input id="ld-db-add-user" type="text" name="user" class="text" value="" autocomplete="off"/></td>
     </tr>
     <tr>
-        <td><label>Password</label></td>
-        <td><input type="password" name="password" class="text" value=""/></td>
+        <th><label for="ld-db-add-password"><?php echo $this->translate("Password") ?></label></th>
+        <td><input id="ld-db-add-password" type="password" name="password" class="text" value="" autocomplete="off"/></td>
     </tr>
     </table>
-     
-    <input type="submit" class="submit" value="Add"/>
+
+    <input type="submit" class="submit" value="<?php echo $this->translate("Add") ?>"/>
 
 </form>

@@ -43,7 +43,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
                   }
             }
             if ($this->view->userRole == 'admin') {
-                printf('<a class="view" href="%s">Settings</a><br/>',  $manageUrl);
+                printf('<a class="view" href="%s">%s</a><br/>', $manageUrl, $this->translate("Settings"));
             }
             printf('</div>');
 
@@ -55,7 +55,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
         <?php if ($all && $this->view->userRole == 'admin') : ?>
         <li class="empty new">
             <a href="<?php echo $this->view->url(array('controller' => 'instance', 'action' => 'new')) ?>">
-                Add a new application
+                <?php echo $this->translate("Add a new application") ?>
             </a>
         </li>
         <?php endif; ?>
@@ -74,6 +74,15 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
         </script>
 
         <?php
+    }
+
+    protected function translate($string)
+    {
+        if (empty($this->view->translate)) {
+            $this->view->translate = $this->view->getHelper('translate');
+        }
+
+        return $this->view->translate->translate($string);
     }
 
 }
