@@ -19,9 +19,10 @@ rm $FOLDER/wp-register.php
 rm $FOLDER/wp-content/plugins/hello.php
 rm -rf $FOLDER/wp-content/plugins/akismet
 
+mkdir themes
 rm -rf $FOLDER/wp-content/themes/classic
 rm -rf $FOLDER/wp-content/themes/default
-svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "$FOLDER/themes"
+svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "themes/default"
 
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php
