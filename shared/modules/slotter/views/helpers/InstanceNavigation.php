@@ -19,7 +19,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         );
 
         foreach ($actions as $action => $label) {
-            $url = $this->view->instanceActionUrl($this->view->id, $action);
+            $url = $this->view->instanceActionUrl($action, $this->view->id);
             $current = $this->view->action == $action;
             echo '<li' . ($current ? ' class="current"' : '') . '><a href="' . $url . '">' . $label . '</a></li>' . "\n";
         }
