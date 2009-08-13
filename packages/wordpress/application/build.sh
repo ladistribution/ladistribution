@@ -36,8 +36,9 @@ rm $FOLDER/wp-admin/import/wp-cat2tag.php
 find . -name '*.DS_Store' -type f -delete
 
 # Create zip package
-zip -rqv $PACKAGE $FOLDER dist plugins -x "*/.svn/*"
+zip -rqv $PACKAGE $FOLDER dist plugins themes -x "*/.svn/*"
 mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
+rm -rf themes
