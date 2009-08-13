@@ -72,7 +72,8 @@ class Ld_Loader
         } else {
             $cookieManager = new Ld_Cookie_Simple();
         }
-        $cookieConfig = array('cookieName' => 'ld-auth', 'cookiePath' => $site->getPath());
+        $path = $site->getPath();
+        $cookieConfig = array('cookieName' => 'ld-auth', 'cookiePath' => empty($path) ? '/' : $path);
         $authStorage = new Ld_Auth_Storage_Cookie($cookieManager, $cookieConfig);
         $auth = Zend_Auth::getInstance();
         $auth->setStorage($authStorage);
