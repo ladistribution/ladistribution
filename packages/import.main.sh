@@ -12,6 +12,7 @@ $IMPORT lib-clearbricks.zip
 $IMPORT lib-ld.zip
 $IMPORT lib-php-openid.zip
 $IMPORT lib-geshi.zip
+$IMPORT lib-htmlpurifier.zip
 
 $IMPORT css-h6e-minimal.zip
 $IMPORT css-ld-ui.zip
