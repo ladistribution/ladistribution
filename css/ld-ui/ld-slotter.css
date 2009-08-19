@@ -38,6 +38,10 @@
   clear:both;
 }
 
+.h6e-simple-footer {
+	padding-top:1em;
+}
+
 /* Notifications
 -------------------------------------------------------------- */
 
@@ -54,3 +58,15 @@
 .ld-error   a { color:#8a1f11; }
 .ld-notice  a { color:#514721; }
 .ld-success a { color:#264409; }
+
+/* Others
+-------------------------------------------------------------- */
+
+.inline {
+	display:inline;
+}
+
+#ld-lang-switcher input, #ld-lang-switcher select {
+	font-size:11px;
+	vertical-align:5%;
+}

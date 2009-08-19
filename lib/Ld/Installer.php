@@ -131,7 +131,7 @@ class Ld_Installer
 
     public function getLinks()
     {
-        $baseUrl = $this->getSite()->getPath() . '/' .  $this->getPath();
+        $baseUrl = $this->getSite()->getUrl() . $this->getPath();
 
         $links = $this->getManifest()->getLinks();
         foreach ($links as $id => $link) {
@@ -223,7 +223,7 @@ class Ld_Installer
         }
 
         // Erase files (would be better to delete files one by one)
-        foreach ($this->getDeployments('to') as $deployment) {
+        foreach (array_reverse($this->getDeployments('to')) as $deployment) {
             Ld_Files::unlink($deployment);
         }
 

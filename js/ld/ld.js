@@ -8,6 +8,7 @@ Ld.init = function($)
     this.themesPanel($);
     this.sortableBlocks($);
     // this.instanceMenu($);
+    this.langSwitcher($);
 }
 
 Ld.dataTables = function($)
@@ -24,8 +25,6 @@ Ld.sortableBlocks = function($)
     $(".blocks.sortables").sortable({
         items: 'li.sortable', cursor: 'crosshair',
         update: function() {
-            // console.log(Ld.sortInstancesUrl);
-            // console.log($(".blocks").sortable('serialize'));
             $.post(Ld.sortInstancesUrl, $(".blocks").sortable('serialize'));
         }
     });
@@ -62,4 +61,14 @@ Ld.themesPanel = function($)
     //     var value = $('#available-themes input:radio[name=theme]:checked').val();
     //     $.post($("#available-themes").attr('action'), {theme: value});
     // });
+}
+
+Ld.langSwitcher = function($)
+{
+	$("#ld-lang-switcher input.submit").hide();
+
+	$("#ld-lang-switcher select").change(function() {
+		// $.cookie('ld-lang', $(this).val());
+		$(this).parent().submit();
+	});
 }

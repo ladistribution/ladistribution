@@ -243,8 +243,23 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return null;
     }
 
+    public function hasExtension($id)
+    {
+        $extensions = $this->getExtensions();
+        foreach ($extensions as $extension) {
+            if ($extension->getPackageId() == $id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function addExtension($extension, $preferences = array())
     {
+        if (!$this->getSite()->hasPackage($extension)) {
+            return null;
+        }
+
         $package = $this->site->getPackageExtension($this->getPackageId(), $extension);
 
         $this->getInstaller(); // include the application installer

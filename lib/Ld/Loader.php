@@ -33,7 +33,7 @@ class Ld_Loader
         defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
         if (constant('LD_DEBUG')) {
-            error_reporting( E_ALL | E_NOTICE /* | E_STRICT */ );
+            // error_reporting( E_ALL | E_NOTICE /* | E_STRICT */ );
         }
 
         set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
@@ -77,6 +77,14 @@ class Ld_Loader
         $authStorage = new Ld_Auth_Storage_Cookie($cookieManager, $cookieConfig);
         $auth = Zend_Auth::getInstance();
         $auth->setStorage($authStorage);
+
+        // Locale
+        $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/ld/', array('en_US'));
+        $adapter = new Zend_Translate('gettext', $site->getDirectory('shared') . '/locales/ld/en_US/default.mo', 'en_US');
+        foreach ($locales as $locale) {
+            $adapter->addTranslation($site->getDirectory('shared') . "/locales/ld/$locale/default.mo", $locale);
+        }
+        Zend_Registry::set('Zend_Translate', $adapter);
 
         // Legacy CSS Constant
         defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));

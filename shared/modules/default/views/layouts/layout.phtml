@@ -29,19 +29,24 @@
   </div>
 
   <div class="h6e-simple-footer">
-      <p>
-          <?php printf($this->translate('This is <a href="%s">La Distribution</a>!'), 'http://ladistribution.net/') ?>
-          <!--
-          <form class="inline" action="" method="post">
+          <?php printf($this->translate('Powered by <a href="%s">La Distribution</a>,'), 'http://ladistribution.net/') ?>
+          a community project initiated by <a href="http://h6e.net/">h6e</a>.
+          <form class="inline" action="" method="post" id="ld-lang-switcher">
               <label><?php echo $this->translate("Language:") ?></label>
               <select name="ld-lang">
-                  <option value="en_US">Anglais (USA)</option>
-                  <option value="fr_FR">Français (France)</option>
+                  <?php
+                  $locales = array('auto' => 'auto', 'en_US' => 'English (USA)', 'fr_FR' => 'Français (France)');
+                  foreach ($locales as $id => $label) {
+                      if (isset($_COOKIE['ld-lang']) && $id == $_COOKIE['ld-lang']) {
+                          echo "<option selected=\"selected\" value=\"$id\">$label</option>\n";
+                      } else {
+                          echo "<option value=\"$id\">$label</option>\n";
+                      }
+                  }
+                  ?>
                </select>
-               <input type="submit" value="Ok"/>
+               <input type="submit" class="submit" value="Ok"/>
           </form>
-          -->
-      </p>
   </div>
 
 </div>

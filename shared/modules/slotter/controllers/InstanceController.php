@@ -108,7 +108,7 @@ class Slotter_InstanceController extends Slotter_BaseController
         if ( $this->_hasParam('add') ) {
 
             $this->view->extension = $extension = $this->_getParam('add');
-            if ($this->_isExtensionInstalled($extension)) {
+            if ($this->instance->hasExtension($extension)) {
                 $this->view->installed = true;
                 return;
             }
@@ -144,7 +144,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
         $this->view->extensions = array();
         foreach ($extensions as $id => $extension) {
-            if (!$this->_isExtensionInstalled($id)) {
+            if (!$this->instance->hasExtension($id)) {
                 $this->view->extensions[$id] = $extension;
             }
         }
@@ -186,12 +186,12 @@ class Slotter_InstanceController extends Slotter_BaseController
       if ($this->getRequest()->isGet()) {
           $this->view->configuration = $this->instance->getConfiguration();
       
-      } else if ($this->getRequest()->isPost()) {
+      } else if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
           $configuration = $this->_getParam('configuration');
           $this->view->configuration = $this->instance->setConfiguration($configuration);
       }
   }
-  
+
   /**
    * Themes action.
    */
@@ -201,7 +201,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
       $this->view->extensions = array();
       foreach ($extensions as $extension) {
-          if ($this->_isExtensionInstalled($extension->id)) {
+          if ($this->instance->hasExtension($extension->id)) {
               continue;
           }
           $this->view->extensions[] = $extension;
@@ -331,17 +331,6 @@ class Slotter_InstanceController extends Slotter_BaseController
             $this->_redirectToAction('status', $instance->id);
 
         }
-    }
-
-    protected function _isExtensionInstalled($id)
-    {
-        $extensions = $this->instance->getExtensions();
-        foreach ($extensions as $extension) {
-            if ($extension->getPackageId() == $id) {
-                return true;
-            }
-        }
-        return false;
     }
 
     protected function _redirectToAction($action = 'status', $id = null)

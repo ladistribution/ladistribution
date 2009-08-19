@@ -204,6 +204,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
         unset($this->_instances);
     }
 
+    public function getLocales()
+    {
+        $locales = Ld_Files::getJson($this->getDirectory('dist') . '/locales.json');
+        if (empty($locales)) {
+            return array('en_US');
+        }
+        return $locales;
+    }
+
+    public function updateLocales($locales)
+    {
+        Ld_Files::putJson($this->getDirectory('dist') . '/locales.json', $locales);
+    }
+
     public function getInstance($id)
     {
         $instances = $this->getInstances();
@@ -248,7 +262,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         foreach ($package->getManifest()->getDependencies() as $dependency) {
-            if (null === $this->_getLibraryInfos($dependency)) {
+            if (!$this->isPackageInstalled($dependency)) {
                 $this->createInstance($dependency);
             }
         }
@@ -285,6 +299,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
             case 'application':
                 $installer->install($preferences);
                 $installer->instance = $this->registerInstance($package, $preferences);
+                // install available locales
+                foreach ($this->getLocales() as $locale) {
+                    $localeId = str_replace('_', '-', strtolower($locale));
+                    $localePackageId = $package->getId() . '-locale-' . $localeId;
+                    if (!$installer->instance->hasExtension($localePackageId) && $this->hasPackage($localePackageId)) {
+                        $installer->instance->addExtension($localePackageId);
+                    }
+                }
                 $installer->postInstall($preferences);
                 return $installer->instance;
             default:
@@ -489,11 +511,24 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $preference['type'] = 'list';
                 $preference['options'] = array();
                 foreach ($users as $id => $user) {
-                    $preference['options'][] = array('value' => $user['username'], 'label' => $user['username']);
+                    $preference['options'][] = array('value' => $user['username'], 'label' => $user['fullname']);
                 }
                 if (Ld_Auth::isAuthenticated()) {
                     $preference['defaultValue'] = Ld_Auth::getUsername();
                 }
+            }
+            // Special Type: locale
+            if ($preference['type'] == 'lang') {
+                $preference['type'] = 'list';
+                $preference['options'][] = array('value' => 'auto', 'label' => 'auto');
+                foreach ($this->getLocales() as $locale) {
+                    $localeId = str_replace('_', '-', strtolower($locale));
+                    $localePackageId = $package->getId() . '-locale-' . $localeId;
+                    if ($this->hasPackage($localePackageId)) {
+                        $preference['options'][] = array('value' => $locale, 'label' => $locale);
+                    }
+                }
+                $preference['defaultValue'] = 'auto';
             }
             $preferences[] = $preference;
         }

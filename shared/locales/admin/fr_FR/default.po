@@ -1,0 +1,572 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: La Distribution\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-18 19:20+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: François Hodierne <francois@upian.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: translate\n"
+"X-Poedit-Basepath: /Web/ld\n"
+"X-Poedit-SearchPath-0: admin\n"
+"X-Poedit-SearchPath-1: shared\n"
+
+#: shared/modules/default/views/layouts/layout.phtml:33
+#, php-format
+msgid "This is <a href=\"%s\">La Distribution</a>!"
+msgstr "C'est <a href=\"%s\">La Distribution</a> !"
+
+#: shared/modules/default/views/layouts/layout.phtml:35
+msgid "Language:"
+msgstr "Langue :"
+
+#: shared/modules/slotter/views/scripts/databases/delete.phtml:1
+msgid "Delete a connection"
+msgstr "Supprimer une connexion"
+
+#: shared/modules/slotter/views/scripts/databases/delete.phtml:3
+msgid "Are you sure you want to delete this database connection?"
+msgstr "Êtes-vous sûrs de vouloir supprimer cette connexion à une base de donnée ?"
+
+#: shared/modules/slotter/views/scripts/databases/delete.phtml:8
+msgid "Delete"
+msgstr "Supprimer"
+
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:1
+msgid "Update a connection"
+msgstr "Mettre à jour une connexion"
+
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:7
+#: shared/modules/slotter/views/scripts/databases/index.phtml:12
+#: shared/modules/slotter/views/scripts/databases/new.phtml:7
+msgid "Type"
+msgstr "Type"
+
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:16
+#: shared/modules/slotter/views/scripts/databases/index.phtml:13
+#: shared/modules/slotter/views/scripts/databases/new.phtml:16
+msgid "Host"
+msgstr "Serveur"
+
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:20
+#: shared/modules/slotter/views/scripts/databases/index.phtml:14
+msgid "Name"
+msgstr "Nom"
+
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:24
+#: shared/modules/slotter/views/scripts/databases/new.phtml:24
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:28
+#: shared/modules/slotter/views/scripts/databases/new.phtml:28
+msgid "Password"
+msgstr "Mot de passe"
+
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:35
+#: shared/modules/slotter/views/scripts/index/update.phtml:1
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:1
+msgid "Databases connections"
+msgstr "Connexions aux bases de données"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:5
+msgid "None"
+msgstr "Aucune"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:15
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:21
+msgid "Actions"
+msgstr "Actions"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:28
+msgid "edit"
+msgstr "éditer"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:33
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:34
+msgid "delete"
+msgstr "supprimer"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:46
+msgid "You can:"
+msgstr "Vous pouvez :"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:50
+msgid "Add a new database connection"
+msgstr "Ajouter une nouvelle connexion à une base de donnée"
+
+#: shared/modules/slotter/views/scripts/databases/new.phtml:1
+msgid "Add a new connection"
+msgstr "Ajouter une nouvelle connexion"
+
+#: shared/modules/slotter/views/scripts/databases/new.phtml:20
+msgid "DB Name"
+msgstr "Nom de la base"
+
+#: shared/modules/slotter/views/scripts/databases/new.phtml:33
+msgid "Add"
+msgstr "Ajouter"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:10
+msgid "Manage"
+msgstr "Gérer"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:30
+msgid "Updates"
+msgstr "Mises à jour"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:34
+#, php-format
+msgid "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>"
+msgstr "Des mises à jours sont disponibles. Il est conseillé de <a href=\"%s\">mettre à jour maintenant.</a>"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:38
+msgid "Everything fine, nothing to update."
+msgstr "Tout est ok, rien à mettre à jour."
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:5
+msgid "Everything is up to date."
+msgstr "Tout est à jour."
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:14
+msgid "Libraries"
+msgstr "Bibliothèques"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:18
+#: shared/modules/slotter/views/scripts/index/update.phtml:41
+msgid "package"
+msgstr "paquet"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:19
+#: shared/modules/slotter/views/scripts/index/update.phtml:42
+msgid "current version"
+msgstr "version actuelle"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:20
+#: shared/modules/slotter/views/scripts/index/update.phtml:43
+msgid "new version"
+msgstr "nouvelle version"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:29
+#: shared/modules/slotter/views/scripts/index/update.phtml:57
+#: shared/modules/slotter/views/scripts/index/update.phtml:68
+msgid "none"
+msgstr "aucune"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:35
+msgid "Applications"
+msgstr "Applications"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:39
+msgid "name"
+msgstr "nom"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:40
+msgid "path"
+msgstr "chemin"
+
+#: shared/modules/slotter/views/scripts/index/update.phtml:76
+msgid "Update selected"
+msgstr "Mettre à jour la sélection"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:9
+msgid "Existing backups"
+msgstr "Sauvegardes existantes"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:13
+msgid "None available"
+msgstr "Aucune disponible"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:19
+msgid "File"
+msgstr "Fichier"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:20
+msgid "Size"
+msgstr "Taille"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:32
+msgid "download"
+msgstr "télécharger"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:33
+msgid "restore"
+msgstr "restaurer"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:43
+msgid "New backup"
+msgstr "Nouvelle sauvegarde"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:47
+msgid "Backup now"
+msgstr "Sauvegarder maintenant"
+
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:54
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:58
+msgid "Upload"
+msgstr "Envoyer"
+
+#: shared/modules/slotter/views/scripts/instance/clone.phtml:1
+msgid "Clone an application"
+msgstr "Cloner une application"
+
+#: shared/modules/slotter/views/scripts/instance/clone.phtml:7
+msgid "Backup (zip file please)"
+msgstr "Sauvegarde (fichier zip svp)"
+
+#: shared/modules/slotter/views/scripts/instance/clone.phtml:17
+msgid "Upload & clone"
+msgstr "Envoyer et cloner"
+
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:23
+msgid "No preference available for this application."
+msgstr "Aucune option pour cette application."
+
+#: shared/modules/slotter/views/scripts/instance/delete.phtml:3
+msgid "Are you sure you want to delete this application?"
+msgstr "Êtes-vous sûrs de vouloir supprimer cette application ?"
+
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:11
+#, php-format
+msgid "Install %s?"
+msgstr "Installer %s ?"
+
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:15
+msgid "This extension is already installed"
+msgstr "Cette extension est déjà installée."
+
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:19
+msgid "You are going to install an extension. Are you sure?"
+msgstr "Vous allez installer une extension. Êtes-vous sûrs ?"
+
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:34
+msgid "install"
+msgstr "installer"
+
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:43
+msgid "Install an extension"
+msgstr "Installer une extension"
+
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:56
+msgid "No extension available for this application."
+msgstr "Pas d'extension disponible pour cette application."
+
+#: shared/modules/slotter/views/scripts/instance/new.phtml:3
+msgid "Add a new application"
+msgstr "Ajouter une application"
+
+#: shared/modules/slotter/views/scripts/instance/new.phtml:17
+#: shared/modules/slotter/views/scripts/instance/status.phtml:59
+msgid "You can also:"
+msgstr "Vous pouvez aussi :"
+
+#: shared/modules/slotter/views/scripts/instance/new.phtml:21
+msgid "Clone an application from a backup"
+msgstr "Cloner une application depuis une sauvegarde"
+
+#: shared/modules/slotter/views/scripts/instance/new.phtml:27
+msgid "Deploy a new % instance "
+msgstr "Déployer une nouvelle instance de %s"
+
+#: shared/modules/slotter/views/scripts/instance/new.phtml:34
+msgid "Create"
+msgstr "Créer"
+
+#: shared/modules/slotter/views/scripts/instance/ok.phtml:1
+msgid "Ok"
+msgstr "Ok"
+
+#: shared/modules/slotter/views/scripts/instance/ok.phtml:5
+msgid "Continue"
+msgstr "Continuer"
+
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:11
+msgid "Not supported."
+msgstr "Non supporté."
+
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:15
+msgid "No user available."
+msgstr "Aucun utilisateur disponible."
+
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:25
+msgid "Full Name"
+msgstr "Nom Complet"
+
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:26
+msgid "Role"
+msgstr "Role"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:11
+msgid "Package"
+msgstr "Paquet"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:13
+msgid "Version"
+msgstr "Version"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:14
+msgid "Status"
+msgstr "Statut"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:23
+msgid "update available"
+msgstr "mise à jour disponible"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:23
+#: shared/modules/slotter/views/scripts/instance/status.phtml:42
+msgid "up to date"
+msgstr "à jour"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:27
+#: shared/modules/slotter/views/scripts/instance/status.phtml:46
+msgid "update"
+msgstr "mettre à jour"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:42
+msgid "Update available"
+msgstr "Mise à jour disponible"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:50
+msgid "uninstall"
+msgstr "désinstaller"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:62
+msgid "Delete this application"
+msgstr "Supprimer cette application"
+
+#: shared/modules/slotter/views/scripts/instance/themes.phtml:17
+msgid "Available Themes"
+msgstr "Thèmes disponibles"
+
+#: shared/modules/slotter/views/scripts/instance/themes.phtml:50
+msgid "No theme available for this application."
+msgstr "Aucun thème disponible pour cette application."
+
+#: shared/modules/slotter/views/scripts/instance/themes.phtml:62
+msgid "Theme Preferences"
+msgstr "Préférences du thème"
+
+#: shared/modules/slotter/views/scripts/locales/index.phtml:1
+msgid "Locales"
+msgstr "Locales"
+
+#: shared/modules/slotter/views/scripts/repositories/delete.phtml:1
+msgid "Remove a repository"
+msgstr "Supprimer un dépôt"
+
+#: shared/modules/slotter/views/scripts/repositories/delete.phtml:3
+msgid "Are you sure you want to remove this repository?"
+msgstr "Êtes-vous sûrs de vouloir supprimer ce dépôt ?"
+
+#: shared/modules/slotter/views/scripts/repositories/delete.phtml:8
+msgid "Remove"
+msgstr "Supprimer"
+
+#: shared/modules/slotter/views/scripts/repositories/index.phtml:1
+msgid "Repositories"
+msgstr "Dépôts"
+
+#: shared/modules/slotter/views/scripts/repositories/index.phtml:9
+msgid "Create a local repository"
+msgstr "Créer un dépôt local"
+
+#: shared/modules/slotter/views/scripts/repositories/index.phtml:12
+msgid "Add a remote repository"
+msgstr "Ajouter un dépôt distant"
+
+#: shared/modules/slotter/views/scripts/repositories/list.phtml:14
+msgid "URL"
+msgstr "URL"
+
+#: shared/modules/slotter/views/scripts/repositories/list.phtml:29
+msgid "manage"
+msgstr "gérer"
+
+#: shared/modules/slotter/views/scripts/repositories/list.phtml:29
+msgid "browse"
+msgstr "parcourir"
+
+#: shared/modules/slotter/views/scripts/repositories/list.phtml:30
+msgid "remove"
+msgstr "supprimer"
+
+#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:1
+msgid "Browse repository"
+msgstr "Parcourir le dépôt"
+
+#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:3
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:3
+msgid "Repository URL:"
+msgstr "Adresse du dépôt:"
+
+#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:12
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:25
+msgid "Remove this repository"
+msgstr "Supprimer ce dépôt"
+
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:1
+msgid "Manage repository"
+msgstr "Gérer le dépôt"
+
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:5
+msgid "Upload a new package"
+msgstr "Envoyer un nouveau paquet"
+
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:7
+msgid "Zip file please."
+msgstr "Fichier zip svp."
+
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:16
+msgid "Packages"
+msgstr "Paquets"
+
+#: shared/modules/slotter/views/scripts/repositories/new.phtml:1
+msgid "Add a new repository"
+msgstr "Ajouter un nouveau dépôt"
+
+#: shared/modules/slotter/views/scripts/repositories/package.phtml:1
+msgid "Package:"
+msgstr "Paquet :"
+
+#: shared/modules/slotter/views/scripts/repositories/package.phtml:3
+msgid "Releases"
+msgstr "Sorties"
+
+#: shared/modules/slotter/views/scripts/repositories/package.phtml:23
+msgid "Extensions"
+msgstr "Extensions"
+
+#: shared/modules/slotter/views/scripts/repositories/package.phtml:27
+msgid "None|fem"
+msgstr "Aucune"
+
+#: shared/modules/slotter/views/scripts/repositories/repository.phtml:3
+msgid "This repository is empty."
+msgstr "The dépôt est vide."
+
+#: shared/modules/slotter/views/scripts/users/delete.phtml:1
+msgid "Delete an user"
+msgstr "Supprimer un utilisateur"
+
+#: shared/modules/slotter/views/scripts/users/delete.phtml:3
+msgid "Are you sure you want to delete this user?"
+msgstr "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:1
+msgid "Edit user infos"
+msgstr "Editer les infos d'un utilisateur"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:5
+msgid "Infos"
+msgstr "Informations"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:13
+#: shared/modules/slotter/views/scripts/users/new.phtml:11
+msgid "Email"
+msgstr "Email"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:20
+msgid "Change password"
+msgstr "Changer le mot de passe"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:22
+msgid "If you would like to change the password type a new one. Otherwise leave this blank."
+msgstr "Si vous souhaitez changer de mot de passe, tapez en un nouveau. Sinon, laissez ce champ vide."
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:32
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:36
+msgid "New password again"
+msgstr "Nouveau password à nouveau"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:51
+msgid "Identities"
+msgstr "Identités"
+
+#: shared/modules/slotter/views/scripts/users/index.phtml:1
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: shared/modules/slotter/views/scripts/users/index.phtml:5
+msgid "None|masc"
+msgstr "Aucun"
+
+#: shared/modules/slotter/views/scripts/users/index.phtml:91
+#: shared/modules/slotter/views/scripts/users/new.phtml:1
+msgid "Add a new user"
+msgstr "Ajouter un nouvel utilisateur"
+
+#: shared/modules/slotter/controllers/BaseController.php:47
+msgid "Home"
+msgstr "Accueil"
+
+#: shared/modules/slotter/controllers/BaseController.php:51
+#: shared/modules/slotter/controllers/DatabasesController.php:29
+msgid "Databases"
+msgstr "Bases de données"
+
+#: shared/modules/slotter/controllers/InstanceController.php:54
+msgid "New"
+msgstr "Nouveau"
+
+#: shared/modules/slotter/views/helpers/InstanceNavigation.php:13
+msgid "status"
+msgstr "statut"
+
+#: shared/modules/slotter/views/helpers/InstanceNavigation.php:14
+msgid "configure"
+msgstr "configuration"
+
+#: shared/modules/slotter/views/helpers/InstanceNavigation.php:15
+msgid "themes"
+msgstr "thèmes"
+
+#: shared/modules/slotter/views/helpers/InstanceNavigation.php:16
+msgid "extensions"
+msgstr "extensions"
+
+#: shared/modules/slotter/views/helpers/InstanceNavigation.php:17
+msgid "roles"
+msgstr "roles"
+
+#: shared/modules/slotter/views/helpers/InstanceNavigation.php:18
+msgid "backups"
+msgstr "sauvegardes"
+
+#: shared/modules/slotter/views/helpers/InstancesList.php:46
+msgid "Settings"
+msgstr "Paramètres"
+
+#~ msgid "Admin"
+#~ msgstr "Administration"
+#~ msgid "Log Out"
+#~ msgstr "Déconnexion"
+#~ msgid "Log In"
+#~ msgstr "Connexion"
+#~ msgid "type"
+#~ msgstr "type"
+#~ msgid "host"
+#~ msgstr "serveur"
+#~ msgid "actions"
+#~ msgstr "actions"
+#~ msgid "username"
+#~ msgstr "nom d'utilisateur"
+
+#, fuzzy
+#~ msgid "user"
+#~ msgstr "nom d'utilisateur"
+
+#, fuzzy
+#~ msgid "theme"
+#~ msgstr "thèmes"
+#~ msgid "Up to date"
+#~ msgstr "A jour"
+

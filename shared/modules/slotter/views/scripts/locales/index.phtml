@@ -1,0 +1,19 @@
+<h2><?php echo $this->translate("Locales") ?></h2>
+
+<form action="<?php echo $this->url() ?>" method="post">
+
+    <fieldset>
+
+    <?php foreach ($this->allLocales as $id => $label) : ?>
+
+        <input type="checkbox" id="locale-<?php echo $id ?>" name="locales[<?php echo $id ?>]"
+            <?php if (in_array($id, $this->locales)) : ?> checked="checked"<?php endif ?> />
+        <label for="locale-<?php echo $id ?>"><?php echo $this->escape($label) ?></label>
+
+    <?php endforeach ?>
+
+    </fieldset>
+
+    <p><input type="submit" value="<?php echo $this->translate("Update") ?>"/></p>
+
+</form>

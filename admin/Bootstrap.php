@@ -14,6 +14,11 @@ class Bootstrap
         self::dispatch();
     }
 
+    public static function getSite()
+    {
+        return Zend_Registry::get('site');
+    }
+
     public static function prepare($dir)
     {
         self::$_registry = Zend_Registry::getInstance();
@@ -23,6 +28,7 @@ class Bootstrap
         self::setupMvc();
         self::setupRoutes();
         self::setupCache();
+        self::setupLocales();
 
         if ( get_magic_quotes_gpc() ) {
             $fn = array('self', '_stripslashesDeep');
@@ -56,6 +62,10 @@ class Bootstrap
         );
 
         self::$_front->addControllerDirectory(
+            $site->getDirectory('shared') . '/modules/merger/controllers', 'merger'
+        );
+
+        self::$_front->addControllerDirectory(
             $site->getDirectory('shared') . '/modules/identity/controllers', 'identity'
         );
 
@@ -73,6 +83,16 @@ class Bootstrap
         $config = new Zend_Config_Ini(dirname(__FILE__)  .'/routes.ini');
         $router = self::$_front->getRouter();
         $router->addConfig($config);
+    }
+
+    public static function setupLocales()
+    {
+        $site = self::getSite();
+        $adapter = Zend_Registry::get('Zend_Translate');
+        $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/admin/');
+        foreach ($locales as $locale) {
+            $adapter->addTranslation($site->getDirectory('shared') . "/locales/admin/$locale/default.mo", $locale);
+        }
     }
 
     public static function setupCache()

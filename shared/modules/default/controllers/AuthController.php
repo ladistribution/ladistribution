@@ -37,7 +37,7 @@ class AuthController extends Ld_Controller_Action
         if (isset($referer)) {
             $this->_redirect($referer);
         } else {
-            $this->_redirect( Zend_Registry::get('site')->getUrl() );
+            $this->_redirect( $this->getSite()->getUrl() );
         }
     }
 
@@ -53,8 +53,7 @@ class AuthController extends Ld_Controller_Action
                 'email'      => $this->_getParam('ld_register_email')
             );
 
-            $site = Zend_Registry::get('site');
-            $site->addUser($user);
+            $this->getSite()->addUser($user);
 
             Ld_Auth::authenticate($this->_getParam('ld_register_username'), $this->_getParam('ld_register_password'));
 

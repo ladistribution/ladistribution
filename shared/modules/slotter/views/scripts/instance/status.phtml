@@ -20,7 +20,7 @@
         <td><?php echo $this->instance->getType() ?></td>
         <td><?php echo $this->instance->getVersion() ?></td>
         <td><?php echo ($this->instance->hasUpdate = $this->instance->hasUpdate()) ?
-            $this->translate('Update available') : $this->translate('up to date') ?></td>
+            $this->translate('update available') : $this->translate('up to date') ?></td>
         <td>
         <?php if ($this->instance->hasUpdate) : ?>
             <a href="<?php echo $this->instanceActionUrl('update') ?>?version=<?php echo $this->instance->hasUpdate ?>"><?php

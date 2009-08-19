@@ -79,7 +79,7 @@ class Ld_Preference
      * @var array
      */    
     protected $_supportedTypes = array('text', 'password', 'boolean', 'hidden',
-        'range', 'list', 'color', 'textarea', 'email', 'user');
+        'range', 'list', 'color', 'textarea', 'email', 'user', 'lang');
 
     /**
      * Preference constructor.

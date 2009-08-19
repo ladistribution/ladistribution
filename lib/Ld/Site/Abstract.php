@@ -35,6 +35,12 @@ abstract class Ld_Site_Abstract
         throw new Exception("Unknown package '$id'");
     }
 
+    public function hasPackage($id)
+    {
+        $packages = $this->getPackages();
+        return isset($packages[$id]);
+    }
+
     abstract public function getPackageExtensions($packageId, $type = null);
 
     public function getPackageExtension($packageId, $extensionId)
@@ -46,7 +52,13 @@ abstract class Ld_Site_Abstract
         throw new Exception("Unknown extension for $packageId: $extensionId");
     }
 
+    public function isPackageInstalled($id)
+    {
+        return $this->_getLibraryInfos($id) ? true : false;
+    }
+
     // TODO: to be renamed
+
     public function _getLibraryInfos($package)
     {
         $instances = $this->getInstances();

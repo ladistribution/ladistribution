@@ -80,11 +80,19 @@ class Ld_Files
         if ($initial) {
             self::log('copy', "$source -> $target");
         }
+
+        if (!file_exists($source)) {
+            self::log('skipped', "$source (not existing)");
+            return false;
+        }
+
+        $dir = dirname($target);
+        self::createDirIfNotExists($dir);
+
         if (is_dir($source)) {
-            if (!file_exists($target) && is_writable(dirname($target))) {
-                mkdir( $target, 0777, true);
-                self::updatePermissions($target);
-            }
+
+            self::createDirIfNotExists($target);
+
             if (!is_writable($target)) {
                 if (file_exists($target)) {
                     self::log('skipped', "$target (not writable)");
@@ -97,25 +105,21 @@ class Ld_Files
                 }
                 return false;
             }
-            $d = dir( $source );
-            while ( FALSE !== ( $entry = $d->read() ) ) {
-                if ($entry == '.' || $entry == '..') {
-                    continue;
-                }
-                $origin = $source . '/' . $entry;
-                $destination = $target . '/' . $entry;
-                if (is_dir($origin)) {
-                    self::copy($origin, $destination, false);
-                    continue;
-                }
+
+            foreach (self::getDirectories($source) as $directory) {
+                self::copy($source . '/' . $directory, $target . '/' . $directory, false);
+            }
+
+            foreach (self::getFiles($source) as $file) {
+                $destination = $target . '/' . $file;
                 if (file_exists($destination) && !is_writable($destination)) {
                     self::log('skipped', "$destination (not writable)");
                     continue;
                 }
-                $result = copy($origin, $destination);
+                $result = copy($source . '/' . $file, $destination);
                 self::updatePermissions($destination);
             }
-            $d->close();
+
         } else {
             copy($source, $target);
             self::updatePermissions($target);

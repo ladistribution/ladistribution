@@ -29,6 +29,15 @@ abstract class Ld_Instance_Application_Abstract extends Ld_Instance_Abstract
         return $infos['url'];
     }
 
+    public function getLocale()
+    {
+        $infos = $this->getInfos();
+        if (isset($infos['locale'])) {
+            return $infos['locale'];
+        }
+        return 'auto';
+    }
+
     abstract public function getLinks();
 
     abstract public function getPreferences($type = 'preferences');

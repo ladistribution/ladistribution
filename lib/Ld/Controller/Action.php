@@ -47,6 +47,11 @@ class Ld_Controller_Action extends Zend_Controller_Action
         return $translator;
     }
 
+    function getSite()
+    {
+        return Zend_Registry::get('site');
+    }
+
     function _setTitle($title)
     {
         $this->view->title = $title;
