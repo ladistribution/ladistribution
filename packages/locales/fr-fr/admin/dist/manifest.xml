@@ -4,7 +4,7 @@
   <version>0.2-34-2</version>
   <type>locale</type>
   <extend>admin</extend>
-  <folder>dist/locales/fr_FR</folder>
+  <directory>dist/locales/fr_FR</directory>
   <deploy>
       <origin>locale</origin>
       <destination path="shared">locales/admin/fr_FR</destination>

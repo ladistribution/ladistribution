@@ -22,11 +22,6 @@ class Slotter_BaseController extends Ld_Controller_Action
             throw new Exception('No Instance defined.');
         }
 
-        if ($this->_hasParam('ld-lang')) {
-            setCookie('ld-lang', $this->_getParam('ld-lang'), time() + 365 * 24 * 60 * 60, $this->site->getPath());
-            $_COOKIE['ld-lang'] = $this->_getParam('ld-lang');
-        }
-
         $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
         $this->view->action = $this->getRequest()->getActionName();
@@ -98,7 +93,10 @@ class Slotter_BaseController extends Ld_Controller_Action
     protected function _initLang()
     {
         if ($this->_hasParam('ld-lang')) {
-            $locale = $this->_getParam('ld-lang');
+            $path = $site->getPath();
+            $cookiePath = empty($path) ? '/' : $path;
+            $locale = $_COOKIE['ld-lang'] = $this->_getParam('ld-lang');
+            setCookie('ld-lang', $locale, time() + 365 * 24 * 60 * 60, $cookiePath);
         } else if ($this->getRequest()->getCookie('ld-lang')) {
             $locale = $this->getRequest()->getCookie('ld-lang');
         }

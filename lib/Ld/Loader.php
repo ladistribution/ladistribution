@@ -81,7 +81,9 @@ class Ld_Loader
         // Locale
         $default_mo = $site->getDirectory('shared') . '/locales/ld/en_US/default.mo';
         if (file_exists($default_mo)) {
-            $adapter = new Zend_Translate('gettext', $default_mo, 'en_US');
+            $options = array();
+            $options['disableNotices'] = constant('LD_DEBUG') ? false : true;
+            $adapter = new Zend_Translate('gettext', $default_mo, 'en_US', $options);
             $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/ld/', array('en_US'));
             foreach ($locales as $locale) {
                 $adapter->addTranslation($site->getDirectory('shared') . "/locales/ld/$locale/default.mo", $locale);

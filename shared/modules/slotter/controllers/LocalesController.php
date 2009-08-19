@@ -8,15 +8,6 @@ require_once 'BaseController.php';
 class Slotter_LocalesController extends Slotter_BaseController
 {
 
-    protected function _getAllLocales()
-    {
-        return array(
-            'en_US' => 'English (USA)',
-            'fr_FR' => 'Français (France)',
-            'de_DE' => 'Deutsch (Deutschland)'
-        );
-    }
-
     public function indexAction()
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('locales')) {
@@ -40,10 +31,13 @@ class Slotter_LocalesController extends Slotter_BaseController
                 }
 
                 // Install available locales packages for applications
-                foreach ($this->getSite()->getApplicationsInstances() as $instance) {
-                    $packageId = $instance->getPackageId() . '-locale-' . $locale ;
-                    if (!$instance->hasExtension($packageId) && $this->getSite()->hasPackage($packageId)) {
-                        $instance->addExtension($packageId);
+                foreach ($this->getSite()->getInstances() as $id => $infos) {
+                    $instance = $this->getSite()->getInstance($id);
+                    if (isset($instance)) {
+                        $packageId = $instance->getPackageId() . '-locale-' . $locale ;
+                        if (!$instance->hasExtension($packageId) && $this->getSite()->hasPackage($packageId)) {
+                            $instance->addExtension($packageId);
+                        }
                     }
                 }
 
@@ -51,7 +45,7 @@ class Slotter_LocalesController extends Slotter_BaseController
 
         }
 
-        $this->view->allLocales = $this->_getAllLocales();
+        $this->view->allLocales = $this->getSite()->getAllLocales();
 
         $this->view->locales = $this->getSite()->getLocales();
     }

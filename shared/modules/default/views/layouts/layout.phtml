@@ -1,6 +1,7 @@
-<?php $this->headScript()->offsetSetFile('jquery', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery.js'); ?>
-<?php $this->headScript()->offsetSetFile('jquery-ui', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery-ui.js'); ?>
-<?php $this->headScript()->offsetSetFile('ld', Zend_Registry::get('site')->getUrl('js') . '/ld/ld.js'); ?>
+<?php $site = Zend_Registry::get('site'); ?>
+<?php $this->headScript()->offsetSetFile('jquery', $site->getUrl('js') . '/jquery/jquery.js'); ?>
+<?php $this->headScript()->offsetSetFile('jquery-ui', $site->getUrl('js') . '/jquery/jquery-ui.js'); ?>
+<?php $this->headScript()->offsetSetFile('ld', $site->getUrl('js') . '/ld/ld.js'); ?>
 <?php echo $this->doctype('XHTML1_STRICT') . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -35,7 +36,7 @@
               <label><?php echo $this->translate("Language:") ?></label>
               <select name="ld-lang">
                   <?php
-                  $locales = array('auto' => 'auto', 'en_US' => 'English (USA)', 'fr_FR' => 'Français (France)');
+                  $locales = array_merge(array('auto' => 'auto'), $site->getLocales());
                   foreach ($locales as $id => $label) {
                       if (isset($_COOKIE['ld-lang']) && $id == $_COOKIE['ld-lang']) {
                           echo "<option selected=\"selected\" value=\"$id\">$label</option>\n";

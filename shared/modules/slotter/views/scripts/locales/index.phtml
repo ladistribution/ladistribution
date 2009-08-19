@@ -7,7 +7,7 @@
     <?php foreach ($this->allLocales as $id => $label) : ?>
 
         <input type="checkbox" id="locale-<?php echo $id ?>" name="locales[<?php echo $id ?>]"
-            <?php if (in_array($id, $this->locales)) : ?> checked="checked"<?php endif ?> />
+            <?php if (isset($this->locales[$id])) : ?> checked="checked"<?php endif ?> />
         <label for="locale-<?php echo $id ?>"><?php echo $this->escape($label) ?></label>
 
     <?php endforeach ?>

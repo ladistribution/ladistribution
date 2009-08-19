@@ -204,13 +204,29 @@ class Ld_Site_Local extends Ld_Site_Abstract
         unset($this->_instances);
     }
 
+    public function getAllLocales()
+    {
+        return array(
+            'en_US' => 'English (USA)',
+            'fr_FR' => 'Français (France)',
+            'de_DE' => 'Deutsch (Deutschland)'
+        );
+    }
+
     public function getLocales()
     {
         $locales = Ld_Files::getJson($this->getDirectory('dist') . '/locales.json');
         if (empty($locales)) {
-            return array('en_US');
+            $locales = array('en_US');
         }
-        return $locales;
+
+        $list = $this->getAllLocales();
+        foreach ($list as $id => $label) {
+            if (!in_array($id, $locales)) {
+                unset($list[$id]);
+            }
+        }
+        return $list;
     }
 
     public function updateLocales($locales)
@@ -300,7 +316,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $installer->install($preferences);
                 $installer->instance = $this->registerInstance($package, $preferences);
                 // install available locales
-                foreach ($this->getLocales() as $locale) {
+                foreach ($this->getLocales() as $locale => $label) {
                     $localeId = str_replace('_', '-', strtolower($locale));
                     $localePackageId = $package->getId() . '-locale-' . $localeId;
                     if (!$installer->instance->hasExtension($localePackageId) && $this->hasPackage($localePackageId)) {
@@ -521,7 +537,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if ($preference['type'] == 'lang') {
                 $preference['type'] = 'list';
                 $preference['options'][] = array('value' => 'auto', 'label' => 'auto');
-                foreach ($this->getLocales() as $locale) {
+                foreach ($this->getLocales() as $locale => $label) {
                     $localeId = str_replace('_', '-', strtolower($locale));
                     $localePackageId = $package->getId() . '-locale-' . $localeId;
                     if ($this->hasPackage($localePackageId)) {
