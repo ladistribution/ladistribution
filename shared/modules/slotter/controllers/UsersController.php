@@ -100,6 +100,7 @@ class Slotter_UsersController extends Slotter_BaseController
             if (count($users) == 1 && Zend_Registry::isRegistered('instance')) {
                 $instance = Zend_Registry::get('instance');
                 $instance->setUserRoles(array($user['username'] => 'admin'));
+                Ld_Auth::authenticate($user['username'], $user['password']);
             }
 
             $this->_redirector->gotoSimple('index', 'users');
