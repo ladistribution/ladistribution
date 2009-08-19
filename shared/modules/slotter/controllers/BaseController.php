@@ -23,7 +23,8 @@ class Slotter_BaseController extends Ld_Controller_Action
         }
 
         if ($this->_hasParam('ld-lang')) {
-            setCookie('ld-lang', $this->_getParam('ld-lang'), mktime() + 365 * 24 * 60 * 60, $this->site->getPath());
+            setCookie('ld-lang', $this->_getParam('ld-lang'), time() + 365 * 24 * 60 * 60, $this->site->getPath());
+            $_COOKIE['ld-lang'] = $this->_getParam('ld-lang');
         }
 
         $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');

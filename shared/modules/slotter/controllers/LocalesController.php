@@ -28,12 +28,6 @@ class Slotter_LocalesController extends Slotter_BaseController
             }
             $this->getSite()->updateLocales($locales);
 
-            // Generate an easy to check package list
-            $packages = $this->getSite()->getPackages();
-            // foreach ($this->getSite()->getPackages() as $id => $package) {
-            //     $packages[] = $id;
-            // }
-
             // Install available locales packages for applications
             foreach ($locales as $locale) {
 
@@ -41,14 +35,14 @@ class Slotter_LocalesController extends Slotter_BaseController
 
                 // Main locale package
                 $packageId = "ld-locale-$locale";
-                if (!$this->getSite()->isPackageInstalled($packageId) && in_array($packageId, $packages)) {
+                if (!$this->getSite()->isPackageInstalled($packageId) && $this->getSite()->hasPackage($packageId)) {
                     $this->getSite()->createInstance($packageId);
                 }
 
                 // Install available locales packages for applications
                 foreach ($this->getSite()->getApplicationsInstances() as $instance) {
                     $packageId = $instance->getPackageId() . '-locale-' . $locale ;
-                    if (!$instance->hasExtension($packageId) && in_array($packageId, $packages)) {
+                    if (!$instance->hasExtension($packageId) && $this->getSite()->hasPackage($packageId)) {
                         $instance->addExtension($packageId);
                     }
                 }

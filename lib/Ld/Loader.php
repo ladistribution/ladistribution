@@ -33,7 +33,7 @@ class Ld_Loader
         defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
         if (constant('LD_DEBUG')) {
-            error_reporting( E_ALL | E_NOTICE | E_STRICT );
+            error_reporting( E_ALL | E_NOTICE /* | E_STRICT */);
         }
 
         set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
