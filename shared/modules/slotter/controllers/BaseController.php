@@ -93,7 +93,7 @@ class Slotter_BaseController extends Ld_Controller_Action
     protected function _initLang()
     {
         if ($this->_hasParam('ld-lang')) {
-            $path = $site->getPath();
+            $path = $this->getSite()->getPath();
             $cookiePath = empty($path) ? '/' : $path;
             $locale = $_COOKIE['ld-lang'] = $this->_getParam('ld-lang');
             setCookie('ld-lang', $locale, time() + 365 * 24 * 60 * 60, $cookiePath);
