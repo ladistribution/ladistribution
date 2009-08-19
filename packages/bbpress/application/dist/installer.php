@@ -107,7 +107,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 	public function getLocales()
 	{
 		$locales = array();
-		foreach (Ld_Files::getFiles($this->getAbsolutePath() . '/bb-includes/languages') as $mo) {
+		foreach (Ld_Files::getFiles($this->getAbsolutePath() . '/my-languages') as $mo) {
 			$locales[] = str_replace('.mo', '', $mo);
 		}
 		return $locales;
