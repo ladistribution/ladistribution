@@ -1,7 +1,7 @@
 <package release="unstable">
   <id>lib-clearbricks</id>
   <name>Clearbricks</name>
-  <version>0.210-2</version>
+  <version>0.215-2</version>
   <type>lib</type>
   <deploy>
       <origin>lib</origin>

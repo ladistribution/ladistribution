@@ -87,11 +87,13 @@ class Bootstrap
 
     public static function setupLocales()
     {
-        $site = self::getSite();
-        $adapter = Zend_Registry::get('Zend_Translate');
-        $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/admin/');
-        foreach ($locales as $locale) {
-            $adapter->addTranslation($site->getDirectory('shared') . "/locales/admin/$locale/default.mo", $locale);
+        if (Zend_Registry::isRegistered('Zend_Translate')) {
+            $site = self::getSite();
+            $adapter = Zend_Registry::get('Zend_Translate');
+            $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/admin/');
+            foreach ($locales as $locale) {
+                $adapter->addTranslation($site->getDirectory('shared') . "/locales/admin/$locale/default.mo", $locale);
+            }
         }
     }
 

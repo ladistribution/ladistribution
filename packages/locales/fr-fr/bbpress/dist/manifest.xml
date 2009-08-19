@@ -1,6 +1,6 @@
 <package>
   <id>bbpress-locale-fr-fr</id>
-  <name>BBPress en Français</name>
+  <name>bbPress en Français</name>
   <version>1.0.2-34-3</version>
   <type>locale</type>
   <extend>bbpress</extend>

@@ -42,24 +42,20 @@ class Ld_Files
         if ($initial) {
             self::log('unlink', $dir);
         }
+
         if (is_file($dir)) {
             unlink($dir);
             return;
         }
-        if (!file_exists($dir) || !$dh = opendir($dir)) {
-            return;
+
+        foreach (self::getDirectories($dir) as $directory) {
+            self::unlink($dir . '/' . $directory, true, false);
         }
-        while (false !== ($obj = readdir($dh))) {
-            if ($obj == '.' || $obj == '..') {
-                continue;
-            }
-            if (is_dir($dir . '/' . $obj)) {
-               self::unlink($dir.'/'.$obj, true, false);
-            } else {
-               unlink($dir . '/' . $obj);
-            }
+
+        foreach (self::getFiles($dir) as $file) {
+            unlink($dir . '/' . $file);
         }
-        closedir($dh);
+
         if ($deleteRootToo) {
             if (is_dir($dir)) {
                 $result = rmdir($dir);
@@ -140,7 +136,7 @@ class Ld_Files
 
     public static function scanDir($dir, $exclude = array())
     {
-        $exclude = array_merge(array('.', '..'), (array)$exclude);
+        $exclude = array_merge(array('.', '..', '.svn'), (array)$exclude);
 
         $files = array();
         $directories = array();
@@ -249,7 +245,7 @@ class Ld_Files
     public static function scanInstances($root, $ignore = array())
     {
         $instances = array();
-        $ignore = array_merge(array('dist', '.svn'), $ignore);
+        $ignore = array_merge(array('dist'), $ignore);
         foreach (self::getDirectories($root, $ignore) as $directory) {
             $dist = $root . '/' . $directory . '/dist';
             if (file_exists($dist)) {
