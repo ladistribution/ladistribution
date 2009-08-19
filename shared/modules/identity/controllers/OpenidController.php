@@ -40,7 +40,7 @@ class Identity_OpenidController extends Ld_Controller_Action
 
     public function profileAction()
     {
-         $this->view->identity = LD_BASE_URL . 'identity/' . $this->_getParam('id');
+        $this->view->identity = $this->getSite()->getBaseUrl() . 'identity/' . $this->_getParam('id');
     }
 
     public function authAction()
@@ -52,7 +52,7 @@ class Identity_OpenidController extends Ld_Controller_Action
                 if ($this->_restrict()) {
                     return;
                 }
-                $userIdentity = LD_BASE_URL . 'identity/' . $this->username;
+                $userIdentity = $this->getSite()->getBaseUrl() . 'identity/' . $this->username;
                 if (!$this->_server->hasUser($userIdentity)) {
                     // we don't care about the password
                     $this->_server->register($userIdentity, $this->username); 
