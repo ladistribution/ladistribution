@@ -5,7 +5,7 @@
 <?php else : ?>
 
     <?php
-    $this->headScript()->offsetSetFile('jquery-tablednd', Zend_Registry::get('site')->getUrl('js') . '/jquery/jquery.tablednd.js');
+    $this->js()->append('/jquery/jquery.tablednd.js', 'js-jquery-tablednd');
     ?>
 
     <table id="repositories" class="h6e-data">

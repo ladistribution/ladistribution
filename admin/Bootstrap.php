@@ -52,8 +52,10 @@ class Bootstrap
 
         $mvc = Zend_Layout::startMvc(array('layoutPath' => $site->getDirectory('shared') . '/modules/default/views/layouts'));
 
-        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/h6e-minimal/h6e-minimal.css', 'screen');
-        $mvc->getView()->headLink()->appendStylesheet($site->getUrl('css') . '/ld-ui/ld-ui.css', 'screen');
+        $mvc->getView()->addHelperPath('Ld/View/Helper', 'Ld_View_Helper');
+
+        $mvc->getView()->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
+        $mvc->getView()->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
 
         self::$_front = Zend_Controller_Front::getInstance();
 

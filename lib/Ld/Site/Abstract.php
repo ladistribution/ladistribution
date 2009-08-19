@@ -54,12 +54,12 @@ abstract class Ld_Site_Abstract
 
     public function isPackageInstalled($id)
     {
-        return $this->_getLibraryInfos($id) ? true : false;
+        return $this->getLibraryInfos($id) ? true : false;
     }
 
     // TODO: to be renamed
 
-    public function _getLibraryInfos($package)
+    public function getLibraryInfos($package)
     {
         $instances = $this->getInstances();
         foreach ($instances as $instance) {

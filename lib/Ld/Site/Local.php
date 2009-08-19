@@ -396,7 +396,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // Check and eventually Update dependencies
         foreach ($package->getManifest()->getDependencies() as $dependency) {
-            $infos = $this->_getLibraryInfos($dependency);
+            $infos = $this->getLibraryInfos($dependency);
             if (null === $infos) {
                 $this->createInstance($dependency);
             } else {

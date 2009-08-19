@@ -1,7 +1,9 @@
-<?php $site = Zend_Registry::get('site'); ?>
-<?php $this->headScript()->offsetSetFile('jquery', $site->getUrl('js') . '/jquery/jquery.js'); ?>
-<?php $this->headScript()->offsetSetFile('jquery-ui', $site->getUrl('js') . '/jquery/jquery-ui.js'); ?>
-<?php $this->headScript()->offsetSetFile('ld', $site->getUrl('js') . '/ld/ld.js'); ?>
+<?php
+$site = Zend_Registry::get('site');
+$this->js()->append('/jquery/jquery.js', 'js-jquery');
+$this->js()->append('/jquery/jquery-ui.js', 'js-jquery-ui');
+$this->js()->append('/ld/ld.js', 'admin');
+?>
 <?php echo $this->doctype('XHTML1_STRICT') . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>

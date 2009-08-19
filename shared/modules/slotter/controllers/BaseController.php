@@ -22,7 +22,7 @@ class Slotter_BaseController extends Ld_Controller_Action
             throw new Exception('No Instance defined.');
         }
 
-        $this->view->setHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
+        $this->view->addHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
         $this->view->action = $this->getRequest()->getActionName();
 

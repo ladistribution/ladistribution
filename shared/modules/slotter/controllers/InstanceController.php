@@ -182,13 +182,12 @@ class Slotter_InstanceController extends Slotter_BaseController
   public function configureAction()
   {
       $this->view->preferences = $this->instance->getPreferences('configuration');
-      
-      if ($this->getRequest()->isGet()) {
-          $this->view->configuration = $this->instance->getConfiguration();
-      
-      } else if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
+
+      if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
           $configuration = $this->_getParam('configuration');
           $this->view->configuration = $this->instance->setConfiguration($configuration);
+      } else {
+          $this->view->configuration = $this->instance->getConfiguration();
       }
   }
 

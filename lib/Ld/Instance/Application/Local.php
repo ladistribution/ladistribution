@@ -266,7 +266,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         $installer = $package->getInstaller();
 
         foreach ($package->getManifest()->getDependencies() as $dependency) {
-            if (null === $this->getSite()->_getLibraryInfos($dependency)) {
+            if (!$this->getSite()->isPackageInstalled($dependency)) {
                 $this->getSite()->createInstance($dependency);
             }
         }
