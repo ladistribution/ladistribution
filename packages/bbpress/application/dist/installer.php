@@ -6,6 +6,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 	public function install($preferences = array())
 	{
 		parent::install($preferences);
+
 		$this->create_config_file();
 	}
 
@@ -13,7 +14,12 @@ class Ld_Installer_Bbpress extends Ld_Installer
 	{
 		parent::postInstall($preferences);
 
+		if (isset($preferences['lang'])) {
+			$this->getInstance()->setInfos(array('locale' => $preferences['lang']))->save();
+		}
+
 		define('BB_INSTALLING', true);
+
 		$this->load_bp();
 
 		$params = array(
@@ -47,7 +53,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		$this->httpClient = new Zend_Http_Client();
 		$this->httpClient->setCookieJar();
 
-		$this->httpClient->setUri($this->instance->getUrl() . '/bb-admin/install.php');
+		$this->httpClient->setUri($this->getInstance()->getUrl() . '/bb-admin/install.php');
 		$this->httpClient->setParameterPost($params);
 		$response = $this->httpClient->request('POST');
 
@@ -84,6 +90,42 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			$this->bbdb = $bbdb;
 			$this->loaded = true;
 		}
+	}
+
+	// Preferences
+
+	public function getPreferences($type)
+	{
+		$preferences = parent::getPreferences($type);
+		
+		if ($type != 'theme') {
+			$preferences[] = $this->_getLangPreference();
+		}
+		return $preferences;
+	}
+
+	public function getLocales()
+	{
+		$locales = array();
+		foreach (Ld_Files::getFiles($this->getAbsolutePath() . '/bb-includes/languages') as $mo) {
+			$locales[] = str_replace('.mo', '', $mo);
+		}
+		return $locales;
+	}
+
+	protected function _getLangPreference()
+	{
+		$preference = array();
+		$preference['name'] = 'lang';
+		$preference['label'] = 'Language';
+		$preference['type'] = 'list';
+		$preference['options'] = array();
+		$preference['options'][] = array('value' => 'auto', 'label' => 'auto');
+		foreach ($this->getLocales() as $locale) {
+			$preference['options'][] = array('value' => $locale, 'label' => $locale);
+		}
+		$preference['defaultValue'] = 'auto';
+		return $preference;
 	}
 
 	// Configuration

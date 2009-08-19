@@ -80,6 +80,10 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     {
         parent::postInstall($preferences);
 
+        if (isset($preferences['lang'])) {
+            $this->getInstance()->setInfos(array('locale' => $preferences['lang']))->save();
+        }
+
         if (!empty($preferences['administrator'])) {
             $username = $preferences['administrator']['username'];
             $this->setUserRoles(array($username => 'admin'));
@@ -96,6 +100,9 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         $conf = array_merge($this->getConfiguration(), $configuration);
         $cfg_local  = "<?php\n";
         foreach ($conf as $key => $value) {
+            if ($key == 'lang' && $value == 'auto') {
+                continue;
+            }
             if ($key == 'tpl') {
                 foreach ($value as $tpl_id => $tpl) {
                     foreach ($tpl as $tpl_key => $tpl_value) {
@@ -110,6 +117,10 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
         if (isset($configuration['title']) && isset($this->instance)) {
             $this->instance->setInfos(array('name' => $configuration['title']))->save();
+        }
+
+        if (isset($configuration['lang']) && isset($this->instance)) {
+            $this->instance->setInfos(array('locale' => $configuration['lang']))->save();
         }
 
         if ($type == 'theme') {
@@ -184,10 +195,11 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         }
     }
 
-    public function _getLangPreference()
+    protected function _getLangPreference()
     {
         $dirs = Ld_Files::getDirectories($this->getAbsolutePath() . '/inc/lang/');
         $options = array();
+        $options[] = array('label' => 'auto', 'value' => 'auto');
         foreach ($dirs as $lang) {
             if ($lang == 'dist') {
                 continue;

@@ -16,6 +16,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		define('WP_INSTALLING', true);
 
+		if (isset($preferences['lang'])) {
+			$this->getInstance()->setInfos(array('locale' => $preferences['lang']))->save();
+		}
+
 		$this->load_wp();
 
 		wp_check_mysql_version();
@@ -171,17 +175,41 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		switch_theme($theme, $theme);
 	}
 
-	// public function uninstall()
-	// {
-	// 	$this->load_wp();
-	// 	
-	// 	foreach ($this->wpdb->tables as $table) {
-	// 		$tablename = $this->wpdb->$table;
-	// 		$result = $this->wpdb->query("DROP TABLE $tablename;");
-	// 	}
-	// 
-	// 	parent::uninstall();
-	// }
+	public function getPreferences($type)
+	{
+		$preferences = parent::getPreferences($type);
+		
+		if ($type != 'theme') {
+			$preferences[] = $this->_getLangPreference();
+		}
+		return $preferences;
+	}
+
+	public function getLocales()
+	{
+		$locales = array();
+		foreach (Ld_Files::getFiles($this->getAbsolutePath() . '/wp-content/languages') as $mo) {
+			if (strpos($mo, 'continents-cities') === false) {
+				$locales[] = str_replace('.mo', '', $mo);
+			}
+		}
+		return $locales;
+	}
+
+	protected function _getLangPreference()
+	{
+		$preference = array();
+		$preference['name'] = 'lang';
+		$preference['label'] = 'Language';
+		$preference['type'] = 'list';
+		$preference['options'] = array();
+		$preference['options'][] = array('value' => 'auto', 'label' => 'auto');
+		foreach ($this->getLocales() as $locale) {
+			$preference['options'][] = array('value' => $locale, 'label' => $locale);
+		}
+		$preference['defaultValue'] = 'auto';
+		return $preference;
+	}
 
 	public function getConfiguration()
 	{
@@ -200,19 +228,27 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	public function setConfiguration($configuration, $type = 'general')
 	{
+		$this->load_wp();
+
 		if ($type == 'general') {
 			$type = 'configuration';
 		}
-		$this->load_wp();
+
 		foreach ($this->getPreferences($type) as $preference) {
-			$preference = $preference->toArray();
+			$preference =  is_object($preference) ? $preference->toArray() : $preference;
 			$option = $preference['name'];
 			$value = isset($configuration[$option]) ? $configuration[$option] : null;
 			update_option($option, $value);
 		}
+
 		if (isset($configuration['blogname']) && isset($this->instance)) {
 			$this->instance->setInfos(array('name' => $configuration['blogname']))->save();
 		}
+
+		if (isset($configuration['lang']) && isset($this->instance)) {
+			$this->instance->setInfos(array('locale' => $configuration['lang']))->save();
+		}
+
 		return $this->getConfiguration();
 	}
 

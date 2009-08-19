@@ -16,5 +16,17 @@ define('DB_HOST', $db['host']);
 
 $table_prefix = $application->getDbPrefix();
 
+$locale = $application->getLocale();
+
+if ($locale == 'auto') {
+	if (isset($_COOKIE['ld-lang'])) {
+		$locale = $_COOKIE['ld-lang'];
+	}
+}
+
+if (isset($locale) && $locale != 'auto') {
+	define('WPLANG', $locale);	
+}
+
 require_once 'Ld/Files.php';
 Ld_Files::includes(dirname(__FILE__) . '/prepend/');

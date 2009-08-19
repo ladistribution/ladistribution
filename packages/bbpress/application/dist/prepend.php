@@ -16,5 +16,17 @@ define('BBDB_HOST', $db['host']);
 
 $bb_table_prefix = $application->getDbPrefix();
 
+$locale = $application->getLocale();
+
+if ($locale == 'auto') {
+	if (isset($_COOKIE['ld-lang'])) {
+		$locale = $_COOKIE['ld-lang'];
+	}
+}
+
+if (isset($locale) && $locale != 'auto') {
+	define('BB_LANG', $locale);	
+}
+
 require_once 'Ld/Files.php';
 Ld_Files::includes(dirname(__FILE__) . '/prepend/');

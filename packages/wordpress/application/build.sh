@@ -5,7 +5,7 @@ FOLDER="application"
 PACKAGE="$NAME.zip"
 
 # Get source
-svn export $SOURCE $FOLDER
+svn export $SOURCE $FOLDER --force
 
 # Remove some useless (or not desired) files
 rm $FOLDER/wp-atom.php
@@ -19,10 +19,12 @@ rm $FOLDER/wp-register.php
 rm $FOLDER/wp-content/plugins/hello.php
 rm -rf $FOLDER/wp-content/plugins/akismet
 
+# Remove default themes
 mkdir themes
 rm -rf $FOLDER/wp-content/themes/classic
 rm -rf $FOLDER/wp-content/themes/default
-svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "themes/default"
+# And replace by the i18ned default one
+svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "themes/default" --force
 
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php
@@ -42,4 +44,5 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
-rm -rf themes
+# rm -rf themes/default
+mkdir themes
