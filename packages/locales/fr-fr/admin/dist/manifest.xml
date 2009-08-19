@@ -1,0 +1,12 @@
+<package>
+  <id>admin-locale-fr-fr</id>
+  <name>La Distribution Admin en Français</name>
+  <version>0.2-34-2</version>
+  <type>locale</type>
+  <extend>admin</extend>
+  <folder>dist/locales/fr_FR</folder>
+  <deploy>
+      <origin>locale</origin>
+      <destination path="shared">locales/admin/fr_FR</destination>
+  </deploy>
+</package>

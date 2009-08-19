@@ -1,0 +1,10 @@
+<package>
+  <id>ld-locale-fr-fr</id>
+  <name>La Distribution en Français</name>
+  <version>0.2-34-3</version>
+  <type>lib</type>
+  <deploy>
+      <origin>locale</origin>
+      <destination path="shared">locales/ld/fr_FR</destination>
+  </deploy>
+</package>

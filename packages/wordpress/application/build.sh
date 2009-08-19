@@ -45,4 +45,4 @@ mv $PACKAGE ../../
 # Clean
 rm -rf $FOLDER
 # rm -rf themes/default
-mkdir themes
+rm -rf themes
