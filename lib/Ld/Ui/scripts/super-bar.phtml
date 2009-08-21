@@ -1,8 +1,8 @@
-<?php if (!isset($this->params['jquery']) || $this->params['jquery'] === true ) : ?>
+<?php if (isset($this->params['jquery']) && $this->params['jquery'] === true ) : ?>
     <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/jquery/jquery.js"></script>
 <?php endif ?>
 
-<?php if (!isset($this->params['ld-js']) || $this->params['ld-js'] === true ) : ?>
+<?php if (isset($this->params['ld-js']) && $this->params['ld-js'] === true ) : ?>
     <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/ld/ld.js"></script>
 <?php endif ?>
 
