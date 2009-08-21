@@ -152,7 +152,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		}
 		$this->load_bp();
 		foreach ($this->getPreferences($type) as $preference) {
-			$preference = $preference->toArray();
+			$preference = is_object($preference) ? $preference->toArray() : $preference;
 			$option = $preference['name'];
 			$value = isset($configuration[$option]) ? $configuration[$option] : null;
 			bb_update_option($option, $value);
