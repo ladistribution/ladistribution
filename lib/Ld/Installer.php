@@ -297,7 +297,7 @@ class Ld_Installer
     public function getRestoreFolder()
     {
         if (empty($this->restoreFolder)) {
-            $this->restoreFolder = LD_TMP_DIR . '/clone-' . date("d-m-Y-H-i-s");
+            $this->restoreFolder = LD_TMP_DIR . '/restore-' . date("d-m-Y-H-i-s");
         }
         return $this->restoreFolder;
     }
@@ -324,9 +324,16 @@ class Ld_Installer
         Ld_Files::unlink($this->getBackupFolder());
     }
 
-    public function restore($restoreFolder)
+    public function restore($archive)
     {
-        $this->restoreFolder = $this->tmpFolder = $restoreFolder;
+        $filename = $this->getAbsolutePath() . '/backups/' . $archive;
+        if (is_file($filename)) {
+            $this->restoreFolder = $this->tmpFolder = $this->getRestoreFolder();
+            $uz = new fileUnzip($filename);
+            $uz->unzipAll($this->restoreFolder);
+        } elseif (is_dir($archive)) {
+            $this->restoreFolder = $this->tmpFolder = $archive;
+        }
 
         if ($this->getManifest()->getDb() && $dbConnection = $this->getInstance()->getDbConnection('php')) {
 
