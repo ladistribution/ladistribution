@@ -16,7 +16,7 @@ class ld_event_Core
             }
 
             if (empty($user)) {
-                $user = user::create($ld_user['username'], $ld_user['fullname']);
+                $user = user::create($ld_user['username'], $ld_user['fullname'], '');
             }
 
             $instance = Zend_Registry::get('application');

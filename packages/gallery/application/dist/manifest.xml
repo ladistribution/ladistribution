@@ -1,9 +1,12 @@
 <package>
   <id>gallery</id>
-  <name>Gallery3</name>
-  <version>3.0-b2-33-14</version>
+  <name>Gallery</name>
+  <version>3.0-b2-34-5</version>
   <type>application</type>
   <db>mysql</db>
+  <php>
+      <version>5.2.3</version>
+  </php>
   <need>lib-htmlpurifier</need>
   <deploy>
       <origin>var</origin>
