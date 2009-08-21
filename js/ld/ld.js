@@ -22,6 +22,9 @@ Ld.dataTables = function($)
 
 Ld.sortableBlocks = function($)
 {
+    if ($(".blocks.sortables .sortable").size() <= 1) {
+        return;
+    }
     $(".blocks.sortables").sortable({
         items: 'li.sortable', cursor: 'crosshair',
         update: function() {
