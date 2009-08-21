@@ -1,7 +1,7 @@
 <package>
   <id>dokuwiki</id>
   <name>DokuWiki</name>
-  <version>2009-02-14-34-3</version>
+  <version>2009-02-14-34-9</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>
@@ -18,6 +18,10 @@
       <destination path="public">./lib/plugins/</destination>
   </deploy>
   <deploy>
+      <origin>templates</origin>
+      <destination path="public">./lib/tpl/</destination>
+  </deploy>
+  <deploy>
       <origin>auth</origin>
       <destination path="public">./inc/auth/</destination>
   </deploy>
@@ -28,13 +32,14 @@
       <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
       <preference type="password" label="Admin Password" name="admin_password" value=""/>
       -->
-      <preference type="user" label="Administrator" name="administrator" value=""/>
-      <preference type="lang" label="Language" name="lang" value=""/>
+      <preference type="user" label="Administrator" name="administrator"/>
+      <preference type="lang" label="Language" name="lang"/>
       <preference type="list" label="Initial ACL policy" name="policy">
           <option value="0" label="Open Wiki (read, write, upload for everyone)" />
           <option value="1" label="Public Wiki (read for everyone, write and upload for registered users)" />
           <option value="2" label="Closed Wiki (read, write, upload for registered users only)" />
       </preference>
+      <preference type="hidden" name="template" defaultValue="minimal"/>
   </install>
   <configuration>
       <preference type="text" label="Wiki title" name="title"/>

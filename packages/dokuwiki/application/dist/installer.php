@@ -49,6 +49,11 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
                 $conf[$key] = $preferences[$key];
             }
         }
+        if (isset($conf['lang'])) {
+            if ($conf['lang'] != 'auto') {
+                $conf['lang'] = substr($conf['lang'], 0, 2);
+            }
+        }
         $this->setConfiguration($conf);
 
         // Users
