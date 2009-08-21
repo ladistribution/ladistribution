@@ -38,17 +38,9 @@ cd wordpress
 
   cd plugin
 
-    cd openid
-    ./build.sh
-    cd ..
-
   cd ..
 
   cd theme
-
-    cd minimal
-    ./build.sh
-    cd ..
 
     cd p2
     ./build.sh
@@ -86,10 +78,6 @@ cd dokuwiki
 
   cd plugin
 
-    cd openid
-    ./build.sh
-    cd ..
-
     cd css
     ./build.sh
     cd ..
@@ -97,10 +85,6 @@ cd dokuwiki
   cd ..
 
   cd theme
-
-    cd minimal
-    ./build.sh
-    cd ..
 
     cd monobook
     ./build.sh
