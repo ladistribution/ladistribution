@@ -22,8 +22,6 @@ class Ld_Loader
 
         defined('LD_REWRITE') OR define('LD_REWRITE', true);
 
-        defined('LD_SESSION') OR define('LD_SESSION', true);
-
         defined('LD_TMP_DIR') OR define('LD_TMP_DIR', realpath( $dir ) . '/tmp');
 
         defined('LD_LIB_DIR') or define('LD_LIB_DIR', realpath( $dir ) . '/lib' );
@@ -87,6 +85,9 @@ class Ld_Loader
             $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/ld/', array('en_US'));
             foreach ($locales as $locale) {
                 $adapter->addTranslation($site->getDirectory('shared') . "/locales/ld/$locale/default.mo", $locale);
+            }
+            if (isset($_COOKIE['ld-lang'])) {
+                $adapter->setLocale($_COOKIE['ld-lang']);
             }
             Zend_Registry::set('Zend_Translate', $adapter);
         }
