@@ -1,3 +1,11 @@
+<?php if ($this->update) : ?>
+    <?php
+    // handle an issue when upgrading frrom barbes to a newer version
+    header("Location:" . $this->url(array('controller' => 'index', 'action' => 'update'), 'update'));
+    exit;
+    ?>
+<?php endif ?>
+
 <h2><?php echo $this->translate('Update') ?></h2>
 
 <?php if (empty($this->libraries) && empty($this->applications)) : ?>
