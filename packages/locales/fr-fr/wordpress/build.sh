@@ -8,7 +8,6 @@ PACKAGE="$NAME-locale-fr-fr.zip"
 mkdir languages
 svn export "$SOURCE/messages/$LOCALE.mo" "languages/$LOCALE.mo"
 svn export "$SOURCE/messages/continents-cities-$LOCALE.mo" "languages/continents-cities-$LOCALE.mo"
-mkdir themes
 mkdir themes/default
 svn export "$SOURCE/messages/kubrick/$LOCALE.mo" "themes/default/$LOCALE.mo"
 
@@ -21,4 +20,4 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf languages
-rm -rf themes
+rm -rf themes/default

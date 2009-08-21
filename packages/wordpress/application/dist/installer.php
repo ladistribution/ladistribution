@@ -131,20 +131,20 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		$this->_fixDb();
 
+		$this->load_wp();
+
 		wp_cache_flush();
 
 		if (file_exists($this->getRestoreFolder() . '/uploads')) {
 			Ld_Files::copy($this->getRestoreFolder() . '/uploads', $this->getAbsolutePath() . '/wp-content/uploads');
 		}
 
-		$this->load_wp();
-
 		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getPath());
 		update_option('home', $this->getSite()->getBaseUrl() . $this->getPath());
 
 		Ld_Files::unlink($this->getBackupFolder());
 	}
-	
+
 	protected function _fixDb()
 	{
 		$infos = Ld_Files::getJson($this->getRestoreFolder() . '/dist/instance.json');
@@ -198,12 +198,14 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	protected function _getLangPreference()
 	{
-		$preference = array();
-		$preference['name'] = 'lang';
-		$preference['label'] = 'Language';
-		$preference['type'] = 'list';
-		$preference['options'] = array();
-		$preference['options'][] = array('value' => 'auto', 'label' => 'auto');
+		$preference = array(
+			'name' => 'lang', 'label' => 'Language',
+			'type' => 'list', 'defaultValue' => 'auto',
+			'options' => array(
+				array('value' => 'auto', 'label' => 'auto'),
+				array('value' => 'en_US', 'label' => 'en_US')
+			)
+		);
 		foreach ($this->getLocales() as $locale) {
 			$preference['options'][] = array('value' => $locale, 'label' => $locale);
 		}

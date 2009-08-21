@@ -23,8 +23,13 @@ rm -rf $FOLDER/wp-content/plugins/akismet
 mkdir themes
 rm -rf $FOLDER/wp-content/themes/classic
 rm -rf $FOLDER/wp-content/themes/default
-# And replace by the i18ned default one
+
+# Get i18ned default theme
 svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "themes/default" --force
+
+# Get Minimal Theme
+git clone git://github.com/znarf/wordpress-minimal.git themes/minimal
+rm -rf themes/minimal/.git themes/minimal/Makefile
 
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php
@@ -44,5 +49,4 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
-# rm -rf themes/default
 rm -rf themes

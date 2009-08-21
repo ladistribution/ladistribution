@@ -1,7 +1,7 @@
 <package>
   <id>wordpress-locale-fr-fr</id>
   <name>Wordpress en Français</name>
-  <version>2.8.4-34-3</version>
+  <version>2.8.4-34-4</version>
   <type>locale</type>
   <extend>wordpress</extend>
   <directory>dist/locales/fr_FR</directory>
@@ -16,5 +16,9 @@
   <deploy>
       <origin>themes/default/fr_FR.mo</origin>
       <destination path="public">../../../wp-content/themes/default/fr_FR.mo</destination>
+  </deploy>
+  <deploy>
+      <origin>themes/minimal/fr_FR.mo</origin>
+      <destination path="public">../../../wp-content/themes/minimal/fr_FR.mo</destination>
   </deploy>
 </package>
