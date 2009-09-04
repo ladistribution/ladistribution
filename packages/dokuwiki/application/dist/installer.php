@@ -24,9 +24,10 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         // Deploy the files
         parent::install($preferences);
 
+        $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
+
         // Rewrite Rules
         if (constant('LD_REWRITE')) {
-            $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
             $htaccess  = "RewriteEngine on\n";
             $htaccess .= "RewriteBase $path\n";
             $htaccess .= "RewriteRule ^_media/(.*)              lib/exe/fetch.php?media=$1  [QSA,L]\n";
@@ -54,6 +55,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
                 $conf['lang'] = substr($conf['lang'], 0, 2);
             }
         }
+        $conf['basedir'] = $path;
         $this->setConfiguration($conf);
 
         // Users
@@ -69,10 +71,10 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
         // ACL
         $cfg_acl = '';
-        if ($preferences['policy'] == 2) {
+        if (isset($preferences['policy']) && $preferences['policy'] == 2) {
             $cfg_acl .=  "*               @ALL          0\n";
             $cfg_acl .=  "*               @user         8\n";
-        } elseif ($preferences['policy'] == 1) {
+        } elseif (isset($preferences['policy']) && $preferences['policy'] == 1) {
             $cfg_acl .=  "*               @ALL          1\n";
             $cfg_acl .=  "*               @user         8\n";
         } else {
@@ -177,7 +179,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         foreach ($dirs as $name) {
             $dir = $this->getAbsolutePath() . '/lib/tpl/' . $name;
             $active = $name == $this->getCurrentTheme();
-            $screenshot = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/lib/tpl/' . $name . '/screenshot.png';
+            $screenshot = $this->getSite()->getPath() . '/' . $this->getPath() . '/lib/tpl/' . $name . '/screenshot.png';
             $themes[$name] = compact('name', 'dir', 'active', 'screenshot');
         }
         return $themes;
