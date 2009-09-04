@@ -132,7 +132,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getPath()
     {
         $path = trim($this->path, " /\t\n\r\0\x0B");
-        return '/' . $path;
+        return empty($path) ? '' : '/' . $path;
     }
 
     public function getConfig($key = null)

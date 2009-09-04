@@ -1,7 +1,7 @@
 <package>
   <id>admin-locale-fr-fr</id>
   <name>Ld Admin en Français</name>
-  <version>0.2-34-2</version>
+  <version>0.2-36-2</version>
   <type>locale</type>
   <extend>admin</extend>
   <directory>dist/locales/fr_FR</directory>

@@ -45,7 +45,9 @@ class Slotter_BaseController extends Ld_Controller_Action
                     array( 'label' => $translator->translate('Applications'), 'module'=> 'slotter', 'route' => 'default'),
                     array( 'label' => $translator->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
                     array( 'label' => $translator->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
-                    array( 'label' => $translator->translate('Users'), 'module' => 'slotter', 'controller' => 'users' )
+                    array( 'label' => $translator->translate('Users'), 'module' => 'slotter', 'controller' => 'users' ),
+                    array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' ),
+                    array( 'label' => $translator->translate('Global Settings'), 'module' => 'slotter', 'controller' => 'settings' )
             ))
         );
 
