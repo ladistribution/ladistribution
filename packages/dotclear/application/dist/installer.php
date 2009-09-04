@@ -5,6 +5,10 @@ class Ld_Installer_Dotclear extends Ld_Installer
 
 	function install($preferences = array())
 	{
+		if (strlen($preferences['admin_password']) < 6) {
+			throw new Exception("Password should be at least 6 characters long.");
+		}
+
 		parent::install($preferences);
 
 		$this->create_config_file($preferences);
@@ -27,7 +31,7 @@ class Ld_Installer_Dotclear extends Ld_Installer
 		$this->addPrepend($this->absolutePath . "/inc/prepend.php");
 	}
 
-	function create_config_file($preferences)
+	function create_config_file($preferences, $auth = false)
 	{
 		$cfg = "<?php\n";
 		$cfg .= 'define("DC_DBPERSIST", false);' . "\n";
@@ -35,6 +39,10 @@ class Ld_Installer_Dotclear extends Ld_Installer
 		$cfg .= "define('DC_SESSION_NAME', '" . 'dcxd' . "');\n";
 		$cfg .= "define('DC_PLUGINS_ROOT',dirname(__FILE__).'/../plugins');\n";
 		$cfg .= "define('DC_TPL_CACHE',dirname(__FILE__).'/../cache');\n";
+		if ($auth) {
+			$cfg .= "define('DC_AUTH_CLASS','ldDcAuth');\n";
+			$cfg .= '$' . "__autoload['ldDcAuth'] = dirname(__FILE__).'/../dist/ld.auth.php';\n";
+		}
 		Ld_Files::put($this->absolutePath . "/inc/config.php", $cfg);
 	}
 
@@ -105,6 +113,8 @@ class Ld_Installer_Dotclear extends Ld_Installer
 			$con->query("INSERT INTO $setting_table SET setting_type = 'string', setting_ns = 'system', setting_value = 'path_info', blog_id = 'default', setting_id = 'url_scan'");
 
 		}
+
+		$this->create_config_file($preferences, true);
 	}
 
 	function uninstall()
