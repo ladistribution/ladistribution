@@ -4,14 +4,14 @@
    
 -------------------------------------------------------------- */
 
-@import "ld-slotter.css";
+@import "ld-slotter.css?v=0.3";
 
-@import "ld-login.css";
+@import "ld-login.css?v=0.3";
 
-@import "ld-data.css";
+@import "ld-data.css?v=0.3";
 
-@import "ld-bars.css";
+@import "ld-bars.css?v=0.3";
 
-@import "ld-panel.css";
+@import "ld-panel.css?v=0.3";
 
-@import "ld-instances.css";
+@import "ld-instances.css?v=0.3";
