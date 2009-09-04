@@ -19,7 +19,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
         $instance = $this->view->instance;
 
         if (empty($this->view->applications)) {
-            $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances();
+            $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances(array('admin'));
         }
 
         foreach ($this->view->applications as $id => $application) {
