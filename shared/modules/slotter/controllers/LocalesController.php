@@ -8,6 +8,18 @@ require_once 'BaseController.php';
 class Slotter_LocalesController extends Slotter_BaseController
 {
 
+    /**
+     * preDispatch
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+            $this->_disallow();
+        }
+    }
+
     public function indexAction()
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('locales')) {

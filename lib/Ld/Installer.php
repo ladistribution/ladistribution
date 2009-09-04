@@ -201,7 +201,15 @@ class Ld_Installer
         // Config
         if (isset($preferences['path'])) {
             $cfg_ld = "<?php\n";
-            $cfg_ld .= "require_once('" . realpath($this->getSite()->getDirectory('dist')) . "/site.php');\n";
+
+            // Compute a relative path
+            $n = count(explode("/", trim($preferences['path'], "/")));
+            for ($i = 0; $i < $n; $i++) $path = isset($path) ? $path . '/..' : '/../..';
+            $cfg_ld .= "require_once(dirname(__FILE__) . '" . $path . "/dist/site.php');\n";
+
+            // The same code with an absolute path
+            // $cfg_ld .= "require_once('" . realpath($this->getSite()->getDirectory('dist')) . "/site.php');\n";
+
             Ld_Files::put($this->getAbsolutePath() . "/dist/config.php", $cfg_ld);
         }
     }
@@ -302,16 +310,25 @@ class Ld_Installer
         return $this->restoreFolder;
     }
 
+    public function getBackupsPath()
+    {
+        return $this->getSite()->getDirectory() . '/backups/' . $this->getInstance()->getPath();
+        // old emplacement
+        // return $this->getAbsolutePath() . '/backups';
+    }
+
     public function backup()
     {
-        Ld_Files::createDirIfNotExists($this->getAbsolutePath() . '/backups');
+        $backupsPath = $this->getBackupsPath();
+
+        Ld_Files::createDirIfNotExists($backupsPath);
 
         $directories = array('dist' => $this->getAbsolutePath() . '/dist/');
         $directories = array_merge($directories, $this->getBackupDirectories());
 
         $filename = 'backup-' . date("d-m-Y-H-i-s") . '.zip';
 
-        $fp = fopen($this->getAbsolutePath() . '/backups/' . $filename, 'wb');
+        $fp = fopen($backupsPath . '/' . $filename, 'wb');
         $zip = new fileZip($fp);
         foreach ($directories as $name => $directory) {
             if (file_exists($directory)) {
@@ -326,7 +343,7 @@ class Ld_Installer
 
     public function restore($archive)
     {
-        $filename = $this->getAbsolutePath() . '/backups/' . $archive;
+        $filename = $this->getBackupsPath() . '/' . $archive;
         if (is_file($filename)) {
             $this->restoreFolder = $this->tmpFolder = $this->getRestoreFolder();
             $uz = new fileUnzip($filename);
@@ -397,11 +414,12 @@ class Ld_Installer
     {
         foreach ($this->getThemes() as $theme) {
             if ($theme['active']) {
-                if (file_exists($theme['dir'] . '/dist')) {
+                try {
                     $manifest = Ld_Manifest::loadFromDirectory($theme['dir']);
                     return $manifest->getPreferences();
+                } catch (Exception $e) {
+                    break;
                 }
-                return array();
             }
         }
         return array();
@@ -413,7 +431,7 @@ class Ld_Installer
 
     public function getUserRoles()
     {
-        $userRoles = Ld_Files::getJson($this->absolutePath . '/dist/roles.json');
+        $userRoles = Ld_Files::getJson($this->getAbsolutePath() . '/dist/roles.json');
         $users = $this->getSite()->getUsers();
         foreach ((array)$users as $user) {
             $username = $user['username'];

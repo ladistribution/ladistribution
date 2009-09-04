@@ -24,7 +24,7 @@ abstract class Ld_Instance_Abstract
 
     protected $infos = array();
 
-    public $site;
+    protected $site;
 
     public function __construct($infos = null)
     {

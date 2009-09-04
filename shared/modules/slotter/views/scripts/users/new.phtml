@@ -2,25 +2,25 @@
 
 <form method="post" action="">
 
-    <table>
+    <table class="ld-form">
     <tr>
-        <td><label><?php echo $this->translate("Full Name") ?></label></td>
-        <td><input type="text" name="fullname" class="text" value=""/></td>
+        <th><label for="new-user-fullname"><?php echo $this->translate("Full Name") ?></label></th>
+        <td><input id="new-user-fullname" type="text" name="fullname" class="text" value=""/></td>
     </tr>
     <tr>
-        <td><label><?php echo $this->translate("Email") ?></label></td>
-        <td><input type="text" name="email" class="text" value=""/></td>
+        <th><label for="new-user-email"><?php echo $this->translate("Email") ?></label></th>
+        <td><input id="new-user-email" type="text" name="email" class="text" value=""/></td>
     </tr>
     <tr>
-        <td><label><?php echo $this->translate("Username") ?></label></td>
-        <td><input type="text" name="username" class="text" value=""/></td>
+        <th><label for="new-user-username"><?php echo $this->translate("Username") ?></label></th>
+        <td><input id="new-user-username" type="text" name="username" class="text" value=""/></td>
     </tr>
     <tr>
-        <td><label><?php echo $this->translate("Password") ?></label></td>
-        <td><input type="password" name="password" class="text" value=""/></td>
+        <th><label for="new-user-password"><?php echo $this->translate("Password") ?></label></th>
+        <td><input id="new-user-password" type="password" name="password" class="text" value="" autocomplete="off"/></td>
     </tr>
     </table>
 
-    <input type="submit" class="submit" value="<?php echo $this->translate("Add") ?>"/>
+    <input type="submit" class="submit button" value="<?php echo $this->translate("Add") ?>"/>
 
 </form>

@@ -48,6 +48,11 @@ class Ld_Auth
         return Zend_Auth::getInstance()->hasIdentity();
     }
 
+    public static function getIdentity()
+    {
+        return Zend_Auth::getInstance()->getIdentity();
+    }
+
     public static function getUsername()
     {
         if (self::isAuthenticated()) {
@@ -59,21 +64,33 @@ class Ld_Auth
         return null;
     }
 
+    public static function isOpenid()
+    {
+        $identity = self::getIdentity();
+        if (substr($identity, 0, 7) == 'http://' || substr($identity, 0, 8) == 'https://') {
+            return true;
+        }
+        return false;
+    }
+
+    public static function isAnonymous()
+    {
+        $user = self::getUser();
+        if ($user) {
+            return $user['username'] == 'anonymous' ? true : false;
+        }
+        return true;
+    }
+
     public static function getUser()
     {
         if (self::isAuthenticated()) {
-            $identity = Zend_Auth::getInstance()->getIdentity();
-            if (substr($identity, 0, 7) == 'http://' || substr($identity, 0, 8) == 'https://') {
+            $identity = self::getIdentity();
+            if (self::isOpenid()) {
                 $user = Zend_Registry::get('site')->getUserByUrl($identity);
-                // if user is authenticated with OpenID
-                // with an identity not attached to a local account
-                // we clear the identity to cancel the authentication
-                // if (isset($user)) {
-                //     return $user;
-                // } else {
-                //     self::logout();
-                //     return null;
-                // }
+                if (empty($user)) {
+                    $user = array('fullname' => "Anonymous ($identity)", 'username' => 'anonymous');
+                }
                 return $user;
             }
             return Zend_Registry::get('site')->getUser($identity);

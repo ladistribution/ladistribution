@@ -25,6 +25,8 @@ class Ld_Package
     public $extend = null;
 
     public $url = null;
+    
+    protected $absoluteFilename = null;
 
     protected $_manifest = null;
 
@@ -61,6 +63,11 @@ class Ld_Package
             return $this->site;
         }
         return Zend_Registry::get('site');
+    }
+
+    public function setAbsoluteFilename($filename)
+    {
+        $this->absoluteFilename = $filename;
     }
 
     public function getArchive()

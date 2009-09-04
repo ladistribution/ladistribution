@@ -31,7 +31,7 @@
                 <input type="hidden" name="referer" value="<?php echo $this->escape($_SERVER['HTTP_REFERER']) ?>"/>
             <?php endif ?>
 
-            <input type="submit" class="submit" value="<?php echo $this->translate('install') ?>"/>
+            <input type="submit" class="submit" value="<?php echo $this->translate('Install') ?>"/>
         </form>
 
     <?php endif ?>
@@ -40,21 +40,39 @@
 
     <?php if (isset($this->extensions) && count($this->extensions) > 0) : ?>
 
-        <h3><?php echo $this->translate('Install an extension') ?></h3>
-
-        <ul>
+        <table class="h6e-data">
+        <tr>
+            <th><?php echo $this->translate("Package") ?></th>
+            <th><?php echo $this->translate("Type") ?></th>
+            <th colspan="3"><?php echo $this->translate("Actions") ?></th>
+        </tr>
         <?php
         foreach ($this->extensions as $id => $extension) {
-            $url = $this->instanceActionUrl('extensions') . '?add=' . $id;
-            printf("<li><a href=\"%s\">%s</a></li>", $url, $extension->name);
+            printf("<tr>\n");
+            printf("<td>%s</td>\n", $extension->name);
+            printf("<td>%s</td>\n", $extension->type);
+            if ($this->instance->hasExtension($id)) {
+                $extension = $this->instance->getExtension($id);
+                if ($extension->hasUpdate()) {
+                    $updateUrl = $this->instanceActionUrl('extensions') . '?update=' . $id;
+                    printf("<td><a href=\"%s\">%s</a></td>\n", $updateUrl, $this->translate('update'));
+                } else {
+                     printf("<td>%s</td>\n", $this->translate('up to date'));
+                }
+                $uninstallUrl = $this->instanceActionUrl('extensions') . '?remove=' . $id;
+                printf("<td><a href=\"%s\">%s</a></td>\n", $uninstallUrl, $this->translate('uninstall'));
+            } else {
+                $installUrl = $this->instanceActionUrl('extensions') . '?add=' . $id;
+                printf("<td>/</td><td><a href=\"%s\">%s</a></td>\n", $installUrl, $this->translate('install'));
+            }
         }
         ?>
-        </ul>
-    
+        </table>
+
     <?php else : ?>
-        
+
         <p><?php echo $this->translate('No extension available for this application.') ?></p>
-        
+
     <?php endif; ?>
 
 <?php endif ?>

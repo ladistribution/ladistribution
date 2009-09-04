@@ -20,7 +20,7 @@ abstract class Ld_Repository_Abstract
 
     public $type = null;
 
-    public $types = array(
+    protected $types = array(
         'applications'  => array('application', 'bundle'),
         'libraries'     => array('shared', 'lib', 'css', 'js'),
         'extensions'    => array('theme', 'plugin', 'locale')

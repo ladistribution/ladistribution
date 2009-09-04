@@ -26,7 +26,7 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->view->action = $this->getRequest()->getActionName();
 
-        $this->_setTitle('Admin');
+        $this->_setTitle('La Distribution');
 
         $this->_initAcl();
 

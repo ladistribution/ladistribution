@@ -52,10 +52,15 @@ class Ld_Controller_Action extends Zend_Controller_Action
         return Zend_Registry::get('site');
     }
 
-    function _setTitle($title)
+    function setTitle($title)
     {
         $this->view->title = $title;
         $this->view->headTitle($title, 'SET');
+    }
+
+    function appendTitle($title)
+    {
+        $this->view->headTitle( ' | ' . $title );
     }
 
     function noRender()
@@ -63,5 +68,8 @@ class Ld_Controller_Action extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
     }
-
+    
+    // Legacy
+    
+    function _setTitle($title) { return $this->setTitle($title); }
 }

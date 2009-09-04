@@ -1,14 +1,14 @@
 <div class="h6e-top-bar">
     <div class="h6e-top-bar-inner">
         <div class="a">
-            <a class="logo" href="<?php echo $this->site->getBaseUrl() ?>admin/">La Distribution</a>
+            <a class="logo" href="<?php echo $this->site->getUrl() ?>">La Distribution</a>
         </div>
         <div class="b">
         <?php
         $user = Ld_Auth::getUser();
         if ($user) {
             $userUrl = Ld_Ui::getAdminUrl(array(
-                    'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => $user['username']
+                'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => urlencode($user['username'])
             ));
         }
         $loginUrl = Ld_Ui::getAdminUrl(array(
@@ -17,12 +17,27 @@
         $logoutUrl = Ld_Ui::getAdminUrl(array(
               'module' => 'default', 'controller' => 'auth', 'action' => 'logout'
         ));
+        $registerUrl = Ld_Ui::getAdminUrl(array(
+              'module' => 'default', 'controller' => 'auth', 'action' => 'register'
+        ));
+        $completeUrl = Ld_Ui::getAdminUrl(array(
+              'module' => 'default', 'controller' => 'auth', 'action' => 'complete'
+        ));
+        $open_registration = Zend_Registry::get('site')->getConfig('open_registration'); 
         ?>
-        <?php if (Ld_Auth::isAuthenticated() && $user) : ?>
+        <?php if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous()) : ?>
+            <a href="<?php echo $completeUrl ?>"><?php echo $user['fullname'] ?></a>
+            <a href="<?php echo $logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>
+        <?php elseif (Ld_Auth::isAuthenticated() && $user) : ?>
             <a href="<?php echo $userUrl ?>"><?php echo $user['fullname'] ?></a>
             <a href="<?php echo $logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>
         <?php else : ?>
             <a class="h6e-login" href="<?php echo $loginUrl ?>"><?php echo $this->translate("Log In") ?></a>
+            <!--
+            <?php if ($open_registration) : ?>
+                <a href="<?php echo $registerUrl ?>"><?php echo $this->translate("Register") ?></a>
+            <?php endif ?>
+            -->
         <?php endif ?>
         </div>
     </div>

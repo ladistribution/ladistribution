@@ -18,7 +18,11 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
         $instance = $this->view->instance;
 
-        foreach (Zend_Registry::get('site')->getApplicationsInstances() as $id => $application) {
+        if (empty($this->view->applications)) {
+            $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances();
+        }
+
+        foreach ($this->view->applications as $id => $application) {
 
             if (!$all && $this->view->id != $id) {
                 continue;
@@ -35,17 +39,17 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             printf('<a class="manage" href="%s">%s</a><br />', $application->getUrl(), $application->getName());
             printf('<span class="path">/%s/</span>', $application->getPath());
             printf('</div>');
-
-            printf('<div class="links">');
-            foreach ($application->getLinks() as $link) {
-                  if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
-                      printf("<a class=\"view\" href=\"%s\">%s</a><br/>", $link['href'], ucfirst($link['title']));
-                  }
-            }
+            
             if ($this->view->userRole == 'admin') {
+                printf('<div class="links">');
+                foreach ($application->getLinks() as $link) {
+                      if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
+                          printf("<a class=\"view\" href=\"%s\">%s</a><br/>", $link['href'], ucfirst($link['title']));
+                      }
+                }
                 printf('<a class="view" href="%s">%s</a><br/>', $manageUrl, $this->translate("Settings"));
+                printf('</div>');
             }
-            printf('</div>');
 
             printf("</li>\n");
         }

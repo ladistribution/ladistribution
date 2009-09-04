@@ -87,7 +87,7 @@
   margin:0;
 }
 
-table.ld-form  {
+table.ld-form, table.ld-preferences  {
 	width:auto;
 }
 

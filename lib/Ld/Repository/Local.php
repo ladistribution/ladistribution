@@ -140,7 +140,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
         $baseUrl = str_replace($this->getSite()->getDirectory() . '/', $this->getSite()->getUrl(), $dir);
         $package->url = $baseUrl . "/$package->id.zip";
-        $package->absoluteFilename = realpath($dir) . "/$package->id.zip";
+        $package->setAbsoluteFilename( realpath($dir) . "/$package->id.zip" );
 
         return $package;
     }

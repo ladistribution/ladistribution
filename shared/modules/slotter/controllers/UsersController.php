@@ -18,6 +18,7 @@ class Slotter_UsersController extends Slotter_BaseController
         switch ($this->_getParam('action')) {
             case 'edit':
             case 'add-identity':
+            case 'remove-identity':
                 if (empty($this->currentUser) || $this->_getParam('id') != $this->currentUser['username']) {
                     if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
                         $this->_disallow();
@@ -131,31 +132,92 @@ class Slotter_UsersController extends Slotter_BaseController
                 $params['password'] = $new_password;
             }
             $this->site->updateUser($id, $params);
-            $this->_redirector->gotoSimple('index', 'users');
         }
     }
 
     public function addIdentityAction()
     {
-        $auth = Zend_Auth::getInstance();
-
         $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
 
-        $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), null, null, $root);
+        if ($this->_hasParam('openid_identifier')) {
 
-        $result = $auth->authenticate($adapter);
-
-        if ($result->isValid()) {
-            $id = $this->_getParam('id');
-            $user = $this->site->getUser($id);
-            if (empty($user['identities'])) {
-                $user['identities'] = array();
+            $consumer = new Zend_OpenId_Consumer();
+            if (!$consumer->login($this->_getParam('openid_identifier'), null, $root)) {
+                throw Exception("OpenID login failed.");
             }
-            $user['identities'][] = $auth->getIdentity();
-            $this->site->updateUser($id, $user);
-            $this->_redirector->gotoSimple('index', 'users');
+
+        } elseif ($this->_hasParam('openid_mode')) {
+
+            if ($this->_getParam('openid_mode') == 'id_res') {
+                $consumer = new Zend_OpenId_Consumer();
+                if ($consumer->verify($_GET)) {
+                    $userId = $this->_getParam('id');
+                    $this->_addUserIdentity($userId, $this->_getOpenidIdentity());
+                    $user = $this->site->getUser($id);
+                    $this->_redirector->gotoSimple('edit', 'users', 'slotter', array('id' => $userId));
+                } else {
+                    throw new Exception("OpenID Authentication failed: " . $consumer->getError());
+                }
+            } else if ($this->_getParam('openid_mode') == 'id_res') {
+                throw new Exception("OpenID Authentication canceled.");
+            }
+
         }
 
+    }
+
+    protected function _addUserIdentity($user, $identity)
+    {
+        if (is_string($user)) {
+            $user = $this->site->getUser($user);
+        }
+
+        $test = $this->site->getUserByUrl($identity);
+        if (isset($test)) {
+            throw new Exception("This OpenID is already used.");
+        }
+
+        if (empty($user['identities'])) {
+            $user['identities'] = array();
+        }
+
+        $user['identities'][] = $identity;
+
+        $this->site->updateUser($user['username'], $user);
+    }
+
+    protected function _getOpenidIdentity()
+    {
+        $params = $this->_getAllParams();
+
+        if (isset($_SESSION["zend_openid"]['claimed_id'])) {
+            return $_SESSION["zend_openid"]['claimed_id'];
+        } else if (isset($params["openid_claimed_id"])) {
+            return $params["openid_claimed_id"];
+        } else if (isset($params["openid1_claimed_id"])) {
+            return $params["openid_claimed_id"];
+        } else if (isset($params["openid_identity"])){
+            return $params["openid_identity"];
+        }
+    }
+
+    public function removeIdentityAction()
+    {
+        $id = $this->_getParam('id');
+        $identity = urldecode( $this->_getParam('identity') );
+
+        $user = $this->site->getUser($id);
+
+        foreach ($user['identities'] as $key => $userIdentity) {
+            if ($userIdentity == $identity) {
+                unset($user['identities'][$key]);
+                break;
+            }
+        }
+
+        $this->site->updateUser($id, $user);
+
+        $this->_redirector->gotoSimple('edit', 'users', 'slotter', array('id' => $id));
     }
 
 }

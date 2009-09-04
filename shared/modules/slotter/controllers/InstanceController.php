@@ -34,17 +34,6 @@ class Slotter_InstanceController extends Slotter_BaseController
         }
     }
 
-    /**
-     * postDispatch
-     */
-    public function postDispatch()
-    {
-        if ($this->getRequest()->isPost() && $this->_hasParam('referer')) {
-            $this->_redirectTo($this->_getParam('referer'));
-            return;
-        }
-    }
-
     protected function _handleNavigation()
     {
         $translator = $this->getTranslator();
@@ -108,13 +97,14 @@ class Slotter_InstanceController extends Slotter_BaseController
         if ( $this->_hasParam('add') ) {
 
             $this->view->extension = $extension = $this->_getParam('add');
+
+            $this->view->package = $package = $this->site->getPackageExtension($this->instance->getPackageId(), $extension);
+            $this->view->preferences = $this->site->getInstallPreferences($package);
+
             if ($this->instance->hasExtension($extension)) {
                 $this->view->installed = true;
                 return;
             }
-
-            $this->view->package = $package = $this->site->getPackageExtension($this->instance->getPackageId(), $extension);
-            $this->view->preferences = $this->site->getInstallPreferences($package);
 
             if ($this->getRequest()->isPost()) {
                 $preferences = $this->_getParam('preferences');
@@ -128,25 +118,36 @@ class Slotter_InstanceController extends Slotter_BaseController
             }
 
         } else if ( $this->_hasParam('update') ) {
-            $path = $this->_getParam('update');
-            $this->instance->updateExtension($path);
-            $this->_redirectToAction('status');
+            $this->view->extension = $extension = $this->instance->getExtension($this->_getParam('update'));
+            if ($this->getRequest()->isPost()) {
+                if ($this->_hasParam('confirm')) {
+                    $this->instance->updateExtension($extension);
+                }
+                $this->_redirectToAction('extensions');
+            } else {
+                $this->render('extension-update');
+            }
             return;
 
         } else if ( $this->_hasParam('remove') ) {
-            $path = $this->_getParam('remove');
-            $this->instance->removeExtension($path);
-            $this->_redirectToAction('status');
+            $this->view->extension = $extension = $this->instance->getExtension($this->_getParam('remove'));
+            if ($this->getRequest()->isPost()) {
+                if ($this->_hasParam('confirm')) {
+                    $this->instance->removeExtension($extension);
+                }
+                $this->_redirectToAction('extensions');
+            } else {
+                $this->render('extension-remove');
+            }
             return;
+
         }
 
         $extensions = $this->site->getPackageExtensions($this->instance->getPackageId());
 
         $this->view->extensions = array();
         foreach ($extensions as $id => $extension) {
-            if (!$this->instance->hasExtension($id)) {
-                $this->view->extensions[$id] = $extension;
-            }
+            $this->view->extensions[$id] = $extension;
         }
     }
 

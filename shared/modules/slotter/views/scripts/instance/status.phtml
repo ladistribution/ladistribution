@@ -12,7 +12,7 @@
         <th><?php echo $this->translate('Type') ?></th>
         <th><?php echo $this->translate('Version') ?></th>
         <th><?php echo $this->translate('Status') ?></th>
-        <th><?php echo $this->translate('Actions') ?></th>
+        <th colspan="2"><?php echo $this->translate('Actions') ?></th>
     </tr>
     <tbody>
     <tr>
@@ -28,10 +28,11 @@
             ?></a>
         <?php endif ?>
         </td>
+        <td></td>
     </tr>
     </tbody>
     <?php if (count($this->extensions) > 0) : ?>
-        <tr class="th2"><th colspan="5"><em>Extensions</em></th></tr>
+        <tr class="th2"><th colspan="6"><em>Extensions</em></th></tr>
         <tbody>
         <?php foreach($this->extensions as $extension) : ?>
             <tr>
@@ -39,13 +40,15 @@
                 <td><?php echo $extension->getType() ?></td>
                 <td><?php echo $extension->getVersion() ?></td>
                 <td><?php echo $extension->hasUpdate ?
-                    $this->translate('Update available') : $this->translate('up to date') ?></td>
+                    $this->translate('update available') : $this->translate('up to date') ?></td>
                 <td>
                     <?php if ($extension->hasUpdate) : ?>
                         <a href="<?php echo $this->instanceActionUrl('extensions') . '?update=' . $extension->getPath() ?>"><?php
                             echo $this->translate('update')
                         ?></a>
                     <?php endif ?>
+                </td>
+                <td>
                     <a href="<?php echo $this->instanceActionUrl('extensions') . '?remove=' . $extension->getPath() ?>"><?php
                         echo $this->translate('uninstall')
                     ?></a>

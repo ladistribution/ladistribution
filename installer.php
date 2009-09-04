@@ -20,8 +20,6 @@
 
 date_default_timezone_set('UTC');
 
-define('LD_SESSION', false);
-
 defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 
 defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');

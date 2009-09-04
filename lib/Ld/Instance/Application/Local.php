@@ -206,6 +206,12 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->getInstaller()->getUserRole($username);
     }
 
+    // public function isUserAdmin($username = null)
+    // {
+    //     $role = $this->getUserRole($username);
+    //     return in_array($role, array('admin', 'administrator'));
+    // }
+
     // Extensions
 
     public function getExtensions()
@@ -245,13 +251,12 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function hasExtension($id)
     {
-        $extensions = $this->getExtensions();
-        foreach ($extensions as $extension) {
-            if ($extension->getPackageId() == $id) {
-                return true;
-            }
+        try {
+            $extension = $this->getExtension($id);
+            return $extension;
+        } catch (Exception $e) {
+            return false;
         }
-        return false;
     }
 
     public function addExtension($extension, $preferences = array())
@@ -382,17 +387,17 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->getInstaller()->restore($folder);
     }
 
-    public function getBackupPath()
+    public function getBackupsPath()
     {
-        return $this->getAbsolutePath() . '/backups';
+        return $this->getInstaller()->getBackupsPath();
     }
 
     public function getBackups()
     {
         $backups = array();
-        $archives = Ld_Files::getFiles($this->getBackupPath());
+        $archives = Ld_Files::getFiles($this->getBackupsPath());
         foreach ($archives as $filename) {
-            $absoluteFilename = $this->getBackupPath() . '/' . $filename;
+            $absoluteFilename = $this->getBackupsPath() . '/' . $filename;
             $size = round( filesize($absoluteFilename) / 1024 ) . ' ko';
             $backups[] = compact('filename', 'absoluteFilename', 'size');
         }
@@ -401,7 +406,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function deleteBackup($backup)
     {
-        $filename = $this->getBackupPath() . '/' . $backup;
+        $filename = $this->getBackupsPath() . '/' . $backup;
         if (file_exists($filename)) {
             Ld_Files::unlink($filename);
         }

@@ -10,8 +10,6 @@
 
     <form id="available-themes" method="post" action="<?php echo $this->url() ?>">
 
-        <input type="hidden" name="id" value="<?php echo $this->escape($this->instance->id) ?>"/>
-
         <?php if (!empty($this->themes)) : ?>
 
             <h3><?php echo $this->translate('Available Themes') ?></h3>
@@ -62,8 +60,6 @@
         <h3><?php echo $this->translate('Theme Preferences') ?></h3>
 
         <form method="post" action="">
-
-            <input type="hidden" name="id" value="<?php echo $this->escape($this->instance->id) ?>"/>
 
             <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
 

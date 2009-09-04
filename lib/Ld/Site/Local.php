@@ -28,6 +28,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public $slots = 10;
 
+    protected $directories = array();
+
+    protected $_instances = array();
+
     public function __construct($params = array())
     {
         $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'defaultModule');
@@ -127,12 +131,22 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getPath()
     {
-        return $this->path;
+        $path = trim($this->path, " /\t\n\r\0\x0B");
+        return '/' . $path;
+    }
+
+    public function getConfig($key = null)
+    {
+        $config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
+        if (isset($key)) {
+            return isset($config[$key]) ? $config[$key] : null;
+        }
+        return $config;
     }
 
     public function getBaseUrl()
     {
-        return 'http://' . $this->getHost() . $this->getPath() . '/';
+        return $this->getUrl();
     }
 
     public function getDirectory($dir = null)
@@ -171,7 +185,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $instances;
     }
 
-    public function getApplicationsInstances()
+    public function getApplicationsInstances(array $ignore = array())
     {
         $applications = array();
         foreach ($this->getInstances('application') as $id => $application) {
@@ -179,7 +193,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if (empty($instance)) {
                 continue;
             }
-            if ($application['package'] != 'admin') {
+            if (!in_array($application['package'], $ignore)) {
                 $applications[$id] = $instance;
             }
         }
@@ -477,8 +491,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $preferences['title'] = $instanceInfos['name'];
 
         $instance = $this->createInstance($instanceInfos['package'], $preferences);
-        foreach ($instanceInfos['extensions'] as $extension) {
-            $instance->addExtension($extension['package']);
+        if (isset($instanceInfos['extensions'])) {
+            foreach ($instanceInfos['extensions'] as $extension) {
+                $instance->addExtension($extension['package']);
+            }
         }
         $instance->restoreBackup($restoreFolder);
 
@@ -806,6 +822,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
     
     // Legacy
 
-    public function getBasePath() { return $this->path; }
+    public function getBasePath() { return $this->getPath(); }
 
 }

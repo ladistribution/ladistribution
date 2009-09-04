@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-18 14:16+0100\n"
+"POT-Creation-Date: 2009-09-04 09:35+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@upian.com>\n"
 "Language-Team: \n"
@@ -21,10 +21,16 @@ msgstr "Administration"
 msgid "Settings"
 msgstr "Paramètres"
 
-#: lib/Ld/Ui/scripts/top-bar.phtml:23
+#: lib/Ld/Ui/scripts/top-bar.phtml:30
+#: lib/Ld/Ui/scripts/top-bar.phtml:33
 msgid "Log Out"
-msgstr "Déconnexion"
+msgstr "Se Déconnecter"
 
-#: lib/Ld/Ui/scripts/top-bar.phtml:25
+#: lib/Ld/Ui/scripts/top-bar.phtml:35
 msgid "Log In"
-msgstr "Connexion"
+msgstr "Se Connecter"
+
+#: lib/Ld/Ui/scripts/top-bar.phtml:38
+msgid "Register"
+msgstr "S'enregistrer"
+

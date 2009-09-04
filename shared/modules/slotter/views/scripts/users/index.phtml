@@ -2,7 +2,7 @@
 
 <?php if (empty($this->users)) : ?>
 
-    <p><?php echo $this->translate("None|masc") ?></p>
+    <p><?php echo $this->translate("None|user") ?></p>
 
 <?php else : ?>
 
@@ -18,7 +18,6 @@
            <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
        <?php endforeach ?>
        */ ?>
-
        <?php if ($this->userRole == 'admin') : ?>
            <th colspan="2"><?php echo $this->translate("Actions") ?></th>
        <?php endif ?>

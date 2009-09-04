@@ -52,11 +52,14 @@
 
 <?php if (isset($this->user['identities']) && count($this->user['identities']) > 0) : ?>
 
-    <ul>
+    <table class="h6e-data">
     <?php foreach ($this->user['identities'] as $identity) : ?>
-        <li><?php echo $this->escape($identity) ?></li>
+        <tr>
+            <td><?php echo $this->escape($identity) ?></td>
+            <td><a href="<?php echo $this->url(array('action' => 'remove-identity', 'identity' => urlencode($identity))) ?>"><?php echo $this->translate("remove") ?></td>
+        </tr>
     <?php endforeach ?>
-    </ul>
+    </table>
 
 <?php else : ?>
 
@@ -64,17 +67,14 @@
 
 <?php endif ?>
 
-<!-- <h4>Add another identity</h4> -->
-
 <form method="post" action="<?php echo $this->url(array('action' => 'add-identity')) ?>">
 
-    <table class="ld-form">
+    <table style="width:auto">
         <tr>
-            <th><label>Add another identity</label></th>
-            <td><input type="text" name="openid_identifier" value="" /></td>
+            <th><label for="add_new_identity"><?php echo $this->translate("Add an identity:") ?></label></th>
+            <td><input id="add_new_identity" type="text" name="openid_identifier" value="" /></td>
+            <td><input type="submit" value="<?php echo $this->translate("Add") ?>"/></td>
         </tr>
     </table>
-
-    <input type="submit" value="<?php echo $this->translate("Add") ?>"/>
 
 </form>

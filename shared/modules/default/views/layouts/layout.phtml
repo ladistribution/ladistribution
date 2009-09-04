@@ -20,7 +20,7 @@ $this->js()->append('/ld/ld.js', 'admin');
 <div class="h6e-main-content">
 
   <?php $bc = $this->navigation()->breadcrumbs()->__toString(); ?>
-  
+
   <?php if (!empty($bc)) : ?>
   <div class="h6e-bread-crumbs">
       <?php echo $bc ?>
@@ -32,8 +32,11 @@ $this->js()->append('/ld/ld.js', 'admin');
   </div>
 
   <div class="h6e-simple-footer">
-          <?php printf($this->translate('Powered by <a href="%s">La Distribution</a>,'), 'http://ladistribution.net/') ?>
-          a community project initiated by <a href="http://h6e.net/">h6e</a>.
+          <?php
+          printf(
+              $this->translate('Powered by <a href="%s">La Distribution</a>, a community project initiated by <a href="%s">h6e</a>.'),
+              'http://ladistribution.net/', 'http://h6e.net/' );
+          ?>
           <form class="inline" action="" method="post" id="ld-lang-switcher">
               <label><?php echo $this->translate("Language:") ?></label>
               <select name="ld-lang">

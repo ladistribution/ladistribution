@@ -92,7 +92,7 @@ class Ld_Ui
         $site = self::getSite();
         $admin = self::getAdmin();
 
-        $applications = $site->getApplicationsInstances();
+        $applications = $site->getApplicationsInstances(array('admin'));
 
         $isAdmin = false;
         if ($admin && $admin->getUserRole() == 'admin') {

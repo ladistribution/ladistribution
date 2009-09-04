@@ -212,7 +212,7 @@ class Ld_Files
 
     public static function putJson($file, $content)
     {
-        self::put($file, Zend_Json::encode($content));  
+        self::put($file, Zend_Json::encode($content));
     }
 
     public static function get($file)

@@ -17,12 +17,25 @@
  */
 require_once 'Zend/Controller/Action/Helper/Abstract.php';
 
+class Ld_OpenId_Extension_Sreg extends Zend_OpenId_Extension_Sreg
+{
+    function parseResponse($params)
+    {
+        $result = parent::parseResponse($params);
+        return true;
+    }
+}
+
 class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstract
 {
 
     public function authenticate()
     {
         $referer = $this->_getReferer();
+
+        if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+            $result = Ld_Auth::authenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+        }
 
         if ($this->_getParam('ld_auth_action') == 'logout') {
 
@@ -36,20 +49,26 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
         } else if ($this->_getParam('ld_auth_action') == 'login') {
 
-            $result = Ld_Auth::authenticate($this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'));
-
-            if ($result->isValid()) {
-                if (isset($referer)) {
-                    $this->_redirect($referer);
-                }
-                return $result;
-            // if authentication Fail, we try to log in with OpenID
-            } else if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
-                $this->_setParam('openid_action', 'login');
-                $this->_setParam('openid_identifier', $this->_getParam('ld_auth_username'));
-            } else {
-                return $result;
+            if ($this->_hasParam('openid_identifier')) {
+                $this->_setParam('ld_auth_username', $this->_getParam('openid_identifier'));
             }
+
+            if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
+                return $this->_authenticateWithOpenid();
+            }
+
+            if ($this->_hasParam('ld_auth_username') && $this->_hasParam('ld_auth_password')) {
+                $result = Ld_Auth::authenticate($this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'));
+                if ($result->isValid()) {
+                     if (isset($referer)) {
+                          $this->_redirect($referer);
+                      }
+                  }
+                  return $result;
+            }
+
+            return null;
+
         }
 
         if ($this->_getParam('openid_action') || $this->_getParam('openid_mode')) {
@@ -65,30 +84,32 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
     {
         $auth = Zend_Auth::getInstance();
 
-        $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
+        $root = Zend_Registry::get('site')->getUrl();
 
-        $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), null, null, $root);
+        $sreg = new Ld_OpenId_Extension_Sreg(
+            array('nickname' => true, 'email' => true, 'fullname' => true), null, 1.1);
+
+        $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), null, null, $root, $sreg);
 
         if ($this->_getParam('openid_action') == 'login' && $this->_getParam('openid_identifier')) {
 
+            // we register the referer in the session
+            $this->_session = new Zend_Session_Namespace("ld_openid");
+            $this->_session->referer = $this->_getReferer();
+
             // we start the OpenID process
             // this should likely redirect to the OpenID provider
-            return $auth->authenticate($adapter);
+            $result = $auth->authenticate($adapter);
+
+            return $result;
 
         } else if ($this->_getParam('openid_mode') == 'id_res') {
 
             $result = $auth->authenticate($adapter);
 
             // if user is correctly authenticated with OpenID
-            // but with an identity not attached to a local account
-            // we clear the identity to cancel the authentication
-            // and return an authentication failure
             if ($result->isValid()) {
-                $user = Ld_Auth::getUser();
-                if (empty($user)) {
-                    $auth->clearIdentity();
-                    return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, null);
-                }
+                // nothing
             }
 
             return $result;

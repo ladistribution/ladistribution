@@ -1,37 +1,46 @@
 <div id="ld-login">
 
   <div id="ld-login-box">
+      
+    <?php if (isset($this->complete)) : ?>
+        <h2><?php echo $this->translate("Complete Registration") ?></h2>
+    <?php else : ?>
+        <h2><?php echo $this->translate("Register") ?></h2>
+    <?php endif ?>
 
-    <h2>Register</h2>
+    <?php
+
+    if (isset($this->error)) {
+        if (is_string($this->error)) {
+            echo '<div class="ld-error"><b>Error</b>: ' . $this->escape($this->error) . '</div>';
+        }
+    }
+
+    ?>
 
     <form method="post" action="">
 
-        <label for="ld-register-username">Username:</label>
-        <input id="ld-register-username" class="text" type="text" name="ld_register_username" value=""/>
+        <label for="ld-register-username"><?php echo $this->translate("Username:") ?></label>
+        <input id="ld-register-username" class="text" type="text" name="ld_register_username" value="<?php
+            if (isset($this->user, $this->user['username'])) echo $this->escape($this->user['username']);
+        ?>"/>
 
-        <label for="ld-register-email">Email:</label>
-        <input id="ld-register-email" class="text" type="text" name="ld_register_email" value=""/>
+        <label for="ld-register-email"><?php echo $this->translate("Email:") ?></label>
+        <input id="ld-register-email" class="text" type="text" name="ld_register_email" value="<?php
+            if (isset($this->user, $this->user['email'])) echo $this->escape($this->user['email']);
+        ?>"/>
 
-        <label for="ld-register-password">Password:</label>
-        <input id="ld-register-password" class="text"  type="password" name="ld_register_password" value="">
+        <label for="ld-register-password"><?php echo $this->translate("Password:") ?></label>
+        <input id="ld-register-password" class="text"  type="password" name="ld_register_password" value="" autocomplete="off"/>
 
-        <label for="ld-register-password-again">Password again:</label>
-        <input id="ld-register-password-again" class="text" type="password" name="ld_register_password_again" value=""/>
+        <label for="ld-register-password-again"><?php echo $this->translate("Password again:") ?></label>
+        <input id="ld-register-password-again" class="text" type="password" name="ld_register_password_again" value="" autocomplete="off"/>
 
-        <!--
-        <label for="ld-register-fullname">Full Name:</label>
-        <input id="ld-register-fullname" class="text" type="text" name="ld_register_fullname" value=""/>
-        -->
-        
         <input type="hidden" name="ld_auth_action" value="register"/>
 
-        <input class="button" type="submit" value="Register"/>
+        <input class="button" type="submit" value="<?php echo $this->translate("Register") ?>"/>
 
     </form>
-
-    <div class="links">
-      <a href="<?php echo $this->url(array('module' => 'default', 'action' => 'login', 'controller' => 'auth')); ?>">Log In</a>
-    </div>
 
   </div>
 

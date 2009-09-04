@@ -2,7 +2,7 @@
 
   <div id="ld-login-box">
 
-    <h2>Login</h2>
+    <h2><?php echo $this->translate("Log In") ?></h2>
 
     <?php
 
@@ -19,7 +19,8 @@
                 break;
             default:
                 $messages = $this->authentication->getMessages();
-                echo '<div class="ld-error"><b>Error</b>: ' . $this->escape($messages[0]) . '</div>';
+                foreach ($messages as $message)
+                    echo '<div class="ld-error"><b>Error</b>: ' . $this->escape($message) . '</div>';
                 break;
         }
     }
@@ -27,11 +28,28 @@
 
     <form method="post" action="">
 
-        <label for="ld-auth-username">Username:</label>
-        <input id="ld-auth-username" class="text" type="text" name="ld_auth_username" value=""/>
+        <?php if (isset($this->ld_auth_user)) : ?>
 
-        <label for="ld-auth-password">Password:</label>
-        <input id="ld-auth-password" class="text"  type="password" name="ld_auth_password" value="">
+            <div style="display:none">
+
+            <label for="ld-auth-username"><?php echo $this->translate("Username (or OpenID):") ?></label>
+            <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value="<?php echo $this->ld_auth_user['username'] ?>"/>
+
+            </div>
+
+            <label for="ld-auth-password"><?php echo $this->translate("Password:") ?></label>
+            <input id="ld-auth-password" class="text"  type="password" name="ld_auth_password" value=""/>
+
+            <script type="text/javascript">jQuery('#ld-auth-password').focus();</script>
+
+        <?php else : ?>
+
+            <label for="ld-auth-username"><?php echo $this->translate("Username (or OpenID):") ?></label>
+            <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value=""/>
+
+            <script type="text/javascript">jQuery('#ld-auth-username').focus();</script>
+
+        <?php endif ?>
 
         <?php foreach ($this->postParams as $key => $value) : ?>
             <input type="hidden" name="<?php echo $key ?>" value="<?php echo $this->escape($value) ?>"/>
@@ -43,7 +61,8 @@
             <input type="hidden" name="ld_referer" value="<?php echo $this->escape($this->referer) ?>"/>
         <?php endif ?>
 
-        <input class="button" type="submit" value="Log In"/>
+        <input type="hidden" name="openid_action" value="login"/>
+        <input class="button" type="submit" value="<?php echo $this->translate("Log In") ?>"/>
 
     </form>
 
@@ -62,9 +81,9 @@
     </div>
 
     <div class="links">
-      <a href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>">Register</a>
-      |
-      <a href="<?php echo $this->url(array('module' => 'default', 'action' => 'lost-password', 'controller' => 'auth')); ?>">Lost your password?</a>
+      <?php if ($this->open_registration) : ?>
+      <a href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php echo $this->translate("Register") ?></a>
+      <?php endif ?>
     </div>
 
   </div>

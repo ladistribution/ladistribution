@@ -17,8 +17,9 @@ class Slotter_IndexController extends Slotter_BaseController
 
         switch ($this->getRequest()->action) {
             case 'index':
+                // disallow anonymous access to instance list ?
                 if (!$this->_acl->isAllowed($this->userRole, 'instances', 'view')) {
-                    $this->_disallow();
+                    // $this->_disallow();
                 }
                 break;
             default:
@@ -45,24 +46,16 @@ class Slotter_IndexController extends Slotter_BaseController
     */
     public function indexAction()
     {
-        $this->view->applications = array();
-
         $this->view->hasUpdate = false;
 
-        $applications = $this->site->getInstances('application');
-
-        foreach ($applications as $id => $application) {
-            $instance = $this->site->getInstance($id);
-            if (empty($instance)) {
-                continue;
-            }
+        $applications = $this->site->getApplicationsInstances();
+        foreach ($applications as $id => $instance) {
             if ($instance->hasUpdate = $instance->hasUpdate()) {
                 $this->view->hasUpdate = true;
             }
-            if ($application['package'] != 'admin') {
-                $this->view->applications[$id] = $instance;
-            }
         }
+
+        $this->view->applications = $this->site->getApplicationsInstances(array('admin'));
 
         $this->view->databases = $this->site->getDatabases();
 
@@ -87,6 +80,11 @@ class Slotter_IndexController extends Slotter_BaseController
             $this->noRender();
             $this->getResponse()->appendBody('ok');
         }
+    }
+    
+    public function packagesAction()
+    {
+        $this->view->packages = $this->site->getPackages();
     }
 
     /**
@@ -125,6 +123,9 @@ class Slotter_IndexController extends Slotter_BaseController
             // Applications
             if ($infos['type'] == 'application') {
                 $instance = $this->site->getInstance($id);
+                if (empty($instance)) {
+                    continue;
+                }
                 $instance->hasUpdate = $instance->hasUpdate();
                 if (empty($instance->hasUpdate)) {
                     // Extensions

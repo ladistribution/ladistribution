@@ -46,7 +46,7 @@
                 printf('<li id="app_%s" class="%s">', $id, $className);
 
                 if ($application->isCurrent() && !$settings && !$admin) {
-                    printf('<strong><a href="%s">%s</a></strong>', $application->getUrl(), $application->getName());
+                    printf('<strong><a href="%s">%s</a></strong>' . "\n  ", $application->getUrl(), $application->getName());
                 } else {
                     printf('<a href="%s">%s</a>', $application->getUrl(), $application->getName());
                 }
@@ -73,7 +73,7 @@
                     }
                 }
 
-                printf("</li>");
+                printf("</li>\n");
 
             }
 

@@ -1,0 +1,17 @@
+<h2><?php echo $this->translate("Global settings") ?></h2>
+
+<?php if (!empty($this->preferences)) : ?>
+
+<form method="post" action="<?php echo $this->url() ?>">
+
+    <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
+
+    <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
+
+</form>
+
+<?php else : ?>
+
+<p><?php echo $this->translate('No preference available.') ?></p>
+
+<?php endif ?>

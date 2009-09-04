@@ -1,0 +1,21 @@
+<?php $this->instancesList(false) ?>
+
+<div class="ld-panel">
+
+<?php $this->instanceNavigation() ?>
+
+<div class="ld-panel-content">
+
+<h3><?php printf($this->translate('Uninstall %s?'), $this->extension->getPackage()->getName()) ?></h3>
+
+<p><?php echo $this->translate('You are going to uninstall an extension. Are you sure?') ?></p>
+
+<form method="post" action="<?php echo $this->url() ?>">
+    <input type="hidden" name="remove" value="<?php echo $this->escape($this->extension->getPackageId()) ?>"/>
+    <input type="submit" class="submit button" name="confirm" value="<?php echo $this->translate('Uninstall') ?>"/>
+    <input type="submit" class="submit cancel button" name="cancel" value="<?php echo $this->translate('Cancel') ?>"/>
+</form>
+
+</div> <!-- .ld-panel-content -->
+
+</div> <!-- .ld-panel -->
