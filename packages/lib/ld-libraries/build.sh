@@ -15,6 +15,7 @@ mkdir shared
 mkdir shared/locales
 mkdir shared/locales/ld
 svn export "http://ladistribution.net/svn/trunk/shared/locales/ld/en_US" shared/locales/ld/en_US
+# cp -R /Web/ld/shared/locales/ld/en_US shared/locales/ld/en_US
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
