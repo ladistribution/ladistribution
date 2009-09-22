@@ -37,7 +37,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
             $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-f\n";
             $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-d\n";
             $htaccess .= "RewriteRule (.*)                      doku.php?id=$1  [QSA,L]\n";
-            file_put_contents($this->getAbsolutePath() . "/.htaccess", $htaccess);
+            Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
         }
 
         // Configuration file
@@ -206,7 +206,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     {
         $dirs = Ld_Files::getDirectories($this->getAbsolutePath() . '/inc/lang/');
         $options = array();
-        $options[] = array('label' => 'auto', 'value' => 'auto');
+        // $options[] = array('label' => 'auto', 'value' => 'auto');
         foreach ($dirs as $lang) {
             if ($lang == 'dist') {
                 continue;
@@ -250,6 +250,20 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         Ld_Files::copy($this->getRestoreFolder() . '/conf', $this->getAbsolutePath() . '/conf');
 
         Ld_Files::unlink($this->getRestoreFolder());
+
+        $this->_fixUrl();
+    }
+
+    public function postMove()
+    {
+        $this->_fixUrl();
+    }
+
+    protected function _fixUrl()
+    {
+        $conf = $this->getConfiguration();
+        $conf['basedir'] = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
+        $this->setConfiguration($conf);
     }
 
 }

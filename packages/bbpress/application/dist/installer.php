@@ -92,6 +92,17 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		}
 	}
 
+	// Operations
+
+	public function restore($restoreFolder)
+	{
+		parent::restore($restoreFolder);
+
+		$this->load_bp();
+
+		bb_update_option('uri', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
+	}
+
 	// Preferences
 
 	public function getPreferences($type)
@@ -115,16 +126,17 @@ class Ld_Installer_Bbpress extends Ld_Installer
 
 	protected function _getLangPreference()
 	{
-		$preference = array();
-		$preference['name'] = 'lang';
-		$preference['label'] = 'Language';
-		$preference['type'] = 'list';
-		$preference['options'] = array();
-		$preference['options'][] = array('value' => 'auto', 'label' => 'auto');
+		$preference = array(
+			'name' => 'lang', 'label' => 'Language',
+			'type' => 'list', 'defaultValue' => 'auto',
+			'options' => array(
+				array('value' => 'auto', 'label' => 'auto'),
+				array('value' => 'en_US', 'label' => 'en_US')
+			)
+		);
 		foreach ($this->getLocales() as $locale) {
 			$preference['options'][] = array('value' => $locale, 'label' => $locale);
 		}
-		$preference['defaultValue'] = 'auto';
 		return $preference;
 	}
 
@@ -159,6 +171,9 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		}
 		if (isset($configuration['name']) && isset($this->instance)) {
 			$this->instance->setInfos(array('name' => $configuration['name']))->save();
+		}
+		if (isset($configuration['lang']) && isset($this->instance)) {
+			$this->instance->setInfos(array('locale' => $configuration['lang']))->save();
 		}
 		return $this->getConfiguration();
 	}

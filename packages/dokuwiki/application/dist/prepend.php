@@ -17,7 +17,7 @@ if ($locale == 'auto') {
 }
 
 if (isset($locale) && $locale != 'auto') {
-	$conf['lang'] = $locale;
+	$conf['lang'] = substr($locale, 0, 2);
 }
 
 require_once 'Ld/Files.php';

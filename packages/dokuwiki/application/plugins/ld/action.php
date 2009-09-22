@@ -52,6 +52,7 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 
 	function prepend(&$event, $param)
 	{
+		global $conf;
 		if (file_exists(DOKU_INC . 'dist/prepend.php')) {
 			include DOKU_INC . 'dist/prepend.php';
 		}
@@ -59,6 +60,7 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 
 	function append(&$event, $param)
 	{
+		global $conf;
 		if (file_exists(DOKU_INC . 'dist/append.php')) {
 			include DOKU_INC . 'dist/append.php';
 		}

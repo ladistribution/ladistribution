@@ -139,10 +139,23 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			Ld_Files::copy($this->getRestoreFolder() . '/uploads', $this->getAbsolutePath() . '/wp-content/uploads');
 		}
 
-		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getPath());
-		update_option('home', $this->getSite()->getBaseUrl() . $this->getPath());
+		$this->_fixUrl();
 
-		Ld_Files::unlink($this->getBackupFolder());
+		Ld_Files::unlink($this->getRestoreFolder());
+	}
+
+	public function postMove()
+	{	
+		$this->load_wp();
+		$this->_fixUrl();
+	}
+
+	protected function _fixUrl()
+	{
+		global $wp_rewrite;
+		$wp_rewrite = $this->wp_rewrite;
+		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
+		update_option('home', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
 	}
 
 	protected function _fixDb()
@@ -209,7 +222,6 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		foreach ($this->getLocales() as $locale) {
 			$preference['options'][] = array('value' => $locale, 'label' => $locale);
 		}
-		$preference['defaultValue'] = 'auto';
 		return $preference;
 	}
 

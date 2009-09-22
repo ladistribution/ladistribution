@@ -32,3 +32,15 @@ function ld_disable_menus()
 }
 
 add_action('bb_admin_menu_generator', 'ld_disable_menus');
+
+
+function ld_repermalink_result($permalink)
+{
+	if (defined('LD_ROOT_CONTEXT') && constant('LD_ROOT_CONTEXT')) {
+		$site = Zend_Registry::get('site');
+		return 'http://' . $site->getHost() . $site->getPath() . '/';
+	}
+	return $permalink;
+}
+
+add_filter('bb_repermalink_result', 'ld_repermalink_result');
