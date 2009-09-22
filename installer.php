@@ -177,7 +177,7 @@ echo " - Init OK<br>\n";
 if (defined('LD_LOCALE')) {
     Ld_Files::createDirIfNotExists($site->getDirectory('shared') . '/locales');
     if (constant('LD_LOCALE') == 'fr_FR') {
-        $site->addRepository(array('type' => 'remote', 'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/locale/fr', 'name' => ''));
+        $site->addRepository(array('type' => 'remote', 'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/fr', 'name' => ''));
         $site->updateLocales(array('en_US','fr_FR'));
         $site->createInstance('ld-locale-fr-fr');
     }
