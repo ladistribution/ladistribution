@@ -1,0 +1,22 @@
+<?php $this->instancesList(false) ?>
+
+<h3><?php echo $this->translate('Move this application') ?></h3>
+
+<form method="post" enctype="multipart/form-data" action="<?php echo $this->url() ?>">
+
+    <table class="ld-form">
+        <tr>
+            <td><label><?php echo $this->translate('Old path:') ?></label></td>
+            <td><input disabled="disabled" class="text" size="25" type="text" name="oldpath" value="<?php echo $this->instance->getPath() ?>" /></td>
+        </tr>
+        <tr>
+            <td><label><?php echo $this->translate('New path:') ?></label></td>
+            <td><input class="text" size="25" type="text" name="path" value="<?php echo $this->instance->getPath() ?>" /></td>
+        </tr>
+    </table>
+
+    <p>
+        <input name="upload" class="submit button" type="submit" value="<?php echo $this->translate('Move') ?>"/>
+    </p>
+
+</form>

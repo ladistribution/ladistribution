@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 09:34+0100\n"
+"POT-Creation-Date: 2009-09-22 11:33+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@upian.com>\n"
 "Language-Team: \n"
@@ -17,12 +17,12 @@ msgstr ""
 "X-Poedit-SearchPath-0: admin\n"
 "X-Poedit-SearchPath-1: shared\n"
 
-#: shared/modules/default/views/layouts/layout.phtml:37
+#: shared/modules/default/views/layouts/layout.phtml:40
 #, php-format
 msgid "Powered by <a href=\"%s\">La Distribution</a>, a community project initiated by <a href=\"%s\">h6e</a>."
 msgstr "Propulsé par <a href=\"%s\">La Distribution</a>, un projet communautaire initié par <a href=\"%s\">h6e</a>."
 
-#: shared/modules/default/views/layouts/layout.phtml:41
+#: shared/modules/default/views/layouts/layout.phtml:44
 msgid "Language:"
 msgstr "Langue :"
 
@@ -325,37 +325,58 @@ msgstr "Installer"
 msgid "Package"
 msgstr "Paquet"
 
-#: shared/modules/slotter/views/scripts/instance/extensions.phtml:58
-#: shared/modules/slotter/views/scripts/instance/status.phtml:27
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:47
+#: shared/modules/slotter/views/scripts/instance/status.phtml:13
+msgid "Version"
+msgstr "Version"
+
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:60
+#: shared/modules/slotter/views/scripts/instance/status.phtml:26
 #: shared/modules/slotter/views/scripts/instance/status.phtml:47
 msgid "update"
 msgstr "mettre à jour"
 
-#: shared/modules/slotter/views/scripts/instance/extensions.phtml:60
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:62
 #: shared/modules/slotter/views/scripts/instance/status.phtml:23
 #: shared/modules/slotter/views/scripts/instance/status.phtml:43
 msgid "up to date"
 msgstr "à jour"
 
-#: shared/modules/slotter/views/scripts/instance/extensions.phtml:63
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:65
 #: shared/modules/slotter/views/scripts/instance/status.phtml:53
 msgid "uninstall"
 msgstr "désinstaller"
 
-#: shared/modules/slotter/views/scripts/instance/extensions.phtml:66
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:68
 msgid "install"
 msgstr "installer"
 
-#: shared/modules/slotter/views/scripts/instance/extensions.phtml:74
+#: shared/modules/slotter/views/scripts/instance/extensions.phtml:76
 msgid "No extension available for this application."
 msgstr "Pas d'extension disponible pour cette application."
+
+#: shared/modules/slotter/views/scripts/instance/move.phtml:1
+msgid "Move an application"
+msgstr "Déplacer une application"
+
+#: shared/modules/slotter/views/scripts/instance/move.phtml:7
+msgid "Old path:"
+msgstr "Ancien chemin :"
+
+#: shared/modules/slotter/views/scripts/instance/move.phtml:11
+msgid "New path:"
+msgstr "Nouveau chemin :"
+
+#: shared/modules/slotter/views/scripts/instance/move.phtml:17
+msgid "Move"
+msgstr "Déplacer"
 
 #: shared/modules/slotter/views/scripts/instance/new.phtml:3
 msgid "Add a new application"
 msgstr "Ajouter une application"
 
 #: shared/modules/slotter/views/scripts/instance/new.phtml:17
-#: shared/modules/slotter/views/scripts/instance/status.phtml:62
+#: shared/modules/slotter/views/scripts/instance/status.phtml:64
 msgid "You can also:"
 msgstr "Vous pouvez aussi :"
 
@@ -395,10 +416,6 @@ msgstr "Nom Complet"
 msgid "Role"
 msgstr "Role"
 
-#: shared/modules/slotter/views/scripts/instance/status.phtml:13
-msgid "Version"
-msgstr "Version"
-
 #: shared/modules/slotter/views/scripts/instance/status.phtml:14
 msgid "Status"
 msgstr "Statut"
@@ -408,7 +425,15 @@ msgstr "Statut"
 msgid "update available"
 msgstr "mise à jour disponible"
 
-#: shared/modules/slotter/views/scripts/instance/status.phtml:65
+#: shared/modules/slotter/views/scripts/instance/status.phtml:29
+msgid "move"
+msgstr "déplacer"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:67
+msgid "Move this application"
+msgstr "Déplacer cette application"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:68
 msgid "Delete this application"
 msgstr "Supprimer cette application"
 
@@ -453,6 +478,7 @@ msgid "Add a remote repository"
 msgstr "Ajouter un dépôt distant"
 
 #: shared/modules/slotter/views/scripts/repositories/list.phtml:14
+#: shared/modules/slotter/views/scripts/repositories/new.phtml:13
 msgid "URL"
 msgstr "URL"
 
@@ -465,6 +491,7 @@ msgid "browse"
 msgstr "parcourir"
 
 #: shared/modules/slotter/views/scripts/repositories/list.phtml:30
+#: shared/modules/slotter/views/scripts/users/edit.phtml:59
 msgid "remove"
 msgstr "supprimer"
 
@@ -601,13 +628,17 @@ msgstr "Bases de données"
 msgid "New"
 msgstr "Nouveau"
 
-#: shared/modules/slotter/controllers/SettingsController.php:49
+#: shared/modules/slotter/controllers/SettingsController.php:50
 msgid "Anyone can register?"
 msgstr "Tout le monde peut s'enregistrer ?"
 
-#: shared/modules/slotter/controllers/SettingsController.php:59
+#: shared/modules/slotter/controllers/SettingsController.php:60
 msgid "Default Application"
 msgstr "Application par défaut"
+
+#: shared/modules/slotter/controllers/SettingsController.php:65
+msgid "Admin path on root?"
+msgstr "Chemin vers l'admin à la racine ?"
 
 #: shared/modules/slotter/views/helpers/InstanceNavigation.php:13
 msgid "status"

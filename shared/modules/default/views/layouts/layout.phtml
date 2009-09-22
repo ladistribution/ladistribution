@@ -3,6 +3,9 @@ $site = Zend_Registry::get('site');
 $this->js()->append('/jquery/jquery.js', 'js-jquery');
 $this->js()->append('/jquery/jquery-ui.js', 'js-jquery-ui');
 $this->js()->append('/ld/ld.js', 'admin');
+$authUrl = $this->url(array(
+    'module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
+$this->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absoluteURL($authUrl)));
 ?>
 <?php echo $this->doctype('XHTML1_STRICT') . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">

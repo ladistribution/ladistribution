@@ -44,6 +44,7 @@
         <tr>
             <th><?php echo $this->translate("Package") ?></th>
             <th><?php echo $this->translate("Type") ?></th>
+            <th><?php echo $this->translate("Version") ?></th>
             <th colspan="3"><?php echo $this->translate("Actions") ?></th>
         </tr>
         <?php
@@ -51,6 +52,7 @@
             printf("<tr>\n");
             printf("<td>%s</td>\n", $extension->name);
             printf("<td>%s</td>\n", $extension->type);
+            printf("<td>%s</td>\n", $extension->version);
             if ($this->instance->hasExtension($id)) {
                 $extension = $this->instance->getExtension($id);
                 if ($extension->hasUpdate()) {

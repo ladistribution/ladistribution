@@ -104,6 +104,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     $config[$key] = $this->$key;
                 }
             }
+            $config['root_admin'] = 1;
             $config['secret'] = Ld_Auth::generatePhrase();
             Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
         }
@@ -453,6 +454,41 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // we should return an object for libraries too ...
     }
 
+    public function moveInstance($instance, $path)
+    {
+        if (is_string($instance)) {
+            $instance = $this->getInstance($instance);
+        }
+
+        if (empty($path)) {
+            throw new Exception("Path can't be empty.");
+        }
+
+        $oldPath = $instance->getPath();
+
+        if ($oldPath == $path) {
+            return $instance;
+        }
+
+        // Move
+        $installer = $instance->getInstaller();
+        $installer->move($path);
+        $installer->postMove();
+
+        $instance->save();
+
+        // God, this should be refactorised
+        $registeredInstances = $this->getInstances();
+        foreach ($registeredInstances as $key => $registeredInstance) {
+            if ($oldPath == $registeredInstance['path']) {
+                $registeredInstances[$key]['path'] = $path;
+            }
+        }
+        $this->updateInstances($registeredInstances);
+
+        return $instance;
+    }
+
     public function deleteInstance($instance)
     {
         if (is_string($instance)) {
@@ -553,6 +589,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if ($preference['type'] == 'lang') {
                 $preference['type'] = 'list';
                 $preference['options'][] = array('value' => 'auto', 'label' => 'auto');
+                $preference['options'][] = array('value' => 'en_US', 'label' => 'en_US');
                 foreach ($this->getLocales() as $locale => $label) {
                     $localeId = str_replace('_', '-', strtolower($locale));
                     $localePackageId = $package->getId() . '-locale-' . $localeId;

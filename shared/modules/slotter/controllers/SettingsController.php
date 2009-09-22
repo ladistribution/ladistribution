@@ -25,6 +25,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
             $configuration = Ld_Files::getJson($this->getSite()->getDirectory('dist') . '/config.json');
             unset($configuration['open_registration']);
+            unset($configuration['root_admin']);
             foreach ($this->_getParam('configuration') as $key => $value) {
                 $configuration[$key] = $value;
             }
@@ -58,6 +59,11 @@ class Slotter_SettingsController extends Slotter_BaseController
         $preferences[] = array(
             'name' => 'root_application', 'label' => $translator->translate('Default Application'),
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $options
+        );
+
+        $preferences[] = array(
+            'name' => 'root_admin', 'label' => $translator->translate('Admin path on root?'),
+            'type' => 'boolean', 'defaultValue' => false
         );
 
         $this->view->preferences = $preferences;

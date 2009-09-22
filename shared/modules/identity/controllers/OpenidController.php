@@ -19,7 +19,6 @@ class Identity_OpenidController extends Ld_Controller_Action
         $this->_server = new Zend_OpenId_Provider($authUrl, null, null, $storage);
 
         $this->view->serverUrl = Zend_OpenId::absoluteURL($authUrl);
-        $this->view->headLink(array('rel' => 'openid2.provider', 'href' => $this->view->serverUrl));
 
         if (isset($this->user)) {
             $this->username = $this->user['username'];
@@ -34,13 +33,10 @@ class Identity_OpenidController extends Ld_Controller_Action
         }
     }
 
-    public function indexAction()
-    {
-    }
-
     public function profileAction()
     {
-        $this->view->identity = $this->getSite()->getBaseUrl() . 'identity/' . $this->_getParam('id');
+        $this->view->identity = Zend_OpenId::absoluteURL($this->view->url(
+            array('module' => 'identity', 'controller' => 'openid', 'id' => $this->_getParam('id')), 'identity'));
     }
 
     public function authAction()

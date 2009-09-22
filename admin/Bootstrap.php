@@ -25,8 +25,10 @@ class Bootstrap
 
         self::$_registry['instance'] = self::$_registry['site']->getInstance($dir);
 
-        self::setupMvc();
+        self::$_front = Zend_Controller_Front::getInstance();
+
         self::setupRoutes();
+        self::setupMvc();
         self::setupCache();
         self::setupLocales();
 
@@ -57,27 +59,42 @@ class Bootstrap
         $mvc->getView()->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
         $mvc->getView()->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
 
-        self::$_front = Zend_Controller_Front::getInstance();
+        $modules = array('slotter', 'merger', 'identity', 'default');
 
-        self::$_front->addControllerDirectory(
-            $site->getDirectory('shared') . '/modules/slotter/controllers', 'slotter'
-        );
+        foreach ($modules as $module) {
+            self::$_front->addControllerDirectory(
+                $site->getDirectory('shared') . "/modules/$module/controllers", $module
+            );
+        }
 
-        self::$_front->addControllerDirectory(
-            $site->getDirectory('shared') . '/modules/merger/controllers', 'merger'
-        );
+        // Routes Admin modules in various contexts
 
-        self::$_front->addControllerDirectory(
-            $site->getDirectory('shared') . '/modules/identity/controllers', 'identity'
-        );
+        $baseUrl = $site->getPath() . '/' . $instance->getPath();
 
-        self::$_front->addControllerDirectory(
-            $site->getDirectory('shared') . '/modules/default/controllers', 'default'
-        );
+        if ($site->getConfig('root_admin') == 1) {
+            $baseUrl = $site->getPath();
+            $path = str_replace($baseUrl, '', $_SERVER["REQUEST_URI"]);
+            if ($path == '/admin/') {
+                $redirect = $baseUrl . '/' . $modules[0];
+            } else if (strpos($path, 'admin') === 1) {
+                $n = 1;
+                $redirect = str_replace('/admin' , '', $_SERVER["REQUEST_URI"], $n);
+            }
+        }
 
         if (constant('LD_REWRITE') == false) {
-            self::$_front->setBaseUrl( $site->getPath() . '/' . $instance->getPath() . '/index.php');
+            $baseUrl = $site->getPath() . '/' . $instance->getPath() . '/index.php';
         }
+
+        if (isset($redirect)) {
+            header('Location:' . $redirect);
+            exit;
+        }
+
+        if (isset($baseUrl)) {
+            self::$_front->setBaseUrl($baseUrl);
+        }
+
     }
 
     public static function setupRoutes()

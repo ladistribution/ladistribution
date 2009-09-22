@@ -333,6 +333,15 @@ class Slotter_InstanceController extends Slotter_BaseController
         }
     }
 
+    public function moveAction()
+    {
+        if ($this->getRequest()->isPost() && $this->_hasParam('path')) {
+            $path = Ld_Files::cleanpath($this->_getParam('path'));
+            $instance = $this->site->moveInstance($this->instance, $path);
+            $this->_redirectToAction('status');
+        }
+    }
+
     protected function _redirectToAction($action = 'status', $id = null)
     {
         $url = $this->view->instanceActionUrl($action, $id);

@@ -200,21 +200,26 @@ class Ld_Installer
 
         // Config
         if (isset($preferences['path'])) {
-            $cfg_ld = "<?php\n";
-
-            // Compute a relative path
-            $n = count(explode("/", trim($preferences['path'], "/")));
-            for ($i = 0; $i < $n; $i++) $path = isset($path) ? $path . '/..' : '/../..';
-            $cfg_ld .= "require_once(dirname(__FILE__) . '" . $path . "/dist/site.php');\n";
-
-            // The same code with an absolute path
-            // $cfg_ld .= "require_once('" . realpath($this->getSite()->getDirectory('dist')) . "/site.php');\n";
-
-            Ld_Files::put($this->getAbsolutePath() . "/dist/config.php", $cfg_ld);
+            $this->_createConfigFile($preferences['path']);
         }
     }
 
     public function postInstall($preferences = array()) {}
+
+    protected function _createConfigFile($path)
+    {
+        $cfg_ld = "<?php\n";
+
+        // Compute a relative path
+        $n = count(explode("/", trim($path, "/")));
+        for ($i = 0; $i < $n; $i++) $relativePath = isset($relativePath) ? $relativePath . '/..' : '/../..';
+        $cfg_ld .= "require_once(dirname(__FILE__) . '" . $relativePath . "/dist/site.php');\n";
+
+        // The same code with an absolute path
+        // $cfg_ld .= "require_once('" . realpath($this->getSite()->getDirectory('dist')) . "/site.php');\n";
+
+        Ld_Files::put($this->getAbsolutePath() . "/dist/config.php", $cfg_ld); 
+    }
 
     public function update()
     {
@@ -312,7 +317,7 @@ class Ld_Installer
 
     public function getBackupsPath()
     {
-        return $this->getSite()->getDirectory() . '/backups/' . $this->getInstance()->getPath();
+        return $this->getSite()->getDirectory('dist') . '/backups/' . $this->getInstance()->getId();
         // old emplacement
         // return $this->getAbsolutePath() . '/backups';
     }
@@ -326,7 +331,7 @@ class Ld_Installer
         $directories = array('dist' => $this->getAbsolutePath() . '/dist/');
         $directories = array_merge($directories, $this->getBackupDirectories());
 
-        $filename = 'backup-' . date("d-m-Y-H-i-s") . '.zip';
+        $filename = /* 'backup-' . */ $this->getId() . '-' . $this->getInstance()->getId() . '-' . date("Y-m-d-H-i-s") . '.zip';
 
         $fp = fopen($backupsPath . '/' . $filename, 'wb');
         $zip = new fileZip($fp);
@@ -340,6 +345,21 @@ class Ld_Installer
 
         Ld_Files::unlink($this->getBackupFolder());
     }
+
+    public function move($path)
+    {
+        Ld_Files::copy($this->getInstance()->getAbsolutePath(), $this->getSite()->getDirectory() . '/' . $path);
+        Ld_Files::unlink($this->getInstance()->getAbsolutePath());
+
+        $this->getInstance()->setInfos(array('path' => $path));
+
+        $this->setPath($this->getInstance()->getPath());
+        $this->setAbsolutePath($this->getInstance()->getAbsolutePath());
+
+        $this->_createConfigFile($path);
+    }
+
+    public function postMove() {}
 
     public function restore($archive)
     {

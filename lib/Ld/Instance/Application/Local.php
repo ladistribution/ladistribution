@@ -84,6 +84,19 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return $this->getAbsolutePath() . '/dist/instance.json';
     }
 
+    public function getId()
+    {
+        if (isset($this->id)) {
+            return $this->id;
+        }
+        foreach ($this->getSite()->getInstances('application') as $id => $application) {
+            if ($application['path'] == $this->getPath()) {
+                return $this->id = $id;
+            }
+        }
+        return null;
+    }
+
     public function getDb()
     {
         return $this->db;
@@ -98,8 +111,18 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return null;
     }
 
+    public function isRoot()
+    {
+        return $this->getPath() == $this->getSite()->getConfig('root_application');
+    }
+
     public function isCurrent()
     {
+        if ($_SERVER["REQUEST_URI"] == $this->getSite()->getPath() . '/') {
+            if ($this->isRoot()) {
+                return true;
+            }
+        }
         return strpos( $_SERVER["REQUEST_URI"], $this->getSite()->getPath() . '/' . $this->getPath() . "/" ) === 0;
     }
 

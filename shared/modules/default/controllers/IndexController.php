@@ -17,7 +17,10 @@ class IndexController extends Ld_Controller_Action
 
         foreach ($modules as $module) {
             if ($module != 'default') {
-                 $this->_redirector->goto('index', 'index', $module);
+                 // $this->_redirector->goto('index', 'index', $module);
+                 $router = Zend_Controller_Front::getInstance()->getRouter();
+                 $router->setGlobalParam('module', $module);
+                 $this->_forward('index', 'index', $module);
                  return;
             }
         }
