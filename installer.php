@@ -8,6 +8,9 @@
 // Uncomment this line if your web server isn't Apache or if mod_rewrite is not available
 // define('LD_REWRITE', false);
 
+// Uncomment & modify this line if you want to localise your installation
+// define('LD_LOCALE', 'fr_FR');
+
 // Uncomment & modify this line if you want to target a specific release
 // instead of the default one (edge)
 // define('LD_RELEASE', 'barbes');
@@ -75,6 +78,7 @@ $root = dirname(__FILE__);
 $directories = array(
     'lib'    => $root . '/lib',
     'dist'   => $root . '/dist',
+    'shared' => $root . '/shared',
     'tmp'    => $root . '/tmp',
 );
 
@@ -143,6 +147,9 @@ foreach ($base_libs as $name => $source) {
         $uz->unzipAll($targetDirectory);
     }
     Ld_Files::copy($targetDirectory . '/lib', $directories['lib']);
+    if (file_exists($targetDirectory . '/shared')) {
+        Ld_Files::copy($targetDirectory . '/shared', $directories['shared']);
+    }
 }
 
 echo '- Zend & Ld OK<br>';
@@ -156,7 +163,7 @@ $site = Ld_Loader::loadSite(dirname(__FILE__));
 
 // Detect base path
 if (!empty($_SERVER["SCRIPT_NAME"])) {
-  $site->path = str_replace('/installer.php', '', $_SERVER["SCRIPT_NAME"]);
+    $site->path = str_replace('/installer.php', '', $_SERVER["SCRIPT_NAME"]);
 }
 
 // Init
@@ -164,6 +171,18 @@ if (!empty($_SERVER["SCRIPT_NAME"])) {
 $site->init();
 
 echo " - Init OK<br>\n";
+
+// Handle locales
+
+if (defined('LD_LOCALE')) {
+    Ld_Files::createDirIfNotExists($site->getDirectory('shared') . '/locales');
+    if (constant('LD_LOCALE') == 'fr_FR') {
+        $site->addRepository(array('type' => 'remote', 'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/locale/fr', 'name' => ''));
+        $site->updateLocales(array('en_US','fr_FR'));
+        $site->createInstance('ld-locale-fr-fr');
+    }
+    echo " - Locale OK<br>\n";
+}
 
 // Clean TMP
 foreach ($base_libs as $name => $source) {
@@ -176,8 +195,8 @@ foreach ($base_libs as $name => $source) {
 $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
-    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.8.2-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.2-30-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.2-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-39-1');
     $site->updateInstances($instances);
 }
 
@@ -199,6 +218,28 @@ if (empty($admin)) {
 } else {
     $site->updateInstance($admin);
     echo '- Update Admin OK<br>';
+}
+
+// Base Index
+
+$root_index = $root . '/index.php';
+if (!file_exists($root_index)) {
+    $index  = '<?php' . "\n";
+    $index .= "define('LD_ROOT_CONTEXT', true);\n";
+    $index .= "require_once('admin/dispatch.php');\n";
+    Ld_Files::put($root_index, $index);
+}
+
+// Base .htaccess
+if (constant('LD_REWRITE')) {
+    $root_htaccess = $root . '/.htaccess';
+    $path = $site->getPath() . '/';
+    $htaccess  = "RewriteEngine on\n";
+    $htaccess .= "RewriteBase $path\n";
+    $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
+    $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
+    $htaccess .= "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php\n";
+    Ld_Files::put($root_htaccess, $htaccess);
 }
 
 echo 'Everything OK. <a href="' . $admin->getUrl() . '">Go admin</a>.';
