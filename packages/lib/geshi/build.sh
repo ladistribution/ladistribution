@@ -1,7 +1,7 @@
-VERSION="1.0.8.3"
+VERSION="1.0.8.4"
 FOLDER="lib"
 NAME="geshi"
-SOURCE="Location: http://freefr.dl.sourceforge.net/sourceforge/geshi/GeSHi-$VERSION.tar.gz"
+SOURCE="http://freefr.dl.sourceforge.net/project/geshi/geshi/GeSHi%20{$VERSION}/GeSHi-{$VERSION}.tar.gz"
 GZ="$NAME.gz"
 PACKAGE="lib-geshi.zip"
 # Get source
