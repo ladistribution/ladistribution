@@ -45,7 +45,7 @@ class Ld_Cli
 
     protected function _prompt($label)
     {
-        $this->_write(sprintf("    %s:", $label));
+        $this->_write(sprintf("    %s:", $label), false);
         return trim(fgets(STDIN));
     }
 
@@ -194,6 +194,43 @@ class Ld_Cli
         }
     }
 
+    // Databases
+
+    public function databases()
+    {
+        $databases = $this->getSite()->getDatabases();
+        if (empty($databases)) {
+            $this->_write('None');
+        } else {
+            foreach ($this->getSite()->getDatabases() as $id => $db) {
+                $this->_write(sprintf("$id => %s://%s@%s/%s", $db['type'], $db['user'], $db['host'], $db['name']));
+            }
+        }
+    }
+
+    public function addDatabase()
+    {
+        $type = 'mysql';
+        $host = isset($this->_opts->host) ? $this->_opts->host : $this->_prompt('Host');
+        $name = isset($this->_opts->name) ? $this->_opts->name : $this->_prompt('Name');
+        $user = isset($this->_opts->user) ? $this->_opts->user : $this->_prompt('User');
+        $password = isset($this->_opts->password) ? $this->_opts->password : $this->_prompt('Password');
+        $this->getSite()->addDatabase(compact('type', 'host', 'name', 'user', 'password'));
+    }
+
+    public function deleteDatabase()
+    {
+        if (empty($this->_args[1])) {
+            throw new Exception("No database ID passed as argument.");
+        }
+        $id = $this->_args[1];
+        $confirm    = isset($this->_opts->force) ? $this->_opts->force : $this->_confirm("Delete database connection $id?");
+        if ($confirm) {
+            $this->getSite()->deleteDatabase($id);
+            $this->_write("Database connection deleted.");
+        }
+    }
+
     // Instances
 
     public function install()
@@ -211,7 +248,7 @@ class Ld_Cli
                     break;
                 case 'list':
                     if (isset($pref['options'][0]['value'])) {
-                        $pref['defaultValue'] = $pref['options'][0]['label'];
+                        $pref['defaultValue'] = $pref['options'][0]['value'];
                     }
                 default:
                     if (isset($pref['defaultValue'])) {

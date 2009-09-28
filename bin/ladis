@@ -11,6 +11,11 @@ define('LD_LIB_DIR', LD_DIR . '/lib');
 
 set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
 
+// In case ZF is not available
+if (!file_exists(LD_LIB_DIR . '/Zend/Loader/Autoloader.php')) {
+    include(LD_DIR . '/installer.php');
+}
+
 // Zend Loader
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();

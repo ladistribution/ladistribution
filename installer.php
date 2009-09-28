@@ -61,10 +61,22 @@ function is_requirable($lib)
     return false;
 }
 
+function out($message)
+{
+    if (defined('LD_CLI') && constant('LD_CLI')) {
+        fwrite(STDOUT, "# $message");
+        fwrite(STDOUT, PHP_EOL);
+    } else {
+        echo "$message<br/>\n";
+        flush();
+    }
+}
+
 // Test PHP version
 
 if (!version_compare(PHP_VERSION, '5.2.0', '>=')) {
-    die ( '- Failure. La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.' );
+    out('- Failure. La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.' );
+    exit;
 }
 
 // Try
@@ -94,8 +106,7 @@ foreach ($directories as $name => $directory) {
 
 set_include_path( $directories['lib'] . PATH_SEPARATOR . get_include_path() );
 
-echo '- Directories OK<br>';
-flush();
+out('Directories OK');
 
 // Essentials
 
@@ -122,8 +133,7 @@ foreach ($essentials as $file => $source) {
     install_if_not_exists_and_require($file, $source);
 }
 
-echo '- Essentials OK<br>';
-flush();
+out('Essentials OK');
 
 // Zend & Ld libraries
     
@@ -152,8 +162,7 @@ foreach ($base_libs as $name => $source) {
     }
 }
 
-echo '- Zend & Ld OK<br>';
-flush();
+out('Zend & Ld OK');
 
 // Load Site
 
@@ -170,7 +179,7 @@ if (!empty($_SERVER["SCRIPT_NAME"])) {
 
 $site->init();
 
-echo " - Init OK<br>\n";
+out('Init OK');
 
 // Handle locales
 
@@ -181,7 +190,7 @@ if (defined('LD_LOCALE')) {
         $site->updateLocales(array('en_US','fr_FR'));
         $site->createInstance('ld-locale-fr-fr');
     }
-    echo " - Locale OK<br>\n";
+    out('Locale OK');
 }
 
 // Clean TMP
@@ -200,8 +209,12 @@ if (empty($instances)) {
     $site->updateInstances($instances);
 }
 
-echo '- Registry OK<br>';
-flush();
+out('Registry OK');
+
+if (defined('LD_CLI') && constant('LD_CLI')) {
+   out('Install from CLI OK');
+   return;
+}
 
 // Install or Update Admin
 
@@ -214,10 +227,10 @@ foreach ($site->getInstances() as $id => $infos) {
 
 if (empty($admin)) {
     $admin = $site->createInstance('admin', array('title' => 'La Distribution Admin', 'path' => 'admin'));
-    echo '- Install Admin OK<br>';
+    out('Install Admin OK');
 } else {
     $site->updateInstance($admin);
-    echo '- Update Admin OK<br>';
+    out('Update Admin OK');
 }
 
 // Base Index
@@ -242,13 +255,12 @@ if (constant('LD_REWRITE')) {
     Ld_Files::put($root_htaccess, $htaccess);
 }
 
-echo 'Everything OK. <a href="' . $admin->getUrl() . '">Go admin</a>.';
-flush();
+out('Everything OK. <a href="' . $admin->getUrl() . '">Go admin</a>.');
 
 // Catch
 
 } catch (Exception $e) {
 
-echo '- FAIL: ' . $e->getMessage() . '<br>';
+    out( 'FAIL: ' . $e->getMessage() );
 
 }
