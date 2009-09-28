@@ -25,20 +25,10 @@ class Ld_Cookie_Simple
 
     public function getCookieValue($cookiename, $deleteIfInvalid = true)
     {
-        if ( get_magic_quotes_gpc() && empty($this->stripslashed) ) {
-            $_COOKIE = array_map(array('self', '_stripslashesDeep'), $_COOKIE);
-            $this->stripslashed = true;
-        }
         if ($this->cookieExists($cookiename)) {
-            return $_COOKIE[$cookiename];
+            return stripslashes($_COOKIE[$cookiename]);
         }
         return (false);
-    }
-
-    protected static function _stripslashesDeep($value)
-    {
-        $value = is_array($value) ? array_map(array('self', '_stripslashesDeep'), $value) : stripslashes($value);
-        return $value;
     }
 
     public function setCookie($cookiename, $value, $username, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
