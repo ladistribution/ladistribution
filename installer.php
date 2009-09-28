@@ -64,10 +64,10 @@ function is_requirable($lib)
 function out($message)
 {
     if (defined('LD_CLI') && constant('LD_CLI')) {
-        fwrite(STDOUT, "# $message");
+        fwrite(STDOUT, "- $message");
         fwrite(STDOUT, PHP_EOL);
     } else {
-        echo "$message<br/>\n";
+        echo "- $message<br/>\n";
         flush();
     }
 }
@@ -164,6 +164,11 @@ foreach ($base_libs as $name => $source) {
 
 out('Zend & Ld OK');
 
+if (defined('LD_CLI_INSTALL') && constant('LD_CLI_INSTALL')) {
+   out('CLI install OK');
+   return;
+}
+
 // Load Site
 
 $loader = $directories['lib'] . '/Ld/Loader.php';
@@ -211,10 +216,6 @@ if (empty($instances)) {
 
 out('Registry OK');
 
-if (defined('LD_CLI') && constant('LD_CLI')) {
-   out('Install from CLI OK');
-   return;
-}
 
 // Install or Update Admin
 

@@ -13,6 +13,7 @@ set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
 
 // In case ZF is not available
 if (!file_exists(LD_LIB_DIR . '/Zend/Loader/Autoloader.php')) {
+    define('LD_CLI_INSTALL', true);
     include(LD_DIR . '/installer.php');
 }
 
