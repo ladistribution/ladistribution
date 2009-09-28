@@ -58,10 +58,13 @@
                     if (isset($adminUrl)) {
                         $link = sprintf('<a href="%s">%s</a>', $adminUrl, $this->translate("Admin"));
                         if ($admin) {
-                            printf('<strong>%s</strong> | ', $link);
+                            printf('<strong>%s</strong>', $link);
                         } else {
-                            printf('%s | ', $link);
+                            printf('%s', $link);
                         }
+                    }
+                    if (isset($adminUrl) && isset($settingsUrl)) {
+                        printf(' | ');
                     }
                     if (isset($settingsUrl)) {
                         $link = sprintf('<a href="%s">%s</a>', $settingsUrl, $this->translate("Settings"));

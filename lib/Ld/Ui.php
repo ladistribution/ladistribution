@@ -118,13 +118,37 @@ class Ld_Ui
         echo $view->render('super-bar.phtml');
     }
     
-    public static function top_bar()
+    public static function top_bar($options = array())
     {
         $admin = self::getAdmin();
 
         $view = self::getView();
 
         $view->site = self::getSite();
+
+        if (isset($options['loginUrl'])) {
+            $view->loginUrl = $options['loginUrl'];
+        } else {
+            $view->loginUrl = Ld_Ui::getAdminUrl(array(
+                  'module' => 'default', 'controller' => 'auth', 'action' => 'login'
+            ));
+        }
+
+        if (isset($options['logoutUrl'])) {
+            $view->logoutUrl = $options['logoutUrl'];
+        } else {
+            $view->logoutUrl = Ld_Ui::getAdminUrl(array(
+                  'module' => 'default', 'controller' => 'auth', 'action' => 'logout'
+            ));
+        }
+
+        $view->registerUrl = Ld_Ui::getAdminUrl(array(
+              'module' => 'default', 'controller' => 'auth', 'action' => 'register'
+        ));
+
+        $view->completeUrl = Ld_Ui::getAdminUrl(array(
+              'module' => 'default', 'controller' => 'auth', 'action' => 'complete'
+        ));
 
         echo $view->render('top-bar.phtml');
     }
