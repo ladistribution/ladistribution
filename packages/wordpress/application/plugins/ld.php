@@ -123,33 +123,36 @@ add_filter('load_default_widgets', 'ld_load_default_widgets');
 
 function ld_option_home($value)
 {
-    if (defined('LD_ROOT_CONTEXT') && constant('LD_ROOT_CONTEXT')) {
-        $site = Zend_Registry::get('site');
-        return 'http://' . $site->getHost() . $site->getPath();
-    }
-    return $value;
+	if (defined('LD_ROOT_CONTEXT') && constant('LD_ROOT_CONTEXT')) {
+		$site = Zend_Registry::get('site');
+		return 'http://' . $site->getHost() . $site->getPath();
+	}
+	return $value;
 }
 
 add_filter('option_home', 'ld_option_home');
 
 function ld_loginurl($login_url = '', $redirect = '')
 {
-	$login_url = Ld_Ui::getAdminUrl(array(
+	$ld_login_url = Ld_Ui::getAdminUrl(array(
 		'module' => 'default', 'controller' => 'auth', 'action' => 'login',
 		'referer' => empty($redirect) ? null : urlencode($redirect)
 	));
+	if ($ld_login_url) {
+	    return $ld_login_url;
+	}
 	return $login_url;
 }
 
 add_filter('login_url', 'ld_loginurl');
 
-function ld_logouturl($logout_url = '', $redirect = '')
-{
-	$logout_url = Ld_Ui::getAdminUrl(array(
-		'module' => 'default', 'controller' => 'auth', 'action' => 'logout',
-		'referer' => empty($redirect) ? null : urlencode($redirect)
-	));
-	return $logout_url;
-}
-
-add_filter('logout_url', 'ld_logouturl');
+// function ld_logouturl($logout_url = '', $redirect = '')
+// {
+//  $logout_url = Ld_Ui::getAdminUrl(array(
+//      'module' => 'default', 'controller' => 'auth', 'action' => 'logout',
+//      'referer' => empty($redirect) ? null : urlencode($redirect)
+//  ));
+//  return $logout_url;
+// }
+// 
+// add_filter('logout_url', 'ld_logouturl');
