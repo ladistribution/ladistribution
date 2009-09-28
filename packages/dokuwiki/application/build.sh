@@ -19,6 +19,10 @@ mkdir templates
 git clone git://github.com/znarf/dokuwiki-minimal.git templates/minimal
 rm -rf templates/minimal/.git templates/minimal/Makefile
 
+# Add CSS plugin
+git clone git://github.com/znarf/dokuwiki-css.git plugins/css
+rm -rf plugins/css/.git
+
 # Apply patches
 patch -p0 -d $FOLDER < patches/config.diff
 patch -p0 -d $FOLDER < patches/config-feed.diff
@@ -77,3 +81,4 @@ mv $PACKAGE ../../
 # Clean
 rm -rf $FOLDER
 rm -rf templates
+rm -rf plugins/css
