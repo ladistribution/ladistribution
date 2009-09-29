@@ -112,12 +112,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _checkRepositories()
     {
-        $cfg = array();
-        $cfg['repositories'] = array(
-            'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
-            'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/main')
-        );
-        Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
+        if (!file_exists($this->getDirectory('dist') . '/repositories.json')) {
+            $cfg = array();
+            $cfg['repositories'] = array(
+                'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
+                'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/main')
+            );
+            Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
+        }
     }
 
     public function getUniqId()
