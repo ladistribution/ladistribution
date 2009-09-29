@@ -143,7 +143,7 @@ class Slotter_UsersController extends Slotter_BaseController
 
             $consumer = new Zend_OpenId_Consumer();
             if (!$consumer->login($this->_getParam('openid_identifier'), null, $root)) {
-                throw Exception("OpenID login failed.");
+                throw new Exception("OpenID login failed.");
             }
 
         } elseif ($this->_hasParam('openid_mode')) {
