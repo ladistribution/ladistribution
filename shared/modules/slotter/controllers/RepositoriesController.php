@@ -100,7 +100,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
                 'id' => $this->_getParam('name'),
                 'type' => $this->_getParam('type'),
                 'name' => $this->_getParam('name'),
-                'endpoint' => $this->_getParam('endpoint')
+                'endpoint' => trim($this->_getParam('endpoint'))
             ));
             $this->_redirector->setGotoSimple('index');
             $this->_redirector->redirectAndExit();
