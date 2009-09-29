@@ -57,7 +57,7 @@ class Identity_OpenidController extends Ld_Controller_Action
                 $params = $this->_getAllParams();
 
                 $siteRoot = $this->_server->getSiteRoot($params);
-                $trustedSites = $this->_server->getTrustedSites();
+                $trustedSites = (array)$this->_server->getTrustedSites();
 
                 $result = $this->_server->login($this->_getParam('openid_identity'), $this->username);
                 if ($result) {
