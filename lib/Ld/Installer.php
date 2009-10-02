@@ -200,13 +200,13 @@ class Ld_Installer
 
         // Config
         if (isset($preferences['path'])) {
-            $this->_createConfigFile($preferences['path']);
+            $this->_createDistConfigFile($preferences['path']);
         }
     }
 
     public function postInstall($preferences = array()) {}
 
-    protected function _createConfigFile($path)
+    protected function _createDistConfigFile($path)
     {
         $cfg_ld = "<?php\n";
 
@@ -356,7 +356,7 @@ class Ld_Installer
         $this->setPath($this->getInstance()->getPath());
         $this->setAbsolutePath($this->getInstance()->getAbsolutePath());
 
-        $this->_createConfigFile($path);
+        $this->_createDistConfigFile($path);
     }
 
     public function postMove() {}
