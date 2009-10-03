@@ -1,3 +1,8 @@
+/* --------------------------------------------------------------
+   
+   LD UI: Slotter
+   
+-------------------------------------------------------------- */
 
 .ld-layout h2 {
   margin:0px 0 15px;
@@ -13,6 +18,10 @@
 	width:960px;
 	padding-left:20px;
 	padding-right:20px;
+}
+
+.h6e-main-content hr {
+	padding-top:2em;
 }
 
 .h6e-page-title {
@@ -40,6 +49,26 @@
 
 .h6e-simple-footer {
 	padding-top:1em;
+}
+
+/* Home
+-------------------------------------------------------------- */
+
+.ld-home {
+	width:100%;
+	overflow:hidden;
+}
+
+.ld-home .manage {
+	float:left;
+	padding-right:25px;
+	border-right:1px dotted #ccc;
+	margin-right:25px;
+}
+
+.ld-home .update {
+	width:60%;
+	float:left;
 }
 
 /* Notifications

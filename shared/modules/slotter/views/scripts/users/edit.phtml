@@ -46,7 +46,9 @@
 
 </form>
 
-<div class="separator" style="border-top:1px solid #ccc;padding-top:20px;margin-top:20px"></div>
+<?php if ($this->currentUser['username'] == $this->user['username']) : ?>
+
+<hr/>
 
 <h3><?php echo $this->translate("Identities") ?></h3>
 
@@ -78,3 +80,5 @@
     </table>
 
 </form>
+
+<?php endif ?>

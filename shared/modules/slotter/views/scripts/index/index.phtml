@@ -1,12 +1,25 @@
-<h2>Applications</h2>
+<?php if (empty($this->users) || count($this->users) == 0) : ?>
+
+    <h2>Installation</h2>
+
+    <p><?php echo $this->translate(
+        "There is no user registered yet. Registering a first user is necessary to password protect this admin and install others applications."
+    ) ?></p>
+
+    <p><a href="<?php echo $this->url(array('controller' => 'users', 'action' => 'new')) ?>"><?php
+        echo $this->translate("Register the first user now.") ?></a></p>
+
+<?php return; endif ?>
+
+<h2><?php echo $this->translate("Applications") ?></h2>
 
 <?php $this->instancesList() ?>
 
 <?php if ($this->canAdmin) : ?>
 
-<div style="width:100%;overflow:hidden">
+<div class="ld-home">
 
-    <div style="float:left;padding-right:25px;margin-right:25px;border-right:1px dotted #ccc">
+    <div class="manage">
         <h2><?php echo $this->translate->translate("Manage") ?></h2>
         <?php
         $pages = array(
@@ -27,7 +40,7 @@
         </ul>
     </div>
 
-    <div style="float:left">
+    <div class="update">
         <h2><?php echo $this->translate("Updates") ?></h2>
         <?php if ($this->canAdmin && $this->hasUpdate) :
             $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update');
@@ -44,14 +57,15 @@
 
 <?php endif ?>
 
-<?php if (empty($this->users) || count($this->users) == 0) : $this->canAdmin = true; ?>
-
-    <p><strong>Warning:</strong> You don't have any user registered yet. Registering users is necessary to password protect this admin and install others applications.</p>
-
-<?php endif ?>
-
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
-    <p><strong>Notice:</strong> You didn't registered any database connection yet. A database is often needed to deploy new web application.</p>
+    <?php $newDbUrl = $this->url(array('controller' => 'databases', 'action' => 'new')); ?>
+
+    <p><strong><?php echo $this->translate("Notice:") ?></strong>
+    <?php echo $this->translate("There is no database connection registered yet. A database is often needed to install new applications.") ?>
+    <!--
+    <a href="<?php echo $newDbUrl ?>"><?php echo $this->translate("Add a database connection") ?></a>
+    -->
+    </p>
 
 <?php endif ?>

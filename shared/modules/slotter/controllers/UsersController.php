@@ -102,6 +102,9 @@ class Slotter_UsersController extends Slotter_BaseController
                 $instance = Zend_Registry::get('instance');
                 $instance->setUserRoles(array($user['username'] => 'admin'));
                 Ld_Auth::authenticate($user['username'], $user['password']);
+                // in this case, we believe the user wants to go back to the index
+                $this->_redirector->gotoSimple('index', 'index');
+                return;
             }
 
             $this->_redirector->gotoSimple('index', 'users');
