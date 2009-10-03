@@ -29,7 +29,7 @@
     <tr>
         <td><?php echo $user['username'] ?></td>
         <td><?php echo $user['fullname'] ?></td>
-        
+
         <?php /*
         <?php foreach ($this->applications as $application) : ?>
             <td style="text-align:center">
@@ -54,7 +54,7 @@
             </td>
        <?php endforeach ?>
        */ ?>
-       
+
        <?php if ($this->userRole == 'admin') : ?>
            <td>
                <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $user['username'] )); ?>"><?php
@@ -82,6 +82,8 @@
 
 <?php endif ?>
 
+<?php if ($this->userRole == 'admin') : ?>
+
 <br />
 
 <h3><?php echo $this->translate("You can:") ?></h3>
@@ -89,3 +91,5 @@
 <ul>
     <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php echo $this->translate("Add a new user") ?></a></li>
 </ul>
+
+<?php endif ?>

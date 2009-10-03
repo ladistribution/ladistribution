@@ -2,16 +2,16 @@
 
 <form method="post" action="">
     
-    <table>
+    <table class="ld-form">
     <?php if ($this->type == 'local') : ?>
     <tr>
-        <td><label><?php echo $this->translate("Name") ?></label></td>
-        <td><input type="text" name="name" class="text" value=""/></td>
+        <th><label for="ld-repository-add-name"><?php echo $this->translate("Name") ?></label></th>
+        <td><input id="ld-repository-add-name" type="text" name="name" class="text" value=""/></td>
     </tr>
     <?php elseif ($this->type == 'remote') : ?>
         <tr>
-            <td><label><?php echo $this->translate("URL") ?></label></td>
-            <td><input type="text" name="endpoint" class="text" value="" size="50"/></td>
+            <th><label for="ld-repository-add-url"><?php echo $this->translate("URL") ?></label></th>
+            <td><input id="ld-repository-add-url" type="text" name="endpoint" class="text" value="" size="50"/></td>
         </tr>
     <?php endif ?>
     </table>

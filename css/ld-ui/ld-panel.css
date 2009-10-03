@@ -1,7 +1,7 @@
 /* --------------------------------------------------------------
-   
-   LD Panel
-   
+
+   LD UI: Panel
+
 -------------------------------------------------------------- */
 
 /* Global
@@ -88,11 +88,7 @@
 }
 
 table.ld-form, table.ld-preferences  {
-	width:auto;
-}
-
-table.ld-form th, table.ld-form td {
-	width:50%;
+  width:auto;
 }
 
 /* Theme Selector

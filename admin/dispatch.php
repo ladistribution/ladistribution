@@ -9,6 +9,7 @@ $site = Zend_Registry::get('site');
 // Load admin if needed
 $path = str_replace($site->getPath(), '', $_SERVER["REQUEST_URI"]);
 $modules = Ld_Files::getDirectories($site->getDirectory('shared') . '/modules');
+$modules[] = 'auth';
 foreach ($modules as $module) {
     if (strpos($path, $module) === 1) {
         $root_application = 'admin';

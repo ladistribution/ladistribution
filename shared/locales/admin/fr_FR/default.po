@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-22 11:33+0100\n"
+"POT-Creation-Date: 2009-10-03 14:14+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@upian.com>\n"
 "Language-Team: \n"
@@ -85,29 +85,28 @@ msgstr "Mettre à jour une connexion"
 msgid "Type"
 msgstr "Type"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:16
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:18
 #: shared/modules/slotter/views/scripts/databases/index.phtml:13
 #: shared/modules/slotter/views/scripts/databases/new.phtml:16
 msgid "Host"
 msgstr "Serveur"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:20
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:22
 #: shared/modules/slotter/views/scripts/databases/index.phtml:14
 msgid "Name"
 msgstr "Nom"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:24
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:26
 #: shared/modules/slotter/views/scripts/databases/new.phtml:24
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:28
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:30
 #: shared/modules/slotter/views/scripts/databases/new.phtml:28
 msgid "Password"
 msgstr "Mot de passe"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:35
-#: shared/modules/slotter/views/scripts/index/update.phtml:9
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:37
 msgid "Update"
 msgstr "Mettre à jour"
 
@@ -120,7 +119,6 @@ msgid "None|database"
 msgstr "Aucune"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:15
-#: shared/modules/slotter/views/scripts/instance/backups.phtml:21
 msgid "Actions"
 msgstr "Actions"
 
@@ -129,7 +127,6 @@ msgid "edit"
 msgstr "éditer"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:33
-#: shared/modules/slotter/views/scripts/instance/backups.phtml:34
 msgid "delete"
 msgstr "supprimer"
 
@@ -138,8 +135,9 @@ msgid "You can:"
 msgstr "Vous pouvez :"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:50
-msgid "Add a new database connection"
-msgstr "Ajouter une nouvelle connexion à une base de donnée"
+#: shared/modules/slotter/views/scripts/index/index.phtml:67
+msgid "Add a database connection"
+msgstr "Ajouter une connexion à une base de donnée"
 
 #: shared/modules/slotter/views/scripts/databases/new.phtml:1
 msgid "Add a new connection"
@@ -153,22 +151,46 @@ msgstr "Nom de la base"
 msgid "Add"
 msgstr "Ajouter"
 
+#: shared/modules/slotter/views/scripts/index/index.phtml:3
+msgid "Installation"
+msgstr "Installation"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:6
+msgid "There is no user registered yet. Registering a first user is necessary to password protect this admin and install others applications."
+msgstr "Il n'y a aucun utilisateur enregistré pour le moment. Enregistrer un premier utilisateur est nécessaire pour protéger cette interface d'administration et installer d'autres applications."
+
 #: shared/modules/slotter/views/scripts/index/index.phtml:10
+msgid "Register the first user now."
+msgstr "Enregistrer le premier utilisateur maintenant."
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:14
+msgid "Applications"
+msgstr "Applications"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:23
 msgid "Manage"
 msgstr "Gérer"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:31
+#: shared/modules/slotter/views/scripts/index/index.phtml:44
 msgid "Updates"
 msgstr "Mises à jour"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:35
+#: shared/modules/slotter/views/scripts/index/index.phtml:48
 #, php-format
 msgid "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>"
 msgstr "Des mises à jours sont disponibles. Il est conseillé de <a href=\"%s\">mettre à jour maintenant.</a>"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:39
+#: shared/modules/slotter/views/scripts/index/index.phtml:52
 msgid "Everything fine, nothing to update."
 msgstr "Tout est ok, rien à mettre à jour."
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:64
+msgid "Notice:"
+msgstr "Note :"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:65
+msgid "There is no database connection registered yet. A database is often needed to install new applications."
+msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment. Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
 
 #: shared/modules/slotter/views/scripts/index/update.phtml:13
 msgid "Everything is up to date."
@@ -198,10 +220,6 @@ msgstr "nouvelle version"
 #: shared/modules/slotter/views/scripts/index/update.phtml:76
 msgid "none"
 msgstr "aucune"
-
-#: shared/modules/slotter/views/scripts/index/update.phtml:43
-msgid "Applications"
-msgstr "Applications"
 
 #: shared/modules/slotter/views/scripts/index/update.phtml:47
 msgid "name"
@@ -355,19 +373,20 @@ msgstr "installer"
 msgid "No extension available for this application."
 msgstr "Pas d'extension disponible pour cette application."
 
-#: shared/modules/slotter/views/scripts/instance/move.phtml:1
-msgid "Move an application"
-msgstr "Déplacer une application"
+#: shared/modules/slotter/views/scripts/instance/move.phtml:3
+#: shared/modules/slotter/views/scripts/instance/status.phtml:67
+msgid "Move this application"
+msgstr "Déplacer cette application"
 
-#: shared/modules/slotter/views/scripts/instance/move.phtml:7
+#: shared/modules/slotter/views/scripts/instance/move.phtml:9
 msgid "Old path:"
 msgstr "Ancien chemin :"
 
-#: shared/modules/slotter/views/scripts/instance/move.phtml:11
+#: shared/modules/slotter/views/scripts/instance/move.phtml:13
 msgid "New path:"
 msgstr "Nouveau chemin :"
 
-#: shared/modules/slotter/views/scripts/instance/move.phtml:17
+#: shared/modules/slotter/views/scripts/instance/move.phtml:19
 msgid "Move"
 msgstr "Déplacer"
 
@@ -429,10 +448,6 @@ msgstr "mise à jour disponible"
 msgid "move"
 msgstr "déplacer"
 
-#: shared/modules/slotter/views/scripts/instance/status.phtml:67
-msgid "Move this application"
-msgstr "Déplacer cette application"
-
 #: shared/modules/slotter/views/scripts/instance/status.phtml:68
 msgid "Delete this application"
 msgstr "Supprimer cette application"
@@ -491,7 +506,7 @@ msgid "browse"
 msgstr "parcourir"
 
 #: shared/modules/slotter/views/scripts/repositories/list.phtml:30
-#: shared/modules/slotter/views/scripts/users/edit.phtml:59
+#: shared/modules/slotter/views/scripts/users/edit.phtml:63
 msgid "remove"
 msgstr "supprimer"
 
@@ -573,32 +588,36 @@ msgstr "Editer les infos d'un utilisateur"
 msgid "Infos"
 msgstr "Informations"
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:13
+#: shared/modules/slotter/views/scripts/users/edit.phtml:14
 #: shared/modules/slotter/views/scripts/users/new.phtml:11
 msgid "Email"
 msgstr "Email"
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:20
+#: shared/modules/slotter/views/scripts/users/edit.phtml:22
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:22
+#: shared/modules/slotter/views/scripts/users/edit.phtml:24
 msgid "If you would like to change the password type a new one. Otherwise leave this blank."
 msgstr "Si vous souhaitez changer de mot de passe, tapez en un nouveau. Sinon, laissez ce champ vide."
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:32
+#: shared/modules/slotter/views/scripts/users/edit.phtml:34
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:36
+#: shared/modules/slotter/views/scripts/users/edit.phtml:38
 msgid "New password again"
 msgstr "Nouveau mot de passe une deuxième fois"
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:51
+#: shared/modules/slotter/views/scripts/users/edit.phtml:55
 msgid "Identities"
 msgstr "Identités"
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:74
+#: shared/modules/slotter/views/scripts/users/edit.phtml:71
+msgid "You don't have any OpenID identity registered yet. You can add new identities with the form below."
+msgstr "Vous n'avez encore enregistré aucune identité OpenID. Vous pouvez ajoutez d'autres identités avec le formulaire ci-dessous."
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:80
 msgid "Add an identity:"
 msgstr "Ajouter une identité :"
 
@@ -668,10 +687,16 @@ msgstr "sauvegardes"
 msgid "Settings"
 msgstr "Paramètres"
 
+#~ msgid "Warning:"
+#~ msgstr "Avertissement :"
+
+#, fuzzy
+#~ msgid "Add a new database now."
+#~ msgstr "Ajouter une nouvelle connexion à une base de donnée"
+#~ msgid "Move an application"
+#~ msgstr "Déplacer une application"
 #~ msgid "Manage extensions"
 #~ msgstr "Gérer les extensions"
-#~ msgid "Install an extension"
-#~ msgstr "Installer une extension"
 #~ msgid "None"
 #~ msgstr "Aucune"
 #~ msgid "Update available"

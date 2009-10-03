@@ -1,7 +1,7 @@
 <package release="unstable">
   <id>css-ld-ui</id>
   <name>La Distribution UI libraries</name>
-  <version>0.3-40-6</version>
+  <version>0.3-40-7</version>
   <type>css</type>
   <deploy>
       <origin>css</origin>

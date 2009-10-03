@@ -29,6 +29,8 @@ defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
 defined('LD_DEBUG') OR define('LD_DEBUG', false);
 
+defined('LD_SESSION') OR define('LD_SESSION', false);
+
 // Functions
 
 function install_if_not_exists_and_require($file, $source)
@@ -149,7 +151,7 @@ if (!is_requirable('Ld/Installer.php')) {
 
 foreach ($base_libs as $name => $source) {
     $archiveName = $directories['tmp'] . '/' . $name . '.zip';
-    $targetDirectory = $directories['tmp'] . '/' . $name;
+    $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
     if (!file_exists($targetDirectory)) {
         $zip = file_get_contents($source);
         Ld_Files::put($archiveName, $zip);
@@ -185,6 +187,21 @@ if (!empty($_SERVER["SCRIPT_NAME"])) {
 $site->init();
 
 out('Init OK');
+
+// Upgrade repositories (if needed)
+
+$repositories = $site->getRepositoriesConfiguration();
+foreach ($repositories as $id => $repository) {
+    if (isset($repository['endpoint']) && strpos($repository['endpoint'], LD_SERVER . 'repositories/barbes') !== false) {
+        $repositories[$id]['endpoint'] = str_replace(
+            LD_SERVER . 'repositories/barbes', LD_SERVER . 'repositories/' . LD_RELEASE, $repository['endpoint']);
+        $repository_upgrade = true;
+    }
+}
+if (isset($repository_upgrade)) {
+    $site->saveRepositoriesConfiguration($repositories);
+    out('Repositories OK');
+}
 
 // Handle locales
 
@@ -247,13 +264,15 @@ if (!file_exists($root_index)) {
 // Base .htaccess
 if (constant('LD_REWRITE')) {
     $root_htaccess = $root . '/.htaccess';
-    $path = $site->getPath() . '/';
-    $htaccess  = "RewriteEngine on\n";
-    $htaccess .= "RewriteBase $path\n";
-    $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
-    $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-    $htaccess .= "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php\n";
-    Ld_Files::put($root_htaccess, $htaccess);
+    if (!file_exists($root_htaccess)) {
+        $path = $site->getPath() . '/';
+        $htaccess  = "RewriteEngine on\n";
+        $htaccess .= "RewriteBase $path\n";
+        $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
+        $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
+        $htaccess .= "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php\n";
+        Ld_Files::put($root_htaccess, $htaccess);
+    }
 }
 
 out('Everything OK. <a href="' . $admin->getUrl() . '">Go admin</a>.');

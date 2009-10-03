@@ -1,6 +1,6 @@
 <?php if (empty($this->users) || count($this->users) == 0) : ?>
 
-    <h2>Installation</h2>
+    <h2><?php echo $this->translate("Installation") ?></h2>
 
     <p><?php echo $this->translate(
         "There is no user registered yet. Registering a first user is necessary to password protect this admin and install others applications."

@@ -7,11 +7,13 @@
     <table class="ld-form">
     <tr>
         <th><label><?php echo $this->translate("Full Name") ?></label></td>
-        <td><input type="text" name="fullname" class="text" value="<?php if (isset($this->user['fullname'])) echo $this->escape($this->user['fullname']) ?>"/></td>
+        <td><input type="text" name="fullname" class="text" value="<?php
+            if (isset($this->user['fullname'])) echo $this->escape($this->user['fullname']) ?>"/></td>
     </tr>
     <tr>
         <th><label><?php echo $this->translate("Email") ?></label></td>
-        <td><input type="text" name="email" class="text" value="<?php if (isset($this->user['email'])) echo $this->escape($this->user['email']) ?>"/></td>
+        <td><input type="text" name="email" class="text" value="<?php
+            if (isset($this->user['email'])) echo $this->escape($this->user['email']) ?>"/></td>
     </tr>
     </table>
 
@@ -65,16 +67,18 @@
 
 <?php else : ?>
 
-    <p><em>You don't have any other identities registered yet. You can add new OpenID identities with the form below.</em></p>
+    <p><em><?php echo $this->translate(
+        "You don't have any OpenID identity registered yet. You can add new identities with the form below."
+    ) ?></em></p>
 
 <?php endif ?>
 
 <form method="post" action="<?php echo $this->url(array('action' => 'add-identity')) ?>">
 
-    <table style="width:auto">
+    <table class="ld-form">
         <tr>
             <th><label for="add_new_identity"><?php echo $this->translate("Add an identity:") ?></label></th>
-            <td><input id="add_new_identity" type="text" name="openid_identifier" value="" /></td>
+            <td><input id="add_new_identity" type="text" name="openid_identifier" value="" size="50" /></td>
             <td><input type="submit" value="<?php echo $this->translate("Add") ?>"/></td>
         </tr>
     </table>
