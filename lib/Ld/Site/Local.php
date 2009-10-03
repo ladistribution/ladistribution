@@ -264,7 +264,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $dir = $this->getDirectory() . '/' . $id;
 
         // by id
-        } else if (isset($instances[$id])) {
+        } else if (isset($instances[$id]) && isset($instances[$id]['path'])) {
             $dir = $this->getDirectory() . '/' . $instances[$id]['path'];
         }
 
