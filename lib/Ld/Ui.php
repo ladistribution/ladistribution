@@ -71,7 +71,11 @@ class Ld_Ui
         $router->addDefaultRoutes();
         $router->addConfig($config);
 
-        $baseUrl = self::getSite()->getPath() . '/' . $admin->getPath();
+        $baseUrl = self::getSite()->getPath();
+        if (self::getSite()->getConfig('root_admin') != 1) {
+            $baseUrl .=  '/' . $admin->getPath();
+        }
+
         if (constant('LD_REWRITE') == false) {
             $baseUrl .= '/index.php';
         }
