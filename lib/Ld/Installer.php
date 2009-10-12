@@ -348,8 +348,7 @@ class Ld_Installer
 
     public function move($path)
     {
-        Ld_Files::copy($this->getInstance()->getAbsolutePath(), $this->getSite()->getDirectory() . '/' . $path);
-        Ld_Files::unlink($this->getInstance()->getAbsolutePath());
+        Ld_Files::move($this->getInstance()->getAbsolutePath(), $this->getSite()->getDirectory() . '/' . $path);
 
         $this->getInstance()->setInfos(array('path' => $path));
 

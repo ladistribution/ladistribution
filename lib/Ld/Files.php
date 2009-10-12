@@ -122,6 +122,16 @@ class Ld_Files
         }
     }
 
+    public static function move($old, $new)
+    {
+        self::createDirIfNotExists($new);
+        $result = rename($old, $new);
+        if (!$result) {
+            self::copy($old, $new);
+            self::unlink($old);
+        }
+    }
+
     public static function getDirectories($dir, $exclude = array())
     {
         $result = self::scanDir($dir, $exclude);
