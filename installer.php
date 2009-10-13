@@ -16,7 +16,7 @@
 
 // Uncomment & modify this line if you want to target a specific release
 // instead of the default one (edge)
-// define('LD_RELEASE', 'barbes');
+// define('LD_RELEASE', 'concorde');
 
 // Uncomment & modify this line if you want the installer talk to antoher server
 // eg: 'http://localhost/ld/'
@@ -246,7 +246,7 @@ if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_REL
     // - should be simplified after Barbes 
     $packageId = "ld-locale-" . str_replace('_', '-', strtolower(LD_LOCALE));
     $packages = $site->getPackages();
-    if (isset($package[$packageId])) {
+    if (isset($packages[$packageId])) {
         if (!method_exists($site, 'isPackageInstalled') || !$site->isPackageInstalled($packageId)) {
             $site->createInstance($packageId);
         }
@@ -266,7 +266,7 @@ $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
     $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.2-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-42-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-42-3');
     $site->updateInstances($instances);
 }
 
@@ -324,7 +324,7 @@ if (constant('LD_REWRITE')) {
     }
 }
 
-out('Everything OK. <a href="' . $admin->getUrl() . '">Go admin</a>.');
+out('Everything OK. <a href="' . $admin->getUrl() . '">Go to admin</a>.');
 
 // Catch
 
