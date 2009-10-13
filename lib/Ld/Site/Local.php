@@ -91,6 +91,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if (defined('LD_REWRITE') && constant('LD_REWRITE') == false) {
                 $cfg .= "define('LD_REWRITE', false);\n";
             }
+            if (defined('LD_UNIX_PERMS')) {
+                $cfg .= "define('LD_UNIX_PERMS', '" . LD_UNIX_PERMS . "');\n";
+            }
             $cfg .= '$loader = dirname(__FILE__) . "/../lib/Ld/Loader.php";' . "\n";
             $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
             $cfg .= "Ld_Loader::loadSite(dirname(__FILE__) . '/..');\n";
