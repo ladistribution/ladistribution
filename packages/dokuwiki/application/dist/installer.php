@@ -26,19 +26,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
         $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 
-        // Rewrite Rules
-        if (constant('LD_REWRITE')) {
-            $htaccess  = "RewriteEngine on\n";
-            $htaccess .= "RewriteBase $path\n";
-            $htaccess .= "RewriteRule ^_media/(.*)              lib/exe/fetch.php?media=$1  [QSA,L]\n";
-            $htaccess .= "RewriteRule ^_detail/(.*)             lib/exe/detail.php?media=$1  [QSA,L]\n";
-            $htaccess .= "RewriteRule ^_export/([^/]+)/(.*)     doku.php?do=export_$1&id=$2  [QSA,L]\n";
-            $htaccess .= "RewriteRule ^$                        doku.php [L]\n";
-            $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-f\n";
-            $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-d\n";
-            $htaccess .= "RewriteRule (.*)                      doku.php?id=$1  [QSA,L]\n";
-            Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
-        }
+        $this->_buildHtaccess();
 
         // Configuration file
         $conf = $this->defaultConfiguration;
@@ -257,6 +245,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     public function postMove()
     {
         $this->_fixUrl();
+        $this->_buildHtaccess();
     }
 
     protected function _fixUrl()
@@ -264,6 +253,25 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         $conf = $this->getConfiguration();
         $conf['basedir'] = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
         $this->setConfiguration($conf);
+    }
+
+    protected function _buildHtaccess()
+    {
+        $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
+
+        // Rewrite Rules
+        if (constant('LD_REWRITE')) {
+            $htaccess  = "RewriteEngine on\n";
+            $htaccess .= "RewriteBase $path\n";
+            $htaccess .= "RewriteRule ^_media/(.*)              lib/exe/fetch.php?media=$1  [QSA,L]\n";
+            $htaccess .= "RewriteRule ^_detail/(.*)             lib/exe/detail.php?media=$1  [QSA,L]\n";
+            $htaccess .= "RewriteRule ^_export/([^/]+)/(.*)     doku.php?do=export_$1&id=$2  [QSA,L]\n";
+            $htaccess .= "RewriteRule ^$                        doku.php [L]\n";
+            $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-f\n";
+            $htaccess .= "RewriteCond %{REQUEST_FILENAME}       !-d\n";
+            $htaccess .= "RewriteRule (.*)                      doku.php?id=$1  [QSA,L]\n";
+            Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
+        }
     }
 
 }
