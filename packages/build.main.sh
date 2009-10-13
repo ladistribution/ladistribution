@@ -78,10 +78,6 @@ cd dokuwiki
 
   cd plugin
 
-    cd css
-    ./build.sh
-    cd ..
-
   cd ..
 
   cd theme

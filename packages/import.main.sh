@@ -29,7 +29,6 @@ $IMPORT wordpress-theme-simpla.zip
 $IMPORT wordpress-theme-whiteasmilk.zip
 
 $IMPORT dokuwiki.zip
-$IMPORT dokuwiki-plugin-css.zip
 $IMPORT dokuwiki-theme-monobook.zip
 
 $IMPORT bbpress.zip
