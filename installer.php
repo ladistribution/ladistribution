@@ -5,6 +5,9 @@
 // Uncomment this line if you want to turn debug infos on
 // define('LD_DEBUG', true);
 
+// Uncomment this line if you want to force Unix permissions
+// define('LD_UNIX_PERMS', 0777);
+
 // Uncomment this line if your web server isn't Apache or if mod_rewrite is not available
 // define('LD_REWRITE', false);
 
@@ -20,6 +23,8 @@
 // define('LD_SERVER', 'http://ladistribution.net/');
 
 // Default Configuration
+
+set_time_limit(300);
 
 date_default_timezone_set('UTC');
 
@@ -48,14 +53,25 @@ function install_if_not_exists_and_require($file, $source)
             die($msg);
         }
         file_put_contents($file, $content);
+        fix_perms($file);
     }
     require($file);
+}
+
+function fix_perms($target)
+{
+    if (defined('LD_UNIX_USER')) {
+        chown($target, LD_UNIX_USER);
+    }
+    if (defined('LD_UNIX_PERMS')) {
+        chmod($target, LD_UNIX_PERMS);
+    }
 }
 
 function is_requirable($lib)
 {
     $paths = explode(PATH_SEPARATOR, get_include_path());
-    foreach($paths as $path) {
+    foreach ($paths as $path) {
         if (@file_exists("$path/$lib")) {
             return true;
         }
@@ -102,7 +118,8 @@ foreach ($directories as $name => $directory) {
             $msg = "- Failure. Can't create folder $directory. Check your permissions.";
             die($msg);
         }
-        mkdir($directory, 0777, true);
+        mkdir($directory);
+        fix_perms($directory);
     }
 }
 
@@ -119,8 +136,14 @@ $essentials_directories = array(
 );
 
 foreach ($essentials_directories as $directory) {
+    $parent = dirname($directory);
+    if (!file_exists($parent)) {
+        mkdir($parent);
+        fix_perms($parent);
+    }
     if (!file_exists($directory)) {
-        mkdir($directory, 0777, true);
+        mkdir($directory);
+        fix_perms($directory);
     }
 }
 
@@ -138,10 +161,10 @@ foreach ($essentials as $file => $source) {
 out('Essentials OK');
 
 // Zend & Ld libraries
-    
+
 $base_libs = array();
 
-if (!is_requirable('Zend/Loader.php')) {
+if (!is_requirable('Zend/Loader/Autoloader.php')) {
     $base_libs['zend-framework'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-zend-framework/lib-zend-framework.zip';
 }
 
@@ -190,12 +213,16 @@ out('Init OK');
 
 // Upgrade repositories (if needed)
 
+$endpoints = array();
 $repositories = $site->getRepositoriesConfiguration();
 foreach ($repositories as $id => $repository) {
-    if (isset($repository['endpoint']) && strpos($repository['endpoint'], LD_SERVER . 'repositories/barbes') !== false) {
-        $repositories[$id]['endpoint'] = str_replace(
-            LD_SERVER . 'repositories/barbes', LD_SERVER . 'repositories/' . LD_RELEASE, $repository['endpoint']);
-        $repository_upgrade = true;
+    if (isset($repository['endpoint'])) {
+        if (strpos($repository['endpoint'], LD_SERVER . 'repositories/barbes') !== false) {
+            $repositories[$id]['endpoint'] = str_replace(
+                LD_SERVER . 'repositories/barbes', LD_SERVER . 'repositories/' . LD_RELEASE, $repository['endpoint']);
+            $repository_upgrade = true;
+        }
+        $endpoints[] = $repositories[$id]['endpoint'];
     }
 }
 if (isset($repository_upgrade)) {
@@ -205,12 +232,24 @@ if (isset($repository_upgrade)) {
 
 // Handle locales
 
-if (defined('LD_LOCALE')) {
+if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_RELEASE') != 'barbes') {
     Ld_Files::createDirIfNotExists($site->getDirectory('shared') . '/locales');
-    if (constant('LD_LOCALE') == 'fr_FR') {
-        $site->addRepository(array('type' => 'remote', 'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/fr', 'name' => ''));
-        $site->updateLocales(array('en_US','fr_FR'));
-        $site->createInstance('ld-locale-fr-fr');
+    $dir = $site->getDirectory('shared') . '/locales/ld/' . LD_LOCALE;
+    $repository = LD_SERVER . 'repositories/' . LD_RELEASE . '/' . substr(LD_LOCALE, 0, 2);
+    if (!in_array($repository, $endpoints)) {
+        $site->addRepository(array('type' => 'remote', 'endpoint' => $repository, 'name' => 'Fr Locales'));
+    }
+    // Set locales
+    // - should be replaced by updateLocales after Barbes
+    Ld_Files::putJson($site->getDirectory('dist') . '/locales.json', array('en_US', LD_LOCALE));
+    // Install main package
+    // - should be simplified after Barbes 
+    $packageId = "ld-locale-" . str_replace('_', '-', strtolower(LD_LOCALE));
+    $packages = $site->getPackages();
+    if (isset($package[$packageId])) {
+        if (!method_exists($site, 'isPackageInstalled') || !$site->isPackageInstalled($packageId)) {
+            $site->createInstance($packageId);
+        }
     }
     out('Locale OK');
 }
@@ -218,7 +257,7 @@ if (defined('LD_LOCALE')) {
 // Clean TMP
 foreach ($base_libs as $name => $source) {
     $targetDirectory = $directories['tmp'] . '/' . $name;
-    Ld_Files::unlink($targetDirectory); 
+    Ld_Files::unlink($targetDirectory);
 }
 
 // Instances registry
@@ -227,7 +266,7 @@ $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
     $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.2-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-39-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-42-1');
     $site->updateInstances($instances);
 }
 
@@ -248,6 +287,16 @@ if (empty($admin)) {
     out('Install Admin OK');
 } else {
     $site->updateInstance($admin);
+    // Localise admin
+    if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_RELEASE') != 'barbes') {
+        $packageId = "admin-locale-" . str_replace('_', '-', strtolower(LD_LOCALE));
+        // should be replaced by hasExtension after Barbes
+        try {
+            $admin->getExtension($packageId);
+        } catch (Exception $e) {
+            $admin->addExtension($packageId);
+        }
+    }
     out('Update Admin OK');
 }
 
