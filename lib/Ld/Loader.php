@@ -86,7 +86,7 @@ class Ld_Loader
             foreach ($locales as $locale) {
                 $adapter->addTranslation($site->getDirectory('shared') . "/locales/ld/$locale/default.mo", $locale);
             }
-            if (isset($_COOKIE['ld-lang'])) {
+            if (isset($_COOKIE['ld-lang']) && $adapter->isAvailable($_COOKIE['ld-lang'])) {
                 $adapter->setLocale($_COOKIE['ld-lang']);
             }
             Zend_Registry::set('Zend_Translate', $adapter);
