@@ -72,7 +72,7 @@ class Ld_Ui
         $router->addConfig($config);
 
         $baseUrl = self::getSite()->getPath();
-        if (self::getSite()->getConfig('root_admin') != 1) {
+        if (constant('LD_REWRITE') == false || self::getSite()->getConfig('root_admin') != 1) {
             $baseUrl .=  '/' . $admin->getPath();
         }
 

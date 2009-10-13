@@ -73,7 +73,7 @@ class Bootstrap
 
         $indexScript = $site->getDirectory() . '/index.php';
 
-        if ($site->getConfig('root_admin') == 1 && file_exists($indexScript)) {
+        if ($site->getConfig('root_admin') == 1 && constant('LD_REWRITE') == true && file_exists($indexScript)) {
             $baseUrl = $site->getPath();
             $path = str_replace($baseUrl, '', $_SERVER["REQUEST_URI"]);
             if ($path == '/admin/') {
