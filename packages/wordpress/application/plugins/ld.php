@@ -121,6 +121,19 @@ function ld_load_default_widgets($default = true)
 
 add_filter('load_default_widgets', 'ld_load_default_widgets');
 
+function eh_wp_dashboard_setup()
+{
+	global $wp_meta_boxes;
+
+	unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']);
+	unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_incoming_links']);
+
+	unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']);
+	unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']);
+}
+
+add_action('wp_dashboard_setup', 'eh_wp_dashboard_setup');
+
 function ld_option_home($value)
 {
 	if (defined('LD_ROOT_CONTEXT') && constant('LD_ROOT_CONTEXT')) {
@@ -156,3 +169,13 @@ add_filter('login_url', 'ld_loginurl');
 // }
 // 
 // add_filter('logout_url', 'ld_logouturl');
+
+function ld_locale($locale = '')
+{
+    if (empty($locale) || $locale == 'auto') {
+        return 'en_US';
+    }
+    return $locale;
+}
+
+add_filter('locale', 'ld_locale');

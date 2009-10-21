@@ -1,5 +1,5 @@
 NAME="codecolorer"
-VERSION="0.7.3"
+VERSION="0.9.5"
 SOURCE="http://svn.wp-plugins.org/$NAME/tags/$VERSION/"
 FOLDER="plugin"
 PACKAGE="wordpress-plugin-$NAME.zip"
@@ -10,8 +10,8 @@ rm -rf $FOLDER/lib
 # Apply Geshi patch
 patch -p0 -d $FOLDER < patches/geshi.diff
 # Remove locales
-rm -rf $FOLDER/codecolorer-ru_RU.mo
-rm -rf $FOLDER/codecolorer-ru_RU.po
+# rm -rf $FOLDER/codecolorer-ru_RU.mo
+# rm -rf $FOLDER/codecolorer-ru_RU.po
 # Create zip package
 zip -rqv $PACKAGE $FOLDER dist -x "*/.svn/*"
 mv $PACKAGE ../../../

@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="2.8.4"
+VERSION="2.8.5"
 SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
@@ -33,8 +33,6 @@ rm -rf themes/minimal/.git themes/minimal/Makefile
 
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php
-rm $FOLDER/wp-admin/import/btt.php
-rm $FOLDER/wp-admin/import/jkw.php
 rm $FOLDER/wp-admin/import/greymatter.php
 rm $FOLDER/wp-admin/import/stp.php
 rm $FOLDER/wp-admin/import/utw.php
