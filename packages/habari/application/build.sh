@@ -1,5 +1,5 @@
 NAME="habari"
-VERSION="0.6.2"
+VERSION="0.6.3"
 ZIP="$NAME-$VERSION.zip"
 SOURCE="http://dist.habariproject.org/$ZIP"
 FOLDER="application"
@@ -7,8 +7,8 @@ PACKAGE="$NAME.zip"
 
 # Get source
 curl $SOURCE > $ZIP
-unzip $ZIP
-mv "$NAME-$VERSION" $FOLDER
+unzip $ZIP -d $FOLDER
+# mv "$NAME-$VERSION" $FOLDER
 rm $ZIP
 
 # Remove some unwanted files (mac)
