@@ -34,7 +34,12 @@ class Ld_Cli
 
     public function dispatch()
     {
+        
         $method = $this->convertFromClientNaming($this->_action);
+
+        if (strtolower($method) == 'clone') {
+            $method = 'duplicate';
+        }
 
         if (method_exists($this, $method)) {
             $this->$method();
@@ -163,8 +168,10 @@ class Ld_Cli
 
     public function about()
     {
-        $this->_write("La Distribution CLI v0.2");
+        $this->getSite();
+        $this->_write("La Distribution '" . LD_RELEASE . "'");
         $this->_write("Copyright (c) 2009 h6e.net");
+        $this->_write("Licensed under the GPL and MIT licences.");
     }
 
     // Users
@@ -318,6 +325,19 @@ class Ld_Cli
             $result = $this->getSite()->deleteInstance($instance);
             $this->_write("Instance deleted.");
         }
+    }
+
+    public function duplicate()
+    {
+        if (empty($this->_args[1]) || !file_exists($this->_args[1])) {
+            throw new Exception("No or invalid filename passed as argument.");
+        }
+        $filename = $this->_args[1];
+
+        $preferences = array();
+        $preferences['path'] = $this->_prompt('Path');
+
+        $instance = $this->getSite()->cloneInstance($filename, $preferences);
     }
 
     // Repositories
