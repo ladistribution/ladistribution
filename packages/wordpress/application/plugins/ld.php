@@ -121,7 +121,7 @@ function ld_load_default_widgets($default = true)
 
 add_filter('load_default_widgets', 'ld_load_default_widgets');
 
-function eh_wp_dashboard_setup()
+function ld_wp_dashboard_setup()
 {
 	global $wp_meta_boxes;
 
@@ -132,7 +132,7 @@ function eh_wp_dashboard_setup()
 	unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']);
 }
 
-add_action('wp_dashboard_setup', 'eh_wp_dashboard_setup');
+add_action('wp_dashboard_setup', 'ld_wp_dashboard_setup');
 
 function ld_option_home($value)
 {
