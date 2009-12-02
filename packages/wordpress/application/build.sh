@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="2.8.5"
+VERSION="2.8.6"
 SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"

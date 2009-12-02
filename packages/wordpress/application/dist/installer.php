@@ -373,8 +373,8 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_version, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $wp_roles;
 			global $_wp_deprecated_widgets_callbacks;
-			require_once $this->absolutePath . "/../../../wp-load.php";
-			require_once $this->absolutePath . "/../../../wp-admin/includes/plugin.php";
+			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
+			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
 			$this->loaded = true;
 		}
 	}
