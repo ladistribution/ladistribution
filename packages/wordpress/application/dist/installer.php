@@ -108,16 +108,17 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		foreach ($wp_themes as $theme) {
 			$id = $theme['Stylesheet'];
 			$name = $theme['Name'];
+			$template = $theme['Template'];
 			$folder = 'wp-content' . $theme['Stylesheet Dir'];
 			$dir = $this->getAbsolutePath() . '/' . $folder;
 			$screenshot = $this->getSite()->getBaseUrl() .
 				$this->getPath() . '/' . $folder . '/' . $theme['Screenshot'];
 			$active = $current_theme == $theme['Name'];
-			$themes[$id] = compact('name', 'dir', 'screenshot', 'active');
+			$themes[$id] = compact('name', 'template', 'dir', 'screenshot', 'active');
 		}
 		return $themes;
 	}
-    
+
 	public function getBackupDirectories()
 	{
 		parent::getBackupDirectories();
@@ -145,7 +146,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	}
 
 	public function postMove()
-	{	
+	{
 		$this->load_wp();
 		$this->_fixUrl();
 	}
@@ -154,6 +155,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	{
 		global $wp_rewrite;
 		$wp_rewrite = $this->wp_rewrite;
+		remove_filter('clean_url', 'qtrans_convertURL');
 		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
 		update_option('home', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
 	}
@@ -181,17 +183,19 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			}
 		}
 	}
-	
-	public function setTheme($theme)
+
+	public function setTheme($stylesheet)
 	{
 		$this->load_wp();
-		switch_theme($theme, $theme);
+		$themes = $this->getThemes();
+		$theme = $themes[$stylesheet];
+		switch_theme($theme['template'], $stylesheet);
 	}
 
 	public function getPreferences($type)
 	{
 		$preferences = parent::getPreferences($type);
-		
+
 		if ($type != 'theme') {
 			$preferences[] = $this->_getLangPreference();
 		}
@@ -319,12 +323,15 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			// fix 'Wrong datatype for second argument in wp-includes/widgets.php on lines 607, 695'
 			global $_wp_deprecated_widgets_callbacks;
 
+			// for qTranslate plugin
+			global $q_config;
+
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
 			require_once $this->getAbsolutePath() . "/wp-includes/theme.php";
 
-			$this->wp_rewrite = $wp_rewrite;
+			$this->wp_rewrite = $GLOBALS['wp_rewrite'] = $wp_rewrite;
 			$this->wpdb = $wpdb;
 
 			$this->loaded = true;
@@ -373,6 +380,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_version, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $wp_roles;
 			global $_wp_deprecated_widgets_callbacks;
+			global $q_config;
 			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
 			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
 			$this->loaded = true;
@@ -383,6 +391,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 	{
 		parent::install($preferences);
 		$this->load_wp();
+		wp_cache_delete('plugins', 'plugins');
 		activate_plugin($this->plugin_file);
 	}
 
