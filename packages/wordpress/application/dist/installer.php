@@ -329,6 +329,9 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			// fix 'Wrong datatype for second argument in wp-includes/widgets.php on lines 607, 695'
 			global $_wp_deprecated_widgets_callbacks;
 
+			// call to a member function register_handler() on a non-object in wp-includes/media.php
+			global $wp_embed;
+
 			// for qTranslate plugin
 			global $q_config;
 
@@ -386,6 +389,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_version, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $wp_roles;
 			global $_wp_deprecated_widgets_callbacks;
+			global $wp_embed;
 			global $q_config;
 			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
 			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
