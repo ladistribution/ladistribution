@@ -74,8 +74,14 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	function postUpdate()
 	{
-		// this is not possible to do that here, due to multiple instances update
-		// $this->load_wp();
+		$this->httpClient = new Zend_Http_Client();
+		$this->httpClient->setCookieJar();
+		$this->httpClient->setUri($this->instance->getUrl() . 'wp-admin/upgrade.php?step=1');
+
+		$response = $this->httpClient->request('GET');
+		if (constant('LD_DEBUG')) {
+			echo $response->getBody();
+		}
 	}
 
 	function create_config_file()
