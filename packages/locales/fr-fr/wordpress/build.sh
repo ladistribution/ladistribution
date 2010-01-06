@@ -1,6 +1,6 @@
 NAME="wordpress"
 LOCALE="fr_FR"
-VERSION="2.8.4"
+VERSION="2.9.1"
 SOURCE="http://svn.automattic.com/wordpress-i18n/$LOCALE/tags/$VERSION/"
 PACKAGE="$NAME-locale-fr-fr.zip"
 
