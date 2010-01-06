@@ -1,6 +1,6 @@
 NAME="wordpress"
 VERSION="2.9.1"
-SOURCE="http://svn.automattic.com/$NAME/branches/$VERSION/"
+SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
