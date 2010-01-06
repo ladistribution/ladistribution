@@ -1,6 +1,6 @@
 NAME="wordpress"
 VERSION="2.9.1"
-SOURCE="http://svn.automattic.com/$NAME/branches/2.9/"
+SOURCE="http://svn.automattic.com/$NAME/branches/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
@@ -40,7 +40,7 @@ rm $FOLDER/wp-admin/import/wp-cat2tag.php
 
 # Apply patches
 patch -p0 -d $FOLDER < patches/unserialize-import.diff
-# patch -p0 -d $FOLDER < patches/menu-header.diff
+patch -p0 -d $FOLDER < patches/menu-header.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete

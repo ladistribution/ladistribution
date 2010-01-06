@@ -1,0 +1,10 @@
+<package>
+  <id>wordpress-plugin-qtranslate</id>
+  <name>qTranslate</name>
+  <version>2.5-54-3</version>
+  <type>plugin</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/plugins/qtranslate</directory>
+  <installer name="Ld_Installer_Wordpress_Plugin_Qtranslate" />
+</package>
+

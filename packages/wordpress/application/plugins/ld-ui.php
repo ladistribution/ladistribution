@@ -4,7 +4,7 @@ Plugin Name: LD ui
 Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
 Version: 0.2-24-1
-Author: h6e
+Author: h6e.net
 Author URI: http://h6e.net/
 */
 

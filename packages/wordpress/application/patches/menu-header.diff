@@ -1,0 +1,13 @@
+Index: wp-admin/menu-header.php
+===================================================================
+--- wp-admin/menu-header.php	(revision 12337)
++++ wp-admin/menu-header.php	(working copy)
+@@ -45,6 +45,8 @@
+ 		if ( !empty($submenu[$item[2]]) )
+ 			$class[] = 'wp-has-submenu';
+ 
++		do_action('wp_menu_output');
++
+ 		if ( ( $parent_file && $item[2] == $parent_file ) || strcmp($self, $item[2]) == 0 ) {
+ 			if ( !empty($submenu[$item[2]]) )
+ 				$class[] = 'wp-has-current-submenu wp-menu-open';

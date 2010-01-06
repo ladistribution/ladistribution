@@ -1,5 +1,5 @@
 NAME="codecolorer"
-VERSION="0.9.5"
+VERSION="0.9.7"
 SOURCE="http://svn.wp-plugins.org/$NAME/tags/$VERSION/"
 FOLDER="plugin"
 PACKAGE="wordpress-plugin-$NAME.zip"

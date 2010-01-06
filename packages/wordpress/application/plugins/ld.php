@@ -3,8 +3,8 @@
 Plugin Name: LD package
 Plugin URI: http://h6e.net/wordpress/plugins/ld-package
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.2-26-1
-Author: h6e
+Version: 0.3-50-5
+Author: h6e.net
 Author URI: http://h6e.net/
 */
 
@@ -76,11 +76,13 @@ function ld_disable_version_check()
 
 add_action('plugins_loaded', 'ld_disable_version_check');
 
-function ld_disable_menus()
+function ld_admin_menu()
 {
 	global $menu, $submenu;
 
 	$disable_menus = array('plugins.php', 'users.php');
+	$disable_menus = apply_filters('ld_disable_menus', $disable_menus);
+
 	foreach ($menu as $key => $item) {
 		$script = $item[2];
 		if (!empty($disable_menus) && in_array($script, $disable_menus)) {
@@ -94,6 +96,8 @@ function ld_disable_menus()
 		'update-core.php',
 		'options-misc.php'
 	);
+	$disable_submenus = apply_filters('ld_disable_submenus', $disable_submenus);
+
 	foreach ($submenu as $key => $sub) {
 		foreach ($sub as $num => $item) {
 			$script = $item[2];
@@ -104,7 +108,7 @@ function ld_disable_menus()
 	}
 }
 
-add_action('admin_menu', 'ld_disable_menus');
+add_action('admin_menu', 'ld_admin_menu', '20');
 
 /**
  * Don't load default widgets when interacting from Ld Installer.
@@ -147,10 +151,12 @@ add_filter('option_home', 'ld_option_home');
 
 function ld_loginurl($login_url = '', $redirect = '')
 {
-	$ld_login_url = Ld_Ui::getAdminUrl(array(
-		'module' => 'default', 'controller' => 'auth', 'action' => 'login',
-		'referer' => empty($redirect) ? null : urlencode($redirect)
-	));
+	if (class_exists('Ld_Ui')) {
+		$ld_login_url = Ld_Ui::getAdminUrl(array(
+			'module' => 'default', 'controller' => 'auth', 'action' => 'login',
+			'referer' => empty($redirect) ? null : urlencode($redirect)
+		));
+	}
 	if ($ld_login_url) {
 	    return $ld_login_url;
 	}

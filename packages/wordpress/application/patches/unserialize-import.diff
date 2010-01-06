@@ -1,0 +1,12 @@
+Index: wp-admin/import/wordpress.php
+===================================================================
+--- wp-admin/import/wordpress.php	(revision 12320)
++++ wp-admin/import/wordpress.php	(working copy)
+@@ -599,6 +599,7 @@
+ 			$key   = $this->get_tag( $p, 'wp:meta_key' );
+ 			$value = $this->get_tag( $p, 'wp:meta_value' );
+ 			$value = stripslashes($value); // add_post_meta() will escape.
++			$value = maybe_unserialize($value);
+ 
+ 			$this->process_post_meta($post_id, $key, $value);
+ 
