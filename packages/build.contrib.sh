@@ -46,6 +46,10 @@ cd wordpress
     ./build.sh
     cd ..
 
+    cd qtranslate
+    ./build.sh
+    cd ..
+
   cd ..
 
 cd ..
