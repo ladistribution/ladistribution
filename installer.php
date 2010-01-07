@@ -265,8 +265,8 @@ foreach ($base_libs as $name => $source) {
 $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
-    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.2-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-42-3');
+    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.6-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-54-4');
     $site->updateInstances($instances);
 }
 
@@ -298,30 +298,6 @@ if (empty($admin)) {
         }
     }
     out('Update Admin OK');
-}
-
-// Base Index
-
-$root_index = $root . '/index.php';
-if (!file_exists($root_index)) {
-    $index  = '<?php' . "\n";
-    $index .= "define('LD_ROOT_CONTEXT', true);\n";
-    $index .= "require_once('admin/dispatch.php');\n";
-    Ld_Files::put($root_index, $index);
-}
-
-// Base .htaccess
-if (constant('LD_REWRITE')) {
-    $root_htaccess = $root . '/.htaccess';
-    if (!file_exists($root_htaccess)) {
-        $path = $site->getPath() . '/';
-        $htaccess  = "RewriteEngine on\n";
-        $htaccess .= "RewriteBase $path\n";
-        $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
-        $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-        $htaccess .= "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php\n";
-        Ld_Files::put($root_htaccess, $htaccess);
-    }
 }
 
 out('Everything OK. <a href="' . $admin->getUrl() . '">Go to admin</a>.');

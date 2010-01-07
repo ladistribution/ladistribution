@@ -47,7 +47,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
             'shared' => 'shared',
             'lib'    => 'lib',
             'dist'   => 'dist',
-            'tmp'    => 'tmp'
+            'tmp'    => 'tmp',
+            'cache'  => 'tmp/cache'
         );
     }
 
@@ -56,6 +57,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $this->_checkDirectories();
         $this->_checkConfig();
         $this->_checkRepositories();
+        $this->_checkRoot();
     }
 
     protected function _checkDirectories()
@@ -122,6 +124,33 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/main')
             );
             Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
+        }
+    }
+
+    protected function _checkRoot()
+    {
+        // Base Index
+        $root_index = $this->getDirectory() . '/index.php';
+        if (!file_exists($root_index)) {
+            $index  = '<?php' . "\n";
+            $index .= "define('LD_ROOT_CONTEXT', true);\n";
+            $index .= "if (file_exists('admin/dispatch.php')) require_once('admin/dispatch.php');\n";
+            $index .= "else echo 'La Distribution Admin component not installed.';";
+            Ld_Files::put($root_index, $index);
+        }
+
+        // Base .htaccess
+        if (constant('LD_REWRITE')) {
+            $root_htaccess = $this->getDirectory() . '/.htaccess';
+            if (!file_exists($root_htaccess)) {
+                $path = $this->getPath() . '/';
+                $htaccess  = "RewriteEngine on\n";
+                $htaccess .= "RewriteBase $path\n";
+                $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
+                $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
+                $htaccess .= "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php\n";
+                Ld_Files::put($root_htaccess, $htaccess);
+            }
         }
     }
 
@@ -455,7 +484,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (isset($instance)) {
             return $instance;
         }
-        
+
         // we should return an object for libraries too ...
     }
 
@@ -570,7 +599,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
             $preferences[] = $preference;
         }
-        
+
         // Prefs
         $prefs = $package->getInstallPreferences();
         foreach ($prefs as $pref) {
@@ -797,7 +826,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function saveRepositoriesConfiguration($cfg)
     {
         uasort($cfg, array($this, "_sortByOrder"));
-        Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);  
+        Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
     }
 
     protected function _getRepository($config)
@@ -861,7 +890,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
         return $packages;
     }
-    
+
     // Legacy
 
     public function getBasePath() { return $this->getPath(); }
