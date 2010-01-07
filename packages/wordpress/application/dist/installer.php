@@ -115,7 +115,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			$id = $theme['Stylesheet'];
 			$name = $theme['Name'];
 			$template = $theme['Template'];
-			$folder = 'wp-content' . $theme['Stylesheet Dir'];
+			$folder = 'wp-content/themes/' . $theme['Stylesheet'];
 			$dir = $this->getAbsolutePath() . '/' . $folder;
 			$screenshot = $this->getSite()->getBaseUrl() .
 				$this->getPath() . '/' . $folder . '/' . $theme['Screenshot'];
