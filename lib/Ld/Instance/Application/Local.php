@@ -7,7 +7,7 @@
  * @package    Ld_Instance
  * @subpackage Ld_Instance_Application
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -34,16 +34,16 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         if (empty($this->infos)) {
 
-            if (!file_exists($this->getAbsolutePath())) {
+            if (!Ld_Files::exists($this->getAbsolutePath())) {
                 throw new Exception("no application found in path $this->absolutePath");
             }
 
-            if (!file_exists($this->getInstanceJson())) {
+            if (!Ld_Files::exists($this->getInstanceJson())) {
                 throw new Exception("instance.json not found in path $this->absolutePath");
             }
 
-            $json = file_get_contents($this->getInstanceJson());
-            $this->setInfos(Zend_json::decode($json));
+            $json = Ld_Files::getJson($this->getInstanceJson());
+            $this->setInfos($json);
 
             if (empty($this->infos['path'])) {
                 throw new Exception('Path empty. Is it an application?');
@@ -56,6 +56,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function save()
     {
+        unset($this->extensions); // empty so that it yill be refreshed next time
         Ld_Files::putJson($this->getInstanceJson(), $this->infos);
     }
 
@@ -284,7 +285,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function addExtension($extension, $preferences = array())
     {
-        if (!$this->getSite()->hasPackage($extension)) {
+        if (!$this->getSite()->hasPackage($extension) || $this->hasExtension($extension)) {
             return null;
         }
 
@@ -430,7 +431,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     public function deleteBackup($backup)
     {
         $filename = $this->getBackupsPath() . '/' . $backup;
-        if (file_exists($filename)) {
+        if (Ld_Files::exists($filename)) {
             Ld_Files::unlink($filename);
         }
     }

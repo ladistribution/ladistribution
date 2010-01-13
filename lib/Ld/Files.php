@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Files
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -77,7 +77,7 @@ class Ld_Files
             self::log('copy', "$source -> $target");
         }
 
-        if (!file_exists($source)) {
+        if (!self::exists($source)) {
             self::log('skipped', "$source (not existing)");
             return false;
         }
@@ -90,7 +90,7 @@ class Ld_Files
             self::createDirIfNotExists($target);
 
             if (!is_writable($target)) {
-                if (file_exists($target)) {
+                if (self::exists($target)) {
                     self::log('skipped', "$target (not writable)");
                 } else {
                     if (constant('LD_DEBUG')) {
@@ -108,7 +108,7 @@ class Ld_Files
 
             foreach (self::getFiles($source) as $file) {
                 $destination = $target . '/' . $file;
-                if (file_exists($destination) && !is_writable($destination)) {
+                if (self::exists($destination) && !is_writable($destination)) {
                     self::log('skipped', "$destination (not writable)");
                     continue;
                 }
@@ -151,7 +151,7 @@ class Ld_Files
         $files = array();
         $directories = array();
 
-        if (file_exists($dir) && $dh = opendir($dir)) {
+        if (self::exists($dir) && $dh = opendir($dir)) {
             while (false !== ($obj = readdir($dh))) {
                 if (in_array($obj, $exclude)) {
                     continue;
@@ -196,7 +196,7 @@ class Ld_Files
     {
         $paths = explode(PATH_SEPARATOR, get_include_path());
         foreach ($paths as $path) {
-            if (@file_exists("$path/$file")) {
+            if (@self::exists("$path/$file")) {
                 return true;
             }
         }
@@ -205,7 +205,8 @@ class Ld_Files
 
     public static function createDirIfNotExists($dir)
     {
-        if (!file_exists($dir)) {
+        if (!self::exists($dir)) {
+            self::log('mkdir', $dir);
             mkdir($dir, 0777, true);
             self::updatePermissions($dir);
         }
@@ -213,7 +214,7 @@ class Ld_Files
 
     public static function put($file, $content)
     {
-        if (file_exists($file) && !is_writable($file)) {
+        if (self::exists($file) && !is_writable($file)) {
             throw new Exception("Can't write $file.");
         }
         file_put_contents($file, $content);
@@ -227,7 +228,7 @@ class Ld_Files
 
     public static function get($file)
     {
-        if (file_exists($file)) {
+        if (self::exists($file)) {
             return file_get_contents($file);
         }
         return null;
@@ -258,7 +259,7 @@ class Ld_Files
         $ignore = array_merge(array('dist'), $ignore);
         foreach (self::getDirectories($root, $ignore) as $directory) {
             $dist = $root . '/' . $directory . '/dist';
-            if (file_exists($dist)) {
+            if (self::exists($dist)) {
                 $instance = self::getJson($dist . '/instance.json');
                 if (!empty($instance)) {
                     $instances[] = $instance;
@@ -287,6 +288,23 @@ class Ld_Files
                 Ld_Files::unlink(LD_TMP_DIR . '/' . $dir);
             }
         }
+    }
+
+    public static function upload()
+    {
+        $dir = LD_TMP_DIR . '/uploads';
+        Ld_Files::createDirIfNotExists($dir);
+
+        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter->setDestination($dir);
+        $result = $adapter->receive();
+
+        return $adapter->getFileName($filename);
+    }
+
+    public static function exists($filename)
+    {
+        return file_exists($filename);
     }
 
     public static function log($action, $message)

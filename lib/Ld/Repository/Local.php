@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Repository
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -158,8 +158,22 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         Ld_Files::createDirIfNotExists($dir);
     }
 
-    public function deletePackage($name)
+    public function deletePackage($packageId)
     {
+        foreach ($this->getPackages() as $id => $package) {
+            $dir = $this->getDirectory($package);
+            if ($packageId == $id) {
+                if ($package->getType() == 'application') {
+                    foreach (Ld_Files::getFiles($dir) as $file) {
+                        Ld_Files::unlink($dir . '/' . $file);
+                    }
+                } else {
+                    Ld_Files::unlink($dir);
+                }
+                $this->generatePackageList();
+                return;
+            }
+        }
     }
 
     public function updatePackage($name, $params)
@@ -220,7 +234,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         Ld_Files::putJson($this->dir . '/packages.json', $packages);
 
         // Generate HTML Index
-        if (!file_exists($this->dir . '/index.html')) {
+        if (!Ld_Files::exists($this->dir . '/index.html')) {
             Ld_Files::put($this->dir . '/index.html', 'This is a <a href="http://ladistribution.net/">La Distribution</a> repository.');
         }
     }

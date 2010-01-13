@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Package
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -77,15 +77,8 @@ class Ld_Package
         }
 
         $filename = LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '.zip';
-        if (!file_exists($filename)) {
-            $httpClient = new Zend_Http_Client($this->url);
-            $response = $httpClient->request();
-            if ($response->isError()) {
-                $message = 'HTTP Error with ' . $this->url . ' - ' . $response->getStatus() . ' : ' . $response->getMessage();
-                throw new Exception($message);
-            }
-            $zip = $response->getBody();
-            Ld_Files::put($filename, $zip);
+        if (!Ld_Files::exists($filename)) {
+            Ld_Http::download($this->url, $filename);
         }
         return $filename;
     }
@@ -98,7 +91,7 @@ class Ld_Package
     public function fetchFiles()
     {
         $dir = $this->getTmpDir();
-        if (!file_exists($dir)) {
+        if (!Ld_Files::exists($dir)) {
             Ld_Files::purgeTmpDir();
             Ld_Files::createDirIfNotExists($dir);
             $archive = $this->getArchive();
@@ -123,7 +116,7 @@ class Ld_Package
             $dir = $this->fetchFiles();
             $classFile = $dir . 'dist/installer.php';
             $className = $this->getManifest()->getClassName();
-            if (!file_exists($classFile)) {
+            if (!Ld_Files::exists($classFile)) {
                 $className = 'Ld_Installer';
             } else {
                 if (!class_exists($className, false)) {
