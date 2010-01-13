@@ -4,17 +4,23 @@
 
     <table>
         <tr>
-            <td><label><?php echo $this->translate('Backup (zip file please)') ?></label></td>
-            <td><input type="file" name="file"/></td>
+            <td rowspan="3"><label><?php echo $this->translate('Backup (zip file please)') ?></label></td>
+            <td><label><?php echo $this->translate('Local (file)') ?></label></td>
+            <td><input type="file" name="file"/><br/></td>
+        </tr>
+        <tr><td>or</td></tr>
+        <tr>
+            <td><label><?php echo $this->translate('Remote (URL)') ?></label></td>
+            <td><input class="text" size="25" type="text" name="url"/></td>
         </tr>
         <tr>
-            <td><label><?php echo $this->translate('Path') ?></label></td>
+            <td colspan="2"><label><?php echo $this->translate('Path') ?></label></td>
             <td><input class="text" size="25" type="text" name="preferences[path]" value="clone" /></td>
         </tr>
     </table>
 
     <p>
-        <input name="upload" class="submit" type="submit" value="<?php echo $this->translate('Upload & clone') ?>"/>
+        <input name="upload" class="submit" type="submit" value="<?php echo $this->translate('Clone') ?>"/>
     </p>
 
 </form>

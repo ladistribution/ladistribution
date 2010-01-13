@@ -10,7 +10,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
 
     /**
      * Init.
-     */    
+     */
     public function init()
     {
         parent::init();
@@ -69,7 +69,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
     }
 
     /**
-     * Order action. 
+     * Order action.
      */
     public function orderAction()
     {
@@ -136,28 +136,35 @@ class Slotter_RepositoriesController extends Slotter_BaseController
         }
 
         if ($this->_hasParam('upload')) {
-
-            $dir = LD_TMP_DIR . '/uploads';
-            Ld_Files::createDirIfNotExists($dir);
-
-            $adapter = new Zend_File_Transfer_Adapter_Http();
-            $adapter->setDestination($dir);
-            $result = $adapter->receive();
-
-            $this->repository->importPackage( $adapter->getFileName() );
+            $filename = Ld_Files::upload();
+            $this->repository->importPackage($filename);
         }
 
-        if ($this->_hasParam('package')) {
-
-            $type = $this->_getParam('type', 'application');
-            $package = $this->_getParam('package');
-
-            $this->view->package = $package;
-            $this->view->releases = $this->repository->getReleases($package, $type);
-            $this->view->extensions = $this->repository->getPackageExtensions($package);
-
-            $this->render('package');
+        if ($this->_hasParam('delete')) {
+            $this->view->packageId = $packageId = $this->_getParam('delete');
+            if ($this->getRequest()->isGet()) {
+                $this->render('delete-package');
+                return;
+            }
+            if ($this->getRequest()->isPost()) {
+                $this->repository->deletePackage($packageId);
+                $this->_redirector->gotoSimpleAndExit('manage', null, null, array('id' => $this->repository->id));
+            }
         }
+
+        // if ($this->_hasParam('package')) {
+        //
+        //     $type = $this->_getParam('type', 'application');
+        //     $package = $this->_getParam('package');
+        //
+        //     $this->view->package = $package;
+        //     $this->view->releases = $this->repository->getReleases($package, $type);
+        //     $this->view->extensions = $this->repository->getPackageExtensions($package);
+        //
+        //     $this->render('package');
+        // }
+
+        $this->view->repository = $this->repository;
 
         $this->view->applications = $this->repository->getApplications();
         $this->view->extensions = $this->repository->getExtensions();

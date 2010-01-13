@@ -47,9 +47,7 @@ class Slotter_LocalesController extends Slotter_BaseController
                     $instance = $this->getSite()->getInstance($id);
                     if (isset($instance)) {
                         $packageId = $instance->getPackageId() . '-locale-' . $locale ;
-                        if (!$instance->hasExtension($packageId) && $this->getSite()->hasPackage($packageId)) {
-                            $instance->addExtension($packageId);
-                        }
+                        $instance->addExtension($packageId);
                     }
                 }
 

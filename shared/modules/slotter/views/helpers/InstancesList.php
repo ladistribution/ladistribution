@@ -5,6 +5,15 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
     public function instancesList($all = true)
     {
+        if (empty($this->view->applications)) {
+            $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances(array('admin'));
+        }
+
+        if ($all && empty($this->view->applications) && $this->view->userRole != 'admin') {
+            echo '<p>' . $this->translate("No application installed yet.") . '</p>';
+            return;
+        }
+
         ?>
 
         <div class="ld-instance-list">
@@ -17,10 +26,6 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
         <?php
 
         $instance = $this->view->instance;
-
-        if (empty($this->view->applications)) {
-            $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances(array('admin'));
-        }
 
         foreach ($this->view->applications as $id => $application) {
 

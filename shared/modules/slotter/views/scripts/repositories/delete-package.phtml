@@ -1,0 +1,10 @@
+<h2><?php echo $this->translate("Delete a package") ?></h2>
+
+<p><?php echo sprintf($this->translate("Are you sure you want to delete '%s' package from this repository?"), $this->packageId) ?></p>
+
+<form method="post" action="">
+
+    <input type="hidden" name="id" value="<?php echo $this->escape($this->packageId) ?>"/>
+    <input type="submit" class="submit button" value="<?php echo $this->translate("Delete") ?>"/>
+
+</form>

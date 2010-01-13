@@ -225,7 +225,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
       $this->view->themes = $this->instance->getThemes();
   }
-  
+
   /**
    * Backup action.
    */
@@ -239,14 +239,20 @@ class Slotter_InstanceController extends Slotter_BaseController
           return $this->_redirectToAction('backups');
       }
 
+
       // Download
       if ($this->_hasParam('download')) {
           $backup = $this->_getParam('download');
           foreach ($availableBackups as $backup) {
               if ($backup['filename'] == $this->_getParam('download')) {
+                  ob_end_clean();
                   header('Content-Type: application/zip');
                   header('Content-Disposition: attachment; filename="' . $backup['filename'] . '"');
-                  echo Ld_Files::get($backup['absoluteFilename']);
+                  $handle = fopen($backup['absoluteFilename'], "rb");
+                  while ( ($buffer = fread($handle, 8192)) != '' ) {
+                      echo $buffer;
+                  }
+                  fclose($handle);
                   exit;
               }
           }
@@ -266,14 +272,14 @@ class Slotter_InstanceController extends Slotter_BaseController
       }
 
       // Upload
-      if ($this->_hasParam('upload')) {
-          $dir = $this->instance->getAbsolutePath() . '/backups/';
-          Ld_Files::createDirIfNotExists($dir);
-          $adapter = new Zend_File_Transfer_Adapter_Http();
-          $adapter->setDestination($dir);
-          $result = $adapter->receive();
-          return $this->_redirectToAction('backups');
-      }
+      // if ($this->_hasParam('upload')) {
+      //     $dir = $this->instance->getAbsolutePath() . '/backups/';
+      //     Ld_Files::createDirIfNotExists($dir);
+      //     $adapter = new Zend_File_Transfer_Adapter_Http();
+      //     $adapter->setDestination($dir);
+      //     $result = $adapter->receive();
+      //     return $this->_redirectToAction('backups');
+      // }
 
       $this->view->backups = $availableBackups;
   }
@@ -316,20 +322,21 @@ class Slotter_InstanceController extends Slotter_BaseController
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('upload')) {
 
-            $dir = LD_TMP_DIR . '/uploads';
-            Ld_Files::createDirIfNotExists($dir);
+            $url = $this->_getParam('url');
 
-            $adapter = new Zend_File_Transfer_Adapter_Http();
-            $adapter->setDestination($dir);
-            $result = $adapter->receive();
+            if (!empty($url)) {
+                $filename = LD_TMP_DIR . '/backup-' . date("d-m-Y-H-i-s") . '.zip';
+                Ld_Http::download($url, $filename);
+            } else {
+                $filename = Ld_Files::upload();
+            }
 
             $preferences = $this->_getParam('preferences');
             $preferences['path'] = Ld_Files::cleanpath($preferences['path']);
 
-            $instance = $this->site->cloneInstance($adapter->getFileName(), $preferences);
+            $instance = $this->site->cloneInstance($filename, $preferences);
 
             $this->_redirectToAction('status', $instance->id);
-
         }
     }
 
