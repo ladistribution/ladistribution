@@ -150,6 +150,8 @@ function get_userdatabylogin( $user_login )
 			$wp_user = new WP_User($user_id);
 			$wp_user->set_role(get_option('default_role'));
 
+			update_usermeta( $user_id, 'rich_editing', 'true');
+
 			return get_userdata($user_id);
 		}
 
