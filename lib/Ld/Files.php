@@ -130,6 +130,9 @@ class Ld_Files
             self::copy($old, $new);
             self::unlink($old);
         }
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
+        }
     }
 
     public static function getDirectories($dir, $exclude = array())
@@ -299,7 +302,7 @@ class Ld_Files
         $adapter->setDestination($dir);
         $result = $adapter->receive();
 
-        return $adapter->getFileName($filename);
+        return $adapter->getFileName();
     }
 
     public static function exists($filename)

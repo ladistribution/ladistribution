@@ -22,6 +22,9 @@
 // eg: 'http://localhost/ld/'
 // define('LD_SERVER', 'http://ladistribution.net/');
 
+// Uncomment & modify this line in case of php memory issues
+// ini_set("memory_limit", "32M");
+
 // Default Configuration
 
 set_time_limit(300);
@@ -265,8 +268,8 @@ foreach ($base_libs as $name => $source) {
 $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
-    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.6-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-54-4');
+    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.7-1');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-55-4');
     $site->updateInstances($instances);
 }
 
