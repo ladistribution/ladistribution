@@ -136,7 +136,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
         }
 
         if ($this->_hasParam('upload')) {
-            $filename = Ld_Files::upload();
+            $filename = Ld_Http::upload();
             $this->repository->importPackage($filename);
         }
 

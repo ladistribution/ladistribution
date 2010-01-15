@@ -328,7 +328,7 @@ class Slotter_InstanceController extends Slotter_BaseController
                 $filename = LD_TMP_DIR . '/backup-' . date("d-m-Y-H-i-s") . '.zip';
                 Ld_Http::download($url, $filename);
             } else {
-                $filename = Ld_Files::upload();
+                $filename = Ld_Http::upload();
             }
 
             $preferences = $this->_getParam('preferences');

@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Manifest
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -24,10 +24,10 @@ class Ld_Manifest
     public static function loadFromDirectory($dir)
     {
         $filename = $dir . '/dist/manifest.xml';
-        if (!file_exists($filename)) {
+        if (!Ld_Files::exists($filename)) {
             $filename = $dir . '/manifest.xml'; // alternate name
         }
-        if (file_exists($filename)) {
+        if (Ld_Files::exists($filename)) {
             return self::parse($filename);
         } else {
             throw new Exception("manifest.xml doesn't exists or is unreadable in $dir");
@@ -37,13 +37,9 @@ class Ld_Manifest
     public static function loadFromZip($zip)
     {
         $tmpFolder = LD_TMP_DIR . '/package-' . date("d-m-Y-H-i-s");
-        $uz = new fileUnzip($zip);
-        $uz->unzipAll($tmpFolder);
-
+        Ld_Zip::extract($zip, $tmpFolder);
         $manifest = self::loadFromDirectory($tmpFolder);
-
         Ld_Files::unlink($tmpFolder);
-
         return $manifest;
     }
 

@@ -25,7 +25,7 @@ class Ld_Package
     public $extend = null;
 
     public $url = null;
-    
+
     protected $absoluteFilename = null;
 
     protected $_manifest = null;
@@ -95,8 +95,7 @@ class Ld_Package
             Ld_Files::purgeTmpDir();
             Ld_Files::createDirIfNotExists($dir);
             $archive = $this->getArchive();
-            $uz = new fileUnzip($archive);
-            $uz->unzipAll($dir);
+            Ld_Zip::extract($archive, $dir);
         }
         return $dir;
     }

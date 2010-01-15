@@ -149,7 +149,7 @@ class Ld_Files
 
     public static function scanDir($dir, $exclude = array())
     {
-        $exclude = array_merge(array('.', '..', '.svn'), (array)$exclude);
+        $exclude = array_merge(array('.', '..', '.svn', '.DS_Store'), (array)$exclude);
 
         $files = array();
         $directories = array();
@@ -187,14 +187,14 @@ class Ld_Files
         }
         return ($path{0}=='/'?'/':'').join('/', $out);
     }
-    
+
     public static function cleanpath($path)
     {
         $path = trim($path, " /\t\n\r");
         $path = self::realpath( $path );
         return $path;
     }
-    
+
     public static function is_requirable($file)
     {
         $paths = explode(PATH_SEPARATOR, get_include_path());
@@ -209,7 +209,7 @@ class Ld_Files
     public static function createDirIfNotExists($dir)
     {
         if (!self::exists($dir)) {
-            self::log('mkdir', $dir);
+            // self::log('mkdir', $dir);
             mkdir($dir, 0777, true);
             self::updatePermissions($dir);
         }
@@ -293,21 +293,17 @@ class Ld_Files
         }
     }
 
-    public static function upload()
-    {
-        $dir = LD_TMP_DIR . '/uploads';
-        Ld_Files::createDirIfNotExists($dir);
-
-        $adapter = new Zend_File_Transfer_Adapter_Http();
-        $adapter->setDestination($dir);
-        $result = $adapter->receive();
-
-        return $adapter->getFileName();
-    }
-
     public static function exists($filename)
     {
         return file_exists($filename);
+    }
+
+    public static function real($path)
+    {
+        if (self::exists($path)) {
+            return realpath($path);
+        }
+        return $path;
     }
 
     public static function log($action, $message)
@@ -321,5 +317,9 @@ class Ld_Files
             }
         }
     }
+
+    public static function upload() { return Ld_Http::upload(); }
+    public static function download($url, $filename) { return Ld_Http::download($url, $filename); }
+    public static function unzip($archive, $destination) { return Ld_Zip::extract($archive, $destination); }
 
 }

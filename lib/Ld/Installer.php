@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Installer
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -218,7 +218,7 @@ class Ld_Installer
         // The same code with an absolute path
         // $cfg_ld .= "require_once('" . realpath($this->getSite()->getDirectory('dist')) . "/site.php');\n";
 
-        Ld_Files::put($this->getAbsolutePath() . "/dist/config.php", $cfg_ld); 
+        Ld_Files::put($this->getAbsolutePath() . "/dist/config.php", $cfg_ld);
     }
 
     public function update()
@@ -263,7 +263,7 @@ class Ld_Installer
         if ($this->getManifest()->getDb() && $dbConnection = $this->getInstance()->getDbConnection('php')) {
 
             Ld_Files::createDirIfNotExists($this->getBackupFolder() . '/tables');
-            
+
             // Generate SQL schema
             $fp = fopen($this->getBackupFolder() . "/tables/schema.sql", "w");
             foreach ($this->getInstance()->getDbTables() as $tablename) {
@@ -333,15 +333,7 @@ class Ld_Installer
 
         $filename = /* 'backup-' . */ $this->getId() . '-' . $this->getInstance()->getId() . '-' . date("Y-m-d-H-i-s") . '.zip';
 
-        $fp = fopen($backupsPath . '/' . $filename, 'wb');
-        $zip = new fileZip($fp);
-        foreach ($directories as $name => $directory) {
-            if (file_exists($directory)) {
-                $zip->addDirectory($directory, $name, true);
-            }
-        }
-        $zip->write();
-        unset($zip);
+        Ld_Zip::pack($directories, $backupsPath . '/' . $filename);
 
         Ld_Files::unlink($this->getBackupFolder());
     }
@@ -365,8 +357,7 @@ class Ld_Installer
         $filename = $this->getBackupsPath() . '/' . $archive;
         if (is_file($filename)) {
             $this->restoreFolder = $this->tmpFolder = $this->getRestoreFolder();
-            $uz = new fileUnzip($filename);
-            $uz->unzipAll($this->restoreFolder);
+            Ld_Zip::extract($filename, $this->restoreFolder);
         } elseif (is_dir($archive)) {
             $this->restoreFolder = $this->tmpFolder = $archive;
         }
@@ -379,7 +370,7 @@ class Ld_Installer
                 // not yet clear when we have to use
                 // CHARACTER SET utf8
                 // or not :-/
-                if (file_exists($filename)) {
+                if (Ld_Files::exists($filename)) {
                     $query = "LOAD DATA LOCAL INFILE '$filename'
                     REPLACE INTO TABLE $tablename
                     FIELDS TERMINATED BY ';'

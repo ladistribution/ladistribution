@@ -28,9 +28,6 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
         if (Zend_Registry::isRegistered('cache')) {
             $this->_cache = Zend_Registry::get('cache');
         }
-
-        $this->httpClient = new Zend_Http_Client();
-        $this->httpClient->setHeaders('Accept', 'application/json');
     }
 
     public function getUrl()
@@ -49,10 +46,9 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
         if (empty($this->packages)) {
 
             $this->packages = array();
-
-            $this->httpClient->setUri($this->endpoint . '/packages.json');
-            $response = $this->httpClient->request();
-            $result = Zend_Json::decode( $response->getBody() );
+            
+            $json = Ld_Http::get($this->endpoint . '/packages.json');
+            $result = Zend_Json::decode($json);
 
             foreach ((array)$result as $id => $params) {
                 $this->packages[$id] = $this->getPackage($params);

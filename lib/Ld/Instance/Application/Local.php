@@ -77,7 +77,8 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function getAbsolutePath()
     {
-        return $this->absolutePath = $this->getSite()->getDirectory() . '/' . $this->path;
+        $this->absolutePath = Ld_Files::real($this->getSite()->getDirectory() . '/' . $this->path);
+        return $this->absolutePath;
     }
 
     public function getInstanceJson()
