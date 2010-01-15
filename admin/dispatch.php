@@ -7,12 +7,18 @@ require_once($dir . '/dist/config.php');
 $site = Zend_Registry::get('site');
 
 // Load admin if needed
-$path = str_replace($site->getPath(), '', $_SERVER["REQUEST_URI"]);
-$modules = Ld_Files::getDirectories($site->getDirectory('shared') . '/modules');
-$modules[] = 'auth';
-foreach ($modules as $module) {
-    if (strpos($path, $module) === 1) {
-        $root_application = 'admin';
+if ($site->getConfig('root_admin') == 1) {
+    $path = str_replace($site->getPath() . '/', '', $_SERVER["REQUEST_URI"]);
+    $parts = explode('/', $path);
+    if (!empty($parts)) {
+        $modules = Ld_Files::getDirectories($site->getDirectory('shared') . '/modules');
+        $modules[] = 'auth';
+        foreach ($modules as $module) {
+            if ($parts[0] == $module) {
+                $root_application = 'admin';
+                break;
+            }
+        }
     }
 }
 
