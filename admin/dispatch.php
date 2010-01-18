@@ -6,9 +6,19 @@ require_once($dir . '/dist/config.php');
 
 $site = Zend_Registry::get('site');
 
+function str_replace_once($needle, $replace, $haystack)
+{
+    $pos = strpos($haystack, $needle);
+    if ($pos === false) {
+        return $haystack;
+    }
+    return substr_replace($haystack, $replace, $pos, strlen($needle));
+}
+
 // Load admin if needed
 if ($site->getConfig('root_admin') == 1) {
-    $path = str_replace($site->getPath() . '/', '', $_SERVER["REQUEST_URI"]);
+    $path = $_SERVER["REQUEST_URI"];
+    $path = str_replace_once($site->getPath() . '/', '', $_SERVER["REQUEST_URI"]);
     $parts = explode('/', $path);
     if (!empty($parts)) {
         $modules = Ld_Files::getDirectories($site->getDirectory('shared') . '/modules');

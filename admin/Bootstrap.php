@@ -79,8 +79,7 @@ class Bootstrap
             if ($path == '/admin/') {
                 $redirect = $baseUrl . '/' . $modules[0];
             } else if (strpos($path, 'admin') === 1) {
-                $n = 1;
-                $redirect = str_replace('/admin' , '', $_SERVER["REQUEST_URI"], $n);
+                $redirect = str_replace('/admin' , '', $_SERVER["REQUEST_URI"]);
             }
         }
 
