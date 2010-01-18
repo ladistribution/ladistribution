@@ -1,7 +1,7 @@
 PATH=$PATH:../../bin
 
 SITE="../.."
-REPOSITORY="locale/fr"
+REPOSITORY="edge/fr"
 
 IMPORT="ladis import-package --site $SITE $REPOSITORY"
 
