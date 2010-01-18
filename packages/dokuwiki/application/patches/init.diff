@@ -1,11 +1,11 @@
---- inc/init.php	2009-02-14 13:13:24.000000000 +0100
-+++ inc/init.php.patched	2009-06-23 16:09:22.000000000 +0200
-@@ -17,6 +17,8 @@
-   // define the include path
-   if(!defined('DOKU_INC')) define('DOKU_INC',fullpath(dirname(__FILE__).'/../').'/');
+--- inc/init.php.orig	2009-12-25 11:14:40.000000000 +0100
++++ inc/init.php	2010-01-05 02:42:23.000000000 +0100
+@@ -20,6 +20,8 @@
+ // define the include path
+ if(!defined('DOKU_INC')) define('DOKU_INC',fullpath(dirname(__FILE__).'/../').'/');
  
-+  require_once(DOKU_INC.'dist/config.php');
++require_once(DOKU_INC.'dist/config.php');
 +
-   // define config path (packagers may want to change this to /etc/dokuwiki/)
-   if(!defined('DOKU_CONF')) define('DOKU_CONF',DOKU_INC.'conf/');
+ // define config path (packagers may want to change this to /etc/dokuwiki/)
+ if(!defined('DOKU_CONF')) define('DOKU_CONF',DOKU_INC.'conf/');
  

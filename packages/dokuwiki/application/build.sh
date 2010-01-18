@@ -1,7 +1,8 @@
 NAME="dokuwiki"
-VERSION="2009-02-14"
+VERSION="2009-12-25"
+SUBVERSION="c"
 GZ="$NAME.tgz"
-SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}b.tgz"
+SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}{$SUBVERSION}.tgz"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 

@@ -1,10 +1,10 @@
---- feed.php	2009-06-08 21:44:19.000000000 +0200
-+++ feed.php	2009-06-08 21:49:45.000000000 +0200
+--- feed.php.orig	2009-12-25 11:14:41.000000000 +0100
++++ feed.php	2010-01-05 02:43:16.000000000 +0100
 @@ -7,6 +7,7 @@
   */
  
-   if(!defined('DOKU_INC')) define('DOKU_INC',dirname(__FILE__).'/');
-+  require_once(DOKU_INC.'dist/config.php');
-   require_once(DOKU_INC.'inc/init.php');
-   require_once(DOKU_INC.'inc/common.php');
-   require_once(DOKU_INC.'inc/events.php');
+ if(!defined('DOKU_INC')) define('DOKU_INC',dirname(__FILE__).'/');
++require_once(DOKU_INC.'dist/config.php');
+ require_once(DOKU_INC.'inc/init.php');
+ require_once(DOKU_INC.'inc/common.php');
+ require_once(DOKU_INC.'inc/events.php');
