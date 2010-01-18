@@ -51,18 +51,20 @@ class Ld_Zip
         // with PHP PECL extension
         if (class_exists('Ld_Zip_Archive', false)) {
             Ld_Files::log('unzip (ZipArchive)', "$archive => $destination");
-            $zip = new ZipArchive() ;
-            if ($zip->open($archive) !== TRUE) {
-                throw new Exception('Could not open archive');
+            $zip = new ZipArchive();
+            $open = $zip->open($archive);
+            if ($open === TRUE) {
+                $zip->extractTo($destination);
+                $zip->close();
+                return;
+            } else {
+                Ld_Files::log('unzip (ZipArchive)', "Could not open $archive ($open)");
             }
-            $zip->extractTo($destination);
-            $zip->close();
-        // with Clearbricks library
-        } else {
-            Ld_Files::log('unzip (fileUnzip)', "$archive => $destination");
-            $uz = new fileUnzip($archive);
-            $uz->unzipAll($destination);
         }
+        // with Clearbricks library
+        Ld_Files::log('unzip (fileUnzip)', "$archive => $destination");
+        $uz = new fileUnzip($archive);
+        $uz->unzipAll($destination);
     }
 
 }
@@ -74,7 +76,9 @@ if (class_exists('ZipArchive'))
     {
         public function addDirectory($absolutePath, $path, $dummy = '')
         {
-            $this->addEmptyDir($path);
+            if (method_exists($this, 'addEmptyDir')) {
+                $this->addEmptyDir($path);
+            }
             foreach (Ld_Files::getFiles($absolutePath) as $file) {
                 $this->addFile("$absolutePath/$file", "$path/$file");
             }
