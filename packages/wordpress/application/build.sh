@@ -31,6 +31,9 @@ svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "them
 git clone git://github.com/znarf/wordpress-minimal.git themes/minimal
 rm -rf themes/minimal/.git themes/minimal/Makefile
 
+# Get memcache code
+sudo svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force
+
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php
 rm $FOLDER/wp-admin/import/greymatter.php
@@ -46,7 +49,7 @@ patch -p0 -d $FOLDER < patches/menu-header.diff
 find . -name '*.DS_Store' -type f -delete
 
 # Create zip package
-zip -rqv $PACKAGE $FOLDER dist plugins themes -x "*/.svn/*"
+zip -rqv $PACKAGE $FOLDER dist plugins themes content -x "*/.svn/*"
 mv $PACKAGE ../../
 
 # Clean
