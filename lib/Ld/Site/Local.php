@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Site
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -32,6 +32,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected $_instances = array();
 
+    protected $_users = array();
+
+    protected $_repositories = array();
+
+    protected $_config = array();
+
     public function __construct($params = array())
     {
         $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'defaultModule');
@@ -50,6 +56,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
             'tmp'    => 'tmp',
             'cache'  => 'tmp/cache'
         );
+
+        $config = $this->getConfig();
+        if (isset($config['host'])) {
+            $this->host = $config['host'];
+        }
+        if (isset($config['path'])) {
+            $this->path = $config['path'];
+        }
     }
 
     public function init()
@@ -66,7 +80,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         foreach ($this->directories as $name => $directory) {
             $directory = $this->getDirectory($name);
-            if (!file_exists($directory)) {
+            if (!Ld_Files::exists($directory)) {
                 if (!is_writable(dirname($directory))) {
                     $msg = "Can't create folder $directory. Check your permissions.";
                     die($msg);
@@ -76,7 +90,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
             if (in_array($name, array('dist', 'lib', 'tmp'))) {
                 $htaccess = $directory . '/.htaccess';
-                if (!file_exists($htaccess)) {
+                if (!Ld_Files::exists($htaccess)) {
                     Ld_Files::put($htaccess, "Deny from all");
                 }
             }
@@ -85,7 +99,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _checkConfig()
     {
-        if (!file_exists($this->getDirectory('dist') . '/site.php')) {
+        if (!Ld_Files::exists($this->getDirectory('dist') . '/site.php')) {
             $cfg  = "<?php\n";
             if (defined('LD_DEBUG') && constant('LD_DEBUG') == true) {
                 $cfg .= "define('LD_DEBUG', true);\n";
@@ -96,13 +110,16 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if (defined('LD_UNIX_PERMS')) {
                 $cfg .= "define('LD_UNIX_PERMS', " . LD_UNIX_PERMS . ");\n";
             }
+            if (defined('LD_UNIX_USER')) {
+                $cfg .= "define('LD_UNIX_USER', '" . LD_UNIX_USER . "');\n";
+            }
             $cfg .= '$loader = dirname(__FILE__) . "/../lib/Ld/Loader.php";' . "\n";
             $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
             $cfg .= "Ld_Loader::loadSite(dirname(__FILE__) . '/..');\n";
             Ld_Files::put($this->getDirectory('dist') . "/site.php", $cfg);
         }
 
-        if (!file_exists($this->getDirectory('dist') . '/config.json')) {
+        if (!Ld_Files::exists($this->getDirectory('dist') . '/config.json')) {
             $config = array();
             foreach (array('host', 'path') as $key) {
                 if (isset($this->$key)) {
@@ -117,7 +134,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _checkRepositories()
     {
-        if (!file_exists($this->getDirectory('dist') . '/repositories.json')) {
+        if (!Ld_Files::exists($this->getDirectory('dist') . '/repositories.json')) {
             $cfg = array();
             $cfg['repositories'] = array(
                 'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
@@ -131,7 +148,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         // Base Index
         $root_index = $this->getDirectory() . '/index.php';
-        if (!file_exists($root_index)) {
+        if (!Ld_Files::exists($root_index)) {
             $index  = '<?php' . "\n";
             $index .= "define('LD_ROOT_CONTEXT', true);\n";
             $index .= "if (file_exists('admin/dispatch.php')) require_once('admin/dispatch.php');\n";
@@ -142,7 +159,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Base .htaccess
         if (constant('LD_REWRITE')) {
             $root_htaccess = $this->getDirectory() . '/.htaccess';
-            if (!file_exists($root_htaccess)) {
+            if (!Ld_Files::exists($root_htaccess)) {
                 $path = $this->getPath() . '/';
                 $htaccess  = "RewriteEngine on\n";
                 $htaccess .= "RewriteBase $path\n";
@@ -172,7 +189,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getConfig($key = null)
     {
-        $config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
+        $config = $this->_config;
+        if (empty($config)) {
+            $config = $this->_config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
+        }
         if (isset($key)) {
             return isset($config[$key]) ? $config[$key] : null;
         }
@@ -187,9 +207,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getDirectory($dir = null)
     {
         if (isset($dir)) {
-            return $this->dir . '/' . $this->directories[$dir];
+            return Ld_Files::real($this->dir . '/' . $this->directories[$dir]);
         }
-        return $this->dir;
+        return Ld_Files::real($this->dir);
     }
 
     public function getUrl($dir = null)
@@ -288,11 +308,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $instances = $this->getInstances();
 
         // by global path
-        if (file_exists($id) && file_exists($id . '/dist')) {
+        if (Ld_Files::exists($id) && Ld_Files::exists($id . '/dist')) {
             $dir = $id;
 
         // by local path
-        } else if (file_exists($this->getDirectory() . '/' . $id) && file_exists($this->getDirectory() . '/' . $id . '/dist')) {
+        } else if (Ld_Files::exists($this->getDirectory() . '/' . $id) && Ld_Files::exists($this->getDirectory() . '/' . $id . '/dist')) {
             $dir = $this->getDirectory() . '/' . $id;
 
         // by id
@@ -302,7 +322,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (isset($dir)) {
 
-            $instance = Ld_Instance_Application_Local::loadFromDir($dir);
+            $registryKey = 'Ld_Instance_Application_Local_' . md5($dir);
+            if (Zend_Registry::isRegistered($registryKey)) {
+                $instance = Zend_Registry::get($registryKey);
+            } else {
+                $instance = Ld_Instance_Application_Local::loadFromDir($dir);
+                Zend_Registry::set($registryKey, $instance);
+            }
+
             if (isset($instance)) {
                 $instance->setSite($this);
                 return $instance;
@@ -368,9 +395,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 foreach ($this->getLocales() as $locale => $label) {
                     $localeId = str_replace('_', '-', strtolower($locale));
                     $localePackageId = $package->getId() . '-locale-' . $localeId;
-                    if (!$installer->instance->hasExtension($localePackageId) && $this->hasPackage($localePackageId)) {
-                        $installer->instance->addExtension($localePackageId);
-                    }
+                    $installer->instance->addExtension($localePackageId);
                 }
                 $installer->postInstall($preferences);
                 return $installer->instance;
@@ -429,7 +454,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function updateInstance($params)
     {
-        if (is_string($params) && file_exists($this->getDirectory() . '/' . $params)) { // for applications (by path)
+        if (is_string($params) && Ld_Files::exists($this->getDirectory() . '/' . $params)) { // for applications (by path)
             $instance = $this->getInstance($params);
             $packageId = $instance->getPackageId();
         } else if (is_string($params)) { // for libraries
@@ -553,8 +578,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $cloneId = 'clone-' . date("d-m-Y-H-i-s");
 
         $restoreFolder = LD_TMP_DIR . '/' . $cloneId;
-        $uz = new fileUnzip($archive);
-        $uz->unzipAll($restoreFolder);
+        Ld_Zip::extract($archive, $restoreFolder);
 
         $instanceInfos = Ld_Files::getJson($restoreFolder . '/dist/instance.json');
 
@@ -702,14 +726,19 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getUsers()
     {
-        $users = Ld_Files::getJson($this->getDirectory('dist') . '/users.json');
+        $users = $this->_users;
+
+        if (empty($users)) {
+            $users = Ld_Files::getJson($this->getDirectory('dist') . '/users.json');
+        }
+
         foreach ((array)$users as $key => $user) {
             $users[$key]['id'] = $key;
             if (empty($users[$key]['fullname'])) {
                 $users[$key]['fullname'] = $users[$key]['username'];
             }
         }
-        return $users;
+        return $this->_users = $users;
     }
 
     public function getUser($username)
@@ -753,7 +782,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $users = $this->getUsers();
         $users[$this->getUniqId()] = $user;
 
-        $this->_writeUsers($users);
+        $this->writeUsers($users);
     }
 
     public function updateUser($username, $infos = array())
@@ -776,7 +805,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $users = $this->getUsers();
         $users[$id] = $user;
 
-        $this->_writeUsers($users);
+        $this->writeUsers($users);
     }
 
     public function deleteUser($username)
@@ -790,11 +819,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $users = $this->getUsers();
         unset($users[$id]);
 
-        $this->_writeUsers($users);
+        $this->writeUsers($users);
     }
 
-    protected function _writeUsers($users)
+    public function writeUsers($users)
     {
+        $this->users = $users;
         Ld_Files::putJson($this->getDirectory('dist') . '/users.json', $users);
     }
 
@@ -802,6 +832,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getRepositories($type = null)
     {
+        if (!empty($this->_repositories)) {
+            return $this->_repositories;
+        }
+
         $repositories = array();
 
         foreach ($this->getRepositoriesConfiguration() as $id => $config) {
@@ -810,7 +844,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
-        return $repositories;
+        return $this->_repositories = $repositories;
     }
 
     public function getRepositoriesConfiguration()

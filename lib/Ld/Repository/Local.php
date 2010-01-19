@@ -33,6 +33,19 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         Ld_Files::createDirIfNotExists($this->dir);
     }
 
+    
+    public function getCacheKey()
+    {
+        return null;
+        // return 'Ld_Repository_Local_Packages_' . md5($this->id);
+    }
+
+    public function getPackagesJson()
+    {
+        $json = Ld_Files::getJson($this->getDir() . '/packages.json');
+        return $json;
+    }
+
     public function getDir()
     {
         return $this->dir;
@@ -51,18 +64,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return $this->getSite()->getUrl() . 'repositories/' . $this->name . '/';
     }
 
-    public function getPackages($type = null)
-    {
-        $applications = $this->getApplications();
-
-        $libraries = $this->getLibraries();
-
-        $extensions = $this->getExtensions();
-
-        return array_merge($applications, $libraries, $extensions);
-    }
-
-    public function getApplications()
+    protected function _getApplicationsList()
     {
         $dirs = Ld_Files::getDirectories($this->dir, array('lib', 'css', 'js', 'shared'));
 
@@ -77,7 +79,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return $applications;
     }
 
-    public function getLibraries()
+    protected function _getLibrariesList()
     {
         $libraries = array();
         foreach ($this->types['libraries'] as $type) {
@@ -98,12 +100,12 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return $libraries;
     }
 
-    public function getPackageExtensions($packageId, $type = null)
+    protected function _getPackageExtensionsList($packageId, $type = null)
     {
         if ($type == null) {
             $extensions = array();
             foreach ($this->types['extensions'] as $type) {
-                $extensions = array_merge($extensions, $this->getPackageExtensions($packageId, $type));
+                $extensions = array_merge($extensions, $this->_getPackageExtensionsList($packageId, $type));
             }
             return $extensions;
         }
@@ -118,12 +120,12 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return $extensions;
     }
 
-    public function getExtensions()
+    protected function _getExtensionsList()
     {
         $dirs = Ld_Files::getDirectories($this->dir, array('lib', 'css', 'js', 'shared'));
         $extensions = array();
         foreach ($dirs as $id) {
-            $extensions = array_merge($extensions, $this->getPackageExtensions($id));
+            $extensions = array_merge($extensions, $this->_getPackageExtensionsList($id));
         }
         return $extensions;
     }
@@ -145,19 +147,6 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return $package;
     }
 
-    public function getReleases($name, $type)
-    {
-        $dir = $this->getDirectory(array('id' => $name, 'type' => $type));
-        $releases = Ld_Files::getFiles($dir, 'manifest.xml');
-        return $releases;
-    }
-
-    public function createPackage($name, $type = null)
-    {
-        $dir = $this->getDirectory(array('id' => $name, 'type' => $type));
-        Ld_Files::createDirIfNotExists($dir);
-    }
-
     public function deletePackage($packageId)
     {
         foreach ($this->getPackages() as $id => $package) {
@@ -170,14 +159,14 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
                 } else {
                     Ld_Files::unlink($dir);
                 }
-                $this->generatePackageList();
+
+                $packages = $this->getPackagesJson();
+                unset($packages[$packageId]);
+                $this->updatePackageList($packages);
+
                 return;
             }
         }
-    }
-
-    public function updatePackage($name, $params)
-    {
     }
 
     public function importPackage($filename, $clean = true)
@@ -193,11 +182,14 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
         Ld_Files::put($dir . "/manifest.xml", $manifest->getRawXml());
 
+        $packages = $this->getPackagesJson();
+        $id = $package->getId();
+        $packages[$id] = $this->getPackage($package);
+        $this->updatePackageList($packages);
+
         if ($clean) {
             Ld_Files::unlink($filename);
         }
-
-        $this->generatePackageList();
 
         return $package;
     }
@@ -226,9 +218,26 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         return $this->dir . '/' . $id;
     }
 
+    public function updatePackageList($packages)
+    {
+        Ld_Files::putJson($this->getDir() . '/packages.json', $packages);
+
+        // this doesn't work from CLI because cache is currently not initialised
+        if (Zend_Registry::isRegistered('cache')) {
+            $cacheKey = $this->getCacheKey();
+            $this->_cache = Zend_Registry::get('cache');
+            if (isset($cacheKey, $this->_cache)) {
+                $this->_cache->remove($cacheKey);
+            }
+        }
+    }
+
     public function generatePackageList()
     {
-        $packages = $this->getPackages();
+        $applications = $this->_getApplicationsList();
+        $libraries = $this->_getLibrariesList();
+        $extensions = $this->_getExtensionsList();
+        $packages = array_merge($applications, $libraries, $extensions);
 
         // Generate Json Index
         Ld_Files::putJson($this->dir . '/packages.json', $packages);
