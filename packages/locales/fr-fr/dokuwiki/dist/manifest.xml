@@ -1,7 +1,7 @@
 <package>
   <id>dokuwiki-locale-fr-fr</id>
   <name>Dokuwiki en Français</name>
-  <version>2009-02-14-34-3</version>
+  <version>2009-12-25-3</version>
   <type>locale</type>
   <extend>dokuwiki</extend>
   <directory>inc/lang/fr</directory>
