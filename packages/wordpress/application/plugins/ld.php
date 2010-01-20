@@ -140,41 +140,14 @@ add_action('wp_dashboard_setup', 'ld_wp_dashboard_setup');
 
 function ld_option_home($value)
 {
-	if (defined('LD_ROOT_CONTEXT') && constant('LD_ROOT_CONTEXT')) {
-		$site = Zend_Registry::get('site');
+	$application = Zend_Registry::get('site')->getInstance(ABSPATH);
+	if ($application->isRoot()) {
 		return 'http://' . $site->getHost() . $site->getPath();
 	}
 	return $value;
 }
 
 add_filter('option_home', 'ld_option_home');
-
-function ld_loginurl($login_url = '', $redirect = '')
-{
-	if (class_exists('Ld_Ui')) {
-		$ld_login_url = Ld_Ui::getAdminUrl(array(
-			'module' => 'default', 'controller' => 'auth', 'action' => 'login',
-			'referer' => empty($redirect) ? null : urlencode($redirect)
-		));
-	}
-	if ($ld_login_url) {
-	    return $ld_login_url;
-	}
-	return $login_url;
-}
-
-add_filter('login_url', 'ld_loginurl');
-
-// function ld_logouturl($logout_url = '', $redirect = '')
-// {
-//  $logout_url = Ld_Ui::getAdminUrl(array(
-//      'module' => 'default', 'controller' => 'auth', 'action' => 'logout',
-//      'referer' => empty($redirect) ? null : urlencode($redirect)
-//  ));
-//  return $logout_url;
-// }
-// 
-// add_filter('logout_url', 'ld_logouturl');
 
 function ld_locale($locale = '')
 {
