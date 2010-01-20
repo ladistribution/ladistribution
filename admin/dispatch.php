@@ -16,22 +16,23 @@ function str_replace_once($needle, $replace, $haystack)
 }
 
 // Load admin if needed
-if ($site->getConfig('root_admin') == 1) {
-    $path = $_SERVER["REQUEST_URI"];
-    $path = str_replace_once($site->getPath() . '/', '', $_SERVER["REQUEST_URI"]);
-    $parts = explode('/', $path);
-    if (!empty($parts)) {
+$path = str_replace_once($site->getPath() . '/', '', $_SERVER["REQUEST_URI"]);
+$parts = explode('/', $path);
+if (!empty($parts)) {
+    if ($site->getConfig('root_admin') == 1) {
         $modules = Ld_Files::getDirectories($site->getDirectory('shared') . '/modules');
         $modules[] = 'auth';
-        foreach ($modules as $module) {
-            if ($parts[0] == $module) {
-                $root_application = 'admin';
-                break;
-            }
+        if (in_array($parts[0], $modules)) {
+            $root_application = 'admin';
+        }
+    } else {
+        if ($parts[0] == 'admin') {
+            $root_application = 'admin';
         }
     }
 }
 
+// Default Root Application
 $default_root_application = 'admin';
 
 // Get Root Application
