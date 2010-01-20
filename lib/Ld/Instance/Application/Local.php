@@ -65,7 +65,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         parent::setSite($site);
 
         if ($this->type == 'application' && isset($this->path)) {
-            $this->infos['url'] = $this->url = $this->site->getBaseUrl() . $this->path . '/';
+            if ($this->isRoot()) {
+                $this->infos['url'] = $this->url = $this->site->getBaseUrl();
+            } else {
+                $this->infos['url'] = $this->url = $this->site->getBaseUrl() . $this->path . '/';
+            }
         }
     }
 
