@@ -12,7 +12,7 @@ svn export $SOURCE $FOLDER
 find . -name '*.DS_Store' -type f -delete
 
 # Create zip package
-zip -rqv $PACKAGE $FOLDER dist -x "*/.svn/*"
+zip -rqv $PACKAGE $FOLDER dist -x \*.svn/\* \*.preserve
 mv $PACKAGE ../../
 
 # Clean

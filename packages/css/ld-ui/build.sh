@@ -7,7 +7,7 @@ svn export $SOURCE $FOLDER
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 # Create zip package
-zip -rqv $PACKAGE $FOLDER manifest.xml -x "*/.svn/*"
+zip -rqv $PACKAGE $FOLDER manifest.xml -x \*.svn/\* \*.preserve
 mv $PACKAGE ../../
 #Clean
 rm -rf $FOLDER

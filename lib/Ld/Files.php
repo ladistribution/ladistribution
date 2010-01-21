@@ -43,6 +43,11 @@ class Ld_Files
             self::log('unlink', $dir);
         }
 
+        if (!is_writable($dir)) {
+            self::log('skipped', "$dir (not writable)");
+            return false;
+        }
+
         if (is_file($dir)) {
             unlink($dir);
             return;
@@ -82,11 +87,17 @@ class Ld_Files
             return false;
         }
 
+        if (self::exists($target . '/.preserve')) {
+            self::log('skipped', "$target (preserve detected in target)");
+            return false;
+        }
+
         $dir = dirname($target);
         self::createDirIfNotExists($dir);
 
         if (is_dir($source)) {
 
+            $target = Ld_Files::real($target);
             self::createDirIfNotExists($target);
 
             if (!is_writable($target)) {
@@ -217,6 +228,7 @@ class Ld_Files
 
     public static function put($file, $content)
     {
+        // self::log('put', $file);
         if (self::exists($file) && !is_writable($file)) {
             throw new Exception("Can't write $file.");
         }
@@ -231,6 +243,7 @@ class Ld_Files
 
     public static function get($file)
     {
+        // self::log('get', $file);
         if (self::exists($file)) {
             return file_get_contents($file);
         }
@@ -295,6 +308,7 @@ class Ld_Files
 
     public static function exists($filename)
     {
+        // self::log('exists', "$filename");
         return file_exists($filename);
     }
 
