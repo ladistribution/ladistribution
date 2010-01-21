@@ -336,6 +336,9 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			// for qTranslate plugin
 			global $q_config;
 
+			// cache functions need it
+			global $blog_id, $table_prefix;
+
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
@@ -392,6 +395,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 			global $_wp_deprecated_widgets_callbacks;
 			global $wp_embed;
 			global $q_config;
+			global $blog_id, $table_prefix;
 			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
 			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
 			$this->loaded = true;
