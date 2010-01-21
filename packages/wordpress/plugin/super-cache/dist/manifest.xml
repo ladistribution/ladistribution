@@ -1,0 +1,9 @@
+<package release="unstable">
+  <id>wordpress-plugin-supercache</id>
+  <name>Super Cache</name>
+  <version>0.9.8.0-20</version>
+  <type>plugin</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/plugins/wp-super-cache</directory>
+  <installer name="Ld_Installer_Wordpress_Plugin_Supercache" />
+</package>

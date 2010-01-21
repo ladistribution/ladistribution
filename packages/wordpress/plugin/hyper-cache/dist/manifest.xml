@@ -1,0 +1,9 @@
+<package>
+  <id>wordpress-plugin-hypercache</id>
+  <name>Hyper Cache</name>
+  <version>2.6.4-3</version>
+  <type>plugin</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/plugins/hyper-cache</directory>
+  <installer name="Ld_Installer_Wordpress_Plugin_Hypercache" />
+</package>
