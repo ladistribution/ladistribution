@@ -76,7 +76,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	{
 		$this->httpClient = new Zend_Http_Client();
 		$this->httpClient->setCookieJar();
-		$this->httpClient->setUri($this->instance->getUrl() . 'wp-admin/upgrade.php?step=1');
+		$this->httpClient->setUri($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
 
 		$response = $this->httpClient->request('GET');
 		if (constant('LD_DEBUG')) {
