@@ -30,6 +30,7 @@ class Ld_Manifest
         if (Ld_Files::exists($filename)) {
             return self::parse($filename);
         } else {
+            Ld_Files::unlink($dir);
             throw new Exception("manifest.xml doesn't exists or is unreadable in $dir");
         }
     }
