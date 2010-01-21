@@ -34,7 +34,6 @@ class Ld_Cli
 
     public function dispatch()
     {
-        
         $method = $this->convertFromClientNaming($this->_action);
 
         if (strtolower($method) == 'clone') {
@@ -156,6 +155,61 @@ class Ld_Cli
 
         $site = new Ld_Site_Local(array('dir' => $dir, 'host' => $host, 'path' => $path));
         $site->init();
+    }
+
+    public function siteUpdate()
+    {
+        $site = $this->getSite();
+
+        $this->_write(sprintf("The following packages have an update:"));
+
+        $updates = array();
+
+        foreach ($site->getInstances() as $id => $infos) {
+            // Applications
+            if ($infos['type'] == 'application') {
+                $instance = $site->getInstance($id);
+                if ($instance && $version = $instance->hasUpdate()) {
+                    $updates[] = $instance;
+                    $this->_write(sprintf(" - '%s' instance at /%s/ (%s => %s)",
+                        $instance->getPackageId(), $instance->getPath(), $instance->getVersion(), $version));
+                    // Extensions
+                    foreach ($instance->getExtensions() as $extension) {
+                        if ($extension && $version = $extension->hasUpdate()) {
+                            $updates[] = $extension;
+                            $this->_write(sprintf("     > '%s' extension (%s => %s)",
+                                $extension->getPackageId(), $extension->getVersion(), $version));
+                        }
+                    }
+                }
+            // Libraries
+            } else {
+                $instance = new Ld_Instance_Library($infos);
+                $instance->setSite($site);
+                if ($instance && $version = $instance->hasUpdate()) {
+                    $updates[] = $infos['package'];
+                    $this->_write(sprintf(" - '%s' library (%s => %s)",
+                        $instance->getPackageId(), $instance->getVersion(), $version));
+                }
+            }
+        }
+
+        if (empty($updates)) {
+            $this->_write(sprintf(" No package. Everything is up to date."));
+            return;
+        }
+
+        $confirm = isset($this->_opts->force) ? $this->_opts->force : $this->_confirm("Update this packages?");
+        if ($confirm) {
+            foreach ($updates as $update) {
+                if ($update instanceof Ld_Instance_Extension) {
+                    $update->parent()->updateExtension($update);
+                } else {
+                    $site->updateInstance($update);
+                }
+            }
+            $this->_write("Update OK.");
+        }
     }
 
     public function instances()
