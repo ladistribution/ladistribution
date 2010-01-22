@@ -31,7 +31,11 @@ class Ld_Loader
         defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
         if (constant('LD_DEBUG')) {
-            error_reporting( E_ALL | E_NOTICE /* | E_STRICT */);
+            if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+                error_reporting( E_ALL ^ E_DEPRECATED );
+            } else {
+                error_reporting( E_ALL | E_NOTICE );
+            }
         }
 
         set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
