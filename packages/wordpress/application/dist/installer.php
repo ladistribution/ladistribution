@@ -159,8 +159,6 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	protected function _fixUrl()
 	{
-		global $wp_rewrite;
-		$wp_rewrite = $this->wp_rewrite;
 		remove_filter('clean_url', 'qtrans_convertURL');
 		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
 		update_option('home', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
@@ -238,9 +236,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	public function getConfiguration()
 	{
+		global $wpdb;
 		$this->load_wp();
-		$options_table = $this->wpdb->options;
-		$options = $this->wpdb->get_results("SELECT * FROM $options_table ORDER BY option_name");
+		$options_table = $wpdb->options;
+		$options = $wpdb->get_results("SELECT * FROM $options_table ORDER BY option_name");
 		$configuration = array();
 		foreach ( (array) $options as $option) {
 			if ( is_serialized($option->option_value) ) {
@@ -322,31 +321,18 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	function load_wp()
 	{
 		if (empty($this->loaded)) {
-
 			define('WP_LD_INSTALLER', true);
-
-			global $wpdb, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $is_apache;
-
-			// fix 'Wrong datatype for second argument in wp-includes/widgets.php on lines 607, 695'
-			global $_wp_deprecated_widgets_callbacks;
-
-			// call to a member function register_handler() on a non-object in wp-includes/media.php
-			global $wp_embed;
-
-			// for qTranslate plugin
-			global $q_config;
-
-			// cache functions need it
-			global $blog_id, $table_prefix;
-
+			global $wpdb, $wp_embed;
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
 			require_once $this->getAbsolutePath() . "/wp-includes/theme.php";
-
-			$this->wp_rewrite = $GLOBALS['wp_rewrite'] = $wp_rewrite;
-			$this->wpdb = $wpdb;
-
+			$globals = array_keys( get_defined_vars() );
+			foreach ($globals as $key) {
+				if (empty($GLOBALS[$key])) {
+					$GLOBALS[$key] = $$key;
+				}
+			}
 			$this->loaded = true;
 
 		}
@@ -355,7 +341,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	// Add the .htaccess and active clean URLs
 	function enable_clean_urls()
 	{
-		$wp_rewrite = $this->wp_rewrite;
+		global $wp_rewrite;
 		if (got_mod_rewrite()) {
 			$wp_rewrite->set_permalink_structure('/%year%/%monthnum%/%postname%/');
 			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
@@ -391,13 +377,15 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 	{
 		if (empty($this->loaded)) {
 			define('WP_LD_INSTALLER', true);
-			global $wpdb, $wp_version, $wp_rewrite, $wp_db_version, $wp_taxonomies, $wp_filesystem, $wp_roles;
-			global $_wp_deprecated_widgets_callbacks;
-			global $wp_embed;
-			global $q_config;
-			global $blog_id, $table_prefix;
-			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
-			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
+			global $wpdb, $wp_embed;
+			require_once $this->getAbsolutePath() . "/wp-load.php";
+			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
+			$globals = array_keys( get_defined_vars() );
+			foreach ($globals as $key) {
+				if (empty($GLOBALS[$key])) {
+					$GLOBALS[$key] = $$key;
+				}
+			}
 			$this->loaded = true;
 		}
 	}
