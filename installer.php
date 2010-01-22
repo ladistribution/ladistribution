@@ -11,6 +11,9 @@
 // Uncomment this line if your web server isn't Apache or if mod_rewrite is not available
 // define('LD_REWRITE', false);
 
+// Uncomment this line if you want to enable memcached support in your installation
+// define('LD_MEMCACHED', true);
+
 // Uncomment & modify this line if you want to localise your installation
 // define('LD_LOCALE', 'fr_FR');
 
@@ -18,11 +21,11 @@
 // instead of the default one (edge)
 // define('LD_RELEASE', 'concorde');
 
-// Uncomment & modify this line if you want the installer talk to antoher server
+// Uncomment & modify this line if you want the installer to talk to another server
 // eg: 'http://localhost/ld/'
 // define('LD_SERVER', 'http://ladistribution.net/');
 
-// Uncomment & modify this line in case of php memory issues
+// Uncomment this line in case of php memory issues (32M is the minimum recommended)
 // ini_set("memory_limit", "32M");
 
 // Default Configuration
@@ -259,7 +262,7 @@ if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_REL
 
 // Clean TMP
 foreach ($base_libs as $name => $source) {
-    $targetDirectory = $directories['tmp'] . '/' . $name;
+    $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
     Ld_Files::unlink($targetDirectory);
 }
 
@@ -269,7 +272,7 @@ $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
     $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.7-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-55-6');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-56-4');
     $site->updateInstances($instances);
 }
 

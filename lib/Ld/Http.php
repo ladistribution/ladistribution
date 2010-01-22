@@ -29,6 +29,9 @@ class Ld_Http
     {
         $contents = '';
         $remote = fopen($url, "r", false, self::context());
+        if (!$remote) {
+            return false;
+        }
         while ( ($buffer = fread($remote, 8192)) != '' ) {
             $contents .= $buffer;
         }

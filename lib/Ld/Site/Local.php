@@ -107,6 +107,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if (defined('LD_REWRITE') && constant('LD_REWRITE') == false) {
                 $cfg .= "define('LD_REWRITE', false);\n";
             }
+            if (defined('LD_MEMCACHED') && constant('LD_MEMCACHED') == true) {
+                $cfg .= "define('LD_MEMCACHED', true);\n";
+            }
             if (defined('LD_UNIX_PERMS')) {
                 $cfg .= "define('LD_UNIX_PERMS', " . LD_UNIX_PERMS . ");\n";
             }

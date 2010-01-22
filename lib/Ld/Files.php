@@ -39,6 +39,8 @@ class Ld_Files
      */
     public static function unlink($dir, $deleteRootToo = true, $initial = true)
     {
+        $dir = self::real($dir);
+
         if ($initial) {
             self::log('unlink', $dir);
         }
@@ -97,7 +99,7 @@ class Ld_Files
 
         if (is_dir($source)) {
 
-            $target = Ld_Files::real($target);
+            $target = self::real($target);
             self::createDirIfNotExists($target);
 
             if (!is_writable($target)) {
@@ -294,14 +296,14 @@ class Ld_Files
             $filemtime = filemtime(LD_TMP_DIR . '/' . $file);
             $age = time() - $filemtime;
             if ($age > $maxAge) {
-                Ld_Files::unlink(LD_TMP_DIR . '/' . $file);
+                self::unlink(LD_TMP_DIR . '/' . $file);
             }
         }
         foreach (self::getDirectories(LD_TMP_DIR, array('cache')) as $dir) {
             $filemtime = filemtime(LD_TMP_DIR . '/' . $dir);
             $age = time() - $filemtime;
             if ($age > $maxAge) {
-                Ld_Files::unlink(LD_TMP_DIR . '/' . $dir);
+                self::unlink(LD_TMP_DIR . '/' . $dir);
             }
         }
     }
