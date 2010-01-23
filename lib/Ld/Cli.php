@@ -203,7 +203,7 @@ class Ld_Cli
         if ($confirm) {
             foreach ($updates as $update) {
                 if ($update instanceof Ld_Instance_Extension) {
-                    $update->parent()->updateExtension($update);
+                    $update->getParent()->updateExtension($update);
                 } else {
                     $site->updateInstance($update);
                 }
