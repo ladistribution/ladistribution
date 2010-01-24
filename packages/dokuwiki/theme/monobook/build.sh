@@ -1,12 +1,13 @@
 NAME="monobook"
-SOURCE="http://tjgrant.com/files/dokuwiki/$NAME-current.tar.bz2"
+VERSION="2010-01-20"
+SOURCE="http://www.andreas-haerter.de/public/user/{$VERSION}_{$NAME}.tar.gz"
+GZ="$NAME.tgz"
 FOLDER="theme"
 PACKAGE="dokuwiki-theme-$NAME.zip"
-TAR="$NAME.tar.bz2"
 # Get source
-curl $SOURCE > $TAR
-tar xvjf $TAR
-rm $TAR
+curl $SOURCE > $GZ
+tar zxvf $GZ
+rm $GZ
 mv $NAME $FOLDER
 cp screenshot.png $FOLDER
 # Remove some unwanted files (mac)
