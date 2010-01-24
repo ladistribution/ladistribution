@@ -1,9 +1,8 @@
 <package release="unstable">
   <id>laconica</id>
   <name>Laconica</name>
-  <version>0.7.3-6</version>
+  <version>0.8.2-3</version>
   <type>application</type>
   <db>mysql</db>
   <need>lib-php-openid</need>
-  <installer name="Ld_Installer_Laconica" src="./dist/installer.php" />
 </package>

@@ -21,7 +21,7 @@ class Ld_Installer_Laconica extends Ld_Installer
 		$cfg .= '$config["site"]["name"] = "' . $preferences['title'] . '";' . "\n";
 
 		$cfg .= '$config["db"]["database"] = ' .
-			'sprintf("mysqli://%s:%s@%s/h6e", $db["user"], $db["password"], $db["host"], $db["password"], $db["name"]);' . "\n";
+			'sprintf("mysqli://%s:%s@%s/%s", $db["user"], $db["password"], $db["host"], $db["password"], $db["name"]);' . "\n";
 
 		$cfg .= '$config["site"]["fancy"] = true;' . "\n";
 
