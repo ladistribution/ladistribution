@@ -26,24 +26,28 @@ class Ld_Zip
             foreach ($directories as $name => $directory) {
                 if (Ld_Files::exists($directory)) {
                     $directory = Ld_Files::real($directory);
-                    Ld_Files::log('addDirectory', "$directory => $name");
+                    Ld_Files::log('addDirectory (ZipArchive)', "$directory => $name");
                     $zip->addDirectory($directory, $name);
                 }
             }
-            $zip->close();
-        // with Clearbricks library
-        } else {
-            Ld_Files::log('pack (fileZip)', $archive);
-            $fp = fopen($archive, 'wb');
-            $zip = new fileZip($fp);
-            foreach ($directories as $name => $directory) {
-                if (Ld_Files::exists($directory)) {
-                    Ld_Files::log('addDirectory', "$directory => $name");
-                    $zip->addDirectory($directory, $name, true);
-                }
+            $result = $zip->close();
+            if ($result) {
+                return true;
+            } else {
+                Ld_Files::log('pack (ZipArchive)', "Could not pack $archive");
             }
-            $zip->write();
         }
+        // with Clearbricks library
+        Ld_Files::log('pack (fileZip)', $archive);
+        $fp = fopen($archive, 'wb');
+        $zip = new fileZip($fp);
+        foreach ($directories as $name => $directory) {
+            if (Ld_Files::exists($directory)) {
+                Ld_Files::log('addDirectory (fileZip)', "$directory => $name");
+                $zip->addDirectory($directory, $name, true);
+            }
+        }
+        $zip->write();
     }
 
     public static function extract($archive, $destination)
@@ -56,13 +60,13 @@ class Ld_Zip
             if ($open === TRUE) {
                 $zip->extractTo($destination);
                 $zip->close();
-                return;
+                return true;
             } else {
-                Ld_Files::log('unzip (ZipArchive)', "Could not open $archive ($open)");
+                Ld_Files::log('extract (ZipArchive)', "Could not open $archive ($open)");
             }
         }
         // with Clearbricks library
-        Ld_Files::log('unzip (fileUnzip)', "$archive => $destination");
+        Ld_Files::log('extract (fileUnzip)', "$archive => $destination");
         $uz = new fileUnzip($archive);
         $uz->unzipAll($destination);
     }
@@ -79,10 +83,11 @@ if (class_exists('ZipArchive'))
             if (method_exists($this, 'addEmptyDir')) {
                 $this->addEmptyDir($path);
             }
-            foreach (Ld_Files::getFiles($absolutePath) as $file) {
+            $scanDir = Ld_Files::scanDir($absolutePath);
+            foreach ((array)$scanDir['files'] as $file) {
                 $this->addFile("$absolutePath/$file", "$path/$file");
             }
-            foreach (Ld_Files::getDirectories($absolutePath) as $directory) {
+            foreach ((array)$scanDir['directories'] as $directory) {
                 $this->addDirectory("$absolutePath/$directory", "$path/$directory");
             }
         }
