@@ -1,7 +1,7 @@
-NAME="statusnet"
+NAME="laconica"
 VERSION="0.8.2"
 GZ="$NAME.gz"
-SOURCE="http://status.net/$NAME-$VERSION.tar.gz"
+SOURCE="http://status.net/statusnet-$VERSION.tar.gz"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 

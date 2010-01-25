@@ -2,6 +2,8 @@ SOURCE="http://ladistribution.net/svn/trunk/"
 FOLDER="application"
 PACKAGE="admin.zip"
 
+mkdir $FOLDER
+
 # Export from SVN
 svn export "$SOURCE/js" js
 # Local Export
@@ -35,4 +37,4 @@ mv $PACKAGE ../
 rm -rf js
 rm -rf modules
 rm -rf locales
-rm -rf $FOLDER/*
+rm -rf $FOLDER
