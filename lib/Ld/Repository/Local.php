@@ -33,7 +33,6 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         Ld_Files::createDirIfNotExists($this->dir);
     }
 
-    
     public function getCacheKey()
     {
         return null;

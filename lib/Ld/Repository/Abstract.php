@@ -42,7 +42,11 @@ abstract class Ld_Repository_Abstract
             $this->packages = array();
             $packages = $this->getPackagesJson();
             foreach ((array)$packages as $id => $params) {
-                $this->packages[$id] = new Ld_Package($params);
+                $package = new Ld_Package($params);
+                if ($this->type == 'local') {
+                    $package->setAbsoluteFilename($this->getDirectory($package) . "/$package->id.zip");
+                }
+                $this->packages[$id] = $package;
             }
             if (isset($cacheKey, $this->_cache)) {
                 $this->_cache->save($this->packages, $cacheKey);

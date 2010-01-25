@@ -15,11 +15,11 @@
 // define('LD_MEMCACHED', true);
 
 // Uncomment & modify this line if you want to localise your installation
-// define('LD_LOCALE', 'fr_FR');
+define('LD_LOCALE', 'fr_FR');
 
 // Uncomment & modify this line if you want to target a specific release
 // instead of the default one (edge)
-// define('LD_RELEASE', 'concorde');
+define('LD_RELEASE', 'concorde');
 
 // Uncomment & modify this line if you want the installer to talk to another server
 // eg: 'http://localhost/ld/'
