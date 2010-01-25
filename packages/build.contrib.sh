@@ -50,6 +50,14 @@ cd wordpress
     ./build.sh
     cd ..
 
+    cd super-cache
+    ./build.sh
+    cd ..
+
+    cd hyper-cache
+    ./build.sh
+    cd ..
+
   cd ..
 
   cd theme

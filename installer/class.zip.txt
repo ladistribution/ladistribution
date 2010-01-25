@@ -47,7 +47,7 @@ class fileZip
 		$this->fp = $out_fp;
 	}
 	
-	public function __destroy()
+	public function __destruct()
 	{
 		$this->close();
 	}

@@ -281,7 +281,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return array(
             'en_US' => 'English (USA)',
             'fr_FR' => 'Français (France)',
-            'de_DE' => 'Deutsch (Deutschland)'
+            // 'de_DE' => 'Deutsch (Deutschland)'
         );
     }
 
@@ -827,7 +827,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function writeUsers($users)
     {
-        $this->users = $users;
+        $this->_users = $users;
         Ld_Files::putJson($this->getDirectory('dist') . '/users.json', $users);
     }
 
@@ -864,6 +864,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         uasort($cfg, array($this, "_sortByOrder"));
         Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
+        unset($this->_repositories); // empty local cache
     }
 
     protected function _getRepository($config)

@@ -183,12 +183,12 @@ if (!is_requirable('Ld/Installer.php')) {
 foreach ($base_libs as $name => $source) {
     $archiveName = $directories['tmp'] . '/' . $name . '.zip';
     $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
-    if (!Ld_Files::exists($targetDirectory)) {
+    if (!file_exists($targetDirectory)) {
         Ld_Http::download($source, $archiveName);
         Ld_Zip::extract($archiveName, $targetDirectory);
     }
     Ld_Files::copy($targetDirectory . '/lib', $directories['lib']);
-    if (Ld_Files::exists($targetDirectory . '/shared')) {
+    if (file_exists($targetDirectory . '/shared')) {
         Ld_Files::copy($targetDirectory . '/shared', $directories['shared']);
     }
 }
@@ -203,7 +203,7 @@ if (defined('LD_CLI_INSTALL') && constant('LD_CLI_INSTALL')) {
 // Load Site
 
 $loader = $directories['lib'] . '/Ld/Loader.php';
-if (Ld_Files::exists($loader)) { require_once $loader; } else { require_once 'Ld/Loader.php'; }
+if (file_exists($loader)) { require_once $loader; } else { require_once 'Ld/Loader.php'; }
 $site = Ld_Loader::loadSite(dirname(__FILE__));
 
 // Detect base path
@@ -272,7 +272,7 @@ $instances = $site->getInstances();
 if (empty($instances)) {
     $instances = array();
     $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.7-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-56-4');
+    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-57-1');
     $site->updateInstances($instances);
 }
 

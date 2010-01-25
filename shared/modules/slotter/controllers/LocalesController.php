@@ -31,6 +31,34 @@ class Slotter_LocalesController extends Slotter_BaseController
             }
             $this->getSite()->updateLocales($locales);
 
+            // Collect remote endpoints
+            $allEndpoints = array();
+            foreach ($this->getSite()->getRepositoriesConfiguration() as $repository) {
+                if ($repository['type'] == 'remote') {
+                    $allEndpoints[] = $repository['endpoint'];
+                }
+            }
+            // Install extra repositories
+            foreach ($locales as $locale) {
+                $shortLocale = substr($locale, 0, 2);
+                if ($shortLocale == 'en') {
+                    continue;
+                }
+                $mainEndpoints = array(
+                    'http://ladistribution.net/repositories/edge/main',
+                    'http://ladistribution.net/repositories/concorde/main');
+                foreach ($mainEndpoints as $endpoint) {
+                    if (in_array($endpoint, $allEndpoints)) {
+                        $localeEndpoint = str_replace('/main', '/' . $shortLocale, $endpoint);
+                        if (!in_array($localeEndpoint, $allEndpoints)) {
+                            $this->getSite()->addRepository(array(
+                                'type' => 'remote', 'endpoint' => $localeEndpoint, 'name' => ''
+                            ));
+                        }
+                    }
+                }
+            }
+
             // Install available locales packages for applications
             foreach ($locales as $locale) {
 

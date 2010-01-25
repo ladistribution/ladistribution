@@ -32,9 +32,9 @@ class Slotter_SettingsController extends Slotter_BaseController
             Ld_Files::putJson($this->getSite()->getDirectory('dist') . '/config.json', $configuration);
         }
 
-        $this->appendTitle('Global Settings');
-
         $translator = $this->getTranslator();
+
+        $this->appendTitle($translator->translate('Global settings'));
 
         $preferences = array();
 

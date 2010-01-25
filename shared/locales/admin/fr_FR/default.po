@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-03 14:14+0100\n"
+"POT-Creation-Date: 2010-01-25 12:24+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: François Hodierne <francois@upian.com>\n"
+"Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -135,7 +135,6 @@ msgid "You can:"
 msgstr "Vous pouvez :"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:50
-#: shared/modules/slotter/views/scripts/index/index.phtml:67
 msgid "Add a database connection"
 msgstr "Ajouter une connexion à une base de donnée"
 
@@ -148,8 +147,17 @@ msgid "DB Name"
 msgstr "Nom de la base"
 
 #: shared/modules/slotter/views/scripts/databases/new.phtml:33
+#: shared/modules/slotter/views/scripts/domains/new.phtml:12
 msgid "Add"
 msgstr "Ajouter"
+
+#: shared/modules/slotter/views/scripts/domains/new.phtml:1
+msgid "Add a new domain"
+msgstr ""
+
+#: shared/modules/slotter/views/scripts/domains/new.phtml:7
+msgid "Dir (absolute path)"
+msgstr ""
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:3
 msgid "Installation"
@@ -164,6 +172,7 @@ msgid "Register the first user now."
 msgstr "Enregistrer le premier utilisateur maintenant."
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:14
+#: shared/modules/slotter/views/scripts/index/update.phtml:43
 msgid "Applications"
 msgstr "Applications"
 
@@ -278,13 +287,21 @@ msgstr "Cloner une application"
 msgid "Backup (zip file please)"
 msgstr "Sauvegarde (fichier zip svp)"
 
-#: shared/modules/slotter/views/scripts/instance/clone.phtml:11
+#: shared/modules/slotter/views/scripts/instance/clone.phtml:8
+msgid "Local (file)"
+msgstr "Locale (fichier)"
+
+#: shared/modules/slotter/views/scripts/instance/clone.phtml:13
+msgid "Remote (URL)"
+msgstr "Distante (URL)"
+
+#: shared/modules/slotter/views/scripts/instance/clone.phtml:17
 msgid "Path"
 msgstr "Chemin"
 
-#: shared/modules/slotter/views/scripts/instance/clone.phtml:17
-msgid "Upload & clone"
-msgstr "Envoyer et cloner"
+#: shared/modules/slotter/views/scripts/instance/clone.phtml:23
+msgid "Clone"
+msgstr "Cloner"
 
 #: shared/modules/slotter/views/scripts/instance/configure.phtml:23
 msgid "No preference available for this application."
@@ -468,6 +485,15 @@ msgstr "Préférences du thème"
 msgid "Locales"
 msgstr "Locales"
 
+#: shared/modules/slotter/views/scripts/repositories/delete-package.phtml:1
+msgid "Delete a package"
+msgstr "Supprimer un paquet"
+
+#: shared/modules/slotter/views/scripts/repositories/delete-package.phtml:3
+#, php-format
+msgid "Are you sure you want to delete '%s' package from this repository?"
+msgstr "Êtes-vous sûrs de vouloir supprimer le paquet '%s' ce dépôt ?"
+
 #: shared/modules/slotter/views/scripts/repositories/delete.phtml:1
 msgid "Remove a repository"
 msgstr "Supprimer un dépôt"
@@ -506,6 +532,7 @@ msgid "browse"
 msgstr "parcourir"
 
 #: shared/modules/slotter/views/scripts/repositories/list.phtml:30
+#: shared/modules/slotter/views/scripts/repositories/repository.phtml:31
 #: shared/modules/slotter/views/scripts/users/edit.phtml:63
 msgid "remove"
 msgstr "supprimer"
@@ -589,7 +616,7 @@ msgid "Infos"
 msgstr "Informations"
 
 #: shared/modules/slotter/views/scripts/users/edit.phtml:14
-#: shared/modules/slotter/views/scripts/users/new.phtml:11
+#: shared/modules/slotter/views/scripts/users/index.phtml:16
 msgid "Email"
 msgstr "Email"
 
@@ -629,8 +656,7 @@ msgstr "Utilisateurs"
 msgid "None|user"
 msgstr "Aucun"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:90
-#: shared/modules/slotter/views/scripts/users/new.phtml:1
+#: shared/modules/slotter/views/scripts/users/index.phtml:94
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
 
@@ -683,10 +709,18 @@ msgstr "roles"
 msgid "backups"
 msgstr "sauvegardes"
 
-#: shared/modules/slotter/views/helpers/InstancesList.php:50
+#: shared/modules/slotter/views/helpers/InstancesList.php:13
+msgid "No application installed yet."
+msgstr "Aucune application installée pour le moment."
+
+#: shared/modules/slotter/views/helpers/InstancesList.php:55
 msgid "Settings"
 msgstr "Paramètres"
 
+#~ msgid "Global Settings"
+#~ msgstr "Paramètres globaux"
+#~ msgid "Upload & clone"
+#~ msgstr "Envoyer et cloner"
 #~ msgid "Warning:"
 #~ msgstr "Avertissement :"
 

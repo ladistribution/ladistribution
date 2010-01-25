@@ -1,7 +1,5 @@
 <?php
 
-// define('LD_DEBUG', true);
-
 if (empty($_GET['confirm'])) {
     exit;
 }
@@ -30,7 +28,6 @@ Ld_Files::purgeTmpDir(0);
 $directories = array('js', 'css', 'shared', 'lib', 'dist', 'tmp');
 foreach ($directories as $id) {
     $path = $site->getDirectory($id);
-    echo $path . "\n<br>";
     Ld_Files::unlink($path);
 }
 

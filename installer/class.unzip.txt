@@ -38,7 +38,7 @@ class fileUnzip
 		$this->file_name = $file_name;
 	}
 	
-	public function __destroy()
+	public function __destruct()
 	{
 		$this->close();
 	}
@@ -47,6 +47,7 @@ class fileUnzip
 	{
 		if ($this->fp) {
 			fclose($this->fp);
+			$this->fp = null;
 		}
 		
 		if ($this->memory_limit) {
@@ -100,7 +101,6 @@ class fileUnzip
 			throw new Exception(sprintf(__('Trying to unzip a folder name %s'),$file_name));
 		}
 		
-		// Modified by znarf --
 		if ($target) {
 			$this->testTargetDir(dirname($target));
 		}
@@ -108,7 +108,6 @@ class fileUnzip
 		if (!$details['uncompressed_size']) {
 			return $this->putContent('',$target);
 		}
-		// --
 		
 		fseek($this->fp(),$details['contents_start_offset']);
 		
@@ -208,9 +207,7 @@ class fileUnzip
 		if ($target) {
 			$r = file_put_contents($target,$content);
 			if ($r === false) {
-			    echo 'Unable to write destination file.';
-			    exit;
-				throw new Exception('Unable to write destination file.');
+				throw new Exception(__('Unable to write destination file.'));
 			}
 			files::inheritChmod($target);
 			return true;

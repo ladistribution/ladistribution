@@ -40,10 +40,13 @@ class files
 			'ps'		=> 'application/postscript',
 			'ai'		=> 'application/postscript',
 			'eps'	=> 'application/postscript',
+			'json'	=> 'application/json',
+			'xml'	=> 'application/xml',
 			
 			'bin'	=> 'application/octet-stream',
 			'exe'	=> 'application/octet-stream',
 			
+			'bz2'	=> 'application/x-bzip',
 			'deb'	=> 'application/x-debian-package',
 			'gz'		=> 'application/x-gzip',
 			'jar'	=> 'application/x-java-archive',
@@ -59,22 +62,28 @@ class files
 			'mid'	=> 'audio/x-midi',
 			'midi'	=> 'audio/x-midi',
 			'ogg'	=> 'application/ogg',
+			'ra'		=> 'audio/x-pn-realaudio',
+			'ram'	=> 'audio/x-pn-realaudio',
 			'wav'	=> 'audio/x-wav',
+			'wma'	=> 'audio/x-ms-wma',
 			
 			'swf'	=> 'application/x-shockwave-flash',
 			'swfl'	=> 'application/x-shockwave-flash',
 			
 			'bmp'	=> 'image/bmp',
 			'gif'	=> 'image/gif',
+			'ico'	=> 'image/vnd.microsoft.icon',
 			'jpeg'	=> 'image/jpeg',
 			'jpg'	=> 'image/jpeg',
 			'jpe'	=> 'image/jpeg',
 			'png'	=> 'image/png',
+			'svg'	=> 'image/svg+xml',
 			'tiff'	=> 'image/tiff',
 			'tif'	=> 'image/tiff',
 			'xbm'	=> 'image/x-xbitmap',
 			
 			'css'	=> 'text/css',
+			'csv'	=> 'text/csv',
 			'js'		=> 'text/javascript',
 			'html'	=> 'text/html',
 			'htm'	=> 'text/html',
@@ -85,6 +94,7 @@ class files
 			'mpg'	=> 'video/mpeg',
 			'mpeg'	=> 'video/mpeg',
 			'mpe'	=> 'video/mpeg',
+			'ogv'	=> 'video/ogg',
 			'viv'	=> 'video/vnd.vivo',
 			'vivo'	=> 'video/vnd.vivo',
 			'qt'		=> 'video/quicktime',
@@ -92,7 +102,8 @@ class files
 			'mp4'	=> 'video/mp4',
 			'm4v'	=> 'video/x-m4v',
 			'flv'	=> 'video/x-flv',
-			'avi'	=> 'video/x-msvideo'
+			'avi'	=> 'video/x-msvideo',
+			'wmv'	=> 'video/x-ms-wmv'
 		);
 	
 	/**
@@ -317,9 +328,9 @@ class files
 		}
 		
 		if (self::$dir_mode != null) {
-			return chmod($file,self::$dir_mode);
+			return @chmod($file,self::$dir_mode);
 		} else {
-			return chmod($file,fileperms(dirname($file)));
+			return @chmod($file,fileperms(dirname($file)));
 		}
 	}
 	
