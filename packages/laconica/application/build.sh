@@ -9,7 +9,7 @@ PACKAGE="$NAME.zip"
 curl $SOURCE > $GZ
 tar zxvf $GZ
 rm $GZ
-mv $NAME-$VERSION $FOLDER
+mv statusnet-$VERSION $FOLDER
 
 # Remove unecessary files
 rm $FOLDER/sphinx.conf.sample
