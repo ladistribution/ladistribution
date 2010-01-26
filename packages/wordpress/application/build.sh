@@ -32,7 +32,7 @@ git clone git://github.com/znarf/wordpress-minimal.git themes/minimal
 rm -rf themes/minimal/.git themes/minimal/Makefile
 
 # Get memcache code
-sudo svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force
+svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force
 
 # Remove more files (useless importers)
 rm $FOLDER/wp-admin/import/blogware.php
