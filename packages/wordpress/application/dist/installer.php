@@ -374,8 +374,8 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 		if (empty($this->loaded)) {
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
-			require_once $this->getAbsolutePath() . "/wp-load.php";
-			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
+			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
+			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
 			$globals = array_keys( get_defined_vars() );
 			foreach ($globals as $key) {
 				if (empty($GLOBALS[$key])) {
