@@ -319,6 +319,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		if (empty($this->loaded)) {
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
+			global $blog_id, $table_prefix;
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
@@ -374,6 +375,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 		if (empty($this->loaded)) {
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
+			global $blog_id, $table_prefix;
 			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
 			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
 			$globals = array_keys( get_defined_vars() );
