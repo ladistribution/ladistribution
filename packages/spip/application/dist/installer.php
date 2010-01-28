@@ -1,6 +1,6 @@
 <?php
 
-class Installer_Spip extends Ld_Installer
+class Ld_Installer_Spip extends Ld_Installer
 {
 
     function install($preferences = array())
@@ -19,8 +19,8 @@ class Installer_Spip extends Ld_Installer
 
     function performHttpInstall($preferences = array())
     {
-        $databases = $this->site->getDatabases();
-        $db = $databases[ $this->instance->getDb() ];
+        $databases = $this->getSite()->getDatabases();
+        $db = $databases[ $this->getInstance()->getDb() ];
 
         $this->httpClient = new Zend_Http_Client();
         $this->httpClient->setCookieJar();
@@ -95,7 +95,7 @@ class Installer_Spip extends Ld_Installer
         $response = $this->httpClient->request('POST');
         if (constant('LD_DEBUG')) {
             echo $response->getBody();
-        }       
+        }
 
         $this->httpClient->setParameterPost(array(
           'exec'  => 'install',
@@ -109,7 +109,7 @@ class Installer_Spip extends Ld_Installer
 
     public function createConnectFile()
     {
-        Ld_Files::copy($this->dir . 'config/connect.php', $this->absolutePath . '/config/connect.php');
+        Ld_Files::copy($this->getDir() . 'config/connect.php', $this->getAbsolutePath() . '/config/connect.php');
     }
 
 }

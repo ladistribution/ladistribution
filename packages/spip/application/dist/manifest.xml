@@ -1,9 +1,8 @@
-<package release="unstable" >
+<package>
   <id>spip</id>
   <name>Spip</name>
-  <version>2.0.8-23-8</version>
+  <version>2.0.10-1</version>
   <type>application</type>
-  <installer name="Installer_Spip" src="./dist/installer.php" />
   <link rel="admin" type="text/html" href="/ecrire/" />
   <db>mysql</db>
   <install>
