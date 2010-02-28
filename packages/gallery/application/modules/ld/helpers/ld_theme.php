@@ -29,6 +29,9 @@ class ld_theme_Core
         #gHeader {
             background:none;
         }
+        #gBanner {
+            background:none;
+        }
         #gLoginMenu {
             display:none;
         }

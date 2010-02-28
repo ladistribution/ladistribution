@@ -1,5 +1,5 @@
 NAME="gallery3"
-VERSION="3.0-beta-2"
+VERSION="3.0-rc-1"
 # SOURCE="git://github.com/$NAME/gallery3.git"
 ZIP="gallery-$VERSION.zip"
 SOURCE="http://freefr.dl.sourceforge.net/project/gallery/$NAME/$VERSION/$ZIP"

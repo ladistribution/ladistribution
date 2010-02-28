@@ -98,6 +98,12 @@ class Ld_Installer_Gallery extends Ld_Installer
 	// 	return $salt;
 	// }
 
+	public function postUpdate()
+	{
+		// upgrade code there
+		// manual upgrade = http://example.com/gallery3/index.php/upgrader
+	}
+
 	public $roles = array('administrator', 'user');
 
 	public $defaultRole = 'user';
