@@ -43,6 +43,14 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			$user_id = wp_create_user($user_name, $user_password, $user_email);
 		}
 
+		// Update admin password
+		if (isset($preferences['administrator'])) {
+			$user = get_userdata($user_id);
+			$userdata = add_magic_quotes(get_object_vars($user));
+			$userdata['user_pass'] = $preferences['administrator']['hash'];
+			$user_id = wp_insert_user($userdata);
+		}
+
 		$this->setUserRoles(array($user_name => 'administrator'));
 
 		update_option('admin_email', $user_email);
@@ -272,9 +280,37 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $this->getConfiguration();
 	}
 
-	public $roles = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
+	public $roles = array('subscriber', 'contributor', 'author', 'editor', 'administrator');
 
 	public $defaultRole = 'subscriber';
+
+	public function getUsers()
+	{
+		$this->load_wp();
+
+		$users = $this->getSite()->getUsers();
+
+		$usernames = array();
+		foreach ((array)$users as $id => $user) {
+			$usernames[] = $user['username'];
+		}
+
+		$wp_user_search = new WP_User_Search();
+		foreach ( $wp_user_search->get_results() as $userid ) {
+			$wp_user = new WP_User($userid);
+			if (!in_array($wp_user->user_login, $usernames)) {
+				$user = array(
+					'hash' 		=> $wp_user->user_pass,
+					'username' 	=> $wp_user->user_login,
+					'fullname' 	=> $wp_user->display_name,
+					'email'		=> $wp_user->user_email
+				);
+				$users[] = $user;
+			}
+		}
+
+		return $users;
+	}
 
 	public function getRoles()
 	{
@@ -285,7 +321,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	{
 		$this->load_wp();
 		$roles = array();
-		$users = $this->getSite()->getUsers();
+		$users = $this->getUsers();
 		foreach ($users as $user) {
 			$username = $user['username'];
 			$roles[$username] = $this->defaultRole; // default

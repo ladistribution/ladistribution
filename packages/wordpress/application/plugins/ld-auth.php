@@ -20,7 +20,7 @@ function ld_autologin_user()
 	}
 }
 
-add_action('init', 'ld_autologin_user');
+add_action('plugins_loaded', 'ld_autologin_user', 3);
 
 function ld_logout()
 {
@@ -35,7 +35,10 @@ class Ld_Auth_Adapter_Wordpress implements Zend_Auth_Adapter_Interface
 	{
 		if (is_user_logged_in()) {
 			$user = wp_get_current_user();
-			return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $user->user_login);
+			$ld_user = Zend_Registry::get('site')->getUser($wp_user->user_login);
+			if ($ld_user) {
+				return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $ld_user['username']);
+			}
 		}
 		return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
 	}
@@ -155,6 +158,13 @@ function get_userdatabylogin( $user_login )
 			return get_userdata($user_id);
 		}
 
+		return get_userdata($wp_user->ID);
+	}
+
+	// search in WP DB ...
+
+	$query = $wpdb->prepare("SELECT * FROM $wpdb->users WHERE user_login = %s LIMIT 1", $user_login);
+	if ( $wp_user = $wpdb->get_row($query) ) {
 		return get_userdata($wp_user->ID);
 	}
 

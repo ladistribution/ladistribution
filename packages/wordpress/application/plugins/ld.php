@@ -140,10 +140,12 @@ add_action('wp_dashboard_setup', 'ld_wp_dashboard_setup');
 
 function ld_option_home($value)
 {
-	$site = Zend_Registry::get('site');
-	$application = $site->getInstance(ABSPATH);
-	if ($application->isRoot()) {
-		return 'http://' . $site->getHost() . $site->getPath();
+	if (Zend_Registry::isRegistered('site')) {
+		$site = Zend_Registry::get('site');
+		$application = $site->getInstance(ABSPATH);
+		if ($application->isRoot()) {
+			return 'http://' . $site->getHost() . $site->getPath();
+		}
 	}
 	return $value;
 }
