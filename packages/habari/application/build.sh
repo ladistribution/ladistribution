@@ -1,5 +1,5 @@
 NAME="habari"
-VERSION="0.6.3"
+VERSION="0.6.4"
 ZIP="$NAME-$VERSION.zip"
 SOURCE="http://dist.habariproject.org/$ZIP"
 FOLDER="application"
