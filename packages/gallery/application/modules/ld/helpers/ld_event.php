@@ -16,7 +16,7 @@ class ld_event_Core
             }
 
             if (empty($user)) {
-                $user = user::create($ld_user['username'], $ld_user['fullname'], '');
+                $user = identity::create_user($ld_user['username'], $ld_user['fullname'], $ld_user['hash'], $ld_user['email']);
             }
 
             $instance = Zend_Registry::get('application');
@@ -27,7 +27,7 @@ class ld_event_Core
                 $user->save();
             }
 
-            user::login($user);
+            auth::login($user);
         }
 
     }

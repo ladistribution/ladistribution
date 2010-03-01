@@ -22,29 +22,29 @@ class ld_theme_Core
         body, a, a:visited {
             color:#4E5368;
         }
-        .gView, #doc4 {
+        .g-view, #doc4 {
             margin-top:35px;
             border:none;
         }
-        #gHeader {
+        #g-header {
             background:none;
         }
-        #gBanner {
+        #g-banner {
             background:none;
         }
-        #gLoginMenu {
+        #g-login-menu {
             display:none;
         }
-        #gFooter {
+        #g-footer {
             background:none;
             padding:10px 0;
             margin-bottom:75px;
         }
-        #gCredits {
+        #g-credits {
             font-size:12px;
             background:none;
         }
-        #gCredits a {
+        #g-credits a {
             color:inherit !important;
             text-decoration:underline;
         }
