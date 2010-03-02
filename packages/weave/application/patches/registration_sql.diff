@@ -1,0 +1,122 @@
+--- registration/1.0/weave_user/mysql.php.original	2010-02-02 12:26:55.000000000 +0100
++++ registration/1.0/weave_user/mysql.php	2010-02-02 12:27:24.000000000 +0100
+@@ -110,6 +110,9 @@
+ 		try
+ 		{
+ 			$insert_stmt = 'insert into users (username, md5, email, status) values (:username, :md5, :email, 1)';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$insert_stmt = ld_weave_prepare_sql($insert_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($insert_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->bindParam(':md5', md5($password));
+@@ -142,6 +145,9 @@
+ 		try
+ 		{
+ 			$insert_stmt = 'update users set md5 = :md5 where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$insert_stmt = ld_weave_prepare_sql($insert_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($insert_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->bindParam(':md5', md5($password));
+@@ -166,6 +172,9 @@
+ 		try
+ 		{
+ 			$insert_stmt = 'update users set email = :email where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$insert_stmt = ld_weave_prepare_sql($insert_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($insert_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->bindParam(':email', $email);
+@@ -194,6 +203,9 @@
+ 		try
+ 		{
+ 			$select_stmt = 'select count(*) from users where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$select_stmt = ld_weave_prepare_sql($select_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($select_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->execute();
+@@ -213,6 +225,9 @@
+ 		try
+ 		{
+ 			$select_stmt = 'select id, status, alert from users where username = ? and md5 = ?';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$select_stmt = ld_weave_prepare_sql($select_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($select_stmt);
+ 			$pwhash = md5($password);
+ 			$sth->bindParam(':username', $this->_username);
+@@ -248,6 +263,9 @@
+ 		try
+ 		{
+ 			$insert_stmt = 'update users set status = :status where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$insert_stmt = ld_weave_prepare_sql($insert_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($insert_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->bindParam(':status', $status);
+@@ -276,6 +294,9 @@
+ 		try
+ 		{
+ 			$insert_stmt = 'update users set alert = :alert where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$insert_stmt = ld_weave_prepare_sql($insert_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($insert_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->bindParam(':alert', $alert);
+@@ -314,6 +335,9 @@
+ 		try
+ 		{
+ 			$select_stmt = 'select email from users where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$select_stmt = ld_weave_prepare_sql($select_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($select_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->execute();
+@@ -338,6 +362,9 @@
+ 		try
+ 		{
+ 			$delete_stmt = 'delete from users where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$delete_stmt = ld_weave_prepare_sql($delete_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($delete_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->execute();
+@@ -370,6 +397,9 @@
+ 		try
+ 		{
+ 			$insert_stmt = 'update users set reset = :reset where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$insert_stmt = ld_weave_prepare_sql($insert_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($insert_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->bindParam(':reset', $string);
+@@ -398,6 +428,9 @@
+ 		try
+ 		{
+ 			$select_stmt = 'select username from users where username = :username and reset = :reset';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$select_stmt = ld_weave_prepare_sql($select_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($select_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->bindParam(':reset', $code);
+@@ -429,6 +462,9 @@
+ 		try
+ 		{
+ 			$insert_stmt = 'update users set reset = NULL where username = :username';
++			if (function_exists('ld_weave_prepare_sql')) {
++				$insert_stmt = ld_weave_prepare_sql($insert_stmt);
++			}
+ 			$sth = $this->_dbh->prepare($insert_stmt);
+ 			$sth->bindParam(':username', $this->_username);
+ 			$sth->execute();

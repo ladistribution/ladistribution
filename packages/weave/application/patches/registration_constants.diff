@@ -1,0 +1,11 @@
+--- registration/1.0/weave_user_constants.php.dist.original	2010-01-12 22:16:50.000000000 +0100
++++ registration/1.0/weave_user_constants.php.dist	2010-02-02 19:29:25.000000000 +0100
+@@ -37,7 +37,7 @@
+ #
+ # ***** END LICENSE BLOCK *****
+ 
+-
++require_once(dirname(__FILE__) . '/../../dist/prepend.php');
+ 
+ #engine for auth
+ #Acceptable values: mysql | mozilla

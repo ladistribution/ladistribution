@@ -1,0 +1,11 @@
+<package>
+  <id>weave</id>
+  <name>Weave</name>
+  <version>1.0-28</version>
+  <type>application</type>
+  <db>mysql</db>
+  <deploy>
+      <origin>auth</origin>
+      <destination path="public">./sync/1.0/weave_user/</destination>
+  </deploy>
+</package>

@@ -1,0 +1,26 @@
+--- sync/1.0/index.php.orig	2010-03-01 14:45:21.000000000 +0100
++++ sync/1.0/index.php	2010-03-01 14:46:25.000000000 +0100
+@@ -38,6 +38,8 @@
+ #
+ # ***** END LICENSE BLOCK *****
+ 
++	require_once(dirname(__FILE__) . '/../../dist/prepend.php');
++
+ 	require_once 'weave_constants.php';
+ 	require_once 'weave_storage/' . WEAVE_STORAGE_ENGINE . '.php';
+ 	require_once 'weave_basic_object.php';
+@@ -56,9 +58,11 @@
+ 		$path = $_SERVER['PATH_INFO'];
+ 	else if (!empty($_SERVER['ORIG_PATH_INFO']))
+ 		$path = $_SERVER['ORIG_PATH_INFO'];
+-	else
+-		report_problem("No path found", 404);
+-	
++
++	if (function_exists('ld_weave_sync_path')) {
++		$path = ld_weave_sync_path($path);
++	}
++
+ 	$path = substr($path, 1); #chop the lead slash
+ 	list($username, $function, $collection, $id) = explode('/', $path . '///');
+ 	
