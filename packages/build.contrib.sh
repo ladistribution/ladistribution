@@ -129,3 +129,11 @@ cd roundcube
   cd ..
 
 cd ..
+
+cd weave
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..
