@@ -12,6 +12,15 @@ class Ld_Installer_Weave extends Ld_Installer
 		$this->createHtaccess();
 	}
 
+	function postUpdate($preferences = array())
+	{
+		$db = $this->instance->getDbConnection();
+		$dbPrefix = $this->getInstance()->getDbPrefix();
+
+		$db->query("ALTER TABLE `{$dbPrefix}wbo` CHANGE `username` `username` VARCHAR( 32 ) NOT NULL");
+		$db->query("ALTER TABLE `{$dbPrefix}collections` CHANGE `userid` `userid` VARCHAR( 32 ) NOT NULL");
+	}
+
 	function getSchemaTables()
 	{
 		$dbPrefix = $this->getInstance()->getDbPrefix();
@@ -29,7 +38,7 @@ class Ld_Installer_Weave extends Ld_Installer
 		// ) ENGINE=InnoDB;";
 
 		$tables[] = "CREATE TABLE `{$dbPrefix}collections` (
-			`userid` int(11) NOT NULL,
+			`userid` varchar(32) NOT NULL,
 			`collectionid` smallint(6) NOT NULL,
 			`name` varchar(32) NOT NULL,
 			PRIMARY KEY  (`userid`,`collectionid`),
@@ -37,7 +46,7 @@ class Ld_Installer_Weave extends Ld_Installer
 		) ENGINE=InnoDB;";
 
 		$tables[] = "CREATE TABLE `{$dbPrefix}wbo` (
-			`username` int(11) NOT NULL,
+			`username` varchar(32) NOT NULL,
 			`collection` smallint(6) NOT NULL default '0',
 			`id` varbinary(64) NOT NULL default '',
 			`parentid` varbinary(64) default NULL,

@@ -1,5 +1,6 @@
 NAME="weave"
 VERSION="1.0"
+REVISION_SYNC="e8cb7f5fc23e"
 SOURCE_REGISTRATION="http://hg.mozilla.org/labs/weaveserver-registration"
 SOURCE_SYNC="http://hg.mozilla.org/labs/weaveserver-sync"
 FOLDER="application"
@@ -8,7 +9,7 @@ PACKAGE="$NAME.zip"
 # Get source
 # mkdir $FOLDER
 # hg clone $SOURCE_REGISTRATION $FOLDER/registration
-hg clone $SOURCE_SYNC $FOLDER/sync
+hg clone $SOURCE_SYNC $FOLDER/sync --rev $REVISION_SYNC
 
 # Apply patches
 # patch -p0 -d $FOLDER < patches/registration_index.diff

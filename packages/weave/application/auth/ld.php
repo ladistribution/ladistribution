@@ -26,7 +26,7 @@ class WeaveAuthentication implements WeaveAuthenticationBase
 	{
 		$result = Ld_Auth::authenticate($this->_username, $password);
 		if ($result->isValid()) {
-			$user = Ld_Auth::getUsername();
+			$user = Ld_Auth::getUser();
 			if ($user) {
 				return $user['id'];
 			}

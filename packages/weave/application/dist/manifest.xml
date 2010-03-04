@@ -1,7 +1,7 @@
 <package>
   <id>weave</id>
   <name>Weave</name>
-  <version>1.0-28</version>
+  <version>1.0-32</version>
   <type>application</type>
   <db>mysql</db>
   <deploy>
