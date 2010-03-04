@@ -9,7 +9,7 @@ PACKAGE="$NAME.zip"
 # Get source
 # mkdir $FOLDER
 # hg clone $SOURCE_REGISTRATION $FOLDER/registration
-hg clone $SOURCE_SYNC $FOLDER/sync --rev $REVISION_SYNC
+hg clone --rev $REVISION_SYNC $SOURCE_SYNC $FOLDER/sync
 
 # Apply patches
 # patch -p0 -d $FOLDER < patches/registration_index.diff
