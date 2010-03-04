@@ -85,6 +85,32 @@ class Ld_Installer_Gallery extends Ld_Installer
 		if (!$result) {
 			throw Exception(mysql_error());
 		}
+
+		$blocks_dashboard_center = array(
+			7 => array('gallery', 'photo_stream')
+		);
+		$sql = installer::prepend_prefix($config["prefix"], sprintf(
+			"UPDATE {vars} SET value = '%s' WHERE module_name = 'gallery' AND name = 'blocks_dashboard_center'", 
+			serialize($blocks_dashboard_center)
+		));
+		$result = $con->query($sql);
+		// module::set_var("gallery", "blocks_dashboard_center", $blocks_dashboard_center);
+
+		$blocks_dashboard_sidebar = array(
+			2 => array('gallery', 'block_adder'),
+			3 => array('gallery', 'stats')
+		);
+		$sql = installer::prepend_prefix($config["prefix"], sprintf(
+			"UPDATE {vars} SET value = '%s' WHERE module_name = 'gallery' AND name = 'blocks_dashboard_sidebar'", 
+			serialize($blocks_dashboard_sidebar)
+		));
+		$result = $con->query($sql);
+		// module::set_var("gallery", "blocks_dashboard_sidebar", $blocks_dashboard_sidebar);
+
+		// block_manager::remove("dashboard_center", 'welcome');
+		// block_manager::remove("dashboard_center", 'log_entries');
+		// block_manager::remove("dashboard_sidebar", 'platform_info');
+		// block_manager::remove("dashboard_sidebar", 'project_news');
 	}
 
 	// protected function _getSalt()
@@ -104,7 +130,7 @@ class Ld_Installer_Gallery extends Ld_Installer
 		// manual upgrade = http://example.com/gallery3/index.php/upgrader
 	}
 
-	public $roles = array('administrator', 'user');
+	public $roles = array('user', 'administrator');
 
 	public $defaultRole = 'user';
 

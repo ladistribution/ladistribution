@@ -37,4 +37,10 @@ class ld_event_Core
         Ld_Auth::logout();
     }
 
+    static function admin_menu($menu, $theme)
+    {
+        $menu->remove("settings_menu");
+        $menu->remove("modules");
+    }
+
 }

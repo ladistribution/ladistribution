@@ -1,13 +1,13 @@
 <package>
   <id>gallery</id>
   <name>Gallery</name>
-  <version>3.0-2-rc1</version>
+  <version>3.0-6-rc1</version>
   <type>application</type>
   <db>mysql</db>
   <php>
       <version>5.2.3</version>
   </php>
-  <need>lib-htmlpurifier</need>
+  <!-- <need>lib-htmlpurifier</need> -->
   <deploy>
       <origin>var</origin>
       <destination path="public">var</destination>
