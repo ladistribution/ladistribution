@@ -34,9 +34,13 @@ class Ld_Auth
         }
     }
 
-    public static function authenticate($username, $password)
+    public static function authenticate($username, $password, $remember = false)
     {
         $auth = Zend_Auth::getInstance();
+        if ($remember) {
+            $storage = $auth->getStorage();
+            $storage->setOptions(array('cookieExpire' => time()+60*60*24*30));
+        }
         $adapter = new Ld_Auth_Adapter_File();
         $adapter->setCredentials($username, $password);
         $result = $auth->authenticate($adapter);

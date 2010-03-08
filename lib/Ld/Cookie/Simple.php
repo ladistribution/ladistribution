@@ -26,7 +26,9 @@ class Ld_Cookie_Simple
     public function getCookieValue($cookiename, $deleteIfInvalid = true)
     {
         if ($this->cookieExists($cookiename)) {
-            return stripslashes($_COOKIE[$cookiename]);
+            $value = stripslashes($_COOKIE[$cookiename]);
+            $value = html_entity_decode($value); // issue spotted with habari
+            return $value;
         }
         return (false);
     }

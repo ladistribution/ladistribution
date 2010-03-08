@@ -27,7 +27,7 @@ class AuthController extends Ld_Controller_Action
         $this->view->postParams = array();
         foreach ($_POST as $key => $value) {
             $ignore = array(
-                'ld_auth_username', 'ld_auth_password', 'ld_auth_action',
+                'ld_auth_username', 'ld_auth_password', 'ld_auth_action', 'ld_auth_remember',
                 'ld_referer',
                 'openid_action', 'openid_identifier');
             if (in_array($key, $ignore)) {

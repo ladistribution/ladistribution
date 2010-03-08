@@ -5,17 +5,16 @@
     <h2><?php echo $this->translate("Log In") ?></h2>
 
     <?php
-
     if (isset($this->authentication)) {
         switch ($this->authentication->getCode()) {
             case Zend_Auth_Result::SUCCESS:
                 // everything OK
                 break;
             case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-                echo '<div class="ld-error"><b>Error</b>: ' . "Invalid username." . '</div>';
+                echo '<div class="ld-error"><b>Error</b>: ' . $this->translate("Invalid username.") . '</div>';
                 break;
             case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-                echo '<div class="ld-error"><b>Error</b>: ' . "Incorrect password." . '</div>';
+                echo '<div class="ld-error"><b>Error</b>: ' . $this->translate("Incorrect password.") . '</div>';
                 break;
             default:
                 $messages = $this->authentication->getMessages();
@@ -40,6 +39,11 @@
             <label for="ld-auth-password"><?php echo $this->translate("Password:") ?></label>
             <input id="ld-auth-password" class="text"  type="password" name="ld_auth_password" value=""/>
 
+            <label for="ld-auth-remember">
+                <input id="ld-auth-remember" type="checkbox" name="ld_auth_remember"/>
+                <?php echo $this->translate("Remember me") ?>
+            </label>
+
             <script type="text/javascript">jQuery('#ld-auth-password').focus();</script>
 
         <?php else : ?>
@@ -56,7 +60,7 @@
         <?php endforeach ?>
 
         <input type="hidden" name="ld_auth_action" value="login"/>
-        
+
         <?php if (isset($this->referer)) : ?>
             <input type="hidden" name="ld_referer" value="<?php echo $this->escape($this->referer) ?>"/>
         <?php endif ?>

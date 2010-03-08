@@ -56,17 +56,21 @@ class Ld_Auth_Storage_Cookie implements Zend_Auth_Storage_Interface
             $config = $config->toArray();
         }
 
-        if (is_array($config)) {
+        $this->setOptions($config);
+    }
+    
+    public function setOptions($options)
+    {
+        if (is_array($options)) {
             $keys = array('cookieName', 'cookieExpire', 'cookiePath',
                 'cookieDomain', 'cookieSecure', 'cookieHttpOnly');
             foreach ($keys as $key) {
-                if (array_key_exists($key, $config)) {
+                if (array_key_exists($key, $options)) {
                     $property = "_$key";
-                    $this->$property = $config[$key];
+                    $this->$property = $options[$key];
                 }
             }
         }
-
     }
 
     /**
