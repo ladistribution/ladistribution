@@ -1,23 +1,16 @@
-<package release="unstable">
+<package>
   <id>lib-ld</id>
   <name>La Distribution PHP libraries</name>
-  <version>0.4-7</version>
+  <version>0.4-9</version>
   <type>lib</type>
   <need>lib-zend-framework</need>
   <need>lib-clearbricks</need>
   <deploy>
       <origin>lib</origin>
-      <destination path="lib">./</destination>
+      <destination path="lib">Ld</destination>
   </deploy>
-  <!--
   <deploy>
       <origin>locales</origin>
       <destination path="shared">locales/ld</destination>
-  </deploy>
-  -->
-  <!-- we have to do that this way, because of limitations in old version of Ld Libraries -->
-  <deploy>
-      <origin>shared</origin>
-      <destination path="shared">./</destination>
   </deploy>
 </package>

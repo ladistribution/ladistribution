@@ -89,6 +89,13 @@ class AuthController extends Ld_Controller_Action
                 'email'      => $this->_getParam('ld_register_email')
             );
 
+            $validate = Ld_Plugin::applyFilters('Auth:register:validate', true, $this->_getAllParams());
+            if ($validate !== true) {
+                $this->view->user = $user;
+                $this->view->error = $validate;
+                return;
+            }
+
             if (Ld_Auth::isOpenid()) {
                 $user['identities'] = array( Ld_Auth::getIdentity() );
                 if (!$this->_hasParam('ld_register_password')) {
@@ -160,7 +167,7 @@ class AuthController extends Ld_Controller_Action
 
         if ($auto) {
             $referer = $this->getRequest()->getServer('HTTP_REFERER');
-            if (false === strpos($referer, 'auth/login')) {
+            if (false === strpos($referer, 'auth/login') && false === strpos($referer, 'auth/register')) {
                 return $referer;
             }
         }
@@ -170,7 +177,7 @@ class AuthController extends Ld_Controller_Action
     {
         $this->_tryRedirect(array(
             $this->_getReferer($auto),
-            $this->view->url(array(), null, true)
+            $this->getSite()->getBaseUrl()
         ));
     }
 
@@ -178,9 +185,12 @@ class AuthController extends Ld_Controller_Action
     {
         foreach ($urls as $url) {
             if (Zend_Uri_Http::check($url)) {
-                return $this->_redirect($url);
+                $this->noRender();
+                $this->_redirect($url);
+                return;
             }
         }
+        throw new Exception("Can't redirect.");
     }
 
 }

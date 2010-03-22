@@ -171,6 +171,7 @@ class Slotter_UsersController extends Slotter_BaseController
                 }
             }
             $this->admin->setUserRoles($userRoles);
+            // redirect
             $this->_redirector->gotoSimple('index', 'users');
         }
 
@@ -198,7 +199,6 @@ class Slotter_UsersController extends Slotter_BaseController
     public function editAction()
     {
         $id = $this->_getParam('id');
-        $this->view->user = $user = $this->site->getUser($id);
         if ($this->getRequest()->isPost()) {
             $params = array(
                 'fullname'   => $this->_getParam('fullname'),
@@ -211,6 +211,7 @@ class Slotter_UsersController extends Slotter_BaseController
             }
             $this->site->updateUser($id, $params);
         }
+        $this->view->user = $this->site->getUser($id);
     }
 
     public function addIdentityAction()

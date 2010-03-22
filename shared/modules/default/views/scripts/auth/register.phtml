@@ -36,9 +36,15 @@
         <label for="ld-register-password-again"><?php echo $this->translate("Password again:") ?></label>
         <input id="ld-register-password-again" class="text" type="password" name="ld_register_password_again" value="" autocomplete="off"/>
 
+        <?php if (isset($this->referer)) : ?>
+            <input type="hidden" name="ld_referer" value="<?php echo $this->escape($this->referer) ?>"/>
+        <?php endif ?>
+
         <input type="hidden" name="ld_auth_action" value="register"/>
 
-        <input class="button" type="submit" value="<?php echo $this->translate("Register") ?>"/>
+        <?php Ld_Plugin::doAction('Auth:register:form'); ?>
+
+        <input class="submit button ld-button" type="submit" value="<?php echo $this->translate("Register") ?>"/>
 
     </form>
 

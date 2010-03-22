@@ -14,10 +14,10 @@
         $open_registration = Zend_Registry::get('site')->getConfig('open_registration'); 
         ?>
         <?php if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous()) : ?>
-            <a href="<?php echo $this->completeUrl ?>"><?php echo $user['fullname'] ?></a>
+            <a href="<?php echo $this->completeUrl ?>"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></a>
             <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>
         <?php elseif (Ld_Auth::isAuthenticated() && $user) : ?>
-            <a href="<?php echo $userUrl ?>"><?php echo $user['fullname'] ?></a>
+            <a href="<?php echo $userUrl ?>"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></a>
             <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>
         <?php else : ?>
             <a class="h6e-login" href="<?php echo $this->loginUrl ?>"><?php echo $this->translate("Log In") ?></a>

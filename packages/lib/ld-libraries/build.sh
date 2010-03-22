@@ -1,4 +1,4 @@
-SOURCE="http://ladistribution.net/svn/trunk/lib/"
+SOURCE="http://ladistribution.net/svn/trunk/lib/Ld"
 FOLDER="lib"
 PACKAGE="lib-ld.zip"
 
@@ -10,13 +10,15 @@ svn export $SOURCE $FOLDER
 
 # Get locales
 
-# svn export "http://ladistribution.net/svn/trunk/shared/locales/ld" locales
-# we have to do that this way, because of limitations in old version of Ld Libraries
-mkdir shared
-mkdir shared/locales
-mkdir shared/locales/ld
 # Export from SVN
-svn export "http://ladistribution.net/svn/trunk/shared/locales/ld/en_US" shared/locales/ld/en_US
+svn export "http://ladistribution.net/svn/trunk/shared/locales/ld" locales
+
+# we have to do that this way, because of limitations in old version of Ld Libraries
+# mkdir shared
+# mkdir shared/locales
+# mkdir locales
+# svn export "http://ladistribution.net/svn/trunk/shared/locales/ld/en_US" locales/en_US
+
 # Local Export
 # cp -R /Web/ld/shared/locales/ld/en_US shared/locales/ld/en_US
 

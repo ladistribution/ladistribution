@@ -1,7 +1,7 @@
 <package release="unstable">
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.4-7</version>
+  <version>0.4-9</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
@@ -19,7 +19,7 @@
   </deploy>
   <deploy>
       <origin>js</origin>
-      <destination path="js"></destination>
+      <destination path="js">ld</destination>
   </deploy>
   <deploy>
       <origin>locales</origin>

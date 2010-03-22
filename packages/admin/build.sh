@@ -5,7 +5,7 @@ PACKAGE="admin.zip"
 mkdir $FOLDER
 
 # Export from SVN
-svn export "$SOURCE/js" js
+svn export "$SOURCE/js/ld" js
 # Local Export
 # mkdir js
 # cp -R /Web/ld/js/ld js/ld
