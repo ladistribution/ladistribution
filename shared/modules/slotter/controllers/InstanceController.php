@@ -309,13 +309,57 @@ class Slotter_InstanceController extends Slotter_BaseController
         }
 
         if ($this->getRequest()->isPost()) {
-            $roles = $this->_getParam('roles');
-            $this->instance->getInstaller()->setUserRoles($roles);
+            // save user order
+            if ($this->_hasParam('userOrder')) {
+                $userOrder = array_merge($this->instance->getUserOrder(), (array)$this->_getParam('userOrder'));
+                $this->instance->setUserOrder($userOrder);
+            }
+            // save user roles
+            if ($this->_hasParam('userRoles')) {
+                $userRoles = array_merge($this->instance->getUserRoles(), (array)$this->_getParam('userRoles'));
+                $this->instance->setUserRoles($userRoles);
+            }
+            if ($this->getRequest()->isXmlHttpRequest()) {
+                $this->noRender();
+                $this->getResponse()->appendBody('ok');
+                return;
+            }
         }
 
-        $this->view->users = $this->site->getUsers();
-        $this->view->roles = $this->instance->getInstaller()->getRoles();
-        $this->view->userRoles = $this->instance->getInstaller()->getUserRoles();
+        $this->view->users = $this->_getUsers();
+        $this->view->roles = $this->instance->getRoles();
+        $this->view->userRoles = $this->instance->getUserRoles();
+
+        // Fix missing roles
+        foreach ($this->view->users as $username => $user) {
+            if (empty($this->view->userRoles[$username])) {
+                $this->view->userRoles[$username] = $installer->defaultRole;
+            }
+        }
+    }
+
+    protected function _getUsers()
+    {
+        $users = $this->instance->getUsersByUsername();
+
+        foreach ($this->admin->getUserRoles() as $username => $role) {
+            if (empty($users[$username])) {
+                $user = $this->site->getUser($username);
+                if (empty($user)) {
+                    continue;
+                }
+                $users[$username] = $user;
+            }
+        }
+
+        $userOrder = $this->instance->getUserOrder();
+        foreach ($users as $username => $user) {
+            $users[$username]['order'] = isset($userOrder[$username]) ? $userOrder[$username] : 999;
+        }
+
+        uasort($users, array('Ld_Utils', "sortByOrder"));
+
+        return $users;
     }
 
     public function cloneAction()

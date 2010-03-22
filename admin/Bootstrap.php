@@ -69,7 +69,11 @@ class Bootstrap
 
         // Routes Admin modules in various contexts
 
-        $baseUrl = $site->getPath() . '/' . $instance->getPath();
+        if (defined('LD_ROOT_CONTEXT')) {
+            $baseUrl = $site->getPath();
+        } else {
+            $baseUrl = $site->getPath() . '/' . $instance->getPath();
+        }
 
         $indexScript = $site->getDirectory() . '/index.php';
 

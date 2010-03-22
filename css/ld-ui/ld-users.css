@@ -1,0 +1,94 @@
+/* --------------------------------------------------------------
+
+   LD UI: Users
+
+-------------------------------------------------------------- */
+
+.ld-groups {
+    width: 100%;
+    overflow: hidden;
+}
+
+.ld-group {
+    border: 1px solid #ddd;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    position: relative;
+    padding: 15px 0 5px 15px;
+    min-width: 186px;
+    min-height: 48px;
+    margin: 10px;
+    margin-left: 0;
+    float: left;
+    clear: both;
+}
+
+.ld-group-name {
+    position: absolute;
+    top: -1em;
+    left: 20px;
+    font-weight: bold;
+    padding: 0.25em;
+    background: white;
+}
+
+.ld-user {
+    border: 1px solid #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #EDEDED;
+    margin: 0 1em 0.5em 0;
+    padding: 0.35em;
+    font-size: 11px;
+    line-height: 1.35em;
+    width: 164px;
+    height: 32px;
+    overflow: hidden;
+    float: left;
+}
+
+.ld-user .username, .ld-user .fullname {
+    display: block;
+    white-space: nowrap;
+}
+
+.ld-user .username {
+    font-style: italic;
+}
+
+.ld-user .avatar {
+    float: left;
+    height: 32px;
+    width: 32px;
+    margin-right: 0.5em;
+}
+
+.ld-user .checkbox {
+    float: left;
+    margin-top: 10px;
+    margin-right: 10px
+}
+
+.ld-user.selected {
+    background-color: #ccc;
+    border-color: #999;
+}
+
+.ld-user.disabled {
+    background-color: #f1f1f1;
+    border-color: #ddd;
+}
+
+.ld-actions {
+    margin: 1em 0.25em;
+}
+
+.ld-panel.roles-panel .ld-panel-content {
+    padding: 10px 10px 20px 20px;
+}
+
+.ld-panel.roles-panel .ld-user {
+    width: 128px;
+}

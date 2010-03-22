@@ -15,25 +15,25 @@
         </td>
     </tr>
     <tr>
-        <th><label><?php echo $this->translate("Host") ?></label></th>
-        <td><input type="text" name="host" class="text" value="<?php echo $this->escape($this->db['host']) ?>"/></td>
+        <th><label for="ld-db-edit-host"><?php echo $this->translate("Host") ?></label></th>
+        <td><input id="ld-db-edit-host" type="text" name="host" class="text" value="<?php echo $this->escape($this->db['host']) ?>"/></td>
     </tr>
     <tr>
-        <th><label><?php echo $this->translate("Name") ?></label></th>
-        <td><input type="text" name="name" class="text" value="<?php echo $this->escape($this->db['name']) ?>"/></td>
+        <th><label for="ld-db-edit-name"><?php echo $this->translate("Name") ?></label></th>
+        <td><input id="ld-db-edit-name"  type="text" name="name" class="text" value="<?php echo $this->escape($this->db['name']) ?>"/></td>
     </tr>
     <tr>
-        <th><label><?php echo $this->translate("Username") ?></label></th>
-        <td><input type="text" name="user" class="text" value="<?php echo $this->escape($this->db['user']) ?>"/></td>
+        <th><label for="ld-db-edit-user"><?php echo $this->translate("Username") ?></label></th>
+        <td><input id="ld-db-edit-user" type="text" name="user" class="text" value="<?php echo $this->escape($this->db['user']) ?>"/></td>
     </tr>
     <tr>
-        <th><label><?php echo $this->translate("Password") ?></label></th>
-        <td><input type="password" name="password" class="text" value="" autocomplete="off"/></td>
+        <th><label for="ld-db-edit-password"><?php echo $this->translate("Password") ?></label></th>
+        <td><input id="ld-db-edit-password" type="password" name="password" class="text" value="" autocomplete="off"/></td>
     </tr>
     </table>
 
     <input type="hidden" name="id" value="<?php echo $this->escape($this->id) ?>"/>
 
-    <input type="submit" class="submit" value="<?php echo $this->translate("Update") ?>"/>
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>
 
 </form>

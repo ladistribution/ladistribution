@@ -8,12 +8,12 @@
 -------------------------------------------------------------- */
 
 .ld-panel {
-  font:12px/16px "Helvetica Neue", Helvetica, Arial, sans-serif ! important;
+  font:12px/16px "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-align:left;
 }
 
 .ld-panel, .ld-panel a {
-  color:#4E5368 ! important;
+  color:#4E5368;
 }
 
 .ld-panel a {
@@ -34,6 +34,15 @@
   font-size:18px;
   margin:0.5em 0 1em;
 }
+
+.ld-panel input.cancel {
+  background:transparent;
+  border:none;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+.ld-panel input.cancel:hover { text-decoration:none; }
 
 /* Instance Menu
 -------------------------------------------------------------- */

@@ -54,7 +54,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
             'lib'    => 'lib',
             'dist'   => 'dist',
             'tmp'    => 'tmp',
-            'cache'  => 'tmp/cache'
+            'cache'  => 'tmp/cache',
+            'repositories' => 'repositories'
         );
 
         $config = $this->getConfig();
@@ -174,6 +175,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
     }
 
+    public function isChild()
+    {
+        return false;
+    }
+
     public function getUniqId()
     {
         return uniqid();
@@ -210,17 +216,26 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getDirectory($dir = null)
     {
         if (isset($dir)) {
-            return Ld_Files::real($this->dir . '/' . $this->directories[$dir]);
+            $directory = Ld_Files::real($this->dir . '/' . $this->directories[$dir]);
+        } else {
+            $directory = Ld_Files::real($this->dir);
         }
-        return Ld_Files::real($this->dir);
+        return $directory;
     }
 
     public function getUrl($dir = null)
     {
+        $url = 'http://' . $this->getHost() . $this->getPath() . '/';
         if (isset($dir)) {
-            return 'http://' . $this->getHost() . $this->getPath() . '/' . $this->directories[$dir];
+             $url .= $this->directories[$dir];
         }
-        return 'http://' . $this->getHost() . $this->getPath() . '/';
+        return $url;
+    }
+
+    public function getName()
+    {
+        $site_name = $this->getConfig('site_name');
+        return $site_name;
     }
 
     public function getInstances($filterValue = null, $filterKey = 'type')
@@ -258,19 +273,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $applications;
     }
 
-    protected function _sortByOrder($a, $b)
-    {
-        if (isset($a['order']) && isset($b['order'])) {
-            return ($a['order'] < $b['order']) ? -1 : 1;
-        } else if (isset($a['order'])) {
-            return -1;
-        }
-        return 1;
-    }
-
     public function updateInstances($instances)
     {
-        uasort($instances, array($this, "_sortByOrder"));
+        uasort($instances, array("Ld_Utils", "sortByOrder"));
         Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
         // Reset stored instances list
         unset($this->_instances);
@@ -727,108 +732,62 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     // Users
 
-    public function getUsers()
+    public function getUsersBackend()
     {
-        $users = $this->_users;
-
-        if (empty($users)) {
-            $users = Ld_Files::getJson($this->getDirectory('dist') . '/users.json');
+        if (empty($this->_usersBackend)) {
+            $this->_usersBackend = new Ld_Site_Users_Simple();
+            $this->_usersBackend->setSite($this);
         }
+        return $this->_usersBackend;
+    }
 
-        foreach ((array)$users as $key => $user) {
-            $users[$key]['id'] = $key;
-            if (empty($users[$key]['fullname'])) {
-                $users[$key]['fullname'] = $users[$key]['username'];
-            }
+    public function setUsersBackend($usersBackend)
+    {
+        $this->_usersBackend = $usersBackend;
+    }
+
+    public function getUsers($params = array())
+    {
+        $users = $this->getUsersBackend()->getUsers($params);
+        return $users;
+    }
+
+    public function getUsersByUsername()
+    {
+        $users = array();
+        foreach ($this->getUsers() as $user) {
+            $username = $user['username'];
+            $users[$username] = $user;
         }
-        return $this->_users = $users;
+        return $users;
     }
 
     public function getUser($username)
     {
-        $users = $this->getUsers();
-        foreach ($users as $user) {
-            if ($user['username'] == $username) {
-                return $user;
-            }
-        }
-        return null;
+        $user = $this->getUsersBackend()->getUser($username);
+        return $user;
     }
 
     public function getUserByUrl($url)
     {
-        foreach (self::getUsers() as $id => $user) {
-            if (!empty($user['identities'])) {
-                foreach ($user['identities'] as $identity) {
-                    if ($identity == $url) {
-                        return $user;
-                    }
-                }
-            }
-        }
-        return null;
+        $user = $this->getUsersBackend()->getUserByUrl($url);
+        return $user;
     }
 
     public function addUser($user)
     {
-        $hasher = new Ld_Auth_Hasher(8, TRUE);
-
-        if (isset($user['password'])) {
-            $user['hash'] = $hasher->HashPassword($user['password']);
-            unset($user['password']);
-        }
-
-        if ($exists = $this->getUser($user['username'])) {
-            throw new Exception("User with this username already exists.");
-        }
-
-        $users = $this->getUsers();
-        $users[$this->getUniqId()] = $user;
-
-        $this->writeUsers($users);
+        $this->getUsersBackend()->addUser($user);
+        return $user;
     }
 
     public function updateUser($username, $infos = array())
     {
-        if (!$user = $this->getUser($username)) {
-            throw new Exception("User with this username doesn't exists.");
-        }
-
-        $id = $user['id'];
-
-        foreach ($infos as $key => $value) {
-            if ($key == 'password') {
-                $hasher = new Ld_Auth_Hasher(8, TRUE);
-                $user['hash'] = $hasher->HashPassword($value);
-            } else {
-                $user[$key] = $value;
-            }
-        }
-
-        $users = $this->getUsers();
-        $users[$id] = $user;
-
-        $this->writeUsers($users);
+        return $this->getUsersBackend()->updateUser($username, $infos);
     }
 
     public function deleteUser($username)
     {
-        if (!$user = $this->getUser($username)) {
-            throw new Exception("User with this username doesn't exists.");
-        }
-
-        $id = $user['id'];
-
-        $users = $this->getUsers();
-        unset($users[$id]);
-
-        $this->writeUsers($users);
-    }
-
-    public function writeUsers($users)
-    {
-        $this->_users = $users;
-        Ld_Files::putJson($this->getDirectory('dist') . '/users.json', $users);
+        return $this->getUsersBackend()->deleteUser($username);
     }
 
     // Repositories
@@ -847,6 +806,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
+        $repositories = Ld_Plugin::applyFilters('Site:getRepositories', $repositories);
+
         return $this->_repositories = $repositories;
     }
 
@@ -862,17 +823,16 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function saveRepositoriesConfiguration($cfg)
     {
-        uasort($cfg, array($this, "_sortByOrder"));
+        uasort($cfg, array("Ld_Utils", "sortByOrder"));
         Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
         unset($this->_repositories); // empty local cache
     }
 
     protected function _getRepository($config)
     {
-        if ($config['type'] == 'local') {
-            return new Ld_Repository_Local($config);
-        } elseif ($config['type'] == 'remote') {
-            return new Ld_Repository_Remote($config);
+        if (isset($config['type'])) {
+            $className = 'Ld_Repository_' . ucfirst(strtolower($config['type']));
+            return new $className($config);
         }
     }
 

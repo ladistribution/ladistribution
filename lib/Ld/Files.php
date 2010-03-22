@@ -45,6 +45,11 @@ class Ld_Files
             self::log('unlink', $dir);
         }
 
+        if (self::exists($dir . '/.preserve')) {
+            self::log('skipped', "$dir (preserve detected in target)");
+            return false;
+        }
+
         if (!is_writable($dir)) {
             self::log('skipped', "$dir (not writable)");
             return false;

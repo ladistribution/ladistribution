@@ -1,6 +1,6 @@
 <?php $this->instancesList(false) ?>
 
-<div class="ld-panel">
+<div class="ld-panel roles-panel">
 
 <?php $this->instanceNavigation() ?>
 
@@ -18,21 +18,72 @@
 
 <form action="<?php echo $this->url() ?>" method="post">
 
+<?php if (defined('LD_AJAX_USERS') && constant('LD_AJAX_USERS')) : ?>
+
+<?php
+
+$labels = array(
+    'admin'         => $this->translate('Administrator'),
+    'administrator' => $this->translate('Administrator'),
+    'editor'        => $this->translate('Editor'),
+    'author'        => $this->translate('Author'),
+    'contributor'   => $this->translate('Contributor'),
+    'subscriber'    => $this->translate('Subscriber'),
+    'guest'         => $this->translate('Guest'),
+    'user'          => $this->translate('User')
+);
+
+function role_label($role, $labels)
+{
+    if (isset($labels[$role])) {
+        return $labels[$role];
+    }
+    return ucfirst($role);
+}
+
+?>
+
+<div class="ld-groups">
+    <?php foreach ($this->roles as $role) : ?>
+        <div id="group_<?php echo $role ?>" class="ld-group ld-group-<?php echo $role ?> sortable">
+            <span class="ld-group-name"><?php echo role_label($role, $labels) ?></span>
+            <?php foreach ($this->users as $user) : $username = $user['username'] ?>
+                <?php if ( isset($this->userRoles[$username]) && $this->userRoles[$username] == $role ) : ?>
+                    <?php $this->userRenderer($user, array('checkbox' => false)) ?>
+                <?php endif ?>
+            <?php endforeach ?>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($){
+        if (typeof Ld == "undefined") Ld = {};
+        Ld.setRolesUrl = "<?php echo $this->url(); ?>";
+    });
+})(jQuery);
+</script>
+
+<?php else : ?>
+
 <table class="h6e-data">
 
     <tr>
         <th><?php echo $this->translate('Username') ?></th>
         <th><?php echo $this->translate('Full Name') ?></th>
+        <th><?php echo $this->translate("Email") ?></th>
         <th><?php echo $this->translate('Role') ?></th>
     </tr>
 
 <?php foreach ($this->users as $user) : ?>
 
     <tr>
-        <td><?php echo $user['username'] ?></td>
-        <td><?php echo $user['fullname'] ?></td>
+        <td><?php echo $this->escape($user['username']) ?></td>
+        <td><?php echo $this->escape($user['fullname']) ?></td>
+        <td><?php echo $this->escape($user['email']) ?></td>
         <td>
-            <select name="roles[<?php echo $user['username'] ?>]">
+            <select name="userRoles[<?php echo $user['username'] ?>]">
                 <?php foreach ($this->roles as $role) : ?>
                     <?php
                     $username = $user['username'];
@@ -49,7 +100,9 @@
 
 </table>
 
-<input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
+<input type="submit" class="submit button" value="<?php echo $this->translate("Update roles") ?>"/>
+
+<?php endif ?>
 
 </form>
 

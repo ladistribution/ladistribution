@@ -1,0 +1,25 @@
+<?php
+
+class View_Helper_UserRenderer extends Zend_View_Helper_Abstract
+{
+
+    public function userRenderer($user, $params = array())
+    {
+            $username = $user['username'];
+            ?>
+            <div id="user_<?php echo $username ?>" class="ld-user">
+                <?php if (isset($params['checkbox']) && $params['checkbox']) : ?>
+                    <?php if (isset($params['disabled']) && $params['disabled']) : ?>
+                        <input name="users[<?php echo $username ?>]" type="checkbox" class="checkbox" checked="checked" disabled="disabled"/>
+                    <?php else : ?>
+                        <input name="users[<?php echo $username ?>]" type="checkbox" class="checkbox"/>
+                    <?php endif ?>
+                <?php endif ?>
+                <img src="http://www.gravatar.com/avatar/<?php echo md5($user['email']) ?>?s=32" alt="" class="avatar"/>
+                <span class="username"><?php echo $username ?></span>
+                <span class="fullname"><?php echo $user['fullname'] ?></span>
+            </div>
+            <?php
+    }
+
+}

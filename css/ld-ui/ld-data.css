@@ -26,7 +26,7 @@ table.h6e-data tr.even td {
 
 table.h6e-data tr td.move {
   padding:10px;
-  background:url(img/move.gif) center center no-repeat;
+  background:url(img/move.png) center center no-repeat;
 }
 
 table.h6e-data tr.dragging td {

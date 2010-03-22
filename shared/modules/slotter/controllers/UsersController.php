@@ -25,11 +25,15 @@ class Slotter_UsersController extends Slotter_BaseController
                     }
                 }
                 break;
+            case 'add':
             case 'index':
                 // allow
+                if (!$this->_acl->isAllowed($this->userRole, 'instances', 'manage')) {
+                    $this->_disallow();
+                }
                 break;
             default:
-                if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+                if (!$this->_acl->isAllowed($this->userRole, 'users', 'manage')) {
                     $this->_disallow();
                 }
         }
@@ -46,6 +50,11 @@ class Slotter_UsersController extends Slotter_BaseController
         $usersPage->addPage(array(
             'label' => 'New', 'module'=> 'slotter', 'controller' => 'users', 'action' => 'new'
         ));
+
+        $usersPage->addPage(array(
+            'label' => 'Add', 'module'=> 'slotter', 'controller' => 'users', 'action' => 'add'
+        ));
+
         if ($this->_hasParam('id')) {
             $action = $this->getRequest()->action;
             $usersPage->addPage(array(
@@ -61,28 +70,61 @@ class Slotter_UsersController extends Slotter_BaseController
 
     public function indexAction()
     {
-        $applications = $this->site->getInstances('application');
+        if ($this->getRequest()->isPost()) {
+            // save user order
+            if ($this->_hasParam('userOrder')) {
+                $userOrder = array_merge($this->admin->getUserOrder(), (array)$this->_getParam('userOrder'));
+                $this->admin->setUserOrder($userOrder);
+            }
+            // save user roles
+            if ($this->_hasParam('userRoles')) {
+                $userRoles = array_merge($this->admin->getUserRoles(), (array)$this->_getParam('userRoles'));
+                $this->admin->setUserRoles($userRoles);
+            }
+            // remove users
+            if ($this->_hasParam('userAction')) {
+                switch($this->_getParam('userAction')) {
+                    case 'remove':
+                        if ($this->_hasParam('users')) {
+                            $userRoles = $this->admin->getUserRoles();
+                            foreach ((array)$this->_getParam('users') as $username => $on) {
+                                if (isset($userRoles[$username])) {
+                                    unset($userRoles[$username]);
+                                }
+                            }
+                            $this->admin->setUserRoles($userRoles);
+                        }
+                        break;
+                    case 'delete':
+                        if ($this->_hasParam('users')) {
+                            $userRoles = $this->admin->getUserRoles();
+                            foreach ((array)$this->_getParam('users') as $username => $on) {
+                                $this->site->deleteUser($username);
+                                if (isset($userRoles[$username])) {
+                                    unset($userRoles[$username]);
+                                }
+                            }
+                            $this->admin->setUserRoles($userRoles);
+                        }
+                        break;
+                }
+            }
+            // redirect or render
+            if ($this->getRequest()->isXmlHttpRequest()) {
+                $this->noRender();
+                $this->getResponse()->appendBody('ok');
+            } else {
+                $this->_redirector->gotoSimple('index', 'users');
+            }
+            return;
+        }
 
-        // if ($this->getRequest()->isPost()) {
-        //     $roles = $this->_getParam('roles');
-        //     foreach ($applications as $id => $application) {
-        //         $path = $application['path'];
-        //         if (isset($roles[$path])) {
-        //             $instance = $this->site->getInstance($path);
-        //             $instance->setUserRoles($roles[$path]);
-        //         }
-        //     }
-        // }
+        $this->view->users = $this->_getUsers();
+        $this->view->roles = $this->admin->getRoles();
+        $this->view->userRoles = $this->admin->getUserRoles();
 
-        $this->view->users = $this->site->getUsers();
-
-        // foreach ($applications as $id => $application) {
-        //     $instance = $this->site->getInstance($application['path']);
-        //     $applications[$id]['roles'] = $instance->getRoles();
-        //     $applications[$id]['userRoles'] = $instance->getUserRoles();
-        // }
-        // 
-        // $this->view->applications = $applications;
+        $this->view->canManageRoles = $this->_acl->isAllowed($this->userRole, 'instances', 'manage');
+        $this->view->canManageUsers = $this->_acl->isAllowed($this->userRole, 'users', 'manage');
     }
 
     public function newAction()
@@ -108,6 +150,35 @@ class Slotter_UsersController extends Slotter_BaseController
             }
 
             $this->_redirector->gotoSimple('index', 'users');
+        }
+    }
+
+    public function addAction()
+    {
+        if (!$this->getSite()->hasParentSite()) {
+            $this->_disallow();
+        }
+
+        if ($this->_hasParam('users') || $this->_hasParam('query')) {
+            $users = $this->view->users = $this->_getUsers();
+        }
+
+        if ($this->getRequest()->isPost() && $this->_hasParam('users')) {
+            $userRoles = $this->admin->getUserRoles();
+            foreach ((array)$this->_getParam('users') as $username => $on) {
+                if (empty($userRoles[$username])) {
+                    $userRoles[$username] = 'user'; // default role
+                }
+            }
+            $this->admin->setUserRoles($userRoles);
+            $this->_redirector->gotoSimple('index', 'users');
+        }
+
+        if ($this->_hasParam('query')) {
+            $this->view->query = $query = $this->_getParam('query');
+            $this->view->searchUsers = $this->getSite()->getParentSite()->getUsers(compact('query'));
+        } else {
+            $this->view->query = '';
         }
     }
 
@@ -156,7 +227,7 @@ class Slotter_UsersController extends Slotter_BaseController
                 if ($consumer->verify($_GET)) {
                     $userId = $this->_getParam('id');
                     $this->_addUserIdentity($userId, $this->_getOpenidIdentity());
-                    $user = $this->site->getUser($id);
+                    // $user = $this->site->getUser($id);
                     $this->_redirector->gotoSimple('edit', 'users', 'slotter', array('id' => $userId));
                 } else {
                     throw new Exception("OpenID Authentication failed: " . $consumer->getError());
@@ -221,6 +292,25 @@ class Slotter_UsersController extends Slotter_BaseController
         $this->site->updateUser($id, $user);
 
         $this->_redirector->gotoSimple('edit', 'users', 'slotter', array('id' => $id));
+    }
+
+    protected function _getUsers()
+    {
+        $userOrder = $this->admin->getUserOrder();
+
+        $users = array();
+        foreach ($this->admin->getUserRoles() as $username => $role) {
+            $user = $this->site->getUser($username);
+            if (empty($user)) {
+                continue;
+            }
+            $user['order'] = isset($userOrder[$username]) ? $userOrder[$username] : 999;
+            $users[$username] = $user;
+        }
+
+        uasort($users, array('Ld_Utils', "sortByOrder"));
+
+        return $users;
     }
 
 }

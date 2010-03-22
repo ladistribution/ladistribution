@@ -19,7 +19,8 @@ class Ld_Http
         $context = stream_context_create(array(
             'http' => array(
                 'method'  => 'GET',
-                'header'  => "User-Agent: La Distribution Http Library\r\n"
+                'user_agent' => 'La Distribution Http Library',
+                'timeout' => 1
             )
         ));
         return $context;
@@ -45,6 +46,9 @@ class Ld_Http
         // Ld_Files::log('Ld_Http::download', "$url");
         $local = fopen($filename, "w+");
         $remote = fopen($url, "r", false, self::context());
+        if (!$local || !$remote) {
+            return false;
+        }
         while ( ($buffer = fread($remote, 8192)) != '' ) {
             fwrite($local, $buffer);
         }

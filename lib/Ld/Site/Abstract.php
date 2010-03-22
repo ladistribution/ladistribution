@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Site
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -54,7 +54,8 @@ abstract class Ld_Site_Abstract
 
     public function isPackageInstalled($id)
     {
-        return $this->getLibraryInfos($id) ? true : false;
+        $installed = $this->getLibraryInfos($id) ? true : false;
+        return $installed;
     }
 
     // TODO: to be renamed

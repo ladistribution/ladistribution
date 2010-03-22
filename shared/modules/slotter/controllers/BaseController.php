@@ -18,6 +18,8 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->view->site = $this->site = $this->_registry['site'];
 
+        $this->view->admin = $this->admin = $this->_registry['instance'];
+
         if (empty($this->_registry['instance'])) {
             throw new Exception('No Instance defined.');
         }
@@ -26,7 +28,7 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->view->action = $this->getRequest()->getActionName();
 
-        $this->_setTitle('La Distribution');
+        $this->_setTitle( $this->site->getName() );
 
         $this->_initAcl();
 
@@ -40,7 +42,7 @@ class Slotter_BaseController extends Ld_Controller_Action
         $translator = $this->getTranslator();
 
         $pages = array(
-            array( 'label' => $translator->translate('Home'), 'module' => 'default', 'route' => 'default',
+            array( 'label' => $translator->translate('Home'), 'module' => 'slotter', 'route' => 'default',
                 'pages' => array(
                     array( 'label' => $translator->translate('Applications'), 'module'=> 'slotter', 'route' => 'default'),
                     array( 'label' => $translator->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
@@ -66,24 +68,30 @@ class Slotter_BaseController extends Ld_Controller_Action
         $admin = new Zend_Acl_Role('admin');
         $this->_acl->addRole($admin, $user);
 
-        $instances = new Zend_Acl_Resource('instances');
-        $this->_acl->add($instances);
+        $resources = array('instances', 'repositories', 'databases', 'users');
+        foreach ($resources as $resource) {
+            $this->_acl->add( new Zend_Acl_Resource($resource) );
+        }
 
         $this->_acl->allow('admin', null, 'admin');
         $this->_acl->allow('user', 'instances', 'view');
-        $this->_acl->allow('admin', 'instances', 'admin');
+        $this->_acl->allow('admin', 'instances', 'manage');
+        $this->_acl->allow('admin', 'repositories', 'manage');
+        $this->_acl->allow('admin', 'databases', 'manage');
+        $this->_acl->allow('admin', 'users', 'manage');
+
+        Ld_Plugin::doAction('Slotter:acl', $this->_acl);
 
         $this->view->userRole = $this->userRole = $this->_getCurrentUserRole();
     }
 
     protected function _getCurrentUserRole()
     {
-        $users = $this->site->getUsers();
-        if (empty($users)) {
+        $roles = $this->admin->getUserRoles();
+        if (empty($roles)) {
             return 'admin';
         } else if (isset($this->user)) {
             $username = $this->user['username'];
-            $roles = $this->_registry['instance']->getUserRoles();
             if (isset($roles[$username])) {
                 return $roles[$username];
             }
@@ -115,63 +123,6 @@ class Slotter_BaseController extends Ld_Controller_Action
          } else {
              $this->_forward('login', 'auth', 'default');
          }
-    }
-
-    /**
-     * preDispatch
-     */
-    public function preDispatch()
-    {
-        if ($this->getRequest()->isPost()) {
-            $this->_contentType = $_SERVER['CONTENT_TYPE'];
-            // TEMP: handle a particular context when interacting with requests in oAuth library
-            if ($this->_contentType == 'application/octet-stream') {
-                $this->_contentType == 'application/json';
-            }
-            if ($this->_contentType == 'application/json') {
-                $params = Zend_Json::decode( $this->getRequest()->getRawBody() );
-                $this->getRequest()->setParams($params);
-                // TEMP: useful too with oAuth library
-                if (!$this->_hasParam('format')) {
-                    $this->_setParam('format', 'json');
-                }
-            }
-        }
-
-        $this->_handleFormat();
-    }
-    
-    public function postDispatch()
-    {
-        switch ($this->_format) {
-            case 'json':
-                $this->_helper->viewRenderer->setNoRender(true);
-                $this->view->jsonRenderer($this->view->getVars(), true);
-                break;
-            default:
-                break;
-        }
-    }
-    
-    protected function _handleFormat()
-    {
-        $this->_format = $this->getRequest()->getParam('format');
-        if (empty($this->_format)) {
-            $this->_format = 'xhtml';
-        }
-        
-        if (isset($_SERVER['HTTP_ACCEPT'])) {
-          $accept = $_SERVER['HTTP_ACCEPT'];
-          if (isset(self::$_accept[$accept])) {
-              $this->_format = self::$_accept[$accept];
-          }
-        }
-        
-        if ($this->_format != 'xhtml') {
-          $viewRenderer = Zend_Controller_Action_HelperBroker::getExistingHelper('viewRenderer');
-          $viewRenderer->setViewSuffix($this->_format . ".php");
-          $this->_helper->layout->disableLayout();
-        }
     }
 
 }

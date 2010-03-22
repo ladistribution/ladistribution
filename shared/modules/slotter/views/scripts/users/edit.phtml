@@ -6,13 +6,13 @@
 
     <table class="ld-form">
     <tr>
-        <th><label><?php echo $this->translate("Full Name") ?></label></td>
-        <td><input type="text" name="fullname" class="text" value="<?php
+        <th><label for="edit-user-fullname"><?php echo $this->translate("Full Name") ?></label></td>
+        <td><input id="edit-user-fullname" type="text" name="fullname" class="text" value="<?php
             if (isset($this->user['fullname'])) echo $this->escape($this->user['fullname']) ?>"/></td>
     </tr>
     <tr>
-        <th><label><?php echo $this->translate("Email") ?></label></td>
-        <td><input type="text" name="email" class="text" value="<?php
+        <th><label for="edit-user-email"><?php echo $this->translate("Email") ?></label></td>
+        <td><input id="edit-user-email" type="text" name="email" class="text" value="<?php
             if (isset($this->user['email'])) echo $this->escape($this->user['email']) ?>"/></td>
     </tr>
     </table>
@@ -31,12 +31,12 @@
     </tr>
     -->
     <tr>
-        <th><label><?php echo $this->translate("New password") ?></label></td>
-        <td><input type="password" name="new_password" class="text" value="" autocomplete="off"/></td>
+        <th><label for="edit-user-password"><?php echo $this->translate("New password") ?></label></td>
+        <td><input id="edit-user-password" type="password" name="new_password" class="text" value="" autocomplete="off"/></td>
     </tr>
     <tr>
-        <th><label><?php echo $this->translate("New password again") ?></label></td>
-        <td><input type="password" name="new_password_again" class="text" value="" autocomplete="off"/></td>
+        <th><label for="edit-user-password-2"><?php echo $this->translate("New password again") ?></label></td>
+        <td><input id="edit-user-password-2" type="password" name="new_password_again" class="text" value="" autocomplete="off"/></td>
     </tr>
     </table>
 
@@ -44,7 +44,7 @@
 
     <input type="hidden" name="id" value="<?php echo $this->escape($this->username) ?>"/>
 
-    <input type="submit" class="submit" value="<?php echo $this->translate("Update") ?>"/>
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>
 
 </form>
 
@@ -79,7 +79,7 @@
         <tr>
             <th><label for="add_new_identity"><?php echo $this->translate("Add an identity:") ?></label></th>
             <td><input id="add_new_identity" type="text" name="openid_identifier" value="" size="50" /></td>
-            <td><input type="submit" value="<?php echo $this->translate("Add") ?>"/></td>
+            <td><input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add") ?>"/></td>
         </tr>
     </table>
 

@@ -8,18 +8,55 @@
 
 <form action="" method="post">
 
+<?php if (defined('LD_AJAX_USERS') && constant('LD_AJAX_USERS')) : ?>
+
+<div class="ld-groups">
+    <?php foreach ($this->roles as $role) : ?>
+        <div id="group_<?php echo $role ?>" class="ld-group ld-group-<?php echo $role ?> sortable">
+            <span class="ld-group-name"><?php echo ucfirst($role) ?></span>
+            <?php foreach ($this->users as $user) : $username = $user['username'] ?>
+                <?php if ( isset($this->userRoles[$username]) && $this->userRoles[$username] == $role ) : ?>
+                    <?php $this->userRenderer($user, array('checkbox' => true)) ?>
+                <?php endif ?>
+            <?php endforeach ?>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<div class="ld-actions">
+    <?php echo $this->translate("Action for selection:") ?>
+    <select name="userAction">
+        <option value="none"><?php echo $this->translate("Choose an action...") ?></option>
+        <?php if ($this->site->isChild()) : ?>
+            <option value="remove"><?php echo $this->translate("Remove users") ?></option>
+        <?php else : ?>
+            <option value="delete"><?php echo $this->translate("Delete users") ?></option>
+        <?php endif ?>
+        </select>
+    <input type="submit" class="submit" value="<?php echo $this->translate("Go") ?>"/>
+</div>
+
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($){
+        if (typeof Ld == "undefined") Ld = {};
+        Ld.setRolesUrl = "<?php echo $this->url(); ?>";
+    });
+})(jQuery);
+</script>
+
+<?php else : ?>
+
 <table class="h6e-data">
 
    <tr>
        <th><?php echo $this->translate("Username") ?></th>
        <th><?php echo $this->translate("Full Name") ?></th>
        <th><?php echo $this->translate("Email") ?></th>
-       <?php /*
-       <?php foreach ($this->applications as $application) : ?>
-           <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
-       <?php endforeach ?>
-       */ ?>
-       <?php if ($this->userRole == 'admin') : ?>
+
+       <th><?php echo $this->translate("Role") ?></th>
+
+       <?php if ($this->canManageUsers) : ?>
            <th colspan="2"><?php echo $this->translate("Actions") ?></th>
        <?php endif ?>
 
@@ -32,32 +69,24 @@
         <td><?php echo $user['fullname'] ?></td>
         <td><?php echo $user['email'] ?></td>
 
-        <?php /*
-        <?php foreach ($this->applications as $application) : ?>
-            <td style="text-align:center">
-            <?php if (!empty($application['roles'])) : ?>
-
-                <select name="roles[<?php echo $application['path'] ?>][<?php echo $user['username'] ?>]">
-                    <?php foreach ($application['roles'] as $role) : ?>
+        <td>
+            <?php if ($this->canManageRoles) : ?>
+                <select name="userRoles[<?php echo $user['username'] ?>]">
+                    <?php foreach ($this->roles as $role) : ?>
                         <?php
                         $username = $user['username'];
-                        $selected = isset($application['userRoles'][$username]) && $application['userRoles'][$username] == $role ?
+                        $selected = isset($this->userRoles[$username]) && $this->userRoles[$username] == $role ?
                             'selected="selected"' : '';
                         ?>
                         <option <?php echo $selected ?> value="<?php echo $role ?>"><?php echo ucfirst($role) ?></option>
                     <?php endforeach ?>
                 </select>
-
-            <?php else : ?>
-
-                <em style="color:#999">N/A</em>
-
+            <?php else: ?>
+                <?php echo $this->userRoles[ $user['username'] ] ?>
             <?php endif ?>
-            </td>
-       <?php endforeach ?>
-       */ ?>
+        </td>
 
-       <?php if ($this->userRole == 'admin') : ?>
+       <?php if ($this->canManageUsers) : ?>
            <td>
                <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $user['username'] )); ?>"><?php
                    echo $this->translate("edit");
@@ -76,22 +105,24 @@
 
 </table>
 
-<?php /*
-<input type="submit" class="submit button" value="Update"/>
-*/ ?>
+<?php if ($this->canManageRoles) : ?>
+    <input type="submit" class="submit button" value="<?php echo $this->translate("Update roles") ?>"/>
+<?php endif ?>
+
+<?php endif ?>
 
 </form>
 
 <?php endif ?>
 
-<?php if ($this->userRole == 'admin') : ?>
-
-<br />
-
-<h3><?php echo $this->translate("You can:") ?></h3>
-
-<ul>
-    <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php echo $this->translate("Add a new user") ?></a></li>
-</ul>
-
+<?php if ($this->canManageUsers || $this->canManageRoles) : ?>
+    <br/>
+    <h3><?php echo $this->translate("You can:") ?></h3>
+    <ul>
+        <?php if ($this->canManageUsers) : ?>
+        <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php echo $this->translate("Add a new user") ?></a></li>
+        <?php elseif ($this->canManageRoles) : ?>
+        <li><a href="<?php echo $this->url(array('action' => 'add')); ?>"><?php echo $this->translate("Add registered users") ?></a></li>
+        <?php endif ?>
+    </ul>
 <?php endif ?>

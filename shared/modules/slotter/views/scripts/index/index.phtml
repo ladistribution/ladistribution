@@ -1,4 +1,4 @@
-<?php if (empty($this->users) || count($this->users) == 0) : ?>
+<?php if (empty($this->roles)) : ?>
 
     <h2><?php echo $this->translate("Installation") ?></h2>
 
@@ -22,13 +22,16 @@
     <div class="manage">
         <h2><?php echo $this->translate->translate("Manage") ?></h2>
         <?php
-        $pages = array(
-            array('controller' => 'users', 'label' => "Users"),
-            array('controller' => 'repositories', 'label' => "Repositories"),
-            array('controller' => 'databases', 'label' => "Databases"),
-            array('controller' => 'locales', 'label' => "Locales"),
-            array('controller' => 'settings', 'label' => "Global settings")
-        );
+        $pages = array();
+        $pages[] = array('controller' => 'users', 'label' => "Users");
+        if ($this->canManageRepositories) {
+            $pages[] = array('controller' => 'repositories', 'label' => "Repositories");
+        }
+        if ($this->canManageDatabases) {
+            $pages[] = array('controller' => 'databases', 'label' => "Databases");
+        }
+        $pages[] = array('controller' => 'locales', 'label' => "Locales");
+        $pages[] = array('controller' => 'settings', 'label' => "Global settings");
         ?>
         <ul>
             <?php foreach ($pages as $page) :
@@ -55,8 +58,6 @@
 
 </div>
 
-<?php endif ?>
-
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
     <?php $newDbUrl = $this->url(array('controller' => 'databases', 'action' => 'new')); ?>
@@ -67,5 +68,7 @@
     <a href="<?php echo $newDbUrl ?>"><?php echo $this->translate("Add a database connection") ?></a>
     -->
     </p>
+
+<?php endif ?>
 
 <?php endif ?>

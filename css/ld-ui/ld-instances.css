@@ -82,9 +82,9 @@ ul.blocks.mini li .links {
 }
 
 /* Fix a display issue with Firefox 3.5 */
-ul.blocks.mini li.ui-sortable-helper,
-ul.blocks.mini li.ui-sortable-placeholder { height:33px !important; }
 ul.blocks.mini li.ui-sortable-helper .links { display:none; }
+ul.blocks.mini li.ui-sortable-helper { height:32px !important; }
+ul.blocks.mini li.ui-sortable-placeholder { height:31px !important; }
 
 ul.blocks.mini li.empty {
   padding-left:10px;

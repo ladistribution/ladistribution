@@ -1,0 +1,43 @@
+<h2><?php echo $this->translate("Add registered users") ?></h2>
+
+<div>
+
+<p>Type at least 3 characters to search for users with username (or email or full name) that match.</p>
+
+<form method="get" action="<?php echo $this->url() ?>">
+
+    <table class="ld-form" style="margin-bottom:0">
+        <tr>
+            <td><input id="search-user-query" type="text" name="query" value="<?php echo $this->escape($this->query) ?>" size="20"/></td>
+            <td><input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Search") ?>"/></td>
+        </tr>
+    </table>
+
+</form>
+
+</div>
+
+<?php if (isset($this->searchUsers) && count($this->searchUsers)) : ?>
+
+<br style="clear:both"/>
+
+<form method="post" action="<?php echo $this->url() ?>">
+
+<div class="ld-group">
+    <span class="ld-group-name">Users</span>
+    <?php foreach ($this->searchUsers as $user) : $username = $user['username'] ?>
+        <?php if (isset($this->users[$username])) : ?>
+            <?php $this->userRenderer($user, array('checkbox' => true, 'disabled' => true)) ?>
+        <?php else : ?>
+            <?php $this->userRenderer($user, array('checkbox' => true, 'disabled' => false)) ?>
+        <?php endif ?>
+    <?php endforeach ?>
+</div>
+
+<br style="clear:both"/>
+
+<input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add selected users") ?>"/>
+
+</form>
+
+<?php endif ?>

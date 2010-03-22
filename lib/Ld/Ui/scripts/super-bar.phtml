@@ -26,6 +26,10 @@
 
             foreach ($this->applications as $id => $application) {
 
+                if ($application == null) {
+                    continue;
+                }
+
                 $settingsUrl = Ld_Ui::getAdminUrl(array(
                     'module' => 'slotter', 'controller' => 'instance', 'action' => 'status', 'id' => $id
                 ), 'instance-action');

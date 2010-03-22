@@ -29,7 +29,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
     {
         parent::preDispatch();
 
-        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+        if (!$this->_acl->isAllowed($this->userRole, 'repositories', 'manage')) {
             $this->_disallow();
         }
 

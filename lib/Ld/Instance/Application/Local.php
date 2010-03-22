@@ -204,6 +204,25 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     // Roles
 
+    public function getUsers()
+    {
+        $installer = $this->getInstaller();
+        if (method_exists($installer, 'getUsers')) {
+            return $installer->getUsers();
+        }
+        return array();
+    }
+
+    public function getUsersByUsername()
+    {
+        $users = array();
+        foreach ($this->getUsers() as $user) {
+            $username = $user['username'];
+            $users[$username] = $user;
+        }
+        return $users;
+    }
+
     public function getRoles()
     {
         $installer = $this->getInstaller();
@@ -216,15 +235,26 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     public function getUserRoles()
     {
         $installer = $this->getInstaller();
+        $userRoles = array();
         if (method_exists($installer, 'getUserRoles')) {
-            return $installer->getUserRoles();
+            $userRoles = $installer->getUserRoles();
         }
-        return array();
+        return (array)$userRoles;
     }
 
     public function setUserRoles($roles)
     {
         return $this->getInstaller()->setUserRoles($roles);
+    }
+
+    public function getUserOrder()
+    {
+        return (array)$this->getInstaller()->getUserOrder();
+    }
+
+    public function setUserOrder($userOrder)
+    {
+        return $this->getInstaller()->setUserOrder($userOrder);
     }
 
     public function getUserRole($username = null)

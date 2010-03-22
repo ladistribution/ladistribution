@@ -24,12 +24,16 @@ class Slotter_SettingsController extends Slotter_BaseController
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
             $configuration = Ld_Files::getJson($this->getSite()->getDirectory('dist') . '/config.json');
+            // needed for settings that default to false, displayed as checkbox
             unset($configuration['open_registration']);
             unset($configuration['root_admin']);
             foreach ($this->_getParam('configuration') as $key => $value) {
                 $configuration[$key] = $value;
             }
             Ld_Files::putJson($this->getSite()->getDirectory('dist') . '/config.json', $configuration);
+            // in this case, we believe the user wants to go back to the index
+            $this->_redirector->gotoSimple('index', 'index');
+            return;
         }
 
         $translator = $this->getTranslator();
@@ -37,6 +41,10 @@ class Slotter_SettingsController extends Slotter_BaseController
         $this->appendTitle($translator->translate('Global settings'));
 
         $preferences = array();
+
+        $preferences[] = array(
+            'name' => 'site_name', 'label' => $translator->translate('Site Name'), 'type' => 'text'
+        );
 
         $preferences[] = array(
             'name' => 'host', 'label' => $translator->translate('Host'), 'type' => 'text'
@@ -65,6 +73,8 @@ class Slotter_SettingsController extends Slotter_BaseController
             'name' => 'root_admin', 'label' => $translator->translate('Admin path on root?'),
             'type' => 'boolean', 'defaultValue' => false
         );
+
+        $preferences = Ld_Plugin::applyFilters('Slotter:preferences', $preferences);
 
         $this->view->preferences = $preferences;
 

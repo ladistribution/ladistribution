@@ -83,7 +83,9 @@ class Ld_Ui
         $route = $router->getRoute($name);
         $url = $route->assemble($params, true);
 
-        return $baseUrl . '/' . $url;
+        $adminUrl = $baseUrl . '/' . $url;
+
+        return $adminUrl;
     }
 
     public static function superBar($params = array())
@@ -102,8 +104,8 @@ class Ld_Ui
         if ($admin && $admin->getUserRole() == 'admin') {
             $isAdmin = true;
         } else {
-            $users = $site->getUsers();
-            if (empty($users)) {
+            $roles = $admin->getUserRoles();
+            if (empty($roles)) {
                 $isAdmin = true;
             }
         }
@@ -121,7 +123,12 @@ class Ld_Ui
 
         echo $view->render('super-bar.phtml');
     }
-    
+
+    public static function topBar($params = array())
+    {
+        self::top_bar($params);
+    }
+
     public static function top_bar($options = array())
     {
         $admin = self::getAdmin();

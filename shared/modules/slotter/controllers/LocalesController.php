@@ -81,6 +81,10 @@ class Slotter_LocalesController extends Slotter_BaseController
 
             }
 
+            // in this case, we believe the user wants to go back to the index
+            $this->_redirector->gotoSimple('index', 'index');
+            return;
+
         }
 
         $this->view->allLocales = $this->getSite()->getAllLocales();

@@ -7,6 +7,7 @@ Ld.init = function($)
     this.dataTables($);
     this.themesPanel($);
     this.sortableBlocks($);
+    this.sortableUserRoles($);
     // this.instanceMenu($);
     this.langSwitcher($);
 }
@@ -26,11 +27,12 @@ Ld.sortableBlocks = function($)
         return;
     }
     $(".blocks.sortables").sortable({
-        items: 'li.sortable', cursor: 'crosshair',
+        items: 'li.sortable',
         update: function() {
             $.post(Ld.sortInstancesUrl, $(".blocks").sortable('serialize'));
         }
     });
+    $(".blocks.sortables li.sortable").css('cursor', 'move');
     $(".blocks a").mousedown(function(e){
         e.stopPropagation();
     });
@@ -68,10 +70,45 @@ Ld.themesPanel = function($)
 
 Ld.langSwitcher = function($)
 {
-	$("#ld-lang-switcher input.submit").hide();
+    $("#ld-lang-switcher input.submit").hide();
+    $("#ld-lang-switcher select").change(function() { $(this).parent().submit() });
+}
 
-	$("#ld-lang-switcher select").change(function() {
-		// $.cookie('ld-lang', $(this).val());
-		$(this).parent().submit();
-	});
+Ld.userRoles = {}
+
+Ld.saveUserRoles = null;
+
+Ld.sortableUserRoles = function($)
+{
+    $(".ld-group.sortable").sortable({
+        items: '.ld-user', connectWith: '.ld-group', placeholder: 'ld-user empty',
+        update: function() {
+            var role = $(this).attr('id').replace('group_', '');
+            var users = $(this).sortable('toArray');
+            for ( var i = 0, length = users.length ; i < length ; i++ ) {
+                var username = users[i].replace('user_', '');
+                var key = 'userRoles[' + username + ']';
+                Ld.userRoles[key] = role;
+                var key2 = 'userOrder[' + username+ ']';
+                Ld.userRoles[key2] = i;
+            }
+            if (Ld.saveUserRoles) {
+                clearTimeout(Ld.saveUserRoles);
+            }
+            Ld.saveUserRoles = setTimeout(function() { $.post(Ld.setRolesUrl, Ld.userRoles) }, 333);
+        }
+    });
+
+    $(".ld-group input[type=checkbox]").change(function() {
+        if ( $(this).is(':checked') ) {
+            $(this).parent().addClass('selected');
+        } else {
+            $(this).parent().removeClass('selected');
+        }
+        if ( $(this).is(':disabled') ) {
+            $(this).parent().addClass('disabled');
+        }
+    }).change();
+
+    $(".ld-group.sortable .ld-user").css('cursor', 'move');
 }

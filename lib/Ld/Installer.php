@@ -442,19 +442,23 @@ class Ld_Installer
     public function getUserRoles()
     {
         $userRoles = Ld_Files::getJson($this->getAbsolutePath() . '/dist/roles.json');
-        $users = $this->getSite()->getUsers();
-        foreach ((array)$users as $user) {
-            $username = $user['username'];
-            if (empty($userRoles[$username])) {
-                $userRoles[$username] = $this->defaultRole;
-            }
-        }
         return $userRoles;
     }
 
     public function setUserRoles($roles)
     {
         Ld_Files::putJson($this->getAbsolutePath() . '/dist/roles.json', $roles);
+    }
+
+    public function getUserOrder()
+    {
+        $userOrder = Ld_Files::getJson($this->getAbsolutePath() . '/dist/user-order.json');
+        return (array)$userOrder;
+    }
+
+    public function setUserOrder($userOrder)
+    {
+        Ld_Files::putJson($this->getAbsolutePath() . '/dist/user-order.json', $userOrder);
     }
 
     public function getUserRole($username)

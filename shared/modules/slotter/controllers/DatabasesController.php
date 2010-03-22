@@ -15,7 +15,7 @@ class Slotter_DatabasesController extends Slotter_BaseController
     {
         parent::preDispatch();
 
-        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+        if (!$this->_acl->isAllowed($this->userRole, 'databases', 'manage')) {
             $this->_disallow();
         }
 

@@ -6,13 +6,21 @@
  * @category   Ld
  * @package    Ld_Loader
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
 
 class Ld_Loader
 {
+
+    public static $site = null;
+
+    public static $config = array();
+
+    public static $constantsDefined = false;
+
+    public static $autoloadRegistered = false;
 
     public static function defineConstants($dir)
     {
@@ -39,12 +47,12 @@ class Ld_Loader
         }
 
         set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
+
+        self::$constantsDefined = true;
     }
 
-    public static function loadSite($dir)
+    public static function registerAutoload()
     {
-        self::defineConstants($dir);
-
         // Zend Framework & Ld Libraries
         require_once 'Zend/Loader/Autoloader.php';
         $autoloader = Zend_Loader_Autoloader::getInstance();
@@ -55,8 +63,21 @@ class Ld_Loader
         require_once 'clearbricks/zip/class.zip.php';
         require_once 'clearbricks/zip/class.unzip.php';
 
+        self::$autoloadRegistered = true;
+    }
+
+    public static function loadSite($dir)
+    {
+        if (!self::$constantsDefined) {
+            self::defineConstants($dir);
+        }
+
+        if (!self::$autoloadRegistered) {
+            self::registerAutoload();
+        }
+
         // Site configuration
-        $config = Ld_Files::getJson($dir . '/dist/config.json');
+        $config = self::$config = Ld_Files::getJson($dir . '/dist/config.json');
         if (empty($config['dir'])) {
             $config['dir'] = $dir;
         }
@@ -65,20 +86,36 @@ class Ld_Loader
         }
 
         // Site object
-        $site = new Ld_Site_Local($config);
+        $site = self::$site = new Ld_Site_Local($config);
         Zend_Registry::set('site', $site);
 
+        self::setupAuthentication();
+        self::setupLocales();
+
+        // Legacy CSS Constant
+        defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));
+
+        return $site;
+    }
+
+    public static function setupAuthentication()
+    {
         // Setup Authentication
-        if (function_exists('mcrypt_ecb') && isset($config['secret'])) {
-            $cookieManager = new Ld_Cookie($config['secret']);
+        if (function_exists('mcrypt_ecb') && isset(self::$config['secret'])) {
+            $cookieManager = new Ld_Cookie(self::$config['secret']);
         } else {
             $cookieManager = new Ld_Cookie_Simple();
         }
-        $path = $site->getPath();
+        $path = self::$site->getPath();
         $cookieConfig = array('cookieName' => 'ld-auth', 'cookiePath' => empty($path) ? '/' : $path);
-        $authStorage = new Ld_Auth_Storage_Cookie($cookieManager, $cookieConfig);
+        $authStorage = new Ld_Auth_Storage_Cookie($cookieManager, Ld_Plugin::apply('Loader:authCookieConfig', $cookieConfig));
         $auth = Zend_Auth::getInstance();
         $auth->setStorage($authStorage);
+    }
+
+    public static function setupLocales()
+    {
+        $site = self::$site;
 
         // Locale
         $default_mo = $site->getDirectory('shared') . '/locales/ld/en_US/default.mo';
@@ -95,11 +132,6 @@ class Ld_Loader
             }
             Zend_Registry::set('Zend_Translate', $adapter);
         }
-
-        // Legacy CSS Constant
-        defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));
-
-        return $site;
     }
 
 }
