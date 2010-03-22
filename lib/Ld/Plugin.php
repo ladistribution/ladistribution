@@ -42,7 +42,8 @@ class Ld_Plugin
 
     static function applyFilters($tag, $value)
     {
-        return call_user_func_array(array('self', 'apply'), func_get_args());
+        $args = func_get_args();
+        return call_user_func_array(array('self', 'apply'), $args);
     }
 
     static function apply($tag, $value)
