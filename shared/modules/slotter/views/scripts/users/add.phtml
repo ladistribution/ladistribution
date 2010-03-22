@@ -23,6 +23,8 @@
 
 <form method="post" action="<?php echo $this->url() ?>">
 
+<?php if (defined('LD_AJAX_USERS') && constant('LD_AJAX_USERS')) : ?>
+
 <div class="ld-group">
     <span class="ld-group-name">Users</span>
     <?php foreach ($this->searchUsers as $user) : $username = $user['username'] ?>
@@ -35,6 +37,38 @@
 </div>
 
 <br style="clear:both"/>
+
+<?php else : ?>
+
+<table class="h6e-data">
+
+   <tr>
+       <th></th>
+       <th><?php echo $this->translate("Username") ?></th>
+       <th><?php echo $this->translate("Full Name") ?></th>
+       <th><?php echo $this->translate("Email") ?></th>
+   </tr>
+
+<?php foreach ($this->searchUsers as $user) : $username = $user['username'] ?>
+
+    <tr>
+        <td>
+        <?php if (isset($this->users[$username])) : ?>
+            <input name="users[<?php echo $username ?>]" type="checkbox" class="checkbox" checked="checked" disabled="disabled"/>
+        <?php else : ?>
+            <input name="users[<?php echo $username ?>]" type="checkbox" class="checkbox"/>
+        <?php endif ?>
+        </td>
+        <td><?php echo $user['username'] ?></td>
+        <td><?php echo $user['fullname'] ?></td>
+        <td><?php echo $user['email'] ?></td>
+    </tr>
+
+<?php endforeach ?>
+
+</table>
+
+<?php endif ?>
 
 <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add selected users") ?>"/>
 

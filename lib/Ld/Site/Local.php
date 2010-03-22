@@ -235,6 +235,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getName()
     {
         $site_name = $this->getConfig('site_name');
+        if (empty($site_name)) {
+            $site_name = 'La Distribution';
+        }
         return $site_name;
     }
 

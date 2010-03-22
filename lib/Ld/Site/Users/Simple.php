@@ -28,7 +28,7 @@ class Ld_Site_Users_Simple
         return $this->_site;
     }
 
-    public function getUsers()
+    public function getUsers($params = array())
     {
         $users = $this->_users;
 
@@ -36,13 +36,14 @@ class Ld_Site_Users_Simple
             $users = Ld_Files::getJson($this->getSite()->getDirectory('dist') . '/users.json');
         }
 
-        // uasort($users, array($this, "_sortByOrder"));
-
         foreach ((array)$users as $key => $user) {
             $users[$key]['id'] = $key;
-            // if (empty($users[$key]['fullname'])) {
-            //     $users[$key]['fullname'] = $users[$key]['username'];
-            // }
+            if (isset($params['query'])) {
+                $q = $params['query'];
+                if (strpos($user['username'], $q) === false && strpos($user['email'], $q) === false) {
+                    unset($users[$key]);
+                }
+            }
         }
 
         return $this->_users = $users;

@@ -155,9 +155,9 @@ class Slotter_UsersController extends Slotter_BaseController
 
     public function addAction()
     {
-        if (!$this->getSite()->hasParentSite()) {
-            $this->_disallow();
-        }
+        // if (!$this->getSite()->hasParentSite()) {
+        //     $this->_disallow();
+        // }
 
         if ($this->_hasParam('users') || $this->_hasParam('query')) {
             $users = $this->view->users = $this->_getUsers();
@@ -176,7 +176,11 @@ class Slotter_UsersController extends Slotter_BaseController
 
         if ($this->_hasParam('query')) {
             $this->view->query = $query = $this->_getParam('query');
-            $this->view->searchUsers = $this->getSite()->getParentSite()->getUsers(compact('query'));
+            if ($this->getSite()->isChild()) {
+                $this->view->searchUsers = $this->getSite()->getParentSite()->getUsers(compact('query'));
+            } else {
+                $this->view->searchUsers = $this->getSite()->getUsers(compact('query'));
+            }
         } else {
             $this->view->query = '';
         }

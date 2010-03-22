@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 00:28+0100\n"
+"POT-Creation-Date: 2010-03-22 15:11+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -211,7 +211,7 @@ msgstr "Note :"
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:66
 msgid "There is no database connection registered yet. A database is often needed to install new applications."
-msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment. Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
+msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment.<br/>Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
 
 #: shared/modules/slotter/views/scripts/index/update.phtml:13
 msgid "Congratulations! Everything is up to date."
@@ -456,48 +456,48 @@ msgstr "Non supporté."
 msgid "No user available."
 msgstr "Aucun utilisateur disponible."
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:24
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:25
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:26
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:27
 msgid "Administrator"
 msgstr "Administrateur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:26
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:28
 msgid "Editor"
 msgstr "Editeur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:27
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:29
 msgid "Author"
 msgstr "Auteur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:28
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:30
 msgid "Contributor"
 msgstr "Contributeurs"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:29
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:31
 msgid "Subscriber"
 msgstr "Abonné"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:30
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:32
 msgid "Guest"
 msgstr "Invité"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:31
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:33
 msgid "User"
 msgstr "Utilisateur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:63
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:74
 msgid "Full Name"
 msgstr "Nom Complet"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:64
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:75
 msgid "Email"
 msgstr "Email"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:65
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:76
 msgid "Role"
 msgstr "Role"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:92
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:103
 msgid "Update roles"
 msgstr "Mettre à jour les rôles"
 
@@ -652,11 +652,11 @@ msgstr "Aucun préference disponible."
 msgid "Add registered users"
 msgstr "Ajouter des utilisateurs enregistrés"
 
-#: shared/modules/slotter/views/scripts/users/add.phtml:14
+#: shared/modules/slotter/views/scripts/users/add.phtml:12
 msgid "Search"
 msgstr "Rechercher"
 
-#: shared/modules/slotter/views/scripts/users/add.phtml:47
+#: shared/modules/slotter/views/scripts/users/add.phtml:73
 msgid "Add selected users"
 msgstr "Ajouter les utilisateurs sélectionnés"
 
@@ -704,35 +704,35 @@ msgstr "Vous n'avez encore enregistré aucune identité OpenID. Vous pouvez ajou
 msgid "Add an identity:"
 msgstr "Ajouter une identité :"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:5
+#: shared/modules/slotter/views/scripts/users/index.phtml:1
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:9
+#: shared/modules/slotter/views/scripts/users/index.phtml:5
 msgid "None|user"
 msgstr "Aucun"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:29
+#: shared/modules/slotter/views/scripts/users/index.phtml:27
 msgid "Action for selection:"
 msgstr "Action pour la sélection :"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:31
+#: shared/modules/slotter/views/scripts/users/index.phtml:29
 msgid "Choose an action..."
 msgstr "Choisir une action ..."
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:33
+#: shared/modules/slotter/views/scripts/users/index.phtml:30
 msgid "Remove users"
 msgstr "Retirer les utilisateurs"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:35
+#: shared/modules/slotter/views/scripts/users/index.phtml:32
 msgid "Delete users"
 msgstr "Supprimer les utilisateurs"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:38
+#: shared/modules/slotter/views/scripts/users/index.phtml:35
 msgid "Go"
 msgstr "Go"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:115
+#: shared/modules/slotter/views/scripts/users/index.phtml:122
 #: shared/modules/slotter/views/scripts/users/new.phtml:1
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
@@ -750,19 +750,19 @@ msgstr "Bases de données"
 msgid "New"
 msgstr "Nouveau"
 
-#: shared/modules/slotter/controllers/SettingsController.php:45
+#: shared/modules/slotter/controllers/SettingsController.php:46
 msgid "Site Name"
 msgstr "Nom du site"
 
-#: shared/modules/slotter/controllers/SettingsController.php:66
+#: shared/modules/slotter/controllers/SettingsController.php:58
 msgid "Anyone can register?"
 msgstr "Tout le monde peut s'enregistrer ?"
 
-#: shared/modules/slotter/controllers/SettingsController.php:76
+#: shared/modules/slotter/controllers/SettingsController.php:68
 msgid "Default Application"
 msgstr "Application par défaut"
 
-#: shared/modules/slotter/controllers/SettingsController.php:81
+#: shared/modules/slotter/controllers/SettingsController.php:73
 msgid "Admin path on root?"
 msgstr "Chemin vers l'admin à la racine ?"
 
@@ -814,6 +814,8 @@ msgstr ""
 msgid "Full (available, used everywhere)"
 msgstr ""
 
+#~ msgid "Add already registered users"
+#~ msgstr "Ajouter des utilisateurs déjà enregistrés"
 #~ msgid "Invite new users"
 #~ msgstr "Inviter de nouveaux utilisateurs"
 #~ msgid "Backup now"

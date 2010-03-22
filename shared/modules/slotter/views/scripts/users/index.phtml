@@ -27,9 +27,8 @@
     <?php echo $this->translate("Action for selection:") ?>
     <select name="userAction">
         <option value="none"><?php echo $this->translate("Choose an action...") ?></option>
-        <?php if ($this->site->isChild()) : ?>
-            <option value="remove"><?php echo $this->translate("Remove users") ?></option>
-        <?php else : ?>
+        <option value="remove"><?php echo $this->translate("Remove users") ?></option>
+        <?php if (!$this->site->isChild()) : ?>
             <option value="delete"><?php echo $this->translate("Delete users") ?></option>
         <?php endif ?>
         </select>
@@ -121,7 +120,8 @@
     <ul>
         <?php if ($this->canManageUsers) : ?>
         <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php echo $this->translate("Add a new user") ?></a></li>
-        <?php elseif ($this->canManageRoles) : ?>
+        <?php endif ?>
+        <?php if ($this->canManageRoles) : ?>
         <li><a href="<?php echo $this->url(array('action' => 'add')); ?>"><?php echo $this->translate("Add registered users") ?></a></li>
         <?php endif ?>
     </ul>
