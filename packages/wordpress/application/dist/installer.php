@@ -290,16 +290,15 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		$users = array();
 
-		$wp_user_search = new WP_User_Search();
-		foreach ( $wp_user_search->get_results() as $userid ) {
-			$wp_user = new WP_User($userid);
-			$user = array(
-				'hash' 		=> $wp_user->user_pass,
-				'username' 	=> $wp_user->user_login,
-				'fullname' 	=> $wp_user->display_name,
-				'email'		=> $wp_user->user_email
-			);
-			$users[] = $user;
+		$dbPrefix = $this->getInstance()->getDbPrefix();
+		$dbConnection = $this->getInstance()->getDbConnection('php');
+		$result = $dbConnection->query("SELECT * FROM {$dbPrefix}users");
+
+		while ($wp_user = $result->fetch_object()) {
+			$user = $this->getSite()->getUser($wp_user->user_login);
+			if (!empty($user)) {
+				$users[] = $user;
+			}
 		}
 
 		return $users;
