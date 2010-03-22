@@ -280,7 +280,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $this->getConfiguration();
 	}
 
-	public $roles = array('subscriber', 'contributor', 'author', 'editor', 'administrator');
+	public $roles = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
 
 	public $defaultRole = 'subscriber';
 
@@ -288,25 +288,18 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	{
 		$this->load_wp();
 
-		$users = $this->getSite()->getUsers();
-
-		$usernames = array();
-		foreach ((array)$users as $id => $user) {
-			$usernames[] = $user['username'];
-		}
+		$users = array();
 
 		$wp_user_search = new WP_User_Search();
 		foreach ( $wp_user_search->get_results() as $userid ) {
 			$wp_user = new WP_User($userid);
-			if (!in_array($wp_user->user_login, $usernames)) {
-				$user = array(
-					'hash' 		=> $wp_user->user_pass,
-					'username' 	=> $wp_user->user_login,
-					'fullname' 	=> $wp_user->display_name,
-					'email'		=> $wp_user->user_email
-				);
-				$users[] = $user;
-			}
+			$user = array(
+				'hash' 		=> $wp_user->user_pass,
+				'username' 	=> $wp_user->user_login,
+				'fullname' 	=> $wp_user->display_name,
+				'email'		=> $wp_user->user_email
+			);
+			$users[] = $user;
 		}
 
 		return $users;
@@ -356,6 +349,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
 			global $blog_id, $table_prefix;
+			global $q_config;
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
@@ -367,7 +361,6 @@ class Ld_Installer_Wordpress extends Ld_Installer
 				}
 			}
 			$this->loaded = true;
-
 		}
 	}
 
@@ -412,6 +405,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
 			global $blog_id, $table_prefix;
+			global $q_config;
 			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
 			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
 			$globals = array_keys( get_defined_vars() );

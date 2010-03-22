@@ -1,5 +1,5 @@
 NAME="p2"
-VERSION="1.0.4"
+VERSION="1.1.3"
 SOURCE="http://wordpress.org/extend/themes/download/$NAME.$VERSION.zip"
 FOLDER="theme"
 PACKAGE="wordpress-theme-$NAME.zip"
