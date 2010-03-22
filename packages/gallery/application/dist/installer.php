@@ -111,6 +111,8 @@ class Ld_Installer_Gallery extends Ld_Installer
 		// block_manager::remove("dashboard_center", 'log_entries');
 		// block_manager::remove("dashboard_sidebar", 'platform_info');
 		// block_manager::remove("dashboard_sidebar", 'project_news');
+
+		$this->updateHtaccess();
 	}
 
 	// protected function _getSalt()
@@ -128,6 +130,8 @@ class Ld_Installer_Gallery extends Ld_Installer
 	{
 		// upgrade code there
 		// manual upgrade = http://example.com/gallery3/index.php/upgrader
+
+		$this->updateHtaccess();
 	}
 
 	public $roles = array('user', 'administrator');
@@ -137,6 +141,23 @@ class Ld_Installer_Gallery extends Ld_Installer
 	public function getRoles()
 	{
 		return $this->roles;
+	}
+
+	public function updateHtaccess()
+	{
+		if (constant('LD_REWRITE')) {
+			$path = $this->getSite()->getBasePath() . '/' . $this->getPath();
+			$htaccess = Ld_Files::get($this->getAbsolutePath() . "/.htaccess");
+			$htaccess .= "<IfModule mod_rewrite.c>\n";
+			$htaccess .= "RewriteEngine on\n";
+			$htaccess .= "RewriteBase {$path}\n";
+			$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
+			$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
+			$htaccess .= "RewriteRule ^(.*)$ index.php?kohana_uri=$1 [QSA,PT,L]\n";
+			$htaccess .= "RewriteRule ^$ index.php?kohana_uri=$1 [QSA,PT,L]";
+			$htaccess .= "</IfModule>";
+			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
+		}
 	}
 
 }

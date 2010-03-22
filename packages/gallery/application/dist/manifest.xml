@@ -1,7 +1,7 @@
 <package>
   <id>gallery</id>
   <name>Gallery</name>
-  <version>3.0-6-rc1</version>
+  <version>3.0-7-rc1</version>
   <type>application</type>
   <db>mysql</db>
   <php>
@@ -26,5 +26,8 @@
       <!-- <preference type="password" label="Admin Password" name="admin_password" value=""/> -->
       <preference type="user" label="Administrator" name="administrator" value=""/>
   </install>
-  <link title="admin" rel="section" type="text/html" href="/index.php/admin/"/>
+  <configuration>
+      <preference type="text" label="Gallery Name" name="title"/>
+  </configuration>
+  <link title="admin" rel="section" type="text/html" href="/admin/"/>
 </package>

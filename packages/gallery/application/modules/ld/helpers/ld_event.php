@@ -27,7 +27,7 @@ class ld_event_Core
                 $user->save();
             }
 
-            auth::login($user);
+            identity::set_active_user($user);
         }
 
     }
