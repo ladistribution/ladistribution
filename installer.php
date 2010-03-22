@@ -30,10 +30,6 @@
 
 // Default Configuration
 
-set_time_limit(300);
-
-date_default_timezone_set('UTC');
-
 defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 
 defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
@@ -99,13 +95,19 @@ function out($message)
 // Test PHP version
 
 if (!version_compare(PHP_VERSION, '5.2.0', '>=')) {
-    out('- Failure. La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.' );
+    out('Failure. La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.' );
     exit;
 }
 
 // Try
 
 try {
+
+// Start
+
+set_time_limit(300);
+
+date_default_timezone_set('UTC');
 
 // Directories
 
