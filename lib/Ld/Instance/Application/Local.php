@@ -155,15 +155,21 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
             $dbName = $this->getDb();
             $databases = $this->getSite()->getDatabases();
             $db = $databases[$dbName];
+            if (strpos($db['host'], ':')) {
+                list($db['host'], $db['port']) = explode(':', $db['host']);
+            }
             switch ($type) {
                  case 'php':
-                    $con = new mysqli($db['host'], $db['user'], $db['password'], $db['name']);
+                    $con = new mysqli($db['host'], $db['user'], $db['password'], $db['name'], isset($db['port']) ? $db['port'] : null);
                     break;
                  case 'zend':
                  default:
                     $params = array(
-                        'host' => $db['host'], 'username' => $db['user'],
-                        'password' => $db['password'], 'dbname' => $db['name']
+                        'host' => $db['host'],
+                        'username' => $db['user'],
+                        'password' => $db['password'],
+                        'dbname' => $db['name'],
+                        'port' => isset($db['port']) ? $db['port'] : null
                     );
                     $con = Zend_Db::factory('Mysqli', $params);
             }

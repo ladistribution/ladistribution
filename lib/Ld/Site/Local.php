@@ -718,14 +718,18 @@ class Ld_Site_Local extends Ld_Site_Abstract
         Ld_Files::putJson($this->getDirectory('dist') . '/databases.json', $databases);
     }
 
-    protected function _testDatabase($params)
+    protected function _testDatabase($db)
     {
+        if (strpos($db['host'], ':')) {
+            list($db['host'], $db['port']) = explode(':', $db['host']);
+        }
         try {
             $con = Zend_Db::factory('Mysqli', array(
-                'host'     => $params['host'],
-                'username' => $params['user'],
-                'password' => $params['password'],
-                'dbname'   => $params['name']
+                'host'     => $db['host'],
+                'username' => $db['user'],
+                'password' => $db['password'],
+                'dbname'   => $db['name'],
+                'port'     => isset($db['port']) ? $db['port'] : null
             ));
             $result = $con->fetchCol('SHOW TABLES');
         } catch (Exception $e) {
