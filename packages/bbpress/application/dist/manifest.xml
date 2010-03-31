@@ -1,14 +1,14 @@
 <package>
   <id>bbpress</id>
   <name>bbPress</name>
-  <version>1.0-2-39-3</version>
+  <version>1.0-2-65-3</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>
   <db>mysql</db>
   <deploy>
       <origin>plugins</origin>
-      <destination path="public">./bb-plugins/</destination>
+      <destination path="public">bb-plugins</destination>
   </deploy>
   <link title="admin" rel="section" type="text/html" href="/bb-admin/"/>
   <link title="Recent Posts" rel="alternate" type="application/atom+xml" href="/rss.php" />

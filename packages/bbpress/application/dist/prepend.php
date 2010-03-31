@@ -28,5 +28,9 @@ if (isset($locale) && $locale != 'auto') {
 	define('BB_LANG', $locale);	
 }
 
+if (class_exists('Ld_Plugin')) {
+	Ld_Plugin::doAction('Bbpress:prepend');
+}
+
 require_once 'Ld/Files.php';
 Ld_Files::includes(dirname(__FILE__) . '/prepend/');

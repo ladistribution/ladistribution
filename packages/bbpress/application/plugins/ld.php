@@ -20,7 +20,7 @@ function ld_disable_menus()
 		}
 	}
 
-	$disable_submenus = array('options-wordpress.php');
+	$disable_submenus = array('options-wordpress.php', 'bb_ksd_configuration_page');
 	foreach ($bb_submenu as $key => $sub) {
 		foreach ($sub as $num => $item) {
 			$script = $item[2];
@@ -31,8 +31,7 @@ function ld_disable_menus()
 	}
 }
 
-add_action('bb_admin_menu_generator', 'ld_disable_menus');
-
+add_action('bb_admin_menu_generator', 'ld_disable_menus', 20);
 
 function ld_repermalink_result($permalink)
 {
@@ -44,3 +43,7 @@ function ld_repermalink_result($permalink)
 }
 
 add_filter('bb_repermalink_result', 'ld_repermalink_result');
+
+if (class_exists('Ld_Plugin')) {
+	Ld_Plugin::doAction('Bbpress:plugin');
+}

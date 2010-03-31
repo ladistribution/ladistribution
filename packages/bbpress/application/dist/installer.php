@@ -57,11 +57,24 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		$this->httpClient->setParameterPost($params);
 		$response = $this->httpClient->request('POST');
 
-		$activate_plugins = array('core#ld.php', 'core#ld.ui.php', 'core#ld.auth.php', 'core#ld.css.php');
+		$activate_plugins = array('core#ld.php', 'core#ld.ui.php', 'core#ld.auth.php', 'core#ld.css.php', 'core#akismet.php');
 		foreach ($activate_plugins as $plugin) {
 			bb_activate_plugin($plugin);
 		}
 		bb_update_option( 'active_plugins', $activate_plugins );
+	}
+
+	public function postUpdate()
+	{
+		$this->load_bp();
+
+		$active_plugins = bb_get_option('active_plugins');
+		// if current <= 1.0-2-39-3
+		if (!in_array('core#akismet.php', $active_plugins)) {
+			bb_activate_plugin('core#akismet.php');
+			$active_plugins[] = 'core#akismet.php';
+			bb_update_option( 'active_plugins', $active_plugins );
+		}
 	}
 
 	public function create_config_file()
