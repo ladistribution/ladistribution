@@ -49,12 +49,13 @@ function ld_deactivate_plugin()
 	}
 }
 
-function ld_disable_update_nag()
+function ld_disable_admin_notices()
 {
 	remove_action('admin_notices', 'update_nag', 3);
+	remove_action('admin_notices', 'akismet_warning');
 }
 
-add_action('admin_head', 'ld_disable_update_nag');
+add_action('admin_head', 'ld_disable_admin_notices');
 
 function ld_disable_version_check()
 {
