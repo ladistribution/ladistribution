@@ -34,5 +34,9 @@ if (!defined('WP_CACHE')
 	define('WP_CACHE', true);
 }
 
+if (class_exists('Ld_Plugin')) {
+	Ld_Plugin::doAction('Wordpress:prepend');
+}
+
 require_once 'Ld/Files.php';
 Ld_Files::includes(dirname(__FILE__) . '/prepend/');

@@ -73,6 +73,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		activate_plugin('ld-auth.php');
 		activate_plugin('ld-css.php');
 
+		activate_plugin('akismet/akismet.php');
+
 		if (isset($preferences['theme'])) {
 			$this->setTheme($preferences['theme']);
 		}
@@ -86,6 +88,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		$this->httpClient->setCookieJar();
 		$this->httpClient->setUri($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
 		$response = $this->httpClient->request('GET');
+
+		$this->load_wp();
+
+		activate_plugin('akismet/akismet.php');
 	}
 
 	function create_config_file()
@@ -348,6 +354,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
 			global $blog_id, $table_prefix;
+			global $_wp_deprecated_widgets_callbacks;
 			global $q_config;
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
@@ -404,6 +411,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 			define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
 			global $blog_id, $table_prefix;
+			global $_wp_deprecated_widgets_callbacks;
 			global $q_config;
 			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
 			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";

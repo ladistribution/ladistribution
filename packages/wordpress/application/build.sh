@@ -17,7 +17,7 @@ rm $FOLDER/wp-rss.php
 rm $FOLDER/wp-rss2.php
 rm $FOLDER/wp-register.php
 rm $FOLDER/wp-content/plugins/hello.php
-rm -rf $FOLDER/wp-content/plugins/akismet
+# rm -rf $FOLDER/wp-content/plugins/akismet
 
 # Remove default themes
 mkdir themes
@@ -55,3 +55,4 @@ mv $PACKAGE ../../
 # Clean
 rm -rf $FOLDER
 rm -rf themes
+rm content/object-cache-memcached.php

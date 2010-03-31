@@ -94,7 +94,8 @@ function ld_admin_menu()
 		'tools.php',
 		'themes.php', 'theme-editor.php', 'theme-install.php',
 		'update-core.php',
-		'options-misc.php'
+		'options-misc.php',
+		'akismet-stats-display'
 	);
 	$disable_submenus = apply_filters('ld_disable_submenus', $disable_submenus);
 
@@ -161,3 +162,7 @@ function ld_locale($locale = '')
 }
 
 add_filter('locale', 'ld_locale');
+
+if (class_exists('Ld_Plugin')) {
+	Ld_Plugin::doAction('Wordpress:plugin');
+}
