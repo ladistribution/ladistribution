@@ -154,7 +154,7 @@ class Ld_Installer_Gallery extends Ld_Installer
 			$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 			$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
 			$htaccess .= "RewriteRule ^(.*)$ index.php?kohana_uri=$1 [QSA,PT,L]\n";
-			$htaccess .= "RewriteRule ^$ index.php?kohana_uri=$1 [QSA,PT,L]";
+			$htaccess .= "RewriteRule ^$ index.php?kohana_uri=$1 [QSA,PT,L]\n";
 			$htaccess .= "</IfModule>";
 			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 		}
