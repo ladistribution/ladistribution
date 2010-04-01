@@ -3,15 +3,24 @@
 Plugin Name: LD ui
 Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.2-24-1
+Version: 0.4.1
 Author: h6e.net
 Author URI: http://h6e.net/
 */
 
-function ld_admin_head()
+function ld_stylesheet($file, $package)
 {
 	$site = Zend_Registry::get('site');
-	echo '<link rel="stylesheet" type="text/css" href="' . $site->getUrl('css') . '/ld-ui/ld-ui.css' .'" />'."\n";
+	$infos = $site->getLibraryInfos($package);
+	if ($infos['type'] == 'application') {
+		$infos = $site->getInstance($infos['path'])->getInfos();
+	}
+	return $site->getUrl('css') . $file . '?v=' . $infos['version'];
+}
+
+function ld_admin_head()
+{
+	echo '<link rel="stylesheet" type="text/css" href="' . ld_stylesheet('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
 	echo '<style type="text/css"> #footer { display:none; }</style>'."\n";
 }
 
@@ -19,8 +28,7 @@ add_action('admin_head', 'ld_admin_head');
 
 function ld_template_head()
 {
-	$site = Zend_Registry::get('site');
-	echo '<link rel="stylesheet" type="text/css" href="' . $site->getUrl('css') . '/ld-ui/ld-ui.css' .'" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . ld_stylesheet('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
 	echo '<style type="text/css"> body { margin-bottom:50px; }</style>'."\n";
 }
 
