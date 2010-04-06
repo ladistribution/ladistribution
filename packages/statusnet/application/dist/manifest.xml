@@ -1,0 +1,23 @@
+<package>
+  <id>statusnet</id>
+  <name>Status.net</name>
+  <version>0.9.1-6</version>
+  <type>application</type>
+  <db>mysql</db>
+  <need>lib-php-openid</need>
+  <deploy>
+      <origin>config</origin>
+      <destination path="public">./</destination>
+  </deploy>
+  <deploy>
+      <origin>plugins</origin>
+      <destination path="public">plugins</destination>
+  </deploy>
+  <deploy>
+      <origin>themes</origin>
+      <destination path="public">theme</destination>
+  </deploy>
+  <configuration>
+      <preference type="text" label="App Title" name="title"/>
+  </configuration>
+</package>
