@@ -1,8 +1,0 @@
-<package release="unstable">
-  <id>laconica</id>
-  <name>Status.net</name>
-  <version>0.8.2-4</version>
-  <type>application</type>
-  <db>mysql</db>
-  <need>lib-php-openid</need>
-</package>

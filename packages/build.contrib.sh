@@ -22,7 +22,7 @@ cd indexhibit
 
 cd ..
 
-cd laconica
+cd statusnet
 
   cd application
   ./build.sh
