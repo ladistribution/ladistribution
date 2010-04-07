@@ -93,7 +93,12 @@ class Ld_Ui
         self::super_bar($params);
     }
 
-    public static function super_bar($params = array())
+    public static function super_bar($options = array())
+    {
+        echo self::get_super_bar($options);
+    }
+
+    public static function get_super_bar($params = array())
     {
         $site = self::getSite();
         $admin = self::getAdmin();
@@ -121,7 +126,7 @@ class Ld_Ui
         $view->isAdmin = $isAdmin;
         $view->applications = $applications;
 
-        echo $view->render('super-bar.phtml');
+        return $view->render('super-bar.phtml');
     }
 
     public static function topBar($params = array())
@@ -130,6 +135,11 @@ class Ld_Ui
     }
 
     public static function top_bar($options = array())
+    {
+        echo self::get_top_bar($options);
+    }
+
+    public static function get_top_bar($options = array())
     {
         $admin = self::getAdmin();
 
@@ -161,7 +171,7 @@ class Ld_Ui
               'module' => 'default', 'controller' => 'auth', 'action' => 'complete'
         ));
 
-        echo $view->render('top-bar.phtml');
+        return $view->render('top-bar.phtml');
     }
 
 }
