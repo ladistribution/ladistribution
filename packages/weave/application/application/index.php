@@ -12,17 +12,12 @@ require_once dirname(__FILE__) . '/functions.php';
 <link href="<?php echo weave_get_css_url('/ld-ui/ld-ui.css', 'ld-ui') ?>" media="screen" rel="stylesheet" type="text/css"/>
 <style type="text/css">
 #weave-logo {
-    width:350px;
     height:146px;
-    background:url(<?php echo Zend_Registry::get('instance')->getUrl() ?>logo.png) top left no-repeat;
+    background:url(<?php echo Zend_Registry::get('instance')->getUrl() ?>logo.png) top center no-repeat;
     text-indent:-9999px;
-    float:left;
 }
-.h6e-post-content {
-    width:610px;
-    float:left;
-    margin-top:1em;
-    margin-bottom:2em;
+.h6e-main-content {
+    width:35em;
 }
 </style>
 </head>
