@@ -218,9 +218,11 @@ class Slotter_UsersController extends Slotter_BaseController
     {
         $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
 
+        $storage = new Zend_OpenId_Consumer_Storage_File(LD_TMP_DIR . '/openid');
+
         if ($this->_hasParam('openid_identifier')) {
 
-            $consumer = new Zend_OpenId_Consumer();
+            $consumer = new Zend_OpenId_Consumer($storage );
             if (!$consumer->login($this->_getParam('openid_identifier'), null, $root)) {
                 throw new Exception("OpenID login failed: " . $consumer->getError());
             }
@@ -228,7 +230,7 @@ class Slotter_UsersController extends Slotter_BaseController
         } elseif ($this->_hasParam('openid_mode')) {
 
             if ($this->_getParam('openid_mode') == 'id_res') {
-                $consumer = new Zend_OpenId_Consumer();
+                $consumer = new Zend_OpenId_Consumer($storage );
                 if ($consumer->verify($_GET)) {
                     $userId = $this->_getParam('id');
                     $this->_addUserIdentity($userId, $this->_getOpenidIdentity());

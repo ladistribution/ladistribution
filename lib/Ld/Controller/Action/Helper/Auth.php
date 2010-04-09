@@ -90,7 +90,9 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
         $sreg = new Ld_OpenId_Extension_Sreg(
             array('nickname' => true, 'email' => true, 'fullname' => true), null, 1.1);
 
-        $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), null, null, $root, $sreg);
+        $storage = new Zend_OpenId_Consumer_Storage_File(LD_TMP_DIR . '/openid');
+
+        $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), $storage, null, $root, $sreg);
 
         if ($this->_getParam('openid_action') == 'login' && $this->_getParam('openid_identifier')) {
 
