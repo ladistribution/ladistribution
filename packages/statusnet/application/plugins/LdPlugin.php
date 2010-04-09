@@ -21,24 +21,38 @@ class LdPlugin extends Plugin
 
 	function onEndShowHeadElements($action)
 	{
-		$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-			'href' => $this->getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal')));
-		$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-			'href' => $this->getCssUrl('/ld-ui/ld-ui.css', 'ld-ui')));
+		if (common_config('site', 'theme') == 'ld') {
+			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+				'href' => $this->getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal')));
+			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+				'href' => $this->getCssUrl('/ld-ui/ld-ui.css', 'ld-ui')));
+		} else {
+			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+				'href' => $this->getCssUrl('/ld-ui/ld-bars.css', 'ld-ui')));
+			$action->raw(
+				'<style type="text/css">'.
+				'#footer { margin-bottom:25px }'.
+				'</style>'
+			);
+		}
 	}
 
 	function onStartShowHeader($action)
 	{
-		$action->elementStart('div', array('class' => 'h6e-layout'));
-		$action->raw(Ld_Ui::get_top_bar(array('logoutUrl' => common_local_url('logout'))));
-		$action->elementStart('div', array('class' => 'h6e-main-content'));
+		if (common_config('site', 'theme') == 'ld') {
+			$action->elementStart('div', array('class' => 'h6e-layout'));
+			$action->raw(Ld_Ui::get_top_bar(array('logoutUrl' => common_local_url('logout'))));
+			$action->elementStart('div', array('class' => 'h6e-main-content'));
+		}
 	}
 
 	function onEndShowFooter($action)
 	{
 		$action->raw(Ld_Ui::get_super_bar());
-		$action->elementEnd('div');
-		$action->elementEnd('div');
+		if (common_config('site', 'theme') == 'ld') {
+			$action->elementEnd('div');
+			$action->elementEnd('div');
+		}
 	}
 
 	function onStartAccountSettingsDesignMenuItem($widget, $menu)
@@ -52,6 +66,11 @@ class LdPlugin extends Plugin
 	}
 
 	function onStartPublicFeaturedUsersSection($action)
+	{
+	    return false;
+	}
+
+	function onStartShowShortcutIcon($action)
 	{
 	    return false;
 	}

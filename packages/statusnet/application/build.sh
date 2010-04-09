@@ -1,6 +1,5 @@
 VERSION="0.9.x"
 NAME="statusnet"
-SOURCE="git@gitorious.org:~znarfor/statusnet/ladistribution.git"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
@@ -10,15 +9,18 @@ PACKAGE="$NAME.zip"
 # git checkout -b $VERSION origin/$VERSION
 # cd ..
 # rm -rf $FOLDER/.git
-# rm -rf $FOLDER/.gitignore
 
 # Get from GZ
-curl http://gitorious.org/statusnet/ladistribution/archive-tarball/$VERSION > statusnet.gz
+curl http://gitorious.org/statusnet/ladistribution/archive-tarball/0.9.x > statusnet.gz
 tar zxvf statusnet.gz
 rm statusnet.gz
 mv statusnet-ladistribution $FOLDER
 
+# Get from Github with SVN
+# svn checkout http://svn.github.com/znarf/statusnet-ladistribution.git $FOLDER
+
 # Remove unecessary files
+rm $FOLDER/.gitignore
 rm $FOLDER/Makefile
 rm $FOLDER/lighttpd.conf.example
 rm $FOLDER/htaccess.sample
