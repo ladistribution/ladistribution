@@ -88,17 +88,17 @@ class Ld_Ui
         return $adminUrl;
     }
 
-    public static function superBar($params = array())
+    public static function superBar($options = array())
     {
-        self::super_bar($params);
+         echo self::getSuperBar($options);
     }
 
     public static function super_bar($options = array())
     {
-        echo self::get_super_bar($options);
+        self::superBar($options);
     }
 
-    public static function get_super_bar($params = array())
+    public static function getSuperBar($params = array())
     {
         $site = self::getSite();
         $admin = self::getAdmin();
@@ -129,17 +129,17 @@ class Ld_Ui
         return $view->render('super-bar.phtml');
     }
 
-    public static function topBar($params = array())
+    public static function topBar($options = array())
     {
-        self::top_bar($params);
+        echo self::getTopBar($options);
     }
 
     public static function top_bar($options = array())
     {
-        echo self::get_top_bar($options);
+        self::topBar($options);
     }
 
-    public static function get_top_bar($options = array())
+    public static function getTopBar($options = array())
     {
         $admin = self::getAdmin();
 
@@ -172,6 +172,13 @@ class Ld_Ui
         ));
 
         return $view->render('top-bar.phtml');
+    }
+
+    public static function getCssUrl($file, $package)
+    {
+        $infos = self::getSite()->getLibraryInfos("css-$package");
+        $url = self::getSite()->getUrl('css') . $file . '?v=' . $infos['version'];
+        return $url;
     }
 
 }
