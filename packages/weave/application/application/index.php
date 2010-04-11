@@ -1,18 +1,19 @@
 <?php
 require_once dirname(__FILE__) . '/dist/config.php';
 require_once dirname(__FILE__) . '/dist/prepend.php';
-require_once dirname(__FILE__) . '/functions.php';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><?php echo Zend_Registry::get('instance')->getName() ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link href="<?php echo weave_get_css_url('/h6e-minimal/h6e-minimal.css', 'h6e-minimal') ?>" media="screen" rel="stylesheet" type="text/css"/>
-<link href="<?php echo weave_get_css_url('/ld-ui/ld-ui.css', 'ld-ui') ?>" media="screen" rel="stylesheet" type="text/css"/>
+<link href="<?php echo Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal') ?>"
+    media="screen" rel="stylesheet" type="text/css"/>
+<link href="<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') ?>"
+    media="screen" rel="stylesheet" type="text/css"/>
 <style type="text/css">
 #weave-logo {
-    height:146px;
+    height:131px;
     background:url(<?php echo Zend_Registry::get('instance')->getUrl() ?>logo.png) top center no-repeat;
     text-indent:-9999px;
 }
@@ -24,7 +25,7 @@ require_once dirname(__FILE__) . '/functions.php';
 
 <body class="ld-layout">
 
-<?php Ld_Ui::top_bar(); ?>
+<?php Ld_Ui::topBar(); ?>
 
 <div class="h6e-main-content">
 
@@ -65,7 +66,7 @@ require_once dirname(__FILE__) . '/functions.php';
 
 </div>
 
-<?php Ld_Ui::super_bar(); ?>
+<?php Ld_Ui::superBar(); ?>
 
 </body>
 </html>

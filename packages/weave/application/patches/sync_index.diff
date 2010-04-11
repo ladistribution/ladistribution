@@ -1,5 +1,5 @@
---- sync/1.0/index.php.orig	2010-03-01 14:45:21.000000000 +0100
-+++ sync/1.0/index.php	2010-03-01 14:46:25.000000000 +0100
+--- sync/1.0/index.php.orig	2010-04-11 13:56:28.000000000 +0200
++++ sync/1.0/index.php	2010-04-11 15:54:42.000000000 +0200
 @@ -38,6 +38,8 @@
  #
  # ***** END LICENSE BLOCK *****
@@ -7,9 +7,9 @@
 +	require_once(dirname(__FILE__) . '/../../dist/prepend.php');
 +
  	require_once 'weave_constants.php';
- 	require_once 'weave_storage/' . WEAVE_STORAGE_ENGINE . '.php';
  	require_once 'weave_basic_object.php';
-@@ -56,9 +58,11 @@
+ 	require_once 'weave_utils.php';
+@@ -54,9 +56,11 @@
  		$path = $_SERVER['PATH_INFO'];
  	else if (!empty($_SERVER['ORIG_PATH_INFO']))
  		$path = $_SERVER['ORIG_PATH_INFO'];

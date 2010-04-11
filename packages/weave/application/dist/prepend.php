@@ -34,3 +34,11 @@ define('WEAVE_MYSQL_COLLECTION_TABLE_NAME', "{$dbPrefix}collections");
 // define('WEAVE_REGISTER_USE_CAPTCHA', false);
 // define('RECAPTCHA_PUBLIC_KEY', '6LfWcwUAAAAAABnmLyhmgddYeJGdiRlo2MWSOpAl');
 // define('RECAPTCHA_PRIVATE_KEY', '6LfWcwUAAAAAAHpjpBNSaxwLVQXQIG-S0Y6IG38O');
+
+// avoid E_NOTICE errors. since weave is a web service,
+// they can be difficult to trace and break JSON output
+error_reporting( E_ALL ^ E_NOTICE );
+
+if (class_exists('Ld_Plugin')) {
+	Ld_Plugin::doAction('Weave:prepend');
+}

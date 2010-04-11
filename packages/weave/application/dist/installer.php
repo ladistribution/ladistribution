@@ -9,7 +9,7 @@ class Ld_Installer_Weave extends Ld_Installer
 		foreach ($this->getSchemaTables() as $table) {
 			$db->query($table);
 		}
-		$this->createHtaccess();
+		$this->writeHtaccess();
 	}
 
 	function postUpdate($preferences = array())
@@ -19,6 +19,11 @@ class Ld_Installer_Weave extends Ld_Installer
 
 		$db->query("ALTER TABLE `{$dbPrefix}wbo` CHANGE `username` `username` VARCHAR( 32 ) NOT NULL");
 		$db->query("ALTER TABLE `{$dbPrefix}collections` CHANGE `userid` `userid` VARCHAR( 32 ) NOT NULL");
+	}
+
+	function postMove()
+	{
+		$this->writeHtaccess();
 	}
 
 	function getSchemaTables()
@@ -62,11 +67,11 @@ class Ld_Installer_Weave extends Ld_Installer
 			KEY `predecessorindex` (`username`,`collection`,`predecessorid`),
 			KEY `size_index` (`username`,`payload_size`)
 		) ENGINE=InnoDB;";
-	
+
 		return $tables;
 	}
 
-	function createHtaccess()
+	function writeHtaccess()
 	{
 		if (constant('LD_REWRITE')) {
 			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
@@ -80,16 +85,16 @@ class Ld_Installer_Weave extends Ld_Installer
 		}
 	}
 
-	function uninstall()
-	{
-		$db = $this->instance->getDbConnection();
-		$dbPrefix = $this->instance->getDbPrefix();
-
-		$db->query("DROP TABLE IF EXISTS {$dbPrefix}users");
-		$db->query("DROP TABLE IF EXISTS {$dbPrefix}collections");
-		$db->query("DROP TABLE IF EXISTS {$dbPrefix}wbo");
-
-		parent::uninstall();
-	}
+	// function uninstall()
+	// {
+	// 	$db = $this->instance->getDbConnection();
+	// 	$dbPrefix = $this->instance->getDbPrefix();
+	//
+	// 	$db->query("DROP TABLE IF EXISTS {$dbPrefix}users");
+	// 	$db->query("DROP TABLE IF EXISTS {$dbPrefix}collections");
+	// 	$db->query("DROP TABLE IF EXISTS {$dbPrefix}wbo");
+	//
+	// 	parent::uninstall();
+	// }
 
 }
