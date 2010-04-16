@@ -11,7 +11,6 @@ ul.blocks {
   width:100%;
   overflow:hidden;
   margin:1em 0;
-  -moz-padding-start:0;
 }
 
 ul.blocks li {
@@ -38,6 +37,7 @@ ul.blocks li.empty, ul.blocks li.empty a, ul.blocks li.empty a:visited {
   color:#777;	
 }
 
+/*
 ul.blocks li.wordpress { background-image:url(img/wp100.png); }
 ul.blocks li.dotclear  { background-image:url(img/dc100.png); }
 ul.blocks li.dokuwiki  { background-image:url(img/dw100.png); }
@@ -47,6 +47,7 @@ ul.blocks li.laconica  { background-image:url(img/lc100.png); }
 ul.blocks li.bbpress   { background-image:url(img/bp100.png); }
 ul.blocks li.weave     { background-image:url(img/mw100.png); }
 ul.blocks li.gallery   { background-image:url(img/ga100.png); }
+*/
 
 /* Alternative 'mini' Style
 -------------------------------------------------------------- */
@@ -59,7 +60,10 @@ ul.blocks.mini li {
   width:auto;
   height:auto;
 
-  background:#EDEDED center left no-repeat;
+  min-height:32px;
+  min-width:85px;
+
+  background:#EDEDED 2px 2px no-repeat;
 
   border-color:#ddd;
   border-radius:5px;
@@ -67,6 +71,10 @@ ul.blocks.mini li {
   -webkit-border-radius:5px;
 
   line-height:1.2em;
+}
+
+ul.blocks.mini.is-admin li {
+  min-width:165px;
 }
 
 ul.blocks.mini li .name {
@@ -87,12 +95,8 @@ ul.blocks.mini li.ui-sortable-helper { height:32px !important; }
 ul.blocks.mini li.ui-sortable-placeholder { height:31px !important; }
 
 ul.blocks.mini li.empty {
-  padding-left:10px;
-  background:#f9f9f9;
-  background:transparent;
-  height:32px;
+  background-color:transparent;
 }
-
 
 ul.blocks.mini li.current {
   background-color:#f5f5f5;
@@ -108,9 +112,11 @@ ul.blocks.mini li .path, ul.blocks.mini li .manage  {
   white-space:nowrap;
 }
 
-ul.blocks.mini li      { background-image:url(img/default48.png); }
-ul.blocks.mini li.wordpress { background-image:url(img/wp48.png); }
-ul.blocks.mini li.dokuwiki  { background-image:url(img/dw48.png); }
-ul.blocks.mini li.bbpress   { background-image:url(img/bp48.png); }
-ul.blocks.mini li.weave     { background-image:url(img/mw48.png); }
-ul.blocks.mini li.gallery   { background-image:url(img/ga48.png); }
+ul.blocks.mini li           { background-image:url(img/default-48.png); }
+ul.blocks.mini li.wordpress { background-image:url(img/wordpress-48.png); }
+ul.blocks.mini li.dokuwiki  { background-image:url(img/dokuwiki-48.png); }
+ul.blocks.mini li.bbpress   { background-image:url(img/bbpress-48.png); }
+ul.blocks.mini li.weave     { background-image:url(img/weave-48.png); }
+ul.blocks.mini li.gallery   { background-image:url(img/gallery-48.png); }
+ul.blocks.mini li.statusnet { background-image:url(img/statusnet-48.png); }
+ul.blocks.mini li.dotclear  { background-image:url(img/dotclear-48.png); }

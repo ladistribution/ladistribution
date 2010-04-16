@@ -4,12 +4,12 @@
    
 -------------------------------------------------------------- */
 
-.ld-layout h2 {
-  margin:0px 0 15px;
+.h6e-main-content h2 {
+	margin:0px 0 15px;
 }
 
-.ld-layout h2, .ld-layout h2 a, .ld-layout h2 a:visited {
-  color:#FF6448;
+.h6e-main-content h2, .h6e-main-content h2 a, .h6e-main-content h2 a:visited {
+	color:#FF6448;
 }
 
 .h6e-main-content {
@@ -35,11 +35,11 @@
 }
 
 .h6e-page-content {
-  padding:0;
+	padding:0;
 }
 
 .h6e-page-content ul, .h6e-page-content p {
-  font-size:1.1em;
+	font-size:1.1em;
 }
 
 .h6e-simple-footer {

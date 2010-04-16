@@ -23,6 +23,9 @@
 .ld-panel-content {
   padding:20px;
   border:1px solid #ccc;
+  border-radius:0 5px 5px;
+  -moz-border-radius:0 5px 5px;
+  -webkit-border-radius:0 5px 5px;
 }
 
 .ld-panel h1, .ld-panel h2, .ld-panel h3, .ld-panel h4 {
@@ -65,17 +68,16 @@
   display:block;
   padding:5px 10px;
   border:1px solid #ccc;
+  border-radius:5px 5px 0 0;
+  -moz-border-radius:5px 5px 0 0;
+  -webkit-border-radius:5px 5px 0 0;
   margin-right:7px;
   border-bottom:0;
   font-size:12px;
   text-transform:capitalize;
-  background:white;
 }
 
-.ld-instance-menu li a:hover {
-  background:#eee;
-}
-
+.ld-instance-menu li a:hover,
 .ld-instance-menu li.current a {
   background:#eee;
 }
@@ -122,8 +124,14 @@ table.ld-form, table.ld-preferences  {
   float:left;
 }
 
-.themes-container .theme img {
+.themes-container .theme img, .themes-container .theme .no-theme-screenshot {
+  width:150px;
+  height:112px;
   margin-bottom:0.5em;
   display:block;
   border:1px solid #4E5368;
+}
+
+.themes-container .theme .no-theme-screenshot {
+  background:url(img/theme-screenshot.png);
 }

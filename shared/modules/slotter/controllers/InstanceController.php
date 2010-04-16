@@ -85,6 +85,7 @@ class Slotter_InstanceController extends Slotter_BaseController
                 $this->view->preferences = $this->site->getInstallPreferences($packageId);
             } else {
                 $this->view->packages = $this->site->getApplications();
+                ksort($this->view->packages);
             }
         }
     }

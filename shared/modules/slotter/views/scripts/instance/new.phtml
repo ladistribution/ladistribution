@@ -2,7 +2,7 @@
     
 <h2><?php echo $this->translate("Add a new application") ?></h2>
 
-<ul class="blocks">
+<ul class="blocks mini new-instance">
     <?php
     foreach ($this->packages as $id => $package) {
         if ($package->id == 'admin') {
@@ -24,14 +24,14 @@
 
 <?php else : ?>
 
-<h2><?php printf($this->translate("Deploy a new % instance "), $this->escape($this->package->name)) ?></h2>
+<h2><?php printf($this->translate("Create a new % instance "), $this->escape($this->package->name)) ?></h2>
 
 <form method="post" action="">
 
     <?php $this->preferencesRenderer($this->preferences, array(), 'preferences'); ?>
 
     <input type="hidden" name="packageId" value="<?php echo $this->escape($this->package->id) ?>"/>
-    <input type="submit" class="submit" value="<?php echo $this->translate("Create") ?>"/>
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Create") ?>"/>
 
 </form>
 

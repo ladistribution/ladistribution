@@ -18,7 +18,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
         <div class="ld-instance-list">
           <?php if ($this->view->userRole == 'admin') : ?>
-              <ul class="blocks sortables mini">
+              <ul class="blocks sortables mini is-admin">
           <?php else : ?>
               <ul class="blocks mini">
           <?php endif ?>
