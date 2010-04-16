@@ -28,7 +28,7 @@ class Identity_OpenidController extends Ld_Controller_Action
     public function _restrict()
     {
         if ($this->authenticated == false) {
-            $this->_forward('auth', 'index', 'default');
+            $this->_forward('login', 'auth', 'default');
             return true;
         }
     }

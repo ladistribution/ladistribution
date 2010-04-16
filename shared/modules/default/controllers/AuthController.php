@@ -161,6 +161,10 @@ class AuthController extends Ld_Controller_Action
 
     function _getReferer($auto = true)
     {
+        if ($this->_hasParam('openid_mode') || $this->_getParam('openid_identity') || $this->_getParam('openid_assoc_handle')) {
+            return null;
+        }
+
         if ($this->_hasParam('ld_referer')) {
             return $this->_getParam('ld_referer');
         }
