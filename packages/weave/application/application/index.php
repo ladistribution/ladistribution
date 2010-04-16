@@ -20,6 +20,9 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 .h6e-main-content {
     width:35em;
 }
+.nowrap {
+    white-space:nowrap;
+}
 </style>
 </head>
 
@@ -42,6 +45,29 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
           <p>Your Custom Server URL is: <strong><?php echo Zend_Registry::get('instance')->getUrl(); ?></strong></p>
 
           <p>This Weave instance is: <strong>available for registered users only</strong>.</p>
+
+          <h2>Your datas</h2>
+
+          <?php $clients = ld_weave_count('clients'); if ($clients > 0) : ?>
+
+              <?php
+              $bookmarks = ld_weave_count('bookmarks');
+              $forms = ld_weave_count('forms');
+              $passwords = ld_weave_count('passwords');
+              $history = ld_weave_count('history');
+              ?>
+
+              <p>You currently use <span class="nowrap"><strong><?php echo $clients ?></strong> weave clients</span> to store
+                  <span class="nowrap"><strong><?php echo $bookmarks ?></strong> bookmarks</span>,
+                  <span class="nowrap"><strong><?php echo $passwords ?></strong> passwords</span>,
+                  <span class="nowrap"><strong><?php echo $forms ?></strong> forms entries</span> and
+                  <span class="nowrap"><strong><?php echo $history ?></strong> pages</span> in your history.</p>
+
+          <?php else : ?>
+
+              <p>You don't have any Weave datas stored on this server yet.</p>
+
+          <?php endif ?>
 
           <h2>Notes</h2>
           <ul>
