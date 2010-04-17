@@ -26,7 +26,7 @@ svn export "http://ladistribution.net/svn/trunk/shared/locales/ld" locales
 find . -name '*.DS_Store' -type f -delete
 
 # Create zip package
-zip -rqv $PACKAGE $FOLDER shared manifest.xml -x \*.svn/\* \*.preserve
+zip -rqv $PACKAGE $FOLDER locales manifest.xml -x \*.svn/\* \*.preserve
 mv $PACKAGE ../../
 
 # Clean
