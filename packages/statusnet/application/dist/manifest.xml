@@ -1,7 +1,7 @@
 <package>
   <id>statusnet</id>
   <name>Status.net</name>
-  <version>0.9.1-11</version>
+  <version>0.9.1-15</version>
   <type>application</type>
   <db>mysql</db>
   <need>lib-php-openid</need>

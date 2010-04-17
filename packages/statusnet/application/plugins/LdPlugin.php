@@ -11,24 +11,16 @@ class LdPlugin extends Plugin
 	{
 	}
 
-	function getCssUrl($file, $package)
-	{
-		$site = Zend_Registry::get('site');
-		$infos = $site->getLibraryInfos("css-$package");
-		$url = $site->getUrl('css') . $file . '?v=' . $infos['version'];
-		return $url;
-	}
-
 	function onEndShowHeadElements($action)
 	{
 		if (common_config('site', 'theme') == 'ld') {
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-				'href' => $this->getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal')));
+				'href' => Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal')));
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-				'href' => $this->getCssUrl('/ld-ui/ld-ui.css', 'ld-ui')));
+				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui')));
 		} else {
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-				'href' => $this->getCssUrl('/ld-ui/ld-bars.css', 'ld-ui')));
+				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-bars.css', 'ld-ui')));
 			$action->raw(
 				'<style type="text/css">'.
 				'#footer { margin-bottom:25px }'.
@@ -41,14 +33,14 @@ class LdPlugin extends Plugin
 	{
 		if (common_config('site', 'theme') == 'ld') {
 			$action->elementStart('div', array('class' => 'h6e-layout'));
-			$action->raw(Ld_Ui::get_top_bar(array('logoutUrl' => common_local_url('logout'))));
+			$action->raw(Ld_Ui::getTopBar(array('logoutUrl' => common_local_url('logout'))));
 			$action->elementStart('div', array('class' => 'h6e-main-content'));
 		}
 	}
 
 	function onEndShowFooter($action)
 	{
-		$action->raw(Ld_Ui::get_super_bar());
+		$action->raw(Ld_Ui::getSuperBar());
 		if (common_config('site', 'theme') == 'ld') {
 			$action->elementEnd('div');
 			$action->elementEnd('div');
@@ -105,7 +97,43 @@ class LdPlugin extends Plugin
 			'var aside = $("#aside_primary"); if (aside.children("div").length == 0) { aside.hide() };'.
 			'</script>'
 		);
-    }
+	}
+
+	/*
+	function prefix(&$key)
+	{
+		if (empty($this->prefix)) {
+			$application = Zend_Registry::get("application");
+			$this->prefix = $application->getDbPrefix();
+			$this->prefix = substr($this->prefix, 0, -1);
+		}
+		$key = str_replace('statusnet:', $this->prefix . ':', $key);
+	}
+
+	function onStartCacheGet(&$key, &$value)
+	{
+		$this->prefix($key);
+		return true;
+	}
+
+	function onStartCacheSet(&$key, &$value, &$flag, &$expiry, &$success)
+	{
+		$this->prefix($key);
+		return true;
+	}
+
+	function onStartCacheIncrement(&$key, &$step, &$value)
+	{
+		$this->prefix($key);
+		return true;
+	}
+
+	function onStartCacheDelete(&$key, &$success)
+	{
+		$this->prefix($key);
+		return true;
+	}
+	*/
 
 	function onPluginVersion(&$versions)
 	{

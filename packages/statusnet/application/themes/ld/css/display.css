@@ -65,10 +65,10 @@ ol.notices {
 }
 
 #anon_notice {
-	color:inherit;
-	border:1px solid #CCCCCC;
-	background:#f1f1f1;
-	clear:both;
+    color:inherit;
+    border:1px solid #CCCCCC;
+    background:#f1f1f1;
+    clear:both;
 }
 
 #core {
@@ -83,8 +83,8 @@ ol.notices {
     padding:15px;
     margin-bottom:7px;
     -moz-box-shadow:none;
-	-webkit-box-shadow:none;
-	box-shadow:none;
+    -webkit-box-shadow:none;
+    box-shadow:none;
 }
 
 #site_nav_local_views {
@@ -113,6 +113,7 @@ ol.notices {
     font-size:2em;
     color:#009DFF;
     margin-bottom:0.5em;
+    line-height:2em;
 }
 
 #content h2  {
@@ -140,6 +141,19 @@ ol.notices {
     margin-bottom:0.25em;
 }
 
+#content form ul {
+    margin-left:0;
+}
+
+#content form ul li {
+    margin-left:0;
+    margin-bottom:1.5em;
+}
+
+#content .form_settings .form_data p.form_guide {
+    margin-bottom:0;
+}
+
 #content ol.notices li,
 .hentry .entry-content ol.notices li {
     margin-left:0;
@@ -147,6 +161,25 @@ ol.notices {
 
 #content .notices li:hover {
     background:none;
+}
+
+.error, .success {
+    border:1px solid #ccc;
+}
+
+.form_settings fieldset fieldset {
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+    box-shadow:none;
+    background:none;
+}
+
+.form_settings .form_note {
+    border:1px solid #ddd;
+    background:#FFFFDD;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+    box-shadow:none;
 }
 
 /* Aside
@@ -273,8 +306,8 @@ label[for=notice_data-text] {
 
 #form_notice #notice_data-text,
 #form_notice-direct #notice_data-text {
-	display:block;
-	clear:both;
+    display:block;
+    clear:both;
 }
 
 .form_notice #notice_action-submit {

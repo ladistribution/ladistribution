@@ -19,6 +19,8 @@ mv statusnet-ladistribution $FOLDER
 # Get from Github with SVN
 # svn checkout http://svn.github.com/znarf/statusnet-ladistribution.git $FOLDER
 
+mv $FOLDER/plugins/MemcachePlugin.php plugins
+
 # Remove unecessary files
 rm $FOLDER/.gitignore
 rm $FOLDER/Makefile
@@ -53,3 +55,4 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
+rm plugins/MemcachePlugin.php

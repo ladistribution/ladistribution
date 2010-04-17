@@ -11,6 +11,8 @@ $config['db']['type'] = 'mysql';
 $config["db"]["database"] = sprintf("mysqli://%s:%s@%s/%s", $db["user"], $db["password"], $db["host"], $db["name"]);
 $config["db"]["table_prefix"] = $application->getDbPrefix();
 
+$config["cache"]["base"] = substr($application->getDbPrefix(), 0, -1);
+
 if (defined('LD_REWRITE') && constant('LD_REWRITE')) {
 	$config["site"]["fancy"] = true;
 }
