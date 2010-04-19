@@ -27,6 +27,9 @@ class Ld_Installer_Statusnet extends Ld_Installer
 	public function getConfiguration()
 	{
 		$configuration = parent::getConfiguration();
+		if (empty($configuration['title'])) {
+			$configuration['title'] = $configuration['name'];
+		}
 		if (empty($configuration['theme'])) {
 			$configuration['theme'] = 'ld';
 		}
