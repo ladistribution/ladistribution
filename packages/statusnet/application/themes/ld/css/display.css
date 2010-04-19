@@ -182,6 +182,10 @@ ol.notices {
     box-shadow:none;
 }
 
+.h6e-main-content #content  h2, .h6e-main-content #content h2 a, .h6e-main-content #content h2 a:visited {
+    color:inherit;
+}
+
 /* Aside
 -------------------------------------------------------------- */
 

@@ -27,26 +27,11 @@ class Ld_Installer_Statusnet extends Ld_Installer
 	public function getConfiguration()
 	{
 		$configuration = parent::getConfiguration();
-		$configuration['name'] = $this->getInstance()->getName();
-		if (empty($configuration['title'])) {
-			$configuration['title'] = $configuration['name'];
-		}
 		if (empty($configuration['theme'])) {
 			$configuration['theme'] = 'ld';
 		}
 		return $configuration;
 	}
-
-	public function setConfiguration($configuration = array())
-	{
-		$instance = $this->getInstance();
-		if (isset($configuration['name']) && isset($instance)) {
-			$instance->setInfos(array('name' => $configuration['name']))->save();
-		}
-		return parent::setConfiguration($configuration);
-	}
-
-	/* Themes */
 
 	public function getThemes()
 	{
@@ -54,7 +39,7 @@ class Ld_Installer_Statusnet extends Ld_Installer
 
 		$configuration = $this->getConfiguration();
 		$themesDirectories = Ld_Files::getDirectories($this->getAbsolutePath() . '/theme');
-		
+
 		foreach ($themesDirectories as $id) {
 			$name = $id;
 			$dir = $this->getAbsolutePath() . '/theme/' . $id;

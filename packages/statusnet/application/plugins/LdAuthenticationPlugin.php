@@ -32,8 +32,12 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 		$user = Zend_Registry::get('site')->getUser($username);
 		$registration_data = array();
 		$registration_data['nickname'] = $nickname;
-		$registration_data['fullname'] = $user['fullname'];
-		$registration_data['email'] = $user['email'];
+		if (isset($user['fullname'])) {
+			$registration_data['fullname'] = $user['fullname'];
+		}
+		if (isset($user['email'])) {
+			$registration_data['email'] = $user['email'];
+		}
 		return User::register($registration_data);
 	}
 
@@ -71,5 +75,3 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 	}
 
 }
-
-?>
