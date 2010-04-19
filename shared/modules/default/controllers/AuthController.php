@@ -12,13 +12,18 @@ class AuthController extends Ld_Controller_Action
     {
         parent::init();
 
-        $this->_setTitle('La Distribution');
+        $this->_setTitle( $this->getSite()->getName() );
     }
 
     function loginAction()
     {
+
         if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous()) {
-            $this->_forward('complete');
+            $session = new Zend_Session_Namespace("ld_openid");
+            $session->username = $this->_getParam('openid_sreg_nickname');
+            $session->fullname = $this->_getParam('openid_sreg_fullname');
+            $session->email = $this->_getParam('openid_sreg_email');
+            $this->_redirector->goto('complete', 'auth', 'default');
             return;
         }
 
@@ -127,7 +132,7 @@ class AuthController extends Ld_Controller_Action
     function completeAction()
     {
         if (!Ld_Auth::isAuthenticated()) {
-            $this->_forward('disallow');
+            $this->_redirector->goto('login', 'auth', 'default');
             return true;
         }
 
@@ -144,10 +149,12 @@ class AuthController extends Ld_Controller_Action
 
         } elseif ($this->getRequest()->isGet()) {
 
+            $session = new Zend_Session_Namespace("ld_openid");
+
             $this->view->user = $user = array(
-                'username'   => $this->_getParam('openid_sreg_nickname'),
-                'fullname'   => $this->_getParam('openid_sreg_fullname'),
-                'email'      => $this->_getParam('openid_sreg_email')
+                'username'   => $session->username,
+                'fullname'   => $session->fullname,
+                'email'      => $session->email
             );
 
             $this->render('register');
@@ -161,6 +168,7 @@ class AuthController extends Ld_Controller_Action
 
     function _getReferer($auto = true)
     {
+        // don't try to redirect to referer is this an OpenID request
         if ($this->_hasParam('openid_mode') || $this->_getParam('openid_identity') || $this->_getParam('openid_assoc_handle')) {
             return null;
         }

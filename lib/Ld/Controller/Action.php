@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Controller
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -39,6 +39,25 @@ class Ld_Controller_Action extends Zend_Controller_Action
             // new
             $this->view->currentUser = $this->currentUser = $this->_helper->auth->getUser();
         }
+
+        // Locale
+        $this->initLocale();
+    }
+
+    function initLocale()
+    {
+        if ($this->_hasParam('ld-lang')) {
+            $path = $this->getSite()->getPath();
+            $cookiePath = empty($path) ? '/' : $path;
+            $locale = $_COOKIE['ld-lang'] = $this->_getParam('ld-lang');
+            setCookie('ld-lang', $locale, time() + 365 * 24 * 60 * 60, $cookiePath);
+        } else if ($this->getRequest()->getCookie('ld-lang')) {
+            $locale = $this->getRequest()->getCookie('ld-lang');
+        }
+        if (isset($locale) &&  Zend_Registry::isRegistered('Zend_Translate')) {
+            $translate = Zend_Registry::get('Zend_Translate');
+            $translate->setLocale($locale);
+        }
     }
 
     function getTranslator()
@@ -68,8 +87,8 @@ class Ld_Controller_Action extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
     }
-    
+
     // Legacy
-    
+
     function _setTitle($title) { return $this->setTitle($title); }
 }

@@ -7,7 +7,7 @@
  * @package    Ld_Controller
  * @subpackage Ld_Controller_Action_Helper
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -50,7 +50,8 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
         } else if ($this->_getParam('ld_auth_action') == 'login') {
 
             if ($this->_hasParam('openid_identifier')) {
-                $this->_setParam('ld_auth_username', $this->_getParam('openid_identifier'));
+                $openid_identifier = trim( $this->_getParam('openid_identifier') );
+                $this->_setParam('ld_auth_username', $openid_identifier);
             }
 
             if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
@@ -59,13 +60,14 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
             if ($this->_hasParam('ld_auth_username') && $this->_hasParam('ld_auth_password')) {
                 $result = Ld_Auth::authenticate(
-                    $this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'), $this->_getParam('ld_auth_remember'));
+                    $this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'), $this->_getParam('ld_auth_remember')
+                );
                 if ($result->isValid()) {
-                     if (isset($referer)) {
-                          $this->_redirect($referer);
-                      }
-                  }
-                  return $result;
+                    if (isset($referer)) {
+                        $this->_redirect($referer);
+                    }
+                }
+                return $result;
             }
 
             return null;
@@ -113,6 +115,8 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
             // if user is correctly authenticated with OpenID
             if ($result->isValid()) {
                 // nothing
+            } else {
+                Ld_Auth::logout();
             }
 
             return $result;

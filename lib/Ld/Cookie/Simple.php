@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Cookie
  * @author     François Hodierne (http://h6e.net)
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)ç
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -21,6 +21,8 @@ class Ld_Cookie_Simple
         /* 1980-01-01 */
         $expire = 315554400;
         setcookie($name, '', $expire, $path, $domain, $secure, $httponly);
+        // delete cookie from PHP globals
+        unset($_COOKIE[$name]);
     }
 
     public function getCookieValue($cookiename, $deleteIfInvalid = true)

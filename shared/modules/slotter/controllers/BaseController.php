@@ -8,10 +8,6 @@ require_once 'Zend/Controller/Action.php';
 class Slotter_BaseController extends Ld_Controller_Action
 {
 
-    protected static $_accept = array(
-        'application/json' => 'json'
-    );
-
     public function init()
     {
         parent::init();
@@ -32,8 +28,6 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->_initAcl();
 
-        $this->_initLang();
-
         $this->_initNavigation();
     }
 
@@ -49,7 +43,8 @@ class Slotter_BaseController extends Ld_Controller_Action
                     array( 'label' => $translator->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
                     array( 'label' => $translator->translate('Users'), 'module' => 'slotter', 'controller' => 'users' ),
                     array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' ),
-                    array( 'label' => $translator->translate('Global settings'), 'module' => 'slotter', 'controller' => 'settings' )
+                    array( 'label' => $translator->translate('Global settings'), 'module' => 'slotter', 'controller' => 'settings' ),
+                    array( 'label' => $translator->translate('Plugins'), 'module' => 'slotter', 'controller' => 'plugins' )
             ))
         );
 
@@ -68,7 +63,7 @@ class Slotter_BaseController extends Ld_Controller_Action
         $admin = new Zend_Acl_Role('admin');
         $this->_acl->addRole($admin, $user);
 
-        $resources = array('instances', 'repositories', 'databases', 'users');
+        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins');
         foreach ($resources as $resource) {
             $this->_acl->add( new Zend_Acl_Resource($resource) );
         }
@@ -79,6 +74,7 @@ class Slotter_BaseController extends Ld_Controller_Action
         $this->_acl->allow('admin', 'repositories', 'manage');
         $this->_acl->allow('admin', 'databases', 'manage');
         $this->_acl->allow('admin', 'users', 'manage');
+        $this->_acl->allow('admin', 'plugins', 'manage');
 
         Ld_Plugin::doAction('Slotter:acl', $this->_acl);
 
@@ -98,22 +94,6 @@ class Slotter_BaseController extends Ld_Controller_Action
             return 'user';
         }
         return 'guest';
-    }
-
-    protected function _initLang()
-    {
-        if ($this->_hasParam('ld-lang')) {
-            $path = $this->getSite()->getPath();
-            $cookiePath = empty($path) ? '/' : $path;
-            $locale = $_COOKIE['ld-lang'] = $this->_getParam('ld-lang');
-            setCookie('ld-lang', $locale, time() + 365 * 24 * 60 * 60, $cookiePath);
-        } else if ($this->getRequest()->getCookie('ld-lang')) {
-            $locale = $this->getRequest()->getCookie('ld-lang');
-        }
-        if (isset($locale) &&  Zend_Registry::isRegistered('Zend_Translate')) {
-            $translate = Zend_Registry::get('Zend_Translate');
-            $translate->setLocale($locale);
-        }
     }
 
     protected function _disallow()

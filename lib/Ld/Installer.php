@@ -244,7 +244,7 @@ class Ld_Installer
         if ($this->getManifest()->getDb()) {
             foreach ($this->getInstance()->getDbTables() as $tablename) {
                 $db = $this->getInstance()->getDbConnection();
-                $db->query("DROP TABLE $tablename");
+                $db->query("DROP TABLE IF EXISTS $tablename");
             }
         }
     }
@@ -392,11 +392,20 @@ class Ld_Installer
 
     public function getConfiguration()
     {
-        return Ld_Files::getJson($this->getAbsolutePath() . '/dist/configuration.json');
+        $configuration = Ld_Files::getJson($this->getAbsolutePath() . '/dist/configuration.json');
+        $instance = $this->getInstance();
+        if (empty($configuration['name']) && isset($instance)) {
+            $configuration['name'] = $this->getInstance()->getName();
+        }
+        return $configuration;
     }
 
     public function setConfiguration($configuration)
     {
+        $instance = $this->getInstance();
+        if (isset($configuration['name']) && isset($instance)) {
+            $instance->setInfos(array('name' => $configuration['name']))->save();
+        }
         Ld_Files::putJson($this->getAbsolutePath() . '/dist/configuration.json', $configuration);
         return $configuration;
     }
