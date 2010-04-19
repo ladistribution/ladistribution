@@ -27,7 +27,9 @@ class AuthController extends Ld_Controller_Action
             return;
         }
 
-        $this->appendTitle('Login');
+        $translator = $this->getTranslator();
+
+        $this->appendTitle( $translator->translate('Log In') );
 
         $this->view->postParams = array();
         foreach ($_POST as $key => $value) {
@@ -41,14 +43,16 @@ class AuthController extends Ld_Controller_Action
             $this->view->postParams[$key] = $value;
         }
 
-        $this->view->referer = $this->_getReferer();
+        // we register the referer in the session and pass to the view
+        $this->_session = new Zend_Session_Namespace("ld_auth");
+        $this->view->referer = $this->_session->referer = $this->_getReferer();
 
         if ($this->_hasParam('ld_auth_username')) {
             $this->view->ld_auth_user = $this->getSite()->getUser($this->_getParam('ld_auth_username'));
             if (empty($this->view->ld_auth_user)) {
                 $this->view->authentication = new Zend_Auth_Result(
                     Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
-                    $this->_getParam('ld_auth_username'), 
+                    $this->_getParam('ld_auth_username'),
                     array("Identity not found."));
             }
         }
@@ -64,6 +68,8 @@ class AuthController extends Ld_Controller_Action
                     $this->view->url(array(), null, true)
                 ));
 
+            } else {
+                $this->_redirector->goto('index', 'index', 'default');
             }
         }
 
@@ -79,37 +85,59 @@ class AuthController extends Ld_Controller_Action
 
     function registerAction()
     {
-        $this->appendTitle('Register');
+        $translator = $this->getTranslator();
+
+        $this->appendTitle( $translator->translate('Register') );
+
+        // get the referer
+        $this->view->referer = $this->_getReferer();
+        if (empty($this->view->referer)) {
+            $this->_session = new Zend_Session_Namespace("ld_auth");
+            if (isset($this->_session->referer)) {
+                $this->view->referer = $this->_session->referer;
+            }
+        }
 
         $open_registration = $this->getSite()->getConfig('open_registration');
         if (empty($open_registration)) {
-            throw new Exception('Registration is closed.');
+            throw new Exception( $translator->translate('Registration is closed.') );
         }
 
         if ($this->getRequest()->isPost()) {
 
-            $user = array(
-                'username'   => $this->_getParam('ld_register_username'),
-                'password'   => $this->_getParam('ld_register_password'),
-                'email'      => $this->_getParam('ld_register_email')
-            );
-
-            $validate = Ld_Plugin::applyFilters('Auth:register:validate', true, $this->_getAllParams());
-            if ($validate !== true) {
-                $this->view->user = $user;
-                $this->view->error = $validate;
-                return;
-            }
-
-            if (Ld_Auth::isOpenid()) {
-                $user['identities'] = array( Ld_Auth::getIdentity() );
-                if (!$this->_hasParam('ld_register_password')) {
-                    $this->_setParam('ld_register_password', Ld_Auth::generatePhrase(8));
-                }
-            }
-
             try {
 
+                $user = array(
+                    'origin'           => 'Auth:register',
+                    'agent'            => $this->getRequest()->getServer('HTTP_USER_AGENT'),
+                    'ip'               => $this->getRequest()->getServer('REMOTE_ADDR'),
+                    'username'         => trim($this->_getParam('ld_register_username', '')),
+                    'password'         => trim($this->_getParam('ld_register_password', '')),
+                    'password_again'   => trim($this->_getParam('ld_register_password_again', '')),
+                    'email'            => trim($this->_getParam('ld_register_email', ''))
+                );
+
+                if (Ld_Auth::isOpenid()) {
+                    $user['identities'] = array( Ld_Auth::getIdentity() );
+                    if (empty($user['password'])) {
+                        $user['password'] = $user['password_again'] = Ld_Auth::generatePhrase(8);
+                    }
+                }
+
+                // Basic validation
+                if (empty($user['username'])) {
+                    throw new Exception( $translator->translate("Username can't be empty.") );
+                } else if (empty($user['email'])) {
+                    throw new Exception( $translator->translate("Email can't be empty.") );
+                } else if (empty($user['password']) && empty($user['password_again'])) {
+                    throw new Exception( $translator->translate("Password can't be empty.") );
+                } else if ($user['password'] != $user['password_again']) {
+                    throw new Exception( $translator->translate("Passwords must match.") );
+                }
+
+                Ld_Plugin::doAction('Auth:register:validate', $this->_getAllParams());
+
+                unset($user['password_again']);
                 $this->getSite()->addUser($user);
 
                 if (!Ld_Auth::isOpenid()) {

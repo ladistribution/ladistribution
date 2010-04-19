@@ -239,11 +239,12 @@ class Ld_Cli
 
     public function addUser()
     {
+        $origin     = 'Cli:addUser';
         $username   = isset($this->_args[1]) ? $this->_args[1] : $this->_prompt('Username');
         $password   = isset($this->_args[2]) ? $this->_args[2] : $this->_prompt('Password');
         $fullname   = isset($this->_opts->fullname) ? $this->_opts->fullname : $this->_prompt('Full Name');
         $email      = isset($this->_opts->email)    ? $this->_opts->email    : $this->_prompt('Email');
-        $this->getSite()->addUser(compact('fullname', 'email', 'username', 'password'));
+        $this->getSite()->addUser(compact('origin', 'username', 'password', 'email', 'fullname'));
     }
 
     public function deleteUser()

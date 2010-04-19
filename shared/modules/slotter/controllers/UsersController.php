@@ -45,6 +45,8 @@ class Slotter_UsersController extends Slotter_BaseController
     {
         $translator = $this->getTranslator();
 
+        $this->appendTitle( $translator->translate('Users') );
+
         $usersPage = $this->_container->findOneByLabel( $translator->translate('Users') );
 
         $usersPage->addPage(array(
@@ -131,6 +133,7 @@ class Slotter_UsersController extends Slotter_BaseController
     {
         if ($this->getRequest()->isPost()) {
             $user = array(
+                'origin'     => 'Slotter:Users:new',
                 'username'   => $this->_getParam('username'),
                 'password'   => $this->_getParam('password'),
                 'fullname'   => $this->_getParam('fullname'),
@@ -138,15 +141,20 @@ class Slotter_UsersController extends Slotter_BaseController
             );
             $this->site->addUser($user);
 
+            $username = $user['username'];
+
             // if it's the first user, make him administrator.
             $users = $this->site->getUsers();
-            if (count($users) == 1 && Zend_Registry::isRegistered('instance')) {
-                $instance = Zend_Registry::get('instance');
-                $instance->setUserRoles(array($user['username'] => 'admin'));
+            if (count($users) == 1) {
+                $this->admin->setUserRoles(array($username => 'admin'));
                 Ld_Auth::authenticate($user['username'], $user['password']);
                 // in this case, we believe the user wants to go back to the index
                 $this->_redirector->gotoSimple('index', 'index');
                 return;
+            } else {
+                $userRoles = $this->admin->getUserRoles();
+                $userRoles[$username] = 'user';
+                $this->admin->setUserRoles($userRoles);
             }
 
             $this->_redirector->gotoSimple('index', 'users');
@@ -230,7 +238,7 @@ class Slotter_UsersController extends Slotter_BaseController
         } elseif ($this->_hasParam('openid_mode')) {
 
             if ($this->_getParam('openid_mode') == 'id_res') {
-                $consumer = new Zend_OpenId_Consumer($storage );
+                $consumer = new Zend_OpenId_Consumer($storage);
                 if ($consumer->verify($_GET)) {
                     $userId = $this->_getParam('id');
                     $this->_addUserIdentity($userId, $this->_getOpenidIdentity());

@@ -11,15 +11,15 @@
                 // everything OK
                 break;
             case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-                echo '<div class="ld-error"><b>Error</b>: ' . $this->translate("Invalid username.") . '</div>';
+                echo '<div class="ld-error"><b>' . $this->translate("Error:") . '</b> ' . $this->translate("Invalid username.") . '</div>';
                 break;
             case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-                echo '<div class="ld-error"><b>Error</b>: ' . $this->translate("Incorrect password.") . '</div>';
+                echo '<div class="ld-error"><b>' . $this->translate("Error:") . '</b> ' . $this->translate("Incorrect password.") . '</div>';
                 break;
             default:
                 $messages = $this->authentication->getMessages();
                 foreach ($messages as $message)
-                    echo '<div class="ld-error"><b>Error</b>: ' . $this->escape($message) . '</div>';
+                    echo '<div class="ld-error"><b>' . $this->translate("Error:") . '</b> ' . $this->escape($message) . '</div>';
                 break;
         }
     }

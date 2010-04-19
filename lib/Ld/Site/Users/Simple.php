@@ -76,6 +76,8 @@ class Ld_Site_Users_Simple
 
     public function addUser($user)
     {
+        $this->validateUser($user);
+
         $hasher = new Ld_Auth_Hasher(8, TRUE);
 
         if (isset($user['password'])) {
@@ -135,6 +137,37 @@ class Ld_Site_Users_Simple
     {
         $this->_users = $users;
         Ld_Files::putJson($this->getSite()->getDirectory('dist') . '/users.json', $users);
+    }
+    
+    public function validateUser($user)
+    {
+        // Username
+        $validateUsername = new Zend_Validate();
+        $validateUsername->addValidator( new Zend_Validate_StringLength(array('min' => 2, 'max' => 64)) )
+                         ->addValidator( new Zend_Validate_Alnum() );
+        if (!$validateUsername->isValid($user['username'])) {
+            $messages = array_values($validateUsername->getMessages());
+            throw new Exception($messages[0]);
+        }
+
+        // Password
+        $validatePassword = new Zend_Validate();
+        $validatePassword->addValidator( new Zend_Validate_StringLength(array('min' => 6, 'max' => 64)) );
+        if (!$validatePassword->isValid($user['password'])) {
+            throw new Exception('Password should be betwen 6 and 64 characters.');
+        }
+
+        // Email
+        if (isset($user['email'])) {
+            $validateEmail = new Zend_Validate_EmailAddress(array(
+               'allow' => Zend_Validate_Hostname::ALLOW_DNS,
+               'mx'    => true,
+               'deep'  => true
+            ));
+            if (!$validateEmail->isValid($user['email'])) {
+                throw new Exception('Email is invalid.');
+            }
+        }
     }
 
 }

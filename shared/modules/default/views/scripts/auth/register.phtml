@@ -12,7 +12,7 @@
 
     if (isset($this->error)) {
         if (is_string($this->error)) {
-            echo '<div class="ld-error"><b>Error</b>: ' . $this->escape($this->error) . '</div>';
+            echo '<div class="ld-error"><b>' . $this->translate("Error:") . '</b> ' . $this->escape($this->error) . '</div>';
         }
     }
 
