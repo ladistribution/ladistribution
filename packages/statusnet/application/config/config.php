@@ -21,6 +21,30 @@ if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
 	$config["site"]["logdebug"] = true;
 }
 
+$languages = get_all_languages();
+$languages['en']['lang'] = 'en_US';
+$languages['fr-fr']['lang'] = 'fr_FR';
+
+$locales = $application->getInstaller()->getLocales();
+foreach ($languages as $id => $language) {
+	$lang = $language['lang'];
+	if ($id != 'en' && !in_array($lang, $locales)) {
+		unset($languages[$id]);
+	}
+}
+
+$config['site']['languages'] = $languages;
+
+$locale = $configuration['locale'];
+if ($locale == 'auto' && isset($_COOKIE['ld-lang'])) {
+	$locale = $_COOKIE['ld-lang'];
+}
+
+if (isset($locale) && $locale != 'auto') {
+	$config['site']['language'] = $locale;
+	$config['site']['langdetect'] = false;
+}
+
 $config['location']['share'] = 'never';
 $config['attachments']['uploads'] = false;
 $config['invite']['enabled'] = false;

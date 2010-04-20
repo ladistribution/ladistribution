@@ -20,4 +20,8 @@ cd fr-fr
     ./build.sh
   cd ..
 
+  cd statusnet
+    ./build.sh
+  cd ..
+
 cd ..

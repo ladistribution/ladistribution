@@ -22,6 +22,38 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		$this->writeHtaccess();
 	}
 
+	/* Preferences */
+
+	public function getPreferences($type)
+	{
+		$preferences = parent::getPreferences($type);
+		if ($type != 'theme') {
+			$preferences[] = $this->getLocalePreference();
+		}
+		return $preferences;
+	}
+
+	public function getLocales()
+	{
+		return Ld_Files::getDirectories($this->getAbsolutePath() . '/locale');
+	}
+
+	public function getLocalePreference()
+	{
+		$preference = array(
+			'name' => 'locale', 'label' => 'Locale',
+			'type' => 'list', 'defaultValue' => 'auto',
+			'options' => array(
+				array('value' => 'auto', 'label' => 'auto'),
+				array('value' => 'en_US', 'label' => 'en_US')
+			)
+		);
+		foreach ($this->getLocales() as $locale) {
+			$preference['options'][] = array('value' => $locale, 'label' => $locale);
+		}
+		return $preference;
+	}
+
 	/* Configuration */
 
 	public function getConfiguration()

@@ -10,3 +10,4 @@ $IMPORT ld-locale-fr-fr.zip
 $IMPORT dokuwiki-locale-fr-fr.zip
 $IMPORT wordpress-locale-fr-fr.zip
 $IMPORT bbpress-locale-fr-fr.zip
+$IMPORT statusnet-locale-fr-fr.zip
