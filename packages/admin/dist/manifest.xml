@@ -1,9 +1,10 @@
 <package release="unstable">
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.4-17</version>
+  <version>0.4-20</version>
   <type>application</type>
   <need>lib-ld</need>
+  <need>lib-bad-behavior</need>
   <need>css-h6e-minimal</need>
   <need>css-ld-ui</need>
   <need>js-jquery</need>
@@ -26,6 +27,6 @@
       <destination path="shared">locales/admin</destination>
   </deploy>
   <configuration>
-      <preference type="text" label="App Name" name="name"/>
+      <preference type="text" label="Short App Name" name="name"/>
   </configuration>
 </package>

@@ -43,7 +43,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         $preferences = array();
 
         $preferences[] = array(
-            'name' => 'site_name', 'label' => $translator->translate('Site Name'), 'type' => 'text'
+            'name' => 'name', 'label' => $translator->translate('Site Name'), 'type' => 'text'
         );
 
         $preferences[] = array(

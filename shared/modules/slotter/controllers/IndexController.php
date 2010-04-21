@@ -67,6 +67,7 @@ class Slotter_IndexController extends Slotter_BaseController
 
         $this->view->canManageDatabases = $this->_acl->isAllowed($this->userRole, 'databases', 'manage');
         $this->view->canManageRepositories = $this->_acl->isAllowed($this->userRole, 'repositories', 'manage');
+        $this->view->canManagePlugins = $this->_acl->isAllowed($this->userRole, 'plugins', 'manage');
     }
 
     /**
@@ -117,7 +118,7 @@ class Slotter_IndexController extends Slotter_BaseController
                     }
                 }
             }
-            $this->_redirector->gotoSimple('update', 'index');
+            // $this->_redirector->gotoSimple('update', 'index');
         }
 
         $instances = $this->site->getInstances();

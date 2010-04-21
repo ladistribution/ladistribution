@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 15:11+0100\n"
+"POT-Creation-Date: 2010-04-21 15:43+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -32,6 +32,13 @@ msgid "Log In"
 msgstr "Se Connecter"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:14
+#: shared/modules/default/views/scripts/auth/login.phtml:17
+#: shared/modules/default/views/scripts/auth/login.phtml:22
+#: shared/modules/default/views/scripts/auth/register.phtml:15
+msgid "Error:"
+msgstr "Erreur :"
+
+#: shared/modules/default/views/scripts/auth/login.phtml:14
 msgid "Invalid username."
 msgstr "Nom d'utilisateur invalide."
 
@@ -55,7 +62,7 @@ msgstr "Se souvenir de moi"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:89
 #: shared/modules/default/views/scripts/auth/register.phtml:8
-#: shared/modules/default/views/scripts/auth/register.phtml:41
+#: shared/modules/default/views/scripts/auth/register.phtml:47
 msgid "Register"
 msgstr "S'enregistrer"
 
@@ -147,6 +154,7 @@ msgid "You can:"
 msgstr "Vous pouvez :"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:50
+#: shared/modules/slotter/views/scripts/index/index.phtml:71
 msgid "Add a database connection"
 msgstr "Ajouter une connexion à une base de donnée"
 
@@ -159,17 +167,8 @@ msgid "DB Name"
 msgstr "Nom de la base"
 
 #: shared/modules/slotter/views/scripts/databases/new.phtml:35
-#: shared/modules/slotter/views/scripts/domains/new.phtml:12
 msgid "Add"
 msgstr "Ajouter"
-
-#: shared/modules/slotter/views/scripts/domains/new.phtml:1
-msgid "Add a new domain"
-msgstr ""
-
-#: shared/modules/slotter/views/scripts/domains/new.phtml:7
-msgid "Dir (absolute path)"
-msgstr ""
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:3
 msgid "Installation"
@@ -184,7 +183,6 @@ msgid "Register the first user now."
 msgstr "Enregistrer le premier utilisateur maintenant."
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:14
-#: shared/modules/slotter/views/scripts/index/update.phtml:43
 msgid "Applications"
 msgstr "Applications"
 
@@ -192,24 +190,24 @@ msgstr "Applications"
 msgid "Manage"
 msgstr "Gérer"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:47
+#: shared/modules/slotter/views/scripts/index/index.phtml:50
 msgid "Updates"
 msgstr "Mises à jour"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:51
+#: shared/modules/slotter/views/scripts/index/index.phtml:54
 #, php-format
 msgid "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>"
 msgstr "Des mises à jours sont disponibles. Il est conseillé de <a href=\"%s\">mettre à jour maintenant.</a>"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:55
+#: shared/modules/slotter/views/scripts/index/index.phtml:58
 msgid "Everything fine, nothing to update."
 msgstr "Tout est ok, rien à mettre à jour."
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:65
+#: shared/modules/slotter/views/scripts/index/index.phtml:68
 msgid "Notice:"
 msgstr "Note :"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:66
+#: shared/modules/slotter/views/scripts/index/index.phtml:69
 msgid "There is no database connection registered yet. A database is often needed to install new applications."
 msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment.<br/>Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
 
@@ -433,8 +431,8 @@ msgid "Clone an application from a backup"
 msgstr "Cloner une application depuis une sauvegarde"
 
 #: shared/modules/slotter/views/scripts/instance/new.phtml:27
-msgid "Deploy a new % instance "
-msgstr "Déployer une nouvelle instance de %s"
+msgid "Create a new % instance "
+msgstr "Créer une nouvelle instance de %s"
 
 #: shared/modules/slotter/views/scripts/instance/new.phtml:34
 msgid "Create"
@@ -522,17 +520,33 @@ msgstr "Supprimer cette application"
 msgid "Available Themes"
 msgstr "Thèmes disponibles"
 
-#: shared/modules/slotter/views/scripts/instance/themes.phtml:48
+#: shared/modules/slotter/views/scripts/instance/themes.phtml:49
 msgid "No theme available for this application."
 msgstr "Aucun thème disponible pour cette application."
 
-#: shared/modules/slotter/views/scripts/instance/themes.phtml:60
+#: shared/modules/slotter/views/scripts/instance/themes.phtml:61
 msgid "Theme Preferences"
 msgstr "Préférences du thème"
 
 #: shared/modules/slotter/views/scripts/locales/index.phtml:1
 msgid "Locales"
 msgstr "Locales"
+
+#: shared/modules/slotter/views/scripts/plugins/index.phtml:1
+msgid "Plugins"
+msgstr "Greffons"
+
+#: shared/modules/slotter/views/scripts/plugins/index.phtml:8
+msgid "Description"
+msgstr "Description"
+
+#: shared/modules/slotter/views/scripts/plugins/index.phtml:24
+msgid "Active"
+msgstr "Actif"
+
+#: shared/modules/slotter/views/scripts/plugins/index.phtml:28
+msgid "Inactive"
+msgstr "Inactif"
 
 #: shared/modules/slotter/views/scripts/repositories/delete-package.phtml:1
 msgid "Delete a package"
@@ -693,8 +707,8 @@ msgid "New password again"
 msgstr "Nouveau mot de passe une deuxième fois"
 
 #: shared/modules/slotter/views/scripts/users/edit.phtml:55
-msgid "Identities"
-msgstr "Identités"
+msgid "OpenID Identities"
+msgstr "Identités OpenID"
 
 #: shared/modules/slotter/views/scripts/users/edit.phtml:71
 msgid "You don't have any OpenID identity registered yet. You can add new identities with the form below."
@@ -721,8 +735,8 @@ msgid "Choose an action..."
 msgstr "Choisir une action ..."
 
 #: shared/modules/slotter/views/scripts/users/index.phtml:30
-msgid "Remove users"
-msgstr "Retirer les utilisateurs"
+msgid "Remove users from list"
+msgstr "Retirer les utilisateurs de la liste"
 
 #: shared/modules/slotter/views/scripts/users/index.phtml:32
 msgid "Delete users"
@@ -737,12 +751,37 @@ msgstr "Go"
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
 
-#: shared/modules/slotter/controllers/BaseController.php:45
+#: shared/modules/slotter/views/scripts/users/index.phtml:125
+msgid "Add registered users to the list"
+msgstr "Ajouter des utilisateurs enregistrés à la liste"
+
+#: shared/modules/default/controllers/AuthController.php:103
+msgid "Registration is closed."
+msgstr "L'enregistrement est fermé."
+
+#: shared/modules/default/controllers/AuthController.php:129
+msgid "Username can't be empty."
+msgstr "Le nom d'utilisateur ne peut être vide."
+
+#: shared/modules/default/controllers/AuthController.php:131
+msgid "Email can't be empty."
+msgstr "L'email ne peut être vide."
+
+#: shared/modules/default/controllers/AuthController.php:133
+msgid "Password can't be empty."
+msgstr "Le mot de passe ne peut être vide."
+
+#: shared/modules/default/controllers/AuthController.php:135
+msgid "Passwords must match."
+msgstr "Les mots de passe doivent correspondre."
+
+#: shared/modules/slotter/controllers/BaseController.php:39
 msgid "Home"
 msgstr "Accueil"
 
-#: shared/modules/slotter/controllers/BaseController.php:49
+#: shared/modules/slotter/controllers/BaseController.php:43
 #: shared/modules/slotter/controllers/DatabasesController.php:29
+#: shared/modules/slotter/controllers/DatabasesController.php:31
 msgid "Databases"
 msgstr "Bases de données"
 
@@ -798,22 +837,10 @@ msgstr "Aucune application installée pour le moment."
 msgid "Settings"
 msgstr "Paramètres"
 
-#: shared/plugins/ssl.php:6
-msgid "HTTPS support"
-msgstr "Support HTTPS"
-
-#: shared/plugins/ssl.php:8
-msgid "None (not available)"
-msgstr "Aucun (non disponible)"
-
-#: shared/plugins/ssl.php:9
-msgid "Partial (available, used when needed)"
-msgstr ""
-
-#: shared/plugins/ssl.php:10
-msgid "Full (available, used everywhere)"
-msgstr ""
-
+#~ msgid "HTTPS support"
+#~ msgstr "Support HTTPS"
+#~ msgid "None (not available)"
+#~ msgstr "Aucun (non disponible)"
 #~ msgid "Add already registered users"
 #~ msgstr "Ajouter des utilisateurs déjà enregistrés"
 #~ msgid "Invite new users"

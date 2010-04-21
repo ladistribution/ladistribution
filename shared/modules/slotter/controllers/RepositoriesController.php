@@ -40,6 +40,8 @@ class Slotter_RepositoriesController extends Slotter_BaseController
     {
         $translator = $this->getTranslator();
 
+        $this->appendTitle( $translator->translate('Repositories') );
+
         $repositoriesPage = $this->_container->findOneByLabel( $translator->translate('Repositories') );
 
         $repositoriesPage->addPage(array(

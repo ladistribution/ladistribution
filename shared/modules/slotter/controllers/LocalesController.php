@@ -18,6 +18,9 @@ class Slotter_LocalesController extends Slotter_BaseController
         if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
             $this->_disallow();
         }
+
+        $translator = $this->getTranslator();
+        $this->appendTitle($translator->translate('Locales'));
     }
 
     public function indexAction()

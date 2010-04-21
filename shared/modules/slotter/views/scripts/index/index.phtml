@@ -31,6 +31,9 @@
             $pages[] = array('controller' => 'databases', 'label' => "Databases");
         }
         $pages[] = array('controller' => 'locales', 'label' => "Locales");
+        if ($this->canManagePlugins) {
+            $pages[] = array('controller' => 'plugins', 'label' => "Plugins");
+        }
         $pages[] = array('controller' => 'settings', 'label' => "Global settings");
         ?>
         <ul>
