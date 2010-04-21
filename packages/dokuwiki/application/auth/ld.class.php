@@ -132,7 +132,7 @@ class auth_ld extends auth_plain
     function createUser($user,$pwd,$name,$mail,$grps=null)
     {
         $user = array(
-            'origin',   => 'Dokuwiki:createUser',
+            'origin'    => 'Dokuwiki:createUser',
             'username'  => $user,
             'password'  => $pwd,
             'fullname'  => $name,
