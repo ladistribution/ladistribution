@@ -43,7 +43,8 @@ class Slotter_PluginsController extends Slotter_BaseController
             $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($id, 'Word_DashToCamelCase');
             require_once $site->getDirectory('shared') . '/plugins/' . $id . '.php';
             if (class_exists($className, false) && method_exists($className, 'infos')) {
-                $plugin = $className::infos();
+                // $plugin = $className::infos(); // php 5.2 doesn't like this
+                $plugin = call_user_func(array($className, 'infos'));
                 $plugin['fileName'] = $fileName;
                 $plugin['className'] = $className;
                 $plugin['active'] = in_array($id, $active_plugins);
