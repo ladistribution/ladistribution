@@ -1,7 +1,7 @@
-VERSION="1.3.2"
+VERSION="1.4.2"
 FOLDER="js"
 NAME="jquery"
-SOURCE="http://jqueryjs.googlecode.com/files/$NAME-$VERSION.min.js"
+SOURCE="http://code.jquery.com/$NAME-$VERSION.min.js"
 PACKAGE="js-$NAME.zip"
 # Get source
 mkdir $FOLDER

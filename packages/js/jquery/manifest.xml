@@ -1,10 +1,10 @@
-<package release="unstable">
+<package>
   <id>js-jquery</id>
   <name>jQuery</name>
-  <version>1.3.2-1</version>
+  <version>1.4.2-1</version>
   <type>js</type>
   <deploy>
       <origin>js</origin>
-      <destination path="js">./jquery/</destination>
+      <destination path="js">jquery</destination>
   </deploy>
 </package>

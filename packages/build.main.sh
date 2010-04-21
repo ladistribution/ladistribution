@@ -104,4 +104,8 @@ cd lib
   ./build.sh
   cd ..
 
+  cd bad-behavior
+  ./build.sh
+  cd ..
+
 cd ..

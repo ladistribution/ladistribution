@@ -1,0 +1,10 @@
+<package>
+  <id>lib-bad-behavior</id>
+  <name>Bad Behavior</name>
+  <version>2.1.2-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">bad-behavior</destination>
+  </deploy>
+</package>

@@ -1,6 +1,6 @@
 FOLDER="lib"
 PACKAGE="lib-zend-framework.zip"
-VERSION="ZendFramework-1.10.2"
+VERSION="ZendFramework-1.10.3"
 NAME="$VERSION-minimal"
 ZIP="$NAME.zip"
 
@@ -8,7 +8,7 @@ ZIP="$NAME.zip"
 curl http://framework.zend.com/releases/$VERSION/$ZIP > $ZIP
 unzip $ZIP
 rm $ZIP
-mv $NAME/library $FOLDER
+mv $NAME/library/Zend $FOLDER
 rm -rf $NAME
 
 # Create zip package

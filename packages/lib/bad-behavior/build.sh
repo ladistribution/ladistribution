@@ -1,16 +1,16 @@
-VERSION="2.1.3"
+VERSION="2.1.2"
 FOLDER="lib"
-NAME="php-openid"
-SOURCE="http://openidenabled.com/files/$NAME/packages/$NAME-$VERSION.zip"
+NAME="bad-behavior"
+SOURCE="http://downloads.wordpress.org/plugin/$NAME.$VERSION.zip"
 ZIP="$NAME.zip"
-PACKAGE="lib-php-openid.zip"
+PACKAGE="lib-$NAME.zip"
 # Get source
 curl $SOURCE > $ZIP
 unzip $ZIP
 rm $ZIP
-# mkdir $FOLDER
-cp -R $NAME-$VERSION/Auth $FOLDER
-rm -Rf $NAME-$VERSION
+# Grab files we want
+mv $NAME/$NAME $FOLDER
+rm -rf $NAME
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 # Create zip package
