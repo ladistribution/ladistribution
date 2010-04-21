@@ -125,7 +125,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (!Ld_Files::exists($this->getDirectory('dist') . '/config.json')) {
             $config = array();
-            foreach (array('host', 'path') as $key) {
+            foreach (array('host', 'path', 'name') as $key) {
                 if (isset($this->$key)) {
                     $config[$key] = $this->$key;
                 }
@@ -208,6 +208,17 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $config;
     }
 
+    public function setConfig($key = null, $value = null)
+    {
+        $config = $this->getConfig();
+        if (isset($key)) {
+            $config[$key] = $value;
+            Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
+            $this->_config = $config;
+        }
+        return $config;
+    }
+
     public function getBaseUrl()
     {
         return $this->getUrl();
@@ -234,11 +245,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getName()
     {
-        $site_name = $this->getConfig('site_name');
-        if (empty($site_name)) {
-            $site_name = 'La Distribution';
+        $name = $this->getConfig('name');
+        if (empty($name)) {
+            $name = 'La Distribution';
         }
-        return $site_name;
+        return $name;
     }
 
     public function getInstances($filterValue = null, $filterKey = 'type')
@@ -379,7 +390,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $keys = array_keys($availableDbs);
                 $preferences['db'] = $keys[0];
             } else {
-                throw new Exception('Can not choose Db.');
+                $keys = array_keys($availableDbs);
+                $preferences['db'] = $keys[0];
+                // throw new Exception('Can not choose Db.');
             }
         }
 
@@ -648,7 +661,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $preference['type'] = 'list';
                 $preference['options'] = array();
                 foreach ($users as $id => $user) {
-                    $preference['options'][] = array('value' => $user['username'], 'label' => $user['fullname']);
+                    $preference['options'][] = array('value' => $user['username'], 'label' => isset($user['fullname']) ? $user['fullname'] : $user['username']) ;
                 }
                 if (Ld_Auth::isAuthenticated()) {
                     $preference['defaultValue'] = Ld_Auth::getUsername();
@@ -784,17 +797,22 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function addUser($user)
     {
         $this->getUsersBackend()->addUser($user);
+        Ld_Plugin::doAction('Site:addUser', $user);
         return $user;
     }
 
     public function updateUser($username, $infos = array())
     {
-        return $this->getUsersBackend()->updateUser($username, $infos);
+        $result = $this->getUsersBackend()->updateUser($username, $infos);
+        Ld_Plugin::doAction('Site:updateUser', $username, $infos);
+        return $result;
     }
 
     public function deleteUser($username)
     {
-        return $this->getUsersBackend()->deleteUser($username);
+        $result = $this->getUsersBackend()->deleteUser($username);
+        Ld_Plugin::doAction('Site:deleteUser', $username);
+        return $result;
     }
 
     // Repositories

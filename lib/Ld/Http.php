@@ -19,8 +19,8 @@ class Ld_Http
         $context = stream_context_create(array(
             'http' => array(
                 'method'  => 'GET',
-                'user_agent' => 'La Distribution Http Library',
-                'timeout' => 1
+                'user_agent' => 'La Distribution HTTP Library',
+                'timeout' => 5
             )
         ));
         return $context;

@@ -28,30 +28,31 @@ class Ld_Controller_Error extends Zend_Controller_Action
 
         $this->view->details = '';
 
-        foreach ($this->getResponse()->getException() as $e) {
+        $errors = $this->_getParam('error_handler');
 
-            $log_message = get_class($e) . ': error ' . $e->getCode() . ': ' . $e->getMessage() .
-                ' (file ' .  $e->getFile() . ') (line ' . $e->getLine() . ')';
+        $e = $errors->exception;
 
-            if (constant('LD_DEBUG')) {
-                $this->view->details .= '<li>' . $log_message . '<pre>' . $e->getTraceAsString() . '</pre>' . '</li>';
-            } else {
+        $log_message = get_class($e) . ': ' . $e->getMessage() . ' (file ' .  $e->getFile() . ') (line ' . $e->getLine() . ')';
+
+        switch ($errors->type) {
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+                $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
+                $this->view->status = 'Not found';
+                $this->view->message = 'The requested document was not found on this server.';
+                break;
+            default:
+                $this->view->status = 'An error occured';
+                $this->view->message = $e->getMessage();
+                if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
+                    $this->view->details .= '<li>' . $log_message . '<pre>' . $e->getTraceAsString() . '</pre>' . '</li>';
+                }
                 error_log($log_message);
-            }
-
-            switch ($e->getCode()) {
-                case '404':
-                    $this->view->status = 'Not found';
-                    $this->view->message = 'The requested document was not found on this server.';
-                    break;
-                default:
-                    $this->view->status = 'An error occured';
-                    $this->view->message = $e->getMessage();
-            }
         }
-        
+
         $this->_helper->viewRenderer->setNoRender(true);
-        
+
         $this->getResponse()
             ->appendBody( sprintf('<h2>%s</h2>', $this->view->status)  )
             ->appendBody( sprintf('<p>%s</p>',   $this->view->message) )

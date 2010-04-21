@@ -171,14 +171,39 @@ class Ld_Ui
               'module' => 'default', 'controller' => 'auth', 'action' => 'complete'
         ));
 
+        if ($user = Ld_Auth::getUser()) {
+            $view->userUrl = Ld_Ui::getAdminUrl(array(
+                'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => urlencode($user['username'])
+            ));
+        }
+
         return $view->render('top-bar.phtml');
     }
 
     public static function getCssUrl($file, $package)
     {
-        $infos = self::getSite()->getLibraryInfos("css-$package");
+        $infos = self::getPackageInfos($package, 'css');
         $url = self::getSite()->getUrl('css') . $file . '?v=' . $infos['version'];
         return $url;
+    }
+
+    public static function getJsUrl($file, $package)
+    {
+        $infos = self::getPackageInfos($package, 'js');
+        $url = self::getSite()->getUrl('js') . $file . '?v=' . $infos['version'];
+        return $url;
+    }
+
+    protected static function getPackageInfos($package, $type)
+    {
+        $infos = self::getSite()->getLibraryInfos($package);
+        if (empty($infos)) {
+            $infos = self::getSite()->getLibraryInfos("$type-$package");
+        }
+        if ($infos['type'] == 'application') {
+            $infos = self::getSite()->getInstance($infos['path'])->getInfos();
+        }
+        return $infos;
     }
 
 }

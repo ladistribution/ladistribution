@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Cli
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -34,7 +34,7 @@ class Ld_Cli
 
     public function dispatch()
     {
-        $method = $this->convertFromClientNaming($this->_action);
+        $method = Zend_Filter::filterStatic($this->_action, 'Word_DashToCamelCase');
 
         if (strtolower($method) == 'clone') {
             $method = 'duplicate';
@@ -47,10 +47,21 @@ class Ld_Cli
         }
     }
 
-    protected function _prompt($label)
+    protected function _prompt($label, $default = null)
     {
-        $this->_write(sprintf("    %s:", $label), false);
-        return trim(fgets(STDIN));
+        if ($default) {
+            $this->_write(sprintf("    %s [%s]:", $label, $default), false);
+        } else {
+            $this->_write(sprintf("    %s:", $label), false);
+        }
+
+        $value = trim(fgets(STDIN));
+
+        if (empty($value) && $default) {
+            $value = $default;
+        }
+
+        return $value;
     }
 
     protected function _confirm($label, $default = 'y')
@@ -80,16 +91,6 @@ class Ld_Cli
     public function getAction()
     {
         return $this->_action;
-    }
-
-    public function convertFromClientNaming($string)
-    {
-        if (!$this->_filterFromClientNaming) {
-            require_once 'Zend/Filter/Word/DashToCamelCase.php';
-            $this->_filterFromClientNaming = new Zend_Filter_Word_DashToCamelCase();
-        }
-
-        return $this->_filterFromClientNaming->filter($string);
     }
 
     public function getSite()
@@ -153,7 +154,9 @@ class Ld_Cli
         $host = $this->_prompt('host');
         $path = '/' . Ld_Files::cleanpath($this->_prompt('path'));
 
-        $site = new Ld_Site_Local(array('dir' => $dir, 'host' => $host, 'path' => $path));
+        $name = $this->_prompt('name', 'Ma Distribution');
+
+        $site = new Ld_Site_Local(compact('dir', 'host', 'path', 'name'));
         $site->init();
     }
 
@@ -224,7 +227,7 @@ class Ld_Cli
     {
         $this->getSite();
         $this->_write("La Distribution '" . LD_RELEASE . "'");
-        $this->_write("Copyright (c) 2009 h6e.net");
+        $this->_write("Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)");
         $this->_write("Licensed under the GPL and MIT licences.");
     }
 
@@ -313,17 +316,8 @@ class Ld_Cli
                         $pref['defaultValue'] = $pref['options'][0]['value'];
                     }
                 default:
-                    if (isset($pref['defaultValue'])) {
-                        fwrite(STDOUT, sprintf("    %s [%s]:", $pref['label'], $pref['defaultValue']));
-                        $value = trim( fgets(STDIN) );
-                        if (empty($value)) {
-                            $value = $pref['defaultValue'];
-                        }
-                        $preferences[ $pref['name'] ] = $value;
-                    } else {
-                        fwrite(STDOUT, sprintf("    %s: ", $pref['label']));
-                        $preferences[ $pref['name'] ] = trim( fgets(STDIN) );
-                    }
+                    $defaultValue = isset($pref['defaultValue']) ? $pref['defaultValue'] : null;
+                    $preferences[ $pref['name'] ] = $this->_prompt( $pref['label'], $defaultValue );
             }
         }
         $result = $this->getSite()->createInstance($packageId, $preferences);

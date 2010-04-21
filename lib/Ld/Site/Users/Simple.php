@@ -151,10 +151,12 @@ class Ld_Site_Users_Simple
         }
 
         // Password
-        $validatePassword = new Zend_Validate();
-        $validatePassword->addValidator( new Zend_Validate_StringLength(array('min' => 6, 'max' => 64)) );
-        if (!$validatePassword->isValid($user['password'])) {
-            throw new Exception('Password should be betwen 6 and 64 characters.');
+        if (empty($user['hash']) && isset($user['password'])) {
+            $validatePassword = new Zend_Validate();
+            $validatePassword->addValidator( new Zend_Validate_StringLength(array('min' => 6, 'max' => 64)) );
+            if (!$validatePassword->isValid($user['password'])) {
+                throw new Exception('Password should be betwen 6 and 64 characters.');
+            }
         }
 
         // Email

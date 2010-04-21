@@ -1,28 +1,25 @@
 <?php if (isset($this->params['jquery']) && $this->params['jquery'] === true ) : ?>
-    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/jquery/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo Ld_Ui::getJsUrl('/jquery/jquery.js', 'jquery') ?>"></script>
 <?php endif ?>
 
 <?php if (isset($this->params['ld-js']) && $this->params['ld-js'] === true ) : ?>
-    <script type="text/javascript" src="<?php echo $this->site->getUrl('js') ?>/ld/ld.js"></script>
+    <script type="text/javascript" src="<?php echo Ld_Ui::getJsUrl('/ld/ld.js', 'admin') ?>"></script>
 <?php endif ?>
 
 <?php if (isset($this->params['style']) && $this->params['style'] === true ) : ?>
     <style type="text/css">
-        @import "<?php echo $this->site->getUrl('css') ?>/ld-ui/ld-bars.css";
+        @import "<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-bars.css', 'ld-ui') ?>";
     </style>
 <?php endif ?>
 
 <div id="ld-super-bar" class="h6e-super-bar">
-
-    <div class="ld-panel" style="display:none">
-    </div>
 
     <div class="h6e-super-bar-inner">
 
         <div class="a">
             <ul class="instances">
 
-            <?php
+<?php
 
             foreach ($this->applications as $id => $application) {
 
@@ -47,7 +44,7 @@
 
                 $className = $application->getPackageId();
 
-                printf('<li id="app_%s" class="%s">', $id, $className);
+                printf("                " . '<li id="app_%s" class="%s">', $id, $className);
 
                 if ($application->isCurrent() && !$settings && !$admin) {
                     printf('<strong><a href="%s">%s</a></strong>' . "\n  ", $application->getUrl(), $application->getName());
@@ -71,7 +68,7 @@
                         printf(' | ');
                     }
                     if (isset($settingsUrl)) {
-                        $link = sprintf('<a href="%s">%s</a>', $settingsUrl, $this->translate("Settings"));
+                        $link = sprintf('<a class="ld-settings" href="%s">%s</a>', $settingsUrl, $this->translate("Settings"));
                         if ($settings) {
                             printf('<strong>%s</strong>', $link);
                         } else {
@@ -84,25 +81,57 @@
 
             }
 
-            ?>
+?>
 
             </ul>
         </div>
 
         <div class="b">
-        
+
         </div>
 
     </div>
 
 </div>
 
-<!--
+<?php if (defined('LD_AJAX_PANELS') && constant('LD_AJAX_PANELS')) : ?>
+
+<style type="text/css">
+    .ld-panel-container {
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+        position:fixed;
+        background-color:rgba(0,0,0,0.5);
+    }
+    .ld-panel-container .ld-panel {
+        margin:auto;
+        margin-top:150px;
+        width:700px;
+        padding:25px;
+    }
+    .ld-panel-container .ld-panel .ld-panel-content {
+        background:white;
+        max-height:450px;
+        overflow:auto;
+    }
+</style>
+
+<div class="ld-panel-container" style="display:none">
+    <div class="ld-panel">
+    </div>
+</div>
+
+<script type="text/javascript" src="<?php echo Ld_Ui::getJsUrl('/jquery/jquery.js', 'jquery') ?>"></script>
+<script type="text/javascript" src="<?php echo Ld_Ui::getJsUrl('/ld/ld.js', 'admin') ?>"></script>
+
 <script type="text/javascript">
 (function($) {
     $(document).ready(function($){
         $('a.ld-settings').click(function(e) {
-            $(".ld-panel").show().load($(this).attr('href') + " .ld-panel > *", null, function() {
+            $(".ld-panel-container").show();
+            $(".ld-panel-container .ld-panel").load($(this).attr('href') + " .ld-panel > *", null, function() {
                 Ld.instanceMenu($);
             });
             return false;
@@ -110,4 +139,5 @@
     });
 })(jQuery);
 </script>
--->
+
+<?php endif ?>

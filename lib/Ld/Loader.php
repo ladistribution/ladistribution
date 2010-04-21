@@ -89,6 +89,7 @@ class Ld_Loader
         $site = self::$site = new Ld_Site_Local($config);
         Zend_Registry::set('site', $site);
 
+        self::setupPlugins();
         self::setupAuthentication();
         self::setupLocales();
 
@@ -96,6 +97,21 @@ class Ld_Loader
         defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));
 
         return $site;
+    }
+
+    public static function setupPlugins()
+    {
+        $active_plugins = isset(self::$config['active_plugins']) ? self::$config['active_plugins'] : array();
+
+        foreach ($active_plugins as $plugin) {
+            $plugin = strtolower($plugin);
+            require_once self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
+            $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
+            if (class_exists($className, false) && method_exists($className, 'load')) {
+                // $className::load(); // php 5.2 doesn't like this
+                call_user_func(array($className, 'load'));
+            }
+        }
     }
 
     public static function setupAuthentication()
@@ -108,7 +124,10 @@ class Ld_Loader
         }
         $path = self::$site->getPath();
         $cookieConfig = array('cookieName' => 'ld-auth', 'cookiePath' => empty($path) ? '/' : $path);
-        $authStorage = new Ld_Auth_Storage_Cookie($cookieManager, Ld_Plugin::apply('Loader:authCookieConfig', $cookieConfig));
+        if (class_exists('Ld_Plugin')) {
+            $cookieConfig = Ld_Plugin::apply('Loader:authCookieConfig', $cookieConfig);
+        }
+        $authStorage = new Ld_Auth_Storage_Cookie($cookieManager, $cookieConfig);
         $auth = Zend_Auth::getInstance();
         $auth->setStorage($authStorage);
     }
