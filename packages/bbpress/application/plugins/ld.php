@@ -3,12 +3,12 @@
 Plugin Name: Ld package
 Plugin URI: http://h6e.net/bbpress/plugins/ld
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.2-29-1
+Version: 0.4.1
 Author: h6e
 Author URI: http://h6e.net/
 */
 
-function ld_disable_menus()
+function ld_bbpress_disable_menus()
 {
 	global $bb_menu, $bb_submenu;
 
@@ -31,9 +31,9 @@ function ld_disable_menus()
 	}
 }
 
-add_action('bb_admin_menu_generator', 'ld_disable_menus', 20);
+add_action('bb_admin_menu_generator', 'ld_bbpress_disable_menus', 20);
 
-function ld_repermalink_result($permalink)
+function ld_bbpress_repermalink_result($permalink)
 {
 	if (defined('LD_ROOT_CONTEXT') && constant('LD_ROOT_CONTEXT')) {
 		$site = Zend_Registry::get('site');
@@ -42,7 +42,7 @@ function ld_repermalink_result($permalink)
 	return $permalink;
 }
 
-add_filter('bb_repermalink_result', 'ld_repermalink_result');
+add_filter('bb_repermalink_result', 'ld_bbpress_repermalink_result');
 
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Bbpress:plugin');

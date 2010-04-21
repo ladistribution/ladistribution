@@ -3,50 +3,85 @@
 Plugin Name: Ld Auth
 Plugin URI: http://h6e.net/bbpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.2-28-5
-Author: h6e
+Version: 0.4.1
+Author: h6e.net
 Author URI: http://h6e.net/
 */
 
-function get_ld_user($user_id)
+class Ld_Bbpress_Auth
 {
-	global $bbdb;
 
-	if ( !$bb_user = $bbdb->get_row($bbdb->prepare("SELECT * FROM $bbdb->users WHERE ID = %d LIMIT 1", $user_id)) )
-		return false;
+	function get_bb_user($user_id)
+	{
+		global $bbdb;
 
-	$user = array(
-		'hash' 		=> $bb_user->user_pass,
-		'username' 	=> $bb_user->user_nicename,
-		'fullname' 	=> $bb_user->display_name,
-		'email'		=> $bb_user->user_email
-	);
+		if ( !$bb_user = $bbdb->get_row($bbdb->prepare("SELECT * FROM $bbdb->users WHERE ID = %d LIMIT 1", $user_id)) )
+			return false;
 
-	return $user;
-}
+		$ld_user = array(
+			'username' 	=> $bb_user->user_nicename,
+			'hash' 		=> $bb_user->user_pass,
+			'fullname' 	=> $bb_user->display_name,
+			'email'		=> $bb_user->user_email
+		);
 
-function get_bb_user_by_login($login)
-{
-	global $bbdb, $wp_users_object;
-	if (isset($wp_users_object)) {
-		// test if the users exists in bbPress DB
-		$bb_user = $wp_users_object->get_user($login, array( 'by' => 'login' ) );
-		// if not create the user in bbPress DB
-		if (empty($bb_user)) {
-			$ld_user = Zend_Registry::get('site')->getUser($login);
-			if ($ld_user) {
-				$data = array( 'user_login' => $ld_user['username'], 'user_email' => $ld_user['email'] );
-				$bb_user = $wp_users_object->new_user( $data );
-				if (!is_wp_error($bb_user)) {
-					bb_update_usermeta( $bb_user['ID'], $bbdb->prefix . 'capabilities', array('member' => true) );
-				}
-				
-			}
-		}
-		return $bb_user;
+		return $ld_user;
 	}
-	return null;
+
+	function get_bb_user_by_login($login)
+	{
+		global $bbdb, $wp_users_object;
+		if (isset($wp_users_object)) {
+			// test if the users exists in bbPress DB
+			$bb_user = $wp_users_object->get_user($login, array( 'by' => 'login' ) );
+			// if not create the user in bbPress DB
+			if (empty($bb_user)) {
+				$ld_user = Zend_Registry::get('site')->getUser($login);
+				if ($ld_user) {
+					$data = array( 'user_login' => $ld_user['username'], 'user_email' => $ld_user['email'] );
+					$bb_user = $wp_users_object->new_user( $data );
+					if (!is_wp_error($bb_user)) {
+						bb_update_usermeta( $bb_user['ID'], $bbdb->prefix . 'capabilities', array('member' => true) );
+					}
+
+				}
+			}
+			return $bb_user;
+		}
+		return null;
+	}
+
+	function logout()
+	{
+		Ld_Auth::logout();
+	}
+
+	function user_register($user_id)
+	{
+		$ld_user = self::get_bb_user($user_id);
+		$ld_user['origin'] = 'Bbpress:register';
+		Zend_Registry::get('site')->addUser($ld_user);
+	}
+
+	function profile_update($user_id)
+	{
+		$ld_user = self::get_bb_user($user_id);
+		Zend_Registry::get('site')->updateUser($ld_user['username'], $ld_user);
+	}
+
 }
+
+// Hooks
+
+add_action('bb_user_logout', array('Ld_Bbpress_Auth', 'logout'));
+	
+add_action('register_user', array('Ld_Bbpress_Auth', 'user_register'));
+
+add_action('profile_edited', array('Ld_Bbpress_Auth', 'profile_update'));
+
+add_action('bb_update_user_password', array('Ld_Bbpress_Auth', 'profile_update'));
+
+// Replacable bbPress functions
 
 if ( !function_exists('bb_get_current_user') ) :
 function bb_get_current_user() {
@@ -54,7 +89,7 @@ function bb_get_current_user() {
 
 	// LD authentication
 	if (Ld_Auth::isAuthenticated()) {
-		$bb_user = get_bb_user_by_login( Ld_Auth::getUsername() );
+		$bb_user = Ld_Bbpress_Auth::get_bb_user_by_login( Ld_Auth::getUsername() );
 		// set the current user
 		if (isset($bb_user)) {
 			if (empty($current_user)) {
@@ -95,37 +130,14 @@ function bb_login( $login, $password, $remember = false ) {
 	if ($result->isValid()) {
 		return bb_get_current_user();
 	}
+
 	// bbPress login
 	$user = bb_check_login( $login, $password );
 	if ( $user && !is_wp_error( $user ) ) {
 		bb_set_auth_cookie( $user->ID, $remember );
 		do_action('bb_user_login', (int) $user->ID );
 	}
-	
+
 	return $user;
 }
 endif;
-
-function ld_logout()
-{
-	Ld_Auth::logout();
-}
-
-add_action('bb_user_logout', 'ld_logout');
-
-function ld_user_register($user_id)
-{
-	$user = get_ld_user($user_id);
-	Zend_Registry::get('site')->addUser($user);
-}
-
-add_action('register_user', 'ld_user_register');
-
-function ld_profile_update($user_id)
-{
-	$user = get_ld_user($user_id);
-	Zend_Registry::get('site')->updateUser($user['username'], $user);
-}
-
-add_action('profile_edited', 'ld_profile_update');
-add_action('bb_update_user_password', 'ld_profile_update');

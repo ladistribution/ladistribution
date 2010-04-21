@@ -3,30 +3,28 @@
 Plugin Name: Ld UI
 Plugin URI: http://h6e.net/bbpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.2-26-1
+Version: 0.4.1
 Author: h6e
 Author URI: http://h6e.net/
 */
 
-function ld_admin_head()
+function ld_bbpress_admin_head()
 {
-	$site = Zend_Registry::get('site');
-	echo '<link rel="stylesheet" type="text/css" href="' . $site->getUrl('css') . '/ld-ui/ld-ui.css' .'" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
 	echo '<style type="text/css"> #bbFoot { display:none; }</style>'."\n";
 }
 
-add_action('bb_get_admin_header', 'ld_admin_head');
+add_action('bb_get_admin_header', 'ld_bbpress_admin_head');
 
-function ld_template_head()
+function ld_bbpress_template_head()
 {
-	$site = Zend_Registry::get('site');
-	echo '<link rel="stylesheet" type="text/css" href="' . $site->getUrl('css') . '/ld-ui/ld-ui.css' .'" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
 	echo '<style type="text/css"> body { margin-bottom:50px; }</style>'."\n";
 }
 
-add_action('bb_head', 'ld_template_head');
+add_action('bb_head', 'ld_bbpress_template_head');
 
-function ld_footer()
+function ld_bbpress_footer()
 {
 	$superbar = bb_get_option('superbar');
 	if ($superbar == 'never') {
@@ -35,18 +33,18 @@ function ld_footer()
 	if ($superbar == 'connected' && !bb_is_user_logged_in()) {
 		return;
 	}
-	Ld_Ui::super_bar(array('jquery' => true));
+	Ld_Ui::superBar(array('jquery' => true));
 }
 
-function ld_admin_footer()
+function ld_bbpress_admin_footer()
 {
 	$superbar = bb_get_option('superbar');
 	if ($superbar == 'never') {
 		return;
 	}
-	Ld_Ui::super_bar(array('jquery' => false));
+	Ld_Ui::superBar(array('jquery' => false));
 }
 
-add_action( 'bb_admin_footer', 'ld_admin_footer' );
+add_action( 'bb_admin_footer', 'ld_bbpress_admin_footer' );
 
-add_action( 'bb_foot', 'ld_footer' );
+add_action( 'bb_foot', 'ld_bbpress_footer' );

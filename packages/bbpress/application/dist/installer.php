@@ -69,6 +69,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		$this->load_bp();
 
 		$active_plugins = bb_get_option('active_plugins');
+
 		// if current <= 1.0-2-39-3
 		if (!in_array('core#akismet.php', $active_plugins)) {
 			bb_activate_plugin('core#akismet.php');
@@ -167,6 +168,9 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			}
 			$configuration[$option->meta_key] = $option->meta_value;
 		}
+		if (empty($configuration['short_name']) && isset($instance)) {
+			$configuration['short_name'] = $this->getInstance()->getName();
+		}
 		return $configuration;
 	}
 
@@ -182,8 +186,8 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			$value = isset($configuration[$option]) ? $configuration[$option] : null;
 			bb_update_option($option, $value);
 		}
-		if (isset($configuration['name']) && isset($this->instance)) {
-			$this->instance->setInfos(array('name' => $configuration['name']))->save();
+		if (isset($configuration['short_name']) && isset($this->instance)) {
+			$this->instance->setInfos(array('name' => $configuration['short_name']))->save();
 		}
 		if (isset($configuration['lang']) && isset($this->instance)) {
 			$this->instance->setInfos(array('locale' => $configuration['lang']))->save();

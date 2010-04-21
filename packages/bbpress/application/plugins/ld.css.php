@@ -15,22 +15,22 @@ Author URI: http://h6e.net/
  http://blog.oremj.com/2009/02/11/custom-user-css-wordpress-plugin/
 */
 
-add_action('bb_admin_menu_generator', 'ld_custom_css_menu');
-add_action('bb_head', 'ld_custom_css');
+add_action('bb_admin_menu_generator', 'ld_bbpress_custom_css_menu');
+add_action('bb_head', 'ld_bbpress_custom_css');
 
-function ld_custom_css()
+function ld_bbpress_custom_css()
 {
 	echo '<style type="text/css">';	
 	echo htmlspecialchars(bb_get_option('ld_custom_css'));
 	echo '</style>';
 }
 
-function ld_custom_css_menu()
+function ld_bbpress_custom_css_menu()
 {
-	bb_admin_add_submenu( __( 'Custom CSS', 'ld' ), 'manage_themes', 'ld_custom_css_edit', 'themes.php' );
+	bb_admin_add_submenu( __( 'Custom CSS', 'ld' ), 'manage_themes', 'ld_bbpress_custom_css_edit', 'themes.php' );
 }
 
-function ld_custom_css_edit()
+function ld_bbpress_custom_css_edit()
 {
 	$opt_name = 'ld_custom_css';
 
