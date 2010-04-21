@@ -16,6 +16,11 @@ svn export "$SOURCE/shared/modules" modules
 # cp -R /Web/ld/shared/modules modules
 
 # Export from SVN
+svn export "$SOURCE/shared/plugins" plugins
+# Local Export
+# cp -R /Web/ld/shared/plugins plugins
+
+# Export from SVN
 svn export "$SOURCE/admin/" $FOLDER --force
 # Local Export
 # cp -R /Web/ld/admin/* $FOLDER
@@ -30,7 +35,7 @@ svn export "$SOURCE/shared/locales/admin/en_US" locales/en_US
 find . -name '*.DS_Store' -type f -delete
 
 # Create zip package
-zip -rqv $PACKAGE $FOLDER js modules locales dist -x \*.svn/\* \*.preserve
+zip -rqv $PACKAGE $FOLDER js modules plugins locales dist -x \*.svn/\* \*.preserve
 mv $PACKAGE ../
 
 # Clean
