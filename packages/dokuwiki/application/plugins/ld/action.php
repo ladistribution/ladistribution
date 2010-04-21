@@ -68,10 +68,10 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 
 	function tpl_metaheader_output(&$event, $param)
 	{
-		$css_url = Zend_Registry::get('site')->getUrl('css');
-		$event->data['link'][] = array( 'rel'=>'stylesheet', 'type'=>'text/css', 'href'=>$css_url.'/ld-ui/ld-ui.css');
-		$js_url = Zend_Registry::get('site')->getUrl('js');
-		$jquery = array( 'type'=>'text/javascript', '_data' => '', 'src'=>$js_url.'/jquery/jquery.js');
+		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
+			'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui'));
+		$jquery = array('type' => 'text/javascript', '_data' => '',
+			'src' => Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery'));
 		$event->data['script'] = array_merge(array($jquery), $event->data['script']);
 	}
 
@@ -85,7 +85,7 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 			return;
 		}
 		require_once('Ld/Ui.php');
-		Ld_Ui::super_bar(array('jquery' => false));
+		Ld_Ui::superBar(array('jquery' => false));
 	}
 
 }

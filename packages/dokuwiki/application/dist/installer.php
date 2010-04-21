@@ -110,8 +110,8 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         }
         Ld_Files::put($this->getAbsolutePath() . "/conf/local.php", $cfg_local);
 
-        if (isset($configuration['title']) && isset($this->instance)) {
-            $this->instance->setInfos(array('name' => $configuration['title']))->save();
+        if (isset($configuration['name']) && isset($this->instance)) {
+            $this->instance->setInfos(array('name' => $configuration['name']))->save();
         }
 
         if (isset($configuration['lang']) && isset($this->instance)) {
@@ -145,6 +145,10 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         if ($type == 'theme') {
             $template = $this->getCurrentTheme();
             return isset($conf['tpl'][$template]) ? $conf['tpl'][$template] : array();
+        }
+
+        if (empty($conf['name']) && isset($this->instance)) {
+            $conf['name'] = $this->instance->getName();
         }
 
         return $conf;

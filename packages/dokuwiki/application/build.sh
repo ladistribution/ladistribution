@@ -12,6 +12,9 @@ tar zxvf $GZ
 rm $GZ
 mv $NAME-$VERSION $FOLDER
 
+# Get Spam List
+curl http://meta.wikimedia.org/wiki/Spam_blacklist?action=raw | grep -v '<pre>' > $FOLDER/conf/wordblock.conf
+
 # Default screenshot
 cp screenshot.png $FOLDER/lib/tpl/default/
 
