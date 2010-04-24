@@ -8,16 +8,8 @@ require_once 'Ld/Controller/Action.php';
 class AuthController extends Ld_Controller_Action
 {
 
-    function init()
-    {
-        parent::init();
-
-        $this->_setTitle( $this->getSite()->getName() );
-    }
-
     function loginAction()
     {
-
         if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous()) {
             $session = new Zend_Session_Namespace("ld_openid");
             $session->username = $this->_getParam('openid_sreg_nickname');
@@ -28,7 +20,6 @@ class AuthController extends Ld_Controller_Action
         }
 
         $translator = $this->getTranslator();
-
         $this->appendTitle( $translator->translate('Log In') );
 
         $this->view->postParams = array();

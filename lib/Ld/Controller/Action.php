@@ -42,6 +42,11 @@ class Ld_Controller_Action extends Zend_Controller_Action
 
         // Locale
         $this->initLocale();
+        
+        // Title
+        if ($site = $this->getSite()) {
+            $this->setTitle( $site->getName() );
+        }
     }
 
     function initLocale()
@@ -68,7 +73,10 @@ class Ld_Controller_Action extends Zend_Controller_Action
 
     function getSite()
     {
-        return Zend_Registry::get('site');
+        if (Zend_Registry::isRegistered('site')) {
+            return Zend_Registry::get('site');
+        }
+        return null;
     }
 
     function setTitle($title)

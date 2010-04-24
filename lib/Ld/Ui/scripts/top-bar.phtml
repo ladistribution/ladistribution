@@ -4,7 +4,7 @@
             <a class="ld-site-name" href="<?php echo $this->site->getUrl() ?>"><?php echo $this->site->getName() ?></a>
         </div>
         <div class="b">
-        <?php if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous()) : ?>
+        <?php if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous() && $user = Ld_Auth::getUser()) : ?>
 
             <a href="<?php echo $this->completeUrl ?>"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></a>
             <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>

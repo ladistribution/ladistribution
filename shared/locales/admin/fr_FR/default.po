@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-21 15:43+0100\n"
+"POT-Creation-Date: 2010-04-22 15:18+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -81,6 +81,36 @@ msgstr "Email :"
 #: shared/modules/default/views/scripts/auth/register.phtml:36
 msgid "Password again:"
 msgstr "Mot de passe à nouveau :"
+
+#: shared/modules/identity/views/scripts/openid/auth.phtml:1
+msgid "OpenID authentication"
+msgstr "Authentification OpenID"
+
+#: shared/modules/identity/views/scripts/openid/auth.phtml:11
+#, php-format
+msgid "A site identifying as %1$s has asked us for confirmation that %2$s is your identity URL."
+msgstr "Le site %1$s a demandé d'utiliser %2$s comme votre adresse d'identité."
+
+#: shared/modules/identity/views/scripts/openid/auth.phtml:16
+msgid "Remember for this site"
+msgstr "Se souvenir pour ce site"
+
+#: shared/modules/identity/views/scripts/openid/auth.phtml:26
+msgid "Allow"
+msgstr "Autoriser"
+
+#: shared/modules/identity/views/scripts/openid/auth.phtml:27
+msgid "Deny"
+msgstr "Refuser"
+
+#: shared/modules/identity/views/scripts/openid/profile.phtml:1
+msgid "OpenID identity"
+msgstr "Identité OpenID"
+
+#: shared/modules/identity/views/scripts/openid/profile.phtml:7
+#, php-format
+msgid "This is the identity page for this site user: %1$s."
+msgstr "Ceci est la page d'identité pour cet utilisateur: %1$s."
 
 #: shared/modules/slotter/views/scripts/databases/delete.phtml:1
 msgid "Delete a connection"
@@ -774,6 +804,10 @@ msgstr "Le mot de passe ne peut être vide."
 #: shared/modules/default/controllers/AuthController.php:135
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
+
+#: shared/modules/identity/controllers/OpenidController.php:14
+msgid "Identity"
+msgstr "Identité"
 
 #: shared/modules/slotter/controllers/BaseController.php:39
 msgid "Home"

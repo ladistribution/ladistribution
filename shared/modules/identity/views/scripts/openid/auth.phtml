@@ -1,34 +1,31 @@
-<h2>OpenID authentication</h2>
+<h2><?php echo $this->translate("OpenID authentication") ?></h2>
 
 <?php if ($this->mode == 'trust') : ?>
 
-    <p>A site identifying as
-    <a href="<?php echo $this->escape($this->siteRoot);?>">
-    <?php echo $this->escape($this->siteRoot);?>
-    </a>
-    has asked us for confirmation that
-    <a href="<?php echo $this->escape($this->openidServer->getLoggedInUser());?>">
-    <?php echo $this->escape($this->openidServer->getLoggedInUser());?>
-    </a>
-    is your identity URL.
-    </p>
-    
+    <?php
+    $site = sprintf('<a href="%1$s">%1$s</a>', $this->escape($this->siteRoot));
+    $identity = sprintf('<a href="%1$s">%1$s</a>', $this->escape($this->openidServer->getLoggedInUser()));
+    ?>
+
+    <p><?php printf(
+        $this->translate('A site identifying as %1$s has asked us for confirmation that %2$s is your identity URL.', $site, $identity)) ?></p>
+
     <form method="post" action="">
-        
+
         <input type="checkbox" name="forever">
-        <label for="forever">Remember for this site</label>
-        
+        <label for="forever"><?php echo $this->translate("Remember for this site") ?></label>
+
         <br />
         <br />
         <input type="hidden" name="openid_action" value="trust">
-        
+
         <?php foreach ($this->params as $key => $value) : ?>
             <input type="hidden" name="<?php echo $key ?>" value="<?php echo $value ?>"/>
         <?php endforeach ?>
-        
-        <input class="button" type="submit" name="allow" value="Allow">
-        <input class="button" type="submit" name="deny" value="Deny">
-        
+
+        <input class="button" type="submit" name="allow" value="<?php echo $this->translate("Allow") ?>">
+        <input class="button" type="submit" name="deny" value="<?php echo $this->translate("Deny") ?>">
+
     </form>
 
 <?php else : ?>

@@ -31,6 +31,10 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         $this->dir = $this->getSite()->getDirectory('repositories') . '/' . $this->name;
 
         Ld_Files::createDirIfNotExists($this->dir);
+
+        if (!Ld_Files::exists($this->dir . '/packages.json')) {
+            Ld_Files::putJson($this->dir . '/packages.json', array());
+        }
     }
 
     public function getCacheKey()
@@ -219,7 +223,14 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
     public function updatePackageList($packages)
     {
+        // Generate Json Index
         Ld_Files::putJson($this->getDir() . '/packages.json', $packages);
+
+        // Generate HTML Index
+        Ld_Files::put($this->getDir() . '/index.html',
+            '<p>This is a <a href="http://ladistribution.net/">La Distribution</a> repository.</p>' .
+            '<p>To use this repository, you can copy/paste this URL in your repositories list.</p>'
+        );
 
         // this doesn't work from CLI because cache is currently not initialised
         if (Zend_Registry::isRegistered('cache')) {
@@ -228,22 +239,6 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
             if (isset($cacheKey, $this->_cache)) {
                 $this->_cache->remove($cacheKey);
             }
-        }
-    }
-
-    public function generatePackageList()
-    {
-        $applications = $this->_getApplicationsList();
-        $libraries = $this->_getLibrariesList();
-        $extensions = $this->_getExtensionsList();
-        $packages = array_merge($applications, $libraries, $extensions);
-
-        // Generate Json Index
-        Ld_Files::putJson($this->dir . '/packages.json', $packages);
-
-        // Generate HTML Index
-        if (!Ld_Files::exists($this->dir . '/index.html')) {
-            Ld_Files::put($this->dir . '/index.html', 'This is a <a href="http://ladistribution.net/">La Distribution</a> repository.');
         }
     }
 

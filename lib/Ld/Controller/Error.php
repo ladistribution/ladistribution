@@ -34,6 +34,10 @@ class Ld_Controller_Error extends Zend_Controller_Action
 
         $log_message = get_class($e) . ': ' . $e->getMessage() . ' (file ' .  $e->getFile() . ') (line ' . $e->getLine() . ')';
 
+        if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
+            $this->view->details .= '<li>' . $log_message . '<pre>' . $e->getTraceAsString() . '</pre>' . '</li>';
+        }
+
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
@@ -45,9 +49,6 @@ class Ld_Controller_Error extends Zend_Controller_Action
             default:
                 $this->view->status = 'An error occured';
                 $this->view->message = $e->getMessage();
-                if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
-                    $this->view->details .= '<li>' . $log_message . '<pre>' . $e->getTraceAsString() . '</pre>' . '</li>';
-                }
                 error_log($log_message);
         }
 

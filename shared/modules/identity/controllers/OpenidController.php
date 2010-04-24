@@ -10,7 +10,7 @@ class Identity_OpenidController extends Ld_Controller_Action
     {
         parent::init();
 
-        $this->_setTitle('Identity');
+        $this->appendTitle( $this->getTranslator()->translate('Identity') );
 
         $authUrl = $this->view->url(
             array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);

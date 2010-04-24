@@ -140,7 +140,7 @@ class Ld_Loader
         $default_mo = $site->getDirectory('shared') . '/locales/ld/en_US/default.mo';
         if (file_exists($default_mo)) {
             $options = array();
-            $options['disableNotices'] = constant('LD_DEBUG') ? false : true;
+            $options['disableNotices'] = true; // 'auto' locale can generate notices we better avoid
             $adapter = new Zend_Translate('gettext', $default_mo, 'en_US', $options);
             $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/ld/', array('en_US'));
             foreach ($locales as $locale) {

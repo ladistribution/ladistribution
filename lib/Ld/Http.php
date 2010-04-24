@@ -16,13 +16,16 @@ class Ld_Http
 
     public static function context()
     {
-        $context = stream_context_create(array(
-            'http' => array(
-                'method'  => 'GET',
-                'user_agent' => 'La Distribution HTTP Library',
-                'timeout' => 5
-            )
-        ));
+        $httpParams = array(
+            'method'  => 'GET',
+            'user_agent' => 'La Distribution HTTP Library',
+            'timeout' => 5
+        );
+        if (Zend_Registry::isRegistered('site')) {
+            $siteUrl = Zend_Registry::get('site')->getUrl();
+            $httpParams['header'] = "Referer: $siteUrl\r\n";
+        }
+        $context = stream_context_create(array('http' => $httpParams));
         return $context;
     }
 

@@ -196,14 +196,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return empty($path) ? '' : '/' . $path;
     }
 
-    public function getConfig($key = null)
+    public function getConfig($key = null, $default = null)
     {
         $config = $this->_config;
         if (empty($config)) {
             $config = $this->_config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
         }
         if (isset($key)) {
-            return isset($config[$key]) ? $config[$key] : null;
+            return isset($config[$key]) ? $config[$key] : $default;
         }
         return $config;
     }
@@ -861,6 +861,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
     }
 
+    public function _testRepository($config)
+    {
+        if ($config['type'] == 'remote') {
+            if (!Zend_Uri_Http::check($config['endpoint'])) {
+                 throw new Exception("Not a valid URL.");
+            }
+        }
+        try {
+            $repository = $this->_getRepository($config);
+        } catch (Exception $e) {
+            throw new Exception("Not a valid repository.");
+        }
+    }
+
     public function addRepository($params)
     {
         $repositories = $this->getRepositoriesConfiguration();
@@ -871,6 +885,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             'name'      => $params['name'],
             'endpoint'  => $params['endpoint']
         );
+        $this->_testRepository($repositories[$id]);
         $this->saveRepositoriesConfiguration($repositories);
     }
 

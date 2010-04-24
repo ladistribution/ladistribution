@@ -24,6 +24,8 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
             $this->name = $params['name'];
             $this->endpoint = $params['endpoint'];
         }
+
+        $this->getPackages();
     }
 
     public function getCacheKey()
@@ -34,6 +36,9 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
     public function getPackagesJson()
     {
         $json = Ld_Http::get($this->endpoint . '/packages.json');
+        if (!$json) {
+            return array();
+        }
         return Zend_Json::decode($json);
     }
 
