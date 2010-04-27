@@ -16,7 +16,7 @@ class View_Helper_UserRenderer extends Zend_View_Helper_Abstract
                         <input name="users[<?php echo $username ?>]" type="checkbox" class="checkbox"/>
                     <?php endif ?>
                 <?php endif ?>
-                <img src="http://www.gravatar.com/avatar/<?php echo md5($user['email']) ?>?s=32" alt="" class="avatar"/>
+                <?php echo Ld_Ui::getAvatar($user) ?>
                 <span class="username"><?php echo $username ?></span>
                 <?php if (isset($user['fullname'])) : ?><span class="fullname"><?php echo $user['fullname'] ?></span><?php endif ?>
                 </label>

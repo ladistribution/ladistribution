@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-22 15:18+0100\n"
+"POT-Creation-Date: 2010-04-27 14:27+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -562,21 +562,36 @@ msgstr "Préférences du thème"
 msgid "Locales"
 msgstr "Locales"
 
+#: shared/modules/slotter/views/scripts/plugins/index-alternate-1.phtml:1
+#: shared/modules/slotter/views/scripts/plugins/index-alternate.phtml:1
+#: shared/modules/slotter/views/scripts/plugins/index-old.phtml:1
 #: shared/modules/slotter/views/scripts/plugins/index.phtml:1
 msgid "Plugins"
 msgstr "Greffons"
 
-#: shared/modules/slotter/views/scripts/plugins/index.phtml:8
+#: shared/modules/slotter/views/scripts/plugins/index-alternate-1.phtml:9
+#: shared/modules/slotter/views/scripts/plugins/index-alternate.phtml:8
+#: shared/modules/slotter/views/scripts/plugins/index-old.phtml:8
 msgid "Description"
 msgstr "Description"
 
-#: shared/modules/slotter/views/scripts/plugins/index.phtml:24
+#: shared/modules/slotter/views/scripts/plugins/index-alternate-1.phtml:25
+#: shared/modules/slotter/views/scripts/plugins/index-alternate.phtml:26
+#: shared/modules/slotter/views/scripts/plugins/index-old.phtml:33
+#: shared/modules/slotter/views/scripts/plugins/index.phtml:18
 msgid "Active"
 msgstr "Actif"
 
-#: shared/modules/slotter/views/scripts/plugins/index.phtml:28
+#: shared/modules/slotter/views/scripts/plugins/index-alternate-1.phtml:29
+#: shared/modules/slotter/views/scripts/plugins/index-alternate.phtml:30
+#: shared/modules/slotter/views/scripts/plugins/index-old.phtml:37
+#: shared/modules/slotter/views/scripts/plugins/index.phtml:22
 msgid "Inactive"
 msgstr "Inactif"
+
+#: shared/modules/slotter/views/scripts/plugins/index-old.phtml:9
+msgid "State"
+msgstr "État"
 
 #: shared/modules/slotter/views/scripts/repositories/delete-package.phtml:1
 msgid "Delete a package"
@@ -598,6 +613,18 @@ msgstr "Êtes-vous sûrs de vouloir supprimer ce dépôt ?"
 #: shared/modules/slotter/views/scripts/repositories/delete.phtml:8
 msgid "Remove"
 msgstr "Supprimer"
+
+#: shared/modules/slotter/views/scripts/repositories/index-local.phtml:1
+#: shared/modules/slotter/views/scripts/repositories/view.phtml:1
+msgid "Repository Index"
+msgstr ""
+
+#: shared/modules/slotter/views/scripts/repositories/index-local.phtml:3
+#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:3
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:3
+#: shared/modules/slotter/views/scripts/repositories/view.phtml:3
+msgid "Repository URL:"
+msgstr "Adresse du dépôt:"
 
 #: shared/modules/slotter/views/scripts/repositories/index.phtml:1
 msgid "Repositories"
@@ -625,19 +652,13 @@ msgid "browse"
 msgstr "parcourir"
 
 #: shared/modules/slotter/views/scripts/repositories/list.phtml:30
-#: shared/modules/slotter/views/scripts/repositories/repository.phtml:31
-#: shared/modules/slotter/views/scripts/users/edit.phtml:63
+#: shared/modules/slotter/views/scripts/repositories/repository.phtml:28
 msgid "remove"
 msgstr "supprimer"
 
 #: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:1
 msgid "Browse repository"
 msgstr "Parcourir le dépôt"
-
-#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:3
-#: shared/modules/slotter/views/scripts/repositories/manage.phtml:3
-msgid "Repository URL:"
-msgstr "Adresse du dépôt:"
 
 #: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:12
 #: shared/modules/slotter/views/scripts/repositories/manage.phtml:25
@@ -785,27 +806,27 @@ msgstr "Ajouter un nouvel utilisateur"
 msgid "Add registered users to the list"
 msgstr "Ajouter des utilisateurs enregistrés à la liste"
 
-#: shared/modules/default/controllers/AuthController.php:103
+#: shared/modules/default/controllers/AuthController.php:94
 msgid "Registration is closed."
 msgstr "L'enregistrement est fermé."
 
-#: shared/modules/default/controllers/AuthController.php:129
+#: shared/modules/default/controllers/AuthController.php:120
 msgid "Username can't be empty."
 msgstr "Le nom d'utilisateur ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:131
+#: shared/modules/default/controllers/AuthController.php:122
 msgid "Email can't be empty."
 msgstr "L'email ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:133
+#: shared/modules/default/controllers/AuthController.php:124
 msgid "Password can't be empty."
 msgstr "Le mot de passe ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:135
+#: shared/modules/default/controllers/AuthController.php:126
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
 
-#: shared/modules/identity/controllers/OpenidController.php:14
+#: shared/modules/identity/controllers/OpenidController.php:13
 msgid "Identity"
 msgstr "Identité"
 
@@ -871,10 +892,104 @@ msgstr "Aucune application installée pour le moment."
 msgid "Settings"
 msgstr "Paramètres"
 
-#~ msgid "HTTPS support"
-#~ msgstr "Support HTTPS"
-#~ msgid "None (not available)"
-#~ msgstr "Aucun (non disponible)"
+#: shared/plugins/akismet.php:14
+msgid "Checks user submitted content with Akismet to see if it look like spam."
+msgstr "Vérifie le contenu soumis par les utilisateurs avec Akismet pour voir si ca ressemble à du spam."
+
+#: shared/plugins/akismet.php:25
+#: shared/plugins/memcache.php:40
+#: shared/plugins/recaptcha.php:28
+#, php-format
+msgid "%s is configured and running."
+msgstr "%s est configuré et activé."
+
+#: shared/plugins/akismet.php:27
+#: shared/plugins/recaptcha.php:26
+#, php-format
+msgid "%s is not running. Check your configuration to enable it."
+msgstr "%s ne fonctionne pas actuellement. Vérifier votre configuration pour l'activer."
+
+#: shared/plugins/akismet.php:33
+msgid "Akismet API key"
+msgstr "Clé d'API Akismet"
+
+#: shared/plugins/bad-behavior.php:14
+msgid "Detects and automatically blocks unwanted accesses to the site."
+msgstr "Détecte et bloque automatiquement les accès au site non souhaités."
+
+#: shared/plugins/bad-behavior.php:21
+#: shared/plugins/theme-unlocker.php:21
+#, php-format
+msgid "%s is running."
+msgstr "%s fonctionne."
+
+#: shared/plugins/memcache.php:14
+msgid "Cache data with Memcache to enhance performances."
+msgstr "Met en cache des données avec Memcache pour améliorer les performances."
+
+#: shared/plugins/memcache.php:25
+msgid "Memcache PHP extension is missing to enable this plugin."
+msgstr "L'extension PHP Memcache est nécessaire pour activer ce greffon."
+
+#: shared/plugins/memcache.php:38
+msgid "Can't connect to Memcache servers."
+msgstr "Impossible de se connecter aux serveurs Memcache."
+
+#: shared/plugins/memcache.php:58
+msgid "Memcache servers"
+msgstr "Serveurs Memcache"
+
+#: shared/plugins/recaptcha.php:14
+msgid "Integrate reCAPTCHA to registration forms."
+msgstr "Intègre reCAPTCHA aux formulaires d'enregistrement."
+
+#: shared/plugins/recaptcha.php:60
+msgid "reCAPTCHA Public key"
+msgstr "Clé publique reCAPTCHA"
+
+#: shared/plugins/recaptcha.php:63
+msgid "reCAPTCHA Private key"
+msgstr "Clé privée reCAPTCHA"
+
+#: shared/plugins/recaptcha.php:123
+msgid "Are you human?"
+msgstr "Êtes-vous humain ?"
+
+#: shared/plugins/recaptcha.php:137
+#: shared/plugins/recaptcha.php:204
+msgid "The reCAPTCHA response was incorrect."
+msgstr "La réponse reCAPTCHA est incorrecte."
+
+#: shared/plugins/ssl.php:14
+msgid "Make SSL policy definable."
+msgstr "Permet de définir la politique SSL."
+
+#: shared/plugins/ssl.php:31
+msgid "HTTPS support"
+msgstr "Support HTTPS"
+
+#: shared/plugins/ssl.php:33
+msgid "None (not available)"
+msgstr "Aucun (non disponible)"
+
+#: shared/plugins/ssl.php:34
+msgid "Sometimes (available, used for sensitive pages)"
+msgstr "Des fois (disponible, utilisé pour les pages sensibles)"
+
+#: shared/plugins/ssl.php:35
+msgid "Always (available, used everywhere)"
+msgstr "Toujours (disponible, utilisé partout)"
+
+#: shared/plugins/theme-unlocker.php:14
+msgid "Allow administrators to install, update, delete any Wordpress theme."
+msgstr "Permet aux administrateurs d'installer, mettre à jour, supprimer n'importe quel thème Wordpress."
+
+#~ msgid "%s is configured and enabled."
+#~ msgstr "%s est configuré et activé."
+#~ msgid "Memcache is configured and enabled."
+#~ msgstr "Memcache est configuré et activé."
+#~ msgid "Allow caching using the Memcache backend."
+#~ msgstr "Permet la mise en cache en utilisant le backend Memcache."
 #~ msgid "Add already registered users"
 #~ msgstr "Ajouter des utilisateurs déjà enregistrés"
 #~ msgid "Invite new users"

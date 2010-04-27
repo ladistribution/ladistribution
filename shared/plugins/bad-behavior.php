@@ -3,40 +3,45 @@
 class Ld_Plugin_BadBehavior
 {
 
-    public static function infos()
+    public function infos()
     {
         return array(
             'name' => 'Bad Behavior',
             'url' => 'http://ladistribution.net/wiki/plugins/#bad-behavior',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.1',
-            'description' => 'Ban clients with bad bad bad behavior.',
+            'version' => '0.5.0.3',
+            'description' => Ld_Translate::translate('Detects and automatically blocks unwanted accesses to the site.'),
             'license' => 'MIT / GPL'
         );
     }
 
-    public static function load()
+    public function status()
     {
-        Ld_Plugin::addAction('Admin:prepend', array('Ld_Plugin_BadBehavior', 'generic_prepend'));
-        Ld_Plugin::addAction('Wordpress:prepend', array('Ld_Plugin_BadBehavior', 'generic_prepend'));
-        Ld_Plugin::addAction('Dokuwiki:prepend', array('Ld_Plugin_BadBehavior', 'generic_prepend'));
-        Ld_Plugin::addAction('Bbpress:prepend', array('Ld_Plugin_BadBehavior', 'generic_prepend'));
-        Ld_Plugin::addAction('Statusnet:prepend', array('Ld_Plugin_BadBehavior', 'generic_prepend'));
+        return array(1, sprintf(Ld_Translate::translate('%s is running.'), 'Bad Behavior'));
     }
 
-    public static function generic_prepend()
+    public function load()
     {
-        self::start();
+        Ld_Plugin::addAction('Admin:prepend', array($this, 'generic_prepend'), 5);
+        Ld_Plugin::addAction('Wordpress:prepend', array($this, 'generic_prepend'), 5);
+        Ld_Plugin::addAction('Dokuwiki:prepend', array($this, 'generic_prepend'), 5);
+        Ld_Plugin::addAction('Bbpress:prepend', array($this, 'generic_prepend'), 5);
+        Ld_Plugin::addAction('Statusnet:prepend', array($this, 'generic_prepend'), 5);
     }
 
-    public static function start()
+    public function generic_prepend()
+    {
+        $this->start();
+    }
+
+    public function start()
     {
         if (Ld_Auth::isAuthenticated()) {
             return;
         }
 
-        if (!file_exists(LD_LIB_DIR . "/bad-behavior/version.inc.php")) {
+        if (!Ld_Files::exists(LD_LIB_DIR . "/bad-behavior/version.inc.php")) {
             return;
         }
 
@@ -47,20 +52,19 @@ class Ld_Plugin_BadBehavior
 
         $options = array(
             'log_table'     => 'badbehaviour',
-            'display_stats' => true,
-            'strict'        => true,
-            'verbose'       => true,
-            'logging'       => true,
-            'skipblackhole' => false,
-            'httpbl_key' => '',
+            'display_stats' => false,
+            'strict'        => false,
+            'verbose'       => false,
+            'logging'       => false,
+            'httpbl_key'    => '',
             'httpbl_threat' => '25',
             'httpbl_maxage' => '30',
-            'offsite_forms' => true
+            'offsite_forms' => false
         );
 
         bb2_start($options);
     }
-    
+
     public static function log($settings, $package, $key)
     {
         $data = array();

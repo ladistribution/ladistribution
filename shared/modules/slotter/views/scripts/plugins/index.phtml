@@ -3,31 +3,40 @@
 <form action="<?php echo $this->url() ?>" method="post">
     
 <table id="plugins" class="h6e-data">
-<tr>
-    <th><?php echo $this->translate("Name") ?></th>
-    <th><?php echo $this->translate("Description") ?></type>
-    <th><?php echo $this->translate("Version") ?></type>
-    <th colspan="2"><?php echo $this->translate("Actions") ?></th>
-</tr>
 <tbody>
 <?php
 foreach ($this->plugins as $id => $plugin) {
+    $infos = $plugin->infos();
     ?>
-    <tr id="<?php echo $id ?>">
-        <td><?php echo $plugin['name'] ?></td>
-        <td><?php echo $plugin['description'] ?></td>
-        <td><?php echo $plugin['version'] ?></td>
-        <td>
+    <tr>
+        <th><?php echo $infos['name'] ?></th>
+        <th class="plugin-description"><?php echo $infos['description'] ?></th>
+        <th class="plugin-active">
             <label>
             <input type="radio" name="plugins[<?php echo $id ?>]" value="active"
-                <?php if ($plugin['active']) echo 'checked="checked"' ?>/>
+                <?php if ($plugin->active) echo 'checked="checked"' ?>/>
                 <?php echo $this->translate("Active") ?></label>
             <label>
             <input type="radio" name="plugins[<?php echo $id ?>]" value="inactive"
-                <?php if (!$plugin['active']) echo 'checked="checked"' ?>/>
+                <?php if (!$plugin->active) echo 'checked="checked"' ?>/>
                 <?php echo $this->translate("Inactive") ?></label>
-        </td>
+        </th>
     </tr>
+    <?php if ($plugin->active && (method_exists($plugin, 'preferences') || method_exists($plugin, 'status'))) : ?>
+        <tr>
+            <td></td>
+            <td colspan="2" class="plugin-details">
+                <?php if (method_exists($plugin, 'preferences')) : ?>
+                    <?php $this->preferencesRenderer($plugin->preferences(), $this->configuration, 'configuration'); ?>
+                <?php endif ?>
+                <?php if (method_exists($plugin, 'status') && $status = $plugin->status()) : ?>
+                    <p class="plugin-status <?php echo $status[0] == 0 ? 'error' : 'ok' ?>"><strong><?php echo $status[1] ?></strong></p>
+                <?php endif ?>
+            </td>
+        </tr>
+    <?php else: ?>
+        <tr style="display:none"></tr>
+    <?php endif ?>
     <?php
 }
 ?>

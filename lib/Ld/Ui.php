@@ -206,4 +206,27 @@ class Ld_Ui
         return $infos;
     }
 
+    public static function getAvatar($user = null, $size = 32)
+    {
+        $email = isset($user) && isset($user['email']) ? $user['email'] : '';
+
+        if ( !empty($email) ) {
+            $hash = md5( strtolower( $email ) );
+            $host = sprintf( "http://%d.gravatar.com", ( hexdec( $hash{0} ) % 2 ) );
+        } else {
+            $host = 'http://0.gravatar.com';
+        }
+
+        $default = "$host/avatar/ad516503a11cd5ca435acc9bb6523536?s={$size}"; // wordpress default
+
+        if ( !empty($email) ) {
+            $out = "$host/avatar/{$hash}?s={$size}";
+            $out .= '&amp;d=' . urlencode( $default );
+        } else {
+            $out = $default;
+        }
+
+        return sprintf('<img src="%1$s" width="%2$s" height="%2$s" alt="" class="avatar"/>', $out, $size);
+    }
+
 }

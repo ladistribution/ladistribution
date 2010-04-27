@@ -3,54 +3,70 @@
 class Ld_Plugin_Akismet
 {
 
-    public static function infos()
+    public function infos()
     {
         return array(
             'name' => 'Akismet',
             'url' => 'http://ladistribution.net/wiki/plugins/#akismet',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.1',
-            'description' => 'Filter user submitted content (like comments) using Akismet antispam service.',
+            'version' => '0.5.0.3',
+            'description' => Ld_Translate::translate('Checks user submitted content with Akismet to see if it look like spam.'),
             'license' => 'MIT / GPL'
         );
     }
 
-    public static function load()
+    const STATUS_OK = 1;
+    const STATUS_ERROR = 0;
+
+    public function status()
     {
-        Ld_Plugin::addFilter('Slotter:preferences', array('Ld_Plugin_Akismet', 'slotter_preferences'));
-        Ld_Plugin::addAction('Wordpress:prepend', array('Ld_Plugin_Akismet', 'wordpress_prepend'));
-        Ld_Plugin::addAction('Bbpress:plugin', array('Ld_Plugin_Akismet', 'bbpress_plugin'));
+        if ($api_key = $this->get_api_key()) {
+            return array(self::STATUS_OK, sprintf(Ld_Translate::translate('%s is configured and running.'), 'Akismet'));
+        }
+        return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('%s is not running. Check your configuration to enable it.'), 'Akismet'));
     }
 
-    public static function slotter_preferences($preferences)
+    public function preferences()
     {
-        $preferences[] = array(
-            'name' => 'akismet_api_key', 'type' => 'text', 'label' => 'Akismet API key'
+        $preference = array(
+            'name' => 'akismet_api_key', 'type' => 'text', 'label' => Ld_Translate::translate('Akismet API key')
         );
-        return $preferences;
+        return array($preference);
     }
 
-    public static function wordpress_prepend()
+    public function load()
+    {
+        Ld_Plugin::addAction('Wordpress:prepend', array($this, 'wordpress_prepend'));
+        Ld_Plugin::addAction('Bbpress:plugin', array($this, 'bbpress_plugin'));
+    }
+
+    public function get_api_key()
     {
         $site = Zend_Registry::get('site');
-        $akismet_api_key = $site->getConfig('akismet_api_key');
-        if (!empty($akismet_api_key)) {
-            define('WPCOM_API_KEY', $akismet_api_key);
+        $api_key = $site->getConfig('akismet_api_key');
+        if (empty($api_key)) {
+            return null;
+        }
+        return $api_key;
+    }
+
+    public function wordpress_prepend()
+    {
+        if ($api_key = $this->get_api_key()) {
+            define('WPCOM_API_KEY', $api_key);
         }
     }
 
-    public static function bbpress_plugin()
+    public function bbpress_plugin()
     {
-        add_filter('bb_get_option_akismet_key', array('Ld_Plugin_Akismet', 'bbpress_option_akismet_key'));
+        add_filter('bb_get_option_akismet_key', array($this, 'bbpress_option_akismet_key'));
     }
 
-    public static function bbpress_option_akismet_key($value)
+    public function bbpress_option_akismet_key($value)
     {
-        $site = Zend_Registry::get('site');
-        $akismet_api_key = $site->getConfig('akismet_api_key');
-        if (!empty($akismet_api_key)) {
-            return $akismet_api_key;
+        if ($api_key = $this->get_api_key()) {
+            return $api_key;
         }
         return $value;
     }

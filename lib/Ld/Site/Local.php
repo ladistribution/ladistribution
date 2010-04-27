@@ -208,14 +208,18 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $config;
     }
 
-    public function setConfig($key = null, $value = null)
+    public function setConfig($param = null, $value = null)
     {
         $config = $this->getConfig();
-        if (isset($key)) {
-            $config[$key] = $value;
-            Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
-            $this->_config = $config;
+        if (is_array($param)) {
+            foreach ($param as $key => $value) {
+                $config[$key] = $value;
+            }
+        } else if (is_string($param)) {
+            $config[$param] = $value;
         }
+        Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
+        $this->_config = $config;
         return $config;
     }
 

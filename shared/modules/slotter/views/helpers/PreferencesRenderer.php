@@ -19,7 +19,7 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 		return $this->render($preferences, $configuration, $ns);
 	}
 
-	function render($preferences = array(), $configuration = array(), $ns = null)
+	public function render($preferences = array(), $configuration = array(), $ns = null)
 	{
 		echo '<table class="ld-preferences">';
 		foreach ($preferences as $preference) {
@@ -27,24 +27,25 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 				$preference = $preference->toArray();
 			}
 			$name = $preference['name'];
+			$id = isset($ns) ? "$ns-$name" : $name;
 			$inputName = isset($ns) ? "$ns" . "[$name]" : $name;
 			$value = isset($configuration[$name]) ? $configuration[$name] : null;
 			if (!isset($value) && isset($preference['defaultValue'])) {
 				$value = $preference['defaultValue'];
 			}
 			if ($preference['type'] != 'hidden') {
-				echo '<tr><th><label>' . $preference['label'] . '</label></th><td>' . "\n";
+				echo '<tr><th><label for="' . $id . '">' . $preference['label'] . '</label></th><td>' . "\n";
 			}
 			switch ($preference['type']) {
 				case 'boolean':
 					$checked = ($value == 'true' || $value == 1) ? ' checked="checked"' : '';
-					echo '<input type="checkbox" value="1" name="' . $inputName . '"' . $checked . ' />' . "\n";
+					echo '<input type="checkbox" value="1" id="' . $id . '"  name="' . $inputName . '"' . $checked . ' />' . "\n";
 					break;
 				case 'password':
-					echo '<input class="text" type="password" name="' . $inputName . '" value="' . $this->view->escape($value) . '" />' . "\n";
+					echo '<input class="text" type="password" id="' . $id . '"  name="' . $inputName . '" value="' . $this->view->escape($value) . '" />' . "\n";
 					break;
 				case 'range':
-					echo '<select name="' . $inputName . '">' . "\n";
+					echo '<select id="' . $id . '" name="' . $inputName . '">' . "\n";
 					for ($i = (int)$preference['min']; $i <= (int)$preference['max']; $i += $preference['step']) {
 						$selected = (int)$value == $i ? ' selected="selected"' : '';
 						echo '  <option value="' . $i . '"' . $selected . '>' . $i . '</option>' . "\n";
@@ -52,7 +53,7 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 					echo '</select>' . "\n";
 					break;
 				case 'list':
-					echo '<select name="' . $inputName . '">' . "\n";
+					echo '<select id="' . $id . '" name="' . $inputName . '">' . "\n";
 					foreach ($preference['options'] as $option) {
 						$selected = (string)$value == (string)$option['value'] ? ' selected="selected"' : '';
 						echo '  <option value="' . $option['value']  . '"' . $selected . '>' . $option['label'] . '</option>' . "\n";
@@ -63,11 +64,11 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 					echo '<input type="hidden" name="' . $inputName . '" value="' . $this->view->escape($value) . '" />' . "\n";
 					break;
     			case 'textarea':
-    				echo '<textarea cols="46" rows="5" name="' . $inputName . '">' . $this->view->escape($value) . '</textarea>' . "\n";
+    				echo '<textarea cols="46" rows="5" id="' . $id . '" name="' . $inputName . '">' . $this->view->escape($value) . '</textarea>' . "\n";
     				break;
 				case 'text':
 				default:
-				    echo '<input class="text" size="45" type="text" name="' . $inputName . '" value="' . $this->view->escape($value) . '" />' . "\n";
+				    echo '<input class="text" size="45" type="text" id="' . $id . '" name="' . $inputName . '" value="' . $this->view->escape($value) . '" />' . "\n";
 				break;
 			}
 			echo '</tr>';

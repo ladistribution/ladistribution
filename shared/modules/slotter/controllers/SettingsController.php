@@ -23,14 +23,14 @@ class Slotter_SettingsController extends Slotter_BaseController
     function indexAction()
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
-            $configuration = Ld_Files::getJson($this->getSite()->getDirectory('dist') . '/config.json');
+            $configuration = $this->getSite()->getConfig();
             // needed for settings that default to false, displayed as checkbox
             unset($configuration['open_registration']);
             unset($configuration['root_admin']);
             foreach ($this->_getParam('configuration') as $key => $value) {
                 $configuration[$key] = $value;
             }
-            Ld_Files::putJson($this->getSite()->getDirectory('dist') . '/config.json', $configuration);
+            $this->getSite()->setConfig($configuration);
             // in this case, we believe the user wants to go back to the index
             $this->_redirector->gotoSimple('index', 'index');
             return;
@@ -78,7 +78,7 @@ class Slotter_SettingsController extends Slotter_BaseController
 
         $this->view->preferences = $preferences;
 
-        $this->view->configuration = Ld_Files::getJson($this->getSite()->getDirectory('dist') . '/config.json');
+        $this->view->configuration = $this->getSite()->getConfig();
     }
 
 }

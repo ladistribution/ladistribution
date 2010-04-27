@@ -105,11 +105,14 @@ class Ld_Loader
 
         foreach ($active_plugins as $plugin) {
             $plugin = strtolower($plugin);
-            require_once self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
-            $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
-            if (class_exists($className, false) && method_exists($className, 'load')) {
-                // $className::load(); // php 5.2 doesn't like this
-                call_user_func(array($className, 'load'));
+            $fileName = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
+            if (Ld_Files::exists($fileName)) {
+                require_once self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
+                $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
+                if (class_exists($className, false) && method_exists($className, 'load')) {
+                    $class = new $className;
+                    $class->load();
+                }
             }
         }
     }

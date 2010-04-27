@@ -1,7 +1,7 @@
 <package>
   <id>admin-locale-fr-fr</id>
   <name>Fr locales</name>
-  <version>0.4-24</version>
+  <version>0.4-25</version>
   <type>locale</type>
   <extend>admin</extend>
   <directory>dist/locales/fr_FR</directory>
