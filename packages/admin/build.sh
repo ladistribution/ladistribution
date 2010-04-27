@@ -5,18 +5,18 @@ PACKAGE="admin.zip"
 mkdir $FOLDER
 
 # Export from SVN
-svn export "$SOURCE/js/ld" js
+svn export "$SOURCE/js/ld" js --force
 # Local Export
 # mkdir js
 # cp -R /Web/ld/js/ld js/ld
 
 # Export from SVN
-svn export "$SOURCE/shared/modules" modules
+svn export "$SOURCE/shared/modules" modules --force
 # Local Export
 # cp -R /Web/ld/shared/modules modules
 
 # Export from SVN
-svn export "$SOURCE/shared/plugins" plugins
+svn export "$SOURCE/shared/plugins" plugins --force
 # Local Export
 # cp -R /Web/ld/shared/plugins plugins
 
@@ -27,7 +27,7 @@ svn export "$SOURCE/admin/" $FOLDER --force
 
 mkdir locales
 # Export from SVN
-svn export "$SOURCE/shared/locales/admin/en_US" locales/en_US
+svn export "$SOURCE/shared/locales/admin/en_US" locales/en_US --force
 # Local Export
 # cp -R /Web/ld/shared/locales/admin/en_US locales/en_US
 
@@ -41,5 +41,6 @@ mv $PACKAGE ../
 # Clean
 rm -rf js
 rm -rf modules
+rm -rf plugins
 rm -rf locales
 rm -rf $FOLDER
