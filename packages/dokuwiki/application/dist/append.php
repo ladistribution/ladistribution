@@ -1,6 +1,5 @@
 <?php
 
-$dir = dirname(__FILE__) . '/append/';
-
-require_once 'Ld/Files.php';
-Ld_Files::includes(dirname(__FILE__) . '/append/');
+if (class_exists('Ld_Plugin')) {
+	Ld_Plugin::doAction('Dokuwiki:append');
+}

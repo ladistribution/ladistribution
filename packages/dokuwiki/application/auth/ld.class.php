@@ -138,7 +138,7 @@ class auth_ld extends auth_plain
             'fullname'  => $name,
             'email'     => $mail
         );
-        Zend_Registry::get('site')->addUser($user);
+        Zend_Registry::get('site')->addUser($user, false);
         return true;
     }
 
