@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Ui
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -44,48 +44,13 @@ class Ld_Ui
         return self::$_applications;
     }
 
-    public static function getAdmin()
-    {
-        if (isset(self::$_admin)) {
-            return self::$_admin;
-        }
-        $instances = self::getApplications();
-        foreach ($instances as $instance) {
-            if ($instance->getPackageId() == 'admin') {
-                 return self::$_admin = $instance;
-            }
-        }
-        return null;
-    }
-
     public static function getAdminUrl($params = array(), $name = 'default')
     {
-        $admin = self::getAdmin();
-
+        $admin = self::getSite()->getAdmin();
         if (empty($admin)) {
             return null;
         }
-
-        $router = new Zend_Controller_Router_Rewrite();
-        $config = new Zend_Config_Ini($admin->getAbsolutePath()  .'/routes.ini');
-        $router->addDefaultRoutes();
-        $router->addConfig($config);
-
-        $baseUrl = self::getSite()->getPath();
-        if (constant('LD_REWRITE') == false || self::getSite()->getConfig('root_admin') != 1) {
-            $baseUrl .=  '/' . $admin->getPath();
-        }
-
-        if (constant('LD_REWRITE') == false) {
-            $baseUrl .= '/index.php';
-        }
-
-        $route = $router->getRoute($name);
-        $url = $route->assemble($params, true);
-
-        $adminUrl = $baseUrl . '/' . $url;
-
-        return $adminUrl;
+        return $admin->getUrl($params, $name);
     }
 
     public static function superBar($options = array())
@@ -101,7 +66,7 @@ class Ld_Ui
     public static function getSuperBar($params = array())
     {
         $site = self::getSite();
-        $admin = self::getAdmin();
+        $admin = self::getSite()->getAdmin();
 
         $applications = $site->getApplicationsInstances(array('admin'));
 
@@ -141,7 +106,7 @@ class Ld_Ui
 
     public static function getTopBar($options = array())
     {
-        $admin = self::getAdmin();
+        $admin = self::getSite()->getAdmin();
 
         $view = self::getView();
 

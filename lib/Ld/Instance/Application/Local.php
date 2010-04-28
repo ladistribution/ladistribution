@@ -25,7 +25,19 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         $params = Ld_Files::getJson($directory . '/dist/instance.json');
         if (!empty($params)) {
-            return new Ld_Instance_Application_Local($params);
+            if ($params['package'] == 'admin') {
+                $className = 'Ld_Instance_Application_' . Zend_Filter::filterStatic($params['package'], 'Word_DashToCamelCase');
+            } else {
+                $className = 'Ld_Instance_Application_Local';
+            }
+            // if (!class_exists($className)) {
+            //     if (Ld_Files::exists($directory . '/dist/instance.php')) {
+            //         require_once $directory . '/dist/instance.php';
+            //     } else {
+            //         $className = 'Ld_Instance_Application_Local';
+            //     }
+            // }
+            return new $className($params);
         }
         return null;
     }

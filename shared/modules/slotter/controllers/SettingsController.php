@@ -30,7 +30,8 @@ class Slotter_SettingsController extends Slotter_BaseController
             foreach ($this->_getParam('configuration') as $key => $value) {
                 $configuration[$key] = $value;
             }
-            $this->getSite()->setConfig($configuration);
+            // $this->getSite()->setConfig($configuration);
+            Ld_Files::putJson($this->getSite()->getDirectory('dist') . "/config.json", $configuration);
             // in this case, we believe the user wants to go back to the index
             $this->_redirector->gotoSimple('index', 'index');
             return;

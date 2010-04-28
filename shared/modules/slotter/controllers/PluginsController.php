@@ -54,6 +54,8 @@ class Slotter_PluginsController extends Slotter_BaseController
             }
         }
 
+        ksort($plugins);
+
         $this->view->plugins = $plugins;
 
         $this->view->configuration = $site->getConfig();

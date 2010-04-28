@@ -65,6 +65,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (isset($config['path'])) {
             $this->path = $config['path'];
         }
+
+        $this->dir = Ld_Files::real($this->dir);
     }
 
     public function init()
@@ -231,9 +233,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getDirectory($dir = null)
     {
         if (isset($dir)) {
-            $directory = Ld_Files::real($this->dir . '/' . $this->directories[$dir]);
+            $directory = $this->dir . '/' . $this->directories[$dir];
         } else {
-            $directory = Ld_Files::real($this->dir);
+            $directory = $this->dir;
         }
         return $directory;
     }
@@ -272,20 +274,29 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 }
             }
         }
-
         return $instances;
+    }
+
+    public function getAdmin()
+    {
+        $instances = $this->getInstances('admin', 'package');
+        if (empty($instances)) {
+            return null;
+        }
+        $keys = array_keys($instances);
+        $id = $keys[0];
+        return $this->getInstance($id);
     }
 
     public function getApplicationsInstances(array $ignore = array())
     {
         $applications = array();
         foreach ($this->getInstances('application') as $id => $application) {
-            $instance = $this->getInstance($id);
-            if (empty($instance)) {
-                continue;
-            }
             if (!in_array($application['package'], $ignore)) {
-                $applications[$id] = $instance;
+                $instance = $this->getInstance($id);
+                if (isset($instance)) {
+                    $applications[$id] = $instance;
+                }
             }
         }
         return $applications;
@@ -333,17 +344,18 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $instances = $this->getInstances();
 
+        // by id
+        if (isset($instances[$id]) && isset($instances[$id]['path'])) {
+            $dir = $this->getDirectory() . '/' . $instances[$id]['path'];
+
         // by global path
-        if (Ld_Files::exists($id) && Ld_Files::exists($id . '/dist')) {
+        } else if (Ld_Files::exists($id) && Ld_Files::exists($id . '/dist')) {
             $dir = $id;
 
         // by local path
         } else if (Ld_Files::exists($this->getDirectory() . '/' . $id) && Ld_Files::exists($this->getDirectory() . '/' . $id . '/dist')) {
             $dir = $this->getDirectory() . '/' . $id;
 
-        // by id
-        } else if (isset($instances[$id]) && isset($instances[$id]['path'])) {
-            $dir = $this->getDirectory() . '/' . $instances[$id]['path'];
         }
 
         if (isset($dir)) {
@@ -360,6 +372,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $instance->setSite($this);
                 return $instance;
             }
+
         }
 
         return null;
@@ -658,7 +671,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $preference = is_object($pref) ? $pref->toArray() : $pref;
             // Special Type: user
             if ($preference['type'] == 'user') {
-                $users = $this->getUsers();
+                $users = ($admin = $this->getAdmin()) ? $admin->getUsers() : $this->getUsers();
                 if (empty($users)) {
                     throw new Exception('No user available.');
                 }
@@ -798,9 +811,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $user;
     }
 
-    public function addUser($user)
+    public function addUser($user, $validate = true)
     {
-        $this->getUsersBackend()->addUser($user);
+        $this->getUsersBackend()->addUser($user, $validate);
         Ld_Plugin::doAction('Site:addUser', $user);
         return $user;
     }

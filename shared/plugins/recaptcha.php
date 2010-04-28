@@ -25,6 +25,7 @@ class Ld_Plugin_Recaptcha
         if (empty($recaptcha)) {
             return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('%s is not running. Check your configuration to enable it.'), 'reCAPTCHA'));
         }
+        // would be cool to check api key validity here
         return array(self::STATUS_OK, sprintf(Ld_Translate::translate('%s is configured and running.'), 'reCAPTCHA'));
     }
 
@@ -34,6 +35,7 @@ class Ld_Plugin_Recaptcha
         Ld_Plugin::addAction('Auth:register:validate', array($this, 'auth_register_validate'));
         Ld_Plugin::addAction('Wordpress:plugin', array($this, 'wordpress_init'));
         Ld_Plugin::addAction('Bbpress:plugin', array($this, 'bbpress_init'));
+        Ld_Plugin::addAction('Dokuwiki:plugin', array($this, 'dokuwiki_init'));
     }
 
     public $recaptchaService = null;
@@ -78,7 +80,7 @@ class Ld_Plugin_Recaptcha
         #ld-login-box #recaptcha_response_field:focus { border:1px solid #666 !important; }
         #ld-login-box .recaptchatable { border:1px solid #BBBBBB !important; background:white !important; }
         </style>
-        <label for="recaptcha_response_field">Are you human?</label>
+        <label for="recaptcha_response_field"><?php echo Ld_Translate::translate('Are you human?') ?></label>
         <div style="height:120px"><?php echo $recaptcha->getHTML(); ?></div>
         <?php
     }
@@ -91,8 +93,7 @@ class Ld_Plugin_Recaptcha
         try {
             $result = $recaptcha->verify($params['recaptcha_challenge_field'], $params['recaptcha_response_field']);
         } catch (Exception $e) {
-            return $e
-            ->getMessage() . ' (reCAPTCHA)';
+            return $e->getMessage() . ' (reCAPTCHA)';
         }
         if (!$result->isValid()) {
             throw new Exception('reCAPTCHA validation failed. Try again please.');
@@ -178,7 +179,7 @@ class Ld_Plugin_Recaptcha
             <table width="100%">
                 <tr class="<?php echo $class ?>">
                     <th scope="row">
-                        <label for="recaptcha_response_field">Are you human?</label>
+                        <label for="recaptcha_response_field"><?php echo Ld_Translate::translate('Are you human?') ?></label>
                     </th>
                     <td>
                         <?php echo $recaptcha->getHTML(); ?>
@@ -209,6 +210,14 @@ class Ld_Plugin_Recaptcha
             }
         }
         return $param_filter;
+    }
+
+    /* Dokuwiki */
+
+    public function dokuwiki_init()
+    {
+        global $ld_recaptcha_service;
+        $ld_recaptcha_service = $this->getService();
     }
 
 }

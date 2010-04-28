@@ -121,7 +121,7 @@ class Slotter_UsersController extends Slotter_BaseController
             return;
         }
 
-        $this->view->users = $this->_getUsers();
+        $this->view->users = $this->admin->getUsers();
         $this->view->roles = $this->admin->getRoles();
         $this->view->userRoles = $this->admin->getUserRoles();
 
@@ -168,7 +168,7 @@ class Slotter_UsersController extends Slotter_BaseController
         // }
 
         if ($this->_hasParam('users') || $this->_hasParam('query')) {
-            $users = $this->view->users = $this->_getUsers();
+            $users = $this->view->users = $this->admin->getUsers();
         }
 
         if ($this->getRequest()->isPost() && $this->_hasParam('users')) {
@@ -307,25 +307,6 @@ class Slotter_UsersController extends Slotter_BaseController
         $this->site->updateUser($id, $user);
 
         $this->_redirector->gotoSimple('edit', 'users', 'slotter', array('id' => $id));
-    }
-
-    protected function _getUsers()
-    {
-        $userOrder = $this->admin->getUserOrder();
-
-        $users = array();
-        foreach ($this->admin->getUserRoles() as $username => $role) {
-            $user = $this->site->getUser($username);
-            if (empty($user)) {
-                continue;
-            }
-            $user['order'] = isset($userOrder[$username]) ? $userOrder[$username] : 999;
-            $users[$username] = $user;
-        }
-
-        uasort($users, array('Ld_Utils', "sortByOrder"));
-
-        return $users;
     }
 
 }

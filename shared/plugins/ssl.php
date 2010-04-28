@@ -22,6 +22,7 @@ class Ld_Plugin_Ssl
         Ld_Plugin::addAction('Statusnet:config', array($this, 'statusnet_config'));
         Ld_Plugin::addAction('Wordpress:prepend', array($this, 'wordpress_prepend'));
         Ld_Plugin::addAction('Wordpress:plugin', array($this, 'wordpress_plugin'));
+        Ld_Plugin::addFilter('Weave:serverUrl', array($this, 'weave_url'));
     }
 
     public function preferences()
@@ -95,13 +96,13 @@ class Ld_Plugin_Ssl
         }
     }
 
-}
+    public function weave_url($url)
+    {
+        $ssl_support = $this->config();
+        if ($ssl_support == 'sometimes' || $ssl_support == 'sometimes') {
+            $url = str_replace('http://', 'https://', $url);
+        }
+        return $url;
+    }
 
-// function ld_ssl_get_application_url($url, $class)
-// {
-//     $https_support = $class->getSite()->getConfig('https_support');
-//     if (empty($https_support) || $https_support = 'none') {
-//         $url = str_replace('http://', 'https://', $url);
-//     }
-//     return $url;
-// }
+}

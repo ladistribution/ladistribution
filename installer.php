@@ -81,21 +81,64 @@ function is_requirable($lib)
     return false;
 }
 
-function out($message)
+function out($message, $class = 'ok')
 {
     if (defined('LD_CLI') && constant('LD_CLI')) {
         fwrite(STDOUT, "- $message");
         fwrite(STDOUT, PHP_EOL);
     } else {
-        echo "- $message<br/>\n";
+        echo '<li class="' . $class . '">' . $message . "</li>\n";
         flush();
     }
+}
+
+// Starts Output
+
+if (!defined('LD_CLI') || !constant('LD_CLI')) {
+    ?>
+    <html>
+    <head>
+        <title>La Distribution Installer</title>
+        <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.1-3" rel="stylesheet" type="text/css" />
+        <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.4-25" rel="stylesheet" type="text/css" />
+        <style type="text/css">
+        .h6e-page-title { background:url("http://ladistribution.net/logo.png") no-repeat top center; height:75px; text-indent:-9999px; }
+        .h6e-page-content { position:relative; }
+        .h6e-main-content { width:40em; }
+        .h6e-post-content { padding-bottom:90px; }
+        .h6e-simple-footer { position:absolute; bottom:0; width:40em; }
+        ul.ld-steps { margin:0; margin-top:25px; list-style-type:none; }
+        ul.ld-steps li { margin:10px 0; padding-left:25px; background:no-repeat 0 3px; }
+        ul.ld-steps li.ok { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/check_16x13.png"); }
+        ul.ld-steps li.error { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/x_alt_16x16.png"); }
+        </style>
+    </head>
+    <body>
+        <div class="ld-main-content h6e-main-content">
+          <div class="h6e-page-content">
+              <h1 class="h6e-page-title">La Distribution Installer</h1>
+              <div class="h6e-simple-footer" >
+                  Powered by <a href="http://ladistribution.net/">La Distribution</a>,
+                  a community project initiated by <a href="http://h6e.net/">h6e</a>. 
+              </div>
+              <div class="h6e-post-content">
+                  <p>Thank you for downloading this installer.</p>
+                  <p>It will help you install La Distribution in <strong>less than a minute</strong>.</p>
+                  <p>If you encouter any problem, please visit <a href="http://ladistribution.net/en/forums/">our forums</a>,
+                      it should be <strong>easy</strong> to fix!</p>
+              <?php if (empty($_POST['install'])) : ?>
+                  <form method="post" action="">
+                      <input type="submit" class="sunmit button ld-button" name="install" value="Start"/>
+                  </form>
+              </div></body></html><?php exit; endif; ?>
+                  <ul class="ld-steps">
+    <?php
 }
 
 // Test PHP version
 
 if (!version_compare(PHP_VERSION, '5.2.0', '>=')) {
-    out('Failure. La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.' );
+    out('La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.', 'error');
     exit;
 }
 
@@ -108,6 +151,8 @@ try {
 set_time_limit(300);
 
 date_default_timezone_set('UTC');
+
+out('Installation starting');
 
 // Directories
 
@@ -123,8 +168,8 @@ $directories = array(
 foreach ($directories as $name => $directory) {
     if (!file_exists($directory)) {
         if (!is_writable(dirname($directory))) {
-            $msg = "- Failure. Can't create folder $directory. Check your permissions.";
-            die($msg);
+            out("Can't create folder $directory. Check your permissions.", "error");
+            exit;
         }
         mkdir($directory);
         fix_perms($directory);
@@ -133,7 +178,7 @@ foreach ($directories as $name => $directory) {
 
 set_include_path( $directories['lib'] . PATH_SEPARATOR . get_include_path() );
 
-out('Directories OK');
+out('Directories created');
 
 // Essentials
 
@@ -168,34 +213,34 @@ foreach ($essentials as $file => $source) {
     install_if_not_exists_and_require($file, $source);
 }
 
-out('Essentials OK');
+out('Essentials libraries loaded');
 
 // Zend & Ld libraries
 
 $base_libs = array();
 
 if (!is_requirable('Zend/Loader/Autoloader.php')) {
-    $base_libs['zend-framework'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-zend-framework/lib-zend-framework.zip';
+    $base_libs['Zend'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-zend-framework/lib-zend-framework.zip';
 }
 
 if (!is_requirable('Ld/Installer.php')) {
-    $base_libs['ld-libraries'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-ld/lib-ld.zip';
+    $base_libs['Ld'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-ld/lib-ld.zip';
 }
 
 foreach ($base_libs as $name => $source) {
     $archiveName = $directories['tmp'] . '/' . $name . '.zip';
     $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
-    if (!file_exists($targetDirectory)) {
+    if (!Ld_Files::exists($targetDirectory)) {
         Ld_Http::download($source, $archiveName);
         Ld_Zip::extract($archiveName, $targetDirectory);
     }
-    Ld_Files::copy($targetDirectory . '/lib', $directories['lib']);
-    if (file_exists($targetDirectory . '/shared')) {
+    Ld_Files::copy($targetDirectory . '/lib', $directories['lib'] . (LD_RELEASE == 'concorde' ? '' : '/' . $name));
+    if (Ld_Files::exists($targetDirectory . '/shared')) {
         Ld_Files::copy($targetDirectory . '/shared', $directories['shared']);
     }
 }
 
-out('Zend & Ld OK');
+out('Zend Framework and Ld Libraries loaded');
 
 if (defined('LD_CLI_INSTALL') && constant('LD_CLI_INSTALL')) {
    out('CLI install OK');
@@ -217,7 +262,7 @@ if (!empty($_SERVER["SCRIPT_NAME"])) {
 
 $site->init();
 
-out('Init OK');
+out('Site initialised');
 
 // Upgrade repositories (if needed)
 
@@ -225,17 +270,48 @@ $endpoints = array();
 $repositories = $site->getRepositoriesConfiguration();
 foreach ($repositories as $id => $repository) {
     if (isset($repository['endpoint'])) {
-        if (strpos($repository['endpoint'], LD_SERVER . 'repositories/barbes') !== false) {
-            $repositories[$id]['endpoint'] = str_replace(
-                LD_SERVER . 'repositories/barbes', LD_SERVER . 'repositories/' . LD_RELEASE, $repository['endpoint']);
-            $repository_upgrade = true;
+        // upgrade to test/local repositories
+        $default_server = 'http://ladistribution.net/';
+        if (LD_SERVER != $default_server) {
+            if (strpos($repository['endpoint'], $default_server) !== false) {
+                $repository['endpoint'] = str_replace($default_server, LD_SERVER, $repository['endpoint']);
+                $repository_upgrade = true;
+            }
+        }
+        // upgrade old releases repositories
+        $old_releases = LD_RELEASE == 'concorde' ? array('barbes') : array('barbes', 'concorde');
+        foreach ($old_releases as $release) {
+            if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
+                $repositories[$id]['endpoint'] = str_replace(
+                    LD_SERVER . 'repositories/' . $release,
+                    LD_SERVER . 'repositories/' . LD_RELEASE,
+                    $repository['endpoint']
+                );
+                $repository_upgrade = true;
+            }
         }
         $endpoints[] = $repositories[$id]['endpoint'];
     }
 }
 if (isset($repository_upgrade)) {
     $site->saveRepositoriesConfiguration($repositories);
-    out('Repositories OK');
+    out('Repositories upgraded');
+}
+
+// Instances registry
+
+$instances = $site->getInstances();
+if (empty($instances)) {
+    $instances = array();
+    foreach ($base_libs as $name => $source) {
+        $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
+        $manifest = Ld_Manifest::loadFromDirectory($targetDirectory);
+        $infos = $manifest->getInfos();
+        $instances[$site->getUniqId()] = array('package' => $manifest->getId(), 'type' => 'lib', 'version' => $infos['version']);
+        Ld_Files::unlink($targetDirectory);
+    }
+    $site->updateInstances($instances);
+    out('Registry updated');
 }
 
 // Handle locales
@@ -248,37 +324,15 @@ if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_REL
         $site->addRepository(array('type' => 'remote', 'endpoint' => $repository, 'name' => 'Fr Locales'));
     }
     // Set locales
-    // - should be replaced by updateLocales after Barbes
-    Ld_Files::putJson($site->getDirectory('dist') . '/locales.json', array('en_US', LD_LOCALE));
+    $site->updateLocales(array('en_US', LD_LOCALE));
     // Install main package
-    // - should be simplified after Barbes
     $packageId = "ld-locale-" . str_replace('_', '-', strtolower(LD_LOCALE));
     $packages = $site->getPackages();
-    if (isset($packages[$packageId])) {
-        if (!method_exists($site, 'isPackageInstalled') || !$site->isPackageInstalled($packageId)) {
-            $site->createInstance($packageId);
-        }
+    if (isset($packages[$packageId]) && !$site->isPackageInstalled($packageId)) {
+        $site->createInstance($packageId);
+        out('Locale <em>' . LD_LOCALE . '</em> installed');
     }
-    out('Locale OK');
 }
-
-// Clean TMP
-foreach ($base_libs as $name => $source) {
-    $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
-    Ld_Files::unlink($targetDirectory);
-}
-
-// Instances registry
-
-$instances = $site->getInstances();
-if (empty($instances)) {
-    $instances = array();
-    $instances[$site->getUniqId()] = array('package' => 'lib-zend-framework', 'type' => 'lib', 'version' => '1.9.7-1');
-    $instances[$site->getUniqId()] = array('package' => 'lib-ld', 'type' => 'lib', 'version' => '0.3-57-2');
-    $site->updateInstances($instances);
-}
-
-out('Registry OK');
 
 
 // Install or Update Admin
@@ -291,29 +345,24 @@ foreach ($site->getInstances() as $id => $infos) {
 }
 
 if (empty($admin)) {
-    $admin = $site->createInstance('admin', array('title' => 'La Distribution Admin', 'path' => 'admin'));
-    out('Install Admin OK');
+    $admin = $site->createInstance('admin', array('title' => 'Administration', 'path' => 'admin'));
+    out('Administration installed');
 } else {
     $site->updateInstance($admin);
     // Localise admin
     if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_RELEASE') != 'barbes') {
         $packageId = "admin-locale-" . str_replace('_', '-', strtolower(LD_LOCALE));
-        // should be replaced by hasExtension after Barbes
-        try {
-            $admin->getExtension($packageId);
-        } catch (Exception $e) {
-            $admin->addExtension($packageId);
-        }
+        $admin->hasExtension($packageId) ? $admin->updateExtension($packageId) : $admin->addExtension($packageId);
     }
-    out('Update Admin OK');
+    out('Administration up to date');
 }
 
-out('Everything OK. <a href="' . $admin->getUrl() . '">Go to admin</a>.');
+out('Installation finished. Please, continue to <a href="' . $admin->getUrl() . '">the administration panel</a>.');
 
 // Catch
 
 } catch (Exception $e) {
 
-    out( 'FAIL: ' . $e->getMessage() );
+    out($e->getMessage(), 'error');
 
 }

@@ -22,7 +22,11 @@ class Ld_Plugin_Akismet
     public function status()
     {
         if ($api_key = $this->get_api_key()) {
-            return array(self::STATUS_OK, sprintf(Ld_Translate::translate('%s is configured and running.'), 'Akismet'));
+            $service_akismet = new Zend_Service_Akismet($api_key, Zend_Registry::get('site')->getUrl());
+            if ($service_akismet->verifyKey()) {
+                return array(self::STATUS_OK, sprintf(Ld_Translate::translate('%s is configured and running.'), 'Akismet'));
+            }
+            return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('Akismet API key is invalid.'), 'Akismet'));
         }
         return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('%s is not running. Check your configuration to enable it.'), 'Akismet'));
     }

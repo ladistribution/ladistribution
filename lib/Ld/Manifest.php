@@ -24,11 +24,11 @@ class Ld_Manifest
     public static function loadFromDirectory($dir)
     {
         $filename = $dir . '/dist/manifest.xml';
-        if (!Ld_Files::exists($filename)) {
-            $filename = $dir . '/manifest.xml'; // alternate name
-        }
+        $alternateFilename = $dir . '/manifest.xml';
         if (Ld_Files::exists($filename)) {
             return self::parse($filename);
+        } else if (Ld_Files::exists($alternateFilename)) {
+            return self::parse($alternateFilename);
         } else {
             throw new Exception("manifest.xml doesn't exists or is unreadable in $dir");
         }
@@ -45,7 +45,7 @@ class Ld_Manifest
 
     public static function parse($filename)
     {
-        $rawXml = Ld_Files::get($filename);
+        $rawXml = Ld_Files::get($filename, true);
 
         try {
             $xml = new SimpleXMLElement($rawXml);
@@ -207,7 +207,7 @@ class Ld_Manifest
         if (isset($this->xml->installer)) {
             return (string)$this->xml->installer['name'];
         }
-        return 'Ld_Installer_' . ucfirst($this->getId());
+        return 'Ld_Installer_' . Zend_Filter::filterStatic($this->getId(), 'Word_DashToCamelCase');
     }
 
 }

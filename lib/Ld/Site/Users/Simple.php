@@ -74,9 +74,11 @@ class Ld_Site_Users_Simple
         return null;
     }
 
-    public function addUser($user)
+    public function addUser($user, $validate = true)
     {
-        $this->validateUser($user);
+        if ($validate) {
+            $this->validateUser($user);
+        }
 
         $hasher = new Ld_Auth_Hasher(8, TRUE);
 

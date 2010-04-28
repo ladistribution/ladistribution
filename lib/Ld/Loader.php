@@ -68,6 +68,8 @@ class Ld_Loader
 
     public static function loadSite($dir)
     {
+        $dir = realpath($dir);
+
         if (!self::$constantsDefined) {
             self::defineConstants($dir);
         }

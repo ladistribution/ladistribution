@@ -46,3 +46,14 @@ foreach ($this->plugins as $id => $plugin) {
 <input type="submit" class="submit button" value="<?php echo $this->translate("Update") ?>"/>
 
 </form>
+
+<script type="text/javascript">
+Ld.dataTables = function($)
+{
+    $(".h6e-data tbody").each(function() {
+        $(this).children('tr').each(function(i) {
+            if (i % 4 == 2) $(this).addClass('th2');
+        });
+    })
+}
+</script>
