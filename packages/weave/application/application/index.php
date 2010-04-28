@@ -5,7 +5,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title><?php echo Zend_Registry::get('instance')->getName() ?></title>
+<title><?php echo $application->getName() ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="<?php echo Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal') ?>"
     media="screen" rel="stylesheet" type="text/css"/>
@@ -14,7 +14,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 <style type="text/css">
 #weave-logo {
     height:131px;
-    background:url(<?php echo Zend_Registry::get('instance')->getUrl() ?>logo.png) top center no-repeat;
+    background:url(<?php echo $application->getUrl() ?>logo.png) top center no-repeat;
     text-indent:-9999px;
 }
 .h6e-main-content {
@@ -30,11 +30,11 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
 <?php Ld_Ui::topBar(); ?>
 
-<div class="h6e-main-content">
+<div class="ld-main-content h6e-main-content">
 
   <div class="h6e-page-content">
 
-      <h1 id="weave-logo"><?php echo Zend_Registry::get('instance')->getName() ?></h1>
+      <h1 id="weave-logo"><?php echo $application->getName() ?></h1>
 
       <div class="h6e-post-content">
 
@@ -42,11 +42,11 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <h2>Infos</h2>
 
-          <p>Your Custom Server URL is: <strong><?php echo Zend_Registry::get('instance')->getUrl(); ?></strong></p>
-
           <p>This Weave instance is: <strong>available for registered users only</strong>.</p>
 
-          <h2>Your datas</h2>
+          <p>The Custom Server URL is: <strong><?php echo Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
+
+          <h2>Your data</h2>
 
           <?php $clients = ld_weave_count('clients'); if ($clients > 0) : ?>
 
@@ -65,7 +65,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <?php else : ?>
 
-              <p>You don't have any Weave datas stored on this server yet.</p>
+              <p>You don't have any data stored on this server yet.</p>
 
           <?php endif ?>
 

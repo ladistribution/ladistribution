@@ -1,6 +1,6 @@
 NAME="weave"
 VERSION="1.0"
-REVISION_SYNC="1579e64c47ef"
+REVISION_SYNC="2f6ab12871b8"
 SOURCE_REGISTRATION="http://hg.mozilla.org/labs/weaveserver-registration"
 SOURCE_SYNC="http://hg.mozilla.org/labs/weaveserver-sync"
 FOLDER="application"
