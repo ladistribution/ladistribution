@@ -3,31 +3,10 @@
 Plugin Name: LD auth
 Plugin URI: http://h6e.net/wordpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.2-29-1
+Version: 0.4.2
 Author: h6e.net
 Author URI: http://h6e.net/
 */
-
-function ld_autologin_user()
-{
-	if (!is_user_logged_in()) {
-		if (Ld_Auth::isAuthenticated()) {
-			$user = get_userdatabylogin(Ld_Auth::getUsername());
-			if (isset($user)) {
-				wp_set_current_user($user->ID, $user->user_login);
-			}
-		}
-	}
-}
-
-add_action('plugins_loaded', 'ld_autologin_user', 3);
-
-function ld_logout()
-{
-    Ld_Auth::logout();
-}
-
-add_action('wp_logout', 'ld_logout');
 
 class Ld_Auth_Adapter_Wordpress implements Zend_Auth_Adapter_Interface
 {
@@ -35,7 +14,7 @@ class Ld_Auth_Adapter_Wordpress implements Zend_Auth_Adapter_Interface
 	{
 		if (is_user_logged_in()) {
 			$user = wp_get_current_user();
-			$ld_user = Zend_Registry::get('site')->getUser($wp_user->user_login);
+			$ld_user = Ld_Wordpress_Auth::get_ld_user($wp_user->user_login);
 			if ($ld_user) {
 				return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $ld_user['username']);
 			}
@@ -44,17 +23,116 @@ class Ld_Auth_Adapter_Wordpress implements Zend_Auth_Adapter_Interface
 	}
 }
 
-function ld_handle_current_user()
+class Ld_Wordpress_Auth
 {
-	/* authenticate on the LD session if not connected in LD but in WP */
-	if (is_user_logged_in() && !Ld_Auth::isAuthenticated()) {
-		$auth = Zend_Auth::getInstance();
-		$adapter = new Ld_Auth_Adapter_Wordpress();
-		$auth->authenticate($adapter);
-	}	
+
+	function site()
+	{
+		return Zend_Registry::get('site');
+	}
+
+	function auto_login()
+	{
+		if (!is_user_logged_in()) {
+			if (Ld_Auth::isAuthenticated()) {
+				$user = get_userdatabylogin(Ld_Auth::getUsername());
+				if (isset($user)) {
+					wp_set_current_user($user->ID, $user->user_login);
+				}
+			}
+		}
+	}
+
+	function logout()
+	{
+		Ld_Auth::logout();
+	}
+
+	function set_current_user()
+	{
+		if (is_user_logged_in() && !Ld_Auth::isAuthenticated()) {
+			$auth = Zend_Auth::getInstance();
+			$adapter = new Ld_Auth_Adapter_Wordpress();
+			$auth->authenticate($adapter);
+		}
+	}
+
+	function get_user_by_openid( $openid , $id = null )
+	{
+		$ld_user = self::site()->getUserByUrl($openid);
+		if ($ld_user) {
+			$user = get_userdatabylogin($ld_user['username']);
+			return $user->ID;
+		}
+		return $id;
+	}
+
+	function get_ld_user($user_login)
+	{
+		$ld_user = self::site()->getUser($user_login);
+		return $ld_user;
+	}
+
+	function get_wp_user($user_id)
+	{
+		global $wpdb;
+
+		if ( !$wp_user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE ID = %d LIMIT 1", $user_id)) )
+			return false;
+
+		$user = array(
+			'hash' 		=> $wp_user->user_pass,
+			'username' 	=> $wp_user->user_login,
+			'fullname' 	=> $wp_user->display_name,
+			'email'		=> $wp_user->user_email
+		);
+
+		return $user;
+	}
+
+	function user_register($user_id)
+	{
+		$user = self::get_wp_user($user_id);
+		$user['origin'] = 'Wordpress:register';
+		self::site()->addUser($user, false);
+	}
+
+	function profile_update($user_id)
+	{
+		$user = self::get_wp_user($user_id);
+		self::site()->updateUser($user['username'], $user);
+	}
+
+	function login_url($login_url = '', $redirect = '')
+	{
+		if (class_exists('Ld_Ui')) {
+			$login_url = Ld_Ui::getAdminUrl(array(
+				'module' => 'default', 'controller' => 'auth', 'action' => 'login',
+				'referer' => empty($redirect) ? null : urlencode($redirect)
+			));
+		}
+		return $login_url;
+	}
+
 }
 
-add_action('set_current_user', 'ld_handle_current_user');
+// Hooks
+
+add_action('plugins_loaded', array('Ld_Wordpress_Auth', 'auto_login'), 3);
+
+add_action('wp_logout', array('Ld_Wordpress_Auth', 'logout'));
+
+add_action('set_current_user', array('Ld_Wordpress_Auth', 'set_current_user'));
+
+add_filter('openid_get_user_by_openid', array('Ld_Wordpress_Auth', 'get_user_by_openid'));
+
+add_action('user_register', array('Ld_Wordpress_Auth', 'user_register'));
+
+add_action('profile_update', array('Ld_Wordpress_Auth', 'profile_update'));
+
+add_filter('login_url', array('Ld_Wordpress_Auth', 'login_url'));
+
+// Replacable WordPress functions
 
 if ( !function_exists('auth_redirect') ) :
 function auth_redirect()
@@ -107,8 +185,9 @@ function get_userdata( $user_id )
 
 	if ( !$wp_user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE ID = %d LIMIT 1", $user_id)) )
 		return false;
-	
-	$ld_user = Zend_Registry::get('site')->getUser($wp_user->user_login);
+
+	$ld_user = Ld_Wordpress_Auth::get_ld_user($wp_user->user_login);
+
 	if ($ld_user) {
 		$wp_user->user_pass  		= $ld_user['hash'];
 		$wp_user->user_nicename		= $ld_user['username'];
@@ -119,8 +198,6 @@ function get_userdata( $user_id )
 
 	_fill_user($wp_user);
 	return $wp_user;
-
-	// wp_die( __('get_userdata: User not found in LD user backend.') );
 }
 endif;
 
@@ -133,8 +210,8 @@ function get_userdatabylogin( $user_login )
 
 	if ( empty( $user_login ) )
 		return false;
-	
-	$ld_user = Zend_Registry::get('site')->getUser($user_login);
+
+	$ld_user = Ld_Wordpress_Auth::get_ld_user($user_login);
 
 	if ($ld_user) {
 
@@ -169,57 +246,8 @@ function get_userdatabylogin( $user_login )
 	}
 
 	return false;
-	// wp_die( __('get_userdatabylogin: User not found in LD user backend.') );
 }
 endif;
-
-function ld_get_user_by_openid( $openid , $id = null )
-{
-	foreach (Zend_Registry::get('site')->getUsers() as $ld_user) {
-		foreach ($ld_user['identities'] as $identity) {
-			if ($identity == $openid) {
-				$user = get_userdatabylogin($ld_user['username']);
-				return $user->ID;
-			}
-		}
-	}
-	return $id;
-}
-
-add_filter('openid_get_user_by_openid', 'ld_get_user_by_openid');
-
-function ld_get_wp_user($user_id)
-{
-	global $wpdb;
-
-	if ( !$wp_user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE ID = %d LIMIT 1", $user_id)) )
-		return false;
-
-	$user = array(
-		'hash' 		=> $wp_user->user_pass,
-		'username' 	=> $wp_user->user_login,
-		'fullname' 	=> $wp_user->display_name,
-		'email'		=> $wp_user->user_email
-	);
-	
-	return $user;
-}
-
-function ld_user_register($user_id)
-{
-	$user = ld_get_wp_user($user_id);
-	Zend_Registry::get('site')->addUser($user);
-}
-
-add_action('user_register', 'ld_user_register');
-
-function ld_profile_update($user_id)
-{
-	$user = ld_get_wp_user($user_id);
-	Zend_Registry::get('site')->updateUser($user['username'], $user);
-}
-
-add_action('profile_update', 'ld_profile_update');
 
 if ( !function_exists('wp_set_password') ) :
 function wp_set_password( $password, $user_id ) {
@@ -227,33 +255,6 @@ function wp_set_password( $password, $user_id ) {
 	$hash = wp_hash_password($password);
 	$wpdb->update($wpdb->users, array('user_pass' => $hash, 'user_activation_key' => ''), array('ID' => $user_id) );
 	wp_cache_delete($user_id, 'users');
-	ld_profile_update($user_id);
+	Ld_Wordpress_Auth::profile_update($user_id);
 }
 endif;
-
-function ld_loginurl($login_url = '', $redirect = '')
-{
-	if (class_exists('Ld_Ui')) {
-		$ld_login_url = Ld_Ui::getAdminUrl(array(
-			'module' => 'default', 'controller' => 'auth', 'action' => 'login',
-			'referer' => empty($redirect) ? null : urlencode($redirect)
-		));
-	}
-	if ($ld_login_url) {
-	    return $ld_login_url;
-	}
-	return $login_url;
-}
-
-add_filter('login_url', 'ld_loginurl');
-
-// function ld_logouturl($logout_url = '', $redirect = '')
-// {
-//  $logout_url = Ld_Ui::getAdminUrl(array(
-//      'module' => 'default', 'controller' => 'auth', 'action' => 'logout',
-//      'referer' => empty($redirect) ? null : urlencode($redirect)
-//  ));
-//  return $logout_url;
-// }
-// 
-// add_filter('logout_url', 'ld_logouturl');

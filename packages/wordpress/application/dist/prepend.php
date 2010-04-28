@@ -28,6 +28,13 @@ if (isset($locale) && $locale != 'auto') {
 	define('WPLANG', $locale);	
 }
 
+if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
+	define('WP_DEBUG', true);
+	define('SCRIPT_DEBUG', true);
+	define('COMPRESS_SCRIPTS', false);
+	define('CONCATENATE_SCRIPTS', false);
+}
+
 if (!defined('WP_CACHE')
 	&& file_exists(ABSPATH . 'wp-content/advanced-cache.php')
 	&& filesize(ABSPATH . 'wp-content/advanced-cache.php') > 0) {
@@ -37,6 +44,3 @@ if (!defined('WP_CACHE')
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Wordpress:prepend');
 }
-
-require_once 'Ld/Files.php';
-Ld_Files::includes(dirname(__FILE__) . '/prepend/');

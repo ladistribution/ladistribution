@@ -66,14 +66,19 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		$this->populate_sidebar_widgets();
 
-		update_option('active_plugins', array());
+		$plugins = array(
+			'ld.php',
+			'ld-ui.php',
+			'ld-auth.php',
+			'ld-css.php',
+			'akismet/akismet.php'
+		);
 
-		activate_plugin('ld.php');
-		activate_plugin('ld-ui.php');
-		activate_plugin('ld-auth.php');
-		activate_plugin('ld-css.php');
+		foreach ($plugins as $plugin) {
+			activate_plugin($plugin);
+		}
 
-		activate_plugin('akismet/akismet.php');
+		update_option('active_plugins', $plugins);
 
 		if (isset($preferences['theme'])) {
 			$this->setTheme($preferences['theme']);
@@ -88,10 +93,6 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		$this->httpClient->setCookieJar();
 		$this->httpClient->setUri($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
 		$response = $this->httpClient->request('GET');
-
-		$this->load_wp();
-
-		activate_plugin('akismet/akismet.php');
 	}
 
 	function create_config_file()
@@ -205,6 +206,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		$themes = $this->getThemes();
 		$theme = $themes[$stylesheet];
 		switch_theme($theme['template'], $stylesheet);
+		update_option('current_theme', $theme['Name']);
 	}
 
 	public function getPreferences($type)
@@ -257,6 +259,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			}
 			$configuration[$option->option_name] = $option->option_value;
 		}
+		$instance = $this->getInstance();
+		if (empty($configuration['name']) && isset($instance)) {
+			$configuration['name'] = $this->getInstance()->getName();
+		}
 		return $configuration;
 	}
 
@@ -275,8 +281,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			update_option($option, $value);
 		}
 
-		if (isset($configuration['blogname']) && isset($this->instance)) {
-			$this->instance->setInfos(array('name' => $configuration['blogname']))->save();
+		if (isset($configuration['name']) && isset($this->instance)) {
+			$this->instance->setInfos(array('name' => $configuration['name']))->save();
 		}
 
 		if (isset($configuration['lang']) && isset($this->instance)) {
@@ -389,10 +395,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	function populate_sidebar_widgets()
 	{
 		$defaults = array(
-			'sidebar-1' => array(
-				'search', 'pages', 'archives', 'categories', 'links', 'meta'
+			'wp_inactive_widgets' => array(
 			),
-			'sidebar-2' => array(
+			'primary-widget-area' => array(
+				0 => 'search-2', 1 => 'pages', 2 => 'archives-2', 3 => 'categories-2', 4 => 'links', 5 => 'meta-2'
 			),
 			'array_version' => 3
 		);
@@ -405,7 +411,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 {
 
-	private function load_wp()
+	protected function load_wp()
 	{
 		if (empty($this->loaded)) {
 			define('WP_LD_INSTALLER', true);

@@ -3,51 +3,82 @@
 Plugin Name: LD package
 Plugin URI: http://h6e.net/wordpress/plugins/ld-package
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.3-50-5
+Version: 0.4.2
 Author: h6e.net
 Author URI: http://h6e.net/
 */
 
-register_activation_hook('ld.php', 'ld_activate_plugin');
+function ld_handle_capabilities()
+{    
+	global $wp_roles;
+	if (empty($wp_roles)) {
+		return;
+	}
 
-register_deactivation_hook('ld.php', 'ld_deactivate_plugin');
-
-function ld_get_disabled_admin_capabilities()
-{
-	$capabilities = array(
-		// plugins
-		// 'activate_plugins',
+	$disable_admin_caps = array(
+		// 'activate_plugins', 'edit_themes',
 		'edit_plugins', 'install_plugins', 'delete_plugins', 'update_plugins',
-		// themes
-		// 'edit_themes',
 		'install_themes', 'delete_themes', 'update_themes',
-		// users
 		'create_users', 'edit_users', 'delete_users'
 	);
-	return $capabilities;
-}
+	$disable_admin_caps = apply_filters('ld_disable_admin_caps', $disable_admin_caps);
+	
+	$enable_admin_caps = array(
+		'activate_plugins',
+		'edit_themes'
+	);
+	$enable_admin_caps = apply_filters('ld_enable_admin_caps', $enable_admin_caps);
 
-function ld_activate_plugin()
-{
-	global $wp_roles;
+	$ld_disabled_admin_caps = get_option('ld_disabled_admin_caps');
+	if (empty($ld_disabled_admin_caps)) {
+		$ld_disabled_admin_caps = $disable_admin_caps;
+		update_option('ld_disabled_admin_caps', $ld_disabled_admin_caps);
+	}
+
 	$role = $wp_roles->get_role('administrator');
 	if ($role) {
-		foreach (ld_get_disabled_admin_capabilities() as $cap) {
-			$role->remove_cap($cap);
+		foreach ($disable_admin_caps as $cap) {
+			if ($role->has_cap($cap)) {
+				$role->remove_cap($cap);
+				$ld_disabled_admin_caps[] = $cap;
+				update_option('ld_disabled_admin_caps', array_unique($ld_disabled_admin_caps));
+			}
+		}
+		foreach ($enable_admin_caps as $cap) {
+			if (!$role->has_cap($cap)) {
+				$role->add_cap($cap);
+			}
 		}
 	}
 }
 
+add_action('plugins_loaded', 'ld_handle_capabilities');
+
+function ld_handle_registration()
+{
+	if (Zend_Registry::isRegistered('site')) {
+		$site = Zend_Registry::get('site');
+		$users_can_register = $site->getConfig('open_registration', 0);
+		update_option('users_can_register', $users_can_register);
+	}	
+}
+
+add_action('plugins_loaded', 'ld_handle_registration');
+
 function ld_deactivate_plugin()
 {
+	$ld_disabled_admin_caps = (array)get_option('ld_disabled_admin_caps');
+
 	global $wp_roles;
 	$role = $wp_roles->get_role('administrator');
 	if ($role) {
-		foreach (ld_get_disabled_admin_capabilities() as $cap) {
+		foreach ($ld_disabled_admin_caps as $cap) {
 			$role->add_cap($cap);
 		}
 	}
 }
+
+register_deactivation_hook('ld.php', 'ld_deactivate_plugin');
 
 function ld_disable_admin_notices()
 {
@@ -61,21 +92,35 @@ function ld_disable_version_check()
 {
 	remove_action( 'init', 'wp_version_check' );
 
-	remove_action( 'load-plugins.php', 'wp_update_plugins' );
-	remove_action( 'load-update.php', 'wp_update_plugins' );
-	remove_action( 'admin_init', '_maybe_update_plugins' );
-	remove_action( 'wp_update_plugins', 'wp_update_plugins' );
-	
-	remove_action( 'load-themes.php', 'wp_update_themes' );
-	remove_action( 'load-update.php', 'wp_update_themes' );
-	remove_action( 'admin_init', '_maybe_update_themes' );
-	remove_action( 'wp_update_themes', 'wp_update_themes' );
-	
-	wp_clear_scheduled_hook('wp_update_plugins');
-	wp_clear_scheduled_hook('wp_update_themes');
+	$ld_plugin_update = apply_filters('ld_plugin_update', false);
+	if (!$ld_plugin_update) {
+		remove_action( 'load-plugins.php', 'wp_update_plugins' );
+		remove_action( 'load-update.php', 'wp_update_plugins' );
+		remove_action( 'load-update-core.php', 'wp_update_plugins' );
+		remove_action( 'admin_init', '_maybe_update_plugins' );
+		remove_action( 'wp_update_plugins', 'wp_update_plugins' );
+		wp_clear_scheduled_hook('wp_update_plugins');
+	}
+
+	$ld_theme_update = apply_filters('ld_theme_update', false);
+	if (!$ld_theme_update) {
+		remove_action( 'load-themes.php', 'wp_update_themes' );
+		remove_action( 'load-update.php', 'wp_update_themes' );
+		remove_action( 'load-update-core.php', 'wp_update_themes' );
+		remove_action( 'admin_init', '_maybe_update_themes' );
+		remove_action( 'wp_update_themes', 'wp_update_themes' );
+		wp_clear_scheduled_hook('wp_update_themes');
+	}
 }
 
 add_action('plugins_loaded', 'ld_disable_version_check');
+
+function ld_admin_menu_before()
+{
+	remove_action('admin_menu', 'akismet_stats_page');
+}
+
+add_action('admin_menu', 'ld_admin_menu_before', 1);
 
 function ld_admin_menu()
 {
@@ -95,8 +140,7 @@ function ld_admin_menu()
 		'tools.php',
 		'themes.php', 'theme-editor.php', 'theme-install.php',
 		'update-core.php',
-		'options-misc.php',
-		'akismet-stats-display'
+		'options-misc.php'
 	);
 	$disable_submenus = apply_filters('ld_disable_submenus', $disable_submenus);
 
@@ -110,12 +154,12 @@ function ld_admin_menu()
 	}
 }
 
-add_action('admin_menu', 'ld_admin_menu', '20');
+add_action('admin_menu', 'ld_admin_menu', 102);
 
 /**
  * Don't load default widgets when interacting from Ld Installer.
  *
- * This was causing problem with the $wp_widget_factory global.
+ * This is causing problem with the $wp_widget_factory global.
  */
 function ld_load_default_widgets($default = true)
 {
@@ -156,10 +200,10 @@ add_filter('option_home', 'ld_option_home');
 
 function ld_locale($locale = '')
 {
-    if (empty($locale) || $locale == 'auto') {
-        return 'en_US';
-    }
-    return $locale;
+	if (empty($locale) || $locale == 'auto') {
+		return 'en_US';
+	}
+	return $locale;
 }
 
 add_filter('locale', 'ld_locale');

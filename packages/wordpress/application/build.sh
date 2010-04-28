@@ -1,6 +1,7 @@
 NAME="wordpress"
-VERSION="2.9.2"
-SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
+VERSION="3.0.0"
+# SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
+SOURCE='http://core.svn.wordpress.org/trunk/'
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
@@ -25,7 +26,8 @@ rm -rf $FOLDER/wp-content/themes/classic
 rm -rf $FOLDER/wp-content/themes/default
 
 # Get i18ned default theme
-svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "themes/default" --force
+# svn export "http://svn.automattic.com/wordpress-i18n/theme/tags/$VERSION/" "themes/default" --force
+svn export "http://svn.automattic.com/wordpress-i18n/theme/trunk/" "themes/default" --force
 
 # Get Minimal Theme
 git clone git://github.com/znarf/wordpress-minimal.git themes/minimal
@@ -42,8 +44,8 @@ rm $FOLDER/wp-admin/import/utw.php
 rm $FOLDER/wp-admin/import/wp-cat2tag.php
 
 # Apply patches
-patch -p0 -d $FOLDER < patches/unserialize-import.diff
-patch -p0 -d $FOLDER < patches/menu-header.diff
+# patch -p0 -d $FOLDER < patches/unserialize-import.diff
+# patch -p0 -d $FOLDER < patches/menu-header.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete

@@ -3,7 +3,7 @@
 Plugin Name: LD custom css
 Plugin URI: http://h6e.net/wordpress/plugins/ld-css
 Description: Let the user add custom CSS rules to his blog
-Version: 0.2-27-6
+Version: 0.4.2
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -17,7 +17,7 @@ Author URI: http://h6e.net/
 
 load_plugin_textdomain('ld', null, 'ld');
 
-add_action('admin_menu', 'ld_custom_css_menu');
+add_action('admin_menu', 'ld_custom_css_menu', 102);
 add_action('wp_head', 'ld_custom_css');
 
 function ld_custom_css()
@@ -29,7 +29,7 @@ function ld_custom_css()
 
 function ld_custom_css_menu()
 {
-	add_theme_page(__('Custom CSS', 'ld'), __('Custom CSS', 'ld'), 'switch_themes', __FILE__, 'ld_custom_css_edit');
+	add_theme_page(__('Custom CSS', 'ld'), __('Custom CSS', 'ld'), 'edit_theme_options', __FILE__, 'ld_custom_css_edit');
 }
 
 function ld_custom_css_edit()
