@@ -678,7 +678,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $preference['type'] = 'list';
                 $preference['options'] = array();
                 foreach ($users as $id => $user) {
-                    $preference['options'][] = array('value' => $user['username'], 'label' => isset($user['fullname']) ? $user['fullname'] : $user['username']) ;
+                    $preference['options'][] = array('value' => $user['username'], 'label' => !empty($user['fullname']) ? $user['fullname'] : $user['username']) ;
                 }
                 if (Ld_Auth::isAuthenticated()) {
                     $preference['defaultValue'] = Ld_Auth::getUsername();

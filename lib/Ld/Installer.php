@@ -397,6 +397,9 @@ class Ld_Installer
         if (empty($configuration['name']) && isset($instance)) {
             $configuration['name'] = $this->getInstance()->getName();
         }
+        if (empty($configuration['locale']) && isset($instance)) {
+            $configuration['locale'] = $this->getInstance()->getLocale();
+        }
         return $configuration;
     }
 
@@ -405,6 +408,9 @@ class Ld_Installer
         $instance = $this->getInstance();
         if (isset($configuration['name']) && isset($instance)) {
             $instance->setInfos(array('name' => $configuration['name']))->save();
+        }
+        if (isset($configuration['locale']) && isset($this->instance)) {
+            $this->instance->setInfos(array('locale' => $configuration['locale']))->save();
         }
         Ld_Files::putJson($this->getAbsolutePath() . '/dist/configuration.json', $configuration);
         return $configuration;

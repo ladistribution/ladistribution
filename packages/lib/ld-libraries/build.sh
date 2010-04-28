@@ -12,6 +12,7 @@ svn export $SOURCE $FOLDER
 
 # Export from SVN
 svn export "http://ladistribution.net/svn/trunk/shared/locales/ld" locales
+rm -rf locales/fr_FR
 
 # we have to do that this way, because of limitations in old version of Ld Libraries
 # mkdir shared

@@ -206,7 +206,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		$themes = $this->getThemes();
 		$theme = $themes[$stylesheet];
 		switch_theme($theme['template'], $stylesheet);
-		update_option('current_theme', $theme['Name']);
+		update_option('current_theme', $theme['name']);
 	}
 
 	public function getPreferences($type)

@@ -191,9 +191,9 @@ function get_userdata( $user_id )
 	if ($ld_user) {
 		$wp_user->user_pass  		= $ld_user['hash'];
 		$wp_user->user_nicename		= $ld_user['username'];
-		$wp_user->display_name		= $ld_user['fullname'];
 		$wp_user->nickname			= $ld_user['username'];
 		$wp_user->user_email		= $ld_user['email'];
+		$wp_user->display_name		= !empty($ld_user['fullname']) ? $ld_user['fullname'] : $ld_user['username'];
 	}
 
 	_fill_user($wp_user);

@@ -10,7 +10,7 @@ class Ld_Plugin_BadBehavior
             'url' => 'http://ladistribution.net/wiki/plugins/#bad-behavior',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.3',
+            'version' => '0.5.0.4',
             'description' => Ld_Translate::translate('Detects and automatically blocks unwanted accesses to the site.'),
             'license' => 'MIT / GPL'
         );
@@ -88,6 +88,6 @@ function bb2_db_escape($string) { return $string; }
 function bb2_db_num_rows($result) { return ($result === FALSE) ? 0 : count($result); }
 function bb2_db_query($query) { return false; }
 function bb2_db_rows($result) { return $result; }
-function bb2_email() { return "badbots@ioerror.us"; }
+function bb2_email() { return "spam@ladistribution.net"; }
 function bb2_insert($settings, $package, $key) { return false; }
 function bb2_banned_callback($settings, $package, $key) { Ld_Plugin_BadBehavior::log($settings, $package, $key); }

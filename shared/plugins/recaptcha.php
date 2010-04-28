@@ -10,7 +10,7 @@ class Ld_Plugin_Recaptcha
             'url' => 'http://ladistribution.net/wiki/plugins/#recaptcha',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.3',
+            'version' => '0.5.0.4',
             'description' => Ld_Translate::translate('Integrate reCAPTCHA to registration forms.'),
             'license' => 'MIT / GPL'
         );
@@ -23,7 +23,7 @@ class Ld_Plugin_Recaptcha
     {
         $recaptcha = $this->getService();
         if (empty($recaptcha)) {
-            return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('%s is not running. Check your configuration to enable it.'), 'reCAPTCHA'));
+            return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('%s is not running. Complete your configuration to enable it.'), 'reCAPTCHA'));
         }
         // would be cool to check api key validity here
         return array(self::STATUS_OK, sprintf(Ld_Translate::translate('%s is configured and running.'), 'reCAPTCHA'));

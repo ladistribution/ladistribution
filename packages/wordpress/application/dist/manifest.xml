@@ -25,7 +25,7 @@
   <install>
       <preference type="user" label="Administrator" name="administrator"/>
       <preference type="lang" label="Language" name="lang"/>
-      <preference type="hidden" name="theme" defaultValue="ld-minimal"/>
+      <preference type="hidden" name="theme" defaultValue="minimal"/>
   </install>
   <!--
   <install>

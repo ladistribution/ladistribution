@@ -35,7 +35,7 @@ foreach ($languages as $id => $language) {
 
 $config['site']['languages'] = $languages;
 
-$locale = $configuration['locale'];
+$locale = $application->getLocale();
 if ($locale == 'auto' && isset($_COOKIE['ld-lang'])) {
 	$locale = $_COOKIE['ld-lang'];
 }

@@ -96,7 +96,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         $cfg_local  = "<?php\n";
         foreach ($conf as $key => $value) {
             if ($key == 'lang' && $value == 'auto') {
-                continue;
+                $value = 'en';
             }
             if ($key == 'tpl') {
                 foreach ($value as $tpl_id => $tpl) {
@@ -198,7 +198,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     {
         $dirs = Ld_Files::getDirectories($this->getAbsolutePath() . '/inc/lang/');
         $options = array();
-        // $options[] = array('label' => 'auto', 'value' => 'auto');
+        $options[] = array('label' => 'auto', 'value' => 'auto');
         foreach ($dirs as $lang) {
             if ($lang == 'dist') {
                 continue;

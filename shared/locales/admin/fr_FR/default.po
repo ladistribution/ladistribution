@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-27 14:27+0100\n"
+"POT-Creation-Date: 2010-04-29 00:15+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -806,23 +806,23 @@ msgstr "Ajouter un nouvel utilisateur"
 msgid "Add registered users to the list"
 msgstr "Ajouter des utilisateurs enregistrés à la liste"
 
-#: shared/modules/default/controllers/AuthController.php:94
+#: shared/modules/default/controllers/AuthController.php:96
 msgid "Registration is closed."
 msgstr "L'enregistrement est fermé."
 
-#: shared/modules/default/controllers/AuthController.php:120
+#: shared/modules/default/controllers/AuthController.php:123
 msgid "Username can't be empty."
 msgstr "Le nom d'utilisateur ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:122
+#: shared/modules/default/controllers/AuthController.php:125
 msgid "Email can't be empty."
 msgstr "L'email ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:124
+#: shared/modules/default/controllers/AuthController.php:127
 msgid "Password can't be empty."
 msgstr "Le mot de passe ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:126
+#: shared/modules/default/controllers/AuthController.php:129
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
 
@@ -844,19 +844,19 @@ msgstr "Bases de données"
 msgid "New"
 msgstr "Nouveau"
 
-#: shared/modules/slotter/controllers/SettingsController.php:46
+#: shared/modules/slotter/controllers/SettingsController.php:47
 msgid "Site Name"
 msgstr "Nom du site"
 
-#: shared/modules/slotter/controllers/SettingsController.php:58
+#: shared/modules/slotter/controllers/SettingsController.php:59
 msgid "Anyone can register?"
 msgstr "Tout le monde peut s'enregistrer ?"
 
-#: shared/modules/slotter/controllers/SettingsController.php:68
+#: shared/modules/slotter/controllers/SettingsController.php:69
 msgid "Default Application"
 msgstr "Application par défaut"
 
-#: shared/modules/slotter/controllers/SettingsController.php:73
+#: shared/modules/slotter/controllers/SettingsController.php:74
 msgid "Admin path on root?"
 msgstr "Chemin vers l'admin à la racine ?"
 
@@ -896,20 +896,24 @@ msgstr "Paramètres"
 msgid "Checks user submitted content with Akismet to see if it look like spam."
 msgstr "Vérifie le contenu soumis par les utilisateurs avec Akismet pour voir si ca ressemble à du spam."
 
-#: shared/plugins/akismet.php:25
+#: shared/plugins/akismet.php:27
 #: shared/plugins/memcache.php:40
-#: shared/plugins/recaptcha.php:28
+#: shared/plugins/recaptcha.php:29
 #, php-format
 msgid "%s is configured and running."
 msgstr "%s est configuré et activé."
 
-#: shared/plugins/akismet.php:27
+#: shared/plugins/akismet.php:29
+msgid "Akismet API key is invalid."
+msgstr "La clé d'API Akismet est invalide."
+
+#: shared/plugins/akismet.php:31
 #: shared/plugins/recaptcha.php:26
 #, php-format
-msgid "%s is not running. Check your configuration to enable it."
-msgstr "%s ne fonctionne pas actuellement. Vérifier votre configuration pour l'activer."
+msgid "%s is not running. Complete your configuration to enable it."
+msgstr "%s ne fonctionne pas. Complétez votre configuration pour l'activer."
 
-#: shared/plugins/akismet.php:33
+#: shared/plugins/akismet.php:37
 msgid "Akismet API key"
 msgstr "Clé d'API Akismet"
 
@@ -943,20 +947,22 @@ msgstr "Serveurs Memcache"
 msgid "Integrate reCAPTCHA to registration forms."
 msgstr "Intègre reCAPTCHA aux formulaires d'enregistrement."
 
-#: shared/plugins/recaptcha.php:60
+#: shared/plugins/recaptcha.php:62
 msgid "reCAPTCHA Public key"
 msgstr "Clé publique reCAPTCHA"
 
-#: shared/plugins/recaptcha.php:63
+#: shared/plugins/recaptcha.php:65
 msgid "reCAPTCHA Private key"
 msgstr "Clé privée reCAPTCHA"
 
-#: shared/plugins/recaptcha.php:123
+#: shared/plugins/recaptcha.php:83
+#: shared/plugins/recaptcha.php:124
+#: shared/plugins/recaptcha.php:182
 msgid "Are you human?"
 msgstr "Êtes-vous humain ?"
 
-#: shared/plugins/recaptcha.php:137
-#: shared/plugins/recaptcha.php:204
+#: shared/plugins/recaptcha.php:138
+#: shared/plugins/recaptcha.php:205
 msgid "The reCAPTCHA response was incorrect."
 msgstr "La réponse reCAPTCHA est incorrecte."
 
@@ -964,19 +970,19 @@ msgstr "La réponse reCAPTCHA est incorrecte."
 msgid "Make SSL policy definable."
 msgstr "Permet de définir la politique SSL."
 
-#: shared/plugins/ssl.php:31
+#: shared/plugins/ssl.php:32
 msgid "HTTPS support"
 msgstr "Support HTTPS"
 
-#: shared/plugins/ssl.php:33
+#: shared/plugins/ssl.php:34
 msgid "None (not available)"
 msgstr "Aucun (non disponible)"
 
-#: shared/plugins/ssl.php:34
+#: shared/plugins/ssl.php:35
 msgid "Sometimes (available, used for sensitive pages)"
 msgstr "Des fois (disponible, utilisé pour les pages sensibles)"
 
-#: shared/plugins/ssl.php:35
+#: shared/plugins/ssl.php:36
 msgid "Always (available, used everywhere)"
 msgstr "Toujours (disponible, utilisé partout)"
 

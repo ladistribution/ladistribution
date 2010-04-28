@@ -10,7 +10,7 @@ class Ld_Plugin_Akismet
             'url' => 'http://ladistribution.net/wiki/plugins/#akismet',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.3',
+            'version' => '0.5.0.4',
             'description' => Ld_Translate::translate('Checks user submitted content with Akismet to see if it look like spam.'),
             'license' => 'MIT / GPL'
         );
@@ -28,7 +28,7 @@ class Ld_Plugin_Akismet
             }
             return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('Akismet API key is invalid.'), 'Akismet'));
         }
-        return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('%s is not running. Check your configuration to enable it.'), 'Akismet'));
+        return array(self::STATUS_ERROR, sprintf(Ld_Translate::translate('%s is not running. Complete your configuration to enable it.'), 'Akismet'));
     }
 
     public function preferences()
