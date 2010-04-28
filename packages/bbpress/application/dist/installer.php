@@ -168,8 +168,8 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			}
 			$configuration[$option->meta_key] = $option->meta_value;
 		}
-		if (empty($configuration['short_name']) && isset($instance)) {
-			$configuration['short_name'] = $this->getInstance()->getName();
+		if (empty($configuration['short_name']) && $instance = $this->getInstance()) {
+			$configuration['short_name'] = $instance->getName();
 		}
 		return $configuration;
 	}
