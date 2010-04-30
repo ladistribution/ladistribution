@@ -39,6 +39,7 @@ class View_Helper_PreferencesRenderer extends Zend_View_Helper_Abstract
 			switch ($preference['type']) {
 				case 'boolean':
 					$checked = ($value == 'true' || $value == 1) ? ' checked="checked"' : '';
+					echo '<input type="hidden" value="0" name="' . $inputName . '"/>' . "\n"; // not a best practice, but it does the job
 					echo '<input type="checkbox" value="1" id="' . $id . '"  name="' . $inputName . '"' . $checked . ' />' . "\n";
 					break;
 				case 'password':

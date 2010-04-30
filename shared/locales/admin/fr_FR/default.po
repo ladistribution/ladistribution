@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-30 02:28+0100\n"
+"POT-Creation-Date: 2010-04-30 15:26+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -494,38 +494,42 @@ msgid "Editor"
 msgstr "Editeur"
 
 #: shared/modules/slotter/views/scripts/instance/roles.phtml:29
+msgid "Moderator"
+msgstr "Modérateur"
+
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:30
 msgid "Author"
 msgstr "Auteur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:30
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:31
 msgid "Contributor"
 msgstr "Contributeurs"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:31
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:32
 msgid "Subscriber"
 msgstr "Abonné"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:32
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:33
 msgid "Guest"
 msgstr "Invité"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:33
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:34
 msgid "User"
 msgstr "Utilisateur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:74
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:75
 msgid "Full Name"
 msgstr "Nom Complet"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:75
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:76
 msgid "Email"
 msgstr "Email"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:76
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:77
 msgid "Role"
 msgstr "Role"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:103
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:104
 msgid "Update roles"
 msgstr "Mettre à jour les rôles"
 

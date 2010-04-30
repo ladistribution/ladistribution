@@ -25,13 +25,13 @@ class Slotter_SettingsController extends Slotter_BaseController
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
             $configuration = $this->getSite()->getConfig();
             // needed for settings that default to false, displayed as checkbox
-            unset($configuration['open_registration']);
-            unset($configuration['root_admin']);
+            // unset($configuration['open_registration']);
+            // unset($configuration['root_admin']);
             foreach ($this->_getParam('configuration') as $key => $value) {
                 $configuration[$key] = $value;
             }
-            // $this->getSite()->setConfig($configuration);
-            Ld_Files::putJson($this->getSite()->getDirectory('dist') . "/config.json", $configuration);
+            $this->getSite()->setConfig($configuration);
+            // Ld_Files::putJson($this->getSite()->getDirectory('dist') . "/config.json", $configuration);
             // in this case, we believe the user wants to go back to the index
             $this->_redirector->gotoSimple('index', 'index');
             return;
