@@ -41,6 +41,10 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 	function onInitializePlugin()
 	{
 		parent::onInitializePlugin();
+	}
+
+	function onArgsInitialize()
+	{
 		if (Ld_Auth::isAuthenticated()) {
 			if ( common_current_user() && common_is_real_login() ) {
 				return;
@@ -98,6 +102,13 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 			$avatar->original = 0;
 			$avatar->url = $avatar_url;
 			$avatar->insert();
+			// handle memcache
+			$memcache = common_memcache();
+			if ($memcache) {
+				$kv = array('profile_id' => $sn_profile->id, 'width' => $size,  'height' => $size);
+				ksort($kv);
+				$memcache->delete($sn_profile->multicacheKey('Avatar', $kv));
+			}
 		}
 		// update email
 		$sn_user->query('BEGIN');
@@ -107,7 +118,7 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 		$sn_user->emailChanged();
 		$sn_user->query('COMMIT');
 		// sync roles
-		$role =  Zend_Registry::get('application')->getUserRole($username);
+		$role = Zend_Registry::get('application')->getUserRole($username);
 		switch ($role) {
 			case 'moderator':
 				if (!$sn_user->hasRole(Profile_role::MODERATOR)) {
