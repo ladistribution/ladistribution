@@ -40,7 +40,11 @@ class LdPlugin extends Plugin
 
 	function onEndShowFooter($action)
 	{
-		$action->raw(Ld_Ui::getSuperBar());
+		$conf = Zend_Registry::get('application')->getConfiguration();
+		$superbar = isset($conf['superbar']) ? $conf['superbar'] : 'everyone';
+		if ($superbar == 'everyone' || ($superbar == 'connected' && common_current_user())) {
+			$action->raw( Ld_Ui::getSuperBar() );
+		}
 		if (common_config('site', 'theme') == 'ld') {
 			$action->elementEnd('div');
 			$action->elementEnd('div');

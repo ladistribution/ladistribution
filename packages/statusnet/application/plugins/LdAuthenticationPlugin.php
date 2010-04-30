@@ -106,6 +106,26 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 		$result = $sn_user->updateKeys($orig_user);
 		$sn_user->emailChanged();
 		$sn_user->query('COMMIT');
+		// sync roles
+		$role =  Zend_Registry::get('application')->getUserRole($username);
+		switch ($role) {
+			case 'moderator':
+				if (!$sn_user->hasRole(Profile_role::MODERATOR)) {
+					$sn_user->grantRole(Profile_role::MODERATOR);
+				}
+				if ($sn_user->hasRole(Profile_role::ADMINISTRATOR)) {
+					$sn_user->revokeRole(Profile_role::ADMINISTRATOR);
+				}
+				break;
+			case 'user':
+				if ($sn_user->hasRole(Profile_role::MODERATOR)) {
+					$sn_user->revokeRole(Profile_role::MODERATOR);
+				}
+				if ($sn_user->hasRole(Profile_role::ADMINISTRATOR)) {
+					$sn_user->revokeRole(Profile_role::ADMINISTRATOR);
+				}
+				break;
+		}
 	}
 
 	function onEndLogout()

@@ -3,6 +3,8 @@
 class Ld_Installer_Statusnet extends Ld_Installer
 {
 
+	/* Post Events */
+
 	public function postInstall($preferences = array())
 	{
 		$this->writeHtaccess();
@@ -68,6 +70,12 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		return $configuration;
 	}
 
+	public function setConfiguration($configuration = array())
+	{
+		$configuration = array_merge($this->getConfiguration(), $configuration);
+		return parent::setConfiguration($configuration);
+	}
+
 	public function getThemes()
 	{
 		$themes = array();
@@ -76,10 +84,20 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		$themesDirectories = Ld_Files::getDirectories($this->getAbsolutePath() . '/theme');
 
 		foreach ($themesDirectories as $id) {
-			$name = $id;
+			if ($id == 'base') {
+				continue;
+			} else if ($id == 'ld') {
+				$name = 'Minimal';
+			} else {
+				$name = ucfirst($id);
+			}
 			$dir = $this->getAbsolutePath() . '/theme/' . $id;
 			$active = isset($configuration['theme']) && $configuration['theme'] == $id;
-			$screenshot = null;
+			if (Ld_Files::exists("$dir/screenshot.png")) {
+				$screenshot = $this->getSite()->getBaseUrl() . $this->getPath() . "/theme/$id/screenshot.png";
+			} else {
+				$screenshot = null;
+			}
 			$themes[$id] = compact('name', 'dir', 'screenshot', 'active');
 		}
 
@@ -111,7 +129,7 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		parent::restore($archive);
 
 		foreach (array('avatar', 'background', 'file', 'local') as $folder) {
-			if (file_exists($this->getRestoreFolder() . "/$folder")) {
+			if (Ld_Files::exists($this->getRestoreFolder() . "/$folder")) {
 				Ld_Files::copy($this->getRestoreFolder() . "/$folder", $this->getAbsolutePath() . "/$folder");
 			}
 		}
@@ -119,9 +137,22 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		Ld_Files::unlink($this->getRestoreFolder());
 	}
 
+	/* Roles */
+
+	public $roles = array('moderator', 'user');
+
+	public $defaultRole = 'user';
+
+	public function getRoles()
+	{
+		return $this->roles;
+	}
+
+	/* Install Utilities */
+
 	public function writeHtaccess()
 	{
-		if (defined('LD_REWRITE') && constant('LD_REWRITE') === true) {
+		if (defined('LD_REWRITE') && constant('LD_REWRITE')) {
 			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 			$htaccess  = "RewriteEngine on\n";
 			$htaccess .= "RewriteBase $path\n";
