@@ -52,6 +52,10 @@ $config['sms']['enabled'] = false;
 $config['emailpost']['enabled'] = false;
 $config['site']['closed'] = true;
 
+if (isset($configuration['private']) && $configuration['private']) {
+	$config['site']['private'] = true;
+}
+
 $config['site']['theme'] = isset($configuration['theme']) ? $configuration['theme'] : 'ld';
 
 unset($config['plugins']['default']['Mapstraction']);

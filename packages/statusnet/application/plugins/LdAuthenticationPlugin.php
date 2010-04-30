@@ -35,9 +35,6 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 		if (isset($user['fullname'])) {
 			$registration_data['fullname'] = $user['fullname'];
 		}
-		if (isset($user['email'])) {
-			$registration_data['email'] = $user['email'];
-		}
 		return User::register($registration_data);
 	}
 
@@ -58,6 +55,10 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 					User_username::register($user, $nickname, $this->provider_name);
 				}
 			}
+			$this->sync_profile($nickname);
+			if (class_exists('Ld_Plugin')) {
+				Ld_Plugin::doAction('Statusnet:login', $nickname);
+			}
 			common_set_user($nickname);
 			common_real_login(true);
 		} else {
@@ -67,6 +68,44 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 				common_forgetme(); // don't log back in!
 			}
 		}
+	}
+	
+	public function sync_profile($username)
+	{
+		$ld_user = Ld_Auth::getUser($username);
+		$sn_user = User::staticGet('nickname', $username);
+		$sn_profile = $sn_user->getProfile();
+		// update avatars: 24 / 48 / 96
+		foreach (array(AVATAR_PROFILE_SIZE, AVATAR_STREAM_SIZE, AVATAR_MINI_SIZE) as $size) {
+			$avatar_url = Ld_Ui::getAvatarUrl($ld_user, $size);
+			// avoid unique urls
+			$default_avatar_url = Ld_Ui::getDefaultAvatarUrl($size);
+			if ($avatar_url == $default_avatar_url) {
+				$avatar_url .= '#ld-' . $username . '-' . $size;
+			}
+			if ($avatar = $sn_profile->getAvatar($size)) {
+				if ($avatar_url == $avatar->url) {
+					continue;
+				}
+				$avatar->delete();
+			}
+			$avatar = new Avatar();
+			$avatar->created = DB_DataObject_Cast::dateTime();
+			$avatar->width = $size;
+			$avatar->height = $size;
+			$avatar->profile_id = $sn_user->id;
+			$avatar->mediatype = 'img';
+			$avatar->original = 0;
+			$avatar->url = $avatar_url;
+			$avatar->insert();
+		}
+		// update email
+		$sn_user->query('BEGIN');
+		$orig_user = clone($sn_user);
+		$sn_user->email = $ld_user['email'];
+		$result = $sn_user->updateKeys($orig_user);
+		$sn_user->emailChanged();
+		$sn_user->query('COMMIT');
 	}
 
 	function onEndLogout()

@@ -52,6 +52,11 @@ class LdPlugin extends Plugin
 		return false;
 	}
 
+	function onStartAccountSettingsAvatarMenuItem($widget, $menu)
+	{
+		return false;
+	}
+
 	function onStartAccountSettingsOtherMenuItem($widget)
 	{
 		return false;
