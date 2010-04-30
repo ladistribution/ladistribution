@@ -55,8 +55,10 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		update_option('admin_email', $user_email);
 		update_option('blogname', $preferences['title']);
+
 		update_option('siteurl', $this->getSite()->getBaseUrl() . $preferences['path']);
 		update_option('home', $this->getSite()->getBaseUrl() . $preferences['path']);
+		wp_cache_flush();
 
 		if (constant('LD_REWRITE')) {
 			$this->enable_clean_urls();
@@ -382,6 +384,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		global $wp_rewrite;
 		if (got_mod_rewrite()) {
 			$wp_rewrite->set_permalink_structure('/%year%/%monthnum%/%postname%/');
+			$wp_rewrite->permalink_structure = '/%year%/%monthnum%/%postname%/';
 			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
 			insert_with_markers($this->getAbsolutePath() . "/.htaccess", 'WordPress', $rules );
 		}
