@@ -235,8 +235,8 @@ foreach ($base_libs as $name => $source) {
         Ld_Zip::extract($archiveName, $targetDirectory);
     }
     Ld_Files::copy($targetDirectory . '/lib', $directories['lib'] . (LD_RELEASE == 'concorde' ? '' : '/' . $name));
-    if (Ld_Files::exists($targetDirectory . '/shared')) {
-        Ld_Files::copy($targetDirectory . '/shared', $directories['shared']);
+    if ($name == 'Ld') {
+        Ld_Files::copy($targetDirectory . '/locales', $directories['shared'] . '/locales/ld');
     }
 }
 

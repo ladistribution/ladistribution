@@ -118,7 +118,11 @@ class Slotter_IndexController extends Slotter_BaseController
                     }
                 }
             }
-            // $this->_redirector->gotoSimple('update', 'index');
+            // by redirecting, we avoid incoherences between the versions
+            if (!defined('LD_DEBUG') || !constant('LD_DEBUG')) {
+                $this->_redirector->gotoSimple('update', 'index');
+                exit;
+            }
         }
 
         $instances = $this->site->getInstances();

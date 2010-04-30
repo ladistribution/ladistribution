@@ -101,6 +101,10 @@
   line-height:1em;
 }
 
+.h6e-top-bar-inner .b img.avatar {
+  background:white;
+}
+
 .h6e-top-bar-inner .b a {
   float:left;
   display:block;

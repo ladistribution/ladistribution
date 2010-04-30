@@ -644,27 +644,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         $preferences = array();
 
-        // DB
-        $neededDb = $package->getManifest()->getDb();
-        if ($neededDb) {
-            $availableDbs = $this->getDatabases($neededDb);
-            if (empty($availableDbs)) {
-                throw new Exception('No database available.');
-            } else if (count($availableDbs) == 1) {
-                $keys = array_keys($availableDbs);
-                $id = $keys[0];
-                $preference = array('name' => 'db', 'type' => 'hidden', 'defaultValue' => $id);
-            } else {
-                $preference = array('name' => 'db', 'type' => 'list', 'label' => 'Database');
-                $preference['options'] = array();
-                foreach ($availableDbs as $id => $db) {
-                    $label = sprintf("%s", $db['name']);
-                    $preference['options'][] = array('value' => $id, 'label' => $label);
-                }
-            }
-            $preferences[] = $preference;
-        }
-
         // Prefs
         $prefs = $package->getInstallPreferences();
         foreach ($prefs as $pref) {
@@ -697,6 +676,27 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     }
                 }
                 $preference['defaultValue'] = 'auto';
+            }
+            $preferences[] = $preference;
+        }
+
+        // DB
+        $neededDb = $package->getManifest()->getDb();
+        if ($neededDb) {
+            $availableDbs = $this->getDatabases($neededDb);
+            if (empty($availableDbs)) {
+                throw new Exception('No database available.');
+            } else if (count($availableDbs) == 1) {
+                $keys = array_keys($availableDbs);
+                $id = $keys[0];
+                $preference = array('name' => 'db', 'type' => 'hidden', 'defaultValue' => $id);
+            } else {
+                $preference = array('name' => 'db', 'type' => 'list', 'label' => 'Database');
+                $preference['options'] = array();
+                foreach ($availableDbs as $id => $db) {
+                    $label = sprintf("%s", $db['name']);
+                    $preference['options'][] = array('value' => $id, 'label' => $label);
+                }
             }
             $preferences[] = $preference;
         }

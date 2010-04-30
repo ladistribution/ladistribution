@@ -46,11 +46,11 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application_Local
         return $this->router = $router;
     }
 
-    public function getUrl($params = array(), $name = 'default')
+    public function buildUrl($params = array(), $name = 'default')
     {
         $baseUrl = $this->getSite()->getPath();
         if (constant('LD_REWRITE') == false || self::getSite()->getConfig('root_admin') != 1) {
-            $baseUrl .=  '/' . $admin->getPath();
+            $baseUrl .=  '/' . $this->getPath();
         }
         if (constant('LD_REWRITE') == false) {
             $baseUrl .= '/index.php';
@@ -59,6 +59,8 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application_Local
         $router = $this->getRouter();
         $route = $router->getRoute($name);
         $url = $route->assemble($params, true);
+
+        $url = empty($url) ? 'slotter' : $url;
 
         $url = $baseUrl . '/' . $url;
 

@@ -22,7 +22,7 @@ class Ld_Plugin_Memcache
     public function status()
     {
         if (!class_exists('Memcache')) {
-            return array(self::STATUS_ERROR, Ld_Translate::translate('Memcache PHP extension is missing to enable this plugin.'));
+            return array(self::STATUS_ERROR, Ld_Translate::translate('Memcache PHP extension is needed to run this plugin.'));
         }
         try {
             $memcache = new Memcache();

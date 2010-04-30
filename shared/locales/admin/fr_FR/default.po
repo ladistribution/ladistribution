@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-29 00:15+0100\n"
+"POT-Creation-Date: 2010-04-30 02:28+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -852,11 +852,15 @@ msgstr "Nom du site"
 msgid "Anyone can register?"
 msgstr "Tout le monde peut s'enregistrer ?"
 
-#: shared/modules/slotter/controllers/SettingsController.php:69
+#: shared/modules/slotter/controllers/SettingsController.php:66
+msgid "None"
+msgstr "Aucune"
+
+#: shared/modules/slotter/controllers/SettingsController.php:80
 msgid "Default Application"
 msgstr "Application par défaut"
 
-#: shared/modules/slotter/controllers/SettingsController.php:74
+#: shared/modules/slotter/controllers/SettingsController.php:85
 msgid "Admin path on root?"
 msgstr "Chemin vers l'admin à la racine ?"
 
@@ -901,7 +905,7 @@ msgstr "Vérifie le contenu soumis par les utilisateurs avec Akismet pour voir s
 #: shared/plugins/recaptcha.php:29
 #, php-format
 msgid "%s is configured and running."
-msgstr "%s est configuré et activé."
+msgstr "%s est configuré et fonctionne."
 
 #: shared/plugins/akismet.php:29
 msgid "Akismet API key is invalid."
@@ -922,18 +926,23 @@ msgid "Detects and automatically blocks unwanted accesses to the site."
 msgstr "Détecte et bloque automatiquement les accès au site non souhaités."
 
 #: shared/plugins/bad-behavior.php:21
+#: shared/plugins/gravatar.php:21
 #: shared/plugins/theme-unlocker.php:21
 #, php-format
 msgid "%s is running."
 msgstr "%s fonctionne."
+
+#: shared/plugins/gravatar.php:14
+msgid "Display avatars using the Gravatar service."
+msgstr "Affiche des avatars en utilisant le service Gravatar."
 
 #: shared/plugins/memcache.php:14
 msgid "Cache data with Memcache to enhance performances."
 msgstr "Met en cache des données avec Memcache pour améliorer les performances."
 
 #: shared/plugins/memcache.php:25
-msgid "Memcache PHP extension is missing to enable this plugin."
-msgstr "L'extension PHP Memcache est nécessaire pour activer ce greffon."
+msgid "Memcache PHP extension is needed to run this plugin."
+msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greffon."
 
 #: shared/plugins/memcache.php:38
 msgid "Can't connect to Memcache servers."
@@ -1016,8 +1025,6 @@ msgstr "Permet aux administrateurs d'installer, mettre à jour, supprimer n'impo
 #~ msgstr "Déplacer une application"
 #~ msgid "Manage extensions"
 #~ msgstr "Gérer les extensions"
-#~ msgid "None"
-#~ msgstr "Aucune"
 #~ msgid "Update available"
 #~ msgstr "Mise à jour disponible"
 #~ msgid "Admin"

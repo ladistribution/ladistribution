@@ -101,14 +101,14 @@ Ld.sortableUserRoles = function($)
 
     $(".ld-group input[type=checkbox]").change(function() {
         if ( $(this).is(':checked') ) {
-            $(this).parent().addClass('selected');
+            $(this).parents('div.ld-user').addClass('selected');
         } else {
-            $(this).parent().removeClass('selected');
+            $(this).parents('div.ld-user').removeClass('selected');
         }
         if ( $(this).is(':disabled') ) {
-            $(this).parent().addClass('disabled');
+            $(this).parents('div.ld-user').addClass('disabled');
         }
     }).change();
 
-    $(".ld-group.sortable .ld-user").css('cursor', 'move');
+    $(".ld-group.sortable .ld-user").addClass('movable');
 }

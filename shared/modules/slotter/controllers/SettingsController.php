@@ -61,8 +61,19 @@ class Slotter_SettingsController extends Slotter_BaseController
         );
 
         $options = array();
-        foreach ($this->getSite()->getApplicationsInstances() as $id => $instance) {
-            $options[] = array('value' => $instance->getPath(), 'label' => $instance->getName());
+        $options[] = array(
+            'value' => '',
+            'label' => '✖ ' .  $translator->translate('None')
+        );
+        $options[] = array(
+            'value' => $this->admin->getPath(),
+            'label' => '★ ' . $this->admin->getName() . ' /' . $this->admin->getPath() . '/'
+        );
+        foreach ($this->getSite()->getApplicationsInstances(array('admin')) as $id => $instance) {
+            $options[] = array(
+                'value' => $instance->getPath(),
+                'label' => '● ' . $instance->getName() . ' /' . $instance->getPath() . '/'
+            );
         }
 
         $preferences[] = array(

@@ -54,6 +54,14 @@
     white-space: nowrap;
 }
 
+.ld-user.movable {
+    cursor: move;
+}
+
+.ld-user label {
+    cursor: inherit;
+}
+
 .ld-user .username {
     font-style: italic;
 }
@@ -63,6 +71,7 @@
     height: 32px;
     width: 32px;
     margin-right: 0.5em;
+    background:white;
 }
 
 .ld-user .checkbox {
