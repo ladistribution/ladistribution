@@ -408,4 +408,36 @@ class Ld_Cli
             $package->id, $package->version, $repository->name));
     }
 
+    public function buildPackage()
+    {
+        if (empty($this->_args[1])) {
+            throw new Exception("No or invalid application name passed as argument.");
+        }
+        $package = $this->_args[1];
+
+        $dir = $this->getSite()->getDirectory() . "/packages/$package/application";
+        echo shell_exec("cd $dir && ./build.sh");
+    }
+
+    public function updatePackage()
+    {
+        if (empty($this->_args[1])) {
+            throw new Exception("No or invalid application name passed as argument.");
+        }
+        $package = $this->_args[1];
+
+        if (empty($this->_args[2])) {
+            throw new Exception("No or invalid repository passed as argument.");
+        }
+        $repository = $this->_getRepository($this->_args[2]);
+
+        $dir = $this->getSite()->getDirectory() . "/packages/$package/application";
+        echo shell_exec("cd $dir && ./build.sh");
+
+        $file = $this->getSite()->getDirectory() . "/packages/$package.zip";
+        $package = $repository->importPackage($file, false);
+        $this->_write(sprintf("%s v%s successfully imported in '%s' repository",
+            $package->id, $package->version, $repository->name));
+    }
+
 }
