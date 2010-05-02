@@ -41,10 +41,6 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 	function onInitializePlugin()
 	{
 		parent::onInitializePlugin();
-	}
-
-	function onArgsInitialize()
-	{
 		if (Ld_Auth::isAuthenticated()) {
 			if ( common_current_user() && common_is_real_login() ) {
 				return;
