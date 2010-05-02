@@ -26,7 +26,8 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			'name' => $preferences['title'],
 			'uri' => $this->getSite()->getBaseUrl() . $preferences['path'],
 			'keymaster_user_login' => $preferences['administrator']['username'],
-			'keymaster_user_email' => $preferences['administrator']['email'],
+			// 'keymaster_user_email' => $preferences['administrator']['email'],
+			'keymaster_user_email' => 'null@null.ladistribution.net',
 			'keymaster_user_type' => 'new',
 			'forum_name' => 'First Forum'
 		);
@@ -62,20 +63,25 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			bb_activate_plugin($plugin);
 		}
 		bb_update_option( 'active_plugins', $activate_plugins );
+
+		bb_update_option( 'from_email', $preferences['administrator']['email'] );
+
+		bb_update_option( 'avatars_show', 1 );
+		bb_update_option( 'avatars_rating', 'g' );
+		bb_update_option( 'avatars_default', 'default' );
 	}
 
 	public function postUpdate()
 	{
+	    parent::postUpdate();
+		// post update must not includ bbpress files or rely on load_bp()
+	}
+
+	public function postMove()
+	{
+	    parent::postMove();
 		$this->load_bp();
-
-		$active_plugins = bb_get_option('active_plugins');
-
-		// if current <= 1.0-2-39-3
-		if (!in_array('core#akismet.php', $active_plugins)) {
-			bb_activate_plugin('core#akismet.php');
-			$active_plugins[] = 'core#akismet.php';
-			bb_update_option( 'active_plugins', $active_plugins );
-		}
+		bb_update_option('uri', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
 	}
 
 	public function create_config_file()
@@ -141,7 +147,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 	protected function _getLangPreference()
 	{
 		$preference = array(
-			'name' => 'lang', 'label' => 'Language',
+			'name' => 'lang', 'label' => 'Locale',
 			'type' => 'list', 'defaultValue' => 'auto',
 			'options' => array(
 				array('value' => 'auto', 'label' => 'auto'),
@@ -170,6 +176,9 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		}
 		if (empty($configuration['short_name']) && $instance = $this->getInstance()) {
 			$configuration['short_name'] = $instance->getName();
+		}
+		if (empty($configuration['lang']) && $instance = $this->getInstance()) {
+			$configuration['lang'] = $instance->getLocale();
 		}
 		return $configuration;
 	}

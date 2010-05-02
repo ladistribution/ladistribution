@@ -12,7 +12,7 @@ function ld_bbpress_disable_menus()
 {
 	global $bb_menu, $bb_submenu;
 
-	$disable_menus = array('plugins.php', 'users.php', 'tools-recount.php');
+	$disable_menus = array('plugins.php', 'users.php');
 	foreach ($bb_menu as $key => $item) {
 		$script = $item[2];
 		if (!empty($disable_menus) && in_array($script, $disable_menus)) {
@@ -20,7 +20,7 @@ function ld_bbpress_disable_menus()
 		}
 	}
 
-	$disable_submenus = array('options-wordpress.php', 'bb_ksd_configuration_page');
+	$disable_submenus = array('options-wordpress.php', 'options-discussion.php', 'bb_ksd_configuration_page');
 	foreach ($bb_submenu as $key => $sub) {
 		foreach ($sub as $num => $item) {
 			$script = $item[2];

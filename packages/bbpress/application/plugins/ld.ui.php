@@ -48,3 +48,14 @@ function ld_bbpress_admin_footer()
 add_action( 'bb_admin_footer', 'ld_bbpress_admin_footer' );
 
 add_action( 'bb_foot', 'ld_bbpress_footer' );
+
+if ( !function_exists( 'bb_get_avatar' ) ) :
+function bb_get_avatar( $id_or_email, $size = 80, $default = '' )
+{
+	$src = Ld_Ui::getDefaultAvatarUrl($size);
+	$src = Ld_Plugin::applyFilters('Bbpress:getAvatarUrl', $src, $id_or_email, $size, $default);
+	$class = '';
+	$avatar = '<img alt="" src="' . $src . '" class="' . $class . '" style="height:' . $size . 'px; width:' . $size . 'px;" />';
+	return $avatar;
+}
+endif;

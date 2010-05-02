@@ -32,18 +32,31 @@ class Ld_Bbpress_Auth
 	{
 		global $bbdb, $wp_users_object;
 		if (isset($wp_users_object)) {
+			// retrieve Ld User
+			$ld_user = Zend_Registry::get('site')->getUser($login);
+			if (empty($ld_user)) {
+				return null;
+			}
 			// test if the users exists in bbPress DB
 			$bb_user = $wp_users_object->get_user($login, array( 'by' => 'login' ) );
 			// if not create the user in bbPress DB
 			if (empty($bb_user)) {
-				$ld_user = Zend_Registry::get('site')->getUser($login);
-				if ($ld_user) {
-					$data = array( 'user_login' => $ld_user['username'], 'user_email' => $ld_user['email'] );
-					$bb_user = $wp_users_object->new_user( $data );
-					if (!is_wp_error($bb_user)) {
-						bb_update_usermeta( $bb_user['ID'], $bbdb->prefix . 'capabilities', array('member' => true) );
+				$data = array( 'user_login' => $ld_user['username'], 'user_email' => $ld_user['email'], 'display_name' => $ld_user['fullname'] );
+				$bb_user = $wp_users_object->new_user( $data );
+				if (!is_wp_error($bb_user)) {
+					bb_update_usermeta( $bb_user['ID'], $bbdb->prefix . 'capabilities', array('member' => true) );
+				}
+			} else {
+				// sync user infos
+				$args = array();
+				$keys = array('user_email' => 'email', 'display_name' => 'fullname');
+				foreach ($keys as $bb_key => $ld_key) {
+					if ($bb_user->$bb_key != $ld_user[$ld_key]) {
+						$args[$bb_key] = $ld_user[$ld_key];
 					}
-
+				}
+				if (count($args)) {
+					$wp_users_object->update_user( $bb_user->ID, $args );
 				}
 			}
 			return $bb_user;
@@ -60,7 +73,7 @@ class Ld_Bbpress_Auth
 	{
 		$ld_user = self::get_bb_user($user_id);
 		$ld_user['origin'] = 'Bbpress:register';
-		Zend_Registry::get('site')->addUser($ld_user);
+		Zend_Registry::get('site')->addUser($ld_user, false);
 	}
 
 	function profile_update($user_id)
@@ -68,6 +81,13 @@ class Ld_Bbpress_Auth
 		$ld_user = self::get_bb_user($user_id);
 		Zend_Registry::get('site')->updateUser($ld_user['username'], $ld_user);
 	}
+
+	// function get_user_display_name($user_display_name, $user_ID)
+	// {
+	// 	$ld_user = self::get_bb_user($user_ID);
+	// 	$ld_user = Ld_Auth::getUser($ld_user['username']);
+	// 	return !empty($ld_user['fullname']) ? $ld_user['fullname'] : $ld_user['username'];
+	// }
 
 }
 
@@ -81,20 +101,26 @@ add_action('profile_edited', array('Ld_Bbpress_Auth', 'profile_update'));
 
 add_action('bb_update_user_password', array('Ld_Bbpress_Auth', 'profile_update'));
 
+// add_filter('get_post_author', array('Ld_Bbpress_Auth', 'get_user_display_name'), 10, 2);
+// add_filter('get_user_display_name', array('Ld_Bbpress_Auth', 'get_user_display_name'), 10, 2);
+
 // Replacable bbPress functions
 
 if ( !function_exists('bb_get_current_user') ) :
 function bb_get_current_user() {
 	global $current_user;
 
+	// return early
+	if (isset($current_user)) {
+		return $current_user;
+	}
+
 	// LD authentication
 	if (Ld_Auth::isAuthenticated()) {
 		$bb_user = Ld_Bbpress_Auth::get_bb_user_by_login( Ld_Auth::getUsername() );
 		// set the current user
 		if (isset($bb_user)) {
-			if (empty($current_user)) {
-				$current_user = $bb_user;
-			}
+			$current_user = $bb_user;
 			bb_set_current_user($bb_user->ID);
 			return $bb_user;
 		}
