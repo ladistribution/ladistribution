@@ -23,6 +23,7 @@ class Ld_Plugin_Ssl
         Ld_Plugin::addAction('Wordpress:prepend', array($this, 'wordpress_prepend'));
         Ld_Plugin::addAction('Wordpress:plugin', array($this, 'wordpress_plugin'));
         Ld_Plugin::addFilter('Weave:serverUrl', array($this, 'weave_url'));
+        Ld_Plugin::addAction('Bbpress:prepend', array($this, 'bbpress_prepend'));
     }
 
     public function preferences()
@@ -103,6 +104,15 @@ class Ld_Plugin_Ssl
             $url = str_replace('http://', 'https://', $url);
         }
         return $url;
+    }
+
+    public function bbpress_prepend()
+    {
+        $ssl_support = $this->config();
+         if (isset($ssl_support) && ($ssl_support == 'sometimes' || $ssl_support == 'always')) {
+             define('BB_FORCE_SSL_USER_FORMS', true);
+             define('BB_FORCE_SSL_ADMIN', true);
+        }
     }
 
 }
