@@ -707,7 +707,7 @@ msgstr "Aucune"
 
 #: shared/modules/slotter/views/scripts/repositories/repository.phtml:3
 msgid "This repository is empty."
-msgstr "The dépôt est vide."
+msgstr "Ce dépôt est vide."
 
 #: shared/modules/slotter/views/scripts/settings/index.phtml:1
 msgid "Global settings"
