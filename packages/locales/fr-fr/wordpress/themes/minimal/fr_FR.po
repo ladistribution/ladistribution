@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-03 11:51+0100\n"
-"PO-Revision-Date: 2010-05-03 11:51+0100\n"
+"POT-Creation-Date: 2010-05-04 14:21+0100\n"
+"PO-Revision-Date: 2010-05-04 14:23+0100\n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: French (France) <hello@ladistribution.net>\n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,23 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: __;esc_attr__\n"
+"X-Poedit-KeywordsList: __;esc_attr__;_e\n"
 "X-Poedit-Basepath: /Web/wordpress-trunk/wp-content/themes/\n"
 "X-Poedit-SearchPath-0: minimal\n"
+
+#: minimal/404.php:8
+#: minimal/functions.php:63
+#: minimal/header.php:19
+msgid "Not Found"
+msgstr "Non trouvée"
+
+#: minimal/404.php:10
+msgid "Apologies, but the page you requested could not be found."
+msgstr "Désolé, la page demandée n'a pu être trouvée."
+
+#: minimal/comments.php:8
+msgid "Enter your password to view comments."
+msgstr "Entrez votre mot de passe pour voir les commentaires."
 
 #: minimal/comments.php:13
 msgid "No Comments"
@@ -35,8 +49,21 @@ msgid "% Comments"
 msgstr "% commentaires"
 
 #: minimal/comments.php:22
+#: minimal/functions.php:33
+msgid "by"
+msgstr "par"
+
+#: minimal/comments.php:22
 msgid "Edit This"
 msgstr "Éditer"
+
+#: minimal/comments.php:29
+msgid "No comments yet."
+msgstr "Aucune commentaire pour le moment."
+
+#: minimal/comments.php:37
+msgid "Leave a comment"
+msgstr "Laisser un commentaire"
 
 #: minimal/comments.php:40
 #, php-format
@@ -48,40 +75,67 @@ msgstr "Vous devez <a href=\"%s\">être connecté</a> pour publier un commentair
 msgid "Logged in as %s."
 msgstr "Connecté en tant que %s."
 
+#: minimal/comments.php:47
+msgid "Log out of this account"
+msgstr "Se déconnecter de ce compte."
+
+#: minimal/comments.php:47
+msgid "Log out &raquo;"
+msgstr "Se déconnecter &raquo;"
+
+#: minimal/comments.php:52
+msgid "Name"
+msgstr "Nom"
+
+#: minimal/comments.php:52
+#: minimal/comments.php:55
+msgid "(required)"
+msgstr "(obligatoire)"
+
+#: minimal/comments.php:55
+msgid "Mail (will not be published)"
+msgstr "Courriel (ne sera pas publié)"
+
+#: minimal/comments.php:58
+msgid "Website"
+msgstr "Site Web"
+
 #: minimal/comments.php:64
 msgid "Submit Comment"
 msgstr "Envoyer le commentaire"
 
+#: minimal/comments.php:78
+msgid "Sorry, the comment form is closed at this time."
+msgstr "Désolé, le formulaire de commentaire est fermé pour le moment."
+
 #: minimal/functions.php:18
 msgid "The primary widget area"
 msgstr "Zone de widgets principale"
-
-#: minimal/functions.php:33
-msgid "by"
-msgstr "par"
 
 #: minimal/functions.php:35
 #, php-format
 msgid "View all posts by %s"
 msgstr "Voir tout les posts de %s"
 
-#: minimal/functions.php:44
+#: minimal/functions.php:45
 #, php-format
 msgid "Page %s"
 msgstr "Page %s"
 
-#: minimal/functions.php:140
-msgid "Minimal options"
-msgstr ""
-
-#: minimal/functions.php:147
-msgid "Options saved."
-msgstr "Options enregistrées."
-
+#: minimal/functions.php:61
 #: minimal/header.php:17
 #, php-format
 msgid "Search results for \"%s\""
 msgstr "Résultats de recherche pour \"%s\""
+
+#: minimal/functions.php:162
+#: minimal/functions.php:172
+msgid "Minimal options"
+msgstr ""
+
+#: minimal/functions.php:169
+msgid "Options saved."
+msgstr "Options enregistrées."
 
 #: minimal/index.php:15
 msgid "&laquo; Previous Page"
@@ -132,6 +186,14 @@ msgstr "% commentaires &#187;"
 #: minimal/loop.php:29
 msgid "Comments Closed"
 msgstr "Commentaires fermés"
+
+#: minimal/searchform.php:1
+msgid "Search"
+msgstr "Recherche"
+
+#: minimal/searchform.php:5
+msgid "Go"
+msgstr ""
 
 #~ msgid "Customize Theme"
 #~ msgstr "Personnaliser le thème"
@@ -193,10 +255,6 @@ msgstr "Commentaires fermés"
 #~ msgstr "Ping"
 #~ msgid "by %1$s &#8212; %2$s @ <a href=\"#comment-%3$s\">%4$s</a>"
 #~ msgstr "par %1$s &#8212; %2$s à <a href=\"#comment-%3$s\">%4$s</a>"
-#~ msgid "No comments yet."
-#~ msgstr "Aucune commentaire pour le moment."
-#~ msgid "Leave a comment"
-#~ msgstr "Laisser un commentaire"
 #~ msgid ""
 #~ "Line and paragraph breaks automatic, e-mail address never displayed, "
 #~ "<acronym title=\"Hypertext Markup Language\">HTML</acronym> allowed: "
@@ -212,8 +270,6 @@ msgstr "Commentaires fermés"
 #~ msgstr ""
 #~ "Connecté en tant que <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" title="
 #~ "\"Se déconnecter de ce compte\">Se déconnecter &raquo;</a>"
-#~ msgid "Name"
-#~ msgstr "Nom"
 #~ msgid "E-mail"
 #~ msgstr "Courriel"
 #~ msgid "<abbr title=\"Universal Resource Locator\">URL</abbr>"
@@ -222,8 +278,6 @@ msgstr "Commentaires fermés"
 #~ msgstr "Votre commentaire"
 #~ msgid "Say It!"
 #~ msgstr "Dites-le !"
-#~ msgid "Sorry, the comment form is closed at this time."
-#~ msgstr "Désolé, le formulaire de commentaire est fermé pour le moment."
 #~ msgid "Close this window."
 #~ msgstr "Fermer cette fenêtre."
 #~ msgid "Sorry, no posts matched your criteria."
@@ -235,11 +289,6 @@ msgstr "Commentaires fermés"
 #~ "Propulsé par <a href=\"%s\" title=\"Propulsé par WordPress, une plate-"
 #~ "forme de publication personnelle à la pointe de la sémantique"
 #~ "\"><strong>WordPress</strong></a>"
-#~ msgid ""
-#~ "This post is password protected. Enter the password to view comments."
-#~ msgstr ""
-#~ "Cet article est protégé par un mot de passe. Entrez-le pour lire le "
-#~ "commentaires."
 #~ msgid "No Responses"
 #~ msgstr "Aucune réponse"
 #~ msgid "One Response"
@@ -256,16 +305,6 @@ msgstr "Commentaires fermés"
 #~ msgstr "Laisser une réponse à %s"
 #~ msgid "Logged in as <a href=\"%1$s\">%2$s</a>."
 #~ msgstr "Connecté en tant que <a href=\"%1$s\">%2$s</a>."
-#~ msgid "Log out of this account"
-#~ msgstr "Se déconnecter de ce compte."
-#~ msgid "Log out &raquo;"
-#~ msgstr "Se déconnecter &raquo;"
-#~ msgid "(required)"
-#~ msgstr "(obligatoire)"
-#~ msgid "Mail (will not be published)"
-#~ msgstr "Courriel (ne sera pas publié)"
-#~ msgid "Website"
-#~ msgstr "Site Web"
 #~ msgid "<strong>XHTML:</strong> You can use these tags: <code>%s</code>"
 #~ msgstr ""
 #~ "<strong>XHTML&nbsp;:</strong> Vous pouvez utiliser les balises suivantes "
@@ -322,8 +361,6 @@ msgstr "Commentaires fermés"
 #~ msgstr "Sélectionner les couleurs par défaut"
 #~ msgid "Toggle Text Display"
 #~ msgstr "Afficher/masquer le texte"
-#~ msgid "Not Found"
-#~ msgstr "Rien de trouvé"
 #~ msgid "Sorry, but you are looking for something that isn&#8217;t here."
 #~ msgstr "Désolé, mais vous cherchez quelque chose qui n&rsquo;est pas ici."
 #~ msgid "Links:"
@@ -450,8 +487,6 @@ msgstr "Commentaires fermés"
 #~ msgstr "Cette entrée a été publiée le %1$s à %2$s, et est rangée dans %3$s."
 #~ msgid "Search for:"
 #~ msgstr "Recherche sur&nbsp;:"
-#~ msgid "Search"
-#~ msgstr "Recherche"
 #~ msgid "Permanent Link: %s"
 #~ msgstr "Lien permanent&nbsp;: %s"
 #~ msgid "Sorry, no attachments matched your criteria."

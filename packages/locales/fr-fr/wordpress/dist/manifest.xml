@@ -1,7 +1,7 @@
 <package>
   <id>wordpress-locale-fr-fr</id>
   <name>Wordpress en Français</name>
-  <version>3.0.0-29-pre-beta2</version>
+  <version>3.0.0-33-pre-beta2</version>
   <type>locale</type>
   <extend>wordpress</extend>
   <directory>dist/locales/fr_FR</directory>
