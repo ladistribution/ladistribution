@@ -165,13 +165,22 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Base .htaccess
         if (constant('LD_REWRITE')) {
             $root_htaccess = $this->getDirectory() . '/.htaccess';
-            if (!Ld_Files::exists($root_htaccess)) {
-                $path = $this->getPath() . '/';
-                $htaccess  = "RewriteEngine on\n";
-                $htaccess .= "RewriteBase $path\n";
-                $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
-                $htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-                $htaccess .= "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php\n";
+            $path = $this->getPath() . '/';
+            $rules = array(
+                "# BEGIN LD Default",
+                "<ifModule mod_rewrite.c>",
+                "RewriteEngine on",
+                "RewriteBase $path",
+                "RewriteCond %{REQUEST_FILENAME} !-f",
+                "RewriteCond %{REQUEST_FILENAME} !-d",
+                "RewriteRule !\.(js|ico|gif|jpg|png|css|swf|php|txt)$ index.php",
+                "</ifModule>",
+                "# END LD Default"
+            );
+            $htaccess = Ld_Files::exists($root_htaccess) ? Ld_Files::get($root_htaccess) : '';
+            if (empty($htaccess) || stripos($htaccess, 'RewriteEngine') === false) {
+                if (!empty($htaccess)) { $htaccess .= "\n\n"; }
+                $htaccess .= implode("\n", $rules);
                 Ld_Files::put($root_htaccess, $htaccess);
             }
         }
