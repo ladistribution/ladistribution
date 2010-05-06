@@ -13,18 +13,11 @@
 function ld_weave_sync_path($path = '/')
 {
 	global $site, $application;
-	if ($path != '/') {
-		return $path;
-	}
 	$basePath = $site->getPath() . '/' .  $application->getPath();
-	if (isset($_SERVER["REDIRECT_URL"])) {
-		$path = $_SERVER["REDIRECT_URL"];
-	} else {
-		$path = $_SERVER["REQUEST_URI"];
-		// query string parameters should be removed
-		if (!empty($_SERVER["QUERY_STRING"])) {
-		    $path = str_replace("?" . $_SERVER["QUERY_STRING"], "", $path);
-		}
+	$path = $_SERVER["REQUEST_URI"];
+	// query string parameters should be removed
+	if (!empty($_SERVER["QUERY_STRING"])) {
+		$path = str_replace("?" . $_SERVER["QUERY_STRING"], "", $path);
 	}
 	$path = str_replace("$basePath/1.0/", "/", $path);
 	return $path;

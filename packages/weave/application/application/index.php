@@ -73,7 +73,6 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
           <ul>
               <li>registration is not possible from Weave client</li>
               <li>password change is not possible from Weave client</li>
-              <li>Mozilla recommend to use Weave with https</li>
           </ul>
 
           <?php else : ?>
