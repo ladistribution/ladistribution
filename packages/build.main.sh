@@ -78,6 +78,22 @@ cd bbpress
 
 cd ..
 
+cd statusnet
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..
+
+cd weave
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..
+
 cd lib
 
   cd clearbricks

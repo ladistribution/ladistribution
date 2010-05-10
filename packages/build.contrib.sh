@@ -22,14 +22,6 @@ cd indexhibit
 
 cd ..
 
-cd statusnet
-
-  cd application
-  ./build.sh
-  cd ..
-
-cd ..
-
 cd spip
 
   cd application
@@ -60,30 +52,6 @@ cd wordpress
 
   cd ..
 
-  cd theme
-
-    cd p2
-    ./build.sh
-    cd ..
-
-    cd hemingway
-    ./build.sh
-    cd ..
-    
-    cd simpla
-    ./build.sh
-    cd ..
-    
-    cd journalist
-    ./build.sh
-    cd ..
-    
-    cd whiteasmilk
-    ./build.sh
-    cd ..
-
-  cd ..
-
 cd ..
 
 cd dokuwiki
@@ -91,10 +59,6 @@ cd dokuwiki
   cd application
   ./build.sh
   cd ..
-
-  # cd plugin
-  #
-  # cd ..
 
   cd theme
   
@@ -123,14 +87,6 @@ cd moonmoon
 cd ..
 
 cd roundcube
-
-  cd application
-  ./build.sh
-  cd ..
-
-cd ..
-
-cd weave
 
   cd application
   ./build.sh

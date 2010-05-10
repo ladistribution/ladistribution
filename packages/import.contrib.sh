@@ -7,13 +7,11 @@ IMPORT="ladis import-package --site $SITE $REPOSITORY"
 
 $IMPORT habari.zip
 $IMPORT dotclear.zip
-$IMPORT statusnet.zip
 $IMPORT spip.zip
 $IMPORT indexhibit.zip
 $IMPORT moonmoon.zip
 $IMPORT gallery.zip
 $IMPORT roundcube.zip
-$IMPORT weave.zip
 
 $IMPORT wordpress-theme-p2.zip
 $IMPORT wordpress-theme-hemingway.zip
