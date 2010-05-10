@@ -41,3 +41,10 @@ error_reporting( E_ALL ^ E_NOTICE );
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Weave:prepend');
 }
+
+if (strpos($application->getCurrentPath(), '/1.0/') !== false && strpos($_SERVER["SCRIPT_FILENAME"], '/sync/1.0/') === false) {
+	$dir = $application->getAbsolutePath() . '/sync/1.0/';
+	chdir($dir);
+	require 'index.php';
+	exit;
+}

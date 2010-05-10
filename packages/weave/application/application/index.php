@@ -14,7 +14,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 <style type="text/css">
 #weave-logo {
     height:131px;
-    background:url(<?php echo $application->getUrl() ?>logo.png) top center no-repeat;
+    background:url(<?php echo $site->getPath() . '/' . $application->getPath() ?>/logo.png) top center no-repeat;
     text-indent:-9999px;
 }
 .h6e-main-content {
