@@ -26,8 +26,7 @@ class Ld_View_Helper_Css extends Zend_View_Helper_Abstract
 
     public function append($file, $package, $t = 'screen')
     {
-        $infos = $this->getSite()->getLibraryInfos("css-$package");
-        $url = $this->getSite()->getUrl('css') . $file . '?v=' . $infos['version'];
+        $url = Ld_Ui::getCssUrl($file, $package);
         $this->view->headLink()->appendStylesheet($url, $t);
         return $this;
     }

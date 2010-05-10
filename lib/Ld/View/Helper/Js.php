@@ -26,11 +26,7 @@ class Ld_View_Helper_Js extends Zend_View_Helper_Abstract
 
     public function append($file, $package)
     {
-        $infos = $this->getSite()->getLibraryInfos($package);
-        if ($infos['type'] == 'application') {
-            $infos = $this->getSite()->getInstance($infos['path'])->getInfos();
-        }
-        $url = $this->getSite()->getUrl('js') . $file . '?v=' . $infos['version'];
+        $url = Ld_Ui::getJsUrl($file, $package);
         $this->view->headScript()->offsetSetFile($package, $url);
         return $this;
     }
