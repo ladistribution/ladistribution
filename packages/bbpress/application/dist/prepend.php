@@ -31,6 +31,3 @@ if (isset($locale) && $locale != 'auto') {
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Bbpress:prepend');
 }
-
-require_once 'Ld/Files.php';
-Ld_Files::includes(dirname(__FILE__) . '/prepend/');

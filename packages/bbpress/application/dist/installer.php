@@ -234,7 +234,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 
 	// Roles
 
-	public $roles = array('keymaster', 'administrator', 'moderator', 'member', 'inactive');
+	public $roles = array('keymaster', 'administrator', 'moderator', 'member');
 
 	public $defaultRole = 'member';
 
@@ -251,7 +251,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		foreach ($users as $user) {
 			$username = $user['username'];
 			$roles[$username] = $this->defaultRole; // default
-			$userdata = get_bb_user_by_login($username);
+			$userdata = Ld_Bbpress_Auth::get_bb_user_by_login($username);
 			if ($userdata) {
 				$bb_user = new BP_User($userdata->ID);
 				foreach ($this->roles as $role) {
@@ -272,7 +272,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			if (isset($current_user_roles[$username]) && $current_user_roles[$username] == $role) {
 				continue;
 			}
-			$userdata = get_bb_user_by_login($username);
+			$userdata = Ld_Bbpress_Auth::get_bb_user_by_login($username);
 			$bb_user = new BP_User($userdata->ID);
 			$bb_user->set_role($role);
 		}
