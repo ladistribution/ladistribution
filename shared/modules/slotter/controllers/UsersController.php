@@ -220,6 +220,9 @@ class Slotter_UsersController extends Slotter_BaseController
             $this->site->updateUser($id, $params);
         }
         $this->view->user = $this->site->getUser($id);
+
+        $this->view->identity = Zend_OpenId::absoluteURL($this->view->url(
+            array('module' => 'identity', 'controller' => 'openid', 'id' => $id), 'identity'));
     }
 
     public function addIdentityAction()

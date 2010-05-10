@@ -52,7 +52,17 @@
 
 <hr/>
 
-<h3><?php echo $this->translate("OpenID Identities") ?></h3>
+<h3><?php echo $this->translate("OpenID Server") ?></h3>
+
+<p><?php echo $this->translate("You can log on OpenID enabled websites using the bundled OpenID Server.") ?></p>
+
+<p><?php echo $this->translate("Your identity URL:") ?> <strong><?php echo $this->escape($this->identity) ?></strong></p>
+
+<hr/>
+
+<h3><?php echo $this->translate("Other OpenID Identities") ?></h3>
+
+<p><?php echo $this->translate("You can log on this website using other OpenID identities.") ?></p>
 
 <?php if (isset($this->user['identities']) && count($this->user['identities']) > 0) : ?>
 

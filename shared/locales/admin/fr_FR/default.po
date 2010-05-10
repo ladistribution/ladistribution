@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-30 15:26+0100\n"
+"POT-Creation-Date: 2010-05-10 15:06+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -15,7 +15,8 @@ msgstr ""
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: admin\n"
-"X-Poedit-SearchPath-1: shared\n"
+"X-Poedit-SearchPath-1: shared/modules\n"
+"X-Poedit-SearchPath-2: shared/plugins\n"
 
 #: shared/modules/default/views/layouts/layout.phtml:40
 #, php-format
@@ -490,46 +491,50 @@ msgid "Administrator"
 msgstr "Administrateur"
 
 #: shared/modules/slotter/views/scripts/instance/roles.phtml:28
+msgid "Keymaster"
+msgstr "Gardien des clés"
+
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:29
 msgid "Editor"
 msgstr "Editeur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:29
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:30
 msgid "Moderator"
 msgstr "Modérateur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:30
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:31
 msgid "Author"
 msgstr "Auteur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:31
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:32
 msgid "Contributor"
 msgstr "Contributeurs"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:32
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:33
 msgid "Subscriber"
 msgstr "Abonné"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:33
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:34
 msgid "Guest"
 msgstr "Invité"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:34
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:35
 msgid "User"
 msgstr "Utilisateur"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:75
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:76
 msgid "Full Name"
 msgstr "Nom Complet"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:76
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:77
 msgid "Email"
 msgstr "Email"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:77
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:78
 msgid "Role"
 msgstr "Role"
 
-#: shared/modules/slotter/views/scripts/instance/roles.phtml:104
+#: shared/modules/slotter/views/scripts/instance/roles.phtml:105
 msgid "Update roles"
 msgstr "Mettre à jour les rôles"
 
@@ -762,14 +767,30 @@ msgid "New password again"
 msgstr "Nouveau mot de passe une deuxième fois"
 
 #: shared/modules/slotter/views/scripts/users/edit.phtml:55
-msgid "OpenID Identities"
-msgstr "Identités OpenID"
+msgid "OpenID Server"
+msgstr "Serveur OpenID"
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:71
+#: shared/modules/slotter/views/scripts/users/edit.phtml:57
+msgid "You can log on OpenID enabled websites using the bundled OpenID Server."
+msgstr "Vous pouvez vous connecter à d'autres sites compatibles OpenID en utilisant le serveur OpenID intégré."
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:59
+msgid "Your identity URL:"
+msgstr "Votre URL d'identité :"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:63
+msgid "Other OpenID Identities"
+msgstr "Autres identités OpenID"
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:65
+msgid "You can log on this website using other OpenID identities."
+msgstr "Vous pouvez vous connecter à ce site en utilisant d'autres identités OpenID."
+
+#: shared/modules/slotter/views/scripts/users/edit.phtml:81
 msgid "You don't have any OpenID identity registered yet. You can add new identities with the form below."
 msgstr "Vous n'avez encore enregistré aucune identité OpenID. Vous pouvez ajoutez d'autres identités avec le formulaire ci-dessous."
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:80
+#: shared/modules/slotter/views/scripts/users/edit.phtml:90
 msgid "Add an identity:"
 msgstr "Ajouter une identité :"
 
@@ -952,7 +973,7 @@ msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greff
 msgid "Can't connect to Memcache servers."
 msgstr "Impossible de se connecter aux serveurs Memcache."
 
-#: shared/plugins/memcache.php:58
+#: shared/plugins/memcache.php:59
 msgid "Memcache servers"
 msgstr "Serveurs Memcache"
 
@@ -983,19 +1004,19 @@ msgstr "La réponse reCAPTCHA est incorrecte."
 msgid "Make SSL policy definable."
 msgstr "Permet de définir la politique SSL."
 
-#: shared/plugins/ssl.php:32
+#: shared/plugins/ssl.php:33
 msgid "HTTPS support"
 msgstr "Support HTTPS"
 
-#: shared/plugins/ssl.php:34
+#: shared/plugins/ssl.php:35
 msgid "None (not available)"
 msgstr "Aucun (non disponible)"
 
-#: shared/plugins/ssl.php:35
+#: shared/plugins/ssl.php:36
 msgid "Sometimes (available, used for sensitive pages)"
 msgstr "Des fois (disponible, utilisé pour les pages sensibles)"
 
-#: shared/plugins/ssl.php:36
+#: shared/plugins/ssl.php:37
 msgid "Always (available, used everywhere)"
 msgstr "Toujours (disponible, utilisé partout)"
 
