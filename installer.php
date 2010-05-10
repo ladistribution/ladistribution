@@ -11,9 +11,6 @@
 // Uncomment this line if your web server isn't Apache or if mod_rewrite is not available
 // define('LD_REWRITE', false);
 
-// Uncomment this line if you want to enable memcached support in your installation
-// define('LD_MEMCACHED', true);
-
 // Uncomment & modify this line if you want to localise your installation
 // define('LD_LOCALE', 'fr_FR');
 
@@ -92,22 +89,38 @@ function out($message, $class = 'ok')
     }
 }
 
+function error($message)
+{
+    out($message, 'error');
+    ?>
+    </ul>
+    <form method="post" action="">
+        <input type="submit" class="submit button ld-button" name="install" value="Try Again">
+    </form>
+    </div></div></div>
+    </body></html>
+    <?php
+    exit;
+}
+
 // Starts Output
 
 if (!defined('LD_CLI') || !constant('LD_CLI')) {
     ?>
-    <html>
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
     <head>
         <title>La Distribution Installer</title>
-        <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.1-3" rel="stylesheet" type="text/css" />
-        <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.4-25" rel="stylesheet" type="text/css" />
+        <meta charset="UTF-8">
+        <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.1-3" rel="stylesheet" type="text/css">
+        <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.4-25" rel="stylesheet" type="text/css">
         <style type="text/css">
         .h6e-page-title { background:url("http://ladistribution.net/logo.png") no-repeat top center; height:75px; text-indent:-9999px; }
         .h6e-page-content { position:relative; }
         .h6e-main-content { width:40em; }
         .h6e-post-content { padding-bottom:90px; }
         .h6e-simple-footer { position:absolute; bottom:0; width:40em; }
-        ul.ld-steps { margin:0; margin-top:25px; list-style-type:none; }
+        ul.ld-steps { margin:25px 0; list-style-type:none; }
         ul.ld-steps li { margin:10px 0; padding-left:25px; background:no-repeat 0 3px; }
         ul.ld-steps li.ok { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/check_16x13.png"); }
         ul.ld-steps li.error { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/x_alt_16x16.png"); }
@@ -128,9 +141,9 @@ if (!defined('LD_CLI') || !constant('LD_CLI')) {
                       it should be <strong>easy</strong> to fix!</p>
               <?php if (empty($_POST['install'])) : ?>
                   <form method="post" action="">
-                      <input type="submit" class="sunmit button ld-button" name="install" value="Start"/>
+                      <input type="submit" class="submit button ld-button" name="install" value="Start">
                   </form>
-              </div></body></html><?php exit; endif; ?>
+              </div></div></div></body></html><?php exit; endif; ?>
                   <ul class="ld-steps">
     <?php
 }
@@ -138,8 +151,7 @@ if (!defined('LD_CLI') || !constant('LD_CLI')) {
 // Test PHP version
 
 if (!version_compare(PHP_VERSION, '5.2.0', '>=')) {
-    out('La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.', 'error');
-    exit;
+    error('La Distribution needs PHP 5.2.x or higher to run. You are currently running PHP ' . PHP_VERSION . '.');
 }
 
 // Try
@@ -168,8 +180,7 @@ $directories = array(
 foreach ($directories as $name => $directory) {
     if (!file_exists($directory)) {
         if (!is_writable(dirname($directory))) {
-            out("Can't create folder $directory. Check your permissions.", "error");
-            exit;
+            error("Can't create folder $directory. Check your permissions.");
         }
         mkdir($directory);
         fix_perms($directory);
@@ -363,6 +374,11 @@ out('Installation finished. Please, continue to <a href="' . $admin->getUrl() . 
 
 } catch (Exception $e) {
 
-    out($e->getMessage(), 'error');
+    error( $e->getMessage() );
 
 }
+
+?>
+
+</div></div></div>
+</body></html>
