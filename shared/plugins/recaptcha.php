@@ -195,7 +195,7 @@ class Ld_Plugin_Recaptcha
     {
         global $bb_register_error, $bad_input;
         if (!$recaptcha = $this->getService()) {
-            return $param_filter_1;
+            return $param_filter;
         }
         if ($this->bbpress_register_page()) {
             try {
