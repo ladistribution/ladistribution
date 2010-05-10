@@ -2,10 +2,30 @@
 
 require_once(dirname(__FILE__) . "/dist/prepend.php");
 
+$site = Zend_Registry::get("site");
+$application = Zend_Registry::get("application");
+
+$configuration = $application->getConfiguration();
+
 $config["site"]["name"] = $configuration['title'];
 
 $config['site']['server'] = $site->getHost();
 $config['site']['path'] = substr($site->getPath() . '/' . $application->getPath(), 1);
+
+// Handle Root case
+
+if ($application->isRoot()) {
+	$config['theme']['path'] =$config['site']['path'] . '/theme';
+	$config['javascript']['path'] = $config['site']['path'] . '/js';
+	$config['avatar']['path'] = $config['site']['path'] . '/avatar';
+	$config['background']['path'] = $config['site']['path'] . '/background';
+	$config['site']['path'] = substr($site->getPath(), 1);
+}
+
+// Database
+
+$databases = $site->getDatabases();
+$db = $databases[ $application->getDb() ];
 
 $config['db']['type'] = 'mysql';
 $config["db"]["database"] = sprintf("mysqli://%s:%s@%s/%s", $db["user"], $db["password"], $db["host"], $db["name"]);
