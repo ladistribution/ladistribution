@@ -144,6 +144,17 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         return strpos( $_SERVER["REQUEST_URI"], $this->getSite()->getPath() . '/' . $this->getPath() . "/" ) === 0;
     }
 
+    public function getCurrentPath()
+    {
+        $basePath = $this->isRoot() ? $this->getSite()->getPath() : $this->getSite()->getPath() . '/' . $this->getPath();
+        $currentPath = $_SERVER["REQUEST_URI"];
+        if (!empty($_SERVER["QUERY_STRING"])) {
+            $currentPath = str_replace("?" . $_SERVER["QUERY_STRING"], "", $currentPath);
+        }
+        $currentPath = str_replace("$basePath/", "/", $currentPath);
+        return $currentPath;
+    }
+
     public function getDbTables()
     {
         $tables = array();
