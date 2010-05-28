@@ -23,3 +23,4 @@ mv $PACKAGE ../../
 # Clean
 rm -rf languages
 rm -rf themes/default
+rm -rf themes/twentyten
