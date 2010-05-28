@@ -109,7 +109,7 @@ class Ld_Plugin
         }
     }
 
-    function doAction($tag, $arg = '')
+    static function doAction($tag, $arg = '')
     {
         if ( is_array(self::$actions) )
             self::$actions[] = $tag;
