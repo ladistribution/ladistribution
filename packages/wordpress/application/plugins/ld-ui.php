@@ -14,7 +14,9 @@ function ld_admin_head()
 	?>
 	<style type="text/css">
 	#dashboard_right_now a.button[href='update-core.php'] { display:none; }
+	<?php if (get_option('superbar') != 'never') : ?>
 	#footer { display:none; }
+	<?php endif ?>
 	</style>
 	<?php
 }
