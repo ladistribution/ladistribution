@@ -108,10 +108,10 @@ function error($message)
 if (!defined('LD_CLI') || !constant('LD_CLI')) {
     ?>
     <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <html>
     <head>
         <title>La Distribution Installer</title>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
         <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.1-3" rel="stylesheet" type="text/css">
         <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.4-25" rel="stylesheet" type="text/css">
         <style type="text/css">
