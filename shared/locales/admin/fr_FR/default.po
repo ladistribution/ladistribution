@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-10 15:06+0100\n"
+"POT-Creation-Date: 2010-05-28 12:41+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -18,12 +18,12 @@ msgstr ""
 "X-Poedit-SearchPath-1: shared/modules\n"
 "X-Poedit-SearchPath-2: shared/plugins\n"
 
-#: shared/modules/default/views/layouts/layout.phtml:40
+#: shared/modules/default/views/layouts/layout.phtml:44
 #, php-format
 msgid "Powered by <a href=\"%s\">La Distribution</a>, a community project initiated by <a href=\"%s\">h6e</a>."
 msgstr "Propulsé par <a href=\"%s\">La Distribution</a>, un projet communautaire initié par <a href=\"%s\">h6e</a>."
 
-#: shared/modules/default/views/layouts/layout.phtml:44
+#: shared/modules/default/views/layouts/layout.phtml:48
 msgid "Language:"
 msgstr "Langue :"
 
@@ -185,7 +185,6 @@ msgid "You can:"
 msgstr "Vous pouvez :"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:50
-#: shared/modules/slotter/views/scripts/index/index.phtml:71
 msgid "Add a database connection"
 msgstr "Ajouter une connexion à une base de donnée"
 
@@ -214,6 +213,7 @@ msgid "Register the first user now."
 msgstr "Enregistrer le premier utilisateur maintenant."
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:14
+#: shared/modules/slotter/views/scripts/index/update.phtml:43
 msgid "Applications"
 msgstr "Applications"
 
@@ -240,7 +240,7 @@ msgstr "Note :"
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:69
 msgid "There is no database connection registered yet. A database is often needed to install new applications."
-msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment.<br/>Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
+msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment. Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
 
 #: shared/modules/slotter/views/scripts/index/update.phtml:13
 msgid "Congratulations! Everything is up to date."
@@ -624,14 +624,12 @@ msgid "Remove"
 msgstr "Supprimer"
 
 #: shared/modules/slotter/views/scripts/repositories/index-local.phtml:1
-#: shared/modules/slotter/views/scripts/repositories/view.phtml:1
 msgid "Repository Index"
 msgstr ""
 
 #: shared/modules/slotter/views/scripts/repositories/index-local.phtml:3
 #: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:3
 #: shared/modules/slotter/views/scripts/repositories/manage.phtml:3
-#: shared/modules/slotter/views/scripts/repositories/view.phtml:3
 msgid "Repository URL:"
 msgstr "Adresse du dépôt:"
 
@@ -718,7 +716,7 @@ msgstr "Ce dépôt est vide."
 msgid "Global settings"
 msgstr "Paramètres globaux"
 
-#: shared/modules/slotter/views/scripts/settings/index.phtml:15
+#: shared/modules/slotter/views/scripts/settings/index.phtml:18
 msgid "No preference available."
 msgstr "Aucun préference disponible."
 
@@ -855,11 +853,11 @@ msgstr "Les mots de passe doivent correspondre."
 msgid "Identity"
 msgstr "Identité"
 
-#: shared/modules/slotter/controllers/BaseController.php:39
+#: shared/modules/slotter/controllers/BaseController.php:47
 msgid "Home"
 msgstr "Accueil"
 
-#: shared/modules/slotter/controllers/BaseController.php:43
+#: shared/modules/slotter/controllers/BaseController.php:51
 #: shared/modules/slotter/controllers/DatabasesController.php:29
 #: shared/modules/slotter/controllers/DatabasesController.php:31
 msgid "Databases"
@@ -956,6 +954,22 @@ msgstr "Détecte et bloque automatiquement les accès au site non souhaités."
 #, php-format
 msgid "%s is running."
 msgstr "%s fonctionne."
+
+#: shared/plugins/development.php:14
+msgid "Enable debugging, active new features."
+msgstr "Permet d'activer le débugage, de nouvelles fonctionnalités ..."
+
+#: shared/plugins/development.php:23
+msgid "Enable debugging"
+msgstr "Activer le débugage"
+
+#: shared/plugins/development.php:27
+msgid "Active ajax style user management"
+msgstr "Activer la gestion des utilisateurs 'ajax style'"
+
+#: shared/plugins/development.php:31
+msgid "Memory Limit"
+msgstr "Limite mémoire"
 
 #: shared/plugins/gravatar.php:14
 msgid "Display avatars using the Gravatar service."
