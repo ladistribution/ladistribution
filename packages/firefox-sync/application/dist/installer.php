@@ -1,6 +1,6 @@
 <?php
 
-class Ld_Installer_Weave extends Ld_Installer
+class Ld_Installer_FirefoxSync extends Ld_Installer
 {
 
 	function postInstall($preferences = array())
@@ -31,16 +31,6 @@ class Ld_Installer_Weave extends Ld_Installer
 		$dbPrefix = $this->getInstance()->getDbPrefix();
 
 		$tables = array();
-
-		// $tables[] = "CREATE TABLE `{$dbPrefix}users` (
-		// 	id int(11) NOT NULL PRIMARY KEY auto_increment,
-		// 	username varbinary(32) NOT NULL,
-		// 	md5 varbinary(32) default NULL,
-		// 	email varbinary(64) default NULL,
-		// 	status tinyint(4) default '1',
-		// 	alert text,
-		// 	reset varchar(32)
-		// ) ENGINE=InnoDB;";
 
 		$tables[] = "CREATE TABLE `{$dbPrefix}collections` (
 			`userid` varchar(32) NOT NULL,
@@ -77,24 +67,9 @@ class Ld_Installer_Weave extends Ld_Installer
 			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 			$htaccess  = "RewriteEngine on\n";
 			$htaccess .= "RewriteBase {$path}\n";
-			// $htaccess .= "RewriteRule ^user/1.0 registration/1.0/index.php [L]\n";
-			// $htaccess .= "RewriteRule ^user/1 registration/1.0/index.php [L]\n";
-			// $htaccess .= "RewriteRule ^misc/1/captcha_html registration/1.0/captcha.php [L]\n";
 			$htaccess .= "RewriteRule ^1.0 sync/1.0/index.php [L]";
 			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 		}
 	}
-
-	// function uninstall()
-	// {
-	// 	$db = $this->instance->getDbConnection();
-	// 	$dbPrefix = $this->instance->getDbPrefix();
-	//
-	// 	$db->query("DROP TABLE IF EXISTS {$dbPrefix}users");
-	// 	$db->query("DROP TABLE IF EXISTS {$dbPrefix}collections");
-	// 	$db->query("DROP TABLE IF EXISTS {$dbPrefix}wbo");
-	//
-	// 	parent::uninstall();
-	// }
 
 }
