@@ -86,7 +86,7 @@ cd statusnet
 
 cd ..
 
-cd weave
+cd firefox-sync
 
   cd application
   ./build.sh

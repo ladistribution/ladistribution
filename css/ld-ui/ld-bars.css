@@ -5,6 +5,7 @@
 .h6e-top-bar {
   width:100%;
   overflow:hidden;
+  /* */
   position:absolute;
   top:0;
   left:0;
@@ -102,7 +103,9 @@
 }
 
 .h6e-top-bar-inner .b img.avatar {
+  /* 
   background:white;
+  */
 }
 
 .h6e-top-bar-inner .b a {
@@ -164,9 +167,9 @@
 .h6e-super-bar ul.instances li.wordpress { padding-left:25px; background-image:url(img/wp16.png); }
 .h6e-super-bar ul.instances li.dokuwiki  { padding-left:25px; background-image:url(img/dw16.png); }
 .h6e-super-bar ul.instances li.bbpress   { padding-left:25px; background-image:url(img/bp16.png); }
-.h6e-super-bar ul.instances li.weave     { padding-left:25px; background-image:url(img/mw16.png); }
 .h6e-super-bar ul.instances li.gallery   { padding-left:25px; background-image:url(img/ga16.png); }
 .h6e-super-bar ul.instances li.statusnet { padding-left:25px; background-image:url(img/statusnet-16.png); }
+.h6e-super-bar ul.instances li.firefox-sync { padding-left:25px; background-image:url(img/firefox-sync-16.png); }
 
 /* Test New Things
 -------------------------------------------------------------- */
