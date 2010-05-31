@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
     media="screen" rel="stylesheet" type="text/css"/>
 <style type="text/css">
 #sync-logo {
-    height:250px;
+    height:95px;
     background:url(<?php echo $site->getPath() . '/' . $application->getPath() ?>/sync-logo.png) top center no-repeat;
     text-indent:-9999px;
 }

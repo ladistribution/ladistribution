@@ -1,11 +1,14 @@
 <package>
   <id>firefox-sync</id>
   <name>Firefox Sync</name>
-  <version>1.3-12</version>
+  <version>1.3-13</version>
   <type>application</type>
   <db>mysql</db>
   <deploy>
       <origin>auth</origin>
       <destination path="public">./sync/1.0/weave_user/</destination>
   </deploy>
+  <configuration>
+      <preference type="text" label="App Name" name="name"/>
+  </configuration>
 </package>
