@@ -1,7 +1,7 @@
 <package>
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.4-35</version>
+  <version>0.4-40</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>lib-bad-behavior</need>
@@ -31,6 +31,6 @@
       <destination path="shared">locales/admin</destination>
   </deploy>
   <configuration>
-      <preference type="text" label="Short App Name" name="name"/>
+      <preference type="text" label="App Name" name="name"/>
   </configuration>
 </package>
