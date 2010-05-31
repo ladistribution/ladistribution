@@ -1,6 +1,6 @@
 FOLDER="lib"
 PACKAGE="lib-zend-framework.zip"
-VERSION="ZendFramework-1.10.4"
+VERSION="ZendFramework-1.10.5"
 NAME="$VERSION-minimal"
 ZIP="$NAME.zip"
 
