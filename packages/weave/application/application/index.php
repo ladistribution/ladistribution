@@ -12,9 +12,9 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 <link href="<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') ?>"
     media="screen" rel="stylesheet" type="text/css"/>
 <style type="text/css">
-#weave-logo {
-    height:131px;
-    background:url(<?php echo $site->getPath() . '/' . $application->getPath() ?>/logo.png) top center no-repeat;
+#sync-logo {
+    height:250px;
+    background:url(<?php echo $site->getPath() . '/' . $application->getPath() ?>/sync-logo.png) top center no-repeat;
     text-indent:-9999px;
 }
 .h6e-main-content {
@@ -34,7 +34,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
   <div class="h6e-page-content">
 
-      <h1 id="weave-logo"><?php echo $application->getName() ?></h1>
+      <h1 id="sync-logo"><?php echo $application->getName() ?></h1>
 
       <div class="h6e-post-content">
 
@@ -42,7 +42,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <h2>Infos</h2>
 
-          <p>This Weave instance is: <strong>available for registered users only</strong>.</p>
+          <p>This Sync Server instance is: <strong>available for registered users only</strong>.</p>
 
           <p>The Custom Server URL is: <strong><?php echo Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
 
@@ -57,7 +57,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
               $history = ld_weave_count('history');
               ?>
 
-              <p>You currently use <span class="nowrap"><strong><?php echo $clients ?></strong> weave clients</span> to store
+              <p>You currently use <span class="nowrap"><strong><?php echo $clients ?></strong> clients</span> to store
                   <span class="nowrap"><strong><?php echo $bookmarks ?></strong> bookmarks</span>,
                   <span class="nowrap"><strong><?php echo $passwords ?></strong> passwords</span>,
                   <span class="nowrap"><strong><?php echo $forms ?></strong> forms entries</span> and
@@ -71,8 +71,9 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <h2>Notes</h2>
           <ul>
-              <li>registration is not possible from Weave client</li>
-              <li>password change is not possible from Weave client</li>
+              <li>Firefox Sync extension is available on <a href="https://addons.mozilla.org/fr/firefox/addon/10868">addons.mozilla.org</a></li>
+              <li>registration is not possible from Firefox extension</li>
+              <li>password change is not possible from Firefox extension</li>
           </ul>
 
           <?php else : ?>
@@ -86,7 +87,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
   </div>
 
   <div class="h6e-simple-footer" id="footer">
-      Powered by <a href="http://mozillalabs.com/weave/">Weave</a> from <a href="http://mozillalabs.com/">Mozilla Labs</a>.
+      Powered by <a href="http://mozillalabs.com/sync/">Firefox Sync</a> from <a href="http://mozillalabs.com/">Mozilla Labs</a>.
   </div>
 
 </div>

@@ -1,7 +1,7 @@
 <package>
-  <id>weave</id>
-  <name>Weave</name>
-  <version>1.3-5</version>
+  <id>firefox-sync</id>
+  <name>Firefox Sync Server</name>
+  <version>1.3-10</version>
   <type>application</type>
   <db>mysql</db>
   <deploy>

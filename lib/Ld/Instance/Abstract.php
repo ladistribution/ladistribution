@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Instance
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009 h6e / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -69,14 +69,18 @@ abstract class Ld_Instance_Abstract
     public function setInfos($infos = array())
     {
        $this->infos = array_merge($this->infos, $infos);
-       
+
+       if ($this->infos['package'] == 'weave') {
+           $this->infos['package'] = 'firefox-sync';
+       }
+
        // temporary
        foreach (array('package', 'name', 'path', 'type', 'version', 'url', 'db', 'db_prefix') as $key) {
            if (isset($this->infos[$key])) {
                $this->$key = $this->infos[$key];
            }
        }
-       
+
        return $this;
     }
 
