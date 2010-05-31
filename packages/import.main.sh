@@ -29,6 +29,6 @@ $IMPORT dokuwiki.zip
 $IMPORT bbpress.zip
 $IMPORT bbpress-theme-minimal.zip
 
-$IMPORT weave.zip
+$IMPORT firefox-sync.zip
 
 $IMPORT statusnet.zip
