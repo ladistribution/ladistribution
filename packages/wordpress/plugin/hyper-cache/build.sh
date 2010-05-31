@@ -1,5 +1,5 @@
 NAME="wordpress-plugin-hypercache"
-VERSION="2.6.4"
+VERSION="2.6.6"
 SOURCE="http://svn.wp-plugins.org/hyper-cache/trunk/"
 FOLDER="plugin"
 PACKAGE="$NAME.zip"
