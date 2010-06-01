@@ -45,6 +45,11 @@ class Ld_Files
             self::log('unlink', $dir);
         }
 
+        if (self::exists($dir . '/.preserve')) {
+            self::log('skipped', "$dir (preserve detected in target)");
+            return false;
+        }
+
         if (!is_writable($dir)) {
             self::log('skipped', "$dir (not writable)");
             return false;
@@ -243,10 +248,10 @@ class Ld_Files
         self::put($file, Zend_Json::encode($content));
     }
 
-    public static function get($file)
+    public static function get($file, $skipTest = false)
     {
         // self::log('get', $file);
-        if (self::exists($file)) {
+        if ($skipTest || self::exists($file)) {
             return file_get_contents($file);
         }
         return null;

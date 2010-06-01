@@ -16,12 +16,16 @@ class Ld_Http
 
     public static function context()
     {
-        $context = stream_context_create(array(
-            'http' => array(
-                'method'  => 'GET',
-                'header'  => "User-Agent: La Distribution Http Library\r\n"
-            )
-        ));
+        $httpParams = array(
+            'method'  => 'GET',
+            'user_agent' => 'La Distribution HTTP Library',
+            'timeout' => 5
+        );
+        if (Zend_Registry::isRegistered('site')) {
+            $siteUrl = Zend_Registry::get('site')->getUrl();
+            $httpParams['header'] = "Referer: $siteUrl\r\n";
+        }
+        $context = stream_context_create(array('http' => $httpParams));
         return $context;
     }
 
@@ -45,6 +49,9 @@ class Ld_Http
         // Ld_Files::log('Ld_Http::download', "$url");
         $local = fopen($filename, "w+");
         $remote = fopen($url, "r", false, self::context());
+        if (!$local || !$remote) {
+            return false;
+        }
         while ( ($buffer = fread($remote, 8192)) != '' ) {
             fwrite($local, $buffer);
         }

@@ -16,7 +16,7 @@
 
 // Uncomment & modify this line if you want to target a specific release
 // instead of the default one (edge)
-// define('LD_RELEASE', 'concorde');
+// define('LD_RELEASE', 'danube');
 
 // Uncomment & modify this line if you want the installer to talk to another server
 // eg: 'http://localhost/ld/'
@@ -32,8 +32,6 @@ defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
 
 defined('LD_DEBUG') OR define('LD_DEBUG', false);
-
-defined('LD_SESSION') OR define('LD_SESSION', false);
 
 // Functions
 
@@ -107,43 +105,48 @@ function error($message)
 
 if (!defined('LD_CLI') || !constant('LD_CLI')) {
     ?>
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>La Distribution Installer</title>
-        <meta charset="utf-8">
-        <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.1-3" rel="stylesheet" type="text/css">
-        <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.4-25" rel="stylesheet" type="text/css">
-        <style type="text/css">
-        .h6e-page-title { background:url("http://ladistribution.net/logo.png") no-repeat top center; height:75px; text-indent:-9999px; }
-        .h6e-page-content { position:relative; }
-        .h6e-main-content { width:40em; }
-        .h6e-post-content { padding-bottom:90px; }
-        .h6e-simple-footer { position:absolute; bottom:0; width:40em; }
-        ul.ld-steps { margin:25px 0; list-style-type:none; }
-        ul.ld-steps li { margin:10px 0; padding-left:25px; background:no-repeat 0 3px; }
-        ul.ld-steps li.ok { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/check_16x13.png"); }
-        ul.ld-steps li.error { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/x_alt_16x16.png"); }
-        </style>
-    </head>
-    <body>
-        <div class="ld-main-content h6e-main-content">
-          <div class="h6e-page-content">
-              <h1 class="h6e-page-title">La Distribution Installer</h1>
-              <div class="h6e-simple-footer" >
-                  Powered by <a href="http://ladistribution.net/">La Distribution</a>,
-                  a community project initiated by <a href="http://h6e.net/">h6e</a>. 
-              </div>
-              <div class="h6e-post-content">
-                  <p>Thank you for downloading this installer.</p>
-                  <p>It will help you install La Distribution in <strong>less than a minute</strong>.</p>
-                  <p>If you encouter any problem, please visit <a href="http://ladistribution.net/en/forums/">our forums</a>,
-                      it should be <strong>easy</strong> to fix!</p>
-              <?php if (empty($_POST['install'])) : ?>
-                  <form method="post" action="">
-                      <input type="submit" class="submit button ld-button" name="install" value="Start">
-                  </form>
-              </div></div></div></body></html><?php exit; endif; ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>La Distribution Installer</title>
+    <meta charset="utf-8">
+    <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.1-3" rel="stylesheet" type="text/css">
+    <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.4-25" rel="stylesheet" type="text/css">
+    <style type="text/css">
+    .h6e-page-title { background:url("http://ladistribution.net/logo.png") no-repeat top center; height:75px; text-indent:-9999px; }
+    .h6e-page-content { position:relative; }
+    .h6e-main-content { width:40em; }
+    .h6e-post-content { padding-bottom:90px; }
+    .h6e-simple-footer { position:absolute; bottom:0; width:40em; }
+    ul.ld-steps { margin:25px 0; list-style-type:none; }
+    ul.ld-steps li { margin:10px 0; padding-left:25px; background:no-repeat 0 3px; }
+    ul.ld-steps li.ok { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/check_16x13.png"); }
+    ul.ld-steps li.error { background-image:url("<?php echo LD_SERVER ?>css/ld-ui/iconic/x_alt_16x16.png"); }
+    </style>
+</head>
+<body>
+  <div class="ld-main-content h6e-main-content">
+      <div class="h6e-page-content">
+          <h1 class="h6e-page-title">La Distribution Installer</h1>
+          <div class="h6e-simple-footer" >
+              Powered by <a href="http://ladistribution.net/">La Distribution</a>,
+              a community project initiated by <a href="http://h6e.net/">h6e</a>. 
+          </div>
+          <div class="h6e-post-content">
+              <p>Thank you for downloading this installer.</p>
+              <p>It will help you install La Distribution in <strong>less than a minute</strong>.</p>
+              <p>If you encouter any problem, please visit <a href="http://ladistribution.net/en/forums/">our forums</a>,
+                  it should be <strong>easy</strong> to fix!</p>
+          <?php if (empty($_POST['install'])) : ?>
+              <form method="post" action="">
+                  <input type="submit" class="submit button ld-button" name="install" value="Start">
+              </form>
+          </div>
+      </div>
+  </div>
+</body>
+</html>
+<?php exit; endif; ?>
                   <ul class="ld-steps">
     <?php
 }
