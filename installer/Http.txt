@@ -21,7 +21,7 @@ class Ld_Http
             'user_agent' => 'La Distribution HTTP Library',
             'timeout' => 5
         );
-        if (Zend_Registry::isRegistered('site')) {
+        if (method_exists('Zend_Registry', 'isRegistered') && Zend_Registry::isRegistered('site')) {
             $siteUrl = Zend_Registry::get('site')->getUrl();
             $httpParams['header'] = "Referer: $siteUrl\r\n";
         }
