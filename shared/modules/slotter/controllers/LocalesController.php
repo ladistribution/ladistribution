@@ -49,6 +49,7 @@ class Slotter_LocalesController extends Slotter_BaseController
                 }
                 $mainEndpoints = array(
                     'http://ladistribution.net/repositories/edge/main',
+                    'http://ladistribution.net/repositories/danube/main',
                     'http://ladistribution.net/repositories/concorde/main');
                 foreach ($mainEndpoints as $endpoint) {
                     if (in_array($endpoint, $allEndpoints)) {

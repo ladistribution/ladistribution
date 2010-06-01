@@ -24,6 +24,10 @@ class Ld_Plugin_Development
             'type' => 'boolean', 'defaultValue' => '0'
         );
         $preferences[] = array(
+            'name' => 'error_reporting', 'label' => Ld_Translate::translate('Error Reporting'),
+            'type' => 'text', 'defaultValue' => 'E_WARNING'
+        );
+        $preferences[] = array(
             'name' => 'memory_limit', 'label' => Ld_Translate::translate('Memory Limit'),
             'type' => 'text', 'defaultValue' => '32M'
         );
@@ -47,6 +51,10 @@ class Ld_Plugin_Development
         $enable_debugging = Zend_Registry::get('site')->getConfig('enable_debugging');
         if ($enable_debugging) {
             defined('LD_DEBUG') OR define('LD_DEBUG', true);
+        }
+        $error_reporting = Zend_Registry::get('site')->getConfig('error_reporting');
+        if ($error_reporting) {
+            error_reporting($error_reporting);
         }
         $memory_limit = Zend_Registry::get('site')->getConfig('memory_limit');
         if ($memory_limit) {
