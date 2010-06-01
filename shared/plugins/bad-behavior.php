@@ -11,7 +11,7 @@ class Ld_Plugin_BadBehavior
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
             'version' => '0.5.0.4',
-            'description' => Ld_Translate::translate('Detects and automatically blocks unwanted accesses to the site.'),
+            'description' => Ld_Translate::translate('Detects and automatically blocks suspicious accesses to site.'),
             'license' => 'MIT / GPL'
         );
     }

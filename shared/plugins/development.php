@@ -11,7 +11,7 @@ class Ld_Plugin_Development
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
             'version' => '0.5.1',
-            'description' => Ld_Translate::translate('Enable debugging, active new features.'),
+            'description' => Ld_Translate::translate('Customise configuration, enable debugging, new features...'),
             'license' => 'MIT / GPL'
         );
     }

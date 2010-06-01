@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-28 12:41+0100\n"
+"POT-Creation-Date: 2010-06-01 18:23+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -920,8 +920,8 @@ msgid "Settings"
 msgstr "Paramètres"
 
 #: shared/plugins/akismet.php:14
-msgid "Checks user submitted content with Akismet to see if it look like spam."
-msgstr "Vérifie le contenu soumis par les utilisateurs avec Akismet pour voir si ca ressemble à du spam."
+msgid "Checks user submitted content to see if it look like spam."
+msgstr "Vérifie le contenu soumis par les utilisateurs pour voir si ça ressemble à du spam."
 
 #: shared/plugins/akismet.php:27
 #: shared/plugins/memcache.php:40
@@ -945,31 +945,39 @@ msgid "Akismet API key"
 msgstr "Clé d'API Akismet"
 
 #: shared/plugins/bad-behavior.php:14
-msgid "Detects and automatically blocks unwanted accesses to the site."
-msgstr "Détecte et bloque automatiquement les accès au site non souhaités."
+msgid "Detects and automatically blocks suspicious accesses to site."
+msgstr "Détecte et bloque automatiquement les accès suspects au site."
 
 #: shared/plugins/bad-behavior.php:21
 #: shared/plugins/gravatar.php:21
-#: shared/plugins/theme-unlocker.php:21
+#: shared/plugins/wordpress-unlocker.php:39
 #, php-format
 msgid "%s is running."
 msgstr "%s fonctionne."
 
 #: shared/plugins/development.php:14
-msgid "Enable debugging, active new features."
-msgstr "Permet d'activer le débugage, de nouvelles fonctionnalités ..."
+msgid "Customise configuration, enable debugging, new features..."
+msgstr "Personnaliser la configuration, activer le débugage, de nouvelles fonctionnalités ..."
 
 #: shared/plugins/development.php:23
 msgid "Enable debugging"
 msgstr "Activer le débugage"
 
 #: shared/plugins/development.php:27
-msgid "Active ajax style user management"
-msgstr "Activer la gestion des utilisateurs 'ajax style'"
+msgid "Memory Limit"
+msgstr "Memory Limit"
 
 #: shared/plugins/development.php:31
-msgid "Memory Limit"
-msgstr "Limite mémoire"
+msgid "Time Limit"
+msgstr "Time Limit"
+
+#: shared/plugins/development.php:35
+msgid "Include Path"
+msgstr "Include Path"
+
+#: shared/plugins/development.php:39
+msgid "Active ajax style user management"
+msgstr "Activer la gestion des utilisateurs 'ajax style'"
 
 #: shared/plugins/gravatar.php:14
 msgid "Display avatars using the Gravatar service."
@@ -1034,10 +1042,26 @@ msgstr "Des fois (disponible, utilisé pour les pages sensibles)"
 msgid "Always (available, used everywhere)"
 msgstr "Toujours (disponible, utilisé partout)"
 
-#: shared/plugins/theme-unlocker.php:14
-msgid "Allow administrators to install, update, delete any Wordpress theme."
-msgstr "Permet aux administrateurs d'installer, mettre à jour, supprimer n'importe quel thème Wordpress."
+#: shared/plugins/wordpress-unlocker.php:14
+msgid "Unlock WordPress native themes/plugins/users mechanisms."
+msgstr "Déverrouille les mécanismes natifs de WordPress pour les thèmes/plugins/utilisateurs."
 
+#: shared/plugins/wordpress-unlocker.php:23
+msgid "Unlock themes"
+msgstr "Dévérouiller les thèmes"
+
+#: shared/plugins/wordpress-unlocker.php:27
+msgid "Unlock plugins"
+msgstr "Déverrouiller les plugins"
+
+#: shared/plugins/wordpress-unlocker.php:31
+msgid "Unlock users"
+msgstr "Déverrouiller les utilisateurs"
+
+#~ msgid "Allow administrators to install, update, delete any Wordpress theme."
+#~ msgstr ""
+#~ "Permet aux administrateurs d'installer, mettre à jour, supprimer "
+#~ "n'importe quel thème Wordpress."
 #~ msgid "%s is configured and enabled."
 #~ msgstr "%s est configuré et activé."
 #~ msgid "Memcache is configured and enabled."
