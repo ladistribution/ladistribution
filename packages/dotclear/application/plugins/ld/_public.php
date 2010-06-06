@@ -7,8 +7,8 @@ class ldPublicBehaviors
 
   public static function publicFooterContent(&$core)
   {
-      Ld_Ui::top_bar();
-      Ld_Ui::super_bar(array('style' => true));
+      Ld_Ui::topBar();
+      Ld_Ui::superBar(array('style' => true));
   }
 
 }

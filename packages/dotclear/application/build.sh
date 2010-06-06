@@ -1,5 +1,5 @@
 NAME="dotclear"
-VERSION="2.1.5"
+VERSION="2.1.7"
 ZIP="$NAME-$VERSION.zip"
 SOURCE="http://download.dotclear.org/latest/$ZIP"
 FOLDER="application"

@@ -16,9 +16,9 @@ class Ld_Installer_Dotclear extends Ld_Installer
 		$this->create_htaccess();
 
 		// poor man patch
-		$this->addPrepend($this->absolutePath . "/admin/index.php");
-		$this->addPrepend($this->absolutePath . "/admin/install/index.php");
-		$this->addPrepend($this->absolutePath . "/inc/prepend.php");
+		$this->addPrepend($this->getAbsolutePath() . "/admin/index.php");
+		$this->addPrepend($this->getAbsolutePath() . "/admin/install/index.php");
+		$this->addPrepend($this->getAbsolutePath() . "/inc/prepend.php");
 	}
 
 	function update()
@@ -26,9 +26,9 @@ class Ld_Installer_Dotclear extends Ld_Installer
 		parent::update();
 
 		// poor man patch
-		$this->addPrepend($this->absolutePath . "/admin/index.php");
-		$this->addPrepend($this->absolutePath . "/admin/install/index.php");
-		$this->addPrepend($this->absolutePath . "/inc/prepend.php");
+		$this->addPrepend($this->getAbsolutePath() . "/admin/index.php");
+		$this->addPrepend($this->getAbsolutePath() . "/admin/install/index.php");
+		$this->addPrepend($this->getAbsolutePath() . "/inc/prepend.php");
 	}
 
 	function create_config_file($preferences, $auth = false)
@@ -43,26 +43,26 @@ class Ld_Installer_Dotclear extends Ld_Installer
 			$cfg .= "define('DC_AUTH_CLASS','ldDcAuth');\n";
 			$cfg .= '$' . "__autoload['ldDcAuth'] = dirname(__FILE__).'/../dist/ld.auth.php';\n";
 		}
-		Ld_Files::put($this->absolutePath . "/inc/config.php", $cfg);
+		Ld_Files::put($this->getAbsolutePath() . "/inc/config.php", $cfg);
 	}
 
 	public function create_htaccess()
 	{
 		if (constant('LD_REWRITE')) {
-			$path = $this->site->getBasePath() . '/' . $this->path . '/';
+			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 			$htaccess  = "RewriteEngine on\n";
 			$htaccess .= "RewriteBase $path\n";
 			$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 			$htaccess .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
 			$htaccess .= "RewriteRule (.*) index.php/$1 [L]\n";
-			Ld_Files::put($this->absolutePath . "/.htaccess", $htaccess);
+			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 		}
 	}
 
 	function addPrepend($filename)
 	{
 		$file = file($filename);
-		$file[11] = "\n" . "require_once '" . $this->absolutePath . "/dist/prepend.php';" . "\n";
+		$file[11] = "\n" . "require_once '" . $this->getAbsolutePath() . "/dist/prepend.php';" . "\n";
 		Ld_Files::put($filename, implode("", $file));
 	}
 
@@ -73,7 +73,7 @@ class Ld_Installer_Dotclear extends Ld_Installer
 
 		// We use Dotclear installer to actually perform the install
 		// FIXME: we must check the preferences before sending to Dotclear
-		$this->httpClient->setUri($this->instance->getUrl() . '/admin/install/index.php');
+		$this->httpClient->setUri($this->getInstance()->getUrl() . '/admin/install/index.php');
 		$this->httpClient->setParameterPost(array(
 			'u_firstname'  => $preferences['admin_firstname'],
 			'u_name'       => $preferences['admin_name'],
@@ -100,8 +100,8 @@ class Ld_Installer_Dotclear extends Ld_Installer
 
 		if (constant('LD_REWRITE')) {
 
-			$con = $this->instance->getDbConnection();
-			$dbPrefix = $this->instance->getDbPrefix();
+			$con = $this->getInstance()->getDbConnection();
+			$dbPrefix = $this->getInstance()->getDbPrefix();
 
 			$blog_table = $dbPrefix . 'blog';
 			$setting_table = $dbPrefix . 'setting';
@@ -119,8 +119,8 @@ class Ld_Installer_Dotclear extends Ld_Installer
 
 	function uninstall()
 	{
-		$db = $this->instance->getDbConnection();
-		$dbPrefix = $this->instance->getDbPrefix();
+		$db = $this->getInstance()->getDbConnection();
+		$dbPrefix = $this->getInstance()->getDbPrefix();
 
 		$tables = array(
 			// 1st round
