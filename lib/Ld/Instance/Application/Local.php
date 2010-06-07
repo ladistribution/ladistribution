@@ -151,6 +151,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         if (!empty($_SERVER["QUERY_STRING"])) {
             $currentPath = str_replace("?" . $_SERVER["QUERY_STRING"], "", $currentPath);
         }
+        $currentPath = str_replace("//", "/", $currentPath);
         $currentPath = str_replace("$basePath/", "/", $currentPath);
         return $currentPath;
     }
