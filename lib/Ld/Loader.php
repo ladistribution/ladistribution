@@ -26,10 +26,6 @@ class Ld_Loader
     {
         date_default_timezone_set('UTC');
 
-        defined('LD_DEBUG') OR define('LD_DEBUG', false);
-
-        defined('LD_REWRITE') OR define('LD_REWRITE', true);
-
         defined('LD_TMP_DIR') OR define('LD_TMP_DIR', realpath( $dir ) . '/tmp');
 
         defined('LD_LIB_DIR') or define('LD_LIB_DIR', realpath( $dir ) . '/lib' );
@@ -37,14 +33,6 @@ class Ld_Loader
         defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
 
         defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
-
-        if (constant('LD_DEBUG')) {
-            if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
-                error_reporting( E_ALL ^ E_DEPRECATED );
-            } else {
-                error_reporting( E_ALL | E_NOTICE );
-            }
-        }
 
         set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
 
@@ -94,6 +82,10 @@ class Ld_Loader
         self::setupPlugins();
         self::setupAuthentication();
         self::setupLocales();
+
+        // This constants should bet set after plugins are loaded
+        defined('LD_DEBUG') OR define('LD_DEBUG', false);
+        defined('LD_REWRITE') OR define('LD_REWRITE', true);
 
         // Legacy CSS Constant
         defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));
