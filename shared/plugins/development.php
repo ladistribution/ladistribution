@@ -10,7 +10,7 @@ class Ld_Plugin_Development
             'url' => 'http://ladistribution.net/wiki/plugins/#development',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.1',
+            'version' => '0.5.2',
             'description' => Ld_Translate::translate('Customise configuration, enable debugging, new features...'),
             'license' => 'MIT / GPL'
         );
@@ -25,7 +25,7 @@ class Ld_Plugin_Development
         );
         $preferences[] = array(
             'name' => 'error_reporting', 'label' => Ld_Translate::translate('Error Reporting'),
-            'type' => 'text', 'defaultValue' => 'E_WARNING'
+            'type' => 'text', 'defaultValue' => 'E_ALL'
         );
         $preferences[] = array(
             'name' => 'memory_limit', 'label' => Ld_Translate::translate('Memory Limit'),
@@ -54,6 +54,7 @@ class Ld_Plugin_Development
         }
         $error_reporting = Zend_Registry::get('site')->getConfig('error_reporting');
         if ($error_reporting) {
+            eval("\$error_reporting = $error_reporting;");
             error_reporting($error_reporting);
         }
         $memory_limit = Zend_Registry::get('site')->getConfig('memory_limit');
