@@ -1,5 +1,5 @@
---- sync/1.0/index.php.orig	2010-04-11 13:56:28.000000000 +0200
-+++ sync/1.0/index.php	2010-04-11 15:54:42.000000000 +0200
+--- sync/1.0/index.php.orig	2010-06-08 17:01:04.000000000 +0200
++++ sync/1.0/index.php	2010-06-08 17:01:04.000000000 +0200
 @@ -38,6 +38,8 @@
  #
  # ***** END LICENSE BLOCK *****
@@ -9,7 +9,7 @@
  	require_once 'weave_constants.php';
  	require_once 'weave_basic_object.php';
  	require_once 'weave_utils.php';
-@@ -54,9 +56,11 @@
+@@ -57,9 +59,11 @@
  		$path = $_SERVER['PATH_INFO'];
  	else if (!empty($_SERVER['ORIG_PATH_INFO']))
  		$path = $_SERVER['ORIG_PATH_INFO'];

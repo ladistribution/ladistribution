@@ -1,0 +1,17 @@
+--- sync/1.0/weave_storage/mysql.php.orig	2010-06-08 17:10:05.000000000 +0200
++++ sync/1.0/weave_storage/mysql.php	2010-06-08 17:10:35.000000000 +0200
+@@ -109,12 +109,12 @@
+ 		{
+ 			if ($_SERVER['REQUEST_METHOD'] == 'GET')
+ 			{
+-				$this->_dbh = new PDO('mysql:host=' . WEAVE_MYSQL_STORE_READ_HOST . ';dbname=' . WEAVE_MYSQL_STORE_READ_DB, 
++				$this->_dbh = new PDO('mysql:host=' . WEAVE_MYSQL_STORE_READ_HOST . ';port=' . WEAVE_MYSQL_STORE_READ_PORT . ';dbname=' . WEAVE_MYSQL_STORE_READ_DB, 
+ 									WEAVE_MYSQL_STORE_READ_USER, WEAVE_MYSQL_STORE_READ_PASS); 
+ 			}
+ 			else
+ 			{
+-				$this->_dbh = new PDO('mysql:host=' . WEAVE_MYSQL_STORE_WRITE_HOST . ';dbname=' . WEAVE_MYSQL_STORE_WRITE_DB, 
++				$this->_dbh = new PDO('mysql:host=' . WEAVE_MYSQL_STORE_WRITE_HOST . ';port=' . WEAVE_MYSQL_STORE_READ_PORT . ';dbname=' . WEAVE_MYSQL_STORE_WRITE_DB, 
+ 									WEAVE_MYSQL_STORE_WRITE_USER, WEAVE_MYSQL_STORE_WRITE_PASS);
+ 			}
+ 			$this->_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

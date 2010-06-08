@@ -1,16 +1,16 @@
 NAME="firefox-sync"
 VERSION="1.0"
 REVISION_SYNC="3032e32701c1"
-SOURCE_SYNC="http://hg.mozilla.org/labs/weaveserver-sync"
+SOURCE_SYNC="http://hg.mozilla.org/services/sync-server/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
 # Get source
-# mkdir $FOLDER
 hg clone --rev $REVISION_SYNC $SOURCE_SYNC $FOLDER/sync
 
 # Apply patches
 patch -p0 -d $FOLDER < patches/sync_index.diff
+patch -p0 -d $FOLDER < patches/sync_storage_mysql.diff
 
 # mv
 mv $FOLDER/sync/1.0/default_constants.php.dist $FOLDER/sync/1.0/default_constants.php

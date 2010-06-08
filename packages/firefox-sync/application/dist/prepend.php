@@ -11,21 +11,20 @@ $user = Ld_Auth::getUser();
 
 $databases = $site->getDatabases();
 $db = $databases[ $application->getDb() ];
+if (strpos($db['host'], ':')) {
+    list($db['host'], $db['port']) = explode(':', $db['host']);
+}
 
 $dbPrefix = $application->getDbPrefix();
 
 define('WEAVE_AUTH_ENGINE', 'ld');
 define('WEAVE_STORAGE_ENGINE', 'mysql');
 
-define('WEAVE_MYSQL_AUTH_DB', $db['name']);
-define('WEAVE_MYSQL_AUTH_USER', $db['user']);
-define('WEAVE_MYSQL_AUTH_PASS', $db['password']);
-define('WEAVE_MYSQL_AUTH_HOST', $db['host']);
-
 define('WEAVE_MYSQL_STORE_READ_DB', $db['name']);
 define('WEAVE_MYSQL_STORE_READ_USER', $db['user']);
 define('WEAVE_MYSQL_STORE_READ_PASS', $db['password']);
 define('WEAVE_MYSQL_STORE_READ_HOST', $db['host']);
+define('WEAVE_MYSQL_STORE_READ_PORT', $db['port']);
 
 define('WEAVE_MYSQL_STORE_TABLE_NAME', "{$dbPrefix}wbo");
 define('WEAVE_MYSQL_COLLECTION_TABLE_NAME', "{$dbPrefix}collections");
