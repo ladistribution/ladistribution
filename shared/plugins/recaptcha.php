@@ -93,7 +93,7 @@ class Ld_Plugin_Recaptcha
         try {
             $result = $recaptcha->verify($params['recaptcha_challenge_field'], $params['recaptcha_response_field']);
         } catch (Exception $e) {
-            return $e->getMessage() . ' (reCAPTCHA)';
+            throw new Exception($e->getMessage() . ' (reCAPTCHA)');
         }
         if (!$result->isValid()) {
             throw new Exception('reCAPTCHA validation failed. Try again please.');
