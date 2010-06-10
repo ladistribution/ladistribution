@@ -3,7 +3,7 @@
 Plugin Name: LD custom css
 Plugin URI: http://h6e.net/wordpress/plugins/ld-css
 Description: Let the user add custom CSS rules to his blog
-Version: 0.4.2
+Version: 0.4.4
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -41,7 +41,7 @@ function ld_custom_css_edit()
 		$css_val = "/* " . __('Custom CSS', 'ld') . " */\n\n";
 	}
 
-	if( $_POST['action'] == 'update' ) {
+	if (isset($_POST['action']) && $_POST['action'] == 'update' ) {
 		$css_val = $_POST[ $opt_name ];
 		update_option( $opt_name, $css_val );
 		?>

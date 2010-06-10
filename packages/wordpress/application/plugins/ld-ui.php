@@ -3,7 +3,7 @@
 Plugin Name: LD Ui
 Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.4.3
+Version: 0.4.4
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -15,7 +15,7 @@ function ld_admin_head()
 	<style type="text/css">
 	#dashboard_right_now a.button[href='update-core.php'] { display:none; }
 	<?php if (get_option('superbar') != 'never') : ?>
-	#footer { display:none; }
+	#footer { display:none !important; }
 	<?php endif ?>
 	</style>
 	<?php
