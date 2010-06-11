@@ -18,7 +18,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
     text-indent:-9999px;
 }
 .h6e-main-content {
-    width:35em;
+    width:40em;
 }
 .nowrap {
     white-space:nowrap;
@@ -42,9 +42,9 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <h2>Infos</h2>
 
-          <p>This Sync Server instance is: <strong>available for registered users only</strong>.</p>
+          <p>This Sync Server instance is: <strong class="nowrap">available for registered users only</strong>.</p>
 
-          <p>The Custom Server URL is: <strong><?php echo Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
+          <p>The Custom Server URL is: <strong class="nowrap"><?php echo Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
 
           <h2>Your data</h2>
 

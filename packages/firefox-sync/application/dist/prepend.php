@@ -14,6 +14,9 @@ $db = $databases[ $application->getDb() ];
 if (strpos($db['host'], ':')) {
     list($db['host'], $db['port']) = explode(':', $db['host']);
 }
+if (empty($db['port'])) {
+    $db['port'] = '3306';
+}
 
 $dbPrefix = $application->getDbPrefix();
 
