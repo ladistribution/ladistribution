@@ -1,7 +1,7 @@
 <package>
   <id>firefox-sync</id>
   <name>Firefox Sync</name>
-  <version>1.3-16</version>
+  <version>1.3-17</version>
   <type>application</type>
   <db>mysql</db>
   <deploy>
