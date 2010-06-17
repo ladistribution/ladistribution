@@ -33,8 +33,6 @@ if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
 	define('SCRIPT_DEBUG', true);
 	define('COMPRESS_SCRIPTS', false);
 	define('CONCATENATE_SCRIPTS', false);
-} else {
-	define('SCRIPT_DEBUG', true); // temp for wordpress 3.0 dev
 }
 
 if (!defined('WP_CACHE')
