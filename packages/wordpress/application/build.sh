@@ -1,13 +1,11 @@
 NAME="wordpress"
-VERSION="3.0.0"
-# SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
-SOURCE='http://core.svn.wordpress.org/trunk/'
-REVISION='15270'
+VERSION="3.0"
+SOURCE="http://core.svn.wordpress.org/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
 # Get source
-svn export $SOURCE $FOLDER -r $REVISION --force
+svn export $SOURCE $FOLDER --force
 
 # Remove some useless (or not desired) files
 rm $FOLDER/wp-atom.php
