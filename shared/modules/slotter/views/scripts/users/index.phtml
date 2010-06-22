@@ -65,8 +65,8 @@
 
     <tr>
         <td><?php echo $user['username'] ?></td>
-        <td><?php echo $user['fullname'] ?></td>
-        <td><?php echo $user['email'] ?></td>
+        <td><?php echo isset($user['fullname']) ? $user['fullname'] : '' ?></td>
+        <td><?php echo isset($user['email']) ? $user['email'] : '' ?></td>
 
         <td>
             <?php if ($this->canManageRoles) : ?>
