@@ -163,11 +163,7 @@ class Ld_Site_Users_Simple
 
         // Email
         if (isset($user['email'])) {
-            $validateEmail = new Zend_Validate_EmailAddress(array(
-               'allow' => Zend_Validate_Hostname::ALLOW_DNS,
-               'mx'    => true,
-               'deep'  => true
-            ));
+            $validateEmail = new Zend_Validate_EmailAddress();
             if (!$validateEmail->isValid($user['email'])) {
                 throw new Exception('Email is invalid.');
             }
