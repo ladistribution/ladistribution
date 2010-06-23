@@ -26,7 +26,7 @@ class Ld_Translate
         return self::$_translator;
     }
 
-    public function translate($string)
+    public static function translate($string)
     {
         $translator = self::getTranslator();
         if ($translator) {
