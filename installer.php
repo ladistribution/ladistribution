@@ -76,6 +76,15 @@ function is_requirable($lib)
     return false;
 }
 
+function ld_mkdir($directory)
+{
+    if (!is_writable(dirname($directory))) {
+        error("Can't create folder $directory. Check your permissions.");
+    }
+    mkdir($directory);
+    fix_perms($directory);
+}
+
 function out($message, $class = 'ok')
 {
     if (defined('LD_CLI') && constant('LD_CLI')) {
@@ -130,7 +139,7 @@ if (!defined('LD_CLI') || !constant('LD_CLI')) {
           <h1 class="h6e-page-title">La Distribution Installer</h1>
           <div class="h6e-simple-footer" >
               Powered by <a href="http://ladistribution.net/">La Distribution</a>,
-              a community project initiated by <a href="http://h6e.net/">h6e</a>. 
+              a community project initiated by <a href="http://h6e.net/">h6e</a>.
           </div>
           <div class="h6e-post-content">
               <p>Thank you for downloading this installer.</p>
@@ -182,11 +191,7 @@ $directories = array(
 
 foreach ($directories as $name => $directory) {
     if (!file_exists($directory)) {
-        if (!is_writable(dirname($directory))) {
-            error("Can't create folder $directory. Check your permissions.");
-        }
-        mkdir($directory);
-        fix_perms($directory);
+        ld_mkdir($directory);
     }
 }
 
@@ -205,12 +210,10 @@ $essentials_directories = array(
 foreach ($essentials_directories as $directory) {
     $parent = dirname($directory);
     if (!file_exists($parent)) {
-        mkdir($parent);
-        fix_perms($parent);
+        ld_mkdir($parent);
     }
     if (!file_exists($directory)) {
-        mkdir($directory);
-        fix_perms($directory);
+        ld_mkdir($directory);
     }
 }
 
@@ -269,7 +272,9 @@ $site = Ld_Loader::loadSite(dirname(__FILE__));
 
 // Detect base path
 if (!empty($_SERVER["SCRIPT_NAME"])) {
-    $site->path = str_replace('/installer.php', '', $_SERVER["SCRIPT_NAME"]);
+    $xpath = explode('/', $_SERVER["SCRIPT_NAME"]);
+    array_pop($xpath);
+    $site->path = implode('/', $xpath);
 }
 
 // Init
