@@ -12,15 +12,6 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 		$this->writeHtaccess();
 	}
 
-	function postUpdate($preferences = array())
-	{
-		$db = $this->instance->getDbConnection();
-		$dbPrefix = $this->getInstance()->getDbPrefix();
-
-		$db->query("ALTER TABLE `{$dbPrefix}wbo` CHANGE `username` `username` VARCHAR( 32 ) NOT NULL");
-		$db->query("ALTER TABLE `{$dbPrefix}collections` CHANGE `userid` `userid` VARCHAR( 32 ) NOT NULL");
-	}
-
 	function postMove()
 	{
 		$this->writeHtaccess();
