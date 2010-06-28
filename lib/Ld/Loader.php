@@ -73,6 +73,9 @@ class Ld_Loader
         }
         if (empty($config['host']) && isset($_SERVER['SERVER_NAME'])) {
             $config['host'] = $_SERVER['SERVER_NAME'];
+            if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80') {
+                $config['host'] .= ':' . $_SERVER['SERVER_PORT'];
+            }
         }
 
         // Site object
