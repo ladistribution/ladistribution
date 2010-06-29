@@ -2,7 +2,7 @@ SOURCE="https://clearbricks.org/svn/trunk/"
 FOLDER="lib"
 PACKAGE="lib-clearbricks.zip"
 # Export from SVN
-svn export $SOURCE $FOLDER
+svn export -r 248 $SOURCE $FOLDER
 # Apply patches
 patch -p0 -d $FOLDER < patches/empty-directory.diff
 # Remove some unwanted files (mac)
