@@ -10,7 +10,7 @@ class Ld_Plugin_BadBehavior
             'url' => 'http://ladistribution.net/wiki/plugins/#bad-behavior',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.4',
+            'version' => '0.5.1',
             'description' => Ld_Translate::translate('Detects and automatically blocks suspicious accesses to site.'),
             'license' => 'MIT / GPL'
         );
@@ -18,7 +18,21 @@ class Ld_Plugin_BadBehavior
 
     public function status()
     {
-        return array(1, sprintf(Ld_Translate::translate('%s is running.'), 'Bad Behavior'));
+        $httpbl_key = Zend_Registry::get('site')->getConfig('httpbl_key', '');
+        if (empty($httpbl_key)) {
+            return array(1, sprintf(Ld_Translate::translate('%s is running.') . ' ' . Ld_Translate::translate('Http:BL configuration is optional.'), 'Bad Behavior'));
+        }
+        return array(1, sprintf(Ld_Translate::translate('%s is running.') . ' ' . Ld_Translate::translate('Http:BL si configured.'), 'Bad Behavior'));
+    }
+
+    public function preferences()
+    {
+        $preferences = array();
+        $preferences[] = array(
+            'name' => 'bad_behavior_httpbl_key', 'label' => Ld_Translate::translate('Http:BL API Key'),
+            'type' => 'text', 'defaultValue' => ''
+        );
+        return $preferences;
     }
 
     public function load()
@@ -50,13 +64,15 @@ class Ld_Plugin_BadBehavior
         require_once(LD_LIB_DIR . "/bad-behavior/version.inc.php");
         require_once(LD_LIB_DIR . "/bad-behavior/core.inc.php");
 
+        $httpbl_key = Zend_Registry::get('site')->getConfig('httpbl_key', '');
+
         $options = array(
             'log_table'     => 'badbehaviour',
             'display_stats' => false,
             'strict'        => false,
             'verbose'       => false,
             'logging'       => false,
-            'httpbl_key'    => '',
+            'httpbl_key'    => $httpbl_key,
             'httpbl_threat' => '25',
             'httpbl_maxage' => '30',
             'offsite_forms' => false
