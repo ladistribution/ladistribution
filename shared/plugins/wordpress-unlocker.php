@@ -10,7 +10,7 @@ class Ld_Plugin_WordpressUnlocker
             'url' => 'http://ladistribution.net/wiki/plugins/#wordpress-unlocker',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.1',
+            'version' => '0.5.2',
             'description' => Ld_Translate::translate('Unlock WordPress native themes/plugins/users mechanisms.'),
             'license' => 'MIT / GPL'
         );
@@ -38,7 +38,7 @@ class Ld_Plugin_WordpressUnlocker
     {
         return array(1, sprintf(Ld_Translate::translate('%s is running.'), 'WordPress Unlocker'));
     }
-    
+
     public function load()
     {
         Ld_Plugin::addAction('Wordpress:plugin', array($this, 'wordpress_init'), 20);
@@ -50,40 +50,49 @@ class Ld_Plugin_WordpressUnlocker
         add_filter('ld_disable_submenus', array($this, 'wordpress_submenu_filter'));
         add_filter('ld_enable_admin_caps', array($this, 'wordpress_enable_admin_caps'));
         add_filter('ld_disable_admin_caps', array($this, 'wordpress_disable_admin_caps'));
-        $unlock_themes = Zend_Registry::get('site')->getConfig('unlock_themes');
+        $unlock_themes = self::getConfig('unlock_themes');
         if ($unlock_themes) {
             add_filter('ld_theme_update', array($this, 'wordpress_theme_update'));
         }
-        $unlock_plugins = Zend_Registry::get('site')->getConfig('unlock_plugins');
+        $unlock_plugins = self::getConfig('unlock_plugins');
         if ($unlock_plugins) {
             add_filter('ld_plugin_update', array($this, 'wordpress_plugin_update'));
         }
     }
 
-    public function wordpress_menu_filter($submenus)
+    public function getConfig($name)
+    {
+        $site = Zend_Registry::get('site');
+        if ($site->isChild()) {
+            return $site->getParentSite()->getConfig($name);
+        }
+        return $site->getConfig($name);
+    }
+
+    public function wordpress_menu_filter($menu)
     {
         $pages = array();
-        $unlock_plugins = Zend_Registry::get('site')->getConfig('unlock_plugins');
+        $unlock_plugins = self::getConfig('unlock_plugins');
         if ($unlock_plugins) {
             $pages[] = 'plugins.php';
         }
-        $unlock_users = Zend_Registry::get('site')->getConfig('unlock_users');
+        $unlock_users = self::getConfig('unlock_users');
         if ($unlock_users) {
             $pages[] = 'users.php';
         }
         foreach ($pages as $page) {
-            $index = array_search($page, $submenus);
+            $index = array_search($page, $menu);
             if (isset($index)) {
-                unset($submenus[$index]);
+                unset($menu[$index]);
             }
         }
-        return $submenus;
+        return $menu;
     }
 
     public function wordpress_submenu_filter($submenus)
     {
         $pages = array();
-        $unlock_themes = Zend_Registry::get('site')->getConfig('unlock_themes');
+        $unlock_themes = self::getConfig('unlock_themes');
         if ($unlock_themes) {
             $pages[] = 'themes.php';
             $pages[] = 'theme-install.php';
@@ -104,7 +113,8 @@ class Ld_Plugin_WordpressUnlocker
 
     public function wordpress_get_plugins_caps()
     {
-        return array('install_plugins', 'delete_plugins', 'update_plugins');
+        return array('install_plugins', 'delete_plugins', 'update_plugins',
+            /* plugin menu doesn't appear without */ 'delete_users');
     }
 
     public function wordpress_get_users_caps()
@@ -115,15 +125,15 @@ class Ld_Plugin_WordpressUnlocker
     public function wordpress_get_enabled_caps()
     {
         $caps = array();
-        $unlock_themes = Zend_Registry::get('site')->getConfig('unlock_themes');
+        $unlock_themes = self::getConfig('unlock_themes');
         if ($unlock_themes) {
             $caps = array_unique(array_merge($caps, $this->wordpress_get_themes_caps()));
         }
-        $unlock_plugins = Zend_Registry::get('site')->getConfig('unlock_plugins');
+        $unlock_plugins = self::getConfig('unlock_plugins');
         if ($unlock_plugins) {
             $caps = array_unique(array_merge($caps, $this->wordpress_get_plugins_caps()));
         }
-        $unlock_users = Zend_Registry::get('site')->getConfig('unlock_users');
+        $unlock_users = self::getConfig('unlock_users');
         if ($unlock_users) {
             $caps = array_unique(array_merge($caps, $this->wordpress_get_users_caps()));
         }
