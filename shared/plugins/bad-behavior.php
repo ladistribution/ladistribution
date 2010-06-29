@@ -22,7 +22,7 @@ class Ld_Plugin_BadBehavior
         if (empty($httpbl_key)) {
             return array(1, sprintf(Ld_Translate::translate('%s is running.') . ' ' . Ld_Translate::translate('Http:BL configuration is optional.'), 'Bad Behavior'));
         }
-        return array(1, sprintf(Ld_Translate::translate('%s is running.') . ' ' . Ld_Translate::translate('Http:BL si configured.'), 'Bad Behavior'));
+        return array(1, sprintf(Ld_Translate::translate('%s is running.') . ' ' . Ld_Translate::translate('Http:BL is configured.'), 'Bad Behavior'));
     }
 
     public function preferences()

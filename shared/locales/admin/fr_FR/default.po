@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-01 18:23+0100\n"
+"POT-Creation-Date: 2010-06-29 14:07+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -508,7 +508,7 @@ msgstr "Auteur"
 
 #: shared/modules/slotter/views/scripts/instance/roles.phtml:32
 msgid "Contributor"
-msgstr "Contributeurs"
+msgstr "Contributeur"
 
 #: shared/modules/slotter/views/scripts/instance/roles.phtml:33
 msgid "Subscriber"
@@ -948,12 +948,30 @@ msgstr "Clé d'API Akismet"
 msgid "Detects and automatically blocks suspicious accesses to site."
 msgstr "Détecte et bloque automatiquement les accès suspects au site."
 
-#: shared/plugins/bad-behavior.php:21
+#: shared/plugins/bad-behavior.php:23
+#: shared/plugins/bad-behavior.php:25
+#: shared/plugins/bouncer.php:21
 #: shared/plugins/gravatar.php:21
 #: shared/plugins/wordpress-unlocker.php:39
 #, php-format
 msgid "%s is running."
 msgstr "%s fonctionne."
+
+#: shared/plugins/bad-behavior.php:23
+msgid "Http:BL configuration is optional."
+msgstr ""
+
+#: shared/plugins/bad-behavior.php:25
+msgid "Http:BL si configured."
+msgstr ""
+
+#: shared/plugins/bad-behavior.php:32
+msgid "Http:BL API Key"
+msgstr ""
+
+#: shared/plugins/bouncer.php:14
+msgid "Tracks accesses and blocks suspicious one."
+msgstr ""
 
 #: shared/plugins/development.php:14
 msgid "Customise configuration, enable debugging, new features..."
@@ -964,18 +982,22 @@ msgid "Enable debugging"
 msgstr "Activer le débugage"
 
 #: shared/plugins/development.php:27
+msgid "Error Reporting"
+msgstr "Error Reporting"
+
+#: shared/plugins/development.php:31
 msgid "Memory Limit"
 msgstr "Memory Limit"
 
-#: shared/plugins/development.php:31
+#: shared/plugins/development.php:35
 msgid "Time Limit"
 msgstr "Time Limit"
 
-#: shared/plugins/development.php:35
+#: shared/plugins/development.php:39
 msgid "Include Path"
 msgstr "Include Path"
 
-#: shared/plugins/development.php:39
+#: shared/plugins/development.php:43
 msgid "Active ajax style user management"
 msgstr "Activer la gestion des utilisateurs 'ajax style'"
 
