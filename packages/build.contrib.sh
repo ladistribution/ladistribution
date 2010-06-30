@@ -56,10 +56,6 @@ cd ..
 
 cd dokuwiki
 
-  cd application
-  ./build.sh
-  cd ..
-
   cd theme
   
     cd monobook
