@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-29 14:07+0100\n"
+"POT-Creation-Date: 2010-06-29 14:10+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -623,16 +623,6 @@ msgstr "Êtes-vous sûrs de vouloir supprimer ce dépôt ?"
 msgid "Remove"
 msgstr "Supprimer"
 
-#: shared/modules/slotter/views/scripts/repositories/index-local.phtml:1
-msgid "Repository Index"
-msgstr ""
-
-#: shared/modules/slotter/views/scripts/repositories/index-local.phtml:3
-#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:3
-#: shared/modules/slotter/views/scripts/repositories/manage.phtml:3
-msgid "Repository URL:"
-msgstr "Adresse du dépôt:"
-
 #: shared/modules/slotter/views/scripts/repositories/index.phtml:1
 msgid "Repositories"
 msgstr "Dépôts"
@@ -666,6 +656,11 @@ msgstr "supprimer"
 #: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:1
 msgid "Browse repository"
 msgstr "Parcourir le dépôt"
+
+#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:3
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:3
+msgid "Repository URL:"
+msgstr "Adresse du dépôt:"
 
 #: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:12
 #: shared/modules/slotter/views/scripts/repositories/manage.phtml:25
@@ -959,19 +954,15 @@ msgstr "%s fonctionne."
 
 #: shared/plugins/bad-behavior.php:23
 msgid "Http:BL configuration is optional."
-msgstr ""
+msgstr "La configuration Http:BL est optionnelle."
 
 #: shared/plugins/bad-behavior.php:25
-msgid "Http:BL si configured."
-msgstr ""
+msgid "Http:BL is configured."
+msgstr "Http:BL est configuré"
 
 #: shared/plugins/bad-behavior.php:32
 msgid "Http:BL API Key"
-msgstr ""
-
-#: shared/plugins/bouncer.php:14
-msgid "Tracks accesses and blocks suspicious one."
-msgstr ""
+msgstr "Clé d'API Http:BL"
 
 #: shared/plugins/development.php:14
 msgid "Customise configuration, enable debugging, new features..."

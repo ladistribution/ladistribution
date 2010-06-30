@@ -1,6 +1,5 @@
 NAME="admin"
 LOCALE="fr_FR"
-VERSION="0.2.34.3"
 SOURCE="http://ladistribution.net/svn/trunk/shared/locales/$NAME/$LOCALE/"
 FOLDER="locale"
 PACKAGE="$NAME-locale-fr-fr.zip"
