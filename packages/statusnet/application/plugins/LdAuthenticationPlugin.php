@@ -117,6 +117,13 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 		$role = Zend_Registry::get('application')->getUserRole($username);
 		switch ($role) {
 			case 'moderator':
+				// empty memcache (not understood yet why keys are not up to date as expected)
+				// $memcache = common_memcache();
+				// if ($memcache) {
+				// 	$kv = array('profile_id' => $sn_profile->id, 'role' => Profile_role::MODERATOR);
+				// 	ksort($kv);
+				// 	$memcache->delete(Memcached_DataObject::multicacheKey('Profile_role', $kv));
+				// }
 				if (!$sn_user->hasRole(Profile_role::MODERATOR)) {
 					$sn_user->grantRole(Profile_role::MODERATOR);
 				}
@@ -138,6 +145,18 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 	function onEndLogout()
 	{
 		Ld_Auth::logout();
+	}
+
+	function onPluginVersion(&$versions)
+	{
+		$versions[] = array(
+			'name' => 'La Distribution Authentication',
+			'version' => '0.4.1',
+			'author' => 'h6e.net',
+			'homepage' => 'http://h6e.net/',
+			'rawdescription' => _m('SSO support for Status.net in La Distribution')
+		);
+		return true;
 	}
 
 }

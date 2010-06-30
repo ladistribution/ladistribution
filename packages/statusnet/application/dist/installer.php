@@ -70,7 +70,7 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		return $configuration;
 	}
 
-	public function setConfiguration($configuration = array())
+	public function setConfiguration($configuration, $type = 'general')
 	{
 		$configuration = array_merge($this->getConfiguration(), $configuration);
 		return parent::setConfiguration($configuration);
