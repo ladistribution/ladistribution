@@ -163,7 +163,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         // Base .htaccess
-        if (constant('LD_REWRITE')) {
+        // if undefined we assume it's true
+        if (!defined('LD_REWRITE') || constant('LD_REWRITE')) {
             $root_htaccess = $this->getDirectory() . '/.htaccess';
             $path = $this->getPath() . '/';
             $rules = array(
