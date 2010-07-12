@@ -3,7 +3,7 @@
 Plugin Name: LD auth
 Plugin URI: http://h6e.net/wordpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.4.2
+Version: 0.4.3
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -13,7 +13,7 @@ class Ld_Auth_Adapter_Wordpress implements Zend_Auth_Adapter_Interface
 	public function authenticate()
 	{
 		if (is_user_logged_in()) {
-			$user = wp_get_current_user();
+			$wp_user = wp_get_current_user();
 			$ld_user = Ld_Wordpress_Auth::get_ld_user($wp_user->user_login);
 			if ($ld_user) {
 				return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $ld_user['username']);
