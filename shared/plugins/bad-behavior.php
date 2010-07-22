@@ -10,7 +10,7 @@ class Ld_Plugin_BadBehavior
             'url' => 'http://ladistribution.net/wiki/plugins/#bad-behavior',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.1',
+            'version' => '0.5.2',
             'description' => Ld_Translate::translate('Detects and automatically blocks suspicious accesses to site.'),
             'license' => 'MIT / GPL'
         );
@@ -18,7 +18,7 @@ class Ld_Plugin_BadBehavior
 
     public function status()
     {
-        $httpbl_key = Zend_Registry::get('site')->getConfig('httpbl_key', '');
+        $httpbl_key = Zend_Registry::get('site')->getConfig('bb_httpbl_key', '');
         if (empty($httpbl_key)) {
             return array(1, sprintf(Ld_Translate::translate('%s is running.') . ' ' . Ld_Translate::translate('Http:BL configuration is optional.'), 'Bad Behavior'));
         }
@@ -29,7 +29,7 @@ class Ld_Plugin_BadBehavior
     {
         $preferences = array();
         $preferences[] = array(
-            'name' => 'bad_behavior_httpbl_key', 'label' => Ld_Translate::translate('Http:BL API Key'),
+            'name' => 'bb_httpbl_key', 'label' => Ld_Translate::translate('Http:BL API Key'),
             'type' => 'text', 'defaultValue' => ''
         );
         return $preferences;
