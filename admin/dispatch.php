@@ -2,7 +2,12 @@
 
 $dir = dirname(__FILE__);
 
-require_once($dir . '/dist/config.php');
+if (file_exists($dir . '/dist/config.php')) {
+    require_once($dir . '/dist/config.php');
+} else {
+    echo 'La Distribution not installed.';
+    exit;
+}
 
 $site = Zend_Registry::get('site');
 
