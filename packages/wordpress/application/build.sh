@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="3.0"
+VERSION="3.0.1"
 SOURCE="http://core.svn.wordpress.org/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"

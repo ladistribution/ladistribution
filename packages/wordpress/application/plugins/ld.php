@@ -182,7 +182,7 @@ function ld_wp_dashboard_setup()
 	unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']);
 }
 
-add_action('wp_dashboard_setup', 'ld_wp_dashboard_setup');
+add_action('wp_dashboard_setup', 'ld_wp_dashboard_setup', 102);
 
 function ld_option_home($value)
 {
