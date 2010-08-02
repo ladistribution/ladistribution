@@ -104,6 +104,10 @@ cd lib
   ./build.sh
   cd ..
 
+  cd admin
+  ./build.sh
+  cd ..
+
   cd ld-libraries
   ./build.sh
   cd ..

@@ -1,0 +1,30 @@
+<package>
+  <id>lib-admin</id>
+  <name>La Distribution Admin Dependencies</name>
+  <version>0.5-2</version>
+  <type>lib</type>
+  <deploy>
+      <origin>modules/default</origin>
+      <destination path="shared">modules/default</destination>
+  </deploy>
+  <deploy>
+      <origin>modules/identity</origin>
+      <destination path="shared">modules/identity</destination>
+  </deploy>
+  <deploy>
+      <origin>modules/slotter</origin>
+      <destination path="shared">modules/slotter</destination>
+  </deploy>
+  <deploy>
+      <origin>plugins</origin>
+      <destination path="shared">plugins</destination>
+  </deploy>
+  <deploy>
+      <origin>js</origin>
+      <destination path="js">ld</destination>
+  </deploy>
+  <deploy>
+      <origin>locales</origin>
+      <destination path="shared">locales/admin</destination>
+  </deploy>
+</package> 
