@@ -6,32 +6,36 @@ SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}{$SUB_VE
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
-# Get source
-curl $SOURCE > $GZ
-tar zxvf $GZ
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > $GZ
+tar -x -f $GZ
 rm $GZ
 mv $NAME-$VERSION $FOLDER
 
-# Get Spam List
-curl http://meta.wikimedia.org/wiki/Spam_blacklist?action=raw | grep -v '<pre>' > $FOLDER/conf/wordblock.conf
+echo "# Get spam list with curl"
+curl http://meta.wikimedia.org/wiki/Spam_blacklist?action=raw -# | grep -v '<pre>' > $FOLDER/conf/wordblock.conf
 
 # Default screenshot
 cp screenshot.png $FOLDER/lib/tpl/default/
 
-# Add Minimal theme
+echo "# Get minimal theme with git"
 mkdir templates
-git clone git://github.com/znarf/dokuwiki-minimal.git templates/minimal
+git clone git://github.com/znarf/dokuwiki-minimal.git templates/minimal --quiet
 rm -rf templates/minimal/.git templates/minimal/Makefile
 
-# Add CSS plugin
-git clone git://github.com/znarf/dokuwiki-css.git plugins/css
+echo "# Get css plugin with git"
+git clone git://github.com/znarf/dokuwiki-css.git plugins/css --quiet
 rm -rf plugins/css/.git
 
-# Apply patches
+echo "# Apply patches"
 patch -p0 -d $FOLDER < patches/config.diff
 patch -p0 -d $FOLDER < patches/config-feed.diff
 patch -p0 -d $FOLDER < patches/geshi.diff
 patch -p0 -d $FOLDER < patches/init.diff
+
+echo "# Remove files"
 
 # Remove installer
 rm $FOLDER/install.php
@@ -78,8 +82,8 @@ rm -rf $FOLDER/inc/geshi
 # Remove some unwanted files (osX)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE $FOLDER dist plugins templates auth -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER dist plugins templates auth --quiet --exclude \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

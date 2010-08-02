@@ -1,20 +1,27 @@
-VERSION="2.1.4"
+VERSION="2.1.5"
 FOLDER="lib"
 NAME="bad-behavior"
 SOURCE="http://downloads.wordpress.org/plugin/$NAME.$VERSION.zip"
 ZIP="$NAME.zip"
 PACKAGE="lib-$NAME.zip"
-# Get source
-curl $SOURCE > $ZIP
-unzip $ZIP
+
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > $ZIP
+unzip -q $ZIP
 rm $ZIP
+
 # Grab files we want
 mv $NAME/$NAME $FOLDER
 rm -rf $NAME
+
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
-# Create zip package
-zip -rqv $PACKAGE $FOLDER manifest.xml
+
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER manifest.xml --quiet
 mv $PACKAGE ../../
+
 # Clean
 rm -rf $FOLDER

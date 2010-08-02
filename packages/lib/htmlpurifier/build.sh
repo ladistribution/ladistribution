@@ -5,9 +5,11 @@ SOURCE="http://htmlpurifier.org/releases/$NAME.zip"
 ZIP="$NAME.ZIP"
 PACKAGE="lib-htmlpurifier.zip"
 
-# Get source
-curl $SOURCE > $ZIP
-unzip $ZIP
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > $ZIP
+unzip -q $ZIP
 rm $ZIP
 
 # Copy files
@@ -17,8 +19,8 @@ rm -rf $NAME
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE $FOLDER manifest.xml
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER manifest.xml --quiet
 mv $PACKAGE ../../
 
 # Clean

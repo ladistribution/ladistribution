@@ -1,21 +1,23 @@
 NAME="bbpress"
-VERSION="1.0.1"
+VERSION="1.0.2"
 SOURCE="http://svn.automattic.com/$NAME/tags/$VERSION/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
-# Get Source
-svn export $SOURCE $FOLDER --force
+echo "# Building $NAME package"
 
-# Apply patches
+echo "# Get source from $SOURCE with svn"
+svn export $SOURCE $FOLDER --force --quiet
+
+echo "# Apply patches"
 patch -p0 -d $FOLDER < patches/global-bb.diff
 patch -p0 -d $FOLDER < patches/global-bbdb.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE $FOLDER dist plugins -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER dist plugins --quiet --exclude \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

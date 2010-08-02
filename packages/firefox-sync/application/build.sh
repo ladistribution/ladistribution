@@ -1,19 +1,23 @@
 NAME="firefox-sync"
 VERSION="1.0"
-REVISION_SYNC="3032e32701c1"
+REVISION_SYNC="ce1d2c3e7754"
 SOURCE_SYNC="http://hg.mozilla.org/services/sync-server/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
-# Get source
-hg clone --rev $REVISION_SYNC $SOURCE_SYNC $FOLDER/sync
+echo "# Building $NAME package"
 
-# Apply patches
+echo "# Get source from $SOURCE_SYNC with hg"
+hg clone --rev $REVISION_SYNC $SOURCE_SYNC $FOLDER/sync --quiet
+
+echo "# Apply patches"
 patch -p0 -d $FOLDER < patches/sync_index.diff
-patch -p0 -d $FOLDER < patches/sync_storage_mysql.diff
+# patch -p0 -d $FOLDER < patches/sync_storage_mysql.diff
 
 # mv
 mv $FOLDER/sync/1.0/default_constants.php.dist $FOLDER/sync/1.0/default_constants.php
+
+echo "# Remove files"
 
 # rm
 rm -rf $FOLDER/sync/.hg
@@ -25,8 +29,8 @@ rm $FOLDER/sync/1.0/shard_constants.php.dist
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE $FOLDER dist auth -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER dist auth --quiet --exclude \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

@@ -1,13 +1,20 @@
+NAME="css-h6e-minimal"
 SOURCE="git://github.com/znarf/h6e-minimal.git"
 FOLDER="css"
-PACKAGE="css-h6e-minimal.zip"
-# Get source
-git clone $SOURCE $FOLDER
+PACKAGE="$NAME.zip"
+
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with git"
+git clone $SOURCE $FOLDER --quiet
 rm -rf $FOLDER/.git
+
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
-# Create zip package
-zip -rqv $PACKAGE $FOLDER manifest.xml -x \*.svn/\* \*.preserve
+
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER manifest.xml --quiet --exclude \*.svn/\* \*.preserve
 mv $PACKAGE ../../
-#Clean
+
+# Clean
 rm -rf $FOLDER

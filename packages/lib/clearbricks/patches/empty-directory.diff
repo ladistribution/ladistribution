@@ -1,6 +1,6 @@
---- zip/class.unzip.php	2008-08-23 12:12:05.000000000 +0200
-+++ zip/class.unzip.php.modified	2009-06-03 10:20:05.000000000 +0200
-@@ -100,14 +100,14 @@
+--- zip/class.unzip.php.orig	2010-06-29 14:23:33.000000000 +0200
++++ zip/class.unzip.php	2010-06-29 14:23:33.000000000 +0200
+@@ -101,14 +101,14 @@
  			throw new Exception(sprintf(__('Trying to unzip a folder name %s'),$file_name));
  		}
  		
@@ -19,7 +19,7 @@
  		fseek($this->fp(),$details['contents_start_offset']);
  		
  		$this->memoryAllocate($details['compressed_size']);
-@@ -204,7 +204,7 @@
+@@ -205,7 +205,7 @@
  	protected function putContent($content,$target=false)
  	{
  		if ($target) {

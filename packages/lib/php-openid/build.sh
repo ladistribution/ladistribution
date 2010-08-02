@@ -4,17 +4,23 @@ NAME="php-openid"
 SOURCE="http://openidenabled.com/files/$NAME/packages/$NAME-$VERSION.zip"
 ZIP="$NAME.zip"
 PACKAGE="lib-php-openid.zip"
-# Get source
-curl $SOURCE > $ZIP
-unzip $ZIP
+
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > $ZIP
+unzip -q $ZIP
 rm $ZIP
-# mkdir $FOLDER
+
 cp -R $NAME-$VERSION/Auth $FOLDER
 rm -Rf $NAME-$VERSION
+
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
-# Create zip package
-zip -rqv $PACKAGE $FOLDER manifest.xml
+
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER manifest.xml --quiet
 mv $PACKAGE ../../
+
 # Clean
 rm -rf $FOLDER

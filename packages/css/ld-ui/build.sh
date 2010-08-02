@@ -1,13 +1,20 @@
+NAME="css-ld-ui"
 SOURCE="http://ladistribution.net/svn/trunk/css/ld-ui"
 FOLDER="css"
-PACKAGE="css-ld-ui.zip"
-# Export from SVN
-svn export $SOURCE $FOLDER
+PACKAGE="$NAME.zip"
+
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with svn"
+svn export $SOURCE $FOLDER --force --quiet
 # cp -R /Web/ld/css/ld-ui $FOLDER
+
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
-# Create zip package
-zip -rqv $PACKAGE $FOLDER manifest.xml -x \*.svn/\* \*.preserve
+
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER manifest.xml --quiet --exclude \*.svn/\* \*.preserve
 mv $PACKAGE ../../
-#Clean
+
+# Clean
 rm -rf $FOLDER

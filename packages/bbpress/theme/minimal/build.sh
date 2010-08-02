@@ -1,13 +1,20 @@
+NAME="bbpress-theme-minimal"
 SOURCE="git://github.com/znarf/bbpress-minimal.git"
 FOLDER="theme"
-PACKAGE="bbpress-theme-minimal.zip"
-# Get source
-git clone $SOURCE $FOLDER
+PACKAGE="$NAME.zip"
+
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE"
+git clone $SOURCE $FOLDER --quiet
 rm -rf $FOLDER/.git
+
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
-# Create zip package
-zip -rqv $PACKAGE $FOLDER dist -x "*/.svn/*"
+
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER dist --quiet --exclude \*.svn/\*
 mv $PACKAGE ../../../
+
 # Clean
 rm -rf $FOLDER

@@ -1,6 +1,7 @@
 VERSION="0.9.x"
 NAME="statusnet"
 FOLDER="application"
+SOURCE="http://gitorious.org/statusnet/ladistribution/archive-tarball/$VERSION"
 PACKAGE="$NAME.zip"
 
 # Get from GIT
@@ -10,9 +11,9 @@ PACKAGE="$NAME.zip"
 # cd ..
 # rm -rf $FOLDER/.git
 
-# Get from GZ
-curl http://gitorious.org/statusnet/ladistribution/archive-tarball/0.9.x > statusnet.gz
-tar zxvf statusnet.gz
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > statusnet.gz
+tar -x -f statusnet.gz
 rm statusnet.gz
 mv statusnet-ladistribution $FOLDER
 
@@ -20,6 +21,8 @@ mv statusnet-ladistribution $FOLDER
 # svn checkout http://svn.github.com/znarf/statusnet-ladistribution.git $FOLDER
 
 mv $FOLDER/plugins/MemcachePlugin.php plugins
+
+echo "# Remove files"
 
 # Remove unecessary files
 rm $FOLDER/.gitignore
@@ -49,8 +52,8 @@ rm -rf $FOLDER/extlib/Auth
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE $FOLDER dist config plugins themes -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -rqv $PACKAGE $FOLDER dist config plugins themes --quiet --exclude \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean
