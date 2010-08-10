@@ -160,6 +160,7 @@ function get_currentuserinfo($cookie = '', $scheme = '') {
 		$user = get_userdatabylogin(Ld_Auth::getUsername());
 		if (isset($user)) {
 			wp_set_current_user($user->ID);
+			return;
 		}
 	}
 
