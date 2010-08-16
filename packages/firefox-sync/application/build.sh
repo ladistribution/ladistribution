@@ -30,7 +30,7 @@ rm $FOLDER/sync/1.0/shard_constants.php.dist
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist auth --quiet --exclude \*.svn/\*
+zip -r $PACKAGE $FOLDER dist auth -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

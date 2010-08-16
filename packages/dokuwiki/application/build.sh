@@ -83,7 +83,7 @@ rm -rf $FOLDER/inc/geshi
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist plugins templates auth --quiet --exclude \*.svn/\*
+zip -r $PACKAGE $FOLDER dist plugins templates auth -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

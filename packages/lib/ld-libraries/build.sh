@@ -30,7 +30,7 @@ rm -rf locales/fr_FR
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER locales manifest.xml --quiet --exclude \*.svn/\* \*.preserve
+zip -r $PACKAGE $FOLDER locales manifest.xml -q -x \*.svn/\* \*.preserve
 mv $PACKAGE ../../
 
 # Clean

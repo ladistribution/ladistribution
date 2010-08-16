@@ -15,7 +15,7 @@ patch -p0 -d $FOLDER < patches/empty-directory.diff
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER manifest.xml --quiet --exclude \*.svn/\*
+zip -r $PACKAGE $FOLDER manifest.xml -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

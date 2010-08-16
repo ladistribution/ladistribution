@@ -53,7 +53,7 @@ rm -rf $FOLDER/extlib/Auth
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -rqv $PACKAGE $FOLDER dist config plugins themes --quiet --exclude \*.svn/\*
+zip -rqv $PACKAGE $FOLDER dist config plugins themes -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean
