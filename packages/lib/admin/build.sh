@@ -32,7 +32,7 @@ svn export "$SOURCE/shared/locales/admin/en_US" locales/en_US --force --quiet
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE js modules plugins locales manifest.xml --quiet --exclude \*.svn/\* \*.preserve
+zip -r $PACKAGE js modules plugins locales manifest.xml -q -x \*.svn/\* \*.preserve
 mv $PACKAGE ../../
 
 # Clean

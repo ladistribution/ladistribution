@@ -8,7 +8,7 @@ PACKAGE="$NAME.zip"
 echo "# Building $NAME package"
 
 echo "# Get source from $SOURCE_SYNC with hg"
-hg clone --rev $REVISION_SYNC $SOURCE_SYNC $FOLDER/sync --quiet
+hg clone --quiet --rev $REVISION_SYNC $SOURCE_SYNC $FOLDER/sync
 
 echo "# Apply patches"
 patch -p0 -d $FOLDER < patches/sync_index.diff
