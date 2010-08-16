@@ -10,6 +10,7 @@ $IMPORT admin.zip
 $IMPORT lib-zend-framework.zip
 $IMPORT lib-clearbricks.zip
 $IMPORT lib-ld.zip
+$IMPORT lib-admin.zip
 $IMPORT lib-php-openid.zip
 $IMPORT lib-geshi.zip
 $IMPORT lib-htmlpurifier.zip
