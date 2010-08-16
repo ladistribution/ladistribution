@@ -3,7 +3,7 @@
 Plugin Name: LD package
 Plugin URI: http://h6e.net/wordpress/plugins/ld-package
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.4.2
+Version: 0.4.5
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -19,7 +19,8 @@ function ld_handle_capabilities()
 		// 'activate_plugins', 'edit_themes',
 		'edit_plugins', 'install_plugins', 'delete_plugins', 'update_plugins',
 		'install_themes', 'delete_themes', 'update_themes',
-		'create_users', 'edit_users', 'delete_users'
+		'create_users', 'edit_users', 'delete_users',
+		'update_core'
 	);
 	$disable_admin_caps = apply_filters('ld_disable_admin_caps', $disable_admin_caps);
 	

@@ -3,7 +3,7 @@
 Plugin Name: LD auth
 Plugin URI: http://h6e.net/wordpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.4.3
+Version: 0.4.5
 Author: h6e.net
 Author URI: http://h6e.net/
 */
