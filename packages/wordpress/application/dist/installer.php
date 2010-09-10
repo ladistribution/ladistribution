@@ -422,7 +422,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 			global $wpdb, $wp_embed;
 			global $blog_id, $table_prefix;
 			global $_wp_deprecated_widgets_callbacks;
-			global $q_config;
+			global $q_config, $sitepress;
 			global $PHP_SELF;
 			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
 			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
