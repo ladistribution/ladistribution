@@ -35,6 +35,9 @@ class Ld_Auth_Adapter_File implements Zend_Auth_Adapter_Interface
         if ($hasher->CheckPassword($this->_password, $user['hash'])) {
             return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this->_username);
         }
+        if (md5($this->_password) == $user['hash']) {
+            return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this->_username);
+        }
         return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, null);
     }
 
