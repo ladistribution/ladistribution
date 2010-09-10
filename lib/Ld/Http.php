@@ -19,7 +19,7 @@ class Ld_Http
         $httpParams = array(
             'method'  => 'GET',
             'user_agent' => 'La Distribution HTTP Library',
-            'timeout' => 5
+            'timeout' => 1
         );
         if (method_exists('Zend_Registry', 'isRegistered') && Zend_Registry::isRegistered('site')) {
             $siteUrl = Zend_Registry::get('site')->getUrl();

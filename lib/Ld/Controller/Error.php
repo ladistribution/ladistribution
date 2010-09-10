@@ -11,11 +11,6 @@
  * @version    $Id$
  */
 
-/**
- * @see Zend_Controller_Action
- */
-require_once 'Zend/Controller/Action.php';
-
 class Ld_Controller_Error extends Zend_Controller_Action
 {
 

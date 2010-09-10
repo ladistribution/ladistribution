@@ -189,27 +189,10 @@ class Ld_Files
         return compact('files', 'directories');
     }
 
-    // http://fr2.php.net/manual/en/function.realpath.php
-    public static function realpath($path)
-    {
-        $out = array();
-        foreach (explode('/', $path) as $i => $fold) {
-            if ($fold == '' || $fold == '.') {
-                continue;
-            }
-            if ($fold == '..' && $i > 0 && end($out) != '..') {
-                array_pop($out);
-            } else {
-                $out[]= $fold;
-            }
-        }
-        return ($path{0}=='/'?'/':'').join('/', $out);
-    }
-
     public static function cleanpath($path)
     {
         $path = trim($path, " /\t\n\r");
-        $path = self::realpath( $path );
+        $path = self::real($path);
         return $path;
     }
 

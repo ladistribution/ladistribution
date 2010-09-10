@@ -35,4 +35,9 @@ class Ld_Translate
         return $string;
     }
 
+    public static function notranslate($string)
+    {
+        return $string;
+    }
+
 }
