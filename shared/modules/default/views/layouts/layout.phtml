@@ -1,33 +1,37 @@
 <?php
-$site = Zend_Registry::get('site');
-$this->js()->append('/jquery/jquery.js', 'js-jquery');
-$this->js()->append('/jquery/jquery-ui.js', 'js-jquery-ui');
-$this->js()->append('/ld/ld.js', 'admin');
-$authUrl = $this->url(array(
-    'module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
-$this->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absoluteURL($authUrl)));
+$this->js()->append('/jquery/jquery.js', 'js-jquery', 'ld-js');
+$this->js()->append('/jquery/jquery-ui.js', 'js-jquery-ui', 'ld-js-jquery');
+$this->js()->append('/ld/ld.js', 'admin', 'ld-js-jquery-ui');
 ?>
-<?php echo $this->doctype('XHTML1_STRICT') . "\n" ?>
+<?php echo $this->doctype('XHTML5') . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php echo $this->headTitle() . "\n" ?>
-<?php echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . "\n"  ?>
-<?php echo $this->headLink() . "\n" ?>
-<?php echo $this->headStyle() . "\n" ?>
-<?php echo $this->headScript() . "\n" ?>
+<?php echo $this->headTitle()->setIndent(2) . "\n" ?>
+<?php echo '  <meta charset="utf-8"/>' . "\n"  ?>
+<?php echo $this->headLink()->setIndent(2) . "\n" ?>
+<?php echo $this->headScript()->setIndent(2) ?>
+<?php echo $this->headStyle() ?>
 </head>
-<body class="ld-layout h6e-layout">
+<body class="ld-layout h6e-layout <?php if (isset($this->bodyClass)) echo $this->bodyClass ?>">
 
-<?php Ld_Ui::top_bar(); ?>
+<?php Ld_Ui::topBar(); ?>
 
 <div class="ld-main-content h6e-main-content">
-
-  <?php $bc = $this->navigation()->breadcrumbs()->__toString(); ?>
+  
+  <?php $bc = $this->navigation()->breadcrumbs()->__toString() ?>
 
   <?php if (!empty($bc)) : ?>
   <div class="h6e-bread-crumbs">
       <?php echo $bc ?>
   </div>
+  <?php endif ?>
+
+  <?php if (isset($this->layoutTitle)) : ?>
+      <h1 class="h6e-page-title"><?php echo $this->layoutTitle ?></h1>
+  <?php endif ?>
+
+  <?php if (isset($this->menu)) : ?>
+      <?php echo $this->menu($this->menu)->renderMenu(null, array('ulClass' => 'ld-instance-menu', 'maxDepth' => 1)); ?>
   <?php endif ?>
 
   <div class="h6e-page-content">
@@ -44,6 +48,7 @@ $this->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absolu
               <label><?php echo $this->translate("Language:") ?></label>
               <select name="ld-lang">
                   <?php
+                  $site = Zend_Registry::get('site');
                   $locales = array_merge(array('auto' => 'auto'), $site->getLocales());
                   foreach ($locales as $id => $label) {
                       if (isset($_COOKIE['ld-lang']) && $id == $_COOKIE['ld-lang']) {
@@ -60,12 +65,12 @@ $this->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absolu
 
 </div>
 
-<?php Ld_Ui::super_bar(array('jquery' => false, 'ld-js' => false)); ?>
+<?php Ld_Ui::superBar(); ?>
 
 <script type="text/javascript">
 (function($) {
     $(document).ready(function($){
-        if(Ld) Ld.init($);
+        if (Ld) Ld.init($);
     });
 })(jQuery);
 </script>
