@@ -4,7 +4,10 @@
 
 <form method="post" action="<?php echo $this->url() ?>">
 
-    <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
+    <?php
+    $options = array('ns' => 'configuration', 'configuration' => $this->configuration, 'preferences' => $this->preferences);
+    $this->preferencesRenderer()->setOptions($options)->renderTable();
+    ?>
 
     <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 
