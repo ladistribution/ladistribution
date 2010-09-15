@@ -1,5 +1,11 @@
 <h2><?php echo $this->translate("Locales") ?></h2>
 
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content">
+
 <form action="<?php echo $this->url() ?>" method="post">
 
     <fieldset>
@@ -17,3 +23,7 @@
     <p><input class="submit button" type="submit" value="<?php echo $this->translate("Update") ?>"/></p>
 
 </form>
+
+</div>
+
+</div>

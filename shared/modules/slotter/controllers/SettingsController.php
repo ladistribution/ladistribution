@@ -18,28 +18,41 @@ class Slotter_SettingsController extends Slotter_BaseController
         if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
             $this->_disallow();
         }
+
+        $translator = $this->getTranslator();
+        $this->appendTitle( $translator->translate('General Settings') );
     }
 
     function indexAction()
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
             $configuration = $this->getSite()->getConfig();
-            // needed for settings that default to false, displayed as checkbox
-            // unset($configuration['open_registration']);
-            // unset($configuration['root_admin']);
             foreach ($this->_getParam('configuration') as $key => $value) {
                 $configuration[$key] = $value;
             }
             $this->getSite()->setConfig($configuration);
-            // Ld_Files::putJson($this->getSite()->getDirectory('dist') . "/config.json", $configuration);
-            // in this case, we believe the user wants to go back to the index
-            $this->_redirector->gotoSimple('index', 'index');
-            return;
+            $this->_updateAdminBaseUrl();
         }
 
-        $translator = $this->getTranslator();
+        $this->view->preferences = $this->_getPreferences();
 
-        $this->appendTitle($translator->translate('Global settings'));
+        $this->view->configuration = $this->getSite()->getConfig();
+    }
+
+    protected function _updateAdminBaseUrl()
+    {
+        $frontController = Zend_Controller_Front::getInstance();
+        if ($configuration['root_admin']) {
+            $baseUrl = $this->site->getPath();
+        } else {
+            $baseUrl = $this->site->getPath() . '/' . $this->admin->getPath();
+        }
+        $frontController->setBaseUrl($baseUrl);
+    }
+
+    protected function _getPreferences()
+    {
+        $translator = $this->getTranslator();
 
         $preferences = array();
 
@@ -47,9 +60,11 @@ class Slotter_SettingsController extends Slotter_BaseController
             'name' => 'name', 'label' => $translator->translate('Site Name'), 'type' => 'text', 'defaultValue' => 'La Distribution'
         );
 
+        if (!defined('LD_MULTI_DOMAINS') || !constant('LD_MULTI_DOMAINS')) {
         $preferences[] = array(
             'name' => 'host', 'label' => $translator->translate('Host'), 'type' => 'text'
         );
+        }
 
         $preferences[] = array(
             'name' => 'path', 'label' => $translator->translate('Path'), 'type' => 'text'
@@ -60,19 +75,21 @@ class Slotter_SettingsController extends Slotter_BaseController
             'type' => 'boolean', 'defaultValue' => false
         );
 
+        if (!defined('LD_MULTI_DOMAINS') || !constant('LD_MULTI_DOMAINS')) {
+
         $options = array();
         $options[] = array(
             'value' => '',
-            'label' => '✖ ' .  $translator->translate('None')
+            'label' => '&#x2716; ' .  $translator->translate('None')
         );
         $options[] = array(
             'value' => $this->admin->getPath(),
-            'label' => '★ ' . $this->admin->getName() . ' /' . $this->admin->getPath() . '/'
+            'label' => '&#x2605; ' . $this->admin->getName() . ' /' . $this->admin->getPath() . '/'
         );
         foreach ($this->getSite()->getApplicationsInstances(array('admin')) as $id => $instance) {
             $options[] = array(
                 'value' => $instance->getPath(),
-                'label' => '● ' . $instance->getName() . ' /' . $instance->getPath() . '/'
+                'label' => '&#x25CF; ' . $instance->getName() . ' /' . $instance->getPath() . '/'
             );
         }
 
@@ -81,6 +98,8 @@ class Slotter_SettingsController extends Slotter_BaseController
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $options
         );
 
+        }
+
         $preferences[] = array(
             'name' => 'root_admin', 'label' => $translator->translate('Admin path on root?'),
             'type' => 'boolean', 'defaultValue' => false
@@ -88,9 +107,7 @@ class Slotter_SettingsController extends Slotter_BaseController
 
         $preferences = Ld_Plugin::applyFilters('Slotter:preferences', $preferences);
 
-        $this->view->preferences = $preferences;
-
-        $this->view->configuration = $this->getSite()->getConfig();
+        return $preferences;
     }
 
 }

@@ -15,12 +15,12 @@ class Slotter_LocalesController extends Slotter_BaseController
     {
         parent::preDispatch();
 
-        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+        if (!$this->_acl->isAllowed($this->userRole, 'locales', 'manage')) {
             $this->_disallow();
         }
 
         $translator = $this->getTranslator();
-        $this->appendTitle($translator->translate('Locales'));
+        $this->appendTitle( $translator->translate('Locales') );
     }
 
     public function indexAction()
@@ -86,8 +86,8 @@ class Slotter_LocalesController extends Slotter_BaseController
             }
 
             // in this case, we believe the user wants to go back to the index
-            $this->_redirector->gotoSimple('index', 'index');
-            return;
+            // $this->_redirector->gotoSimple('index', 'index');
+            // return;
 
         }
 

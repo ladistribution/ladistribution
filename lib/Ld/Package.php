@@ -152,10 +152,21 @@ class Ld_Package
         $preferences = array();
 
         if ($this->type == 'application' || $this->type == 'bundle') {
-            $preferences[] = array('type' => 'text', 'name' => 'title',
-                    'label' => 'Title', 'defaultValue' => $this->name);
-            $preferences[] = array('type' => 'text', 'name' => 'path',
-                    'label' => 'Path', 'defaultValue' => $this->id);
+            $preferences[] = array('type' => 'text', 'name' => 'title', 'label' => 'Title', 'defaultValue' => $this->name);
+            $preferences[] = array('type' => 'text', 'name' => 'path', 'label' => 'Path', 'defaultValue' => $this->id);
+            if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+                $domainPreference = array('type' => 'list', 'name' => 'domain', 'label' => 'Domain', 'options' => array());
+                foreach ($this->getSite()->getDomains() as $id => $domain) {
+                    $domainPreference['options'][] = array(
+                        'value' => $id,
+                        'label' => $domain['host']
+                    );
+                    if ($domain['host'] == $this->site->getConfig('host')) {
+                        $domainPreference['defaultValue'] = $id;
+                    }
+                }
+                $preferences[] = $domainPreference;
+            }
         }
 
         $prefs = $this->getManifest()->getPreferences('install');

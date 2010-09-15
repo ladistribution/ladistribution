@@ -1,5 +1,11 @@
 <h2><?php echo $this->translate("Repositories") ?></h2>
 
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Ressources') ?>
+
+<div class="ld-panel-content">
+
 <?php echo $this->partial('repositories/list.phtml', array('repositories' => $this->repositories)); ?>
 
 <h3><?php echo $this->translate("You can:") ?></h3>
@@ -12,3 +18,7 @@
         <?php echo $this->translate("Add a remote repository") ?>
     </a></li>
 </ul>
+
+</div>
+
+</div>

@@ -78,6 +78,7 @@
 }
 
 .ld-instance-menu li a:hover,
+.ld-instance-menu li.active a,
 .ld-instance-menu li.current a {
   background:#eee;
 }

@@ -1,4 +1,10 @@
-<h2><?php echo $this->translate("Remove a repository") ?></h2>
+<h2><?php echo $this->translate("Repositories") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Ressources') ?>
+
+<div class="ld-panel-content">
 
 <p><?php echo $this->translate("Are you sure you want to remove this repository?") ?></p>
 
@@ -8,3 +14,7 @@
     <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Remove") ?>"/>
 
 </form>
+
+</div>
+
+</div>

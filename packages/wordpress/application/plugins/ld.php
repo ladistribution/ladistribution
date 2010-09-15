@@ -190,14 +190,26 @@ function ld_option_home($value)
 	if (Zend_Registry::isRegistered('site')) {
 		$site = Zend_Registry::get('site');
 		$application = $site->getInstance(ABSPATH);
-		if ($application->isRoot()) {
-			return 'http://' . $site->getHost() . $site->getPath();
-		}
+		return $application->getUrl();
 	}
 	return $value;
 }
 
 add_filter('option_home', 'ld_option_home');
+
+function ld_option_siteurl($value)
+{
+	if (Zend_Registry::isRegistered('site')) {
+		$site = Zend_Registry::get('site');
+		$application = $site->getInstance(ABSPATH);
+		if (method_exists($application, 'getAbsoluteUrl')) {
+			return $application->getAbsoluteUrl();
+		}
+	}
+	return $value;
+}
+
+add_filter('option_siteurl', 'ld_option_siteurl');
 
 function ld_locale($locale = '')
 {

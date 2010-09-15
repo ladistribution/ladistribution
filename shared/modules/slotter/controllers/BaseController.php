@@ -43,12 +43,21 @@ class Slotter_BaseController extends Ld_Controller_Action
             array( 'label' => $translator->translate('Home'), 'module' => 'slotter', 'route' => 'default',
                 'pages' => array(
                     array( 'label' => $translator->translate('Applications'), 'module'=> 'slotter', 'route' => 'default'),
-                    array( 'label' => $translator->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
-                    array( 'label' => $translator->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
+                    array( 'label' => $translator->translate('Ressources'), 'module' => 'slotter', 'controller' => 'repositories', 'pages' => array(
+                        array( 'label' => $translator->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
+                        array( 'label' => $translator->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
+                    )),
                     array( 'label' => $translator->translate('Users'), 'module' => 'slotter', 'controller' => 'users' ),
-                    array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' ),
-                    array( 'label' => $translator->translate('Global settings'), 'module' => 'slotter', 'controller' => 'settings' ),
-                    array( 'label' => $translator->translate('Plugins'), 'module' => 'slotter', 'controller' => 'plugins' )
+                    array( 'label' => $translator->translate('Settings'), 'module' => 'slotter', 'controller' => 'settings', 'pages' => 
+                        $this->site->isChild() ? array(
+                            array( 'label' => $translator->translate('General'), 'module' => 'slotter', 'controller' => 'settings' ),
+                        ) : array(
+                            array( 'label' => $translator->translate('General'), 'module' => 'slotter', 'controller' => 'settings' ),
+                            array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' ),
+                            array( 'label' => $translator->translate('Domains'), 'module' => 'slotter', 'controller' => 'domains' ),
+                            array( 'label' => $translator->translate('Plugins'), 'module' => 'slotter', 'controller' => 'plugins' ),
+                        )
+                    ),
             ))
         );
 
@@ -67,18 +76,15 @@ class Slotter_BaseController extends Ld_Controller_Action
         $admin = new Zend_Acl_Role('admin');
         $this->_acl->addRole($admin, $user);
 
-        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins');
+        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins', 'locales', 'sites', 'domains');
         foreach ($resources as $resource) {
             $this->_acl->add( new Zend_Acl_Resource($resource) );
+            $this->_acl->allow('admin', $resource, 'manage');
         }
 
         $this->_acl->allow('admin', null, 'admin');
         $this->_acl->allow('user', 'instances', 'view');
-        $this->_acl->allow('admin', 'instances', 'manage');
-        $this->_acl->allow('admin', 'repositories', 'manage');
-        $this->_acl->allow('admin', 'databases', 'manage');
-        $this->_acl->allow('admin', 'users', 'manage');
-        $this->_acl->allow('admin', 'plugins', 'manage');
+        $this->_acl->allow('admin', 'instances', 'update');
 
         Ld_Plugin::doAction('Slotter:acl', $this->_acl);
 
@@ -88,7 +94,7 @@ class Slotter_BaseController extends Ld_Controller_Action
     protected function _getCurrentUserRole()
     {
         $roles = $this->admin->getUserRoles();
-        if (empty($roles)) {
+        if (!$this->site->isChild() && empty($roles)) {
             return 'admin';
         } else if (isset($this->user)) {
             $username = $this->user['username'];

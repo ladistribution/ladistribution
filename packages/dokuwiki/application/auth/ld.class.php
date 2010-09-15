@@ -8,7 +8,7 @@ class auth_ld extends auth_plain
 
     /**
      * Constructor
-     */    
+     */
     function auth_ld()
     {
         $this->cando['addUser']      = true;
@@ -33,13 +33,20 @@ class auth_ld extends auth_plain
     {
       parent::_loadUserData();
 
-      $users = Zend_Registry::get('site')->getUsers();
-
       $roles = Ld_Files::getJson(DOKU_INC . '/dist/roles.json');
 
-      foreach ($users as $user) {
+      // Default role for authenticated user
+      if (Ld_Auth::isAuthenticated()) {
+          $username = Ld_Auth::getUsername();
+          if (empty($roles[$username])) {
+              $roles[$username] = 'user';
+          }
+      }
+
+      foreach ($roles as $username => $role) {
+          $user = Zend_Registry::get('site')->getUser($username);
           $id = $user['username'];
-          if (isset($roles[$id]) && $roles[$id] == 'admin') {
+          if ($role == 'admin') {
               $grps = array('admin', 'user');
           } else {
               $grps = array('user');
@@ -80,7 +87,7 @@ class auth_ld extends auth_plain
      *
      * Is run in addition to the ususal logoff method. Should
      * only be needed when trustExternal is implemented.
-     */    
+     */
     function logOff()
     {
         Ld_Auth::logout();
@@ -107,7 +114,7 @@ class auth_ld extends auth_plain
         if (Ld_Auth::isAuthenticated() && $user == Ld_Auth::getUsername()) {
             $this->logIn($user);
             return true;
-        
+
         // in case user and password are provided
         } else if ($this->checkPass($user,$pass)) {
             $this->logIn($user);

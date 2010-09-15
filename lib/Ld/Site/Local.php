@@ -40,7 +40,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function __construct($params = array())
     {
-        $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'defaultModule');
+        $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'domain');
         foreach ($properties as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
@@ -104,14 +104,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         if (!Ld_Files::exists($this->getDirectory('dist') . '/site.php')) {
             $cfg  = "<?php\n";
-            if (defined('LD_DEBUG') && constant('LD_DEBUG') == true) {
-                $cfg .= "define('LD_DEBUG', true);\n";
-            }
             if (defined('LD_REWRITE') && constant('LD_REWRITE') == false) {
                 $cfg .= "define('LD_REWRITE', false);\n";
-            }
-            if (defined('LD_MEMCACHED') && constant('LD_MEMCACHED') == true) {
-                $cfg .= "define('LD_MEMCACHED', true);\n";
             }
             if (defined('LD_UNIX_PERMS')) {
                 $cfg .= "define('LD_UNIX_PERMS', " . LD_UNIX_PERMS . ");\n";
@@ -119,9 +113,25 @@ class Ld_Site_Local extends Ld_Site_Abstract
             if (defined('LD_UNIX_USER')) {
                 $cfg .= "define('LD_UNIX_USER', '" . LD_UNIX_USER . "');\n";
             }
-            $cfg .= '$loader = dirname(__FILE__) . "/../lib/Ld/Loader.php";' . "\n";
+
+            // Compute a relative path
+            // $relativePath = '/..';
+            // if ($this->isChild()) {
+            //     $path = str_replace($this->getParentSite()->getPath(), '', $this->path);
+            //     $n = count(explode("/", trim($path, "/")));
+            //     for ($i = 0; $i < $n; $i++) $relativePath .= '/..';
+            // }
+
+            $cfg .= '$loader = "' . Ld_Files::real($this->getDirectory('lib')) . '/Ld/Loader.php";' . "\n";
             $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
-            $cfg .= "Ld_Loader::loadSite(dirname(__FILE__) . '/..');\n";
+            if ($this->isChild()) {
+                $cfg .= 'Ld_Loader::loadSite("' . $this->getParentSite()->getDirectory() . '");' . "\n";
+            } else {
+                $cfg .= 'Ld_Loader::loadSite("' . $this->getDirectory() . '");' . "\n";
+            }
+            if ($this->isChild()) {
+                $cfg .= 'Ld_Loader::loadSubSite(dirname(__FILE__) . "/..");' . "\n";
+            }
             Ld_Files::put($this->getDirectory('dist') . "/site.php", $cfg);
         }
 
@@ -197,8 +207,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return uniqid();
     }
 
-    public function getHost()
+    public function getHost($domain = null)
     {
+        if (isset($domain)) {
+            $domains = $this->getDomains();
+            if (isset($domains[$domain])) {
+                return $domains[$domain]['host'];
+            }
+        }
         return $this->host;
     }
 
@@ -235,9 +251,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $config;
     }
 
-    public function getBaseUrl()
+    public function getBaseUrl($domain = null)
     {
-        return $this->getUrl();
+        return $this->getUrl(null, $domain);
     }
 
     public function getDirectory($dir = null)
@@ -250,9 +266,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $directory;
     }
 
-    public function getUrl($dir = null)
+    public function getUrl($dir = null, $domain = null)
     {
-        $url = 'http://' . $this->getHost() . $this->getPath() . '/';
+        $url = 'http://' . $this->getHost($domain) . $this->getPath() . '/';
         if (isset($dir)) {
              $url .= $this->directories[$dir];
         }
@@ -359,6 +375,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $dir = $this->getDirectory() . '/' . $instances[$id]['path'];
 
         // by global path
+        // TODO: check if it seems to be a global path. with (strpos($id, '/') !== false)
         } else if (Ld_Files::exists($id) && Ld_Files::exists($id . '/dist')) {
             $dir = $id;
 
@@ -402,11 +419,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
 
-        foreach ($package->getManifest()->getDependencies() as $dependency) {
-            if (!$this->isPackageInstalled($dependency)) {
-                $this->createInstance($dependency);
-            }
-        }
+        $this->checkDependencies($package);
 
         $neededDb = $package->getManifest()->getDb();
         if ($neededDb && empty($preferences['db'])) {
@@ -471,6 +484,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
               $params['name'] = $preferences['title'];
           }
 
+          if (isset($preferences['domain'])) {
+              $params['domain'] = $preferences['domain'];
+          }
+
           if (isset($preferences['db'])) {
               $params['db'] = $preferences['db'];
               $params['db_prefix'] = $installer->getDbPrefix();
@@ -480,6 +497,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
           if ($params['type'] == 'application') {
               $params['path'] = $installer->getPath();
               $instance = new Ld_Instance_Application_Local();
+              $instance->setSite($this);
               $instance->setPath($params['path']);
               $instance->setInfos($params)->save();
           }
@@ -492,7 +510,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
               'version' => $params['version'],
               'type'    => $params['type'],
               'path'    => isset($params['path']) ? $params['path'] : null,
-              'name'    => isset($params['name']) ? $params['name'] : null
+              'name'    => isset($params['name']) ? $params['name'] : null,
+              'domain'  => isset($params['domain']) ? $params['domain'] : null
           );
           $this->updateInstances($instances);
 
@@ -501,6 +520,23 @@ class Ld_Site_Local extends Ld_Site_Abstract
               $instance->id = $id;
               return $instance;
           }
+    }
+
+    protected function checkDependencies($package)
+    {
+        // Check and eventually Update dependencies
+        foreach ($package->getManifest()->getDependencies() as $dependency) {
+            $infos = $this->getLibraryInfos($dependency);
+            if (null === $infos) {
+                $this->createInstance($dependency);
+            } else {
+                $dependencyPackage = $this->getPackage($dependency);
+                // FIXME: this test is weak
+                if ($infos['version'] != $dependencyPackage->version) {
+                    $this->updateInstance($dependency);
+                }
+            }
+        }
     }
 
     public function updateInstance($params)
@@ -519,19 +555,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         $installer = $package->getInstaller();
 
-        // Check and eventually Update dependencies
-        foreach ($package->getManifest()->getDependencies() as $dependency) {
-            $infos = $this->getLibraryInfos($dependency);
-            if (null === $infos) {
-                $this->createInstance($dependency);
-            } else {
-                $dependencyPackage = $this->getPackage($dependency);
-                // FIXME: this test is weak
-                if ($infos['version'] != $dependencyPackage->version) {
-                    $this->updateInstance($dependency);
-                }
-            }
-        }
+        $this->checkDependencies($package);
 
         // Update instance
         if (isset($instance)) {
@@ -954,6 +978,100 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $packages = array_merge($repository->getPackageExtensions($packageId, $type), $packages);
         }
         return $packages;
+    }
+
+    // Sites
+
+    public function getSites($type = null)
+    {
+        $sites = Ld_Files::getJson($this->getDirectory('dist') . '/sites.json');
+        if (empty($sites)) {
+            $sites = array();
+        }
+        return $sites;
+    }
+
+    public function getSite($id)
+    {
+        $sites = $this->getSites();
+        if (isset($sites[$id])) {
+          return $sites[$id];
+        }
+        return null;
+    }
+
+    public function addSite($params)
+    {
+        $sites = $this->getSites();
+        $sites[$this->getUniqId()] = $params;
+        $this->_writeSites($sites);
+    }
+
+    public function updateSite($id, $params)
+    {
+        $sites = $this->getSites();
+        $sites[$id] = array_merge($sites[$id], $params);
+        $this->_writeSites($sites);
+        return $sites[$id];
+    }
+
+    public function deleteSite($id)
+    {
+        $sites = $this->getSites();
+        unset($sites[$id]);
+        $this->_writeSites($sites);
+    }
+
+    protected function _writeSites($sites)
+    {
+        Ld_Files::putJson($this->getDirectory('dist') . '/sites.json', $sites);
+    }
+
+    // Domains
+
+    public function getDomains()
+    {
+        $domains = Ld_Files::getJson($this->getDirectory('dist') . '/domains.json');
+        if (empty($domains)) {
+            $domains = array();
+        }
+        return $domains;
+    }
+
+    public function getDomain($id)
+    {
+        $domains = $this->getDomains();
+        if (isset($domains[$id])) {
+            return $domains[$id];
+        }
+        return null;
+    }
+
+    public function addDomain($params)
+    {
+        $domains = $this->getDomains();
+        $id = $this->getUniqId();
+        $domains[$id] = $params;
+        $this->_writeDomains($domains);
+    }
+
+    public function updateDomain($id, $params)
+    {
+        $domains = $this->getDomains();
+        $domains[$id] = array_merge($domains[$id], $params);
+        $this->_writeDomains($domains);
+    }
+
+    public function deleteDomain($id)
+    {
+        $domains = $this->getDomains();
+        unset($domains[$id]);
+        $this->_writeDomains($domains);
+    }
+
+    protected function _writeDomains($domains)
+    {
+        Ld_Files::putJson($this->getDirectory('dist') . '/domains.json', $domains);
     }
 
     // Legacy

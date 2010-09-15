@@ -1,4 +1,12 @@
-<h2><?php echo $this->translate("Browse repository") ?></h2>
+<h2><?php echo $this->translate("Repositories") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Ressources') ?>
+
+<div class="ld-panel-content">
+
+<h3><?php echo $this->translate("Browse repository") ?></h3>
 
 <p><strong><?php echo $this->translate("Repository URL:") ?></strong> <?php echo $this->repository->getUrl() ?></p>
 
@@ -13,3 +21,7 @@
         </a>
     </li>
 </ul>
+
+</div>
+
+</div>

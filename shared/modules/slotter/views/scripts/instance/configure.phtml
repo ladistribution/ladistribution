@@ -9,11 +9,9 @@
 <?php if (!empty($this->preferences)) : ?>
 
 <form method="post" action="<?php echo $this->url() ?>">
-    
-    <input type="hidden" name="id" value="<?php echo $this->escape($this->instance->id) ?>"/>
-    
+
     <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
-    
+
     <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 
 </form>

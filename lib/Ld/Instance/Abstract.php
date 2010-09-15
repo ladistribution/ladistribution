@@ -75,7 +75,7 @@ abstract class Ld_Instance_Abstract
        }
 
        // temporary
-       foreach (array('package', 'name', 'path', 'type', 'version', 'url', 'db', 'db_prefix') as $key) {
+       foreach (array('package', 'name', 'path', 'type', 'version', 'url', 'db', 'db_prefix', 'domain') as $key) {
            if (isset($this->infos[$key])) {
                $this->$key = $this->infos[$key];
            }

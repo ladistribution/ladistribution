@@ -1,4 +1,4 @@
-<?php if (empty($this->roles)) : ?>
+<?php if (!$this->site->isChild() && empty($this->roles)) : ?>
 
     <h2><?php echo $this->translate("Installation") ?></h2>
 
@@ -15,6 +15,36 @@
 
 <?php $this->instancesList() ?>
 
+<?php if (!$this->site->isChild() && defined('LD_MULTI_SITES') && constant('LD_MULTI_SITES')) : ?>
+    
+<h2><?php echo $this->translate("Sub Sites") ?></h2>
+
+<div class="ld-instance-list">
+    
+    <ul class="blocks mini is-admin">
+        <?php foreach ($this->site->getSites() as $id => $config) : $subsite = new Ld_Site_Child($config); $subsite->setParentSite($this->site); ?>
+        <li class="">
+            <div class="name">
+                → <a href="<?php echo $subsite->getUrl() ?>"><?php echo $subsite->getName() ?></a><br/>
+            </div>
+            <?php if ($this->userRole == 'admin') :?>
+            <div class="links">
+                <?php $manageUrl = $this->url(array('controller' => 'sites', 'action' => 'edit', 'id' => $id)); ?>
+                <?php printf('<a class="view" href="%s">%s</a>', $manageUrl, $this->translate("Settings")); ?>
+            </div>
+            <?php endif ?>
+        </li>
+        <?php endforeach ?>
+        <?php if ($this->canManageSites) : ?>
+            <li class="empty new">
+                <a href="/ld-mu/slotter/sites/new">Ajouter un nouveau site</a>
+            </li>
+        <?php endif ?>
+    </ul>
+<div>
+
+<?php endif ?>
+
 <?php if ($this->canAdmin) : ?>
 
 <div class="ld-home">
@@ -24,17 +54,19 @@
         <?php
         $pages = array();
         $pages[] = array('controller' => 'users', 'label' => "Users");
-        if ($this->canManageRepositories) {
-            $pages[] = array('controller' => 'repositories', 'label' => "Repositories");
+        if ($this->canManageRepositories || $this->canManageDatabases) {
+            $pages[] = array('controller' => 'repositories', 'label' => "Ressources");
         }
-        if ($this->canManageDatabases) {
-            $pages[] = array('controller' => 'databases', 'label' => "Databases");
-        }
-        $pages[] = array('controller' => 'locales', 'label' => "Locales");
-        if ($this->canManagePlugins) {
-            $pages[] = array('controller' => 'plugins', 'label' => "Plugins");
-        }
-        $pages[] = array('controller' => 'settings', 'label' => "Global settings");
+        // if ($this->canManageDatabases) {
+        //     $pages[] = array('controller' => 'databases', 'label' => "Databases");
+        // }
+        // if ($this->canManageLocales) {
+        //     $pages[] = array('controller' => 'locales', 'label' => "Locales");
+        // }
+        // if ($this->canManagePlugins) {
+        //     $pages[] = array('controller' => 'plugins', 'label' => "Plugins");
+        // }
+        $pages[] = array('controller' => 'settings', 'label' => "Settings");
         ?>
         <ul>
             <?php foreach ($pages as $page) :
@@ -45,7 +77,8 @@
             <?php endforeach ?>
         </ul>
     </div>
-
+    
+    <?php if ($this->canUpdate) : ?>
     <div class="update">
         <h2><?php echo $this->translate("Updates") ?></h2>
         <?php if ($this->canAdmin && $this->hasUpdate) :
@@ -58,6 +91,7 @@
             <p><?php echo $this->translate("Everything fine, nothing to update.") ?></p>
         <?php endif ?>
     </div>
+    <?php endif ?>
 
 </div>
 

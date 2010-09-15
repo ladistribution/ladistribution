@@ -22,6 +22,10 @@ svn export "$SOURCE/shared/plugins" plugins --force --quiet
 # Local Export
 # cp -R /Web/ld/shared/plugins plugins
 
+# Remove some plugins
+rm plugins/subsite.php
+rm plugins/user-database.php
+
 mkdir locales
 # Export from SVN
 svn export "$SOURCE/shared/locales/admin/en_US" locales/en_US --force --quiet

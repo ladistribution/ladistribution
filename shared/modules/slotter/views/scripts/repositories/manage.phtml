@@ -1,8 +1,18 @@
-<h2><?php echo $this->translate("Manage repository") ?></h2>
+<h2><?php echo $this->translate("Repositories") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Ressources') ?>
+
+<div class="ld-panel-content">
+    
+<h3><?php echo $this->translate("Manage repository") ?></h3>
 
 <p><strong><?php echo $this->translate("Repository URL:") ?></strong> <?php echo $this->repository->getUrl() ?></p>
 
-<h3><?php echo $this->translate("Upload a new package") ?></h3>
+<?php require('repository.phtml') ?>
+
+<h4><?php echo $this->translate("Upload a new package") ?></h4>
 
 <p><?php echo $this->translate("Zip file please.") ?></p>
 
@@ -13,11 +23,7 @@
     </p>
 </form>
 
-<h3><?php echo $this->translate("Packages") ?></h3>
-
-<?php require('repository.phtml') ?>
-
-<h3><?php echo $this->translate("You can:") ?></h3>
+<h4><?php echo $this->translate("You can:") ?></h4>
 
 <ul>
     <li>
@@ -26,3 +32,7 @@
         </a>
     </li>
 </ul>
+
+</div>
+
+</div>

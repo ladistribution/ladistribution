@@ -96,6 +96,33 @@ class Ld_Loader
         return $site;
     }
 
+    public static function loadSubSite($dir)
+    {
+        $dir = realpath($dir);
+
+        // Site configuration
+        self::$config = Ld_Files::getJson($dir . '/dist/config.json');
+        if (empty(self::$config['dir'])) {
+            self::$config['dir'] = $dir;
+        }
+        if (empty(self::$config['host']) && isset($_SERVER['SERVER_NAME'])) {
+            self::$config['host'] = $_SERVER['SERVER_NAME'];
+        }
+
+        // Plugins
+        if (empty(self::$config['active_plugins'])) {
+            self::$config['active_plugins'] = array('subsite');
+        }
+        self::setupPlugins();
+
+        // Site object
+        $site = self::$site = new Ld_Site_Child(self::$config);
+        $site->setParentSite( Zend_Registry::get('site') );
+        Zend_Registry::set('site', $site);
+
+        return $site;
+    }
+
     public static function setupPlugins()
     {
         $active_plugins = isset(self::$config['active_plugins']) ? self::$config['active_plugins'] : array();

@@ -26,7 +26,7 @@ class Slotter_DatabasesController extends Slotter_BaseController
     {
         $translator = $this->getTranslator();
 
-        $this->appendTitle($translator->translate('Databases'));
+        $this->appendTitle( $translator->translate('Databases') );
 
         $databasesPage = $this->_container->findOneByLabel( $translator->translate('Databases') );
 

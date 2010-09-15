@@ -1,5 +1,11 @@
 <h2><?php echo $this->translate("Plugins") ?></h2>
 
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content">
+
 <form action="<?php echo $this->url() ?>" method="post">
     
 <table id="plugins" class="h6e-data">
@@ -57,3 +63,7 @@ Ld.dataTables = function($)
     })
 }
 </script>
+
+</div>
+
+</div>

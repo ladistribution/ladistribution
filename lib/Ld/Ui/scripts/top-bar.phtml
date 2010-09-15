@@ -1,7 +1,13 @@
 <div class="h6e-top-bar">
     <div class="h6e-top-bar-inner">
         <div class="a">
-            <a class="ld-site-name" href="<?php echo $this->site->getUrl() ?>"><?php echo $this->site->getName() ?></a>
+            <?php if (!$this->site->isChild()) : ?>
+                <a class="ld-site-name" href="<?php echo $this->site->getUrl() ?>"><?php echo $this->site->getName() ?></a>
+            <?php else : ?>
+                <a class="ld-site-name" href="<?php echo $this->site->getParentSite()->getUrl() ?>"><?php echo $this->site->getParentSite()->getName() ?></a>
+                →
+                <a class="ld-subsite-name" href="<?php echo $this->site->getUrl() ?>"><?php echo $this->site->getName() ?></a>
+            <?php endif ?>
         </div>
         <div class="b">
         <?php if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous() && $user = Ld_Auth::getUser()) : ?>

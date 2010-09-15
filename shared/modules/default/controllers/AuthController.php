@@ -91,8 +91,10 @@ class AuthController extends Ld_Controller_Action
 
         $open_registration = $this->getSite()->getConfig('open_registration');
         if (empty($open_registration)) {
-            $users = $this->getSite()->getUsers();
-            if (count($users) > 0) {
+            $roles = $this->admin->getUserRoles();
+            if (!$this->getSite()->isChild() && empty($roles)) {
+                // skip exception
+            } else {
                 throw new Exception( $translator->translate('Registration is closed.') );
             }
         }
@@ -138,8 +140,8 @@ class AuthController extends Ld_Controller_Action
                     Ld_Auth::authenticate($this->_getParam('ld_register_username'), $this->_getParam('ld_register_password'));
                 }
 
-                $users = $this->getSite()->getUsers();
-                if (count($users) == 1) {
+                $roles = $this->admin->getUserRoles();
+                if (!$this->getSite()->isChild() && empty($roles)) {
                     $admin = $this->_registry['instance'];
                     $admin->setUserRoles(array($user['username'] => 'admin'));
                     Ld_Auth::authenticate($user['username'], $user['password']);

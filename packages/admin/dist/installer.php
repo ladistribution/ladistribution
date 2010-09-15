@@ -12,6 +12,13 @@ class Ld_Installer_Admin extends Ld_Installer
 		}
 	}
 
+	public function postMove()
+	{
+		if (constant('LD_REWRITE')) {
+			$this->create_htaccess();
+		}
+	}
+
 	private function create_htaccess()
 	{
 		$path = $this->getSite()->getPath() . '/' . $this->getPath() . '/';

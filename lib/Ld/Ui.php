@@ -75,7 +75,7 @@ class Ld_Ui
             $isAdmin = true;
         } else {
             $roles = $admin->getUserRoles();
-            if (empty($roles)) {
+            if (!$site->isChild() && empty($roles)) {
                 $isAdmin = true;
             }
         }
@@ -166,7 +166,10 @@ class Ld_Ui
             $infos = self::getSite()->getLibraryInfos("$type-$package");
         }
         if ($infos['type'] == 'application') {
-            $infos = self::getSite()->getInstance($infos['path'])->getInfos();
+            $instances = self::getSite()->getInstances($package, 'package');
+            if (is_array($instances) && isset($instances[0])) {
+                 $infos = $instances[0]->getInfos();
+            }
         }
         return $infos;
     }

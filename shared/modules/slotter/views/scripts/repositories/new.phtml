@@ -1,4 +1,12 @@
-<h2><?php echo $this->translate("Add a new repository") ?></h2>
+<h2><?php echo $this->translate("Repositories") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Ressources') ?>
+
+<div class="ld-panel-content">
+
+<h3><?php echo $this->translate("Add a new repository") ?></h3>
 
 <form method="post" action="">
     
@@ -20,3 +28,7 @@
     <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add") ?>"/>
 
 </form>
+
+</div>
+
+</div>

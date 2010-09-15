@@ -35,11 +35,15 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
 
     public function getPackagesJson()
     {
-        $json = Ld_Http::get($this->endpoint . '/packages.json');
-        if (!$json) {
-            return array();
+        try {
+            $json = Ld_Http::get($this->endpoint . '/packages.json');
+            if ($json) {
+               return Zend_Json::decode($json);
+            }
+        } catch (Exception $e) {
+            // output warning in debug mode ?
         }
-        return Zend_Json::decode($json);
+        return array();
     }
 
     public function getUrl()

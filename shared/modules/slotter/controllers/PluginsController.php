@@ -17,7 +17,7 @@ class Slotter_PluginsController extends Slotter_BaseController
         }
 
         $translator = $this->getTranslator();
-        $this->appendTitle($translator->translate('Plugins'));
+        $this->appendTitle( $translator->translate('Plugins') );
     }
 
     public function indexAction()

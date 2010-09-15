@@ -1,4 +1,10 @@
-<h2><?php echo $this->translate("Global settings") ?></h2>
+<h2><?php echo $this->translate("General Settings") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content">
 
 <?php if (!empty($this->preferences)) : ?>
 
@@ -18,3 +24,7 @@
 <p><?php echo $this->translate('No preference available.') ?></p>
 
 <?php endif ?>
+
+</div>
+
+</div>

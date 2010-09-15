@@ -1,4 +1,12 @@
-<h2><?php echo $this->translate("Delete a package") ?></h2>
+<h2><?php echo $this->translate("Repositories") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Ressources') ?>
+
+<div class="ld-panel-content">
+
+<h3><?php echo $this->translate("Delete a package") ?></h3>
 
 <p><?php echo sprintf($this->translate("Are you sure you want to delete '%s' package from this repository?"), $this->packageId) ?></p>
 
@@ -8,3 +16,7 @@
     <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Delete") ?>"/>
 
 </form>
+
+</div>
+
+</div>

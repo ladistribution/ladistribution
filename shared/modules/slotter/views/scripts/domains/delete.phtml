@@ -1,0 +1,22 @@
+<h2><?php echo $this->translate("Domains") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content">
+
+<h3><?php echo $this->translate("Delete a domain") ?></h3>
+
+<p><?php echo $this->translate("Are you sure you want to delete this domain?") ?></p>
+
+<form method="post" action="">
+
+    <input type="hidden" name="id" value="<?php echo $this->escape($this->id) ?>"/>
+    <input type="submit" class="submit button" value="<?php echo $this->translate("Delete") ?>"/>
+
+</form>
+
+</div>
+
+</div>

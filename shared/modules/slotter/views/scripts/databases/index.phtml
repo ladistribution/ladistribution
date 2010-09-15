@@ -1,4 +1,10 @@
-<h2><?php echo $this->translate("Databases connections") ?></h2>
+<h2><?php echo $this->translate("Databases") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Ressources') ?>
+
+<div class="ld-panel-content">
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
@@ -50,3 +56,7 @@
         echo $this->translate("Add a database connection");
     ?></a></li>
 </ul>
+
+</div>
+
+</div>

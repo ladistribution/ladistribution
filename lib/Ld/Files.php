@@ -167,7 +167,7 @@ class Ld_Files
 
     public static function scanDir($dir, $exclude = array())
     {
-        $exclude = array_merge(array('.', '..', '.svn', '.DS_Store'), (array)$exclude);
+        $exclude = array_merge(array('.', '..', '.svn', '.preserve', '.DS_Store'), (array)$exclude);
 
         $files = array();
         $directories = array();
@@ -210,7 +210,10 @@ class Ld_Files
     public static function createDirIfNotExists($dir)
     {
         if (!self::exists($dir)) {
-            // self::log('mkdir', $dir);
+            // doesn't works for recursive mkdir creations ...
+            // if (!is_writable(dirname($dir))) {
+            //     throw new Exception("Can't create $dir.");
+            // }
             mkdir($dir, 0777, true);
             self::updatePermissions($dir);
         }

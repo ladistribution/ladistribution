@@ -1,0 +1,21 @@
+<h2><?php echo $this->translate("Domains") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content">
+
+<h3><?php echo $this->translate("Edit a domain") ?></h3>
+
+<form method="post" action="">
+
+    <?php $this->preferencesRenderer($this->preferences, $this->configuration); ?>
+
+    <input type="submit" class="submit button" value="<?php echo $this->translate("Update") ?>"/>
+
+</form>
+
+</div>
+
+</div>

@@ -1,0 +1,122 @@
+<h2><?php echo $this->translate("Domains") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content">
+
+<?php if (empty($this->domains) || count($this->domains) == 0) : ?>
+
+    <p>None</p>
+
+<?php else : ?>
+
+    <form method="post" action="<?php echo $this->url() ?>">
+
+    <h3>Domains</h3>
+
+    <table id="repositories" class="h6e-data">
+    <tr>
+        <th><?php echo $this->translate("Default") ?></th>
+        <th><?php echo $this->translate("Host") ?></th>
+        <th><?php echo $this->translate("Default Application") ?></th>
+        <th colspan="2"><?php echo $this->translate("Actions") ?></th>
+    </tr>
+    <tbody>
+    <?php
+    foreach ($this->domains as $id => $domain) {
+        $manageUrl = $this->url(array('id' => $id, 'action' => 'edit'));
+        $removeUrl = $this->url(array('id' => $id, 'action' => 'delete'));
+        ?>
+        <tr id="<?php echo $id ?>">
+            <?php if ($domain['host'] == $this->default) : ?>
+                <td><input type="radio" name="default" value="<?php echo $id ?>" checked="checked"/></td>
+            <?php else : ?>
+                <td><input type="radio" name="default" value="<?php echo $id ?>"/></td>
+            <?php endif ?>
+            <td><?php echo $domain['host'] ?></td>
+            <td>
+                <select name="defaults[<?php echo $id ?>]">
+                    <option value="">&#x2716; None</option>
+                    <?php $applications = array_merge(array($this->admin), $this->applications); ?>
+                    <?php foreach ($applications as $id => $application) : ?>
+                        <?php
+                        $path = $application->getPath();
+                        $name = $application->getName() . ' /' . $application->getPath() . '/';
+                        ?>
+                        <?php if ($domain['default_application'] == $application->getPath()) : ?>
+                            <option value="<?php echo $path ?>" selected="selected">&#x25CF; <?php echo $name ?></option>
+                        <?php else : ?>
+                            <option value="<?php echo $path ?>">&#x25CF; <?php echo $name ?></option>
+                        <?php endif ?>
+                    <?php endforeach ?>
+                </select>
+            </td>
+            <td><a href="<?php echo $manageUrl ?>"><?php echo $this->translate('edit') ?></a></td>
+            <td><a href="<?php echo $removeUrl ?>"><?php echo $this->translate("remove") ?></a></td>
+        </tr>
+        <?php
+    }
+    ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" style="text-align:right">
+                <a href="<?php echo $this->url(array('action' => 'new')) ?>"><?php echo $this->translate("Add a new domain") ?></a>
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+
+    <h3>Applications</h3>
+
+    <table id="repositories" class="h6e-data">
+    <tr>
+        <th><?php echo $this->translate("Name") ?></th>
+        <th colspan="2"><?php echo $this->translate("Domain") ?></th>
+        <th><?php echo $this->translate("Path") ?></th>
+    </tr>
+    <tbody>
+    <?php
+    foreach ($this->applications as $id => $application) {
+        $applicationDomainId = $application->getDomain();
+        ?>
+        <tr id="<?php echo $id ?>">
+            <td><?php echo $application->getName() ?></td>
+            <td><?php echo 'http://' ?></td>
+            <td>
+                <select name="applications[<?php echo $id ?>]">
+                    <?php foreach ($this->domains as $id => $domain) : ?>
+                        <?php
+                        if (empty($applicationDomainId)) {
+                            $selected = $domain['host'] == $this->site->getConfig('host');
+                        } else {
+                            $selected = $applicationDomainId == $id;
+                        }
+                        ?>
+                        <?php if ($selected) : ?>
+                            <option value="<?php echo $id ?>" selected="selected"><?php echo $domain['host'] ?></option>
+                        <?php else : ?>
+                            <option value="<?php echo $id ?>"><?php echo $domain['host'] ?></option>
+                        <?php endif ?>
+                    <?php endforeach ?>
+                </select>
+            </td>
+            <td><span class="path">/<?php echo $application->getPath() ?>/</span></td>
+        </tr>
+        <?php
+    }
+    ?>
+    </tbody>
+    </table>
+
+    <p><input class="submit button" type="submit" value="<?php echo $this->translate("Update") ?>"/></p>
+
+    </form>
+
+<?php endif ?>
+
+</div>
+
+</div>

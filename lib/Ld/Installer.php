@@ -213,7 +213,7 @@ class Ld_Installer
         // Compute a relative path
         $n = count(explode("/", trim($path, "/")));
         for ($i = 0; $i < $n; $i++) $relativePath = isset($relativePath) ? $relativePath . '/..' : '/../..';
-        $cfg_ld .= "require_once(dirname(__FILE__) . '" . $relativePath . "/dist/site.php');\n";
+        $cfg_ld .= "require_once(dirname(__FILE__) . '$relativePath/dist/site.php');\n";
 
         // The same code with an absolute path
         // $cfg_ld .= "require_once('" . realpath($this->getSite()->getDirectory('dist')) . "/site.php');\n";

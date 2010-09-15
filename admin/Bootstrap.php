@@ -80,10 +80,10 @@ class Bootstrap
         if ($site->getConfig('root_admin') == 1 && constant('LD_REWRITE') == true && file_exists($indexScript)) {
             $baseUrl = $site->getPath();
             $path = str_replace($baseUrl, '', $_SERVER["REQUEST_URI"]);
-            if ($path == '/admin/') {
+            if ($path == '/' . $instance->getPath() . '/') {
                 $redirect = $baseUrl . '/' . $modules[0];
-            } else if (strpos($path, 'admin') === 1) {
-                $redirect = str_replace('/admin' , '', $_SERVER["REQUEST_URI"]);
+            } else if (strpos($path, $instance->getPath()) === 1) {
+                $redirect = str_replace('/' . $instance->getPath() , '', $_SERVER["REQUEST_URI"]);
             }
         }
 

@@ -43,36 +43,53 @@ class Ld_Plugin_Development
             'name' => 'active_ajax_users', 'label' => Ld_Translate::translate('Active ajax style user management'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
+        $preferences[] = array(
+            'name' => 'active_multi_sites', 'label' => Ld_Translate::translate('Active Multi Sites'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
+        $preferences[] = array(
+            'name' => 'active_multi_domains', 'label' => Ld_Translate::translate('Active Multi Domains'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
         return $preferences;
     }
 
     public function load()
     {
-        $enable_debugging = Zend_Registry::get('site')->getConfig('enable_debugging');
+        $site = Zend_Registry::get('site');
+        $enable_debugging = $site->getConfig('enable_debugging');
         if ($enable_debugging) {
             defined('LD_DEBUG') OR define('LD_DEBUG', true);
         }
-        $error_reporting = Zend_Registry::get('site')->getConfig('error_reporting');
+        $error_reporting = $site->getConfig('error_reporting');
         if ($error_reporting) {
             eval("\$error_reporting = $error_reporting;");
             error_reporting($error_reporting);
         }
-        $memory_limit = Zend_Registry::get('site')->getConfig('memory_limit');
+        $memory_limit = $site->getConfig('memory_limit');
         if ($memory_limit) {
             ini_set("memory_limit", $memory_limit);
         }
-        $time_limit = Zend_Registry::get('site')->getConfig('time_limit');
+        $time_limit = $site->getConfig('time_limit');
         if ($time_limit) {
             set_time_limit($time_limit);
         }
-        $include_path = Zend_Registry::get('site')->getConfig('include_path');
+        $include_path = $site->getConfig('include_path');
         if ($include_path) {
             $path = empty($include_path) ? LD_LIB_DIR : LD_LIB_DIR . PATH_SEPARATOR . $include_path;
             set_include_path($path);
         }
-        $active_ajax_users = Zend_Registry::get('site')->getConfig('active_ajax_users');
+        $active_ajax_users = $site->getConfig('active_ajax_users');
         if ($active_ajax_users) {
             defined('LD_AJAX_USERS') OR define('LD_AJAX_USERS', true);
+        }
+        $active_multi_sites = $site->getConfig('active_multi_sites');
+        if ($active_multi_sites) {
+            defined('LD_MULTI_SITES') OR define('LD_MULTI_SITES', true);
+        }
+        $active_multi_domains = $site->getConfig('active_multi_domains');
+        if ($active_multi_domains) {
+            defined('LD_MULTI_DOMAINS') OR define('LD_MULTI_DOMAINS', true);
         }
     }
 

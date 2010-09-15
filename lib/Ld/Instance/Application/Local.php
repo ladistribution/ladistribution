@@ -77,10 +77,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         parent::setSite($site);
 
         if ($this->type == 'application' && isset($this->path)) {
+            $domain = !empty($this->domain) ? $this->domain : null;
             if ($this->isRoot()) {
-                $this->infos['url'] = $this->url = $this->site->getBaseUrl();
+                $this->infos['url'] = $this->url = $this->site->getBaseUrl($domain);
             } else {
-                $this->infos['url'] = $this->url = $this->site->getBaseUrl() . $this->path . '/';
+                $this->infos['url'] = $this->url = $this->site->getBaseUrl($domain) . $this->path . '/';
             }
         }
     }
@@ -95,6 +96,12 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         $this->absolutePath = Ld_Files::real($this->getSite()->getDirectory() . '/' . $this->path);
         return $this->absolutePath;
+    }
+
+    public function getAbsoluteUrl()
+    {
+        $domain = !empty($this->domain) ? $this->domain : null;
+        return $this->site->getBaseUrl($domain) . $this->path . '/';
     }
 
     public function getInstanceJson()
