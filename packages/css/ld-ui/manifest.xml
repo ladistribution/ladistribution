@@ -5,6 +5,6 @@
   <type>css</type>
   <deploy>
       <origin>css</origin>
-      <destination path="css">./ld-ui/</destination>
+      <destination path="css">ld-ui</destination>
   </deploy>
 </package>
