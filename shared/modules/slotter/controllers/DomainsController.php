@@ -66,7 +66,7 @@ class Slotter_DomainsController extends Slotter_BaseController
             }
         }
 
-        $this->view->domains = $this->site->getDomains();
+        $this->view->domains = $this->_getDomains();
 
         $this->view->default = $this->site->getConfig('host');
 
@@ -121,6 +121,21 @@ class Slotter_DomainsController extends Slotter_BaseController
             $this->_redirector->gotoSimple('index', 'domains');
             return;
         }
+    }
+    
+    protected function _getDomains()
+    {
+        $domains = $this->site->getDomains();
+
+        if (empty($domains)) {
+             $this->site->addDomain(array(
+                 'host' => $this->site->getConfig('host'),
+                 'default_application' => $this->site->getConfig('root_application')
+             ));
+             $domains = $this->site->getDomains();
+        }
+
+        return $domains;
     }
 
     protected function _getPreferences()

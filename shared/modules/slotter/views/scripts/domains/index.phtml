@@ -54,7 +54,11 @@
                 </select>
             </td>
             <td><a href="<?php echo $manageUrl ?>"><?php echo $this->translate('edit') ?></a></td>
-            <td><a href="<?php echo $removeUrl ?>"><?php echo $this->translate("remove") ?></a></td>
+            <?php if (count($this->domains) > 1) : ?>
+                <td><a href="<?php echo $removeUrl ?>"><?php echo $this->translate("remove") ?></a></td>
+            <?php else : ?>
+                <td><del><?php echo $this->translate("remove") ?></del></td>
+            <?php endif ?>
         </tr>
         <?php
     }
@@ -68,6 +72,8 @@
         </tr>
     </tfoot>
     </table>
+
+    <?php if (count($this->domains) > 1) : ?>
 
     <h3>Applications</h3>
 
@@ -112,6 +118,8 @@
     </table>
 
     <p><input class="submit button" type="submit" value="<?php echo $this->translate("Update") ?>"/></p>
+
+    <?php endif ?>
 
     </form>
 

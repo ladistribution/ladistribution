@@ -39,6 +39,16 @@ class Slotter_BaseController extends Ld_Controller_Action
     {
         $translator = $this->getTranslator();
 
+        $settings = array();
+        $settings[] = array( 'label' => $translator->translate('General'), 'module' => 'slotter', 'controller' => 'settings' );
+        if (!$this->site->isChild()) {
+            $settings[] = array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' );
+            if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+                $settings[] = array( 'label' => $translator->translate('Domains'), 'module' => 'slotter', 'controller' => 'domains' );
+            }
+            $settings[] = array( 'label' => $translator->translate('Plugins'), 'module' => 'slotter', 'controller' => 'plugins' );
+        }
+
         $pages = array(
             array( 'label' => $translator->translate('Home'), 'module' => 'slotter', 'route' => 'default',
                 'pages' => array(
@@ -48,16 +58,7 @@ class Slotter_BaseController extends Ld_Controller_Action
                         array( 'label' => $translator->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
                     )),
                     array( 'label' => $translator->translate('Users'), 'module' => 'slotter', 'controller' => 'users' ),
-                    array( 'label' => $translator->translate('Settings'), 'module' => 'slotter', 'controller' => 'settings', 'pages' => 
-                        $this->site->isChild() ? array(
-                            array( 'label' => $translator->translate('General'), 'module' => 'slotter', 'controller' => 'settings' ),
-                        ) : array(
-                            array( 'label' => $translator->translate('General'), 'module' => 'slotter', 'controller' => 'settings' ),
-                            array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' ),
-                            array( 'label' => $translator->translate('Domains'), 'module' => 'slotter', 'controller' => 'domains' ),
-                            array( 'label' => $translator->translate('Plugins'), 'module' => 'slotter', 'controller' => 'plugins' ),
-                        )
-                    ),
+                    array( 'label' => $translator->translate('Settings'), 'module' => 'slotter', 'controller' => 'settings', 'pages' => $settings),
             ))
         );
 
