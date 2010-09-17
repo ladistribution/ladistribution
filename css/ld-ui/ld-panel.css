@@ -83,6 +83,11 @@
   background:#eee;
 }
 
+
+.ld-panel table.ld-data {
+  min-width:50%;
+}
+
 /* Preferences
 -------------------------------------------------------------- */
 
