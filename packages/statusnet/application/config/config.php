@@ -78,20 +78,24 @@ if (isset($configuration['private']) && $configuration['private']) {
 
 $config['site']['theme'] = isset($configuration['theme']) ? $configuration['theme'] : 'ld';
 
-unset($config['plugins']['default']['Mapstraction']);
-unset($config['plugins']['default']['OpenID']);
-unset($config['plugins']['default']['OStatus']);
-unset($config['plugins']['default']['Geonames']);
-unset($config['plugins']['default']['WikiHashtags']);
-unset($config['plugins']['default']['RSSCloud']);
+$plugins = array(
+	'Mapstraction', 'OpenID', 'OStatus', 'Geonames', 'WikiHashtags', 'RSSCloud',
+	'LilUrl', 'PtitUrl', 'SimpleUrl', 'TightUrl',
+	'TwitterBridge',
+	'Ld', 'LdAuthentication'
+);
 
-unset($config['plugins']['default']['LilUrl']);
-unset($config['plugins']['default']['PtitUrl']);
-unset($config['plugins']['default']['SimpleUrl']);
-unset($config['plugins']['default']['TightUrl']);
+foreach ($plugins as $key) {
+	if (isset($config['plugins']['default'][$key])) {
+		unset($config['plugins']['default'][$key]);
+	}
+}
 
-addPlugin('Ld');
-addPlugin('LdAuthentication');
+foreach ($plugins as $key) {
+	if (file_exists(dirname(__FILE__) . "/../plugins/$key/")) {
+		addPlugin($key);
+	}
+}
 
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Statusnet:config');

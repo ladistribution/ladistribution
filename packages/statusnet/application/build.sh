@@ -4,6 +4,8 @@ FOLDER="application"
 SOURCE="http://gitorious.org/statusnet/ladistribution/archive-tarball/$VERSION"
 PACKAGE="$NAME.zip"
 
+echo "# Building $NAME package"
+
 # Get from GIT
 # git clone $SOURCE $FOLDER
 # cd $FOLDER

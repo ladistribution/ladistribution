@@ -1,0 +1,8 @@
+<package>
+  <id>statusnet-plugin-ostatus</id>
+  <name>oStatus</name>
+  <version>0.9.5-3</version>
+  <type>plugin</type>
+  <extend>statusnet</extend>
+  <directory>plugins/OStatus</directory>
+</package>
