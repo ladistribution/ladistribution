@@ -24,6 +24,10 @@ class Ld_Controller_Action extends Zend_Controller_Action
         // Registry
         $this->_registry = Zend_Registry::getInstance();
 
+        $this->view->site = $this->site = $this->_registry['site'];
+
+        $this->view->admin = $this->admin = $this->_registry['instance'];
+
         // Controller Action Helpers
         $this->_helper->addPath('Ld/Controller/Action/Helper/', 'Ld_Controller_Action_Helper_');
 

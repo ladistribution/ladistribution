@@ -12,10 +12,6 @@ class Slotter_BaseController extends Ld_Controller_Action
     {
         parent::init();
 
-        $this->view->site = $this->site = $this->_registry['site'];
-
-        $this->view->admin = $this->admin = $this->_registry['instance'];
-
         if (empty($this->_registry['instance'])) {
             throw new Exception('No Instance defined.');
         }

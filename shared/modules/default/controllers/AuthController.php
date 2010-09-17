@@ -142,8 +142,7 @@ class AuthController extends Ld_Controller_Action
 
                 $roles = $this->admin->getUserRoles();
                 if (!$this->getSite()->isChild() && empty($roles)) {
-                    $admin = $this->_registry['instance'];
-                    $admin->setUserRoles(array($user['username'] => 'admin'));
+                    $this->admin->setUserRoles(array($user['username'] => 'admin'));
                     Ld_Auth::authenticate($user['username'], $user['password']);
                 }
 
