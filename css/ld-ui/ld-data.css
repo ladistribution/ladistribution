@@ -81,3 +81,13 @@ table.h6e-data td.plugin-details p.plugin-status.ok {
     background:url(iconic/check_16x13.png) 5px 7px no-repeat;
     padding-left:26px;
 }
+
+table.h6e-data td.error {
+    background:url(iconic/x_alt_16x16.png) 5px 5px no-repeat;
+    padding:5px 5px 5px 26px;
+}
+
+table.h6e-data td.ok {
+    background:url(iconic/check_16x13.png) 5px 7px no-repeat;
+    padding:5px 5px 5px 26px;
+}

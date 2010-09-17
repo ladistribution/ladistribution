@@ -8,6 +8,12 @@
 
 <h3><?php echo $this->translate("Delete a connection") ?></h3>
 
+<?php if ($this->used) : ?>
+
+<p><?php echo $this->translate("You can't delete this connection. It's currently used by at least one application.") ?></p>
+
+<?php else : ?>
+
 <p><?php echo $this->translate("Are you sure you want to delete this database connection?") ?></p>
 
 <form method="post" action="">
@@ -16,6 +22,8 @@
     <input type="submit" class="submit" value="<?php echo $this->translate("Delete") ?>"/>
 
 </form>
+
+<?php endif ?>
 
 </div>
 

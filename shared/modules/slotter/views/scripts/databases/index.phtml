@@ -18,17 +18,26 @@
        <th><?php echo $this->translate("Type") ?></th>
        <th><?php echo $this->translate("Host") ?></th>
        <th><?php echo $this->translate("Name") ?></th>
+       <th><?php echo $this->translate("Usage") ?></th>
+       <th><?php echo $this->translate("Status") ?></th>
        <th colspan="2"><?php echo $this->translate("Actions") ?></th>
     </tr>
 
     <tbody>
 
     <?php foreach ($this->databases as $id => $database) : ?>
-
+        <?php $used = $this->site->isDatabaseUsed($id); ?>
+        <?php $test = $this->site->testDatabase($database); ?>
         <tr>
             <td><?php echo $this->escape($database['type']) ?></td>
             <td><?php echo $this->escape($database['host']) ?></td>
             <td><?php echo $this->escape($database['name']) ?></td>
+            <td><?php echo $used ? sprintf($this->translate('used by %1$d applications'), $used) :  $this->translate('unused') ?></td>
+            <?php if ($test) : ?>
+                <td class="ok"><?php echo $this->translate('ok') ?></td>
+            <?php else : ?>
+                <td class="error"><?php echo $this->translate('unavailable') ?></td>
+            <?php endif ?>
             <td>
                 <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $id )); ?>"><?php
                     echo $this->translate("edit");

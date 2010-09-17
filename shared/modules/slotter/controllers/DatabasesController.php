@@ -106,7 +106,11 @@ class Slotter_DatabasesController extends Slotter_BaseController
     public function deleteAction()
     {
         $this->view->id = $id = $this->_getParam('id');
+        $this->view->used = $used = $this->getSite()->isDatabaseUsed($id);
         if ($this->getRequest()->isPost()) {
+            if ($used) {
+                throw new Exception('Database currently used.');
+            }
             $this->site->deleteDatabase($id);
             $this->_redirector->goto('index');
         }

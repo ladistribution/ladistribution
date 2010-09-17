@@ -714,6 +714,25 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $preferences[] = $preference;
         }
 
+        // Domain
+        if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+            $domains = $this->getDomains();
+            if (count($domains) == 1) {
+                // $keys = array_keys($domains);
+                // $id = $keys[0];
+                // $domainPreference = array('name' => 'domain', 'type' => 'hidden', 'defaultValue' => $id);
+            } else {
+                $domainPreference = array('type' => 'list', 'name' => 'domain', 'label' => 'Domain', 'options' => array());
+                foreach ($domains as $id => $domain) {
+                    $domainPreference['options'][] = array('value' => $id, 'label' => $domain['host']);
+                    if ($domain['host'] == $this->site->getConfig('host')) {
+                        $domainPreference['defaultValue'] = $id;
+                    }
+                }
+                $preferences[] = $domainPreference;
+            }
+        }
+
         // DB
         $neededDb = $package->getManifest()->getDb();
         if ($neededDb) {
@@ -756,7 +775,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function addDatabase($params)
     {
-        $this->_testDatabase($params);
+        if (!$this->_testDatabase($params)) {
+            throw new Exception("Database parameters are incorrect.");
+        }
         $databases = $this->getDatabases();
         $databases[$this->getUniqId()] = $params;
         $this->_writeDatabases($databases);
@@ -766,7 +787,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $databases = $this->getDatabases();
         $databases[$id] = array_merge($databases[$id], $params);
-        $this->_testDatabase($databases[$id]);
+        if (!$this->_testDatabase($databases[$id])) {
+            throw new Exception("Database parameters are incorrect.");
+        }
         $this->_writeDatabases($databases);
     }
 
@@ -782,7 +805,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         Ld_Files::putJson($this->getDirectory('dist') . '/databases.json', $databases);
     }
 
-    protected function _testDatabase($db)
+    public function testDatabase($db)
     {
         if (strpos($db['host'], ':')) {
             list($db['host'], $db['port']) = explode(':', $db['host']);
@@ -793,12 +816,27 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 'username' => $db['user'],
                 'password' => $db['password'],
                 'dbname'   => $db['name'],
-                'port'     => isset($db['port']) ? $db['port'] : null
+                'port'     => isset($db['port']) ? $db['port'] : null,
+                'driver_options' => array(MYSQLI_OPT_CONNECT_TIMEOUT => 1)
             ));
             $result = $con->fetchCol('SHOW TABLES');
+            return true;
         } catch (Exception $e) {
-            throw new Exception("Database parameters are incorrect.");
+            return false;
         }
+    }
+
+    public function isDatabaseUsed($id)
+    {
+        $n = 0;
+        $instances = $this->getApplicationsInstances();
+        foreach ($instances as $instance) {
+            $infos = $instance->getInfos();
+            if (isset($infos['db']) && $infos['db'] == $id) {
+                $n++;
+            }
+        }
+        return $n;
     }
 
     // Users
