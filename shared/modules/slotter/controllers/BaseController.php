@@ -20,10 +20,6 @@ class Slotter_BaseController extends Ld_Controller_Action
             throw new Exception('No Instance defined.');
         }
 
-        $authUrl = $this->view->url(array(
-            'module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
-        $this->view->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absoluteURL($authUrl)));
-
         $this->view->addHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
         $this->view->action = $this->getRequest()->getActionName();
