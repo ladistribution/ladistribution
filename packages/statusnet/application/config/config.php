@@ -86,13 +86,11 @@ $plugins = array(
 );
 
 foreach ($plugins as $key) {
-	if (isset($config['plugins']['default'][$key])) {
-		unset($config['plugins']['default'][$key]);
-	}
+	unset($config['plugins']['default'][$key]);
 }
 
 foreach ($plugins as $key) {
-	if (file_exists(dirname(__FILE__) . "/../plugins/$key/")) {
+	if (file_exists(dirname(__FILE__) . "/plugins/{$key}/{$key}Plugin.php") || file_exists(dirname(__FILE__) . "/plugins/{$key}Plugin.php")) {
 		addPlugin($key);
 	}
 }
