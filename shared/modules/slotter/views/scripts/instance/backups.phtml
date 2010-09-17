@@ -8,19 +8,24 @@
 
 <h3><?php echo $this->translate('Existing backups') ?></h3>
 
-<?php if (empty($this->backups) || count($this->backups) == 0) : ?>
-
-    <p><?php echo $this->translate('None available') ?></p>
-
-<?php else : ?>
-
-    <table class="h6e-data">
-        <tr class="th1">
-            <th><?php echo $this->translate('File') ?></th>
-            <th><?php echo $this->translate('Size') ?></th>
-            <th colspan="3"><?php echo $this->translate('Actions') ?></th>
-        </tr>
+<table class="h6e-data ld-data">
+    <tr class="th1">
+        <th><?php echo $this->translate('File') ?></th>
+        <th><?php echo $this->translate('Size') ?></th>
+        <th colspan="3"><?php echo $this->translate('Actions') ?></th>
+    </tr>
     <?php
+    if (empty($this->backups) || count($this->backups) == 0) {
+        ?>
+        <tfoot>
+            <tr>
+                <td>None</td>
+                <td>/</td>
+                <td colspan="3">/</td>
+            </tr>
+        </tfoot>
+        <?php
+    }
     foreach ($this->backups as $backup) {
         $downloadUrl = $this->instanceActionUrl('backups') . '?download=' . $backup['filename'];
         $restoreUrl = $this->instanceActionUrl('backups') . '?restore=' .   $backup['filename'];
@@ -36,9 +41,7 @@
         <?php
     }
     ?>
-    </table>
-
-<?php endif ?>
+</table>
 
 <h3><?php echo $this->translate('New backup') ?></h3>
 
