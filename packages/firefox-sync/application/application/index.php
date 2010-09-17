@@ -72,7 +72,12 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
           <h2>Notes</h2>
           <ul>
               <li>Firefox Sync extension is available on <a href="https://addons.mozilla.org/fr/firefox/addon/10868">addons.mozilla.org</a></li>
-              <li>When initialising choose "<strong>I'm already using Sync on another computer</strong>", then "<strong>Use a custom server</strong>"</li> 
+              <li>When initialising, choose:
+                  <ol>
+                      <li>"<strong>I'm already using Sync on another computer</strong>"</li>
+                      <li>"<strong>Use a custom server</strong>"</li> 
+                  </ol>
+              </li>
               <li>registration is not possible from Firefox extension</li>
               <li>password change is not possible from Firefox extension</li>
           </ul>
