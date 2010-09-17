@@ -13,10 +13,12 @@ class Ld_Installer_Statusnet extends Ld_Installer
 			$this->setConfiguration(array('theme' => $preferences['theme']));
 			$this->setTheme($preferences['theme']);
 		}
+		$this->hit();
 	}
 
 	public function postUpdate()
 	{
+		$this->hit();
 	}
 
 	public function postMove()
@@ -177,6 +179,11 @@ class Ld_Installer_Statusnet extends Ld_Installer
 			$con->query($table);
 		}
 		Ld_Files::unlink($this->getAbsolutePath() . "/db");
+	}
+
+	public function hit()
+	{
+		Ld_Http::get( $this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/' );
 	}
 
 }
