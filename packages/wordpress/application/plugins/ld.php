@@ -190,7 +190,8 @@ function ld_option_home($value)
 	if (Zend_Registry::isRegistered('site')) {
 		$site = Zend_Registry::get('site');
 		$application = $site->getInstance(ABSPATH);
-		return $application->getUrl();
+		$url = $application->getUrl();
+		return substr($url, 0, -1);
 	}
 	return $value;
 }
@@ -203,7 +204,8 @@ function ld_option_siteurl($value)
 		$site = Zend_Registry::get('site');
 		$application = $site->getInstance(ABSPATH);
 		if (method_exists($application, 'getAbsoluteUrl')) {
-			return $application->getAbsoluteUrl();
+			$url = $application->getAbsoluteUrl();
+			return substr($url, 0, -1);
 		}
 	}
 	return $value;
