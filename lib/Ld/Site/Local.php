@@ -1071,7 +1071,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $domains = Ld_Files::getJson($this->getDirectory('dist') . '/domains.json');
         if (empty($domains)) {
-            $domains = array();
+             $this->addDomain(array(
+                 'host' => $this->getConfig('host'),
+                 'default_application' => $this->getConfig('root_application')
+             ));
+             $domains = $this->getDomains();
         }
         return $domains;
     }
@@ -1090,25 +1094,26 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $domains = $this->getDomains();
         $id = $this->getUniqId();
         $domains[$id] = $params;
-        $this->_writeDomains($domains);
+        $this->writeDomains($domains);
     }
 
     public function updateDomain($id, $params)
     {
         $domains = $this->getDomains();
         $domains[$id] = array_merge($domains[$id], $params);
-        $this->_writeDomains($domains);
+        $this->writeDomains($domains);
     }
 
     public function deleteDomain($id)
     {
         $domains = $this->getDomains();
         unset($domains[$id]);
-        $this->_writeDomains($domains);
+        $this->writeDomains($domains);
     }
 
-    protected function _writeDomains($domains)
+    public function writeDomains($domains)
     {
+        uasort($domains, array("Ld_Utils", "sortByOrder"));
         Ld_Files::putJson($this->getDirectory('dist') . '/domains.json', $domains);
     }
 

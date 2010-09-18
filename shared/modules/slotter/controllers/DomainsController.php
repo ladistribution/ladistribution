@@ -43,30 +43,40 @@ class Slotter_DomainsController extends Slotter_BaseController
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
+            $site = $this->getSite();
+            // applications/domains mapping
             if ($this->_hasParam('applications')) {
-                foreach ($this->_getParam('applications') as $id => $domain) {
-                    $application = $this->getSite()->getInstance($id);
-                    $application->setInfos(array('domain' => $domain))->save();
+                foreach ($this->_getParam('applications') as $appId => $domainId) {
+                    $appInstance = $site->getInstance($appId);
+                    $appInstance->setInfos(array('domain' => $domainId))->save();
                 }
             }
+            // handle default applications
             if ($this->_hasParam('defaults')) {
-                foreach ($this->_getParam('defaults') as $id => $application) {
-                    $originalConfig = $this->getSite()->getDomain($id);
-                    if ($originalConfig['host'] == $this->site->getConfig('host')) {
-                        $this->site->setConfig('root_application', $application);
+                foreach ($this->_getParam('defaults') as $domainId => $appPath) {
+
+                    $domainConfig = $site->getDomain($domainId);
+                    if ($domainConfig['host'] == $site->getConfig('host')) {
+                        $site->setConfig('root_application', $appPath);
                     }
-                    $new = array('default_application' => $application);
-                    $this->getSite()->updateDomain($id, $new);
+                    $domainConfig['default_application'] = $appPath;
+                    $site->updateDomain($domainId, $domainConfig);
+                    // update app
+                    if (!empty($appPath)) {
+                        $appInstance = $site->getInstance($appPath);
+                        $appInstance->setInfos(array('domain' => $domainId))->save();
+                    }
                 }
             }
+            // handle default domain
             if ($this->_hasParam('default')) {
-                $domain = $this->getSite()->getDomain( $this->_getParam('default') );
-                $this->site->setConfig('host', $domain['host']);
-                $this->site->setConfig('root_application', $domain['default_application']);
+                $domain = $site->getDomain( $this->_getParam('default') );
+                $site->setConfig('host', $domain['host']);
+                $site->setConfig('root_application', $domain['default_application']);
             }
         }
 
-        $this->view->domains = $this->_getDomains();
+        $this->view->domains = $this->getSite()->getDomains();
 
         $this->view->default = $this->site->getConfig('host');
 
@@ -122,20 +132,29 @@ class Slotter_DomainsController extends Slotter_BaseController
             return;
         }
     }
-    
-    protected function _getDomains()
+
+    /**
+     * Order action.
+     */
+    public function orderAction()
     {
-        $domains = $this->site->getDomains();
+        if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->isPost() && $this->_hasParam('domains')) {
 
-        if (empty($domains)) {
-             $this->site->addDomain(array(
-                 'host' => $this->site->getConfig('host'),
-                 'default_application' => $this->site->getConfig('root_application')
-             ));
-             $domains = $this->site->getDomains();
+            $domains = $this->getSite()->getDomains();
+
+            $order = 0;
+            foreach ($this->_getParam('domains') as $id) {
+                if (isset($domains[$id])) {
+                    $domains[$id]['order'] = $order;
+                    $order ++;
+                }
+            }
+
+            $this->getSite()->writeDomains($domains);
+
+            $this->noRender();
+            $this->getResponse()->appendBody('ok');
         }
-
-        return $domains;
     }
 
     protected function _getPreferences()

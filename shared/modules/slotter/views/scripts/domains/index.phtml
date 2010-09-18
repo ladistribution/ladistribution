@@ -16,8 +16,9 @@
 
     <h3>Domains</h3>
 
-    <table id="repositories" class="h6e-data">
+    <table id="domains" class="h6e-data">
     <tr>
+        <th></th>
         <th><?php echo $this->translate("Default") ?></th>
         <th><?php echo $this->translate("Host") ?></th>
         <th><?php echo $this->translate("Default Application") ?></th>
@@ -30,6 +31,7 @@
         $removeUrl = $this->url(array('id' => $id, 'action' => 'delete'));
         ?>
         <tr id="<?php echo $id ?>">
+            <td class="move"></td>
             <?php if ($domain['host'] == $this->default) : ?>
                 <td><input type="radio" name="default" value="<?php echo $id ?>" checked="checked"/></td>
             <?php else : ?>
@@ -66,7 +68,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="5" style="text-align:right">
+            <td colspan="6" style="text-align:right">
                 <a href="<?php echo $this->url(array('action' => 'new')) ?>"><?php echo $this->translate("Add a new domain") ?></a>
             </td>
         </tr>
@@ -75,9 +77,28 @@
 
     <?php if (count($this->domains) > 1) : ?>
 
+    <?php
+    $this->js()->append('/jquery/jquery.tablednd.js', 'js-jquery-tablednd', 'ld-js-jquery-ui-tablednd');
+    ?>
+
+    <script type="text/javascript">
+    (function($) {
+        $(document).ready(function() {
+            $("#domains").tableDnD({
+                onDragClass: "dragging",
+                onDrop: function(table, row) {
+                    $.post("<?php echo $this->url(array('action' => 'order')) ?>", $("#domains").tableDnDSerialize());
+                    $("#domains tr").removeClass('even');
+                    $("#domains tr:even").addClass('even');
+                },
+            });
+        });
+    })(jQuery);
+    </script>
+
     <h3>Applications</h3>
 
-    <table id="repositories" class="h6e-data">
+    <table id="applications" class="h6e-data">
     <tr>
         <th><?php echo $this->translate("Name") ?></th>
         <th colspan="2"><?php echo $this->translate("Domain") ?></th>
@@ -89,8 +110,17 @@
         $applicationDomainId = $application->getDomain();
         ?>
         <tr id="<?php echo $id ?>">
+
             <td><?php echo $application->getName() ?></td>
             <td><?php echo 'http://' ?></td>
+            <?php if ($application->isRoot()) : ?>
+                <td>
+                    <!-- <select disabled="disabled"><option> -->
+                    <?php $domain = $this->domains[$application->getDomain()]; echo $domain['host']; ?>
+                    <!-- </option></select> -->
+                </td>
+                <td><span class="path">/</span></td>
+            <?php else : ?>
             <td>
                 <select name="applications[<?php echo $id ?>]">
                     <?php foreach ($this->domains as $id => $domain) : ?>
@@ -110,6 +140,7 @@
                 </select>
             </td>
             <td><span class="path">/<?php echo $application->getPath() ?>/</span></td>
+            <?php endif ?>
         </tr>
         <?php
     }

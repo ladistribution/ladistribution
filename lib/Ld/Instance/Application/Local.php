@@ -138,6 +138,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function isRoot()
     {
+        foreach ($this->getSite()->getDomains() as $domain) {
+            if ($domain['default_application'] == $this->getPath()) {
+                return true;
+            }
+        }
         return $this->getPath() == $this->getSite()->getConfig('root_application');
     }
 
@@ -145,7 +150,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         if ($_SERVER["REQUEST_URI"] == $this->getSite()->getPath() . '/') {
             if ($this->isRoot()) {
-                return true;
+                foreach ($this->getSite()->getDomains() as $domain) {
+                    if ($domain['host'] == $_SERVER['SERVER_NAME'] && $domain['default_application'] == $this->getPath()) {
+                        return true;
+                    }
+                }
             }
         }
         return strpos( $_SERVER["REQUEST_URI"], $this->getSite()->getPath() . '/' . $this->getPath() . "/" ) === 0;
@@ -228,7 +237,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         return $this->getInstaller()->setTheme($theme);
     }
-    
+
     public function getConfiguration($type = 'general')
     {
         return $this->getInstaller()->getConfiguration($type);
@@ -396,7 +405,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         // TODO: would be better to return an object instead
         return true;
     }
-        
+
     public function updateExtension($extension)
     {
         if (is_string($extension)) {
@@ -413,10 +422,10 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         $installer->setPath( $this->getPath() . '/' . $extension->getPath() );
         $installer->setAbsolutePath( $this->getAbsolutePath() . '/' . $extension->getPath() );
         $installer->update();
-        
+
         // Update registry
         // $extension->setInfos(array('version' => $package->version))->save();
-        
+
         // We update application registry instead
         foreach ($this->infos['extensions'] as $key => $infos) {
             if ($infos['path'] == $extension->getPath()) {
