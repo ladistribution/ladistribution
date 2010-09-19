@@ -1070,12 +1070,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getDomains()
     {
         $domains = Ld_Files::getJson($this->getDirectory('dist') . '/domains.json');
+        // transitional code
         if (empty($domains)) {
-             $this->addDomain(array(
-                 'host' => $this->getConfig('host'),
-                 'default_application' => $this->getConfig('root_application')
-             ));
-             $domains = $this->getDomains();
+            $domains = array();
+            $id = $this->getUniqId();
+            $domains[$id] = array(
+                'host' => $this->getConfig('host'),
+                'default_application' => $this->getConfig('root_application')
+            );
+            $this->writeDomains($domains);
         }
         return $domains;
     }

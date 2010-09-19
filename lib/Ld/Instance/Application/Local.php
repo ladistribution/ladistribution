@@ -138,9 +138,11 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
 
     public function isRoot()
     {
-        foreach ($this->getSite()->getDomains() as $domain) {
-            if ($domain['default_application'] == $this->getPath()) {
-                return true;
+        if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+            foreach ($this->getSite()->getDomains() as $domain) {
+                if ($domain['default_application'] == $this->getPath()) {
+                    return true;
+                }
             }
         }
         return $this->getPath() == $this->getSite()->getConfig('root_application');
