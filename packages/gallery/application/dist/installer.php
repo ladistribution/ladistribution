@@ -30,47 +30,14 @@ class Ld_Installer_Gallery extends Ld_Installer
 		installer::unpack_var();
 		installer::unpack_sql($config);
 
-		// if (isset($preferences['administrator'])) {
-		// 	$preferences['admin_username'] = $preferences['administrator']['username'];
-		// 	$preferences['admin_fullname'] = $preferences['administrator']['fullname'];
-		// 	$preferences['admin_email'] = $preferences['administrator']['email'];
-		// }
-
 		if (isset($preferences['administrator'])) {
 			$username = $preferences['administrator']['username'];
 			$this->setUserRoles(array($username => 'administrator'));
 		}
 
-		// try {
-		// 	$user = user::lookup_by_name($preferences['admin_username']);
-		// } catch (Exception $e) {
-		// 	$user = null;
-		// }
-
 		$con = $this->instance->getDbConnection();
 
-		// if (empty($user)) {
-		// 	$name = $preferences['admin_username'];
-		// 	$full_name = $preferences['admin_fullname'];
-		// 	$email = $preferences['admin_email'];
-		// 	$sql = installer::prepend_prefix($config["prefix"],
-		// 		"INSERT INTO {users} SET `admin` = 1,  `name` = '$name', `full_name` = '$full_name', `email` = '$email'");
-		// 	$result = $con->query($sql);
-		// 	if (!$result) {
-		// 		throw Exception(mysql_error());
-		// 	}
-		// }
-
 		installer::create_private_key($config);
-
-		// $salt = $this->_getSalt();
-		// $hashed_password = $salt . md5($salt . $preferences['admin_password']);
-		// $sql = installer::prepend_prefix($config["prefix"],
-		// 	"UPDATE {users} SET `password` = '$hashed_password' WHERE `id` = 2");
-		// $result = $con->query($sql);
-		// if (!$result) {
-		// 	throw Exception(mysql_error());
-		// }
 
 		$sql = installer::prepend_prefix($config["prefix"],
 			"DELETE FROM {users} WHERE `id` = 2");
@@ -94,7 +61,6 @@ class Ld_Installer_Gallery extends Ld_Installer
 			serialize($blocks_dashboard_center)
 		));
 		$result = $con->query($sql);
-		// module::set_var("gallery", "blocks_dashboard_center", $blocks_dashboard_center);
 
 		$blocks_dashboard_sidebar = array(
 			2 => array('gallery', 'block_adder'),
@@ -105,26 +71,9 @@ class Ld_Installer_Gallery extends Ld_Installer
 			serialize($blocks_dashboard_sidebar)
 		));
 		$result = $con->query($sql);
-		// module::set_var("gallery", "blocks_dashboard_sidebar", $blocks_dashboard_sidebar);
-
-		// block_manager::remove("dashboard_center", 'welcome');
-		// block_manager::remove("dashboard_center", 'log_entries');
-		// block_manager::remove("dashboard_sidebar", 'platform_info');
-		// block_manager::remove("dashboard_sidebar", 'project_news');
 
 		$this->updateHtaccess();
 	}
-
-	// protected function _getSalt()
-	// {
-	// 	$salt = "";
-	// 	for ($i = 0; $i < 4; $i++) {
-	// 		$char = mt_rand(48, 109);
-	// 		$char += ($char > 90) ? 13 : ($char > 57) ? 7 : 0;
-	// 		$salt .= chr($char);
-	// 	}
-	// 	return $salt;
-	// }
 
 	public function postUpdate()
 	{
