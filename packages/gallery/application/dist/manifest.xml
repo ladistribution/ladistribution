@@ -1,13 +1,12 @@
 <package>
   <id>gallery</id>
   <name>Gallery</name>
-  <version>3.0-8-rc1</version>
+  <version>3.0-16-rc2</version>
   <type>application</type>
   <db>mysql</db>
   <php>
       <version>5.2.3</version>
   </php>
-  <!-- <need>lib-htmlpurifier</need> -->
   <deploy>
       <origin>var</origin>
       <destination path="public">var</destination>
@@ -16,14 +15,7 @@
       <origin>modules</origin>
       <destination path="public">modules</destination>
   </deploy>
-  <!--
   <install>
-      <preference type="text" label="Admin Username" name="admin_username" defaultValue="admin"/>
-      <preference type="password" label="Admin Password" name="admin_password" value=""/>
-  </install>
-  -->
-  <install>
-      <!-- <preference type="password" label="Admin Password" name="admin_password" value=""/> -->
       <preference type="user" label="Administrator" name="administrator" value=""/>
   </install>
   <configuration>

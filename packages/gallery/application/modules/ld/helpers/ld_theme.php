@@ -79,7 +79,7 @@ class ld_theme_Core
             font-size:0.85em;
         }
         #doc3 {
-            margin:35px auto 0;
+            margin:40px auto 0;
             border: 0;
             width:978px;
         }

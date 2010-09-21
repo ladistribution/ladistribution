@@ -16,7 +16,13 @@ class ld_event_Core
             }
 
             if (empty($user)) {
-                $user = identity::create_user($ld_user['username'], $ld_user['fullname'], $ld_user['hash'], $ld_user['email']);
+                $user = ORM::factory("user");
+                $user->name = $ld_user['username'];
+                $user->full_name = $ld_user['fullname'];
+                $user->password = 'XXXXX';
+                $user->hashed_password = $ld_user['hash'];
+                $user->email = $ld_user['email'];
+                $user->save();
             }
 
             $instance = Zend_Registry::get('application');
@@ -39,8 +45,8 @@ class ld_event_Core
 
     static function admin_menu($menu, $theme)
     {
-        $menu->remove("settings_menu");
-        $menu->remove("modules");
+        // $menu->remove("settings_menu");
+        // $menu->remove("modules");
     }
 
 }
