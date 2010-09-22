@@ -84,18 +84,6 @@ class LdPlugin extends Plugin
 	function onStartSecondaryNav($action)
 	{
 		// see lib/action.php#showSecondaryNav for original source
-		$action->menuItem(common_local_url('doc', array('title' => 'about')), _('About'));
-		$action->menuItem(common_local_url('doc', array('title' => 'help')), _('Help'));
-		$action->menuItem(common_local_url('doc', array('title' => 'faq')), _('FAQ'));
-		// $bb = common_config('site', 'broughtby');
-		// if (!empty($bb)) {
-		// 	$action->menuItem(common_local_url('doc', array('title' => 'tos')), _('TOS'));
-		// }
-		// $action->menuItem(common_local_url('doc', array('title' => 'privacy')), _('Privacy'));
-		// $action->menuItem(common_local_url('doc', array('title' => 'source')), _('Source'));
-		$action->menuItem(common_local_url('version'), _('Version'));
-		// $action->menuItem(common_local_url('doc', array('title' => 'contact')), _('Contact'));
-		// $action->menuItem(common_local_url('doc', array('title' => 'badge')), _('Badge'));
 		return false;
 	}
 
@@ -148,7 +136,7 @@ class LdPlugin extends Plugin
 	{
 		$versions[] = array(
 			'name' => 'La Distribution Package',
-			'version' => '0.4.1',
+			'version' => '0.4.2',
 			'author' => 'h6e.net',
 			'homepage' => 'http://h6e.net/',
 			'rawdescription' => _m('Integrate a Status.net instance with La Distribution')

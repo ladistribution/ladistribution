@@ -33,6 +33,9 @@ rm $FOLDER/lighttpd.conf.example
 rm $FOLDER/htaccess.sample
 rm $FOLDER/config.php.sample
 rm $FOLDER/EVENTS.txt
+rm $FOLDER/favicon.ico
+rm $FOLDER/apple-touch-icon.png
+rm $FOLDER/install.php
 
 rm -rf $FOLDER/doc-src
 rm -rf $FOLDER/tests

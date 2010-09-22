@@ -330,6 +330,10 @@ label[for=notice_data-text] {
     border-top:1px solid #CCCCCC;
 }
 
+#site_nav_global_secondary {
+    display:none;
+}
+
 #footer #site_nav_global_secondary ul { list-style-type:none; margin:0.5em 0; }
 #footer #site_nav_global_secondary ul li { display:inline; margin-right:18px; }
 

@@ -1,9 +1,15 @@
 <package>
   <id>statusnet</id>
   <name>Status.net</name>
-  <version>0.9.5-5</version>
+  <version>0.9.5-6</version>
   <type>application</type>
   <db>mysql</db>
+  <php>
+      <version>5.2.3</version>
+  </php>
+  <mysql>
+      <version>5.0</version>
+  </mysql>
   <need>lib-ld</need>
   <need>lib-php-openid</need>
   <deploy>
