@@ -79,9 +79,9 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
         if ($this->type == 'application' && isset($this->path)) {
             $domain = !empty($this->domain) ? $this->domain : null;
             if ($this->isRoot()) {
-                $this->infos['url'] = $this->url = $this->site->getBaseUrl($domain);
+                $this->infos['url'] = $this->url = $site->getBaseUrl($domain);
             } else {
-                $this->infos['url'] = $this->url = $this->site->getBaseUrl($domain) . $this->path . '/';
+                $this->infos['url'] = $this->url = $site->getBaseUrl($domain) . $this->path . '/';
             }
         }
     }
@@ -101,7 +101,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     public function getAbsoluteUrl()
     {
         $domain = !empty($this->domain) ? $this->domain : null;
-        return $this->site->getBaseUrl($domain) . $this->path . '/';
+        return $this->getSite()->getBaseUrl($domain) . $this->path . '/';
     }
 
     public function getInstanceJson()
@@ -152,10 +152,14 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
     {
         if ($_SERVER["REQUEST_URI"] == $this->getSite()->getPath() . '/') {
             if ($this->isRoot()) {
-                foreach ($this->getSite()->getDomains() as $domain) {
-                    if ($domain['host'] == $_SERVER['SERVER_NAME'] && $domain['default_application'] == $this->getPath()) {
-                        return true;
+                if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+                    foreach ($this->getSite()->getDomains() as $domain) {
+                        if ($domain['host'] == $_SERVER['SERVER_NAME'] && $domain['default_application'] == $this->getPath()) {
+                            return true;
+                        }
                     }
+                } else {
+                    return true;
                 }
             }
         }
@@ -372,7 +376,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
             return null;
         }
 
-        $package = $this->site->getPackageExtension($this->getPackageId(), $extension);
+        $package = $this->getSite()->getPackageExtension($this->getPackageId(), $extension);
 
         $this->getInstaller(); // include the application installer
         $installer = $package->getInstaller();
@@ -414,7 +418,7 @@ class Ld_Instance_Application_Local extends Ld_Instance_Application_Abstract
             $extension = $this->getExtension($extension);
         }
 
-        $package = $this->site->getPackageExtension($this->getPackageId(), $extension->package);
+        $package = $this->getSite()->getPackageExtension($this->getPackageId(), $extension->package);
 
         // Get Installer
         $this->getInstaller(); // include the application installer

@@ -1,4 +1,12 @@
 <?php
 define('LD_ROOT_CONTEXT', true);
-if (file_exists('admin/dispatch.php')) require_once('admin/dispatch.php');
-else echo 'La Distribution Admin component not installed.';
+$dir = dirname(__FILE__);
+if (file_exists($dir . '/dist/site.php')) {
+    require_once($dir . '/dist/site.php');
+    list($directory, $script) = Ld_Dispatch::dispatch();
+    chdir($directory);
+    require_once($script);
+} else {
+    echo 'La Distribution not installed.';
+    exit;
+}

@@ -11,14 +11,18 @@
  * @version    $Id$
  */
 
+/**
+ * @category   Ld
+ * @package    Ld_Dispatch
+ */
 class Ld_Dispatch
 {
 
-    public function dispatch()
+    public static function dispatch()
     {
-        $site = self::getSite();
+        $site = Zend_Registry::get('site');
 
-        $root_application = self::getRootApplicationPath();
+        $root_application = self::_getRootApplicationPath();
 
         // Get Instance
         $instance = $site->getInstance($root_application);
@@ -38,43 +42,46 @@ class Ld_Dispatch
         return array($root_application, $script);
     }
 
-    public function getRootApplicationPath()
+    protected static function _getRootApplicationPath()
     {
-        $site = self::getSite();
+        $site = Zend_Registry::get('site');
 
         if (self::isAdmin()) {
             return self::getAdminPath();
         }
 
         // Get Root Application
-        foreach ($site->getDomains() as $domain) {
-            if ($domain['host'] == $_SERVER['SERVER_NAME'] && !empty($domain['default_application'])) {
-                return $domain['default_application'];
+        if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+            foreach ($site->getDomains() as $domain) {
+                if ($domain['host'] == $_SERVER['SERVER_NAME'] && !empty($domain['default_application'])) {
+                    return $domain['default_application'];
+                }
             }
         }
 
+        // Should not be used anymore with new domain code
         $root_application = $site->getConfig('root_application');
         if (!empty($root_application)) {
             return $root_application;
         }
 
-        return self::getDefaultRootApplicationPath();
+        return self::_getDefaultRootApplicationPath();
     }
 
-    public function getAdminPath()
+    protected static function getAdminPath()
     {
-        $admin = self::getSite()->getAdmin();
+        $admin = Zend_Registry::get('site')->getAdmin();
         return $admin->getPath();
     }
 
-    public function getDefaultRootApplicationPath()
+    protected static function _getDefaultRootApplicationPath()
     {
         return self::getAdminPath();
     }
 
-    public function isAdmin()
+    protected static function isAdmin()
     {
-        $site = self::getSite();
+        $site = Zend_Registry::get('site');
         $path = self::str_replace_once($site->getPath() . '/', '', $_SERVER["REQUEST_URI"]);
         $parts = explode('/', $path);
         if (!empty($parts)) {
@@ -94,12 +101,7 @@ class Ld_Dispatch
         return false;
     }
 
-    public function getSite()
-    {
-        return Zend_Registry::get('site');
-    }
-
-    static function str_replace_once($needle, $replace, $haystack)
+    protected static function str_replace_once($needle, $replace, $haystack)
     {
         $pos = strpos($haystack, $needle);
         if ($pos === false) {

@@ -209,10 +209,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getHost($domain = null)
     {
-        if (isset($domain)) {
-            $domains = $this->getDomains();
-            if (isset($domains[$domain])) {
-                return $domains[$domain]['host'];
+        if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+            if (isset($domain)) {
+                $domains = $this->getDomains();
+                if (isset($domains[$domain])) {
+                    return $domains[$domain]['host'];
+                }
             }
         }
         return $this->host;
@@ -725,7 +727,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $domainPreference = array('type' => 'list', 'name' => 'domain', 'label' => 'Domain', 'options' => array());
                 foreach ($domains as $id => $domain) {
                     $domainPreference['options'][] = array('value' => $id, 'label' => $domain['host']);
-                    if ($domain['host'] == $this->site->getConfig('host')) {
+                    if ($domain['host'] == $this->getConfig('host')) {
                         $domainPreference['defaultValue'] = $id;
                     }
                 }
