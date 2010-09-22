@@ -1,0 +1,17 @@
+<package>
+  <id>ajaxplorer</id>
+  <name>AjaXplorer</name>
+  <version>3.0-8</version>
+  <type>application</type>
+  <deploy>
+      <origin>plugins</origin>
+      <destination path="public">plugins</destination>
+  </deploy>
+  <deploy>
+      <origin>conf</origin>
+      <destination path="public">server/conf</destination>
+  </deploy>
+  <install>
+      <preference type="user" label="Administrator" name="administrator" value=""/>
+  </install>
+</package>

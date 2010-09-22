@@ -89,3 +89,11 @@ cd roundcube
   cd ..
 
 cd ..
+
+cd ajaxplorer
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..

@@ -12,6 +12,7 @@ $IMPORT indexhibit.zip
 $IMPORT moonmoon.zip
 $IMPORT gallery.zip
 $IMPORT roundcube.zip
+$IMPORT ajaxplorer.zip
 
 $IMPORT wordpress-theme-p2.zip
 $IMPORT wordpress-theme-hemingway.zip
