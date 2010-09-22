@@ -96,6 +96,10 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
         $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), $storage, null, $root, $sreg);
 
+        $httpClient = new Zend_Http_Client();
+        $httpClient->setConfig(array('maxredirects' => 4, 'timeout' => 15, 'useragent' => 'La Distribution OpenID Consumer'));
+        $adapter->setHttpClient($httpClient);
+
         if ($this->_getParam('openid_action') == 'login' && $this->_getParam('openid_identifier')) {
 
             // we register the referer in the session
