@@ -8,7 +8,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         $site = $this->view->site;
         $instance = $this->view->instance;
 
-        $configuration = $instance->getConfiguration();
+        $preferences = $instance->getPreferences('configuration');
         $themes = $instance->getThemes();
         $extensions = $site->getPackageExtensions( $instance->getPackageId() );
         $roles = $instance->getRoles();
@@ -17,7 +17,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
 
         $actions = array();
         $actions['status'] = $this->translate('status');
-        if (!empty($configuration)) {
+        if (!empty($preferences)) {
             $actions['configure'] = $this->translate('configure');
         }
         if (!empty($themes)) {
