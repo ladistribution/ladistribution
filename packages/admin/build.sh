@@ -14,7 +14,7 @@ svn export "$SOURCE/admin/" $FOLDER --force --quiet
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist --quiet -q -x \*.svn/\* \*.preserve
+zip -r $PACKAGE $FOLDER dist -q -x \*.svn/\* \*.preserve
 mv $PACKAGE ..
 
 # Clean
