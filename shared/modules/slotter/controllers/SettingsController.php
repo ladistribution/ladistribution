@@ -23,7 +23,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         $this->appendTitle( $translator->translate('General Settings') );
     }
 
-    function indexAction()
+    public function indexAction()
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
             $configuration = $this->getSite()->getConfig();
@@ -31,7 +31,7 @@ class Slotter_SettingsController extends Slotter_BaseController
                 $configuration[$key] = $value;
             }
             $this->getSite()->setConfig($configuration);
-            $this->_updateAdminBaseUrl();
+            $this->_updateAdminBaseUrl($configuration);
         }
 
         $this->view->preferences = $this->_getPreferences();
@@ -39,7 +39,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         $this->view->configuration = $this->getSite()->getConfig();
     }
 
-    protected function _updateAdminBaseUrl()
+    protected function _updateAdminBaseUrl($configuration)
     {
         $frontController = Zend_Controller_Front::getInstance();
         if ($configuration['root_admin']) {

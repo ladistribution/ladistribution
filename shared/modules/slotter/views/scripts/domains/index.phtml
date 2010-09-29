@@ -116,7 +116,14 @@
             <?php if ($application->isRoot()) : ?>
                 <td>
                     <!-- <select disabled="disabled"><option> -->
-                    <?php $domain = $this->domains[$application->getDomain()]; echo $domain['host']; ?>
+                    <?php
+                    if (empty($applicationDomainId) || empty($this->domains[$applicationDomainId])) {
+                        echo $this->site->getConfig('host');
+                    } else {
+                        $domain = $this->domains[$applicationDomainId];
+                        echo $domain['host'];
+                    }
+                    ?>
                     <!-- </option></select> -->
                 </td>
                 <td><span class="path">/</span></td>
