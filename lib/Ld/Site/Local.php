@@ -777,7 +777,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function addDatabase($params)
     {
-        if (!$this->_testDatabase($params)) {
+        if (!$this->testDatabase($params)) {
             throw new Exception("Database parameters are incorrect.");
         }
         $databases = $this->getDatabases();
@@ -789,7 +789,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $databases = $this->getDatabases();
         $databases[$id] = array_merge($databases[$id], $params);
-        if (!$this->_testDatabase($databases[$id])) {
+        if (!$this->testDatabase($databases[$id])) {
             throw new Exception("Database parameters are incorrect.");
         }
         $this->_writeDatabases($databases);
