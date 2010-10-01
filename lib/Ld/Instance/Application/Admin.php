@@ -46,7 +46,7 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application_Local
         return $this->router = $router;
     }
 
-    public function buildUrl($params = array(), $name = 'default')
+    public function buildUrl($params = array(), $name = 'default', $reset = true)
     {
         $baseUrl = $this->getSite()->getPath();
         if (constant('LD_REWRITE') == false || self::getSite()->getConfig('root_admin') != 1) {
@@ -58,13 +58,66 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application_Local
 
         $router = $this->getRouter();
         $route = $router->getRoute($name);
-        $url = $route->assemble($params, true);
+        $url = $route->assemble($params, $reset);
 
         $url = empty($url) ? 'slotter' : $url;
 
         $url = $baseUrl . '/' . $url;
 
         return $url;
+    }
+
+    public function getOpenidDir()
+    {
+        $openidDirectory = $this->getAbsolutePath() . '/openid';
+        Ld_Files::createDirIfNotExists($openidDirectory);
+        return $openidDirectory;
+    }
+
+    public function getOpenidAuthUrl()
+    {
+        return $this->buildUrl(array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
+    }
+
+    public function getIdentityUrl($username)
+    {
+        return Zend_OpenId::absoluteURL($this->buildUrl(array('module' => 'identity', 'controller' => 'openid', 'id' => $username), 'identity'));
+    }
+
+    public function getOpenidProvider($username = null, $login = false)
+    {
+        if (empty($this->_openidProvider)) {
+            $storage = new Zend_OpenId_Provider_Storage_File($this->getOpenidDir());
+            $this->_openidProvider = new Zend_OpenId_Provider($this->getOpenidAuthUrl(), null, null, $storage);
+        }
+        if (isset($username)) {
+            // register, and log in ...
+            $identityUrl = $this->getIdentityUrl($username);
+            if (!$this->_openidProvider->hasUser($identityUrl)) {
+                $this->_openidProvider->register($identityUrl, $username);
+            }
+            if ($login) {
+                $this->_openidProvider->login($identityUrl, $username);
+            }
+        }
+        return $this->_openidProvider;
+    }
+
+    public function getOpenidConsumerStorage()
+    {
+        if (empty($this->_openidConsumerStorage)) {
+            $this->_openidConsumerStorage = new Zend_OpenId_Consumer_Storage_File( $this->getOpenidDir() );
+        }
+        return $this->_openidConsumerStorage;
+    }
+
+    public function getOpenidConsumer()
+    {
+        if (empty($this->_openidConsumer)) {
+            $storage = $this->getOpenidConsumerStorage();
+            $this->_openidConsumer = new Zend_OpenId_Consumer($storage);
+        }
+        return $this->_openidConsumer;
     }
 
 }

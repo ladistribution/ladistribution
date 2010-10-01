@@ -4,7 +4,7 @@
 
     <?php
     $site = sprintf('<a href="%1$s">%1$s</a>', $this->escape($this->siteRoot));
-    $identity = sprintf('<a href="%1$s">%1$s</a>', $this->escape($this->openidServer->getLoggedInUser()));
+    $identity = sprintf('<a href="%1$s">%1$s</a>', $this->escape($this->identityUrl));
     ?>
 
     <p><?php printf(

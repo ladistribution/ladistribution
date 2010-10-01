@@ -19,6 +19,7 @@ class Slotter_UsersController extends Slotter_BaseController
             case 'edit':
             case 'add-identity':
             case 'remove-identity':
+            case 'remove-trusted':
                 if (empty($this->currentUser) || $this->_getParam('id') != $this->currentUser['username']) {
                     if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
                         $this->_disallow();
@@ -207,6 +208,7 @@ class Slotter_UsersController extends Slotter_BaseController
     public function editAction()
     {
         $id = $this->_getParam('id');
+
         if ($this->getRequest()->isPost()) {
             $params = array(
                 'fullname'   => $this->_getParam('fullname'),
@@ -219,21 +221,22 @@ class Slotter_UsersController extends Slotter_BaseController
             }
             $this->site->updateUser($id, $params);
         }
-        $this->view->user = $this->site->getUser($id);
 
-        $this->view->identity = Zend_OpenId::absoluteURL($this->view->url(
-            array('module' => 'identity', 'controller' => 'openid', 'id' => $id), 'identity'));
+        $user = $this->site->getUser($id);
+        $openidProvider = $this->admin->getOpenidProvider($user['username'], true);
+
+        $this->view->user = $user;
+        $this->view->identity = $this->admin->getIdentityUrl($id);
+        $this->view->trustedSites = $openidProvider->getTrustedSites();
     }
 
     public function addIdentityAction()
     {
         $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
 
-        $storage = new Zend_OpenId_Consumer_Storage_File(LD_TMP_DIR . '/openid');
-
         if ($this->_hasParam('openid_identifier')) {
 
-            $consumer = new Zend_OpenId_Consumer($storage );
+            $consumer = $this->admin->getOpenidConsumer();
             if (!$consumer->login($this->_getParam('openid_identifier'), null, $root)) {
                 throw new Exception("OpenID login failed: " . $consumer->getError());
             }
@@ -241,7 +244,7 @@ class Slotter_UsersController extends Slotter_BaseController
         } elseif ($this->_hasParam('openid_mode')) {
 
             if ($this->_getParam('openid_mode') == 'id_res') {
-                $consumer = new Zend_OpenId_Consumer($storage);
+                $consumer = $this->admin->getOpenidConsumer();
                 if ($consumer->verify($_GET)) {
                     $userId = $this->_getParam('id');
                     $this->_addUserIdentity($userId, $this->_getOpenidIdentity());
@@ -308,6 +311,18 @@ class Slotter_UsersController extends Slotter_BaseController
         }
 
         $this->site->updateUser($id, $user);
+
+        $this->_redirector->gotoSimple('edit', 'users', 'slotter', array('id' => $id));
+    }
+
+    public function removeTrustedAction()
+    {
+        $id = $this->_getParam('id');
+        $siteroot = urldecode( $this->_getParam('siteroot') );
+
+        $user = $this->site->getUser($id);
+        $openidProvider = $this->admin->getOpenidProvider($user['username'], true);
+        $openidProvider->delSite($siteroot);
 
         $this->_redirector->gotoSimple('edit', 'users', 'slotter', array('id' => $id));
     }

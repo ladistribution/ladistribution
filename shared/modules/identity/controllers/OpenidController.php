@@ -12,14 +12,6 @@ class Identity_OpenidController extends Ld_Controller_Action
 
         $this->appendTitle( $this->getTranslator()->translate('Identity') );
 
-        $authUrl = $this->view->url(
-            array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
-
-        $storage = new Zend_OpenId_Provider_Storage_File(LD_TMP_DIR . '/openid');
-        $this->_server = new Zend_OpenId_Provider($authUrl, null, null, $storage);
-
-        $this->view->serverUrl = Zend_OpenId::absoluteURL($authUrl);
-
         if (isset($this->user)) {
             $this->username = $this->user['username'];
         }
@@ -35,8 +27,7 @@ class Identity_OpenidController extends Ld_Controller_Action
 
     public function profileAction()
     {
-        $this->view->identity = Zend_OpenId::absoluteURL($this->view->url(
-            array('module' => 'identity', 'controller' => 'openid', 'id' => $this->_getParam('id')), 'identity'));
+        $this->view->identityUrl = $this->admin->getIdentityUrl( $this->_getParam('id') );
     }
 
     public function authAction()
@@ -48,37 +39,35 @@ class Identity_OpenidController extends Ld_Controller_Action
                 if ($this->_restrict()) {
                     return;
                 }
-                $userIdentity = $this->getSite()->getBaseUrl() . 'identity/' . $this->username;
-                if (!$this->_server->hasUser($userIdentity)) {
-                    // we don't care about the password
-                    $this->_server->register($userIdentity, $this->username); 
-                }
-            case 'trust':
-                $params = $this->_getAllParams();
+                $userIdentityUrl = $this->admin->getIdentityUrl($this->username);
+                $this->_server = $this->admin->getOpenidProvider($this->username, false);
 
-                $siteRoot = $this->_server->getSiteRoot($params);
-                $trustedSites = (array)$this->_server->getTrustedSites();
+                // no break, we continue after
+            case 'trust':
+                $params = $this->view->params = $this->_getAllParams();
+
+                $siteRoot = $this->view->siteRoot = $this->_server->getSiteRoot($params);
 
                 $result = $this->_server->login($this->_getParam('openid_identity'), $this->username);
                 if ($result) {
+                    // we get trusted sites
+                    $trustedSites = $this->_server->getTrustedSites();
                     // we know the claimed identity, the request is valid, we can move forward
                     if (isset($trustedSites) && in_array($siteRoot, $trustedSites)) {
                         // if the user is already trusting this site, we can directly redirect
                         $this->_server->respondToConsumer($params);
                     }
-                    
+
                     $this->view->openid_identity = $this->_getParam('openid_identity');
                 } else {
                     // else we use the default identity of the connected user
-                    $this->_server->login($userIdentity, $this->username);
-                    $this->view->openid_identity = $userIdentity;
-                    
+                    $this->_server->login($userIdentityUrl, $this->username);
+                    $this->view->openid_identity = $userIdentityUrl;
+
                     // is this ok with common openid process ?
-                    $this->_setParam('openid_identity', $userIdentity);
-                    $this->_setParam('openid_claimed_id', $userIdentity);
+                    $this->_setParam('openid_identity', $userIdentityUrl);
+                    $this->_setParam('openid_claimed_id', $userIdentityUrl);
                 }
-                
-                $this->view->params = $this->_getAllParams();
 
                 if ($this->getRequest()->isPost()) {
                     if (isset($_POST['allow'])) {
@@ -87,14 +76,14 @@ class Identity_OpenidController extends Ld_Controller_Action
                         }
                         $this->_server->respondToConsumer($params);
                     } else if (isset($_POST['deny'])) {
-                        Zend_OpenId::redirect($this->_getParam('openid_return_to'), array('openid.mode'=>'cancel'));
+                        Zend_OpenId::redirect($this->_getParam('openid_return_to'), array('openid.mode' => 'cancel'));
                     }
                 }
                 $this->view->mode = 'trust';
-                $this->view->openidServer = $this->_server;
-                $this->view->siteRoot = $this->_server->getSiteRoot($params);
+                $this->view->identityUrl = $this->_server->getLoggedInUser();
                 break;
             default:
+                $this->_server = $this->admin->getOpenidProvider();
                 $ret = $this->_server->handle();
                 if ($ret) {
                     echo $ret;

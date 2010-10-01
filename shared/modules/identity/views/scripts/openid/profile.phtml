@@ -1,7 +1,7 @@
 <h2><?php echo $this->translate("OpenID identity") ?></h2>
 
 <?php
-$identity = sprintf('<strong>%1$s</strong>', $this->escape($this->identity));
+$identity = sprintf('<strong>%1$s</strong>', $this->escape($this->identityUrl));
 ?>
 
 <p><?php printf($this->translate('This is the identity page for this site user: %1$s.', $identity)) ?></p>

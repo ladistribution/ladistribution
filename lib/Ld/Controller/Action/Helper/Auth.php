@@ -63,6 +63,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
                     $this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'), $this->_getParam('ld_auth_remember')
                 );
                 if ($result->isValid()) {
+                    $this->_rememberIdentity( $result->getIdentity() );
                     if (isset($referer)) {
                         $this->_redirect($referer);
                     }
@@ -83,22 +84,29 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
         return null;
     }
 
-    protected function _authenticateWithOpenid()
+    protected function _getOpenidAuthAdapter()
     {
-        $auth = Zend_Auth::getInstance();
-
         $root = Zend_Registry::get('site')->getUrl();
 
         $sreg = new Ld_OpenId_Extension_Sreg(
             array('nickname' => true, 'email' => true, 'fullname' => true), null, 1.1);
 
-        $storage = new Zend_OpenId_Consumer_Storage_File(LD_TMP_DIR . '/openid');
+        $storage = Zend_Registry::get('instance')->getOpenidConsumerStorage();
 
         $adapter = new Zend_Auth_Adapter_OpenId($this->_getParam('openid_identifier'), $storage, null, $root, $sreg);
 
         $httpClient = new Zend_Http_Client();
         $httpClient->setConfig(array('maxredirects' => 4, 'timeout' => 15, 'useragent' => 'La Distribution OpenID Consumer'));
         $adapter->setHttpClient($httpClient);
+
+        return $adapter;
+    }
+
+    protected function _authenticateWithOpenid()
+    {
+        $auth = Zend_Auth::getInstance();
+
+        $adapter = $this->_getOpenidAuthAdapter();
 
         if ($this->_getParam('openid_action') == 'login' && $this->_getParam('openid_identifier')) {
 
@@ -118,7 +126,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
             // if user is correctly authenticated with OpenID
             if ($result->isValid()) {
-                // nothing
+                $this->_rememberIdentity( $result->getIdentity() );
             } else {
                 Ld_Auth::logout();
             }
@@ -128,20 +136,20 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
         }
     }
 
-    // protected function _authenticateWithOauth()
-    // {
-    //     require_once 'OAuth/OAuthRequestVerifier.php';
-    //     if (OAuthRequestVerifier::requestIsSigned()) {
-    //         try {
-    //             $req = new OAuthRequestVerifier();
-    //             $this->username = $req->verify();
-    //             return $this->username;
-    //         } catch (OAuthException $e) {
-    //             $message = $e->getMessage();
-    //             Ld_Auth::unauthorized($message);
-    //         }
-    //     }
-    // }
+    protected function _rememberIdentity($identity)
+    {
+        if (isset($_COOKIE['ld-identities'])) {
+            $identities = explode(";", $_COOKIE['ld-identities']);
+            array_unshift($identities, $identity);
+            $identities = array_unique($identities);
+        } else {
+            $identities = array();
+            $identities[] = $identity;
+        }
+        $path = Zend_Registry::get('site')->getPath();
+        $cookiePath = empty($path) ? '/' : $path;
+        setCookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
+    }
 
     protected function _getReferer()
     {
