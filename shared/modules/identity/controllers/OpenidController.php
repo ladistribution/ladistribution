@@ -53,7 +53,7 @@ class Identity_OpenidController extends Ld_Controller_Action
                     // we get trusted sites
                     $trustedSites = $this->_server->getTrustedSites();
                     // we know the claimed identity, the request is valid, we can move forward
-                    if (isset($trustedSites) && in_array($siteRoot, $trustedSites)) {
+                    if (is_array($trustedSites) && isset($trustedSites[$siteRoot]) && $trustedSites[$siteRoot] === true) {
                         // if the user is already trusting this site, we can directly redirect
                         $this->_server->respondToConsumer($params);
                     }

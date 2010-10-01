@@ -25,7 +25,7 @@
     }
     ?>
 
-    <form method="post" action="">
+    <form id="ld-auth-form" method="post" action="">
 
         <?php if (isset($this->ld_auth_user)) : ?>
 
@@ -48,10 +48,36 @@
 
         <?php else : ?>
 
+            <?php
+            if (empty($_GET['another-identity']) && isset($_COOKIE['ld-identities'])) {
+                $identities = explode(";", $_COOKIE['ld-identities']);
+            }
+            ?>
+
             <label for="ld-auth-username"><?php echo $this->translate("Username (or OpenID):") ?></label>
             <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value=""/>
 
             <script type="text/javascript">jQuery('#ld-auth-username').focus();</script>
+
+            <div id="ld-identities" style="display:none">
+                <?php
+                $users = array();
+                foreach ($identities as $identity) :
+                    $user = $this->site->getUser($identity);
+                    if (empty($user) || in_array($user['username'], $users)) {
+                        continue;
+                    } else {
+                        $users[] = $user['username'];
+                    }
+                ?>
+                <a href="#">
+                    <?php echo Ld_Ui::getAvatar($user, 32) ?>
+                    <span class="fullname"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></span>
+                    <br>
+                    <span class="identity"><?php echo $identity ?></span>
+                </a>
+                <?php endforeach ?>
+            </div>
 
         <?php endif ?>
 
@@ -66,30 +92,31 @@
         <?php endif ?>
 
         <input type="hidden" name="openid_action" value="login"/>
-        <input class="button" type="submit" value="<?php echo $this->translate("Log In") ?>"/>
+        <input id="ld-auth-login" class="button" type="submit" value="<?php echo $this->translate("Log In") ?>"/>
 
     </form>
-
-    <div style="display:none">
-
-    <h2>OpenID</h2>
-
-    <form method="post" action="">
-        <label>OpenID URL</label><br />
-        <input type="text" name="openid_identifier" value=""/>
-        <br />
-        <input type="hidden" name="openid_action" value="login"/>
-        <input class="button" type="submit" value="Connect"/>
-    </form>
-
-    </div>
 
     <div class="links">
-      <?php if ($this->open_registration) : ?>
-      <a href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php echo $this->translate("Register") ?></a>
+      <a id="ld-auth-another-identity-link" style="display:none" href="?another-identity=1"><?php echo $this->translate("Log In with another identity") ?></a>
+      <?php if ($this->open_registration && empty($this->ld_auth_user)) : ?>
+          <a id="ld-auth-register-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php echo $this->translate("Register") ?></a>
       <?php endif ?>
     </div>
 
   </div>
 
 </div>
+
+<?php if (!empty($identities)) : ?>
+    <script type="text/javascript">
+    jQuery(document).ready(function($){
+        $('#ld-auth-username, label[for="ld-auth-username"], #ld-auth-login, #ld-auth-register-link').hide();
+        $('#ld-identities, #ld-auth-another-identity-link').show();
+        $('#ld-identities a').click(function() {
+            $('#ld-auth-username').val( $(this).children('span.identity').text() );
+            $('#ld-auth-form').submit();
+            return false;
+        });
+    });
+    </script>
+<?php endif ?>

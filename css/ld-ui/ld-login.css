@@ -44,3 +44,43 @@
   font-size:12px;
   margin-top:20px;
 }
+
+/* Identities
+-------------------------------------------------------------- */
+
+#ld-identities img {
+  display:block;
+  float:left;
+  margin:2px;
+}
+
+#ld-identities a {
+  display:block;
+  border:1px solid #ccc;
+  padding:5px 5px;
+  background:white;
+  vertical-align:middle;
+  text-decoration:none;
+  margin-bottom:10px;
+  height:36px;
+}
+
+#ld-identities a:hover {
+  border:1px solid #666;
+  border-color:black;
+	background:#4E5368;
+	color:white;
+}
+
+#ld-identities span.fullname {
+  font-size:14px;
+  line-height:0;
+  padding-left:10px;
+}
+
+#ld-identities span.identity {
+  font-size:11px;
+  line-height:0;
+  color:#999;
+  padding-left:10px;
+}
