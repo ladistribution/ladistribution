@@ -131,7 +131,11 @@ class Ld_Installer
 
     public function getLinks()
     {
-        $baseUrl = $this->getSite()->getUrl() . $this->getPath();
+        if (isset($this->instance)) {
+            $baseUrl = substr($this->getInstance()->getUrl(), 0, -1);
+        } else {
+            $baseUrl = $this->getSite()->getUrl() . $this->getPath();
+        }
 
         $links = $this->getManifest()->getLinks();
         foreach ($links as $id => $link) {
