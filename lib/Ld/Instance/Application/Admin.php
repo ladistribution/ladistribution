@@ -12,7 +12,7 @@
  * @version    $Id$
  */
 
-class Ld_Instance_Application_Admin extends Ld_Instance_Application_Local
+class Ld_Instance_Application_Admin extends Ld_Instance_Application
 {
 
     public function getUsers()

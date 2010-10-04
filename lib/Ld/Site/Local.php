@@ -389,11 +389,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (isset($dir)) {
 
-            $registryKey = 'Ld_Instance_Application_Local_' . md5($dir);
+            $registryKey = 'Ld_Instance_Application_' . md5($dir);
             if (Zend_Registry::isRegistered($registryKey)) {
                 $instance = Zend_Registry::get($registryKey);
             } else {
-                $instance = Ld_Instance_Application_Local::loadFromDir($dir);
+                $instance = Ld_Instance_Application::loadFromDir($dir);
                 Zend_Registry::set($registryKey, $instance);
             }
 
@@ -498,7 +498,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
           // Only create an instance file for applications
           if ($params['type'] == 'application') {
               $params['path'] = $installer->getPath();
-              $instance = new Ld_Instance_Application_Local();
+              $instance = new Ld_Instance_Application();
               $instance->setSite($this);
               $instance->setPath($params['path']);
               $instance->setInfos($params)->save();
@@ -717,7 +717,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         // Domain
-        if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
+        if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS') && $package->getType() == 'application') {
             $domains = $this->getDomains();
             if (count($domains) == 1) {
                 // $keys = array_keys($domains);

@@ -16,9 +16,9 @@ abstract class Ld_Instance_Abstract
 
     public $package;
 
-    public $type;
-
     public $path;
+
+    public $type;
 
     public $version;
 
