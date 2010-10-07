@@ -1,11 +1,10 @@
---- doku.php.orig	2009-12-25 11:14:40.000000000 +0100
-+++ doku.php	2010-01-05 02:40:05.000000000 +0100
-@@ -20,6 +20,8 @@
-     $ACT = 'show';
+--- doku.php	2010-10-07 10:41:45.000000000 +0200
++++ doku.php.new	2010-10-07 10:41:55.000000000 +0200
+@@ -24,6 +24,7 @@
  }
  
+ // load and initialize the core system
 +require_once(DOKU_INC.'dist/config.php');
-+
  require_once(DOKU_INC.'inc/init.php');
- require_once(DOKU_INC.'inc/common.php');
- require_once(DOKU_INC.'inc/events.php');
+ 
+ //import variables

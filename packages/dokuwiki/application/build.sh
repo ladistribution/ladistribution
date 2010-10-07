@@ -1,6 +1,6 @@
 NAME="dokuwiki"
-VERSION="2009-12-25"
-SUB_VERSION="c"
+VERSION="rc2010-10-07"
+SUB_VERSION=""
 GZ="$NAME.tgz"
 SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}{$SUB_VERSION}.tgz"
 FOLDER="application"
@@ -33,6 +33,7 @@ echo "# Apply patches"
 patch -p0 -d $FOLDER < patches/config.diff
 patch -p0 -d $FOLDER < patches/config-feed.diff
 patch -p0 -d $FOLDER < patches/geshi.diff
+patch -p0 -d $FOLDER < patches/load.diff
 patch -p0 -d $FOLDER < patches/init.diff
 
 echo "# Remove files"

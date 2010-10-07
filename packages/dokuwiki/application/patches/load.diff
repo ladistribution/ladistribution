@@ -1,0 +1,10 @@
+--- inc/load.php	2010-10-07 10:08:13.000000000 +0200
++++ inc/load.php.new	2010-10-07 10:59:05.000000000 +0200
+@@ -68,7 +68,6 @@
+         'IXR_Client'            => DOKU_INC.'inc/IXR_Library.php',
+         'IXR_IntrospectionServer' => DOKU_INC.'inc/IXR_Library.php',
+         'Doku_Plugin_Controller'=> DOKU_INC.'inc/plugincontroller.class.php',
+-        'GeSHi'                 => DOKU_INC.'inc/geshi.php',
+         'TarLib'                => DOKU_INC.'inc/TarLib.class.php',
+         'ZipLib'                => DOKU_INC.'inc/ZipLib.class.php',
+         'DokuWikiFeedCreator'   => DOKU_INC.'inc/feedcreator.class.php',

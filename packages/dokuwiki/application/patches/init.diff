@@ -1,11 +1,11 @@
---- inc/init.php.orig	2009-12-25 11:14:40.000000000 +0100
-+++ inc/init.php	2010-01-05 02:42:23.000000000 +0100
+--- inc/init.php	2010-10-07 10:32:49.000000000 +0200
++++ inc/init.php.new	2010-10-07 11:04:02.000000000 +0200
 @@ -20,6 +20,8 @@
  // define the include path
  if(!defined('DOKU_INC')) define('DOKU_INC',fullpath(dirname(__FILE__).'/../').'/');
  
 +require_once(DOKU_INC.'dist/config.php');
 +
- // define config path (packagers may want to change this to /etc/dokuwiki/)
- if(!defined('DOKU_CONF')) define('DOKU_CONF',DOKU_INC.'conf/');
+ // define Plugin dir
+ if(!defined('DOKU_PLUGIN'))  define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
  

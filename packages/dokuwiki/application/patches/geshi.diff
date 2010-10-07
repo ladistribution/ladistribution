@@ -1,6 +1,6 @@
---- inc/parserutils.php.orig	2009-12-25 11:14:41.000000000 +0100
-+++ inc/parserutils.php	2010-01-05 02:47:22.000000000 +0100
-@@ -641,16 +641,16 @@
+--- inc/parserutils.php	2010-10-07 11:01:02.000000000 +0200
++++ inc/parserutils.php.new	2010-10-07 11:01:08.000000000 +0200
+@@ -634,14 +634,14 @@
      $cache = getCacheName($language.$code,".code");
      $ctime = @filemtime($cache);
      if($ctime && !$_REQUEST['purge'] &&
@@ -12,9 +12,6 @@
          $highlighted_code = io_readFile($cache, false);
  
      } else {
- 
--        require_once(DOKU_INC . 'inc/geshi.php');
-+        require_once(LD_LIB_DIR . '/geshi/geshi.php');
  
 -        $geshi = new GeSHi($code, $language, DOKU_INC . 'inc/geshi');
 +        $geshi = new GeSHi($code, $language, LD_LIB_DIR . '/geshi/geshi');
