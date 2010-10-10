@@ -37,7 +37,7 @@ echo "# Get memcached with svn"
 svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force --quiet
 
 # Apply patches
-# patch -p0 -d $FOLDER < patches/sample.diff
+patch -p0 -d $FOLDER < patches/menu-header.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete

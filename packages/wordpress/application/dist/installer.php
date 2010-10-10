@@ -87,14 +87,12 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		}
 
 		wp_cache_flush();
-    }
+
+	}
 
 	function postUpdate()
 	{
-		$this->httpClient = new Zend_Http_Client();
-		$this->httpClient->setCookieJar();
-		$this->httpClient->setUri($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
-		$response = $this->httpClient->request('GET');
+		Ld_Http::get($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
 	}
 
 	function create_config_file()
@@ -168,6 +166,9 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	{
 		$this->load_wp();
 		$this->_fixUrl();
+		if (constant('LD_REWRITE')) {
+			$this->enable_clean_urls();
+		}
 	}
 
 	protected function _fixUrl()
