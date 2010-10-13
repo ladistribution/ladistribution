@@ -230,6 +230,10 @@ class Ld_Ui
 
         $stored = Ld_Files::getJson($application->getAbsolutePath() . '/dist/colors.json');
 
+        foreach (array('base', 'bars', 'panels') as $scheme) {
+            $colors["$scheme-default"] = isset($stored["$scheme-default"]) ? $stored["$scheme-default"] : 1;
+        }
+
         if (!empty($stored)) {
 
         $parts = array(
@@ -248,7 +252,6 @@ class Ld_Ui
         );
 
         foreach ($parts as $id => $partColors) {
-            $colors["$id-default"] = isset($stored["$id-default"]) ? $stored["$id-default"] : 1;
             if (empty($stored["$id-default"]) || $stored["$id-default"] === 0) {
                 foreach ($partColors as $id => $color) if ($color) $colors[$id] = $color;
             }

@@ -252,7 +252,7 @@ class Slotter_InstanceController extends Slotter_BaseController
       }
 
       $this->view->preferences = $this->instance->getInstaller()->getPreferences('theme');
-      $this->view->colorSchemes = $this->instance->getInstaller()->getColorSchemes();
+      $this->view->colorSchemes = $this->instance->getColorSchemes();
 
       $this->view->colors = Ld_Ui::getApplicationColors($this->instance);
   }
