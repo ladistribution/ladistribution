@@ -3,6 +3,8 @@
 class Ld_Installer_FirefoxSync extends Ld_Installer
 {
 
+	public $colorSchemes = array('base', 'bars', 'panels');
+
 	function postInstall($preferences = array())
 	{
 		$db = $this->instance->getDbConnection();

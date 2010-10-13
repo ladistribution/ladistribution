@@ -282,6 +282,11 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         return $this->getInstaller()->setConfiguration($configuration, $type);
     }
 
+    public function getColorSchemes()
+    {
+        return $this->getInstaller()->getColorSchemes();
+    }
+
     // Roles
 
     public function getUsers()

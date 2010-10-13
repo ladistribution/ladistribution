@@ -71,8 +71,6 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
 			'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui'));
 		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
-			'href' => Ld_Ui::getSiteStyleUrl());
-		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
 			'href' => Ld_Ui::getApplicationStyleUrl());
 		$jquery = array('type' => 'text/javascript', '_data' => '',
 			'src' => Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery'));

@@ -19,8 +19,6 @@ class LdPlugin extends Plugin
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui')));
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-				'href' => Ld_Ui::getSiteStyleUrl()));
-			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getApplicationStyleUrl()));
 			$action->raw(
 				'  <style type="text/css">' . "\n  " . $this->_getCssRules() . "\n" . '  </style>' . "\n"
@@ -28,6 +26,8 @@ class LdPlugin extends Plugin
 		} else {
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-bars.css', 'ld-ui')));
+			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+				'href' => Ld_Ui::getApplicationStyleUrl()));
 			$action->raw(
 				'<style type="text/css">'.
 				'#footer { margin-bottom:25px }'.
@@ -158,7 +158,7 @@ class LdPlugin extends Plugin
 	{
 		$versions[] = array(
 			'name' => 'La Distribution Package',
-			'version' => '0.4.2',
+			'version' => '0.5.1',
 			'author' => 'h6e.net',
 			'homepage' => 'http://h6e.net/',
 			'rawdescription' => _m('Integrate a Status.net instance with La Distribution')

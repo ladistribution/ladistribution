@@ -3,7 +3,7 @@
 Plugin Name: LD Ui
 Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.5.0
+Version: 0.5.1
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -11,7 +11,6 @@ Author URI: http://h6e.net/
 function ld_admin_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl('bars') . '" />'."\n";
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
 	?>
 	<style type="text/css">
@@ -34,7 +33,6 @@ add_action('admin_head', 'ld_admin_head');
 function ld_template_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl() . '" />'."\n";
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
 	echo '<style type="text/css">' . "\n";
 	echo '.wp-pre-super-bar { ';

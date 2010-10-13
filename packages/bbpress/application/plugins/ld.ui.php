@@ -3,7 +3,7 @@
 Plugin Name: Ld UI
 Plugin URI: http://h6e.net/bbpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.5.0
+Version: 0.5.1
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -11,7 +11,6 @@ Author URI: http://h6e.net/
 function ld_bbpress_admin_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl('bars') . '" />'."\n";
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
 	echo '<style type="text/css"> #bbFoot { display:none; }</style>'."\n";
 	?>
@@ -30,7 +29,6 @@ add_action('bb_get_admin_header', 'ld_bbpress_admin_head');
 function ld_bbpress_template_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl() . '" />'."\n";
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
 	echo '<style type="text/css"> body {  background:none; margin-bottom:50px; }</style>'."\n";
 }

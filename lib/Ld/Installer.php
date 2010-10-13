@@ -454,19 +454,22 @@ class Ld_Installer
         return array();
     }
 
+    public $colorSchemes = array('bars');
+
     public function getColorSchemes()
     {
         foreach ($this->getThemes() as $theme) {
             if ($theme['active']) {
                 try {
                     $manifest = Ld_Manifest::loadFromDirectory($theme['dir']);
-                    return $manifest->getColorSchemes();
+                    $themeColorSchemes = $manifest->getColorSchemes();
+                    return array_merge($this->colorSchemes, $themeColorSchemes);
                 } catch (Exception $e) {
                     break;
                 }
             }
         }
-        return array();
+        return $this->colorSchemes;
     }
 
     // Roles

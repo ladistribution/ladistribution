@@ -59,13 +59,10 @@ class Slotter_AppearanceController extends Slotter_BaseController
         if ($this->_hasParam('parts')) {
             $parts = explode(',', $this->_getParam('parts'));
         } else {
-            $parts = array('base', 'bars', 'panels');
-        }
-
-        foreach ($parts as $part) {
-            if (isset($colors["$part-default"]) && $colors["$part-default"] == 1) {
-                $id = array_search($part, $parts);
-                if ($id !== false) unset($parts[$id]);
+            if ($application) {
+                $parts = $application->getColorSchemes();
+            } else {
+                $parts = array('base', 'bars', 'panels');
             }
         }
 

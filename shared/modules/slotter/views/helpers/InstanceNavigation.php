@@ -11,7 +11,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         $preferences = $instance->getPreferences('configuration');
         $themes = $instance->getThemes();
         $themePreferences = $instance->getInstaller()->getPreferences('theme');
-        if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) $colorSchemes = $instance->getInstaller()->getColorSchemes();
+        if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) $colorSchemes = $instance->getColorSchemes();
         $extensions = $site->getPackageExtensions( $instance->getPackageId() );
         $roles = $instance->getRoles();
 
