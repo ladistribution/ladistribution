@@ -210,4 +210,15 @@ class Ld_Manifest
         return 'Ld_Installer_' . Zend_Filter::filterStatic($this->getId(), 'Word_DashToCamelCase');
     }
 
+    public function getColorSchemes()
+    {
+        $schemes = array();
+        if (isset($this->xml->colors) && isset($this->xml->colors->scheme)) {
+            foreach ($this->xml->colors->scheme as $scheme) {
+                $schemes[] = (string)$scheme;
+            }
+        }
+        return $schemes;
+    }
+
 }

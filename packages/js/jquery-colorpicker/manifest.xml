@@ -1,0 +1,14 @@
+<package>
+  <id>js-jquery-colorpicker</id>
+  <name>jQuery Color Picker</name>
+  <version>2009-05-23-1</version>
+  <type>js</type>
+  <deploy>
+      <origin>js</origin>
+      <destination path="js">jquery/colorpicker</destination>
+  </deploy>
+  <deploy>
+      <origin>css</origin>
+      <destination path="css">jquery/colorpicker</destination>
+  </deploy>
+</package>

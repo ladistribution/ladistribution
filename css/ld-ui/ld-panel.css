@@ -7,25 +7,10 @@
 /* Global
 -------------------------------------------------------------- */
 
-.ld-panel {
-  font:12px/16px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-align:left;
-}
-
-.ld-panel, .ld-panel a {
-  color:#4E5368;
-}
-
-.ld-panel a {
-	text-decoration:underline;
-}
-
 .ld-panel-content {
   padding:20px;
-  border:1px solid #ccc;
-  border-radius:0 5px 5px;
-  -moz-border-radius:0 5px 5px;
-  -webkit-border-radius:0 5px 5px;
+  border-top-left-radius:0;
+  -moz-border-radius-topleft:0;
 }
 
 .ld-panel h1, .ld-panel h2, .ld-panel h3, .ld-panel h4 {
@@ -50,39 +35,15 @@
 /* Instance Menu
 -------------------------------------------------------------- */
 
-.ld-instance-menu {
-  margin:0;
-  padding:0;
-  width:100%;
-  overflow:hidden;
-}
-
-.ld-instance-menu li {
-  display:block;
-  margin:0;
-  padding:0;
-  float:left;
-}
-
 .ld-instance-menu li a {
-  display:block;
-  padding:5px 10px;
-  border:1px solid #ccc;
-  border-radius:5px 5px 0 0;
-  -moz-border-radius:5px 5px 0 0;
-  -webkit-border-radius:5px 5px 0 0;
-  margin-right:7px;
-  border-bottom:0;
   font-size:12px;
   text-transform:capitalize;
 }
 
-.ld-instance-menu li a:hover,
-.ld-instance-menu li.active a,
-.ld-instance-menu li.current a {
-  background:#eee;
+.ld-instance-menu li.active a, .h6e-tabs li.active a  {
+  font-weight:bold;
+  padding-bottom:6px;
 }
-
 
 .ld-panel table.ld-data {
   min-width:50%;

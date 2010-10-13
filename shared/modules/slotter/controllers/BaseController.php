@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Zend/Controller/Action.php';
-
 /**
  * Base controller
  */
@@ -34,7 +32,10 @@ class Slotter_BaseController extends Ld_Controller_Action
         $settings = array();
         $settings[] = array( 'label' => $translator->translate('General'), 'module' => 'slotter', 'controller' => 'settings' );
         if (!$this->site->isChild()) {
-            $settings[] = array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' );
+            if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+                $settings[] = array( 'label' => $translator->translate('Appearance'), 'module' => 'slotter', 'controller' => 'appearance' );
+            }
+            // $settings[] = array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' );
             if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
                 $settings[] = array( 'label' => $translator->translate('Domains'), 'module' => 'slotter', 'controller' => 'domains' );
             }
@@ -69,7 +70,7 @@ class Slotter_BaseController extends Ld_Controller_Action
         $admin = new Zend_Acl_Role('admin');
         $this->_acl->addRole($admin, $user);
 
-        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins', 'locales', 'sites', 'domains');
+        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins', 'sites', 'domains');
         foreach ($resources as $resource) {
             $this->_acl->add( new Zend_Acl_Resource($resource) );
             $this->_acl->allow('admin', $resource, 'manage');

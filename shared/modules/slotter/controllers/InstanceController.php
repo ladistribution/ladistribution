@@ -228,6 +228,36 @@ class Slotter_InstanceController extends Slotter_BaseController
   }
 
   /**
+   * Appearance action.
+   */
+  public function appearanceAction()
+  {
+      if ($this->getRequest()->isGet()) {
+         $this->view->configuration = $this->instance->getConfiguration('theme');
+
+      } else if ($this->getRequest()->isPost()) {
+          if ($this->_hasParam('configuration')) {
+              $configuration = $this->_getParam('configuration');
+              $this->view->configuration = $this->instance->setConfiguration($configuration, 'theme');
+          }
+          if ($this->_hasParam('colors')) {
+              $colors = Ld_Ui::getApplicationColors($this->instance);
+              foreach ($this->_getParam('colors') as $key => $value) {
+                  $colors[$key] = $value;
+              }
+              $colors['version'] = md5( serialize($colors) );
+              $filename = $this->instance->getAbsolutePAth() . '/dist/colors.json';
+              Ld_Files::putJson($filename, $colors);
+          }
+      }
+
+      $this->view->preferences = $this->instance->getInstaller()->getPreferences('theme');
+      $this->view->colorSchemes = $this->instance->getInstaller()->getColorSchemes();
+
+      $this->view->colors = Ld_Ui::getApplicationColors($this->instance);
+  }
+
+  /**
    * Backup action.
    */
   public function backupsAction()

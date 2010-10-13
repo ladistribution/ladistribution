@@ -10,10 +10,12 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
 
         $preferences = $instance->getPreferences('configuration');
         $themes = $instance->getThemes();
+        $themePreferences = $instance->getInstaller()->getPreferences('theme');
+        if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) $colorSchemes = $instance->getInstaller()->getColorSchemes();
         $extensions = $site->getPackageExtensions( $instance->getPackageId() );
         $roles = $instance->getRoles();
 
-        echo '<ul class="ld-instance-menu">' . "\n";
+        echo '<ul class="ld-instance-menu h6e-tabs">' . "\n";
 
         $actions = array();
         $actions['status'] = $this->translate('status');
@@ -22,6 +24,9 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         }
         if (!empty($themes)) {
             $actions['themes'] = $this->translate('themes');
+        }
+        if (!empty($themePreferences) || !empty($colorSchemes)) {
+            $actions['appearance'] = $this->translate('appearance');
         }
         if (!empty($extensions)) {
             $actions['extensions'] = $this->translate('extensions');
@@ -34,7 +39,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         foreach ($actions as $action => $label) {
             $url = $this->view->instanceActionUrl($action, $this->view->id);
             $current = $this->view->action == $action;
-            echo '<li' . ($current ? ' class="current"' : '') . '><a href="' . $url . '">' . $label . '</a></li>' . "\n";
+            echo '<li' . ($current ? ' class="active"' : '') . '><a href="' . $url . '">' . $label . '</a></li>' . "\n";
         }
         echo "</ul>\n";
     }

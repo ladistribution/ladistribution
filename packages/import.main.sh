@@ -22,6 +22,7 @@ $IMPORT css-ld-ui.zip
 $IMPORT js-jquery.zip
 $IMPORT js-jquery-ui.zip
 $IMPORT js-jquery-tablednd.zip
+$IMPORT js-jquery-colorpicker.zip
 
 $IMPORT wordpress.zip
 

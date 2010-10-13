@@ -1,4 +1,6 @@
-<h2><?php echo $this->translate("Edit user infos") ?></h2>
+<h2><?php echo $this->translate("User infos") ?></h2>
+
+<div class="ld-panel-content h6e-block">
 
 <form method="post" action="" autocomplete="off">
 
@@ -48,7 +50,7 @@
 
 <hr/>
 
-<h3><?php echo $this->translate("OpenID Server") ?></h3>
+<h3><?php echo $this->translate("Connect to other websites using OpenID") ?></h3>
 
 <p><?php echo $this->translate("You can log on OpenID enabled websites using the bundled OpenID Server.") ?></p>
 
@@ -71,9 +73,9 @@
 
 <hr/>
 
-<h3><?php echo $this->translate("Other OpenID Identities") ?></h3>
+<h3><?php echo $this->translate("Connect to this website using OpenID") ?></h3>
 
-<p><?php echo $this->translate("You can log on this website using other OpenID identities.") ?></p>
+<p><?php echo $this->translate("You can log on this website using OpenID identities.") ?></p>
 
 <?php if (isset($this->user['identities']) && count($this->user['identities']) > 0) : ?>
 
@@ -107,3 +109,5 @@
 </form>
 
 <?php endif ?>
+
+</div>

@@ -1,0 +1,106 @@
+<?php
+$this->js()->append('/jquery/colorpicker/colorpicker.js', 'js-jquery-colorpicker', 'ld-js-jquery-colorpicker');
+$this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-colorpicker');
+?>
+
+<h2><?php echo $this->translate("Appearance") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content h6e-block">
+
+    <h3>Colors</h3>
+
+    <form action="" method="post">
+
+        <table>
+            <tr>
+                <th></th>
+                <th>Background</th>
+                <th>Border</th>
+                <th>Title</th>
+                <th>Text</th>
+            </tr>
+            <tr>
+                <th>Base</th>
+                <?php foreach (array('ld-colors-background', 'ld-colors-border', 'ld-colors-title', 'ld-colors-text') as $key) : ?>
+                <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
+                    style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
+                <?php endforeach ?>
+            </tr>
+            <tr>
+                <th>Bars</th>
+                <?php foreach (array('ld-colors-background-2', 'ld-colors-border-2', 'ld-colors-title-2', 'ld-colors-text-2') as $key) : ?>
+                <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
+                    style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
+                <?php endforeach ?>
+            </tr>
+            <tr>
+                <th>Panels</th>
+                <?php foreach (array('ld-colors-background-3', 'ld-colors-border-3', 'ld-colors-title-3', 'ld-colors-text-3') as $key) : ?>
+                <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
+                    style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
+                <?php endforeach ?>
+            </tr>
+        </table>
+
+        <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>
+
+    </form>
+
+</div>
+
+<script type="text/javascript">
+
+var options = {
+    onSubmit: function(hsb, hex, rgb, el) {
+        el = $(el);
+        el.ColorPickerHide();
+    },
+    onBeforeShow: function () {
+        $(this).ColorPickerSetColor(this.value);
+    },
+    onChange: function (hsb, hex, rgb) {
+        var el = $(this).data('colorpicker').el;
+        el = $(el);
+        el.val(hex);
+        el.css('background', '#' + hex);
+        var rules = {
+            'ld-colors-background'   : {'selector' : 'body, .ld-layout, .h6e-layout, body.ld-layout',
+                                        'property' : 'background-color'},
+            'ld-colors-border'       : {'selector' : '.h6e-simple-footer',
+                                        'property' : 'border-color'},
+            'ld-colors-title'        : {'selector' : '.h6e-main-content h2, .h6e-main-content h2 a',
+                                        'property' : 'color'},
+            'ld-colors-text'         : {'selector' : '.h6e-bread-crumbs, .h6e-bread-crumbs a, .h6e-simple-footer, .h6e-simple-footer a',
+                                        'property' : 'color'},
+            'ld-colors-background-2' : {'selector' : 'ul.blocks.mini li, .h6e-top-bar-inner, .h6e-super-bar-inner',
+                                        'property' : 'background'},
+            'ld-colors-text-2'       : {'selector' : '.h6e-top-bar, .h6e-top-bar a, .h6e-super-bar ul.instances li, .h6e-super-bar ul.instances li a',
+                                        'property' : 'color'},
+            'ld-colors-border-2'     : {'selector' : 'ul.blocks.mini li, .h6e-top-bar-inner, .h6e-super-bar-inner',
+                                        'property' : 'border-color'},
+            'ld-colors-background-3' : {'selector' : '.ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, ul.blocks.mini li',
+                                        'property' : 'background'},
+            'ld-colors-text-3'       : {'selector' : '.ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, .ld-panel-content a, ul.blocks.mini li, ul.blocks.mini li a',
+                                        'property' : 'color'},
+            'ld-colors-title-3'      : {'selector' : '.ld-panel-content h3',
+                                        'property' : 'color'},
+            'ld-colors-border-3'     : {'selector' : '.ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, ul.blocks.mini li',
+                                        'property' : 'border-color'},
+        }
+        var id = el.attr('id');
+        if (rules[id]) {
+            var rule = rules[id];
+            $(rule.selector).css(rule.property, '#' + hex + '');
+        }
+    }
+}
+
+$('input.color').ColorPicker(options);
+
+</script>
+
+</div>

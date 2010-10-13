@@ -33,22 +33,6 @@ ul.blocks li.empty {
 
 }
 
-ul.blocks li.empty, ul.blocks li.empty a, ul.blocks li.empty a:visited {
-  color:#777;	
-}
-
-/*
-ul.blocks li.wordpress { background-image:url(img/wp100.png); }
-ul.blocks li.dotclear  { background-image:url(img/dc100.png); }
-ul.blocks li.dokuwiki  { background-image:url(img/dw100.png); }
-ul.blocks li.spip      { background-image:url(img/sp100.png); }
-ul.blocks li.habari    { background-image:url(img/hb100.png); }
-ul.blocks li.laconica  { background-image:url(img/lc100.png); }
-ul.blocks li.bbpress   { background-image:url(img/bp100.png); }
-ul.blocks li.weave     { background-image:url(img/mw100.png); }
-ul.blocks li.gallery   { background-image:url(img/ga100.png); }
-*/
-
 /* Alternative 'mini' Style
 -------------------------------------------------------------- */
 

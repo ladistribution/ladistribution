@@ -1,0 +1,65 @@
+<?php if (!defined('LD_APPEARANCE') || !constant('LD_APPEARANCE')) { return; } ?>
+
+<?php if (!isset($this->parts) || in_array('base', $this->parts)) : ?>
+/* Base */
+body, .ld-layout, .h6e-layout, body.ld-layout {
+    background-color:#<?php echo $this->colors['ld-colors-background'] ?>;
+}
+.ld-layout, .ld-layout a,
+.h6e-layout, .h6e-layout a,
+.h6e-main-content, .h6e-main-content a,
+ul.blocks.mini li.empty, ul.blocks.mini li.empty a {
+    color:#<?php echo $this->colors['ld-colors-text'] ?>;
+}
+.h6e-main-content h2, .h6e-main-content h2 a, .h6e-main-content .h6e-page-title, .h6e-main-content .h6e-page-title a {
+    color:#<?php echo $this->colors['ld-colors-title'] ?>;
+}
+<?php endif ?>
+
+<?php if (!isset($this->parts) || in_array('bars', $this->parts)) : ?>
+/* Bars */
+ul.blocks.mini li, .h6e-top-bar-inner, .h6e-super-bar-inner, #ld-login-box {
+    color:#<?php echo $this->colors['ld-colors-text-2'] ?>;
+    border-color:#<?php echo $this->colors['ld-colors-border-2'] ?>;
+    background-color:#<?php echo $this->colors['ld-colors-background-2'] ?>;
+}
+ul.blocks.mini li a, .h6e-super-bar ul.instances li, .h6e-super-bar ul.instances li a, .h6e-top-bar-inner a, #ld-login-box h2, #ld-login-box a {
+    color:#<?php echo $this->colors['ld-colors-text-2'] ?>;
+}
+<?php
+$bg = $this->colors['ld-colors-background-2'];
+$light = hexdec(substr($bg, 0, 2)) + hexdec(substr($bg, 2, 2)) + hexdec(substr($bg, 4, 2));
+$light = round($light / 3);
+echo "/* Light: $light */\n";
+if ($light < 127) {
+    echo ".h6e-super-bar ul.instances li { /* lighter (dark theme) */ border-color:rgba(0,0,0,0.5); background-color:rgba(0,0,0,0.3); }\n";
+    echo "#ld-identities a { /* lighter (dark theme) */ border-color:rgba(255,255,255,0.1); background-color:rgba(255,255,255,0.2); }\n";
+    echo "#ld-identities a:hover { /* lighter (dark theme) */ border-color:rgba(255,255,255,0.3); background-color:rgba(255,255,255,0.1); }\n";
+}
+?>
+<?php endif ?>
+
+<?php if (!isset($this->parts) || in_array('panels', $this->parts)) : ?>
+/* Panels */
+.ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, .ld-panel-content a, .h6e-block, .h6e-block a, a.h6e-page {
+    color:#<?php echo $this->colors['ld-colors-text-3'] ?>;
+}
+.ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, .h6e-block, .h6e-page {
+    border-color:#<?php echo $this->colors['ld-colors-border-3'] ?>;
+    background-color:#<?php echo $this->colors['ld-colors-background-3'] ?>;
+}
+.ld-panel-content h3, .ld-panel-content .h6e-entry-title, .h6e-block .h6e-entry-title, .h6e-block .h6e-entry-title a {
+    color:#<?php echo $this->colors['ld-colors-title-3'] ?>;
+}
+.h6e-simple-footer, .ld-home .manage, .h6e-page {
+    border-color:#<?php echo $this->colors['ld-colors-border'] ?>;
+}
+/* Instances */
+ul.blocks.mini li {
+    border-color:#<?php echo $this->colors['ld-colors-border-3'] ?>;
+    background-color:#<?php echo $this->colors['ld-colors-background-3'] ?>;
+}
+ul.blocks.mini li, ul.blocks.mini li a {
+    color:#<?php echo $this->colors['ld-colors-text-3'] ?>;
+}
+<?php endif ?>

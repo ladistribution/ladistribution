@@ -4,7 +4,7 @@
 
 <?php $this->instanceNavigation() ?>
 
-<div class="ld-panel-content">
+<div class="ld-panel-content h6e-block">
 
 <div id="available-themes">
 
@@ -51,26 +51,6 @@
         <?php endif ?>
 
     </form>
-
-</div>
-
-<div id="themes-preferences">
-
-    <?php if (!empty($this->preferences)) : ?>
-
-        <h3><?php echo $this->translate('Theme Preferences') ?></h3>
-
-        <form method="post" action="">
-
-            <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
-
-            <div style="margin-bottom:2em">
-            <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
-            </div>
-
-        </form>
-
-    <?php endif ?>
 
 </div>
 

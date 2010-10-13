@@ -1,12 +1,16 @@
-<div class="h6e-top-bar">
+<div id="ld-top-bar" class="h6e-top-bar <?php echo $this->className ?>">
     <div class="h6e-top-bar-inner">
         <div class="a">
             <?php if (!$this->site->isChild()) : ?>
                 <a class="ld-site-name" href="<?php echo $this->site->getUrl() ?>"><?php echo $this->site->getName() ?></a>
             <?php else : ?>
                 <a class="ld-site-name" href="<?php echo $this->site->getParentSite()->getUrl() ?>"><?php echo $this->site->getParentSite()->getName() ?></a>
-                →
+                &rarr;
                 <a class="ld-subsite-name" href="<?php echo $this->site->getUrl() ?>"><?php echo $this->site->getName() ?></a>
+            <?php endif ?>
+            <?php if (Zend_Registry::isRegistered('application') && $application = Zend_Registry::get('application')) : ?>
+                &rarr;
+                <a class="ld-app-name <?php echo $application->getPackageId(); ?>" href="<?php echo $application->getUrl() ?>"><?php echo $application->getName() ?></a>
             <?php endif ?>
         </div>
         <div class="b">

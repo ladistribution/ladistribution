@@ -1,7 +1,7 @@
 <package>
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.5-14</version>
+  <version>0.5-15</version>
   <type>application</type>
   <need>lib-admin</need>
   <need>lib-ld</need>
@@ -11,6 +11,7 @@
   <need>js-jquery</need>
   <need>js-jquery-ui</need>
   <need>js-jquery-tablednd</need>
+  <need>js-jquery-colorpicker</need>
   <link title="Applications" rel="index" type="text/html" href="/slotter/"/>
   <link title="Repositories" rel="section" type="text/html" href="/slotter/repositories"/>
   <link title="Databases" rel="section" type="text/html" href="/slotter/databases"/>

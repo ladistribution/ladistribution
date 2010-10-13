@@ -4,7 +4,7 @@
 
 <?php $this->partialNavigationMenu('Settings') ?>
 
-<div class="ld-panel-content">
+<div class="ld-panel-content h6e-block">
 
 <?php if (!empty($this->preferences)) : ?>
 
@@ -14,6 +14,19 @@
     $options = array('ns' => 'configuration', 'configuration' => $this->configuration, 'preferences' => $this->preferences);
     $this->preferencesRenderer()->setOptions($options)->renderTable();
     ?>
+
+    <table class="ld-preferences">
+        <tr>
+            <th><label>Locales</label></th>
+            <td>
+    <?php foreach ($this->allLocales as $id => $label) : ?>
+        <input type="checkbox" id="locale-<?php echo $id ?>" name="locales[<?php echo $id ?>]"
+            <?php if (isset($this->locales[$id])) : ?> checked="checked"<?php endif ?> />
+        <label for="locale-<?php echo $id ?>"><?php echo $this->escape($label) ?></label>
+    <?php endforeach ?>
+            </td>
+        </tr>
+    </table>
 
     <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 

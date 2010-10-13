@@ -39,16 +39,20 @@ class Ld_Plugin_Development
             'name' => 'include_path', 'label' => Ld_Translate::translate('Include Path'),
             'type' => 'text', 'defaultValue' => str_replace(LD_LIB_DIR . PATH_SEPARATOR, '', ini_get('include_path'))
         );
-        $preferences[] = array(
-            'name' => 'active_ajax_users', 'label' => Ld_Translate::translate('Active ajax style user management'),
-            'type' => 'boolean', 'defaultValue' => '0'
-        );
-        $preferences[] = array(
-            'name' => 'active_multi_sites', 'label' => Ld_Translate::translate('Active Multi Sites'),
-            'type' => 'boolean', 'defaultValue' => '0'
-        );
+        // $preferences[] = array(
+        //     'name' => 'active_ajax_users', 'label' => Ld_Translate::translate('Active ajax style user management'),
+        //     'type' => 'boolean', 'defaultValue' => '0'
+        // );
+        // $preferences[] = array(
+        //     'name' => 'active_multi_sites', 'label' => Ld_Translate::translate('Active Multi Sites'),
+        //     'type' => 'boolean', 'defaultValue' => '0'
+        // );
         $preferences[] = array(
             'name' => 'active_multi_domains', 'label' => Ld_Translate::translate('Active Multi Domains'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
+        $preferences[] = array(
+            'name' => 'active_appearance', 'label' => Ld_Translate::translate('Active Appearance'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
         return $preferences;
@@ -90,6 +94,10 @@ class Ld_Plugin_Development
         $active_multi_domains = $site->getConfig('active_multi_domains');
         if ($active_multi_domains) {
             defined('LD_MULTI_DOMAINS') OR define('LD_MULTI_DOMAINS', true);
+        }
+        $active_appearance = $site->getConfig('active_appearance');
+        if ($active_appearance) {
+            defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
         }
     }
 

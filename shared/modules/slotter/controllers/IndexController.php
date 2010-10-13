@@ -68,7 +68,6 @@ class Slotter_IndexController extends Slotter_BaseController
         $this->view->canManageDatabases = $this->_acl->isAllowed($this->userRole, 'databases', 'manage');
         $this->view->canManageRepositories = $this->_acl->isAllowed($this->userRole, 'repositories', 'manage');
         $this->view->canManagePlugins = $this->_acl->isAllowed($this->userRole, 'plugins', 'manage');
-        $this->view->canManageLocales = $this->_acl->isAllowed($this->userRole, 'locales', 'manage');
 
         $this->view->canManageSites = $this->_acl->isAllowed($this->userRole, 'sites', 'manage');
         

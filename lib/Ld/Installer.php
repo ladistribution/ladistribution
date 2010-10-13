@@ -454,6 +454,21 @@ class Ld_Installer
         return array();
     }
 
+    public function getColorSchemes()
+    {
+        foreach ($this->getThemes() as $theme) {
+            if ($theme['active']) {
+                try {
+                    $manifest = Ld_Manifest::loadFromDirectory($theme['dir']);
+                    return $manifest->getColorSchemes();
+                } catch (Exception $e) {
+                    break;
+                }
+            }
+        }
+        return array();
+    }
+
     // Roles
 
     public $defaultRole = 'user';

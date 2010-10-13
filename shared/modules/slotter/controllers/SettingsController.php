@@ -34,9 +34,15 @@ class Slotter_SettingsController extends Slotter_BaseController
             $this->_updateAdminBaseUrl($configuration);
         }
 
-        $this->view->preferences = $this->_getPreferences();
+        if ($this->getRequest()->isPost() && $this->_hasParam('locales')) {
+            $this->_updateLocales();
+        }
 
+        $this->view->preferences = $this->_getPreferences();
         $this->view->configuration = $this->getSite()->getConfig();
+
+        $this->view->allLocales = $this->getSite()->getAllLocales();
+        $this->view->locales = $this->getSite()->getLocales();
     }
 
     protected function _updateAdminBaseUrl($configuration)
@@ -66,9 +72,9 @@ class Slotter_SettingsController extends Slotter_BaseController
         );
         }
 
-        $preferences[] = array(
-            'name' => 'path', 'label' => $translator->translate('Path'), 'type' => 'text'
-        );
+        // $preferences[] = array(
+        //     'name' => 'path', 'label' => $translator->translate('Path'), 'type' => 'text'
+        // );
 
         $preferences[] = array(
             'name' => 'open_registration', 'label' => $translator->translate('Anyone can register?'),
@@ -76,7 +82,6 @@ class Slotter_SettingsController extends Slotter_BaseController
         );
 
         if (!defined('LD_MULTI_DOMAINS') || !constant('LD_MULTI_DOMAINS')) {
-
         $options = array();
         $options[] = array(
             'value' => '',
@@ -92,12 +97,10 @@ class Slotter_SettingsController extends Slotter_BaseController
                 'label' => '&#x25CF; ' . $instance->getName() . ' /' . $instance->getPath() . '/'
             );
         }
-
         $preferences[] = array(
             'name' => 'root_application', 'label' => $translator->translate('Default Application'),
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $options
         );
-
         }
 
         $preferences[] = array(
@@ -110,4 +113,64 @@ class Slotter_SettingsController extends Slotter_BaseController
         return $preferences;
     }
 
+    protected function _updateLocales()
+    {
+        // Update configuration
+        $locales = array();
+        foreach ($this->_getParam('locales') as $id => $state) {
+            $locales[] = $id;
+        }
+        $this->getSite()->updateLocales($locales);
+
+        // Collect remote endpoints
+        $allEndpoints = array();
+        foreach ($this->getSite()->getRepositoriesConfiguration() as $repository) {
+            if ($repository['type'] == 'remote') {
+                $allEndpoints[] = $repository['endpoint'];
+            }
+        }
+        // Install extra repositories
+        foreach ($locales as $locale) {
+            $shortLocale = substr($locale, 0, 2);
+            if ($shortLocale == 'en') {
+                continue;
+            }
+            $mainEndpoints = array(
+                'http://ladistribution.net/repositories/edge/main',
+                'http://ladistribution.net/repositories/danube/main',
+                'http://ladistribution.net/repositories/concorde/main');
+            foreach ($mainEndpoints as $endpoint) {
+                if (in_array($endpoint, $allEndpoints)) {
+                    $localeEndpoint = str_replace('/main', '/' . $shortLocale, $endpoint);
+                    if (!in_array($localeEndpoint, $allEndpoints)) {
+                        $this->getSite()->addRepository(array(
+                            'type' => 'remote', 'endpoint' => $localeEndpoint, 'name' => ''
+                        ));
+                    }
+                }
+            }
+        }
+
+        // Install available locales packages for applications
+        foreach ($locales as $locale) {
+
+            $locale = str_replace('_', '-', strtolower($locale));
+
+            // Main locale package
+            $packageId = "ld-locale-$locale";
+            if (!$this->getSite()->isPackageInstalled($packageId) && $this->getSite()->hasPackage($packageId)) {
+                $this->getSite()->createInstance($packageId);
+            }
+
+            // Install available locales packages for applications
+            foreach ($this->getSite()->getInstances() as $id => $infos) {
+                $instance = $this->getSite()->getInstance($id);
+                if (isset($instance)) {
+                    $packageId = $instance->getPackageId() . '-locale-' . $locale ;
+                    $instance->addExtension($packageId);
+                }
+            }
+
+        }
+    }
 }

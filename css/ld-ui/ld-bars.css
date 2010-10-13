@@ -33,9 +33,9 @@
   width:978px;
   margin:auto;
   overflow:hidden;
-  background:#EDEDED;
-  border:1px solid #CCCCCC;
   font:11px/12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border:1px solid #ccc;
+  background:inherit;
 }
 
 .h6e-top-bar-inner {
@@ -60,10 +60,6 @@
   border-top-right-radius:5px;
 }
 
-.h6e-super-bar-inner, .h6e-top-bar-inner, .h6e-super-bar-inner a, .h6e-top-bar-inner a {
-  color:#4E5368 !important;
-}
-
 .h6e-super-bar-inner a, .h6e-top-bar-inner a {
   text-decoration:none;
   border-bottom:0;
@@ -82,6 +78,7 @@
 }
 
 .h6e-top-bar-inner .a a {
+  display:inline-block;
 }
 
 .h6e-top-bar-inner .a a.ld-site-name {
@@ -110,6 +107,13 @@
   display:block;
   padding:0 5px;
   height:100%;
+}
+
+.h6e-top-bar.full-width .h6e-top-bar-inner {
+  width:auto;
+  border:0 0 1px;
+  border-radius:0;
+  -moz-border-radius:0;
 }
 
 /* Super Bar Instances
@@ -141,17 +145,7 @@
   height:1.2em;
   line-height:1.2em;
 
-  background:white 4px 4px no-repeat;
-}
-
-.h6e-super-bar ul.instances li.current {
-  border-color:#555;
-  background-color:#888;
-}
-
-.h6e-super-bar ul.instances li.active {
-  border-color:#333;
-  background-color:#666;
+  background:4px 4px no-repeat;
 }
 
 .h6e-super-bar ul.instances li.extra-link {
@@ -161,27 +155,27 @@
   margin-top:1px;
 }
 
+.h6e-top-bar .ld-app-name {
+  background:4px 6px no-repeat;	
+}
+
+.h6e-top-bar .ld-app-name.wordpress,
 .h6e-super-bar ul.instances li.wordpress { padding-left:25px; background-image:url(img/wp16.png); }
+.h6e-top-bar .ld-app-name.dokuwiki,
 .h6e-super-bar ul.instances li.dokuwiki  { padding-left:25px; background-image:url(img/dw16.png); }
+.h6e-top-bar .ld-app-name.bbpress,
 .h6e-super-bar ul.instances li.bbpress   { padding-left:25px; background-image:url(img/bp16.png); }
+.h6e-top-bar .ld-app-name.gallery,
 .h6e-super-bar ul.instances li.gallery   { padding-left:25px; background-image:url(img/ga16.png); }
+.h6e-top-bar .ld-app-name.statusnet,
 .h6e-super-bar ul.instances li.statusnet { padding-left:25px; background-image:url(img/statusnet-16.png); }
+.h6e-top-bar .ld-app-name.firefox-sync,
 .h6e-super-bar ul.instances li.firefox-sync { padding-left:25px; background-image:url(img/firefox-sync-16.png); }
+.h6e-top-bar .ld-app-name.blogmarks,
 .h6e-super-bar ul.instances li.blogmarks { padding-left:25px; background-image:url(img/blogmarks-16.png); }
 
 /* Test New Things
 -------------------------------------------------------------- */
-
-/*
-.h6e-top-bar-inner {
-  width:auto;
-  border-left:0;
-  border-right:0;
-  border-radius:0;
-  -moz-border-radius:0;
-  -webkit-border-radius:0;
-}
-*/
 
 .h6e-super-bar {
   z-index:100;

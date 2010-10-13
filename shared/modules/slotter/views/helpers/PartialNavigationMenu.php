@@ -9,7 +9,7 @@ class View_Helper_PartialNavigationMenu extends Zend_View_Helper_Abstract
         $navigation = $this->view->navigation();
         $container  = $navigation->getContainer();
         $ressources = $container->findOneByLabel( $translator->translate($label) );
-        echo $navigation->menu($ressources)->renderMenu(null, array('ulClass' => 'ld-instance-menu', 'maxDepth' => 0));
+        echo $navigation->menu($ressources)->renderMenu(null, array('ulClass' => 'ld-instance-menu h6e-tabs', 'maxDepth' => 0));
     }
 
 }

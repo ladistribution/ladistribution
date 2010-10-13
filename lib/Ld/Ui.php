@@ -115,7 +115,7 @@ class Ld_Ui
         if (isset($options['loginUrl'])) {
             $view->loginUrl = $options['loginUrl'];
         } else {
-            $view->loginUrl = Ld_Ui::getAdminUrl(array(
+            $view->loginUrl = self::getAdminUrl(array(
                   'module' => 'default', 'controller' => 'auth', 'action' => 'login'
             ));
         }
@@ -123,24 +123,26 @@ class Ld_Ui
         if (isset($options['logoutUrl'])) {
             $view->logoutUrl = $options['logoutUrl'];
         } else {
-            $view->logoutUrl = Ld_Ui::getAdminUrl(array(
+            $view->logoutUrl = self::getAdminUrl(array(
                   'module' => 'default', 'controller' => 'auth', 'action' => 'logout'
             ));
         }
 
-        $view->registerUrl = Ld_Ui::getAdminUrl(array(
+        $view->registerUrl = self::getAdminUrl(array(
               'module' => 'default', 'controller' => 'auth', 'action' => 'register'
         ));
 
-        $view->completeUrl = Ld_Ui::getAdminUrl(array(
+        $view->completeUrl = self::getAdminUrl(array(
               'module' => 'default', 'controller' => 'auth', 'action' => 'complete'
         ));
 
         if ($user = Ld_Auth::getUser()) {
-            $view->userUrl = Ld_Ui::getAdminUrl(array(
+            $view->userUrl = self::getAdminUrl(array(
                 'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => urlencode($user['username'])
             ));
         }
+
+        $view->className = isset($options['full-width']) ? 'full-width' : 'default-width';
 
         return $view->render('top-bar.phtml');
     }
@@ -196,6 +198,97 @@ class Ld_Ui
         $html = Ld_Plugin::applyFilters('Ui:getAvatarHtml', $html, $user, $size);
 
         return $html;
+    }
+
+    public static function getDefaultSiteColors()
+    {
+        return array(
+            "ld-colors-background"   => "ffffff", "ld-colors-border"   => "cccccc", "ld-colors-title"   => "f54e00", "ld-colors-text"   => "4a4a4a",
+            "ld-colors-background-2" => "ededed", "ld-colors-border-2" => "cccccc", "ld-colors-title-2" => "4a4a4a", "ld-colors-text-2" => "4a4a4a",
+            "ld-colors-background-3" => "ededed", "ld-colors-border-3" => "cccccc", "ld-colors-title-3" => "4a4a4a", "ld-colors-text-3" => "4a4a4a",
+        );
+    }
+
+    public static function getSiteColors()
+    {
+        $default = self::getDefaultSiteColors();
+        $stored = Ld_Files::getJson(self::getSite()->getDirectory('dist') . '/colors.json');
+        $colors = array_merge($default, $stored);
+        if (empty($colors['version'])) {
+            $colors['version'] = '1';
+        }
+        return $colors;
+    }
+
+    public static function getApplicationColors($application = null)
+    {
+        if (empty($application) && Zend_Registry::isRegistered('application')) {
+            $application = Zend_Registry::get('application');
+        }
+
+        $colors = self::getSiteColors();
+
+        $stored = Ld_Files::getJson($application->getAbsolutePath() . '/dist/colors.json');
+
+        $parts = array(
+            'base' => array(
+                'ld-colors-background' => $stored['ld-colors-background'], "ld-colors-border" => $stored['ld-colors-border'],
+                'ld-colors-title' => $stored['ld-colors-title'], 'ld-colors-text' => $stored['ld-colors-text']
+            ),
+            'bars' => array(
+                'ld-colors-background-2' => $stored['ld-colors-background-2'], 'ld-colors-border-2' => $stored['ld-colors-border-2'],
+                'ld-colors-title-2' => $stored['ld-colors-title-2'], 'ld-colors-text-2' => $stored['ld-colors-text-2']
+            ),
+            'panels' => array(
+                'ld-colors-background-3' => $stored['ld-colors-background-3'], 'ld-colors-border-3' => $stored['ld-colors-border-3'],
+                'ld-colors-title-3' => $stored['ld-colors-title-3'], 'ld-colors-text-3' => $stored['ld-colors-text-3']
+            )
+        );
+
+        foreach ($parts as $id => $partColors) {
+            $colors["$id-default"] = isset($stored["$id-default"]) ? $stored["$id-default"] : 1;
+            if (empty($stored["$id-default"]) || $stored["$id-default"] === 0) {
+                foreach ($partColors as $id => $color) if ($color) $colors[$id] = $color;
+            }
+        }
+
+        if (empty($colors['version'])) {
+            $colors['version'] = '1';
+        }
+
+        return $colors;
+    }
+
+    public static function getSiteStyle($parts = null)
+    {
+        $view = self::getView();
+        $view->part = $parts;
+        $view->colors = self::getSiteColors();
+        return $view->render('site-style.phtml');
+    }
+
+    public static function siteStyle()
+    {
+        echo self::getSiteStyle();
+    }
+
+    public static function getSiteStyleUrl($parts = null)
+    {
+        $colors = self::getSiteColors();
+        $siteStyleUrl = self::getAdminUrl(array(
+            'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style', 'parts' => $parts, 'v' => $colors['version']), 'default', false);
+        return $siteStyleUrl;
+    }
+
+    public static function getApplicationStyleUrl($parts = null, $application = null)
+    {
+        if (empty($application) && Zend_Registry::isRegistered('application')) {
+            $application = Zend_Registry::get('application');
+        }
+        $colors = self::getApplicationColors($application);
+        $applicationStyleUrl = self::getAdminUrl(array(
+            'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style', 'id' => $application->getId(), 'parts' => $parts, 'v' => $colors['version']), 'default', false);
+        return $applicationStyleUrl;
     }
 
 }

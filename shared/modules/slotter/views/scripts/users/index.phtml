@@ -1,5 +1,7 @@
 <h2><?php echo $this->translate("Users") ?></h2>
 
+<div class="ld-panel-content h6e-block">
+
 <?php if (empty($this->users)) : ?>
 
     <p><?php echo $this->translate("None|user") ?></p>
@@ -126,3 +128,5 @@
         <?php endif ?>
     </ul>
 <?php endif ?>
+
+</div>

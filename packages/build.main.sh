@@ -28,6 +28,10 @@ cd js
   ./build.sh
   cd ..
 
+  cd jquery-colorpicker
+  ./build.sh
+  cd ..
+
 cd ..
 
 cd wordpress
