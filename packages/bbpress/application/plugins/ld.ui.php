@@ -32,7 +32,7 @@ function ld_bbpress_template_head()
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl() . '" />'."\n";
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
-	echo '<style type="text/css"> body { margin-bottom:50px; }</style>'."\n";
+	echo '<style type="text/css"> body {  background:none; margin-bottom:50px; }</style>'."\n";
 }
 
 add_action('bb_head', 'ld_bbpress_template_head');

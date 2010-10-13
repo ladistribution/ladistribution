@@ -9,6 +9,8 @@ echo "# Get source from $SOURCE"
 git clone $SOURCE $FOLDER --quiet
 rm -rf $FOLDER/.git
 
+cp $FOLDER/manifest.xml manifest.xml
+
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
