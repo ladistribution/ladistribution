@@ -1,7 +1,7 @@
 <package>
   <id>bbpress</id>
   <name>bbPress</name>
-  <version>1.0.2-80-1</version>
+  <version>1.0.2-80-2</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>

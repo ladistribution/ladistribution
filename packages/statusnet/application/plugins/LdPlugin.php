@@ -18,6 +18,13 @@ class LdPlugin extends Plugin
 				'href' => Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal')));
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui')));
+			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+				'href' => Ld_Ui::getSiteStyleUrl()));
+			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+				'href' => Ld_Ui::getApplicationStyleUrl()));
+			$action->raw(
+				'  <style type="text/css">' . "\n  " . $this->_getCssRules() . "\n" . '  </style>' . "\n"
+			);
 		} else {
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-bars.css', 'ld-ui')));
@@ -27,6 +34,21 @@ class LdPlugin extends Plugin
 				'</style>'
 			);
 		}
+	}
+
+	protected function _getCssRules()
+	{
+		$colors = Ld_Ui::getApplicationColors();
+		return 'body { background-color:#' . $colors['ld-colors-background'] .'; }
+  label[for="notice_data-text"] { color:#' . $colors['ld-colors-text'] .'; }
+  #footer { border-color:#' . $colors['ld-colors-border'] .'; }
+  #header address a { color:#' . $colors['ld-colors-title'] .'; }
+  #site_nav_local_views ul.nav li a, #site_nav_local_views ul.nav li a:hover, #site_nav_local_views ul.nav li.current a,
+  #wrap #core #content, #wrap #core #aside_primary, #anon_notice { border-color:#' . $colors['ld-colors-border-3'] .'; background-color:#' . $colors['ld-colors-background-3'] .'; }
+  #site_nav_local_views ul.nav li a, #site_nav_local_views ul.nav li a:hover, #site_nav_local_views ul.nav li.current a,
+  #wrap #core #content, #wrap #core #content a, #wrap #core #aside_primary, #wrap #core #aside_primary a, #anon_notice, #anon_notice a { color:#' . $colors['ld-colors-text-3'] .'; }
+  #site_nav_local_views ul.nav li.current a { border-bottom-color:#' . $colors['ld-colors-background-3'] . '; }
+  #content h1, #aside_primary h2 { color:#' . $colors['ld-colors-title-3'] .'; }';
 	}
 
 	function onStartShowHeader($action)

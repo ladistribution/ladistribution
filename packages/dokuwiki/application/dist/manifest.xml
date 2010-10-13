@@ -42,7 +42,6 @@
       <preference type="text" label="App Short Name" name="name"/>
       <preference type="text" label="Wiki title" name="title"/>
       <preference type="text" label="Start page name" name="start" defaultValue="start"/>
-      <preference type="range" label="Number of breadcrumbs" name="breadcrumbs" defaultValue="10" min="0" step="1" max="20"/>
       <preference type="list" label="Display the bottom bar" name="superbar">
           <option value="everyone" label="For everyone"/>
           <option value="connected" label="For connected users"/>

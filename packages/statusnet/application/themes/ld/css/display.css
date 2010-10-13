@@ -260,7 +260,6 @@ ol.notices {
   margin:0;
   padding:0;
   width:100%;
-  overflow:hidden;
 }
 
 #site_nav_local_views ul.nav li {
@@ -282,12 +281,21 @@ ol.notices {
   border-bottom:0;
   font-size:12px;
   background:#f9f9f9;
+  font-weight:normal;
+  text-decoration:underline;
+  position:relative;
+  top:1px;
+  border-bottom-style:solid;
+  border-bottom-width:1px;
 }
 
-#site_nav_local_views ul.nav li.current a,
-#site_nav_local_views ul.nav li a:hover {
-  background:#eee;
+#site_nav_local_views ul.nav li.current a {
+  font-weight:bold;
+  text-shadow:none;
+}
 
+#site_nav_local_views ul.nav li a:hover {
+  text-decoration:none;
 }
 
 /* Form

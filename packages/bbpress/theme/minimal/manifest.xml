@@ -6,6 +6,11 @@
   <need>css-h6e-minimal</need>
   <extend>bbpress</extend>
   <directory>my-templates/minimal</directory>
+  <colors>
+      <scheme>base</scheme>
+      <scheme>bars</scheme>
+      <scheme>panels</scheme>
+  </colors>
   <configuration>
       <preference type="list" label="Display the top bar" name="topbar">
           <option value="everyone" label="For everyone"/>

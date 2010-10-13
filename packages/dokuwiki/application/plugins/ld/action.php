@@ -16,7 +16,7 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 		return array(
 			'author' => 'h6e.net',
 			'email'  => 'contact@h6e.net',
-			'date'   => '2008-02-17',
+			'date'   => '2010-10-13',
 			'name'   => 'La Distribution package',
 			'desc'   => 'support for La Distribution prepend/append file based extension mechanism',
 			'url'    => 'http://h6e.net/dokuwiki/plugins/ld',
@@ -70,6 +70,10 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 	{
 		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
 			'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui'));
+		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
+			'href' => Ld_Ui::getSiteStyleUrl());
+		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
+			'href' => Ld_Ui::getApplicationStyleUrl());
 		$jquery = array('type' => 'text/javascript', '_data' => '',
 			'src' => Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery'));
 		$event->data['script'] = array_merge(array($jquery), $event->data['script']);
@@ -84,7 +88,7 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 		if (isset($conf['superbar']) && $conf['superbar'] == 'connected' && empty($_SERVER['REMOTE_USER'])) {
 			return;
 		}
-		Ld_Ui::superBar(array('jquery' => false));
+		Ld_Ui::superBar();
 	}
 
 }

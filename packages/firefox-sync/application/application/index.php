@@ -11,6 +11,8 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
     media="screen" rel="stylesheet" type="text/css"/>
 <link href="<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') ?>"
     media="screen" rel="stylesheet" type="text/css"/>
+    <link href="<?php echo Ld_Ui::getSiteStyleUrl() ?>"
+        media="screen" rel="stylesheet" type="text/css"/>
 <style type="text/css">
 #sync-logo {
     height:95px;
@@ -18,7 +20,11 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
     text-indent:-9999px;
 }
 .h6e-main-content {
-    width:40em;
+    width:45em;
+}
+.h6e-block {
+    margin-top:2em;
+    padding:2em;
 }
 .nowrap {
     white-space:nowrap;
@@ -33,6 +39,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 <div class="ld-main-content h6e-main-content">
 
   <div class="h6e-page-content">
+      <div class="h6e-block">
 
       <h1 id="sync-logo"><?php echo $application->getName() ?></h1>
 
@@ -90,6 +97,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
       </div>
 
+      </div>
   </div>
 
   <div class="h6e-simple-footer" id="footer">

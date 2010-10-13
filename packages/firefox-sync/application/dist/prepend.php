@@ -6,6 +6,7 @@ require_once dirname(__FILE__) . '/functions.php';
 $site = Zend_Registry::get('site');
 
 $application = $site->getInstance( dirname(__FILE__) . '/..' );
+Zend_Registry::set('application', $application);
 
 $user = Ld_Auth::getUser();
 

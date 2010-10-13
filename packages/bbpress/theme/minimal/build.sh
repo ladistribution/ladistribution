@@ -13,7 +13,7 @@ rm -rf $FOLDER/.git
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist -q -x \*.svn/\*
+zip -r $PACKAGE $FOLDER manifest.xml -q -x \*.svn/\*
 mv $PACKAGE ../../../
 
 # Clean

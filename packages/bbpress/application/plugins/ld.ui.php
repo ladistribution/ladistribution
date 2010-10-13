@@ -3,7 +3,7 @@
 Plugin Name: Ld UI
 Plugin URI: http://h6e.net/bbpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.4.1
+Version: 0.5.0
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -11,7 +11,18 @@ Author URI: http://h6e.net/
 function ld_bbpress_admin_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl('bars') . '" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
 	echo '<style type="text/css"> #bbFoot { display:none; }</style>'."\n";
+	?>
+	<style type="text/css">
+	<?php if (bb_get_option('topbar') != 'never') : ?>
+	html, body { height:auto }
+	body { padding-top:31px !important; }
+	#bbHead { display:none; }
+	</style>
+	<?php endif ?>
+	<?php
 }
 
 add_action('bb_get_admin_header', 'ld_bbpress_admin_head');
@@ -19,6 +30,8 @@ add_action('bb_get_admin_header', 'ld_bbpress_admin_head');
 function ld_bbpress_template_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl() . '" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
 	echo '<style type="text/css"> body { margin-bottom:50px; }</style>'."\n";
 }
 
@@ -33,16 +46,17 @@ function ld_bbpress_footer()
 	if ($superbar == 'connected' && !bb_is_user_logged_in()) {
 		return;
 	}
-	Ld_Ui::superBar(array('jquery' => true));
+	Ld_Ui::superBar();
 }
 
 function ld_bbpress_admin_footer()
 {
-	$superbar = bb_get_option('superbar');
-	if ($superbar == 'never') {
-		return;
+	if (bb_get_option('topbar') != 'never') {
+		Ld_Ui::topBar(array('full-width' => true));
 	}
-	Ld_Ui::superBar(array('jquery' => false));
+	if (bb_get_option('superbar') != 'never') {
+		Ld_Ui::superBar();
+	}
 }
 
 add_action( 'bb_admin_footer', 'ld_bbpress_admin_footer' );

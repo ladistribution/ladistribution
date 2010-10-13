@@ -7,6 +7,7 @@ if (file_exists(dirname(__FILE__) . '/config.php')) {
 $site = Zend_Registry::get('site');
 
 $application = $site->getInstance( dirname(__FILE__) . '/..' );
+Zend_Registry::set('application', $application);
 
 $locale = $application->getLocale();
 

@@ -3,7 +3,7 @@
 Plugin Name: LD Ui
 Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.4.4
+Version: 0.5.0
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -11,13 +11,21 @@ Author URI: http://h6e.net/
 function ld_admin_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl('bars') . '" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
 	?>
 	<style type="text/css">
 	#dashboard_right_now a.button[href='update-core.php'] { display:none; }
 	<?php if (get_option('superbar') != 'never') : ?>
 	#footer { display:none !important; }
 	<?php endif ?>
+	<?php if (get_option('topbar') != 'never') : ?>
+	html, body { height:auto }
+	body { padding-top:31px !important; }
+	#wphead { display:none; }
+	#user_info { display:none; }
 	</style>
+	<?php endif ?>
 	<?php
 }
 
@@ -26,6 +34,8 @@ add_action('admin_head', 'ld_admin_head');
 function ld_template_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getSiteStyleUrl() . '" />'."\n";
+	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
 	echo '<style type="text/css">' . "\n";
 	echo '.wp-pre-super-bar { ';
 	echo 'height:38px; ';
@@ -54,16 +64,17 @@ function ld_footer()
 		return;
 	}
 	echo '<div class="wp-pre-super-bar"></div>';
-	Ld_Ui::superBar(array('jquery' => true));
+	Ld_Ui::superBar();
 }
 
 function ld_admin_footer()
 {
-	$superbar = get_option('superbar');
-	if ($superbar == 'never') {
-		return;
+	if (get_option('topbar') != 'never') {
+		Ld_Ui::topBar(array('full-width' => true));
 	}
-	Ld_Ui::superBar(array('jquery' => false));
+	if (get_option('superbar') != 'never') {
+		Ld_Ui::superBar();
+	}
 }
 
 add_action('wp_footer', 'ld_footer');

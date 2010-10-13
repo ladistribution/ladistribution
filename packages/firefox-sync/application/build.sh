@@ -1,6 +1,6 @@
 NAME="firefox-sync"
-VERSION="1.3.100914"
-REVISION_SYNC="74382022fd012c8770308437a9510917b3c6d198"
+VERSION="1.3.100924"
+REVISION_SYNC="0cbbe2093e9ecc0f945db609d84102e9bfad7951"
 SOURCE_SYNC="http://hg.mozilla.org/services/sync-server/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
