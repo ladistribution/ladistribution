@@ -142,6 +142,7 @@ class Ld_Files
 
     public static function move($old, $new)
     {
+        self::log('move', "$old -> $new");
         self::createDirIfNotExists($new);
         $result = rename($old, $new);
         if (!$result) {

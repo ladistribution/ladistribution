@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Cookie
  * @author     François Hodierne (http://h6e.net)
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)ç
+ * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */

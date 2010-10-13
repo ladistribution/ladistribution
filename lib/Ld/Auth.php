@@ -49,7 +49,13 @@ class Ld_Auth
 
     public static function isAuthenticated()
     {
-        return Zend_Auth::getInstance()->hasIdentity();
+        if (Zend_Auth::getInstance()->hasIdentity()) {
+            $identity = Zend_Auth::getInstance()->getIdentity();
+            if (!empty($identity)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static function getIdentity()
