@@ -1,25 +1,24 @@
---- sync/1.0/index.php	2010-10-13 15:29:09.000000000 +0200
-+++ sync/1.0/index.php.new	2010-10-13 15:29:19.000000000 +0200
-@@ -37,6 +37,9 @@
+--- sync/1.0/index.php	2010-10-13 16:34:01.000000000 +0200
++++ sync/1.0/index.php.new	2010-10-13 16:39:26.000000000 +0200
+@@ -37,6 +37,8 @@
  # the terms of any one of the MPL, the GPL or the LGPL.
  #
  # ***** END LICENSE BLOCK *****
-+
-+	require_once dirname(__FILE__) . '/../../dist/prepend.php';
-+
++        
++        require_once dirname(__FILE__) . '/../../dist/prepend.php';
+ 
  	require_once 'weave_constants.php';
  	require_once 'weave_basic_object.php';
- 	require_once 'weave_utils.php';
-@@ -56,8 +59,10 @@
+@@ -57,8 +59,10 @@
  		$path = $_SERVER['PATH_INFO'];
  	else if (!empty($_SERVER['ORIG_PATH_INFO']))
  		$path = $_SERVER['ORIG_PATH_INFO'];
 -	else
 -		report_problem("No path found", 404);
-+	
++
 +	if (function_exists('ld_weave_sync_path')) {
 +		$path = ld_weave_sync_path($path);
 +	}
  	
- 	$ipath = split_url($path);
- 	$username = $ipath['username'];
+ 	$path = substr($path, 1); #chop the lead slash
+ 	list($username, $function, $collection, $id) = explode('/', $path . '///');
