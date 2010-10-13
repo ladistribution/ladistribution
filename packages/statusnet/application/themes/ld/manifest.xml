@@ -1,0 +1,14 @@
+<package>
+  <id>statusnet-theme-minimal</id>
+  <name>Minimal</name>
+  <version>0.9.5-6</version>
+  <type>theme</type>
+  <need>css-h6e-minimal</need>
+  <extend>statusnet</extend>
+  <directory>themes/ld</directory>
+  <colors>
+      <scheme>base</scheme>
+      <scheme>bars</scheme>
+      <scheme>panels</scheme>
+  </colors>
+</package>
