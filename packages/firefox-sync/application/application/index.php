@@ -11,7 +11,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
     media="screen" rel="stylesheet" type="text/css"/>
 <link href="<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') ?>"
     media="screen" rel="stylesheet" type="text/css"/>
-    <link href="<?php echo Ld_Ui::getSiteStyleUrl() ?>"
+    <link href="<?php echo Ld_Ui::getApplicationStyleUrl() ?>"
         media="screen" rel="stylesheet" type="text/css"/>
 <style type="text/css">
 #sync-logo {
