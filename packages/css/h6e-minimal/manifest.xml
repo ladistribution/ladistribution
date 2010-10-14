@@ -1,7 +1,7 @@
 <package release="unstable">
   <id>css-h6e-minimal</id>
   <name>h6e Minimal CSS framework</name>
-  <version>0.2-1</version>
+  <version>0.2-2</version>
   <type>css</type>
   <deploy>
       <origin>css</origin>
