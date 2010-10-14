@@ -21,10 +21,9 @@ function ld_admin_head()
 	<?php if (get_option('topbar') != 'never') : ?>
 	html, body { height:auto }
 	body { padding-top:31px !important; }
-	#wphead { display:none; }
-	#user_info { display:none; }
-	</style>
+	#wphead, #user_info { display:none; }
 	<?php endif ?>
+	</style>
 	<?php
 }
 
