@@ -7,7 +7,6 @@ body, .ld-layout, .h6e-layout, body.ld-layout {
 }
 .ld-layout, .ld-layout a,
 .h6e-layout, .h6e-layout a,
-.h6e-main-content, .h6e-main-content a,
 ul.blocks.mini li.empty, ul.blocks.mini li.empty a {
     color:#<?php echo $this->colors['ld-colors-text'] ?>;
 }
@@ -48,11 +47,15 @@ if ($light < 127) {
     border-color:#<?php echo $this->colors['ld-colors-border-3'] ?>;
     background-color:#<?php echo $this->colors['ld-colors-background-3'] ?>;
 }
-.ld-panel-content h3, .ld-panel-content .h6e-entry-title, .h6e-block .h6e-entry-title, .h6e-block .h6e-entry-title a, .h6e-block h2, .h6e-block h2 a {
+.ld-panel-content h3, .ld-panel-content .h6e-entry-title, .h6e-block .h6e-entry-title, .h6e-block .h6e-entry-title a, .h6e-block h2, .h6e-block h2 a, .h6e-comment-section-title {
     color:#<?php echo $this->colors['ld-colors-title-3'] ?>;
 }
 .h6e-simple-footer, .ld-home .manage, .h6e-page {
     border-color:#<?php echo $this->colors['ld-colors-border'] ?>;
+}
+.h6e-comment-section {
+    background:none;
+    border-top:1px solid #<?php echo $this->colors['ld-colors-border-3'] ?>;
 }
 /* Instances */
 ul.blocks.mini li {

@@ -58,6 +58,7 @@ class Bootstrap
 
         $mvc->getView()->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
         $mvc->getView()->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
+        $mvc->getView()->headLink()->appendStylesheet(Ld_Ui::getSiteStyleUrl(), 'screen');
 
         $modules = array('slotter', 'merger', 'identity', 'default');
 
