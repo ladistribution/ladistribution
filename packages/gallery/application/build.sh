@@ -1,5 +1,5 @@
 NAME="gallery3"
-VERSION="3.0-rc-2"
+VERSION="3.0"
 ZIP="gallery-$VERSION.zip"
 
 FOLDER="application"
