@@ -62,10 +62,10 @@ class Slotter_DomainsController extends Slotter_BaseController
                     $domainConfig['default_application'] = $appPath;
                     $site->updateDomain($domainId, $domainConfig);
                     // update app
-                    if (!empty($appPath)) {
-                        $appInstance = $site->getInstance($appPath);
-                        $appInstance->setInfos(array('domain' => $domainId))->save();
-                    }
+                    // if (!empty($appPath)) {
+                    //     $appInstance = $site->getInstance($appPath);
+                    //     $appInstance->setInfos(array('domain' => $domainId))->save();
+                    // }
                 }
             }
             // handle default domain
@@ -82,7 +82,8 @@ class Slotter_DomainsController extends Slotter_BaseController
 
         $this->view->admin = $this->admin;
 
-        $this->view->applications = $this->site->getApplicationsInstances(array('admin'));
+        // application list, with admin first
+        $this->view->applications = array_merge(array($this->admin->getId() => $this->admin), $this->site->getApplicationsInstances(array('admin')));
     }
 
     public function newAction()

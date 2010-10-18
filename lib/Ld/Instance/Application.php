@@ -19,12 +19,6 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
 
     protected $absolutePath;
 
-    public function getUrl()
-    {
-        $infos = $this->getInfos();
-        return $infos['url'];
-    }
-
     public function getName()
     {
         $infos = $this->getInfos();
@@ -103,15 +97,21 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
     public function setSite($site)
     {
         parent::setSite($site);
+    }
 
-        if ($this->type == 'application' && isset($this->path)) {
-            $domain = !empty($this->domain) ? $this->domain : null;
-            if ($this->isRoot()) {
-                $this->infos['url'] = $this->url = $site->getBaseUrl($domain);
-            } else {
-                $this->infos['url'] = $this->url = $site->getBaseUrl($domain) . $this->path . '/';
-            }
+    public function getUrl()
+    {
+        $domain = !empty($this->domain) ? $this->domain : null;
+        if ($this->isRoot()) {
+            $url = $this->getSite()->getBaseUrl($domain);
+        } else {
+            $url = $this->getSite()->getBaseUrl($domain) . $this->path . '/';
         }
+
+        // compatibility with older code
+        $this->infos['url'] = $this->url = $url;
+
+        return $url;
     }
 
     public function setPath($path)
@@ -126,10 +126,10 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         return $this->absolutePath;
     }
 
-    public function getAbsoluteUrl()
+    public function getAbsoluteUrl($path = '/')
     {
         $domain = !empty($this->domain) ? $this->domain : null;
-        return $this->getSite()->getBaseUrl($domain) . $this->path . '/';
+        return $this->getSite()->getBaseUrl($domain) . $this->path . $path;
     }
 
     public function getInstanceJson()

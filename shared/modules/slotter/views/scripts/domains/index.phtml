@@ -41,8 +41,7 @@
             <td>
                 <select name="defaults[<?php echo $id ?>]">
                     <option value="">&#x2716; None</option>
-                    <?php $applications = array_merge(array($this->admin), $this->applications); ?>
-                    <?php foreach ($applications as $id => $application) : ?>
+                    <?php foreach ($this->applications as $id => $application) : ?>
                         <?php
                         $path = $application->getPath();
                         $name = $application->getName() . ' /' . $application->getPath() . '/';
@@ -113,21 +112,6 @@
 
             <td><?php echo $application->getName() ?></td>
             <td><?php echo 'http://' ?></td>
-            <?php if ($application->isRoot()) : ?>
-                <td>
-                    <!-- <select disabled="disabled"><option> -->
-                    <?php
-                    if (empty($applicationDomainId) || empty($this->domains[$applicationDomainId])) {
-                        echo $this->site->getConfig('host');
-                    } else {
-                        $domain = $this->domains[$applicationDomainId];
-                        echo $domain['host'];
-                    }
-                    ?>
-                    <!-- </option></select> -->
-                </td>
-                <td><span class="path">/</span></td>
-            <?php else : ?>
             <td>
                 <select name="applications[<?php echo $id ?>]">
                     <?php foreach ($this->domains as $id => $domain) : ?>
@@ -147,7 +131,6 @@
                 </select>
             </td>
             <td><span class="path">/<?php echo $application->getPath() ?>/</span></td>
-            <?php endif ?>
         </tr>
         <?php
     }
@@ -155,9 +138,9 @@
     </tbody>
     </table>
 
-    <p><input class="submit button" type="submit" value="<?php echo $this->translate("Update") ?>"/></p>
-
     <?php endif ?>
+
+    <p><input class="submit button" type="submit" value="<?php echo $this->translate("Update") ?>"/></p>
 
     </form>
 
