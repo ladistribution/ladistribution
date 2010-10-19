@@ -132,7 +132,7 @@ class Ld_Installer
     public function getLinks()
     {
         if (isset($this->instance)) {
-            $baseUrl = substr($this->getInstance()->getUrl(), 0, -1);
+            $baseUrl = $this->getInstance()->getAbsoluteUrl('');
         } else {
             $baseUrl = $this->getSite()->getUrl() . $this->getPath();
         }

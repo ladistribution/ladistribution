@@ -48,8 +48,12 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
 
     public function buildUrl($params = array(), $name = 'default', $reset = true)
     {
-        $baseUrl = $this->getSite()->getPath();
-        if (constant('LD_REWRITE') == false || self::getSite()->getConfig('root_admin') != 1) {
+        $site = $this->getSite();
+
+        // $baseUrl = $this->getSite()->getPath();
+        $baseUrl = 'http://' . $site->getHost($domain) . $site->getPath();
+
+        if (constant('LD_REWRITE') == false || $site->getConfig('root_admin') != 1) {
             $baseUrl .=  '/' . $this->getPath();
         }
         if (constant('LD_REWRITE') == false) {
@@ -65,6 +69,11 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         $url = $baseUrl . '/' . $url;
 
         return $url;
+    }
+
+    public function getUrl()
+    {
+        return $this->buildUrl();
     }
 
     public function getOpenidDir()

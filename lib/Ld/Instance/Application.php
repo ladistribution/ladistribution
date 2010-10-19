@@ -17,6 +17,8 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
 
     public $name;
 
+    public $domain = null;
+
     protected $absolutePath;
 
     public function getName()
