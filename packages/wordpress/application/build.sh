@@ -44,7 +44,7 @@ find . -name '*.DS_Store' -type f -delete
 
 # Create zip package
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist plugins themes content -q -x \*.svn/\*
+zip -r $PACKAGE $FOLDER dist plugins themes content service -q -x \*.svn/\* \*.preserve
 mv $PACKAGE ../../
 
 # Clean

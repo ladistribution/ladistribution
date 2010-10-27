@@ -11,7 +11,9 @@ Author URI: http://h6e.net/
 function ld_admin_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
+	if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+		echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
+	}
 	?>
 	<style type="text/css">
 	#dashboard_right_now a.button[href='update-core.php'] { display:none; }
@@ -32,7 +34,9 @@ add_action('admin_head', 'ld_admin_head');
 function ld_template_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
+	if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+		echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
+	}
 	echo '<style type="text/css">' . "\n";
 	echo '.wp-pre-super-bar { ';
 	echo 'height:38px; ';

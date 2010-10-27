@@ -29,6 +29,10 @@ if (isset($locale) && $locale != 'auto') {
 	define('WPLANG', $locale);	
 }
 
+if (!defined('WP_CONTENT_URL')) {
+	define('WP_CONTENT_URL', $application->getAbsoluteUrl('/') . 'wp-content');
+}
+
 if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
 	define('WP_DEBUG', true);
 	define('SCRIPT_DEBUG', true);

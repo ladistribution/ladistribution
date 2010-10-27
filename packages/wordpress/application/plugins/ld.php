@@ -187,9 +187,8 @@ add_action('wp_dashboard_setup', 'ld_wp_dashboard_setup', 102);
 
 function ld_option_home($value)
 {
-	if (Zend_Registry::isRegistered('site')) {
-		$site = Zend_Registry::get('site');
-		$application = $site->getInstance(ABSPATH);
+	if (Zend_Registry::isRegistered('application')) {
+		$application = Zend_Registry::get('application');
 		$url = $application->getUrl();
 		return substr($url, 0, -1);
 	}
@@ -200,9 +199,8 @@ add_filter('option_home', 'ld_option_home');
 
 function ld_option_siteurl($value)
 {
-	if (Zend_Registry::isRegistered('site')) {
-		$site = Zend_Registry::get('site');
-		$application = $site->getInstance(ABSPATH);
+	if (Zend_Registry::isRegistered('application')) {
+		$application = Zend_Registry::get('application');
 		if (method_exists($application, 'getAbsoluteUrl')) {
 			$url = $application->getAbsoluteUrl();
 			return substr($url, 0, -1);
