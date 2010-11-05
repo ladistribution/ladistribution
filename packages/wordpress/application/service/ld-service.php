@@ -3,14 +3,7 @@
 error_reporting(0);
 
 define('LD_DEBUG', false);
-define('WP_INSTALLING', true);
-
-require_once( 'wp-load.php' );
-require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
-require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-require_once( ABSPATH . '/wp-includes/theme.php' );
-
-require_once( ABSPATH . '/dist/service.php' );
+require_once( 'dist/config.php' );
 
 function out($status, $message)
 {
@@ -43,12 +36,26 @@ if ( $role != 'admin' ) {
 }
 
 if (isset($_GET['method'])) {
+
     $method = $_GET['method'];
-    $params = array();
+
     $input = file_get_contents('php://input');
     if (!empty($input)) {
         $params = Zend_Json::decode($input);
+    } else {
+        $params = array();
     }
+
+    if ($method == 'init') {
+        define('WP_INSTALLING', true);
+    }
+
+    require_once( 'wp-load.php' );
+    require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
+    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+    require_once( ABSPATH . '/wp-includes/theme.php' );
+    require_once( ABSPATH . '/dist/service.php' );
+
     if (method_exists('Ld_Service_Wordpress', $method)) {
         $result = call_user_func(array('Ld_Service_Wordpress', $method), $params);
         header("Content-Type:application/json");

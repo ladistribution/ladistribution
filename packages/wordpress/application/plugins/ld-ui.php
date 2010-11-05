@@ -3,16 +3,18 @@
 Plugin Name: LD Ui
 Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.5.1
+Version: 0.5.2
 Author: h6e.net
 Author URI: http://h6e.net/
 */
 
 function ld_admin_head()
 {
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
-	if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
-		echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
+	if (get_option('topbar') != 'never' || get_option('superbar') != 'never') {
+		echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
+		if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+			echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
+		}
 	}
 	?>
 	<style type="text/css">
@@ -21,8 +23,8 @@ function ld_admin_head()
 	#footer { display:none !important; }
 	<?php endif ?>
 	<?php if (get_option('topbar') != 'never') : ?>
-	html, body { height:auto }
-	body { padding-top:31px !important; }
+	#wpcontent { padding-top:31px !important; }
+	#backtoblog { margin-top:31px !important; }
 	#wphead, #user_info { display:none; }
 	<?php endif ?>
 	</style>
@@ -30,6 +32,8 @@ function ld_admin_head()
 }
 
 add_action('admin_head', 'ld_admin_head');
+
+add_action('login_head', 'ld_admin_head');
 
 function ld_template_head()
 {
@@ -49,8 +53,6 @@ function ld_template_head()
 }
 
 add_action('wp_head', 'ld_template_head');
-
-add_action('login_head', 'ld_template_head');
 
 function ld_footer()
 {
@@ -82,7 +84,7 @@ add_action('wp_footer', 'ld_footer');
 
 add_action('admin_footer', 'ld_admin_footer');
 
-add_action('login_form', 'ld_footer');
+add_action('login_form', 'ld_admin_footer');
 
 function ld_body_class($classes)
 {

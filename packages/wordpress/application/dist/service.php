@@ -25,20 +25,23 @@ class Ld_Service_Wordpress
 		populate_options();
 		populate_roles();
 
-		// Create administrator
-		$user_id = username_exists($user_name);
-		if ( !$user_id ) {
-			$user_id = wp_create_user($user_name, $user_password, $user_email);
+		if (isset($user_name)) {
+			// Create administrator
+			$user_id = username_exists($user_name);
+			if ( !$user_id ) {
+				$user_id = wp_create_user($user_name, $user_password, $user_email);
+			}
+			// Update administrator password
+			$user = get_userdata($user_id);
+			$userdata = add_magic_quotes(get_object_vars($user));
+			$userdata['user_pass'] = $user_hash;
+			$user_id = wp_insert_user($userdata);
+			// Email
+			update_option('admin_email', $user_email);
 		}
 
-		// Update administrator password
-		$user = get_userdata($user_id);
-		$userdata = add_magic_quotes(get_object_vars($user));
-		$userdata['user_pass'] = $user_hash;
-		$user_id = wp_insert_user($userdata);
 
 		// Options
-		update_option('admin_email', $user_email);
 		update_option('blogname', $title);
 		update_option('siteurl', $url);
 		update_option('home', $url);
