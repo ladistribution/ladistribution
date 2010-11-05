@@ -108,4 +108,20 @@ class Ld_Auth
         return null;
     }
 
+    public static function rememberIdentity($identity)
+    {
+        $site = Zend_Registry::get('site');
+        if (isset($_COOKIE['ld-identities'])) {
+            $identities = explode(";", $_COOKIE['ld-identities']);
+            array_unshift($identities, $identity);
+            $identities = array_unique($identities);
+        } else {
+            $identities = array();
+            $identities[] = $identity;
+        }
+        $path = $site->getPath();
+        $cookiePath = empty($path) ? '/' : $path;
+        setCookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
+    }
+
 }

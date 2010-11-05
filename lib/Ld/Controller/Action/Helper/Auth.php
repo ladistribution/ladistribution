@@ -63,7 +63,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
                     $this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'), $this->_getParam('ld_auth_remember')
                 );
                 if ($result->isValid()) {
-                    $this->_rememberIdentity( $result->getIdentity() );
+                    Ld_Auth::rememberIdentity( $result->getIdentity() );
                     if (isset($referer)) {
                         $this->_redirect($referer);
                     }
@@ -126,7 +126,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
             // if user is correctly authenticated with OpenID
             if ($result->isValid()) {
-                $this->_rememberIdentity( $result->getIdentity() );
+                Ld_Auth::rememberIdentity( $result->getIdentity() );
             } else {
                 Ld_Auth::logout();
             }
@@ -134,21 +134,6 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
             return $result;
 
         }
-    }
-
-    protected function _rememberIdentity($identity)
-    {
-        if (isset($_COOKIE['ld-identities'])) {
-            $identities = explode(";", $_COOKIE['ld-identities']);
-            array_unshift($identities, $identity);
-            $identities = array_unique($identities);
-        } else {
-            $identities = array();
-            $identities[] = $identity;
-        }
-        $path = Zend_Registry::get('site')->getPath();
-        $cookiePath = empty($path) ? '/' : $path;
-        setCookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
     }
 
     protected function _getReferer()
