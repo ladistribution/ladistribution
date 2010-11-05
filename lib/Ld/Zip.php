@@ -17,6 +17,7 @@ class Ld_Zip
     public function pack($directories, $archive)
     {
         // with PHP PECL extension
+        /*
         if (class_exists('Ld_Zip_Archive', false)) {
             Ld_Files::log('pack (ZipArchive)', $archive);
             $zip = new Ld_Zip_Archive();
@@ -37,6 +38,7 @@ class Ld_Zip
                 Ld_Files::log('pack (ZipArchive)', "Could not pack $archive");
             }
         }
+        */
         // with Clearbricks library
         Ld_Files::log('pack (fileZip)', $archive);
         $fp = fopen($archive, 'wb');
