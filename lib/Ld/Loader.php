@@ -127,6 +127,11 @@ class Ld_Loader
     {
         $active_plugins = isset(self::$config['active_plugins']) ? self::$config['active_plugins'] : array();
 
+        global $ld_global_plugins;
+        if (isset($ld_global_plugins)) {
+            $active_plugins = array_merge($ld_global_plugins, $active_plugins);
+        }
+
         foreach ($active_plugins as $plugin) {
             $plugin = strtolower($plugin);
             $fileName = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
