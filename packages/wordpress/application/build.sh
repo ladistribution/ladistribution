@@ -1,14 +1,21 @@
 NAME="wordpress"
 VERSION="3.0.1"
-SOURCE="http://core.svn.wordpress.org/tags/$VERSION/"
+GZ="$NAME-$VERSION.tar.gz"
+SOURCE="http://wordpress.org/$GZ"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
 echo "# Building $NAME package"
 
-# Get source
-echo "# Get source from $SOURCE with svn"
-svn export $SOURCE $FOLDER --force --quiet
+# SOURCE="http://core.svn.wordpress.org/tags/$VERSION/"
+# echo "# Get source from $SOURCE with svn"
+# svn export $SOURCE $FOLDER --force --quiet
+
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > $GZ
+tar -x -f $GZ
+rm $GZ
+mv $NAME $FOLDER
 
 # Remove some useless (or not desired) files
 rm $FOLDER/wp-atom.php
@@ -33,6 +40,9 @@ echo "# Get minimal theme with git"
 git clone git://github.com/znarf/wordpress-minimal.git themes/minimal --quiet
 rm -rf themes/minimal/.git themes/minimal/Makefile
 
+echo "# Get akismet with svn"
+svn export http://plugins.svn.wordpress.org/akismet/trunk/ plugins/akismet --force --quiet
+
 echo "# Get memcached with svn"
 svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force --quiet
 
@@ -50,4 +60,5 @@ mv $PACKAGE ../../
 # Clean
 rm -rf $FOLDER
 rm -rf themes
+rm -rf plugins/akismet
 rm content/object-cache-memcached.php

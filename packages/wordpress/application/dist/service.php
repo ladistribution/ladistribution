@@ -40,7 +40,6 @@ class Ld_Service_Wordpress
 			update_option('admin_email', $user_email);
 		}
 
-
 		// Options
 		update_option('blogname', $title);
 		update_option('siteurl', $url);
@@ -64,7 +63,7 @@ class Ld_Service_Wordpress
 		update_option('sidebars_widgets', $defaults);
 
 		// Activate plugins
-		$plugins = array('ld.php', 'ld-ui.php', 'ld-auth.php', 'ld-css.php', 'akismet/akismet.php');
+		$plugins = array('ld.php', 'ld-ui.php', 'ld-auth.php', 'ld-css.php', 'ld-feed.php', 'akismet/akismet.php');
 		foreach ($plugins as $plugin) {
 			activate_plugin($plugin);
 		}
@@ -86,11 +85,15 @@ class Ld_Service_Wordpress
 		$site = self::getSite();
 		$application = self::getApplication();
 
-		wp_cache_flush();
 		remove_filter('clean_url', 'qtrans_convertURL');
-		update_option('siteurl', $site->getBaseUrl() . $application->getPath());
-		update_option('home', $site->getBaseUrl() . $application->getPath());
-		update_option('upload_path', $application->getAbsolutePath() . '/wp-content/uploads');
+
+		self::setOptions(array(
+			'siteurl' 		=> $site->getBaseUrl() . $application->getPath(),
+			'home'    		=> $site->getBaseUrl() . $application->getPath(),
+			'upload_path'	=> $application->getAbsolutePath() . '/wp-content/uploads'
+		));
+
+		return $site->getBaseUrl() . $application->getPath();
 	}
 
 	// Configuration
@@ -118,7 +121,9 @@ class Ld_Service_Wordpress
 
 	public function setOptions($params)
 	{
+		wp_cache_flush();
 		foreach ($params as $key => $value) {
+			update_option($key, '');
 			update_option($key, $value);
 		}
 	}
