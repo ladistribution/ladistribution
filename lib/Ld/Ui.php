@@ -283,7 +283,8 @@ class Ld_Ui
     {
         $colors = self::getSiteColors();
         $siteStyleUrl = self::getAdminUrl(array(
-            'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style', 'parts' => $parts, 'v' => $colors['version']), 'default', false);
+            'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
+            'parts' => $parts, 'v' => $colors['version']), 'default', false);
         return $siteStyleUrl;
     }
 
@@ -294,7 +295,8 @@ class Ld_Ui
         }
         $colors = self::getApplicationColors($application);
         $applicationStyleUrl = self::getAdminUrl(array(
-            'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style', 'id' => $application->getId(), 'parts' => $parts, 'v' => $colors['version']), 'default', false);
+            'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
+            'id' => $application->getId(), 'parts' => $parts, 'v' => $colors['version']), 'default', false);
         return $applicationStyleUrl;
     }
 

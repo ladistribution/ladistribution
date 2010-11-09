@@ -50,7 +50,7 @@ class Slotter_AppearanceController extends Slotter_BaseController
         if ($this->_hasParam('id')) {
             $application = $this->getSite()->getInstance( $this->_getParam('id') );
         }
-        if ($application) {
+        if (isset($application)) {
             $colors = Ld_Ui::getApplicationColors($application);
         } else {
             $colors = Ld_Ui::getSiteColors();
@@ -59,7 +59,7 @@ class Slotter_AppearanceController extends Slotter_BaseController
         if ($this->_hasParam('parts')) {
             $parts = explode(',', $this->_getParam('parts'));
         } else {
-            if ($application) {
+            if (isset($application)) {
                 $parts = $application->getColorSchemes();
             } else {
                 $parts = array('base', 'bars', 'panels');
@@ -68,6 +68,10 @@ class Slotter_AppearanceController extends Slotter_BaseController
 
         $this->view->parts = $parts;
         $this->view->colors = $colors;
+
+        $expires = 60 * 60 * 24 * 7;
+        $this->getResponse()->setHeader('Cache-Control', "max-age=$expires, public");
+        $this->getResponse()->setHeader('Expires', gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 
         $this->renderScript('site-style.phtml');
     }
