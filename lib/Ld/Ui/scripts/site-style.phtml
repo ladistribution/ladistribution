@@ -13,6 +13,9 @@ ul.blocks.mini li.empty, ul.blocks.mini li.empty a {
 .h6e-main-content h2, .h6e-main-content h2 a, .h6e-main-content .h6e-page-title, .h6e-main-content .h6e-page-title a {
     color:#<?php echo $this->colors['ld-colors-title'] ?>;
 }
+.h6e-simple-footer, .ld-home .manage, .h6e-page {
+    border-color:#<?php echo $this->colors['ld-colors-border'] ?>;
+}
 <?php endif ?>
 
 <?php if (!isset($this->parts) || in_array('bars', $this->parts)) : ?>
@@ -31,7 +34,7 @@ $light = hexdec(substr($bg, 0, 2)) + hexdec(substr($bg, 2, 2)) + hexdec(substr($
 $light = round($light / 3);
 echo "/* Light: $light */\n";
 if ($light < 127) {
-    echo ".h6e-super-bar ul.instances li { /* lighter (dark theme) */ border-color:rgba(0,0,0,0.5); background-color:rgba(0,0,0,0.3); }\n";
+    echo ".h6e-super-bar ul.instances li { /* lighter (dark theme) */ border-color:rgba(0,0,0,0.5); background-color:rgba(0,0,0,0.3); border:0 }\n";
     echo "#ld-identities a { /* lighter (dark theme) */ border-color:rgba(255,255,255,0.1); background-color:rgba(255,255,255,0.2); }\n";
     echo "#ld-identities a:hover { /* lighter (dark theme) */ border-color:rgba(255,255,255,0.3); background-color:rgba(255,255,255,0.1); }\n";
 }
@@ -50,17 +53,16 @@ if ($light < 127) {
 .ld-panel-content h3, .ld-panel-content .h6e-entry-title, .h6e-block .h6e-entry-title, .h6e-block .h6e-entry-title a, .h6e-block h2, .h6e-block h2 a, .h6e-comment-section-title {
     color:#<?php echo $this->colors['ld-colors-title-3'] ?>;
 }
-.h6e-simple-footer, .ld-home .manage, .h6e-page {
-    border-color:#<?php echo $this->colors['ld-colors-border'] ?>;
-}
 .h6e-comment-section {
     background:none;
     border-top:1px solid #<?php echo $this->colors['ld-colors-border-3'] ?>;
 }
 /* Instances */
 ul.blocks.mini li {
-    border-color:#<?php echo $this->colors['ld-colors-border-3'] ?>;
     background-color:#<?php echo $this->colors['ld-colors-background-3'] ?>;
+}
+ul.blocks.mini li, ul.blocks.mini li.empty {
+    border-color:#<?php echo $this->colors['ld-colors-border-3'] ?>;
 }
 ul.blocks.mini li, ul.blocks.mini li a {
     color:#<?php echo $this->colors['ld-colors-text-3'] ?>;

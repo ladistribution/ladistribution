@@ -18,6 +18,8 @@ $this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-color
         <table>
             <tr>
                 <th></th>
+                <th></th>
+                <th></th>
                 <th>Background</th>
                 <th>Border</th>
                 <th>Title</th>
@@ -25,6 +27,8 @@ $this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-color
             </tr>
             <tr>
                 <th>Base</th>
+                <th><label><input name="colors[base-default]" value="1" <?php if ($this->colors['base-default'] == 1) echo 'checked="checked"' ?> type="radio"/>Default</label></th>
+                <th><label><input name="colors[base-default]" value="0" <?php if ($this->colors['base-default'] == 0) echo 'checked="checked"' ?> type="radio"/>Custom</label></th>
                 <?php foreach (array('ld-colors-background', 'ld-colors-border', 'ld-colors-title', 'ld-colors-text') as $key) : ?>
                 <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
                     style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
@@ -32,6 +36,8 @@ $this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-color
             </tr>
             <tr>
                 <th>Bars</th>
+                <th><label><input name="colors[bars-default]" value="1" <?php if ($this->colors['bars-default'] == 1) echo 'checked="checked"' ?> type="radio"/>Default</label></th>
+                <th><label><input name="colors[bars-default]" value="0" <?php if ($this->colors['bars-default'] == 0) echo 'checked="checked"' ?> type="radio"/>Custom</label></th>
                 <?php foreach (array('ld-colors-background-2', 'ld-colors-border-2', 'ld-colors-title-2', 'ld-colors-text-2') as $key) : ?>
                 <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
                     style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
@@ -39,6 +45,8 @@ $this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-color
             </tr>
             <tr>
                 <th>Panels</th>
+                <th><label><input name="colors[panels-default]" value="1" <?php if ($this->colors['panels-default'] == 1) echo 'checked="checked"' ?> type="radio"/>Default</label></th>
+                <th><label><input name="colors[panels-default]" value="0" <?php if ($this->colors['panels-default'] == 0) echo 'checked="checked"' ?> type="radio"/>Custom</label></th>
                 <?php foreach (array('ld-colors-background-3', 'ld-colors-border-3', 'ld-colors-title-3', 'ld-colors-text-3') as $key) : ?>
                 <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
                     style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
@@ -53,6 +61,9 @@ $this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-color
 </div>
 
 <script type="text/javascript">
+
+(function($) {
+    $(document).ready(function() {
 
 var options = {
     onSubmit: function(hsb, hex, rgb, el) {
@@ -100,6 +111,22 @@ var options = {
 }
 
 $('input.color').ColorPicker(options);
+
+var enableDisableColors = function() {
+    var el = $(this);
+    var inputs = el.parents('tr').find('input.color');
+    if (el.val() == 1) {
+        inputs.attr('disabled', 'disabled').css('opacity', 0.25);
+    } else {
+        inputs.removeAttr('disabled').css('opacity', 1);
+    }
+};
+
+$('input:radio:checked').each(enableDisableColors);
+$('input:radio').change(enableDisableColors);
+
+    });
+})(jQuery);
 
 </script>
 

@@ -106,11 +106,10 @@ class Ld_Ui
 
     public static function getTopBar($options = array())
     {
-        $admin = self::getSite()->getAdmin();
-
         $view = self::getView();
 
-        $view->site = self::getSite();
+        $view->site = $site = self::getSite();
+        $view->admin = $admin = self::getSite()->getAdmin();
 
         if (isset($options['loginUrl'])) {
             $view->loginUrl = $options['loginUrl'];
@@ -203,7 +202,7 @@ class Ld_Ui
     public static function getDefaultSiteColors()
     {
         return array(
-            "ld-colors-background"   => "ffffff", "ld-colors-border"   => "cccccc", "ld-colors-title"   => "f54e00", "ld-colors-text"   => "4a4a4a",
+            "ld-colors-background"   => "ffffff", "ld-colors-border"   => "cccccc", "ld-colors-title"   => "009dff", "ld-colors-text"   => "4a4a4a",
             "ld-colors-background-2" => "ededed", "ld-colors-border-2" => "cccccc", "ld-colors-title-2" => "4a4a4a", "ld-colors-text-2" => "4a4a4a",
             "ld-colors-background-3" => "ededed", "ld-colors-border-3" => "cccccc", "ld-colors-title-3" => "4a4a4a", "ld-colors-text-3" => "4a4a4a",
         );
@@ -211,13 +210,7 @@ class Ld_Ui
 
     public static function getSiteColors()
     {
-        $default = self::getDefaultSiteColors();
-        $stored = Ld_Files::getJson(self::getSite()->getDirectory('dist') . '/colors.json');
-        $colors = array_merge($default, $stored);
-        if (empty($colors['version'])) {
-            $colors['version'] = '1';
-        }
-        return $colors;
+        return self::getSite()->getColors();
     }
 
     public static function getApplicationColors($application = null)
@@ -230,11 +223,23 @@ class Ld_Ui
 
         $stored = Ld_Files::getJson($application->getAbsolutePath() . '/dist/colors.json');
 
-        foreach (array('base', 'bars', 'panels') as $scheme) {
-            $colors["$scheme-default"] = isset($stored["$scheme-default"]) ? $stored["$scheme-default"] : 1;
+        if (!empty($stored)) {
+            $colors = self::computeColors($colors, $stored);
         }
 
-        if (!empty($stored)) {
+        // Default Colors (by default)
+        foreach (array('base', 'bars', 'panels') as $scheme) {
+            $colors["$scheme-default"] = isset($colors["$scheme-default"]) ? $colors["$scheme-default"] : 1;
+        }
+
+        return $colors;
+    }
+
+    public static function computeColors($colors, $stored)
+    {
+        foreach (array('base', 'bars', 'panels') as $scheme) {
+            $colors["$scheme-default"] = isset($stored["$scheme-default"]) ? $stored["$scheme-default"] : 0;
+        }
 
         $parts = array(
             'base' => array(
@@ -252,11 +257,9 @@ class Ld_Ui
         );
 
         foreach ($parts as $id => $partColors) {
-            if (empty($stored["$id-default"]) || $stored["$id-default"] === 0) {
+            if (empty($colors["$id-default"]) || $colors["$id-default"] === 0) {
                 foreach ($partColors as $id => $color) if ($color) $colors[$id] = $color;
             }
-        }
-
         }
 
         if (empty($colors['version'])) {
@@ -298,6 +301,36 @@ class Ld_Ui
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
             'id' => $application->getId(), 'parts' => $parts, 'v' => $colors['version']), 'default', false);
         return $applicationStyleUrl;
+    }
+
+    public static function relativeTime($time, $now = false)
+    {
+        $time = (int) $time;
+        $curr = $now ? $now : time();
+        $shift = $curr - $time;
+
+        if ($shift < 45) {
+            $diff = $shift;
+            $term = "second";
+        } elseif ($shift < 2700) {
+            $diff = round($shift / 60);
+            $term = "minute";
+        } elseif ($shift < 64800) {
+            $diff = round($shift / 60 / 60);
+            $term = "hour";
+        } elseif ($shift < 64800 * 28) {
+            $diff = round($shift / 60 / 60 / 24);
+            $term = "day";
+        } else {
+            $diff = round($shift / 60 / 60 / 24 / 30);
+            $term = "month";
+        }
+
+        if ($diff > 1) {
+            $term .= "s";
+        }
+
+        return "$diff $term ago";
     }
 
 }

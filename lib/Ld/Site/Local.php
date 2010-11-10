@@ -1125,6 +1125,16 @@ class Ld_Site_Local extends Ld_Site_Abstract
         Ld_Files::putJson($this->getDirectory('dist') . '/domains.json', $domains);
     }
 
+    // Colors
+
+    public function getColors()
+    {
+        $default = Ld_Ui::getDefaultSiteColors();
+        $stored = Ld_Files::getJson($this->getDirectory('dist') . '/colors.json');
+        $colors = Ld_Ui::computeColors($default, $stored);
+        return $colors;
+    }
+
     // Legacy
 
     public function getBasePath() { return $this->getPath(); }
