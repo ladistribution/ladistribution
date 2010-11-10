@@ -37,6 +37,8 @@ class Slotter_PluginsController extends Slotter_BaseController
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
             $configuration = (array)$this->_getParam('configuration');
             $site->setConfig($configuration);
+            $this->_redirector->gotoSimple('index', 'plugins', 'slotter');
+            return;
         }
 
         $active_plugins = (array)$site->getConfig('active_plugins');
