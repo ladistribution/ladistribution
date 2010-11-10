@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Ld/Controller/Action.php';
-
 /**
  * Index controller
  */
@@ -45,7 +43,7 @@ class Merger_IndexController extends Ld_Controller_Action
                 // echo "Application:" . $instance->getUrl() . "<br>\n";
                 foreach ($instance->getLinks() as $link) {
                     $type = (string)$link['type'];
-                    if ($type == 'application/atom+xml' || $type == 'application/atom+xml') {
+                    if ($type == 'application/atom+xml' || $type == 'application/rss+xml') {
                         // echo "URL:" . (string)$link['href'] . "<br>\n";
                         $feeds[] = array(
                             'application' => $instance,
@@ -54,6 +52,12 @@ class Merger_IndexController extends Ld_Controller_Action
                     }
                 }
             }
+        }
+
+        if (Zend_Registry::isRegistered('cache')) {
+            $cache = Zend_Registry::get('cache');
+            Zend_Feed_Reader::setCache($cache);
+            Zend_Feed_Reader::useHttpConditionalGet();
         }
 
         if (!Zend_Feed_Reader::isRegistered('Ld')) {
@@ -92,8 +96,6 @@ class Merger_IndexController extends Ld_Controller_Action
         $entries = array();
         foreach ($zend_feed as $entry) {
 
-            $application = $feed['application'];
-
             $user = null;
             $username = $entry->getUsername();
             if (isset($username)) {
@@ -110,15 +112,16 @@ class Merger_IndexController extends Ld_Controller_Action
             }
 
             $entry = array(
-                'application' => $feed['application'],
+                'application' => $feed['application']->getId(),
+                'package' => $feed['application']->getPackageId(),
                 'title' => $entry->getTitle(),
                 'enclosure' => $entry->getEnclosure(),
                 'type' => $entry->getPostType(),
                 'name' => $name,
                 'user' => $user,
                 'link' => $entry->getLink(),
-                'date' => strtotime($entry->getDateCreated()),
-                'time' => Ld_Ui::relativeTime(strtotime($entry->getDateCreated())),
+                'date' => $entry->getDateCreated()->getTimestamp(),
+                'time' => Ld_Ui::relativeTime($entry->getDateCreated()->getTimestamp()),
                 'content' => $entry->getContent()
             );
 
@@ -130,8 +133,7 @@ class Merger_IndexController extends Ld_Controller_Action
 
     private function _normaliseEntry($entry)
     {
-        $application = $entry['application'];
-        switch ($application->getPackageId()) {
+        switch ($entry['package']) {
             case 'blogmarks':
                 $entry['type'] = 'link';
                 $entry['action'] = 'posted a link';

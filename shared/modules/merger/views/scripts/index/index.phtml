@@ -32,7 +32,7 @@
 
         <?php echo $entry['action'] ?>
         <?php if ($entry['title'] != $entry['content']) : ?>
-            <h2 class="h6e-entry-title"><?php echo $entry['title'] ?></h2>
+            <h2 class="h6e-entry-title"><a href="<?php echo $entry['link'] ?>"><?php echo $entry['title'] ?></a></h2>
         <?php endif ?>
         <?php if (!empty($entry['content'])) : ?>
             <div class="h6e-post-content"><?php echo $entry['content'] ?></div>
@@ -42,7 +42,7 @@
 
     <?php
     if (!empty($entry['application'])) {
-        $instance = $entry['application'];
+        $instance = $this->site->getInstance($entry['application']);
     }
     ?>
 
