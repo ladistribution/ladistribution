@@ -879,6 +879,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (empty($user) && Zend_Uri_Http::check($username)) {
             $user = $this->getUserByUrl($username);
         }
+        if (empty($user)) {
+            $user = $this->getUsersBackend()->getUserBy('fullname', $username);
+        }
         return $user;
     }
 
