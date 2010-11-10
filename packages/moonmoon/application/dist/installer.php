@@ -3,6 +3,8 @@
 class Ld_Installer_Moonmoon extends Ld_Installer
 {
 
+	public $colorSchemes = array('base', 'bars', 'panels');
+
 	public function install($preferences = array())
 	{
 

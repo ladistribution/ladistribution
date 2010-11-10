@@ -25,9 +25,11 @@ if (Ld_Auth::isAuthenticated()) {
 
     <title>moonmoon administration</title>
     <link rel="stylesheet" media="screen" type="text/css" href="default.css" />
+    <?php include("inc/head.inc.php");  ?>
 </head>
 
 <body id="admin-feed">
+    <?php include("inc/top.inc.php");  ?>
     <div id="page">
         <div id="header">
             <h1>moonmoon</h1>
@@ -37,6 +39,7 @@ if (Ld_Auth::isAuthenticated()) {
             <p><?php echo $message ?></p>
         </div>
     </div>
+    <?php include("inc/footer.inc.php");  ?>
 </body>
 </html>
 <?php exit ?>

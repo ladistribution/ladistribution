@@ -1,28 +1,32 @@
 NAME="moonmoon"
-VERSION="8.12"
-SOURCE="http://svn.sharesource.org/svn/$NAME/branches/$VERSION/"
+SOURCE="git://github.com/znarf/moonmoon.git"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
-# Get source
-svn export $SOURCE $FOLDER --force
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with git"
+git clone git://github.com/znarf/moonmoon.git $FOLDER
+rm -rf $FOLDER/.git
 
 # Remove some useless (or not desired) files
 rm $FOLDER/install.php
-rm $FOLDER/custom/config.yml
+rm $FOLDER/administration/changepassword.php
+rm $FOLDER/administration/inc/pwd.inc.php
 
 # Add dummy file in cache folder
+mkdir $FOLDER/cache
 echo "dummy" > $FOLDER/cache/dummy
 
 # Patches
-patch -p0 -d $FOLDER < patches/admin-index.diff
-patch -p0 -d $FOLDER < patches/admin-administration.diff
+# patch -p0 -d $FOLDER < patches/admin-index.diff
+# patch -p0 -d $FOLDER < patches/admin-administration.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE $FOLDER dist admin theme -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER dist admin theme -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean
