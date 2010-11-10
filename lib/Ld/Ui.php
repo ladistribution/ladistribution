@@ -227,18 +227,17 @@ class Ld_Ui
             $colors = self::computeColors($colors, $stored);
         }
 
-        // Default Colors (by default)
-        foreach (array('base', 'bars', 'panels') as $scheme) {
-            $colors["$scheme-default"] = isset($colors["$scheme-default"]) ? $colors["$scheme-default"] : 1;
-        }
-
         return $colors;
     }
 
-    public static function computeColors($colors, $stored)
+    public static function computeColors($colors, $stored = null)
     {
         foreach (array('base', 'bars', 'panels') as $scheme) {
-            $colors["$scheme-default"] = isset($stored["$scheme-default"]) ? $stored["$scheme-default"] : 0;
+            $colors["$scheme-default"] = isset($stored["$scheme-default"]) ? $stored["$scheme-default"] : 1;
+        }
+
+        if (empty($stored)) {
+            return $colors;
         }
 
         $parts = array(
@@ -262,10 +261,6 @@ class Ld_Ui
             }
         }
 
-        if (empty($colors['version'])) {
-            $colors['version'] = '1';
-        }
-
         return $colors;
     }
 
@@ -285,9 +280,10 @@ class Ld_Ui
     public static function getSiteStyleUrl($parts = null)
     {
         $colors = self::getSiteColors();
+        $version = isset($colors['version']) ? $colors['version'] : null;
         $siteStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
-            'parts' => $parts, 'v' => $colors['version']), 'default', false);
+            'parts' => $parts, 'v' => $version), 'default', false);
         return $siteStyleUrl;
     }
 
@@ -297,9 +293,10 @@ class Ld_Ui
             $application = Zend_Registry::get('application');
         }
         $colors = self::getApplicationColors($application);
+        $version = isset($colors['version']) ? $colors['version'] : null;
         $applicationStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
-            'id' => $application->getId(), 'parts' => $parts, 'v' => $colors['version']), 'default', false);
+            'id' => $application->getId(), 'parts' => $parts, 'v' => $version), 'default', false);
         return $applicationStyleUrl;
     }
 

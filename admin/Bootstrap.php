@@ -60,7 +60,9 @@ class Bootstrap
 
         $view->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
         $view->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
-        $view->headLink()->appendStylesheet(Ld_Ui::getSiteStyleUrl(), 'screen');
+        if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+            $view->headLink()->appendStylesheet(Ld_Ui::getSiteStyleUrl(), 'screen');
+        }
 
         if (defined('LD_MERGER') && constant('LD_MERGER')) {
             $modules = array('merger', 'slotter', 'identity', 'default');

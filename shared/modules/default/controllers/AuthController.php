@@ -10,7 +10,7 @@ class AuthController extends Ld_Controller_Action
 
     function loginAction()
     {
-        if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous()) {
+        if (Ld_Auth::isAuthenticated() && Ld_Auth::isOpenid() && Ld_Auth::isAnonymous()) {
             $session = new Zend_Session_Namespace("ld_openid");
             $session->username = $this->_getParam('openid_sreg_nickname');
             $session->fullname = $this->_getParam('openid_sreg_fullname');
