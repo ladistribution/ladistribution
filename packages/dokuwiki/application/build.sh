@@ -1,5 +1,5 @@
 NAME="dokuwiki"
-VERSION="rc2010-10-07"
+VERSION="2010-11-07"
 SUB_VERSION=""
 GZ="$NAME.tgz"
 SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}{$SUB_VERSION}.tgz"
