@@ -25,7 +25,9 @@ class Merger_IndexController extends Ld_Controller_Action
 
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
 
-        $this->view->userRole = $this->userRole = $this->admin->getUserRole($this->currentUser);
+        // code should be elsewhere
+        $username = Ld_Auth::getUsername();
+        $this->view->userRole = $this->userRole = $this->admin->getUserRole($username);
 
         $mainsite = $this->getSite();
         $sites = array($mainsite);
