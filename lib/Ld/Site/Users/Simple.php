@@ -49,15 +49,24 @@ class Ld_Site_Users_Simple
         return $this->_users = $users;
     }
 
-    public function getUser($username)
+    public function getUserBy($key = 'username', $value)
     {
-        $users = $this->getUsers();
-        foreach ($users as $user) {
-            if ($user['username'] == $username) {
+        foreach (self::getUsers() as $id => $user) {
+            if (!empty($user[$key]) && $user[$key] == $value) {
                 return $user;
             }
         }
         return null;
+    }
+
+    public function getUser($username)
+    {
+        return $this->getUserBy('username', $username);
+    }
+
+    public function getUserByEmail($email)
+    {
+        return $this->getUserBy('email', $email);
     }
 
     public function getUserByUrl($url)
@@ -87,6 +96,10 @@ class Ld_Site_Users_Simple
             unset($user['password']);
         }
 
+        if (isset($user['email']) && $exists = $this->getUserByEmail($user['email'])) {
+            throw new Exception("An user with this email addresss is already registered.");
+        }
+
         if ($exists = $this->getUser($user['username'])) {
             throw new Exception("User with this username already exists.");
         }
@@ -97,7 +110,7 @@ class Ld_Site_Users_Simple
         $this->writeUsers($users);
     }
 
-    public function updateUser($username, $infos = array())
+    public function updateUser($username, $infos = array(), $validate = true)
     {
         if (!$user = $this->getUser($username)) {
             return false;
@@ -113,6 +126,10 @@ class Ld_Site_Users_Simple
             } else {
                 $user[$key] = $value;
             }
+        }
+
+        if ($validate) {
+            $this->validateUser($user);
         }
 
         $users = $this->getUsers();
@@ -140,7 +157,7 @@ class Ld_Site_Users_Simple
         $this->_users = $users;
         Ld_Files::putJson($this->getSite()->getDirectory('dist') . '/users.json', $users);
     }
-    
+
     public function validateUser($user)
     {
         // Username

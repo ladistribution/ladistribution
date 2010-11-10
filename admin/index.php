@@ -1,13 +1,13 @@
 <?php
 
-$dir = dirname(__FILE__);
+$appdir = dirname(__FILE__);
 
-require_once($dir . '/dist/config.php');
+require_once($appdir . '/dist/config.php');
 
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Admin:prepend');
 }
 
-require_once($dir . '/Bootstrap.php');
+require_once($appdir . '/Bootstrap.php');
 
-Bootstrap::run($dir);
+Bootstrap::run($appdir);

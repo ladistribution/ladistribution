@@ -54,13 +54,19 @@ class Bootstrap
 
         $mvc = Zend_Layout::startMvc(array('layoutPath' => $site->getDirectory('shared') . '/modules/default/views/layouts'));
 
-        $mvc->getView()->addHelperPath('Ld/View/Helper', 'Ld_View_Helper');
+        $view = $mvc->getView();
 
-        $mvc->getView()->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
-        $mvc->getView()->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
-        $mvc->getView()->headLink()->appendStylesheet(Ld_Ui::getSiteStyleUrl(), 'screen');
+        $view->addHelperPath('Ld/View/Helper', 'Ld_View_Helper');
 
-        $modules = array('slotter', 'merger', 'identity', 'default');
+        $view->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
+        $view->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
+        $view->headLink()->appendStylesheet(Ld_Ui::getSiteStyleUrl(), 'screen');
+
+        if (defined('LD_MERGER') && constant('LD_MERGER')) {
+            $modules = array('merger', 'slotter', 'identity', 'default');
+        } else {
+            $modules = array('slotter', 'merger', 'identity', 'default');
+        }
 
         foreach ($modules as $module) {
             self::$_front->addControllerDirectory(

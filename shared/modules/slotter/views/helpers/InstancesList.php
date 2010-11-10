@@ -6,7 +6,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
     public function instancesList($all = true)
     {
         if (empty($this->view->applications)) {
-            $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances(array('admin'));
+            $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances(array('admin', 'identity'));
         }
 
         if ($all && empty($this->view->applications) && $this->view->userRole != 'admin') {
