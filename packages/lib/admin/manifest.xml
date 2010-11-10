@@ -1,7 +1,7 @@
 <package>
   <id>lib-admin</id>
   <name>La Distribution Admin Dependencies</name>
-  <version>0.5-28</version>
+  <version>0.5-29</version>
   <type>lib</type>
   <deploy>
       <origin>modules/default</origin>
@@ -14,6 +14,10 @@
   <deploy>
       <origin>modules/slotter</origin>
       <destination path="shared">modules/slotter</destination>
+  </deploy>
+  <deploy>
+      <origin>modules/merger</origin>
+      <destination path="shared">modules/merger</destination>
   </deploy>
   <deploy>
       <origin>plugins</origin>
