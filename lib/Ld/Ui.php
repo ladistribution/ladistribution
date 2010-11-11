@@ -261,6 +261,8 @@ class Ld_Ui
             }
         }
 
+        $colors['version'] = isset($stored['version']) ? $stored['version'] : null;
+
         return $colors;
     }
 

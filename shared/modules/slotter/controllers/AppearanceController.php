@@ -33,6 +33,8 @@ class Slotter_AppearanceController extends Slotter_BaseController
             $colors['version'] = md5( serialize($colors) );
             $filename = $this->site->getDirectory('dist') . '/colors.json';
             Ld_Files::putJson($filename, $colors);
+            $this->_redirector->gotoSimple('index', 'appearance', 'slotter');
+            return;
         }
         $this->view->colors = Ld_Ui::getSiteColors();
     }
