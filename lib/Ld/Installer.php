@@ -366,30 +366,56 @@ class Ld_Installer
             $this->restoreFolder = $this->tmpFolder = $archive;
         }
 
-        if ($this->getManifest()->getDb() && $dbConnection = $this->getInstance()->getDbConnection('php')) {
+        if ($this->getManifest()->getDb()) {
 
-            foreach ($this->getInstance()->getDbTables() as $id => $tablename) {
-                $result = $dbConnection->query("TRUNCATE TABLE  $tablename");
+            $tables = $this->getInstance()->getDbTables();
+
+            // Restore Schema
+            foreach ($tables as $id => $tablename) {
+                $this->_query("DROP TABLE $tablename;");
+            }
+            $backupInfos = Ld_Files::getJson($this->getRestoreFolder() . '/dist/instance.json');
+            $schema = Ld_Files::get($this->getRestoreFolder() . '/tables/schema.sql');
+            $statements = explode(';', $schema);
+            foreach ($statements as $statement) {
+                $statement = trim($statement);
+                if (!empty($statement)) {
+                    // Fix Prefix
+                    $statement = str_replace($backupInfos['db_prefix'], $this->getInstance()->getDbPrefix(), $statement);
+                    $this->_query($statement);
+                }
+            }
+
+            // Restore Datas
+            foreach ($tables as $id => $tablename) {
+                $this->_query("TRUNCATE TABLE $tablename");
                 $filename = $this->getRestoreFolder() . '/tables/' . $id . '.csv';
                 // not yet clear when we have to use
                 // CHARACTER SET utf8
                 // or not :-/
                 if (Ld_Files::exists($filename)) {
-                    $query = "LOAD DATA LOCAL INFILE '$filename'
-                    REPLACE INTO TABLE $tablename
-                    FIELDS TERMINATED BY ';'
-                    ENCLOSED BY '\"'
-                    ESCAPED BY '\\\\'
-                    LINES TERMINATED BY '\n'"; // IGNORE 1 LINES;
-                    $result = $dbConnection->query($query);
-                    if (!$result) {
-                        throw new Exception($dbConnection->error);
-                    }
+                    $this->_query(
+                        "LOAD DATA LOCAL INFILE '$filename'
+                        REPLACE INTO TABLE $tablename
+                        FIELDS TERMINATED BY ';'
+                        ENCLOSED BY '\"'
+                        ESCAPED BY '\\\\'
+                        LINES TERMINATED BY '\n'"
+                    ); // IGNORE 1 LINES;
                 }
             }
 
         }
 
+    }
+
+    protected function _query($query, $type = 'php')
+    {
+        $dbConnection = $this->getInstance()->getDbConnection($type);
+        $result = $dbConnection->query($query);
+        if (!$result) {
+            throw new Exception($dbConnection->error);
+        }
     }
 
     // Configuration
