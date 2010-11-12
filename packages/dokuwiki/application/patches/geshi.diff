@@ -1,6 +1,6 @@
 --- inc/parserutils.php	2010-10-07 11:01:02.000000000 +0200
 +++ inc/parserutils.php.new	2010-10-07 11:01:08.000000000 +0200
-@@ -634,14 +634,14 @@
+@@ -634,14 +634,15 @@
      $cache = getCacheName($language.$code,".code");
      $ctime = @filemtime($cache);
      if($ctime && !$_REQUEST['purge'] &&
@@ -14,6 +14,7 @@
      } else {
  
 -        $geshi = new GeSHi($code, $language, DOKU_INC . 'inc/geshi');
++        require_once(LD_LIB_DIR . '/geshi/geshi.php');
 +        $geshi = new GeSHi($code, $language, LD_LIB_DIR . '/geshi/geshi');
          $geshi->set_encoding('utf-8');
          $geshi->enable_classes();
