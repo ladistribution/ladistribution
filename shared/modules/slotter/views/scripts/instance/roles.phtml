@@ -82,7 +82,7 @@ function role_label($role, $labels)
 
     <tr>
         <td><?php echo $this->escape($user['username']) ?></td>
-        <td><?php echo $this->escape($user['fullname']) ?></td>
+        <td><?php echo isset($user['fullname']) ? $this->escape($user['fullname']) : '/' ?></td>
         <td><?php echo $this->escape($user['email']) ?></td>
         <td>
             <select name="userRoles[<?php echo $user['username'] ?>]">

@@ -171,12 +171,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $index .= 'define("LD_ROOT_CONTEXT", true);' . "\n";
             $index .= '$dir = dirname(__FILE__);' . "\n";
             $index .= 'if (file_exists($dir . "/dist/site.php")) {' . "\n";
-            $index .= '  require_once($dir . "/dist/site.php");' . "\n";
-            $index .= '  list($directory, $script) = Ld_Dispatch::dispatch();' . "\n";
-            $index .= '  chdir($directory);' . "\n";
-            $index .= '  require_once($script);' . "\n";
+            $index .= '    require_once($dir . "/dist/site.php");' . "\n";
+            $index .= '    list($directory, $script) = Ld_Dispatch::dispatch();' . "\n";
+            $index .= '    chdir($directory);' . "\n";
+            $index .= '    require_once($script);' . "\n";
             $index .= '} else {' . "\n";
-            $index .= '  echo "La Distribution not installed.";' . "\n";
+            $index .= '    echo "La Distribution not installed.";' . "\n";
             $index .= '}' . "\n";
             Ld_Files::put($root_index, $index);
         }

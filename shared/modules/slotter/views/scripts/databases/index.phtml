@@ -8,7 +8,7 @@
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
-    <p><?php echo $this->translate("None|database") ?></p>
+    <p><?php echo $this->translate("No database connection registered.") ?></p>
 
 <?php else : ?>
 
@@ -34,9 +34,9 @@
             <td><?php echo $this->escape($database['name']) ?></td>
             <td><?php echo $used ? sprintf($this->translate('used by %1$d applications'), $used) :  $this->translate('unused') ?></td>
             <?php if ($test) : ?>
-                <td class="ok"><?php echo $this->translate('ok') ?></td>
+                <td class="ok"><?php // echo $this->translate('ok') ?></td>
             <?php else : ?>
-                <td class="error"><?php echo $this->translate('unavailable') ?></td>
+                <td class="error"><?php // echo $this->translate('unavailable') ?></td>
             <?php endif ?>
             <td>
                 <a href="<?php echo $this->url(array('action' => 'edit', 'id' => $id )); ?>"><?php
