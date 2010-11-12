@@ -8,5 +8,4 @@ if (file_exists($dir . '/dist/site.php')) {
     require_once($script);
 } else {
     echo 'La Distribution not installed.';
-    exit;
 }

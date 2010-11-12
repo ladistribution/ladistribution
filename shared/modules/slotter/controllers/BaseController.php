@@ -16,42 +16,46 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->view->addHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
-        $this->view->action = $this->getRequest()->getActionName();
+        $this->view->action = $this->action = $this->getRequest()->getActionName();
 
         $this->_setTitle( $this->site->getName() );
 
         $this->_initAcl();
+
+        $this->view->userRole = $this->userRole = $this->admin->getUserRole();
 
         $this->_initNavigation();
     }
 
     protected function _initNavigation()
     {
-        $translator = $this->getTranslator();
+        $t = $this->getTranslator();
 
         $settings = array();
-        $settings[] = array( 'label' => $translator->translate('General'), 'module' => 'slotter', 'controller' => 'settings' );
+        $settings[] = array( 'label' => $t->translate('General'), 'module' => 'slotter', 'controller' => 'settings' );
+        if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+            $settings[] = array( 'label' => $t->translate('Appearance'), 'module' => 'slotter', 'controller' => 'appearance' );
+        }
         if (!$this->site->isChild()) {
-            if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
-                $settings[] = array( 'label' => $translator->translate('Appearance'), 'module' => 'slotter', 'controller' => 'appearance' );
-            }
-            // $settings[] = array( 'label' => $translator->translate('Locales'), 'module' => 'slotter', 'controller' => 'locales' );
             if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
-                $settings[] = array( 'label' => $translator->translate('Domains'), 'module' => 'slotter', 'controller' => 'domains' );
+                $settings[] = array( 'label' => $t->translate('Domains'), 'module' => 'slotter', 'controller' => 'domains' );
             }
-            $settings[] = array( 'label' => $translator->translate('Plugins'), 'module' => 'slotter', 'controller' => 'plugins' );
+            $plugins = $this->site->getPlugins();
+            if (!empty($plugins)) {
+                $settings[] = array( 'label' => $t->translate('Plugins'), 'module' => 'slotter', 'controller' => 'plugins' );
+            }
         }
 
         $pages = array(
-            array( 'label' => $translator->translate('Home'), 'module' => 'slotter', 'route' => 'default',
+            array( 'label' => $t->translate('Home'), 'module' => 'slotter', 'route' => 'default',
                 'pages' => array(
-                    array( 'label' => $translator->translate('Applications'), 'module'=> 'slotter', 'route' => 'default'),
-                    array( 'label' => $translator->translate('Ressources'), 'module' => 'slotter', 'controller' => 'repositories', 'pages' => array(
-                        array( 'label' => $translator->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
-                        array( 'label' => $translator->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
+                    array( 'label' => $t->translate('Applications'), 'module'=> 'slotter', 'route' => 'default'),
+                    array( 'label' => $t->translate('Ressources'), 'module' => 'slotter', 'controller' => 'repositories', 'pages' => array(
+                        array( 'label' => $t->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
+                        array( 'label' => $t->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
                     )),
-                    array( 'label' => $translator->translate('Users'), 'module' => 'slotter', 'controller' => 'users' ),
-                    array( 'label' => $translator->translate('Settings'), 'module' => 'slotter', 'controller' => 'settings', 'pages' => $settings),
+                    array( 'label' => $t->translate('Users'), 'module' => 'slotter', 'controller' => 'users' ),
+                    array( 'label' => $t->translate('Settings'), 'module' => 'slotter', 'controller' => 'settings', 'pages' => $settings),
             ))
         );
 
@@ -81,23 +85,6 @@ class Slotter_BaseController extends Ld_Controller_Action
         $this->_acl->allow('admin', 'instances', 'update');
 
         Ld_Plugin::doAction('Slotter:acl', $this->_acl);
-
-        $this->view->userRole = $this->userRole = $this->_getCurrentUserRole();
-    }
-
-    protected function _getCurrentUserRole()
-    {
-        $roles = $this->admin->getUserRoles();
-        if (!$this->site->isChild() && empty($roles)) {
-            return 'admin';
-        } else if (isset($this->user)) {
-            $username = $this->user['username'];
-            if (isset($roles[$username])) {
-                return $roles[$username];
-            }
-            return 'user';
-        }
-        return 'guest';
     }
 
     protected function _disallow()

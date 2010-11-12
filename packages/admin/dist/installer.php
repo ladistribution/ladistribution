@@ -7,14 +7,14 @@ class Ld_Installer_Admin extends Ld_Installer
 	{
 		parent::install($preferences);
         
-		if (constant('LD_REWRITE')) {
+		if (!defined('LD_REWRITE') || constant('LD_REWRITE')) {
 			$this->create_htaccess();
 		}
 	}
 
 	public function postMove()
 	{
-		if (constant('LD_REWRITE')) {
+		if (!defined('LD_REWRITE') || constant('LD_REWRITE')) {
 			$this->create_htaccess();
 		}
 	}

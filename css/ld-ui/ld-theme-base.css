@@ -3,7 +3,7 @@
 
 .h6e-super-bar-inner, .h6e-top-bar-inner {
   background:#EDEDED;
-  border:1px solid #CCCCCC;
+  border-color:#CCCCCC;
 }
 
 .h6e-super-bar-inner, .h6e-top-bar-inner, .h6e-super-bar-inner a, .h6e-top-bar-inner a {

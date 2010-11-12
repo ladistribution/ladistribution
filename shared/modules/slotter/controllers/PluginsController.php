@@ -32,11 +32,16 @@ class Slotter_PluginsController extends Slotter_BaseController
                 }
             }
             $site->setConfig('active_plugins', $active_plugins);
+            $redirect = true;
         }
 
         if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
             $configuration = (array)$this->_getParam('configuration');
             $site->setConfig($configuration);
+            $redirect = true;
+        }
+
+        if (isset($redirect)) {
             $this->_redirector->gotoSimple('index', 'plugins', 'slotter');
             return;
         }
@@ -44,19 +49,18 @@ class Slotter_PluginsController extends Slotter_BaseController
         $active_plugins = (array)$site->getConfig('active_plugins');
 
         $plugins = array();
-        $plugin_files = Ld_Files::getFiles($site->getDirectory('shared') . '/plugins');
-        foreach ($plugin_files as $fileName) {
-            $id = strtolower(str_replace('.php', '', $fileName));
-            $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($id, 'Word_DashToCamelCase');
-            require_once $site->getDirectory('shared') . '/plugins/' . $id . '.php';
+        foreach ($site->getPlugins() as $id => $infos) {
+            $className = $infos['className'];
+            $fileName = $site->getDirectory('shared') . '/plugins/' . $id . '.php';
+            if (Ld_Files::exists($fileName)) {
+                require_once $fileName;
+            }
             if (class_exists($className, false) && method_exists($className, 'infos')) {
                 $plugin = new $className;
                 $plugin->active = in_array($id, $active_plugins);
                 $plugins[$id] = $plugin;
             }
         }
-
-        ksort($plugins);
 
         $this->view->plugins = $plugins;
 

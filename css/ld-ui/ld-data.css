@@ -5,7 +5,7 @@ table.h6e-data {
 
 table.h6e-data th {
   font-weight:bold;
-  background:#ddd;
+  background-color:#ddd;
 }
 
 table.h6e-data th, table.h6e-data td, table.h6e-data caption {
@@ -13,7 +13,7 @@ table.h6e-data th, table.h6e-data td, table.h6e-data caption {
 }
 
 table.h6e-data tr.th2 th {
-  background:#eee;
+  background-color:#eee;
 }
 
 table.h6e-data td, table.h6e-data th {
@@ -21,7 +21,7 @@ table.h6e-data td, table.h6e-data th {
 }
 
 table.h6e-data tr.even td {
-  background:#f5f5f5;
+  background-color:#f5f5f5;
 }
 
 table.h6e-data tr td.move {
@@ -83,11 +83,25 @@ table.h6e-data td.plugin-details p.plugin-status.ok {
 }
 
 table.h6e-data td.error {
-    background:url(iconic/x_alt_16x16.png) 5px 5px no-repeat;
+    background-image:url(iconic/x_alt_16x16.png);
+    background-position:center 5px;
+    background-repeat:no-repeat;
     padding:5px 5px 5px 26px;
 }
 
 table.h6e-data td.ok {
-    background:url(iconic/check_16x13.png) 5px 7px no-repeat;
+    background-image:url(iconic/check_16x13.png);
+    background-position:center 7px;
+    background-repeat:no-repeat;
     padding:5px 5px 5px 26px;
+}
+
+table.h6e-data td.avatar {
+  padding:5px;
+  text-align:center;
+  vertical-align:middle;
+}
+
+table.h6e-data td.avatar img {
+  display:block;
 }

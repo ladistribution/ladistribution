@@ -16,7 +16,7 @@ class Ld_Auth
 
     public static function generatePhrase($length = 64)
     {
-        $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $chars = "1234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $i = 0;
         $phrase = "";
         while ($i < $length) {
@@ -106,6 +106,26 @@ class Ld_Auth
             return Zend_Registry::get('site')->getUser($identity);
         }
         return null;
+    }
+
+    public static function getIdentities()
+    {
+        $site = Zend_Registry::get('site');
+        if (isset($_COOKIE['ld-identities'])) {
+            $identities = explode(";", $_COOKIE['ld-identities']);
+            $usernames = array();
+            $result = array();
+            foreach ($identities as $identity) {
+                $user = $site->getUser($identity);
+                if (empty($user) || in_array($user['username'], $usernames)) {
+                    continue;
+                } else {
+                    $result[$identity] = $user;
+                    $usernames[] = $user['username'];
+                }
+            }
+            return $result;
+        }
     }
 
     public static function rememberIdentity($identity)

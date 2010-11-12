@@ -79,23 +79,34 @@ class Ld_Dispatch
         return self::getAdminPath();
     }
 
-    protected static function isAdmin()
+    protected static function getPart()
     {
         $site = Zend_Registry::get('site');
         $path = self::str_replace_once($site->getPath() . '/', '', $_SERVER["REQUEST_URI"]);
         $parts = explode('/', $path);
         if (!empty($parts)) {
+            return $parts[0];
+        }
+        return null;
+    }
+
+    protected static function isAdmin()
+    {
+        if ($part = self::getPart()) {
+            $site = Zend_Registry::get('site');
             if ($site->getConfig('root_admin') == 1) {
                 $modules = Ld_Files::getDirectories($site->getDirectory('shared') . '/modules');
                 $modules[] = 'auth';
-                if (in_array($parts[0], $modules)) {
+                if (in_array($part, $modules)) {
                     return true;
                 }
             }
-            else {
-                if ($parts[0] == 'admin') {
-                    return true;
-                }
+            if ($part == 'admin') {
+                return true;
+            }
+            if ($user = $site->getUser($part)) {
+                define('LD_USER_CONTEXT', $user['username']);
+                return true;
             }
         }
         return false;

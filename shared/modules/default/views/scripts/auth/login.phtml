@@ -49,8 +49,8 @@
         <?php else : ?>
 
             <?php
-            if (empty($_GET['another-identity']) && isset($_COOKIE['ld-identities'])) {
-                $identities = explode(";", $_COOKIE['ld-identities']);
+            if (empty($_GET['another-identity'])) {
+                $identities = $this->identities;
             }
             ?>
 
@@ -61,20 +61,16 @@
 
             <div id="ld-identities" style="display:none">
                 <?php
-                $users = array();
-                foreach ($identities as $identity) :
-                    $user = $this->site->getUser($identity);
-                    if (empty($user) || in_array($user['username'], $users)) {
-                        continue;
-                    } else {
-                        $users[] = $user['username'];
-                    }
+                foreach ($identities as $identity => $user) :
                 ?>
                 <a href="#">
                     <?php echo Ld_Ui::getAvatar($user, 32) ?>
-                    <span class="fullname"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></span>
+                    <?php $displayname = empty($user['fullname']) ? $user['username'] : $user['fullname'] ?>
+                    <span class="fullname"><?php $displayname ?></span>
+                    <?php if ($displayname != $identity ) : ?>
                     <br>
                     <span class="identity"><?php echo $identity ?></span>
+                    <?php endif ?>
                 </a>
                 <?php endforeach ?>
             </div>

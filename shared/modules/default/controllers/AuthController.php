@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Ld/Controller/Action.php';
-
 /**
  * Auth controller
  */
@@ -64,6 +62,8 @@ class AuthController extends Ld_Controller_Action
             }
         }
 
+        $this->view->identities = Ld_Auth::getIdentities();
+
         $this->view->open_registration = $this->getSite()->getConfig('open_registration');
     }
 
@@ -93,6 +93,8 @@ class AuthController extends Ld_Controller_Action
         if (empty($open_registration)) {
             $roles = $this->admin->getUserRoles();
             if (!$this->getSite()->isChild() && empty($roles)) {
+                // skip exception
+            } elseif ($this->_hasParam('token')) {
                 // skip exception
             } else {
                 throw new Exception( $translator->translate('Registration is closed.') );
@@ -140,12 +142,6 @@ class AuthController extends Ld_Controller_Action
                     Ld_Auth::authenticate($this->_getParam('ld_register_username'), $this->_getParam('ld_register_password'));
                 }
 
-                $roles = $this->admin->getUserRoles();
-                if (!$this->getSite()->isChild() && empty($roles)) {
-                    $this->admin->setUserRoles(array($user['username'] => 'admin'));
-                    Ld_Auth::authenticate($user['username'], $user['password']);
-                }
-
                 $this->_redirectToRefererOrRoot();
 
             } catch (Exception $e) {
@@ -154,6 +150,71 @@ class AuthController extends Ld_Controller_Action
 
                 $this->view->error = $e->getMessage();
 
+            }
+
+        }
+    }
+
+    function activateAction()
+    {
+        $translator = $this->getTranslator();
+
+        if (!$this->_hasParam('token')) {
+            throw new Exception("No token given.");
+        }
+
+        $user = $this->getUsersBackend()->getUserBy('token', $this->_getParam('token'));
+        if (empty($user)) {
+            throw new Exception("Invalid token");
+        }
+
+        $username = $user['username'];
+
+        if ($this->getRequest()->isGet()) {
+
+            $this->view->user = $user;
+            $this->view->finish = true;
+            $this->render('register');
+
+        } elseif ($this->getRequest()->isPost()) {
+
+            try {
+
+                // Update Username
+                $user['username'] = $this->_getParam('ld_register_username');
+
+                // Update Password
+                $password = $this->_getParam('ld_register_password');
+                $password_again = $this->_getParam('ld_register_password_again');
+                if (empty($password) && empty($password_again)) {
+                    throw new Exception( $translator->translate("Password can't be empty.") );
+                } else if ($password != $password_again) {
+                    throw new Exception( $translator->translate("Passwords must match.") );
+                }
+                $user['password'] = $password;
+
+                // Empty token
+                $user['token'] = '';
+
+                // Activated
+                $user['activated'] = true;
+
+                $this->site->updateUser($username, $user);
+
+                // Authenticate with credentials, and remember
+                Ld_Auth::rememberIdentity($user['username']);
+                Ld_Auth::authenticate($user['username'], $password);
+
+                // Redirect
+                $this->noRender();
+                $this->_redirect( $this->getSite()->getBaseUrl() );
+
+            } catch (Exception $e) {
+
+                $this->view->user = $user;
+                $this->view->error = $e->getMessage();
+                $this->view->finish = true;
+                $this->render('register');
             }
 
         }

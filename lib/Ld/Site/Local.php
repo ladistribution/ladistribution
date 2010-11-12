@@ -40,7 +40,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function __construct($params = array())
     {
-        $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'domain');
+        $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'domain', 'owner');
         foreach ($properties as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
@@ -122,22 +122,24 @@ class Ld_Site_Local extends Ld_Site_Abstract
             //     for ($i = 0; $i < $n; $i++) $relativePath .= '/..';
             // }
 
-            $cfg .= '$loader = "' . Ld_Files::real($this->getDirectory('lib')) . '/Ld/Loader.php";' . "\n";
-            $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
             if ($this->isChild()) {
+                $cfg .= '$loader = "' . Ld_Files::real($this->getDirectory('lib')) . '/Ld/Loader.php";' . "\n";
+                $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
                 $cfg .= 'Ld_Loader::loadSite("' . $this->getParentSite()->getDirectory() . '");' . "\n";
-            } else {
-                $cfg .= 'Ld_Loader::loadSite("' . $this->getDirectory() . '");' . "\n";
-            }
-            if ($this->isChild()) {
                 $cfg .= 'Ld_Loader::loadSubSite(dirname(__FILE__) . "/..");' . "\n";
+            } else {
+                $cfg .= '$dir = dirname(__FILE__) . "/..";' . "\n";
+                $cfg .= '$loader = $dir . "/lib/Ld/Loader.php";' . "\n";
+                $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
+                $cfg .= 'Ld_Loader::loadSite($dir);' . "\n";
             }
+
             Ld_Files::put($this->getDirectory('dist') . "/site.php", $cfg);
         }
 
         if (!Ld_Files::exists($this->getDirectory('dist') . '/config.json')) {
             $config = array();
-            foreach (array('host', 'path', 'name') as $key) {
+            foreach (array('host', 'path', 'name', 'owner') as $key) {
                 if (isset($this->$key)) {
                     $config[$key] = $this->$key;
                 }
@@ -166,9 +168,16 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $root_index = $this->getDirectory() . '/index.php';
         if (!Ld_Files::exists($root_index)) {
             $index  = '<?php' . "\n";
-            $index .= "define('LD_ROOT_CONTEXT', true);\n";
-            $index .= "if (file_exists('admin/dispatch.php')) require_once('admin/dispatch.php');\n";
-            $index .= "else echo 'La Distribution Admin component not installed.';";
+            $index .= 'define("LD_ROOT_CONTEXT", true);' . "\n";
+            $index .= '$dir = dirname(__FILE__);' . "\n";
+            $index .= 'if (file_exists($dir . "/dist/site.php")) {' . "\n";
+            $index .= '  require_once($dir . "/dist/site.php");' . "\n";
+            $index .= '  list($directory, $script) = Ld_Dispatch::dispatch();' . "\n";
+            $index .= '  chdir($directory);' . "\n";
+            $index .= '  require_once($script);' . "\n";
+            $index .= '} else {' . "\n";
+            $index .= '  echo "La Distribution not installed.";' . "\n";
+            $index .= '}' . "\n";
             Ld_Files::put($root_index, $index);
         }
 
@@ -232,8 +241,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (empty($config)) {
             $config = $this->_config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
         }
+        $config = Ld_Plugin::applyFilters('Site:getConfig', $config);
         if (isset($key)) {
-            return isset($config[$key]) ? $config[$key] : $default;
+            $value = isset($config[$key]) ? $config[$key] : $default;
+            return $value;
         }
         return $config;
     }
@@ -305,15 +316,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $instances;
     }
 
-    public function getAdmin()
+    public function getApplication($package)
     {
-        $instances = $this->getInstances('admin', 'package');
+        $instances = $this->getInstances($package, 'package');
         if (empty($instances)) {
             return null;
         }
         $keys = array_keys($instances);
         $id = $keys[0];
         return $this->getInstance($id);
+    }
+
+    public function getAdmin()
+    {
+        return $this->getApplication('admin');
     }
 
     public function getApplicationsInstances(array $ignore = array())
@@ -895,6 +911,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $this->getUsersBackend()->addUser($user, $validate);
         Ld_Plugin::doAction('Site:addUser', $user);
+
+        // Register User in Admin (may be plugged as an app plugin)
+        if ($admin = $this->getAdmin()) {
+            $username = $user['username'];
+            $administrators = $admin->getAdministrators();
+            if (count($administrators) == 0) {
+                $roles = array_merge($admin->getUserRoles(), array($username => 'admin'));
+                $admin->setUserRoles($roles);
+            } else {
+                $roles = array_merge($admin->getUserRoles(), array($username => 'user'));
+                $admin->setUserRoles($roles);
+            }
+        }
+
         return $user;
     }
 
@@ -939,6 +969,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // LEGACY: transitional code
         if (isset($cfg['repositories'])) { $cfg = $cfg['repositories']; }
+
+        $cfg = Ld_Plugin::applyFilters('Site:getRepositoriesConfiguration', $cfg);
 
         return $cfg;
     }
@@ -1024,6 +1056,26 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $packages = array_merge($repository->getPackageExtensions($packageId, $type), $packages);
         }
         return $packages;
+    }
+
+    // Plugins
+
+    public function getPlugins()
+    {
+        $plugins = array();
+        $plugin_files = Ld_Files::getFiles($this->getDirectory('shared') . '/plugins');
+        foreach ($plugin_files as $fileName) {
+            $id = strtolower(str_replace('.php', '', $fileName));
+            $plugins[$id] = array(
+                'className' => 'Ld_Plugin_' . Zend_Filter::filterStatic($id, 'Word_DashToCamelCase')
+            );
+        }
+
+        $plugins = Ld_Plugin::applyFilters('Site:plugins', $plugins);
+
+        ksort($plugins);
+
+        return $plugins;
     }
 
     // Sites

@@ -34,6 +34,31 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         return $users;
     }
 
+    public function getUserRole($username = null)
+    {
+        // There is no user roles defined, we make the user admin.
+        $roles = $this->getUserRoles();
+        if (!$this->getSite()->isChild() && empty($roles)) {
+            return 'admin';
+        }
+        return parent::getUserRole($username);
+    }
+
+    public function getAdministrators()
+    {
+        $users = array();
+        foreach ($this->getUserRoles() as $username => $role) {
+            if ($role == 'admin') {
+                $user = $this->getSite()->getUser($username);
+                if (empty($user)) {
+                    continue;
+                }
+                $users[$username] = $user;
+            }
+        }
+        return $users;
+    }
+
     public function getRouter()
     {
         if (isset($this->router)) {
@@ -53,9 +78,11 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         // $baseUrl = $this->getSite()->getPath();
         $baseUrl = 'http://' . $site->getHost($this->domain) . $site->getPath();
 
-        if (constant('LD_REWRITE') == false || $site->getConfig('root_admin') != 1) {
-            $baseUrl .=  '/' . $this->getPath();
-        }
+        // if (constant('LD_REWRITE') == false || $site->getConfig('root_admin') != 1) {
+        //     $baseUrl .=  '/' . $this->getPath();
+        // }
+        $baseUrl .=  '/' . $this->getPath();
+
         if (constant('LD_REWRITE') == false) {
             $baseUrl .= '/index.php';
         }

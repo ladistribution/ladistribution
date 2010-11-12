@@ -125,23 +125,27 @@ class Ld_Loader
 
     public static function setupPlugins()
     {
-        $active_plugins = isset(self::$config['active_plugins']) ? self::$config['active_plugins'] : array();
+        $active_plugins = self::$site->getConfig('active_plugins');
+        if (empty($active_plugins)) {
+            $active_plugins = array();
+        }
 
         global $ld_global_plugins;
         if (isset($ld_global_plugins)) {
             $active_plugins = array_merge($ld_global_plugins, $active_plugins);
+            $active_plugins = array_unique($active_plugins);
         }
 
         foreach ($active_plugins as $plugin) {
             $plugin = strtolower($plugin);
             $fileName = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
             if (Ld_Files::exists($fileName)) {
-                require_once self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
-                $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
-                if (class_exists($className, false) && method_exists($className, 'load')) {
-                    $class = new $className;
-                    $class->load();
-                }
+                require_once $fileName;
+            }
+            $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
+            if (class_exists($className, false) && method_exists($className, 'load')) {
+                $class = new $className;
+                $class->load();
             }
         }
     }

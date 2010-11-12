@@ -1,12 +1,12 @@
 /* --------------------------------------------------------------
-   
+
    LD UI - Login Box
-   
+
 -------------------------------------------------------------- */
 
 #ld-login-box {
   margin:25px auto;
-  width:250px;
+  width:300px;
   border:1px solid #ccc;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
@@ -25,12 +25,17 @@
   display:block;
 }
 
-#ld-login-box input.text {
-  width:238px; /* 250 - 1 * 2 - 5 * 2 */
+
+#ld-login-box input.text, #ld-login-box span.text {
+  width:288px; /* 300 - 1 * 2 - 5 * 2 */
   display:block;
   padding:2px 5px;
   margin:0;
   margin-bottom:10px;
+}
+
+#ld-login-box span.text {
+  font-size:1.2em;
 }
 
 #ld-login-box input.button {
@@ -68,8 +73,8 @@
 #ld-identities a:hover {
   border:1px solid #666;
   border-color:black;
-	background:#4E5368;
-	color:white;
+  background:#4E5368;
+  color:white;
 }
 
 #ld-identities span.fullname {

@@ -6,6 +6,12 @@
 
 <div class="ld-panel-content h6e-block">
 
+<?php if (empty($this->plugins) || count($this->plugins) == 0) : ?>
+
+    <p><?php echo $this->translate("No plugin available.") ?></p>
+
+<?php else : ?>
+        
 <form action="<?php echo $this->url() ?>" method="post">
     
 <table id="plugins" class="h6e-data" style="width:100%">
@@ -63,6 +69,8 @@ Ld.dataTables = function($)
     })
 }
 </script>
+
+<?php endif ?>
 
 </div>
 
