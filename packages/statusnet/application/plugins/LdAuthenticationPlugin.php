@@ -45,21 +45,26 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 			if ( common_current_user() && common_is_real_login() ) {
 				return;
 			}
-			$nickname = Ld_Auth::getUsername();
-			$user = new User_username();
-			$user->username = $nickname;
-			$user->provider_name = $this->provider_name;
-			if (!$user->find()) {
-				$user = $this->autoRegister($user->username);
+			$username = Ld_Auth::getUsername();
+			$user_username = new User_username();
+			$user_username->username = $username;
+			$user_username->provider_name = $this->provider_name;
+			if (!$user_username->find()) {
+				$user = $this->autoRegister($username);
 				if ($user) {
-					User_username::register($user, $nickname, $this->provider_name);
+					User_username::register($user, $username, $this->provider_name);
 				}
+			} else {
+				$user = new User;
+				$user->id = $user_username->user_id;
+				$user->find();
+				$user->fetch();
 			}
-			$this->sync_profile($nickname);
+			$this->sync_profile($user, $username);
 			if (class_exists('Ld_Plugin')) {
-				Ld_Plugin::doAction('Statusnet:login', $nickname);
+				Ld_Plugin::doAction('Statusnet:login', $username);
 			}
-			common_set_user($nickname);
+			common_set_user($user);
 			common_real_login(true);
 		} else {
 			if ( common_current_user() ) {
@@ -70,10 +75,10 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 		}
 	}
 	
-	public function sync_profile($username)
+	public function sync_profile($user, $username)
 	{
+		$sn_user = $user;
 		$ld_user = Ld_Auth::getUser($username);
-		$sn_user = User::staticGet('nickname', $username);
 		$sn_profile = $sn_user->getProfile();
 		// update avatars: 24 / 48 / 96
 		foreach (array(AVATAR_PROFILE_SIZE, AVATAR_STREAM_SIZE, AVATAR_MINI_SIZE) as $size) {
@@ -151,7 +156,7 @@ class LdAuthenticationPlugin extends AuthenticationPlugin
 	{
 		$versions[] = array(
 			'name' => 'La Distribution Authentication',
-			'version' => '0.4.1',
+			'version' => '0.5.2',
 			'author' => 'h6e.net',
 			'homepage' => 'http://h6e.net/',
 			'rawdescription' => _m('SSO support for Status.net in La Distribution')
