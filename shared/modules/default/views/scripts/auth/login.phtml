@@ -65,12 +65,10 @@
                 ?>
                 <a href="#">
                     <?php echo Ld_Ui::getAvatar($user, 32) ?>
-                    <?php $displayname = empty($user['fullname']) ? $user['username'] : $user['fullname'] ?>
-                    <span class="fullname"><?php $displayname ?></span>
-                    <?php if ($displayname != $identity ) : ?>
+                    <?php $displayname = empty($user['fullname']) ? $user['username'] : $user['username']; ?>
+                    <span class="fullname"><?php echo $displayname ?></span>
                     <br>
                     <span class="identity"><?php echo $identity ?></span>
-                    <?php endif ?>
                 </a>
                 <?php endforeach ?>
             </div>
