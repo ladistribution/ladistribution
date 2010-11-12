@@ -32,11 +32,11 @@ ul.blocks.mini li a, .h6e-super-bar ul.instances li, .h6e-super-bar ul.instances
 $bg = $this->colors['ld-colors-background-2'];
 $light = hexdec(substr($bg, 0, 2)) + hexdec(substr($bg, 2, 2)) + hexdec(substr($bg, 4, 2));
 $light = round($light / 3);
-echo "/* Light: $light */\n";
 if ($light < 127) {
-    echo ".h6e-super-bar ul.instances li { /* lighter (dark theme) */ border-color:rgba(0,0,0,0.5); background-color:rgba(0,0,0,0.3); border:0 }\n";
-    echo "#ld-identities a { /* lighter (dark theme) */ border-color:rgba(255,255,255,0.1); background-color:rgba(255,255,255,0.2); }\n";
-    echo "#ld-identities a:hover { /* lighter (dark theme) */ border-color:rgba(255,255,255,0.3); background-color:rgba(255,255,255,0.1); }\n";
+    echo "/* lighter (dark theme) */\n";
+    echo ".h6e-super-bar ul.instances li { background-color:rgba(255,255,255,0.2); }\n";
+    echo "#ld-identities a { border-color:rgba(255,255,255,0.1); background-color:rgba(255,255,255,0.2); }\n";
+    echo "#ld-identities a:hover { border-color:rgba(255,255,255,0.3); background-color:rgba(255,255,255,0.1); }\n";
 }
 ?>
 <?php endif ?>

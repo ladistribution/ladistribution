@@ -220,20 +220,16 @@ class Ld_Ui
         }
 
         $colors = self::getSiteColors();
-
         $stored = Ld_Files::getJson($application->getAbsolutePath() . '/dist/colors.json');
-
-        if (!empty($stored)) {
-            $colors = self::computeColors($colors, $stored);
-        }
-
+        $colors = self::computeColors($colors, $stored);
         return $colors;
     }
 
     public static function computeColors($colors, $stored = null)
     {
         foreach (array('base', 'bars', 'panels') as $scheme) {
-            $colors["$scheme-default"] = isset($stored["$scheme-default"]) ? $stored["$scheme-default"] : 1;
+            $default = empty($stored) ? 1 : 0;
+            $colors["$scheme-default"] = isset($stored["$scheme-default"]) ? $stored["$scheme-default"] : $default;
         }
 
         if (empty($stored)) {
