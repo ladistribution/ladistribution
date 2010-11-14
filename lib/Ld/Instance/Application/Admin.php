@@ -78,10 +78,10 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         // $baseUrl = $this->getSite()->getPath();
         $baseUrl = 'http://' . $site->getHost($this->domain) . $site->getPath();
 
-        // if (constant('LD_REWRITE') == false || $site->getConfig('root_admin') != 1) {
-        //     $baseUrl .=  '/' . $this->getPath();
-        // }
-        $baseUrl .=  '/' . $this->getPath();
+        if (constant('LD_REWRITE') == false || $site->getConfig('root_admin') != 1) {
+            $baseUrl .=  '/' . $this->getPath();
+        }
+        // $baseUrl .=  '/' . $this->getPath();
 
         if (constant('LD_REWRITE') == false) {
             $baseUrl .= '/index.php';

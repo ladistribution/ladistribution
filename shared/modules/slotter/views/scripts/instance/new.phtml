@@ -1,6 +1,6 @@
+<h2><?php echo $this->translate("Add an application") ?></h2>
+
 <?php if (empty($this->package)) : ?>
-    
-<h2><?php echo $this->translate("Add a new application") ?></h2>
 
 <ul class="blocks mini new-instance">
     <?php
@@ -24,7 +24,9 @@
 
 <?php else : ?>
 
-<h2><?php echo sprintf($this->translate("Add a new '%s'"), $this->escape($this->package->name)) ?></h2>
+<div class="ld-panel-content h6e-block no-tab">
+
+<h3><?php echo sprintf($this->translate("New '%s'"), $this->escape($this->package->name)) ?></h3>
 
 <form method="post" action="">
 
@@ -34,5 +36,7 @@
     <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Create") ?>"/>
 
 </form>
+
+</div>
 
 <?php endif ?>

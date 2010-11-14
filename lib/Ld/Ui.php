@@ -262,19 +262,6 @@ class Ld_Ui
         return $colors;
     }
 
-    public static function getSiteStyle($parts = null)
-    {
-        $view = self::getView();
-        $view->part = $parts;
-        $view->colors = self::getSiteColors();
-        return $view->render('site-style.phtml');
-    }
-
-    public static function siteStyle()
-    {
-        echo self::getSiteStyle();
-    }
-
     public static function getSiteStyleUrl($parts = null)
     {
         $colors = self::getSiteColors();
@@ -291,7 +278,7 @@ class Ld_Ui
             $application = Zend_Registry::get('application');
         }
         $colors = self::getApplicationColors($application);
-        $version = isset($colors['version']) ? $colors['version'] : null;
+        $version = substr(md5(serialize($colors)), 0, 10);
         $applicationStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
             'id' => $application->getId(), 'parts' => $parts, 'v' => $version), 'default', false);

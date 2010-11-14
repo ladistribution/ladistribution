@@ -706,13 +706,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 if (empty($users)) {
                     throw new Exception('No user available.');
                 }
-                $preference['type'] = 'list';
-                $preference['options'] = array();
-                foreach ($users as $id => $user) {
-                    $preference['options'][] = array('value' => $user['username'], 'label' => !empty($user['fullname']) ? $user['fullname'] : $user['username']) ;
-                }
-                if (Ld_Auth::isAuthenticated()) {
-                    $preference['defaultValue'] = Ld_Auth::getUsername();
+                if (count($users) == 1) {
+                    $user = array_shift($users);
+                    $preference['type'] = 'hidden';
+                    $preference['defaultValue'] = $user['username'];
+                } else {
+                    $preference['type'] = 'list';
+                    $preference['options'] = array();
+                    foreach ($users as $id => $user) {
+                        $preference['options'][] = array('value' => $user['username'],
+                            'label' => !empty($user['fullname']) ? $user['fullname'] : $user['username']) ;
+                    }
+                    if (Ld_Auth::isAuthenticated()) {
+                        $preference['defaultValue'] = Ld_Auth::getUsername();
+                    }
                 }
             }
             // Special Type: locale

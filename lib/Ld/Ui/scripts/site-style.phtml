@@ -68,3 +68,5 @@ ul.blocks.mini li, ul.blocks.mini li a {
     color:#<?php echo $this->colors['ld-colors-text-3'] ?>;
 }
 <?php endif ?>
+
+<?php Ld_Plugin::doAction('Slotter:SiteStyle', $this->colors, $this->parts); ?>

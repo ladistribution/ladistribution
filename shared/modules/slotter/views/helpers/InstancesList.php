@@ -36,7 +36,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             $className = 'sortable ';
             $className .= $application->getPackageId();
 
-            $manageUrl = $this->view->url(array('controller' => 'instance', 'id' => $id), 'instance-action');
+            $manageUrl = $this->view->url(array('controller' => 'instance', 'id' => $id), 'instance-action', true);
 
             printf('<li id="app_%s" class="%s">', $id, $className);
 
@@ -64,7 +64,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
         <?php if ($all && $this->view->userRole == 'admin') : ?>
         <li class="empty new">
             <a href="<?php echo $this->view->url(array('controller' => 'instance', 'action' => 'new')) ?>">
-                <?php echo $this->translate("Add a new application") ?>
+                <?php echo $this->translate("Add an application") ?>
             </a>
         </li>
         <?php endif; ?>

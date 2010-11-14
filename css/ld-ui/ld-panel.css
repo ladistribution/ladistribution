@@ -9,8 +9,16 @@
 
 .ld-panel-content {
   padding:20px;
+}
+
+.ld-panel-content, .ld-panel-content.has-tab  {
   border-top-left-radius:0;
   -moz-border-radius-topleft:0;
+}
+
+.ld-panel-content.no-tab {
+  border-top-left-radius:5px;
+  -moz-border-radius-topleft:5px;
 }
 
 .ld-panel h1, .ld-panel h2, .ld-panel h3, .ld-panel h4 {
