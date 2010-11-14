@@ -18,16 +18,20 @@ class LdPlugin extends Plugin
 				'href' => Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal')));
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui')));
-			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-				'href' => Ld_Ui::getApplicationStyleUrl()));
-			$action->raw(
-				'  <style type="text/css">' . "\n  " . $this->_getCssRules() . "\n" . '  </style>' . "\n"
-			);
+			if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+				$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+					'href' => Ld_Ui::getApplicationStyleUrl()));
+				$action->raw(
+					'  <style type="text/css">' . "\n  " . $this->_getCssRules() . "\n" . '  </style>' . "\n"
+				);
+			}
 		} else {
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getCssUrl('/ld-ui/ld-bars.css', 'ld-ui')));
-			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
-				'href' => Ld_Ui::getApplicationStyleUrl()));
+			if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+				$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
+					'href' => Ld_Ui::getApplicationStyleUrl()));
+			}
 			$action->raw(
 				'<style type="text/css">'.
 				'#footer { margin-bottom:25px }'.
@@ -158,7 +162,7 @@ class LdPlugin extends Plugin
 	{
 		$versions[] = array(
 			'name' => 'La Distribution Package',
-			'version' => '0.5.1',
+			'version' => '0.5.2',
 			'author' => 'h6e.net',
 			'homepage' => 'http://h6e.net/',
 			'rawdescription' => _m('Integrate a Status.net instance with La Distribution')
