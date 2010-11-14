@@ -7,7 +7,6 @@ class Ld_Installer_Moonmoon extends Ld_Installer
 
 	public function install($preferences = array())
 	{
-
 		parent::install($preferences);
 
 		require_once($this->absolutePath . '/app/classes/Planet.class.php');
@@ -30,18 +29,15 @@ class Ld_Installer_Moonmoon extends Ld_Installer
 			$username = $preferences['administrator']['username'];
 			$this->setUserRoles(array($username => 'administrator'));
 		}
-		
-		$htaccess = 'php_value auto_prepend_file "dist/prepend.php"';
-		Ld_Files::put($this->getAbsolutePath() . '/.htaccess', $htaccess);
-		
-		$htaccess = 'php_value auto_prepend_file none';
-		Ld_Files::put($this->getAbsolutePath() . '/admin/.htaccess', $htaccess);
 	}
     
 	public function update()
 	{
 		/* prevent erasing people.opml when updating */
 		Ld_Files::unlink($this->getDir() . 'application/custom/people.opml');
+
+		Ld_Files::unlink($this->getAbsolutePath() . '/.htaccess');
+		Ld_Files::unlink($this->getAbsolutePath() . '/admin/.htaccess');
 
 		parent::update();
 	}
