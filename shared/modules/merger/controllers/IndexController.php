@@ -62,6 +62,10 @@ class Merger_IndexController extends Ld_Controller_Action
             Zend_Feed_Reader::useHttpConditionalGet();
         }
 
+        $httpClient = new Zend_Http_Client();
+        $httpClient->setConfig(array('maxredirects' => 5, 'timeout' => 5, 'useragent' => 'La Distribution Feed Merger'));
+        Zend_Feed_Reader::setHttpClient($httpClient);
+
         if (!Zend_Feed_Reader::isRegistered('Ld')) {
             Zend_Feed_Reader::addPrefixPath('Ld_Feed_Reader_Extension', LD_LIB_DIR . '/Ld/Feed/Reader/Extension');
             Zend_Feed_Reader::registerExtension('Ld');
