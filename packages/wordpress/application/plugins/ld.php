@@ -211,6 +211,25 @@ function ld_option_siteurl($value)
 
 add_filter('option_siteurl', 'ld_option_siteurl');
 
+function ld_template_redirect()
+{
+	if ( is_404() ) {
+		if ( !$requested_url ) {
+			// build the URL in the address bar
+			$requested_url  = is_ssl() ? 'https://' : 'http://';
+			$requested_url .= $_SERVER['HTTP_HOST'];
+			$requested_url .= $_SERVER['REQUEST_URI'];
+		}
+		if (strpos($requested_url, site_url()) !== false) {
+			$redirect_url = str_replace(site_url(), home_url(), $requested_url);
+			wp_redirect($redirect_url, 301);
+			exit();
+		}
+	}
+}
+
+add_action('template_redirect', 'ld_template_redirect');
+
 function ld_locale($locale = '')
 {
 	if (empty($locale) || $locale == 'auto') {

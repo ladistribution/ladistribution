@@ -1,7 +1,7 @@
 <package>
   <id>wordpress</id>
   <name>WordPress</name>
-  <version>3.0.1-69</version>
+  <version>3.0.1-70</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
@@ -43,14 +43,18 @@
       <preference type="text" label="Blog Title" name="blogname"/>
       <preference type="text" label="Blog Description" name="blogdescription"/>
       <preference type="email" label="Admin Email" name="admin_email"/>
+      <!--
       <preference type="boolean" label="Anyone can register" name="users_can_register" defaultValue="false"/>
       <preference type="range" label="Post per page" name="posts_per_page" min="1" max="100" step="1"/>
+      -->
       <preference type="list" label="Display the bottom bar" name="superbar">
           <option value="everyone" label="For everyone"/>
           <option value="connected" label="For connected users"/>
           <option value="never" label="Never"/>
       </preference>
+      <!--
       <preference type="boolean" label="Enable Atom" name="enable_app"/>
       <preference type="boolean" label="Enable XML-RPC" name="enable_xmlrpc"/>
+      -->
   </configuration>
 </package>
