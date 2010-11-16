@@ -1,5 +1,7 @@
 <?php $this->instancesList(false) ?>
 
+<div class="ld-panel-content h6e-block no-tab">
+
 <h3><?php echo $this->translate('Move this application') ?></h3>
 
 <form method="post" enctype="multipart/form-data" action="<?php echo $this->url() ?>">
@@ -15,8 +17,8 @@
         </tr>
     </table>
 
-    <p>
-        <input name="upload" class="submit button" type="submit" value="<?php echo $this->translate('Move') ?>"/>
-    </p>
+    <input name="upload" class="submit button" type="submit" value="<?php echo $this->translate('Move') ?>"/>
 
 </form>
+
+</div>
