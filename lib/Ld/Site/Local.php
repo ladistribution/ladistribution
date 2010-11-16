@@ -542,8 +542,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function checkDependencies($package)
     {
+        $ignoredDependencies = array();
+        $ignoredDependencies = Ld_Plugin::applyFilters('Site:ignoredDependencies', $ignoredDependencies);
         // Check and eventually Update dependencies
         foreach ($package->getManifest()->getDependencies() as $dependency) {
+            if (in_array($dependency, $ignoredDependencies)) {
+                continue;
+            }
             $infos = $this->getLibraryInfos($dependency);
             if (null === $infos) {
                 $this->createInstance($dependency);
