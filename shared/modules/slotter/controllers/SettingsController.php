@@ -43,6 +43,8 @@ class Slotter_SettingsController extends Slotter_BaseController
 
         $this->view->allLocales = $this->getSite()->getAllLocales();
         $this->view->locales = $this->getSite()->getLocales();
+
+        $this->view->canManageLocales = $this->_acl->isAllowed($this->userRole, 'locales', 'manage');
     }
 
     protected function _updateAdminBaseUrl($configuration)

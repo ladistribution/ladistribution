@@ -74,7 +74,7 @@ class Slotter_BaseController extends Ld_Controller_Action
         $admin = new Zend_Acl_Role('admin');
         $this->_acl->addRole($admin, $user);
 
-        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins', 'sites', 'domains');
+        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins', 'sites', 'domains', 'locales');
         foreach ($resources as $resource) {
             $this->_acl->add( new Zend_Acl_Resource($resource) );
             $this->_acl->allow('admin', $resource, 'manage');

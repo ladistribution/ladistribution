@@ -15,6 +15,7 @@
     $this->preferencesRenderer()->setOptions($options)->renderTable();
     ?>
 
+    <?php if ($this->canManageLocales) : ?>
     <table class="ld-preferences">
         <tr>
             <th><label>Locales</label></th>
@@ -27,6 +28,7 @@
             </td>
         </tr>
     </table>
+    <?php endif ?>
 
     <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 
