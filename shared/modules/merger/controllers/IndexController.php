@@ -12,8 +12,14 @@ class Merger_IndexController extends Ld_Controller_Action
 
         $this->view->addHelperPath(dirname(__FILE__) . '/../../slotter/views/helpers/', 'View_Helper');
 
-        if ($this->getSite()->isChild() && $owner = $this->site->getOwner()) {
-            $this->view->layoutTitle = $owner['fullname'];
+        if ($this->_hasParam('username')) {
+            $this->mergerUser = $this->site->getUser($this->_getParam('username'));
+            if (empty($this->mergerUser)) {
+                throw new Exception("Unknown user");
+            }
+            $this->view->layoutTitle = $this->mergerUser['fullname'];
+        // } else if ($this->getSite()->isChild() && $owner = $this->site->getOwner()) {
+        //     $this->view->layoutTitle = $owner['fullname'];
         } else {
             $this->view->layoutTitle = "News Feed";
         }
@@ -103,10 +109,10 @@ class Merger_IndexController extends Ld_Controller_Action
         foreach ($zend_feed as $entry) {
 
             $user = null;
+            $userUrl = null;
             $username = $entry->getUsername();
             if (isset($username)) {
                 $user = $this->getSite()->getUser($username);
-                $name = $user['fullname'];
             }
             if (empty($user)) {
                 $author = $entry->getAuthor();
@@ -114,26 +120,33 @@ class Merger_IndexController extends Ld_Controller_Action
                 $user = $this->getSite()->getUser($name);
             }
             if (isset($user)) {
-                $name = $user['fullname'];
+                $name = empty($user['fullname']) ? $user['username'] : $user['fullname'];
+                $userUrl = $this->admin->buildUrl(array('module' => 'merger', 'username' => $user['username']), 'merger-user');
             }
 
             $entry = array(
-                'application' => $feed['application']->getId(),
+                'application' => $feed['application'],
                 'package' => $feed['application']->getPackageId(),
                 'title' => $entry->getTitle(),
                 'enclosure' => $entry->getEnclosure(),
                 'type' => $entry->getPostType(),
                 'name' => $name,
                 'user' => $user,
+                'userUrl' => $userUrl,
                 'link' => $entry->getLink(),
                 'date' => $entry->getDateCreated()->getTimestamp(),
                 'time' => Ld_Ui::relativeTime($entry->getDateCreated()->getTimestamp()),
                 'content' => $entry->getContent()
             );
 
-            $entries[] = $this->_normaliseEntry($entry);
+            $entry = $this->_normaliseEntry($entry);
+
+            if (!$this->_hasParam('username') || $this->_getParam('username') == $user['username']) {
+                $entries[] = $entry;
+            }
 
         }
+
         return $entries;
    }
 

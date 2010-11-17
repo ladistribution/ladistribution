@@ -8,9 +8,9 @@
     <div class="hentry">
 
     <?php if (!empty($entry['user'])) : $author = $entry['user']; ?>
-        <a class="avatar" href="/<?php echo $author['username'] ?>"><?php
+        <a class="avatar" href="<?php echo $entry['userUrl'] ?>"><?php
             echo Ld_Ui::getAvatar($author, 32) ?></a>
-        <a class="username" href="/<?php echo $author['username'] ?>"><?php
+        <a class="username" href="<?php echo $entry['userUrl'] ?>"><?php
             echo empty($author['fullname']) ? $author['username'] : $author['fullname'] ?></a>
     <?php endif ?>
 
@@ -41,7 +41,7 @@
 
     <?php
     if (!empty($entry['application'])) {
-        $instance = $this->site->getInstance($entry['application']);
+        $instance = $entry['application'];
     }
     ?>
 

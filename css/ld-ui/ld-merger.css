@@ -38,6 +38,7 @@
 
 .ld-merger .h6e-post-content {
   font-size:12px;
+  overflow:hidden;
 }
 
 .ld-merger .hentry img.enclosure {
