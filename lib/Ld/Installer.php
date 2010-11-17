@@ -206,6 +206,12 @@ class Ld_Installer
         if (isset($preferences['path'])) {
             $this->_createDistConfigFile($preferences['path']);
         }
+
+        // Protect dist directory
+        $dist = $this->getAbsolutePath() . '/dist';
+        if (Ld_Files::exists($dist)) {
+            Ld_Files::denyAccess($dist);
+        }
     }
 
     public function postInstall($preferences = array()) {}

@@ -314,6 +314,18 @@ class Ld_Files
         return $path;
     }
 
+    public static function denyAccess($directory)
+    {
+        $htaccess = $directory . '/.htaccess';
+        if (!Ld_Files::exists($htaccess)) {
+            Ld_Files::put($htaccess, "Deny from all");
+        }
+        $index = $directory . '/index.php';
+        if (!Ld_Files::exists($index)) {
+            Ld_Files::put($index, "<?php // Silence is golden.");
+        }
+    }
+
     public static function log($action, $message)
     {
         if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
