@@ -92,10 +92,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
 
             if (in_array($name, array('dist', 'lib', 'tmp'))) {
-                $htaccess = $directory . '/.htaccess';
-                if (!Ld_Files::exists($htaccess)) {
-                    Ld_Files::put($htaccess, "Deny from all");
-                }
+                Ld_Files::denyAccess($directory);
             }
         }
     }
@@ -313,6 +310,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 }
             }
         }
+
         return $instances;
     }
 
@@ -630,14 +628,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Move
         $installer = $instance->getInstaller();
         $installer->move($path);
-        $installer->postMove();
-
         $instance->save();
+
+        // Post Move
+        $installer->postMove();
 
         // God, this should be refactorised
         $registeredInstances = $this->getInstances();
         foreach ($registeredInstances as $key => $registeredInstance) {
-            if ($oldPath == $registeredInstance['path']) {
+            if (isset($registeredInstance['path']) && $oldPath == $registeredInstance['path']) {
                 $registeredInstances[$key]['path'] = $path;
             }
         }
