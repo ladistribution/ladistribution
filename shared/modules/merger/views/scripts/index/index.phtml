@@ -15,7 +15,7 @@
     <?php endif ?>
 
     <?php if ($entry['type'] == 'link') : ?>
-          <?php echo $entry['action'] ?>
+          <?php if (!empty($entry['user'])) : echo $entry['action']; endif ?>
           <?php if (!empty($entry['enclosure'])) : ?>
             <img class="enclosure" src="<?php echo $entry['enclosure']->url ?>"/>
           <?php endif ?>
@@ -29,7 +29,7 @@
 
     <?php else : ?>
 
-        <?php echo $entry['action'] ?>
+        <?php if (!empty($entry['user'])) : echo $entry['action']; endif ?>
         <?php if ($entry['title'] != $entry['content']) : ?>
             <h2 class="h6e-entry-title"><a href="<?php echo $entry['link'] ?>"><?php echo $entry['title'] ?></a></h2>
         <?php endif ?>
