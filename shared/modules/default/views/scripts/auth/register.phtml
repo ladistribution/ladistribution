@@ -2,7 +2,7 @@
 
   <div id="ld-login-box">
       
-    <?php if (isset($this->complete)) : ?>
+    <?php if (isset($this->complete) || isset($this->finish)) : ?>
         <h2><?php echo $this->translate("Complete Registration") ?></h2>
     <?php else : ?>
         <h2><?php echo $this->translate("Register") ?></h2>
@@ -21,14 +21,22 @@
     <form method="post" action="">
 
         <label for="ld-register-username"><?php echo $this->translate("Username:") ?></label>
-        <input id="ld-register-username" class="text" type="text" name="ld_register_username" value="<?php
-            if (isset($this->user, $this->user['username'])) echo $this->escape($this->user['username']);
-        ?>"/>
+        <?php if (FALSE && isset($this->finish, $this->user, $this->user['username'])) : ?>
+            <span class="text"><?php echo $this->escape($this->user['username']); ?></span>
+        <?php else : ?>
+            <input id="ld-register-username" class="text" type="text" name="ld_register_username" value="<?php
+                if (isset($this->user, $this->user['username'])) echo $this->escape($this->user['username']);
+            ?>"/>
+        <?php endif ?>
 
         <label for="ld-register-email"><?php echo $this->translate("Email:") ?></label>
-        <input id="ld-register-email" class="text" type="text" name="ld_register_email" value="<?php
-            if (isset($this->user, $this->user['email'])) echo $this->escape($this->user['email']);
-        ?>"/>
+        <?php if (isset($this->finish, $this->user, $this->user['email'])) : ?>
+            <span class="text"><?php echo $this->escape($this->user['email']); ?></span>
+        <?php else : ?>
+            <input id="ld-register-email" class="text" type="text" name="ld_register_email" value="<?php
+                if (isset($this->user, $this->user['email'])) echo $this->escape($this->user['email']);
+            ?>"/>
+        <?php endif ?>
 
         <label for="ld-register-password"><?php echo $this->translate("Password:") ?></label>
         <input id="ld-register-password" class="text"  type="password" name="ld_register_password" value="" autocomplete="off"/>

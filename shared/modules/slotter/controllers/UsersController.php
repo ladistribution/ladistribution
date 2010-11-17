@@ -222,11 +222,11 @@ class Slotter_UsersController extends Slotter_BaseController
             $this->site->updateUser($id, $params);
         }
 
-        $user = $this->site->getUser($id);
-        $openidProvider = $this->admin->getOpenidProvider($user['username'], true);
+        $this->view->user = $user = $this->site->getUser($id);
 
-        $this->view->user = $user;
         $this->view->identity = $this->admin->getIdentityUrl($id);
+
+        $openidProvider = $this->admin->getOpenidProvider($user['username'], true);
         $this->view->trustedSites = $openidProvider->getTrustedSites();
     }
 
@@ -259,6 +259,74 @@ class Slotter_UsersController extends Slotter_BaseController
 
         }
 
+    }
+
+    public function emailRegexp()
+    {
+        return "/([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]" . 
+            "+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)/i";
+    }
+
+    public function inviteAction()
+    {
+        if ($this->getRequest()->isPost() && $this->_hasParam('emails')) {
+            $emails = $this->_getParam('emails');
+
+            if ($this->_hasParam('confirm')) {
+                $roles = $this->_getParam('roles');
+                $userRoles = $this->admin->getUserRoles();
+                foreach ($emails as $email) {
+                    $explode = explode('@', $email);
+                    $username = $explode[0];
+                    $user = array(
+                        'origin'     => 'Slotter:invite',
+                        'username'   => $username,
+                        'password'   => Ld_Auth::generatePhrase(),
+                        'fullname'   => '',
+                        'email'      => $email,
+                        'token'      => Ld_Auth::generatePhrase(),
+                        'activated'  => false
+                    );
+                    $this->site->addUser($user, false);
+                    $this->sendInvitationEmail($user);
+                    $userRoles[$username] = isset($roles[$email]) ? $roles[$email] : 'user';
+                }
+                $this->admin->setUserRoles($userRoles);
+                $this->render('invite-ok');
+            } else {
+                preg_match_all($this->emailRegexp(), $emails, $matches);
+                if (!empty($matches[0])) {
+                    $usersBackend = $this->site->getUsersBackend();
+                    $this->view->emails = array();
+                    foreach ($matches[0] as $email) {
+                        $this->view->emails[$email] = $usersBackend->getUserByEmail($email);
+                    }
+                }
+            }
+        }
+
+        $this->view->roles = $this->admin->getRoles();
+        $this->view->userRoles = $this->admin->getUserRoles();
+    }
+
+    public function sendInvitationEmail($user)
+    {
+        $activationUrl = $this->admin->buildUrl(array(
+            'module' => 'default', 'controller' => 'auth', 'action' => 'activate', 'token' => $user['token']));
+
+        $text =
+            'I just created an account for you to join ' . $this->site->getName() . "\n" .
+            $this->site->getUrl() . "\n" .
+            "\n" .
+            "You can activate your account by clicking on the link below." . "\n" .
+            $activationUrl;
+
+        $mail = new Zend_Mail();
+        $mail->setFrom($this->currentUser['email'], $this->currentUser['fullname']);
+        $mail->addTo($user['email']);
+        $mail->setSubject('Invitation to join ' . $this->site->getName());
+        $mail->setBodyText($text);
+        $mail->send();
     }
 
     protected function _addUserIdentity($user, $identity)

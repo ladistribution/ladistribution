@@ -48,6 +48,8 @@
 
 <?php if ($this->currentUser['username'] == $this->user['username']) : ?>
 
+<?php if (isset($this->identity)) : ?>
+    
 <hr/>
 
 <h3><?php echo $this->translate("Connect to other websites using OpenID") ?></h3>
@@ -68,6 +70,8 @@
         </tr>
     <?php endforeach ?>
     </table>
+
+<?php endif ?>
 
 <?php endif ?>
 

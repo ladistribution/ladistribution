@@ -163,7 +163,7 @@ class AuthController extends Ld_Controller_Action
             throw new Exception("No token given.");
         }
 
-        $user = $this->getUsersBackend()->getUserBy('token', $this->_getParam('token'));
+        $user = $this->site->getUsersBackend()->getUserBy('token', $this->_getParam('token'));
         if (empty($user)) {
             throw new Exception("Invalid token");
         }

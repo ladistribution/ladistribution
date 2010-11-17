@@ -1,10 +1,10 @@
 <h2><?php echo $this->translate("Users") ?></h2>
 
-<div class="ld-panel-content h6e-block">
+<div class="ld-panel-content h6e-block no-tab">
 
 <?php if (empty($this->users)) : ?>
 
-    <p><?php echo $this->translate("None|user") ?></p>
+    <p><?php echo $this->translate("No user") ?></p>
 
 <?php else : ?>
 
@@ -51,11 +51,14 @@
 <table class="h6e-data">
 
    <tr>
+       <th></th>
        <th><?php echo $this->translate("Username") ?></th>
        <th><?php echo $this->translate("Full Name") ?></th>
        <th><?php echo $this->translate("Email") ?></th>
 
        <th><?php echo $this->translate("Role") ?></th>
+
+       <th><?php echo $this->translate("Activated") ?></th>
 
        <?php if ($this->canManageUsers) : ?>
            <th colspan="2"><?php echo $this->translate("Actions") ?></th>
@@ -66,6 +69,7 @@
 <?php foreach ($this->users as $user) : ?>
 
     <tr>
+        <td class="avatar"><?php echo Ld_Ui::getAvatar($user, 16) ?></td>
         <td><?php echo $user['username'] ?></td>
         <td><?php echo isset($user['fullname']) ? $user['fullname'] : '' ?></td>
         <td><?php echo isset($user['email']) ? $user['email'] : '' ?></td>
@@ -86,6 +90,12 @@
                 <?php echo $this->userRoles[ $user['username'] ] ?>
             <?php endif ?>
         </td>
+
+        <?php if (!isset($user['activated']) || $user['activated'] == true) : ?>
+            <td class="ok"></td>
+        <?php else: ?>
+            <td class="error"></td>
+        <?php endif ?>
 
        <?php if ($this->canManageUsers) : ?>
            <td>
@@ -121,10 +131,10 @@
     <h3><?php echo $this->translate("You can:") ?></h3>
     <ul>
         <?php if ($this->canManageUsers) : ?>
-        <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php echo $this->translate("Add a new user") ?></a></li>
+        <li><a href="<?php echo $this->url(array('action' => 'invite')); ?>"><?php echo $this->translate("Invite new users") ?></a></li>
         <?php endif ?>
-        <?php if ($this->canManageRoles) : ?>
-        <li><a href="<?php echo $this->url(array('action' => 'add')); ?>"><?php echo $this->translate("Add registered users to the list") ?></a></li>
+        <?php if ($this->canManageRoles && $this->site->isChild()) : ?>
+        <li><a href="<?php echo $this->url(array('action' => 'add')); ?>"><?php echo $this->translate("Add registered users") ?></a></li>
         <?php endif ?>
     </ul>
 <?php endif ?>
