@@ -174,7 +174,9 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	protected function _fixUrl()
 	{
 		remove_filter('clean_url', 'qtrans_convertURL');
+		delete_option('siteurl');
 		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
+		delete_option('home');
 		update_option('home', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
 		update_option('upload_path', $this->getAbsolutePath() . '/wp-content/uploads');
 	}

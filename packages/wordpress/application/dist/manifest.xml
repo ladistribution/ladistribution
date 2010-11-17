@@ -1,7 +1,7 @@
 <package>
   <id>wordpress</id>
   <name>WordPress</name>
-  <version>3.0.1-70</version>
+  <version>3.0.1-71</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
