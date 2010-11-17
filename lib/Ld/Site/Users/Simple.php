@@ -162,7 +162,7 @@ class Ld_Site_Users_Simple
     {
         // Username
         $validateUsername = new Zend_Validate();
-        $validateUsername->addValidator( new Zend_Validate_StringLength(array('min' => 1, 'max' => 64)) ) );
+        $validateUsername->addValidator( new Zend_Validate_StringLength(array('min' => 1, 'max' => 64)) );
         if (!$validateUsername->isValid($user['username'])) {
             $messages = array_values($validateUsername->getMessages());
             throw new Exception($messages[0]);
