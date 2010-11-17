@@ -547,7 +547,7 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
             $size = round( filesize($absoluteFilename) / 1024 ) . ' ko';
             $backups[$filename] = compact('filename', 'absoluteFilename', 'size');
         }
-        krsort($backups);
+        ksort($backups);
         return $backups;
     }
 
