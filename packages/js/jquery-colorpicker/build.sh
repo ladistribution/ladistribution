@@ -16,6 +16,9 @@ rm $ZIP
 mkdir $FOLDER
 cp "$BUILD/js/colorpicker.js" "$FOLDER/colorpicker.js"
 
+echo "# Compressing"
+java -jar ../../../bin/yuicompressor-2.4.2.jar --charset UTF-8 "$FOLDER/colorpicker.js" -o "$FOLDER/colorpicker.js"
+
 # CSS
 mkdir css
 mkdir css/colorpicker

@@ -58,8 +58,14 @@ class Bootstrap
 
         $view->addHelperPath('Ld/View/Helper', 'Ld_View_Helper');
 
-        $view->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
-        $view->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
+        if (defined('LD_COMPRESS_CSS') && constant('LD_COMPRESS_CSS')) {
+            $view->css()->append('/h6e-minimal/h6e-minimal.compressed.css', 'h6e-minimal');
+            $view->css()->append('/ld-ui/ld-ui.compressed.css', 'ld-ui');
+        } else {
+            $view->css()->append('/h6e-minimal/h6e-minimal.css', 'h6e-minimal');
+            $view->css()->append('/ld-ui/ld-ui.css', 'ld-ui');
+        }
+
         if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
             $view->headLink()->appendStylesheet(Ld_Ui::getSiteStyleUrl(), 'screen');
         }

@@ -1,0 +1,21 @@
+<ifModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+</ifModule>
+
+<ifModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 seconds"
+  ExpiresByType text/javascript "access plus 604800 seconds"
+  ExpiresByType application/javascript "access plus 604800 seconds"
+  ExpiresByType application/x-javascript "access plus 604800 seconds"
+</ifModule>
+
+<ifModule mod_headers.c>
+  Header set Cache-Control "max-age=604800, public"
+  Header unset ETag
+  Header unset Last-Modified
+</ifModule>
+
+FileETag None

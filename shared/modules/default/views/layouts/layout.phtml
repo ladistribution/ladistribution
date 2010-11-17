@@ -2,12 +2,21 @@
 
 $this->js()->append('/jquery/jquery.js', 'js-jquery', 'ld-js');
 $this->js()->append('/jquery/jquery-ui.js', 'js-jquery-ui', 'ld-js-jquery');
-$this->js()->append('/ld/ld.js', 'admin', 'ld-js-jquery-ui');
-$authUrl = $this->url(array(
-    'module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
-$this->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absoluteURL($authUrl)));
+
+if (defined('LD_COMPRESS_JS') && constant('LD_COMPRESS_JS')) {
+    $this->js()->append('/ld/ld.c.js', 'admin', 'ld-js-jquery-ui');
+} else {
+    $this->js()->append('/ld/ld.js', 'admin', 'ld-js-jquery-ui');
+}
+
+if (isset($this->admin)) {
+    $authUrl = $this->admin->buildUrl(array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'));
+    $this->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absoluteURL($authUrl)));
+}
+
+echo $this->doctype('XHTML5') . "\n"
+
 ?>
-<?php echo $this->doctype('XHTML5') . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php echo $this->headTitle()->setIndent(2) . "\n" ?>

@@ -10,6 +10,8 @@ echo "# Get source from $SOURCE with curl"
 mkdir $FOLDER
 curl $SOURCE -# > $FOLDER/$NAME.js
 
+cp .htaccess $FOLDER
+
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 

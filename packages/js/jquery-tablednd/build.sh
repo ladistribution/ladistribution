@@ -15,9 +15,11 @@ rm $ZIP
 
 # Copy the files we really want
 mkdir $FOLDER
-mkdir $FOLDER/jquery/
-cp "$BUILD/jquery.tablednd_0_5.js" "$FOLDER/jquery/jquery.tablednd.js"
+cp "$BUILD/jquery.tablednd_0_5.js" "$FOLDER/tablednd.js"
 rm -rf $BUILD
+
+echo "# Compressing"
+java -jar ../../../bin/yuicompressor-2.4.2.jar --charset UTF-8 "$FOLDER/tablednd.js" -o "$FOLDER/tablednd.js"
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
