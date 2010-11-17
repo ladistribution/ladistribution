@@ -61,20 +61,20 @@
 
 #ld-identities a {
   display:block;
-  border:1px solid #ccc;
   padding:5px 5px;
-  background:white;
   vertical-align:middle;
   text-decoration:none;
   margin-bottom:10px;
   height:36px;
+  color:#4E5368;
+  background:white;
+  border:1px solid #bbb;
 }
 
 #ld-identities a:hover {
-  border:1px solid #666;
-  border-color:black;
-  background:#4E5368;
   color:white;
+  background-color:#4E5368;
+  border-color:#333;
 }
 
 #ld-identities span.fullname {
@@ -86,6 +86,6 @@
 #ld-identities span.identity {
   font-size:11px;
   line-height:0;
-  color:#ccc;
+  color:#999;
   padding-left:10px;
 }

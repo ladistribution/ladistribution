@@ -75,20 +75,3 @@ input.button:hover {
   background-color:rgba(0,0,0,0.8);
 }
 
-#ld-identities a {
-	/* lighter (dark theme) */
-	border-color:rgba(255,255,255,0.1);
-	background-color:rgba(255,255,255,0.2);
-	/* darker (light theme) */
-	border-color:rgba(0,0,0,0.25);
-	background-color:rgba(255,255,255,0.75);
-}
-
-#ld-identities a:hover {
-	/* lighter (dark theme) */
-	border-color:rgba(255,255,255,0.3);
-	background-color:rgba(255,255,255,0.1);
-	/* darker (light theme) */
-	border-color:rgba(0,0,0,0.75);
-	background-color:rgba(0,0,0,0.5);
-}
