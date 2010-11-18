@@ -202,15 +202,15 @@ class Ld_Installer
 
         $this->deploy($preferences['path']);
 
-        // Config
+        // Seems it's an application
         if (isset($preferences['path'])) {
+            // Config
             $this->_createDistConfigFile($preferences['path']);
-        }
-
-        // Protect dist directory
-        $dist = $this->getAbsolutePath() . '/dist';
-        if (Ld_Files::exists($dist)) {
-            Ld_Files::denyAccess($dist);
+            // Protect dist directory
+            $dist = $this->getAbsolutePath() . '/dist';
+            if (Ld_Files::exists($dist)) {
+                Ld_Files::denyAccess($dist);
+            }
         }
     }
 
