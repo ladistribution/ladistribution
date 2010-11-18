@@ -320,10 +320,11 @@ class Ld_Files
         if (!Ld_Files::exists($htaccess)) {
             Ld_Files::put($htaccess, "Deny from all");
         }
-        $index = $directory . '/index.php';
-        if (!Ld_Files::exists($index)) {
-            Ld_Files::put($index, "<?php // Silence is golden.");
-        }
+        // Disabled for now as it is not necessary a good idea if directory finish in the include path
+        // $index = $directory . '/index.php';
+        // if (!Ld_Files::exists($index)) {
+        //     Ld_Files::put($index, "<?php // Silence is golden.");
+        // }
     }
 
     public static function log($action, $message)
