@@ -17,16 +17,20 @@ define('BBDB_HOST', $db['host']);
 
 $bb_table_prefix = $application->getDbPrefix();
 
-$locale = $application->getLocale();
+if (strpos($_SERVER['REQUEST_URI'], '/rss/') === false && strpos($_SERVER['REQUEST_URI'], '/rss.php') === false) {
 
-if ($locale == 'auto') {
-	if (isset($_COOKIE['ld-lang'])) {
-		$locale = $_COOKIE['ld-lang'];
+	$locale = $application->getLocale();
+
+	if ($locale == 'auto') {
+		if (isset($_COOKIE['ld-lang'])) {
+			$locale = $_COOKIE['ld-lang'];
+		}
 	}
-}
 
-if (isset($locale) && $locale != 'auto') {
-	define('BB_LANG', $locale);	
+	if (isset($locale) && $locale != 'auto') {
+		define('BB_LANG', $locale);	
+	}
+
 }
 
 if (class_exists('Ld_Plugin')) {
