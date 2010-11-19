@@ -84,6 +84,8 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
             $username = $preferences['administrator']['username'];
             $this->setUserRoles(array($username => 'admin'));
         }
+
+        Ld_Files::unlink($this->getAbsolutePath() . '/lib/tpl/minimal/dist');
     }
 
     public function setConfiguration($configuration, $type = 'general')
