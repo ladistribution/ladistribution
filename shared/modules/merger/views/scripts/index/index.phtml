@@ -12,6 +12,8 @@
             echo Ld_Ui::getAvatar($author, 32) ?></a>
         <a class="username" href="<?php echo $entry['userUrl'] ?>"><?php
             echo empty($author['fullname']) ? $author['username'] : $author['fullname'] ?></a>
+    <?php elseif (!empty($entry['name'])) : ?>
+        <strong><?php echo $entry['name'] ?></strong>
     <?php endif ?>
 
     <?php if ($entry['type'] == 'link') : ?>
@@ -25,7 +27,7 @@
         <?php endif ?>
 
     <?php elseif ($entry['type'] == 'status') : ?>
-        <span class="h6e-entry-title"><?php echo $entry['title'] ?></span>
+        <span class="h6e-entry-title"><?php echo $entry['content'] ?></span>
 
     <?php else : ?>
 

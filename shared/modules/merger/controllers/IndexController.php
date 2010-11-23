@@ -69,7 +69,7 @@ class Merger_IndexController extends Ld_Controller_Action
         }
 
         $httpClient = new Zend_Http_Client();
-        $httpClient->setConfig(array('maxredirects' => 5, 'timeout' => 5, 'useragent' => 'La Distribution Feed Merger'));
+        $httpClient->setConfig(array('maxredirects' => 5, 'timeout' => 10, 'useragent' => 'La Distribution Feed Merger'));
         Zend_Feed_Reader::setHttpClient($httpClient);
 
         if (!Zend_Feed_Reader::isRegistered('Ld')) {
@@ -105,7 +105,7 @@ class Merger_IndexController extends Ld_Controller_Action
     {
         $zend_feed = Zend_Feed_Reader::import($feed['url']);
 
-        $entries = array();
+        $items = array();
         foreach ($zend_feed as $entry) {
 
             $user = null;
@@ -124,30 +124,34 @@ class Merger_IndexController extends Ld_Controller_Action
                 $userUrl = $this->admin->buildUrl(array('module' => 'merger', 'username' => $user['username']), 'merger-user');
             }
 
-            $entry = array(
+            $item = array(
                 'application' => $feed['application'],
                 'package' => $feed['application']->getPackageId(),
                 'title' => $entry->getTitle(),
                 'enclosure' => $entry->getEnclosure(),
                 'type' => $entry->getPostType(),
+                'action' => $entry->getAction(),
                 'name' => $name,
                 'user' => $user,
                 'userUrl' => $userUrl,
                 'link' => $entry->getLink(),
-                'date' => $entry->getDateCreated()->getTimestamp(),
-                'time' => Ld_Ui::relativeTime($entry->getDateCreated()->getTimestamp()),
                 'content' => $entry->getContent()
             );
 
-            $entry = $this->_normaliseEntry($entry);
+            if ($date = $entry->getDateCreated()) {
+                $item['date'] = $date->getTimestamp();
+                $item['time'] = Ld_Ui::relativeTime($date->getTimestamp());
+            }
+
+            $item = $this->_normaliseEntry($item);
 
             if (!$this->_hasParam('username') || $this->_getParam('username') == $user['username']) {
-                $entries[] = $entry;
+                $items[] = $item;
             }
 
         }
 
-        return $entries;
+        return $items;
    }
 
     private function _normaliseEntry($entry)

@@ -11,7 +11,7 @@
   padding:20px;
 }
 
-.ld-panel-content, .ld-panel-content.has-tab  {
+.ld-panel-content, .ld-panel-content.has-tab, .h6e-page-content.has-tab {
   border-top-left-radius:0;
   -moz-border-radius-topleft:0;
 }
