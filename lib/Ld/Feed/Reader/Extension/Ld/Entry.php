@@ -24,6 +24,16 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
   }
 
   /**
+   * Get action
+   *
+   * @return string|null
+   */
+  public function getAction()
+  {
+      return $this->_getData('action');
+  }
+
+  /**
    * Get the entry data specified by name
    *
    * @param  string $name
