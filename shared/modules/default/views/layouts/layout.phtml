@@ -33,10 +33,12 @@ echo $this->doctype('XHTML5') . "\n"
 
   <?php $bc = $this->navigation()->breadcrumbs()->__toString() ?>
 
+  <?php if (!defined('LD_BREADCRUMBS') || constant('LD_BREADCRUMBS')) : ?>
   <?php if (!empty($bc)) : ?>
   <div class="h6e-bread-crumbs">
       <?php echo $bc ?>
   </div>
+  <?php endif ?>
   <?php endif ?>
 
   <?php if (isset($this->layoutTitle)) : ?>
