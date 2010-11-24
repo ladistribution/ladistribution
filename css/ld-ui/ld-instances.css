@@ -65,12 +65,16 @@ ul.blocks.mini li .name {
   float:left;
 }
 
-ul.blocks.mini li .links {
+ul.blocks.mini li .links, ul.blocks.mini li .infos {
   font-size:11px;
   float:right;
   margin-left:10px;
   border-left:1px dotted #ccc;
   padding-left:10px;
+}
+
+ul.blocks.mini li .infos {
+  opacity:0.75;
 }
 
 /* Fix a display issue with Firefox 3.5 */

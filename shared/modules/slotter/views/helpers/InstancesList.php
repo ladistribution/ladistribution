@@ -63,7 +63,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
         <?php if ($all && $this->view->userRole == 'admin') : ?>
         <li class="empty new">
-            <a href="<?php echo $this->view->url(array('controller' => 'instance', 'action' => 'new')) ?>">
+            <a href="<?php echo $this->view->url(array(array('module' => 'slotter', 'controller' => 'instance', 'action' => 'new')) ?>">
                 <?php echo $this->translate("Add an application") ?>
             </a>
         </li>

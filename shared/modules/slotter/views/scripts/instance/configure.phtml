@@ -1,4 +1,4 @@
-<?php $this->instancesList(false) ?>
+<?php $this->instanceWidget() ?>
 
 <div class="ld-panel">
 
@@ -6,21 +6,62 @@
 
 <div class="ld-panel-content h6e-block">
 
+<?php if ($updateVersion = $this->instance->hasUpdate()) : ?>
+
+<h3><?php echo $this->translate("Update available") ?></h3>
+
+<p><?php printf($this->translate("A new version (%s) is available."), $updateVersion) ?></p>
+
+<p><a href="<?php echo $this->instanceActionUrl('update') ?>?version=<?php echo $updateVersion ?>"><?php
+    echo $this->translate("You can update now.") ?></a></p>
+
+<hr/>
+
+<?php endif ?>
+
 <?php if (!empty($this->preferences)) : ?>
+
+<h3><?php echo $this->translate("Configuration") ?></h3>
 
 <form method="post" action="<?php echo $this->url() ?>">
 
     <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
 
-    <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
+    <input type="submit" class="submit button" value="<?php echo $this->translate('Update configuration') ?>"/>
 
 </form>
 
-<?php else : ?>
-
-<p><?php echo $this->translate('No preference available for this application.') ?></p>
+<hr/>
 
 <?php endif ?>
+
+<h3><?php echo $this->translate("Move") ?></h3>
+
+<form method="post" action="<?php echo $this->url(array('action' => 'move')) ?>">
+
+    <table class="ld-form">
+        <tr>
+            <th><label><?php echo $this->translate('Old path') ?></label></th>
+            <td><input disabled="disabled" class="text" size="25" type="text" name="oldpath" value="<?php echo $this->instance->getPath() ?>" /></td>
+        </tr>
+        <tr>
+            <th><label for="move_path"><?php echo $this->translate("New path") ?></label></th>
+            <td><input class="text" size="25" type="text" id="move_path" name="path" value="<?php echo $this->instance->getPath() ?>" /></td>
+            <td><input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Move this application") ?>"/></td>
+        </tr>
+    </table>
+
+</form>
+
+<hr/>
+
+<h3><?php echo $this->translate("Delete") ?></h3>
+
+<form method="get" action="<?php echo $this->url(array('action' => 'delete')) ?>">
+
+    <input type="submit" class="submit button" value="<?php echo $this->translate('Delete this application') ?>"/>
+
+</form>
 
 </div> <!-- .ld-panel-content -->
 

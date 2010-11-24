@@ -21,6 +21,7 @@ class Slotter_InstanceController extends Slotter_BaseController
             if (empty($this->instance)) {
                 throw new Exception('Non existing instance.');
             }
+            Zend_Registry::set('application', $this->instance);
         }
 
         if (!$this->_acl->isAllowed($this->userRole, 'instances', 'admin')) {
@@ -167,6 +168,8 @@ class Slotter_InstanceController extends Slotter_BaseController
     */
     public function statusAction()
     {
+        $this->_forward('configure');
+        return;
         $this->view->extensions = $this->instance->getExtensions();
         foreach ($this->view->extensions as $id => $extension) {
             $this->view->extensions[$id]->hasUpdate = $extension->hasUpdate();

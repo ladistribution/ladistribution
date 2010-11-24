@@ -1,6 +1,6 @@
-<?php $this->instancesList(false) ?>
+<?php $this->instanceWidget() ?>
 
-<div class="ld-panel roles-panel">
+<div class="ld-panel">
 
 <?php $this->instanceNavigation() ?>
 
@@ -68,6 +68,8 @@ function role_label($role, $labels)
 </script>
 
 <?php else : ?>
+
+<h3><?php echo $this->translate('User Roles') ?></h3>
 
 <table class="h6e-data">
 

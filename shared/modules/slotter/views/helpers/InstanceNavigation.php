@@ -18,23 +18,20 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         echo '<ul class="ld-instance-menu h6e-tabs">' . "\n";
 
         $actions = array();
-        $actions['status'] = $this->translate('status');
-        if (!empty($preferences)) {
-            $actions['configure'] = $this->translate('configure');
-        }
+        $actions['configure'] = $this->translate('General');
         if (!empty($themes)) {
-            $actions['themes'] = $this->translate('themes');
+            $actions['themes'] = $this->translate('Themes');
         }
         if (!empty($themePreferences) || !empty($colorSchemes)) {
-            $actions['appearance'] = $this->translate('appearance');
+            $actions['appearance'] = $this->translate('Appearance');
         }
         if (!empty($extensions)) {
-            $actions['extensions'] = $this->translate('extensions');
+            $actions['extensions'] = $this->translate('Extensions');
         }
         if (!empty($roles)) {
-            $actions['roles'] = $this->translate('roles');
+            $actions['roles'] = $this->translate('Roles');
         }
-        $actions['backups']   =  $this->translate('backups');
+        $actions['backups'] = $this->translate('Backups');
 
         foreach ($actions as $action => $label) {
             $url = $this->view->instanceActionUrl($action, $this->view->id);

@@ -40,6 +40,9 @@
 
 .ld-panel input.cancel:hover { text-decoration:none; }
 
+.ld-panel-content table { margin:0.5em 0; }
+.ld-panel-content table.ld-preferences { margin-bottom:1em; }
+
 /* Instance Menu
 -------------------------------------------------------------- */
 
