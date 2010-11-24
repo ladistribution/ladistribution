@@ -14,9 +14,11 @@
 class Ld_Ui
 {
 
-    public static $_admin = null;
+    protected static $_admin = null;
 
-    public static $_applications = array();
+    protected static $_isAdmin = null;
+
+    protected static $_applications = array();
 
     public static function getSite()
     {
@@ -28,6 +30,27 @@ class Ld_Ui
         $view = new Zend_View();
         $view->addScriptPath(dirname(__FILE__) . '/Ui/scripts');
         return $view;
+    }
+
+    public function isAdmin()
+    {
+        if (isset(self::$_isAdmin)) {
+            return self::$_isAdmin;
+        }
+
+        $site = self::getSite();
+        $admin = $site->getAdmin();
+
+        if ($admin && $admin->getUserRole() == 'admin') {
+            return self::$_isAdmin = true;
+        }
+
+        $roles = $admin->getUserRoles();
+        if (empty($roles) && !$site->isChild()) {
+            return self::$_isAdmin = true;
+        }
+
+        return self::$_isAdmin = false;
     }
 
     public static function getApplications()
@@ -53,9 +76,18 @@ class Ld_Ui
         return $admin->buildUrl($params, $name);
     }
 
+    public static function getInstanceSettingsUrl($instance = null, $action = null)
+    {
+        if (empty($instance)) {
+            $instance = Zend_Registry::get('application');
+        }
+        $id = $instance->getId();
+        return self::getAdminUrl(array('controller' => 'instance', 'id' => $id, 'action' => $action), 'instance-action');
+    }
+
     public static function superBar($options = array())
     {
-         echo self::getSuperBar($options);
+        echo self::getSuperBar($options);
     }
 
     public static function super_bar($options = array())
@@ -70,26 +102,17 @@ class Ld_Ui
 
         $applications = $site->getApplicationsInstances(array('admin'));
 
-        $isAdmin = false;
-        if ($admin && $admin->getUserRole() == 'admin') {
-            $isAdmin = true;
-        } else {
-            $roles = $admin->getUserRoles();
-            if (!$site->isChild() && empty($roles)) {
-                $isAdmin = true;
-            }
-        }
-
-        if ($isAdmin) {
-            $applications = array_merge( array('admin' => $admin), $applications);
+        if (self::isAdmin()) {
+            $applications = array_merge(array('admin' => $admin), $applications);
         }
 
         $view = self::getView();
 
         $view->site = $site;
         $view->params = $params;
-        $view->isAdmin = $isAdmin;
         $view->applications = $applications;
+
+        $view->isAdmin = self::isAdmin();
 
         return $view->render('super-bar.phtml');
     }
@@ -144,6 +167,17 @@ class Ld_Ui
         $view->className = isset($options['full-width']) ? 'full-width' : 'default-width';
 
         return $view->render('top-bar.phtml');
+    }
+
+    public static function topNav($options = array())
+    {
+        echo self::getTopNav($options);
+    }
+
+    public static function getTopNav($options = array())
+    {
+        $view = self::getView();
+        return $view->render('top-nav.phtml');
     }
 
     public static function getCssUrl($file, $package)

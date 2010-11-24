@@ -4,6 +4,11 @@
    
 -------------------------------------------------------------- */
 
+.ld-main-content, .h6e-main-content {
+	position:relative;
+	margin-top:0;
+}
+
 .ld-main-content h2 {
 	margin:0px 0 15px;
 }
@@ -66,6 +71,22 @@
 .ld-home .update {
 	width:60%;
 	float:left;
+}
+
+/* Navigation
+-------------------------------------------------------------- */
+
+.ld-nav {
+	list-style-type:none;
+	position:absolute;
+	top:25px;
+	right:25px;
+	margin:0;
+}
+
+.ld-nav li {
+	display:inline;
+	padding-left:5px;
 }
 
 /* Notifications
