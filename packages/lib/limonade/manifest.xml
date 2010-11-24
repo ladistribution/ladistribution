@@ -1,0 +1,14 @@
+<package>
+  <id>lib-limonade</id>
+  <name>Limonade</name>
+  <version>0.5-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">limonade</destination>
+  </deploy>
+  <deploy>
+      <origin>limonade.php</origin>
+      <destination path="lib">limonade.php</destination>
+  </deploy>
+</package>
