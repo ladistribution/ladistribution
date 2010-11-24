@@ -490,6 +490,12 @@ class Ld_Installer
 
     public function getColorSchemes()
     {
+        try {
+            $manifest = Ld_Manifest::loadFromDirectory($this->getAbsolutePath() . '/dist');
+            $applicationColorSchemes = $manifest->getColorSchemes();
+            $this->colorSchemes = array_merge($this->colorSchemes, $applicationColorSchemes);
+        } catch (Exception $e) {
+        }
         foreach ($this->getThemes() as $theme) {
             if ($theme['active']) {
                 try {
