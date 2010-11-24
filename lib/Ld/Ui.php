@@ -319,7 +319,7 @@ class Ld_Ui
             $application = Zend_Registry::get('application');
         }
         $colors = self::getApplicationColors($application);
-        $version = substr(md5(serialize($colors)), 0, 10);
+        $version = substr(md5(serialize($parts) . serialize($colors)), 0, 10);
         $applicationStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
             'id' => $application->getId(), 'parts' => $parts, 'v' => $version), 'default', false);
