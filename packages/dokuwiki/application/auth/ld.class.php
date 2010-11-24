@@ -1,7 +1,6 @@
 <?php
 
-define('DOKU_AUTH', dirname(__FILE__));
-require_once(DOKU_AUTH.'/plain.class.php');
+require_once(DOKU_INC.'/inc/auth/plain.class.php');
 
 class auth_ld extends auth_plain
 {

@@ -107,6 +107,11 @@ class LdPlugin extends Plugin
 		$action->menuItem(common_local_url(''), _m('MENU', 'Public'));
 	}
 
+	function onEndPrimaryNav($action)
+	{
+		$action->menuItem(Ld_Ui::getApplicationSettingsUrl(), _m('MENU', 'Settings'));
+	}
+
 	function onStartSecondaryNav($action)
 	{
 		// see lib/action.php#showSecondaryNav for original source

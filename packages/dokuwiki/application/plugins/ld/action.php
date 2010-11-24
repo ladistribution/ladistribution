@@ -70,11 +70,10 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 	{
 		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
 			'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui'));
+		if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
 		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
 			'href' => Ld_Ui::getApplicationStyleUrl());
-		$jquery = array('type' => 'text/javascript', '_data' => '',
-			'src' => Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery'));
-		$event->data['script'] = array_merge(array($jquery), $event->data['script']);
+		}
 	}
 
 	function template(&$event, $param)

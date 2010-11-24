@@ -22,6 +22,9 @@ class Slotter_InstanceController extends Slotter_BaseController
                 throw new Exception('Non existing instance.');
             }
             Zend_Registry::set('application', $this->instance);
+            if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+                $this->view->headLink()->appendStylesheet(Ld_Ui::getApplicationStyleUrl(), 'screen');
+            }
         }
 
         if (!$this->_acl->isAllowed($this->userRole, 'instances', 'admin')) {
@@ -235,29 +238,46 @@ class Slotter_InstanceController extends Slotter_BaseController
    */
   public function appearanceAction()
   {
+      $application = $this->instance;
+
+      $installer = $application->getInstaller();
+      if (method_exists($installer, 'getCustomCss') && method_exists($installer, 'setCustomCss')) {
+          $this->view->customCss = $this->customCss = true;
+      } else {
+          $this->view->customCss = $this->customCss = false;
+      }
+
       if ($this->getRequest()->isGet()) {
-         $this->view->configuration = $this->instance->getConfiguration('theme');
+         $this->view->configuration = $application->getConfiguration('theme');
+         if ($this->customCss) {
+             $this->view->css = $installer->getCustomCss();
+         }
 
       } else if ($this->getRequest()->isPost()) {
           if ($this->_hasParam('configuration')) {
               $configuration = $this->_getParam('configuration');
-              $this->view->configuration = $this->instance->setConfiguration($configuration, 'theme');
+              $this->view->configuration = $application->setConfiguration($configuration, 'theme');
+          }
+          if ($this->customCss && $this->_hasParam('css')) {
+              $css = $this->_getParam('css');
+              $this->view->css = $installer->setCustomCss($css);
           }
           if ($this->_hasParam('colors')) {
-              $colors = Ld_Ui::getApplicationColors($this->instance);
+              $colors = Ld_Ui::getApplicationColors($application);
               foreach ($this->_getParam('colors') as $key => $value) {
                   $colors[$key] = $value;
               }
               $colors['version'] = md5( serialize($colors) );
-              $filename = $this->instance->getAbsolutePAth() . '/dist/colors.json';
+              $filename = $application->getAbsolutePAth() . '/dist/colors.json';
               Ld_Files::putJson($filename, $colors);
+              $this->_redirectToAction('appearance');
           }
       }
 
-      $this->view->preferences = $this->instance->getInstaller()->getPreferences('theme');
-      $this->view->colorSchemes = $this->instance->getColorSchemes();
+      $this->view->preferences = $installer->getPreferences('theme');
+      $this->view->colorSchemes = $application->getColorSchemes();
 
-      $this->view->colors = Ld_Ui::getApplicationColors($this->instance);
+      $this->view->colors = Ld_Ui::getApplicationColors($application);
   }
 
   /**

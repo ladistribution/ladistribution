@@ -7,12 +7,13 @@ html {
 #wrap {
     min-width:none;
     max-width:none;
+    padding-top:30px;
 }
 
 #wrap .h6e-main-content  {
     margin-top:0;
     margin-bottom:0;
-    padding-top:2em;
+    padding-top:1.5em;
     padding-bottom:1em;
 }
 
@@ -60,8 +61,8 @@ ol.notices {
 -------------------------------------------------------------- */
 
 #header {
-    margin-top:1em;
-    padding-top:1em;
+    margin-top:0;
+    padding-top:0;
 }
 
 #anon_notice,
@@ -324,6 +325,19 @@ label[for=notice_data-text] {
 
 .form_notice #notice_action-submit {
     bottom:7px;
+}
+
+#profilesettings #form_notice,
+#emailsettings #form_notice,
+#oauthconnectionssettings #form_notice {
+    display:none;
+}
+
+#profilesettings #header,
+#emailsettings #header,
+#oauthconnectionssettings #header,
+#peoplesearch #header {
+    margin-bottom:0;
 }
 
 /* Footer

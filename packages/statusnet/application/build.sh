@@ -23,6 +23,7 @@ mv statusnet-ladistribution $FOLDER
 # svn checkout http://svn.github.com/znarf/statusnet-ladistribution.git $FOLDER
 
 mv $FOLDER/plugins/Memcache plugins
+rm -rf plugins/Memcache/locale
 
 echo "# Remove files"
 

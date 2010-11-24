@@ -2,29 +2,37 @@
 require_once dirname(__FILE__) . '/dist/config.php';
 require_once dirname(__FILE__) . '/dist/prepend.php';
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta charset="utf-8"/>
 <title><?php echo $application->getName() ?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link href="<?php echo Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal') ?>"
-    media="screen" rel="stylesheet" type="text/css"/>
-<link href="<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') ?>"
-    media="screen" rel="stylesheet" type="text/css"/>
-    <link href="<?php echo Ld_Ui::getApplicationStyleUrl() ?>"
-        media="screen" rel="stylesheet" type="text/css"/>
+
+<?php if (defined('LD_COMPRESS_CSS') && constant('LD_COMPRESS_CSS')) : ?>
+<link href="<?php echo Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.compressed.css', 'h6e-minimal') ?>" rel="stylesheet" type="text/css"/>
+<link href="<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-ui.compressed.css', 'ld-ui') ?>" rel="stylesheet" type="text/css"/>
+<?php else : ?>
+<link href="<?php echo Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal') ?>" rel="stylesheet" type="text/css"/>
+<link href="<?php echo Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') ?>" rel="stylesheet" type="text/css"/>
+<?php endif ?>
+<?php if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) : ?>
+<link href="<?php echo Ld_Ui::getApplicationStyleUrl() ?>" rel="stylesheet" type="text/css"/>
+<?php endif ?>
+
 <style type="text/css">
 #sync-logo {
     height:95px;
     background:url(<?php echo $site->getPath() . '/' . $application->getPath() ?>/sync-logo.png) top center no-repeat;
     text-indent:-9999px;
 }
-.h6e-main-content {
-    width:45em;
-}
-.h6e-block {
-    margin-top:2em;
+.h6e-page-content {
+    width:40em;
+    margin:2em auto 0;
     padding:2em;
+}
+.h6e-simple-footer {
+    width:44em;
+    margin:2em auto 0;
 }
 .nowrap {
     white-space:nowrap;
@@ -38,8 +46,9 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
 <div class="ld-main-content h6e-main-content">
 
-  <div class="h6e-page-content">
-      <div class="h6e-block">
+  <?php Ld_Ui::topNav(); ?>
+
+  <div class="h6e-page-content h6e-block">
 
       <h1 id="sync-logo"><?php echo $application->getName() ?></h1>
 
@@ -49,9 +58,11 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <h2>Infos</h2>
 
-          <p>This Sync Server instance is: <strong class="nowrap">available for registered users only</strong>.</p>
+          <p>This Sync Server instance is:
+              <strong class="nowrap">available for registered users only</strong>.</p>
 
-          <p>The Custom Server URL is: <strong class="nowrap"><?php echo Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
+          <p>The Custom Server URL is:
+              <strong class="nowrap"><?php echo Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
 
           <h2>Your data</h2>
 
@@ -78,7 +89,8 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <h2>Notes</h2>
           <ul>
-              <li>Firefox Sync extension is available on <a href="https://addons.mozilla.org/fr/firefox/addon/10868">addons.mozilla.org</a></li>
+              <li>Firefox Sync extension is available on
+                  <a href="https://addons.mozilla.org/fr/firefox/addon/10868">addons.mozilla.org</a></li>
               <li>When initialising, choose:
                   <ol>
                       <li>"<strong>I'm already using Sync on another computer</strong>"</li>
@@ -97,7 +109,6 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
       </div>
 
-      </div>
   </div>
 
   <div class="h6e-simple-footer" id="footer">

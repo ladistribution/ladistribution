@@ -360,6 +360,19 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		}
 	}
 
+	public function getCustomCss()
+	{
+		$this->load_wp();
+		return get_option('ld_custom_css');
+	}
+
+	public function setCustomCss($css = '')
+	{
+		$this->load_wp();
+		update_option('ld_custom_css', $css);
+		return get_option('ld_custom_css');
+	}
+
 	function load_wp()
 	{
 		if (empty($this->loaded)) {

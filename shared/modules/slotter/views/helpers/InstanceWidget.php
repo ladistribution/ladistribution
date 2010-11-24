@@ -30,8 +30,9 @@ class View_Helper_InstanceWidget extends Zend_View_Helper_Abstract
         printf('</div>');
 
         printf('<div class="infos">');
-        printf('Package: %s<br/>', $application->getPackageId());
-        printf('Version: %s', $application->getVersion());
+        printf($this->translate("Package: %s"), $application->getPackageId());
+        printf('<br/>');
+        printf($this->translate("Version: %s"), $application->getVersion());
         printf('</div>');
 
         printf("</li>\n");

@@ -218,6 +218,20 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         return $template;
     }
 
+    public function getCustomCss()
+    {
+        $dir = $this->getAbsolutePath() . '/data/style';
+        return Ld_Files::get($dir . '/custom.css');
+    }
+
+    public function setCustomCss($css = '')
+    {
+        $dir = $this->getAbsolutePath() . '/data/style';
+        Ld_Files::createDirIfNotExists($dir);
+        Ld_Files::put($dir . '/custom.css', $css);
+        return $css;
+    }
+
     public $roles = array('admin', 'user');
 
     public $defaultRole = 'user';

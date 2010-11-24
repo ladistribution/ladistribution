@@ -15,7 +15,7 @@
             <h3><?php echo $this->translate('Available Themes') ?></h3>
 
             <div class="themes-container">
-            
+
             <div class="themes">
 
                 <?php foreach($this->themes as $id => $theme) : ?>
@@ -39,16 +39,23 @@
 
             </div>
 
-            <div style="margin:1em 0">
-                <input type="hidden" name="referer" value=""/>
-                <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
-            </div>
-
         <?php else: ?>
 
             <p><?php echo $this->translate('No theme available for this application.') ?></p>
 
         <?php endif ?>
+
+        <?php if (!empty($this->preferences)) : ?>
+
+        <div id="themes-preferences">
+                <h3><?php echo $this->translate('Theme Preferences') ?></h3>
+                <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
+        </div>
+
+        <?php endif ?>
+
+        <input type="hidden" name="referer" value=""/>
+        <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 
     </form>
 

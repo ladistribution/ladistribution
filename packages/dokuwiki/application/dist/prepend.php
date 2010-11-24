@@ -6,7 +6,7 @@ if (file_exists(dirname(__FILE__) . '/config.php')) {
 
 $site = Zend_Registry::get('site');
 
-$application = $site->getInstance( dirname(__FILE__) . '/..' );
+$application = $site->getInstance(DOKU_INC);
 Zend_Registry::set('application', $application);
 
 $locale = $application->getLocale();
@@ -24,7 +24,7 @@ if (isset($locale) && $locale != 'auto') {
 if ($site->getConfig('open_registration', 0) == 0) {
 	$disableactions = explode(',', $conf['disableactions']);
 	$disableactions[] = 'register';
-	return implode(',', array_unique($disableactions));
+	$conf['disableactions'] = implode(',', array_unique($disableactions));
 }
 
 if (class_exists('Ld_Plugin')) {
