@@ -43,6 +43,9 @@ rm -rf themes/minimal/.git themes/minimal/Makefile
 echo "# Get akismet with svn"
 svn export http://plugins.svn.wordpress.org/akismet/trunk/ plugins/akismet --force --quiet
 
+echo "# Get wordpress-importer with svn"
+svn export http://plugins.svn.wordpress.org/wordpress-importer/trunk/ plugins/wordpress-importer --force --quiet
+
 echo "# Get memcached with svn"
 svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force --quiet
 

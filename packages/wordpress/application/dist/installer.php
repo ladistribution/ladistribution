@@ -73,7 +73,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			'ld-ui.php',
 			'ld-auth.php',
 			'ld-css.php',
-			'akismet/akismet.php'
+			'akismet/akismet.php',
+			'wordpress-importer/wordpress-importer.php'
 		);
 
 		foreach ($plugins as $plugin) {
