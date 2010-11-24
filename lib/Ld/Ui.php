@@ -76,13 +76,13 @@ class Ld_Ui
         return $admin->buildUrl($params, $name);
     }
 
-    public static function getInstanceSettingsUrl($instance = null, $action = null)
+    public static function getApplicationSettingsUrl($application = null, $action = null)
     {
-        if (empty($instance)) {
-            $instance = Zend_Registry::get('application');
+        if (empty($application)) {
+            $application = Zend_Registry::get('application');
         }
-        $id = $instance->getId();
-        return self::getAdminUrl(array('controller' => 'instance', 'id' => $id, 'action' => $action), 'instance-action');
+        $params = array('controller' => 'instance', 'id' => $application->getId(), 'action' => $action);
+        return self::getAdminUrl($params, 'instance-action');
     }
 
     public static function superBar($options = array())
@@ -177,6 +177,13 @@ class Ld_Ui
     public static function getTopNav($options = array())
     {
         $view = self::getView();
+        if (isset($options['application'])) {
+            $view->application = $options['application'];
+        } elseif (Zend_Registry::isRegistered('application')) {
+            $view->application = Zend_Registry::get('application');
+        } else {
+            return;
+        }
         return $view->render('top-nav.phtml');
     }
 

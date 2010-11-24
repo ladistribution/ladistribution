@@ -1,16 +1,8 @@
 <?php if (Ld_Ui::isAdmin()) : ?>
 <ul class="ld-nav">
-    <?php
-    $application = Zend_Registry::get('application');
-    foreach ($application->getLinks() as $link) {
-          if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
-              ?>
-              <li><a href="<?php echo $link['href'] ?>"><?php echo $this->translate("Admin") ?></a></li>
-              <?php
-              break;
-          }
-    }
-    ?>
-    <li><a href="<?php echo Ld_Ui::getInstanceSettingsUrl() ?>"><?php echo $this->translate("Settings") ?></a></li>
+    <?php if ($adminUrl = $this->application->getAdminUrl()) : ?>
+    <li><a href="<?php echo $adminUrl ?>"><?php echo $this->translate("Admin") ?></a></li>
+    <?php endif ?>
+    <li><a href="<?php echo Ld_Ui::getApplicationSettingsUrl() ?>"><?php echo $this->translate("Settings") ?></a></li>
 </ul>
 <?php endif ?>

@@ -259,6 +259,15 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         return $this->getInstaller()->getLinks();
     }
 
+    public function getAdminUrl()
+    {
+        foreach ($this->getLinks() as $link) {
+              if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
+                  return $link['href'];
+              }
+        }
+    }
+
     public function getPreferences($type = 'preferences')
     {
         return $this->getInstaller()->getPreferences($type);
