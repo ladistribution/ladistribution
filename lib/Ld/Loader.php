@@ -93,6 +93,8 @@ class Ld_Loader
         // Legacy CSS Constant
         defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));
 
+        Ld_Plugin::doAction("Site:loaded", $site);
+
         return $site;
     }
 
