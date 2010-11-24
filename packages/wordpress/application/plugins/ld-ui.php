@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: LD Ui
-Plugin URI: http://h6e.net/wordpress/plugins/ld-ui
+Plugin URI: http://h6e.net/wordpress/plugins#ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.5.2
+Version: 0.5.3
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -18,7 +18,7 @@ function ld_admin_head()
 	}
 	?>
 	<style type="text/css">
-	#dashboard_right_now a.button[href='update-core.php'] { display:none; }
+	#dashboard_right_now a.button { display:none; }
 	<?php if (get_option('superbar') != 'never') : ?>
 	#footer { display:none !important; }
 	<?php endif ?>
@@ -88,8 +88,15 @@ add_action('login_form', 'ld_admin_footer');
 
 function ld_body_class($classes)
 {
-    $classes[] = 'ld-layout';
-    return $classes;
+	$classes[] = 'ld-layout';
+	return $classes;
 }
 
 add_filter('body_class', 'ld_body_class');
+
+function ld_show_admin_bar($classes)
+{
+	return false;
+}
+
+add_filter('show_admin_bar', 'ld_show_admin_bar');

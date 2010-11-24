@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="3.0.1"
+VERSION="3.1.0-alpha"
 GZ="$NAME-$VERSION.tar.gz"
 SOURCE="http://wordpress.org/$GZ"
 FOLDER="application"
@@ -7,15 +7,15 @@ PACKAGE="$NAME.zip"
 
 echo "# Building $NAME package"
 
-# SOURCE="http://core.svn.wordpress.org/tags/$VERSION/"
-# echo "# Get source from $SOURCE with svn"
-# svn export $SOURCE $FOLDER --force --quiet
+SOURCE="http://core.svn.wordpress.org/trunk/"
+echo "# Get source from $SOURCE with svn"
+svn export $SOURCE $FOLDER --force --quiet
 
-echo "# Get source from $SOURCE with curl"
-curl $SOURCE -# > $GZ
-tar -x -f $GZ
-rm $GZ
-mv $NAME $FOLDER
+# echo "# Get source from $SOURCE with curl"
+# curl $SOURCE -# > $GZ
+# tar -x -f $GZ
+# rm $GZ
+# mv $NAME $FOLDER
 
 # Remove some useless (or not desired) files
 rm $FOLDER/wp-atom.php
@@ -47,7 +47,7 @@ echo "# Get memcached with svn"
 svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force --quiet
 
 # Apply patches
-patch -p0 -d $FOLDER < patches/menu-header.diff
+# patch -p0 -d $FOLDER < patches/menu-header.diff
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete

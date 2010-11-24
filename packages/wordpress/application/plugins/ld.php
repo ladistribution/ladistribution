@@ -3,7 +3,7 @@
 Plugin Name: LD package
 Plugin URI: http://h6e.net/wordpress/plugins/ld-package
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.4.5
+Version: 0.5.3
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -118,10 +118,11 @@ add_action('plugins_loaded', 'ld_disable_version_check');
 
 function ld_admin_menu_before()
 {
+	remove_action('admin_menu', 'akismet_config_page');
 	remove_action('admin_menu', 'akismet_stats_page');
 }
 
-add_action('admin_menu', 'ld_admin_menu_before', 1);
+add_action('init', 'ld_admin_menu_before', 102);
 
 function ld_admin_menu()
 {

@@ -368,6 +368,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			global $_wp_deprecated_widgets_callbacks;
 			global $q_config, $sitepress, $wpcf7_shortcode_manager;
 			global $PHP_SELF;
+			global $show_admin_bar;
+			$show_admin_bar = false;
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
