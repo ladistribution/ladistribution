@@ -9,9 +9,9 @@ BUILD="build"
 echo "# Building $NAME package"
 
 echo "# Get source from $SOURCE with git"
-git clone --quiet git://github.com/sofadesign/limonade.git $BUILD
+git clone -q git://github.com/sofadesign/limonade.git $BUILD
 cd $BUILD
-git checkout 0.5-stable
+git checkout -q origin/0.5-stable
 cd ..
 
 # Grab files we want
