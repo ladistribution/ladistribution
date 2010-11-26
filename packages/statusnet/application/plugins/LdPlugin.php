@@ -109,7 +109,9 @@ class LdPlugin extends Plugin
 
 	function onEndPrimaryNav($action)
 	{
-		$action->menuItem(Ld_Ui::getApplicationSettingsUrl(), _m('MENU', 'Settings'));
+		if (Ld_Ui::isAdmin()) {
+			$action->menuItem(Ld_Ui::getApplicationSettingsUrl(), _m('MENU', 'Settings'));
+		}
 	}
 
 	function onStartSecondaryNav($action)
@@ -127,47 +129,11 @@ class LdPlugin extends Plugin
 		);
 	}
 
-	/*
-	function prefix(&$key)
-	{
-		if (empty($this->prefix)) {
-			$application = Zend_Registry::get("application");
-			$this->prefix = $application->getDbPrefix();
-			$this->prefix = substr($this->prefix, 0, -1);
-		}
-		$key = str_replace('statusnet:', $this->prefix . ':', $key);
-	}
-
-	function onStartCacheGet(&$key, &$value)
-	{
-		$this->prefix($key);
-		return true;
-	}
-
-	function onStartCacheSet(&$key, &$value, &$flag, &$expiry, &$success)
-	{
-		$this->prefix($key);
-		return true;
-	}
-
-	function onStartCacheIncrement(&$key, &$step, &$value)
-	{
-		$this->prefix($key);
-		return true;
-	}
-
-	function onStartCacheDelete(&$key, &$success)
-	{
-		$this->prefix($key);
-		return true;
-	}
-	*/
-
 	function onPluginVersion(&$versions)
 	{
 		$versions[] = array(
 			'name' => 'La Distribution Package',
-			'version' => '0.5.2',
+			'version' => '0.5.3',
 			'author' => 'h6e.net',
 			'homepage' => 'http://h6e.net/',
 			'rawdescription' => _m('Integrate a Status.net instance with La Distribution')
