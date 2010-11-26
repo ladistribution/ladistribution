@@ -1,8 +1,3 @@
-<?php
-$this->js()->append('/jquery/colorpicker/colorpicker.js', 'js-jquery-colorpicker', 'ld-js-jquery-colorpicker');
-$this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-colorpicker');
-?>
-
 <?php $this->instanceWidget() ?>
 
 <div class="ld-panel">
@@ -11,144 +6,24 @@ $this->css()->append('/jquery/colorpicker/css/colorpicker.css', 'js-jquery-color
 
 <div class="ld-panel-content h6e-block">
 
+<?php if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE') && !empty($this->colorSchemes)) : ?>
+
 <form action="" method="post">
 
-    <?php if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE') && !empty($this->colorSchemes)) : ?>
+    <h3><?php echo $this->translate("Colors") ?></h3>
 
-    <h3>Colors</h3>
-
-    <table>
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th><?php echo $this->translate('Background') ?></th>
-            <th><?php echo $this->translate('Border') ?></th>
-            <th><?php echo $this->translate('Title') ?></th>
-            <th><?php echo $this->translate('Text') ?></th>
-        </tr>
-        <?php if (in_array('base', $this->colorSchemes)) : ?>
-        <tr>
-            <th><?php echo $this->translate('Base') ?></th>
-            <th><label><input name="colors[base-default]" value="1" <?php
-                if ($this->colors['base-default'] == 1) echo 'checked="checked"' ?> type="radio"/><?php
-                echo $this->translate('Default') ?></label></th>
-            <th><label><input name="colors[base-default]" value="0" <?php
-                if ($this->colors['base-default'] == 0) echo 'checked="checked"' ?> type="radio"/><?php
-                echo $this->translate('Custom') ?></label></th>
-            <?php foreach (array('ld-colors-background', 'ld-colors-border', 'ld-colors-title', 'ld-colors-text') as $key) : ?>
-            <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
-                style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
-            <?php endforeach ?>
-        </tr>
-        <?php endif ?>
-        <?php if (in_array('bars', $this->colorSchemes)) : ?>
-        <tr>
-            <th><?php echo $this->translate('Bars') ?></th>
-            <th><label><input name="colors[bars-default]" value="1" <?php
-                if ($this->colors['bars-default'] == 1) echo 'checked="checked"' ?> type="radio"/><?php
-                echo $this->translate('Default') ?></label></th>
-            <th><label><input name="colors[bars-default]" value="0" <?php
-                if ($this->colors['bars-default'] == 0) echo 'checked="checked"' ?> type="radio"/><?php
-                echo $this->translate('Custom') ?></label></th>
-            <?php foreach (array('ld-colors-background-2', 'ld-colors-border-2', 'ld-colors-title-2', 'ld-colors-text-2') as $key) : ?>
-            <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
-                style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
-            <?php endforeach ?>
-        </tr>
-        <?php endif ?>
-        <?php if (in_array('panels', $this->colorSchemes)) : ?>
-        <tr>
-            <th><?php echo $this->translate('Panels') ?></th>
-            <th><label><input name="colors[panels-default]" value="1" <?php
-                if ($this->colors['panels-default'] == 1) echo 'checked="checked"' ?> type="radio"/><?php
-                echo $this->translate('Default') ?></label></th>
-            <th><label><input name="colors[panels-default]" value="0" <?php
-                if ($this->colors['panels-default'] == 0) echo 'checked="checked"' ?> type="radio"/><?php
-                echo $this->translate('Custom') ?></label></th>
-            <?php foreach (array('ld-colors-background-3', 'ld-colors-border-3', 'ld-colors-title-3', 'ld-colors-text-3') as $key) : ?>
-            <td><input size="7" class="color" name="colors[<?php echo $key ?>]" id="<?php echo $key ?>"
-                style="background:#<?php echo $this->colors[$key] ?>" type="text" value="<?php echo $this->colors[$key] ?>"/></td>
-            <?php endforeach ?>
-        </tr>
-        <?php endif ?>
-    </table>
-
-    <?php endif ?>
-
-    <?php if (isset($this->customCss) && $this->customCss) : ?>
-
-    <div id="custom-css">
-            <h3><?php echo $this->translate('Custom CSS') ?></h3>
-            <textarea id="css-editor" style="width:855px;height:250px" cols="100" rows="15" name="css"><?php echo $this->css ?></textarea>
-    </div>
-
-    <?php /*
-    $this->js()->append('/codemirror/codemirror.js', 'js-codemirror');
-    $this->headScript()->offsetSetFile(500, $this->site->getUrl('js') . '/codemirror/codemirror.js');
-
-    <script type="text/javascript">
-      var editor = CodeMirror.fromTextArea('css-editor', {
-        width: "860px",
-        height: "250px",
-        path: "<?php echo $this->site->getUrl('js') ?>/codemirror/",
-        parserfile: "parsecss.js",
-        stylesheet: "<?php echo $this->site->getUrl('css') ?>/codemirror/csscolors.css",
-        iframeClass: "css-editor-frame"
-      });
-    </script>
-
-    <style type="text/css">
-    .css-editor-frame { background:white; }
-    </style>
-    */ ?>
-
-    <?php endif ?>
+    <?php echo $this->partial('partials/color-schemes.phtml', array('colorSchemes' => $this->colorSchemes, 'colors' => $this->colors)) ?>
 
     <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>
 
 </form>
 
+<?php else : ?>
+
+    <p><?php echo $this->translate("Not supported") ?></p>
+
+<?php endif ?>
+
 </div> <!-- .ld-panel-content -->
 
 </div> <!-- .ld-panel -->
-
-<script type="text/javascript">
-
-(function($) {
-    $(document).ready(function() {
-
-        var options = {
-            onSubmit: function(hsb, hex, rgb, el) {
-                $(el).ColorPickerHide();
-            },
-            onBeforeShow: function () {
-                $(this).ColorPickerSetColor(this.value);
-            },
-            onChange: function (hsb, hex, rgb) {
-                var el = $(this).data('colorpicker').el;
-                el = $(el);
-                el.val('' + hex);
-                el.css('background', '#' + hex);
-            }
-        }
-
-        $('input.color').ColorPicker(options);
-
-        var enableDisableColors = function() {
-            var el = $(this);
-            var inputs = el.parents('tr').find('input.color');
-            if (el.val() == 1) {
-                inputs.attr('disabled', 'disabled').css('opacity', 0.25);
-            } else {
-                inputs.removeAttr('disabled').css('opacity', 1);
-            }
-        };
-
-        $('input:radio:checked').each(enableDisableColors);
-        $('input:radio').change(enableDisableColors);
-
-    });
-})(jQuery);
-
-</script>

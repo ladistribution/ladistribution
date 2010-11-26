@@ -113,3 +113,9 @@ table.ld-form, table.ld-preferences  {
 .themes-container .theme .no-theme-screenshot {
   background:url(img/theme-screenshot.png);
 }
+
+/* CSS Editor
+-------------------------------------------------------------- */
+
+.css-editor-textarea { width:855px; height:250px; }
+.css-editor-frame { background:white; }

@@ -1,0 +1,23 @@
+<h2><?php echo $this->translate("Settings") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content h6e-block">
+
+    <h3><?php echo $this->translate('Custom CSS') ?></h3>
+
+    <form action="<?php echo $this->url() ?>" method="post">
+
+    <?php echo $this->partial('partials/css-editor.phtml', array('site' => $this->site, 'css' => $this->css)) ?>
+
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>
+
+    </form>
+
+</div>
+
+</script>
+
+</div>

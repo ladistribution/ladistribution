@@ -243,45 +243,50 @@ class Slotter_InstanceController extends Slotter_BaseController
   public function appearanceAction()
   {
       $application = $this->instance;
-
       $installer = $application->getInstaller();
-      if (method_exists($installer, 'getCustomCss') && method_exists($installer, 'setCustomCss')) {
-          $this->view->customCss = $this->customCss = true;
-      } else {
-          $this->view->customCss = $this->customCss = false;
-      }
 
-      if ($this->getRequest()->isGet()) {
-         $this->view->configuration = $application->getConfiguration('theme');
-         if ($this->customCss) {
-             $this->view->css = $installer->getCustomCss();
-         }
-
-      } else if ($this->getRequest()->isPost()) {
+      if ($this->getRequest()->isPost()) {
           if ($this->_hasParam('configuration')) {
               $configuration = $this->_getParam('configuration');
               $this->view->configuration = $application->setConfiguration($configuration, 'theme');
-          }
-          if ($this->customCss && $this->_hasParam('css')) {
-              $css = $this->_getParam('css');
-              $this->view->css = $installer->setCustomCss($css);
           }
           if ($this->_hasParam('colors')) {
               $colors = Ld_Ui::getApplicationColors($application);
               foreach ($this->_getParam('colors') as $key => $value) {
                   $colors[$key] = $value;
               }
-              $colors['version'] = md5( serialize($colors) );
+              // $colors['version'] = md5( serialize($colors) );
               $filename = $application->getAbsolutePAth() . '/dist/colors.json';
               Ld_Files::putJson($filename, $colors);
-              $this->_redirectToAction('appearance');
           }
+          $this->_redirectToAction('appearance');
       }
 
       $this->view->preferences = $installer->getPreferences('theme');
+      $this->view->configuration = $application->getConfiguration('theme');
       $this->view->colorSchemes = $application->getColorSchemes();
 
       $this->view->colors = Ld_Ui::getApplicationColors($application);
+  }
+
+  /**
+   * CSS action.
+   */
+  public function cssAction()
+  {
+      $application = $this->instance;
+      $installer = $application->getInstaller();
+
+      if ($this->getRequest()->isPost() && $this->_hasParam('css')) {
+          if (method_exists($installer, 'setCustomCss')) {
+              $installer->setCustomCss($this->_getParam('css'));
+          }
+          $this->_redirectToAction('css');
+      }
+
+      if (method_exists($installer, 'getCustomCss')) {
+          $this->view->css = $installer->getCustomCss();
+      }
   }
 
   /**

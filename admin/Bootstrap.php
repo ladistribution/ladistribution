@@ -70,6 +70,15 @@ class Bootstrap
             $view->headLink()->appendStylesheet(Ld_Ui::getSiteStyleUrl(), 'screen');
         }
 
+        $view->js()->append('/jquery/jquery.js', 'js-jquery');
+        $view->js()->append('/jquery/jquery-ui.js', 'js-jquery-ui');
+
+        if (defined('LD_COMPRESS_JS') && constant('LD_COMPRESS_JS')) {
+            $view->js()->append('/ld/ld.c.js', 'admin');
+        } else {
+            $view->js()->append('/ld/ld.js', 'admin');
+        }
+
         if (defined('LD_MERGER') && constant('LD_MERGER')) {
             $modules = array('merger', 'slotter', 'identity', 'default');
         } else {

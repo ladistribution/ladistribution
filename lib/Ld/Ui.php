@@ -306,7 +306,7 @@ class Ld_Ui
     public static function getSiteStyleUrl($parts = null)
     {
         $colors = self::getSiteColors();
-        $version = isset($colors['version']) ? $colors['version'] : null;
+        $version = self::getSite()->getConfig('appearance_version');
         $siteStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
             'parts' => $parts, 'v' => $version), 'default', false);
@@ -319,7 +319,8 @@ class Ld_Ui
             $application = Zend_Registry::get('application');
         }
         $colors = self::getApplicationColors($application);
-        $version = substr(md5(serialize($parts) . serialize($colors)), 0, 10);
+        $appearance_version = self::getSite()->getConfig('appearance_version');
+        $version = substr(md5($appearance_version . serialize($colors)), 0, 10);
         $applicationStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
             'id' => $application->getId(), 'parts' => $parts, 'v' => $version), 'default', false);

@@ -8,12 +8,19 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         $site = $this->view->site;
         $instance = $this->view->instance;
 
+        $installer = $instance->getInstaller();
+
         $preferences = $instance->getPreferences('configuration');
         $themes = $instance->getThemes();
-        $themePreferences = $instance->getInstaller()->getPreferences('theme');
-        if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) $colorSchemes = $instance->getColorSchemes();
+        $themePreferences = $installer->getPreferences('theme');
         $extensions = $site->getPackageExtensions( $instance->getPackageId() );
         $roles = $instance->getRoles();
+        if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+            $colorSchemes = $instance->getColorSchemes();
+        }
+        if (Ld_Plugin::applyFilters('Instance:customCss', true)) {
+            $customCss = method_exists($installer, 'setCustomCss');
+        }
 
         echo '<ul class="ld-instance-menu h6e-tabs">' . "\n";
 
@@ -22,8 +29,11 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         if (!empty($themes)) {
             $actions['themes'] = $this->translate('Themes');
         }
-        if (!empty($themePreferences) || !empty($colorSchemes)) {
-            $actions['appearance'] = $this->translate('Appearance');
+        if (!empty($colorSchemes)) {
+            $actions['appearance'] = $this->translate('Colors');
+        }
+        if (!empty($customCss)) {
+            $actions['css'] = $this->translate('CSS');
         }
         if (!empty($extensions)) {
             $actions['extensions'] = $this->translate('Extensions');

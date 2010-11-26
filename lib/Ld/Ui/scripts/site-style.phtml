@@ -72,4 +72,6 @@ ul.blocks.mini li, ul.blocks.mini li a {
 }
 <?php endif ?>
 
+<?php echo $this->site->getCustomCss() ?>
+
 <?php Ld_Plugin::doAction('Slotter:SiteStyle', $this->colors, $this->parts); ?>

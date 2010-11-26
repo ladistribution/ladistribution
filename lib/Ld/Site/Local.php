@@ -1201,6 +1201,31 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $colors;
     }
 
+    public function setColors($colors = array())
+    {
+        $filename = $this->getDirectory('dist') . '/colors.json';
+        Ld_Files::putJson($filename, $colors);
+        $this->_updateAppearanceVersion();
+    }
+
+    public function getCustomCss()
+    {
+        $css = Ld_Files::get($this->getDirectory('dist') . '/custom.css');
+        return $css ? $css : '';
+    }
+
+    public function setCustomCss($css = '')
+    {
+        Ld_Files::put($this->getDirectory('dist') . '/custom.css', $css);
+        $this->_updateAppearanceVersion();
+    }
+
+    protected function _updateAppearanceVersion()
+    {
+        $version = substr(md5(time()), 0, 10);
+        $this->setConfig('appearance_version', $version);
+    }
+
     // Legacy
 
     public function getBasePath() { return $this->getPath(); }

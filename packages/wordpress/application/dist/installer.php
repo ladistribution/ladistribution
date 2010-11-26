@@ -263,7 +263,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			if ( is_serialized($option->option_value) ) {
 				continue;
 			}
-			$configuration[$option->option_name] = $option->option_value;
+			$configuration[$option->option_name] = stripslashes_deep($option->option_value);
 		}
 		$instance = $this->getInstance();
 		if (empty($configuration['name']) && isset($instance)) {

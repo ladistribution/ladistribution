@@ -34,7 +34,10 @@ class Slotter_BaseController extends Ld_Controller_Action
         $settings = array();
         $settings[] = array( 'label' => $t->translate('General'), 'module' => 'slotter', 'controller' => 'settings' );
         if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
-            $settings[] = array( 'label' => $t->translate('Appearance'), 'module' => 'slotter', 'controller' => 'appearance' );
+            $settings[] = array( 'label' => $t->translate('Colors'), 'module' => 'slotter', 'controller' => 'appearance' );
+            if (Ld_Plugin::applyFilters('Site:customCss', true)) {
+                $settings[] = array( 'label' => $t->translate('CSS'), 'module' => 'slotter', 'controller' => 'appearance', 'action' => 'css' );
+            }
         }
         if (!$this->site->isChild()) {
             if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {

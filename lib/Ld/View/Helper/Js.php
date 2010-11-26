@@ -24,11 +24,10 @@ class Ld_View_Helper_Js extends Zend_View_Helper_Abstract
         return $this;
     }
 
-    public function append($file, $package, $index = null)
+    public function append($file, $package)
     {
-        empty($index) ? $index = $package : 0;
         $url = Ld_Ui::getJsUrl($file, $package);
-        $this->view->headScript()->offsetSetFile($index, $url);
+        $this->view->headScript()->appendFile($url);
         return $this;
     }
 

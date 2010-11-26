@@ -5,14 +5,16 @@
 <?php $this->partialNavigationMenu('Ressources') ?>
 
 <div class="ld-panel-content h6e-block">
-    
-<h3><?php echo $this->translate("Manage repository") ?></h3>
+
+<h3><?php echo $this->translate("Local repository") ?></h3>
 
 <p><strong><?php echo $this->translate("Repository URL:") ?></strong> <?php echo $this->repository->getUrl() ?></p>
 
 <?php require('repository.phtml') ?>
 
-<h4><?php echo $this->translate("Upload a new package") ?></h4>
+<hr/>
+
+<h3><?php echo $this->translate("Upload a new package") ?></h3>
 
 <p><?php echo $this->translate("Zip file please.") ?></p>
 
@@ -23,7 +25,9 @@
     </p>
 </form>
 
-<h4><?php echo $this->translate("You can:") ?></h4>
+<hr/>
+
+<h3><?php echo $this->translate("You can:") ?></h3>
 
 <ul>
     <li>

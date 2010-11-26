@@ -6,13 +6,13 @@
 
 <div class="ld-panel-content h6e-block">
 
-<h3><?php echo $this->translate("Browse repository") ?></h3>
+<h3><?php echo $this->translate("Remote repository") ?></h3>
 
 <p><strong><?php echo $this->translate("Repository URL:") ?></strong> <?php echo $this->repository->getUrl() ?></p>
 
 <?php require('repository.phtml') ?>
 
-<h3>Actions</h3>
+<h3><?php echo $this->translate("You can:") ?></h3>
 
 <ul>
     <li>

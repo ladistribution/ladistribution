@@ -15,6 +15,7 @@ $IMPORT lib-php-openid.zip
 $IMPORT lib-geshi.zip
 $IMPORT lib-htmlpurifier.zip
 $IMPORT lib-bad-behavior.zip
+$IMPORT lib-limonade.zip
 
 $IMPORT css-h6e-minimal.zip
 $IMPORT css-ld-ui.zip
@@ -23,6 +24,7 @@ $IMPORT js-jquery.zip
 $IMPORT js-jquery-ui.zip
 $IMPORT js-jquery-tablednd.zip
 $IMPORT js-jquery-colorpicker.zip
+$IMPORT js-codemirror.zip
 
 $IMPORT wordpress.zip
 

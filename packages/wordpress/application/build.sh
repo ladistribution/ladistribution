@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="3.1.0-alpha"
+VERSION="3.1-beta1"
 GZ="$NAME-$VERSION.tar.gz"
 SOURCE="http://wordpress.org/$GZ"
 FOLDER="application"
@@ -7,15 +7,15 @@ PACKAGE="$NAME.zip"
 
 echo "# Building $NAME package"
 
-SOURCE="http://core.svn.wordpress.org/trunk/"
-echo "# Get source from $SOURCE with svn"
-svn export $SOURCE $FOLDER --force --quiet
+# SOURCE="http://core.svn.wordpress.org/trunk/"
+# echo "# Get source from $SOURCE with svn"
+# svn export $SOURCE $FOLDER --force --quiet
 
-# echo "# Get source from $SOURCE with curl"
-# curl $SOURCE -# > $GZ
-# tar -x -f $GZ
-# rm $GZ
-# mv $NAME $FOLDER
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > $GZ
+tar -x -f $GZ
+rm $GZ
+mv $NAME $FOLDER
 
 # Remove some useless (or not desired) files
 rm $FOLDER/wp-atom.php

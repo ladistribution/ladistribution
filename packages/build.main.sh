@@ -32,6 +32,10 @@ cd js
   ./build.sh
   cd ..
 
+  cd codemirror
+  ./build.sh
+  cd ..
+
 cd ..
 
 cd wordpress
@@ -129,6 +133,10 @@ cd lib
   cd ..
 
   cd bad-behavior
+  ./build.sh
+  cd ..
+
+  cd limonade
   ./build.sh
   cd ..
 

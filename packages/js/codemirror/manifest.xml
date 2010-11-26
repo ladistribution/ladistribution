@@ -1,0 +1,14 @@
+<package>
+  <id>js-codemirror</id>
+  <name>CodeMirror</name>
+  <version>0.91-1</version>
+  <type>js</type>
+  <deploy>
+      <origin>js</origin>
+      <destination path="js">codemirror</destination>
+  </deploy>
+  <deploy>
+      <origin>css</origin>
+      <destination path="css">codemirror</destination>
+  </deploy>
+</package>

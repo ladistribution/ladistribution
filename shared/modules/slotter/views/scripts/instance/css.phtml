@@ -1,0 +1,21 @@
+<?php $this->instanceWidget() ?>
+
+<div class="ld-panel">
+
+<?php $this->instanceNavigation() ?>
+
+<div class="ld-panel-content h6e-block">
+
+<form action="" method="post">
+
+    <h3><?php echo $this->translate('Custom CSS') ?></h3>
+
+    <?php echo $this->partial('partials/css-editor.phtml', array('site' => $this->site, 'css' => $this->css)) ?>
+
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>
+
+</form>
+
+</div> <!-- .ld-panel-content -->
+
+</div> <!-- .ld-panel -->

@@ -1,10 +1,12 @@
-<h2><?php echo $this->translate("Plugins") ?></h2>
+<h2><?php echo $this->translate("Settings") ?></h2>
 
 <div class="ld-panel">
 
 <?php $this->partialNavigationMenu('Settings') ?>
 
 <div class="ld-panel-content h6e-block">
+
+<h3><?php echo $this->translate("Plugins") ?></h3>
 
 <?php if (empty($this->plugins) || count($this->plugins) == 0) : ?>
 

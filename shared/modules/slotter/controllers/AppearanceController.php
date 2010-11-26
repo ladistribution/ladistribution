@@ -26,24 +26,33 @@ class Slotter_AppearanceController extends Slotter_BaseController
         }
 
         if ($this->getRequest()->isPost() && $this->_hasParam('colors')) {
-            $colors = Ld_Ui::getSiteColors();
+            $colors = $this->site->getColors();
             foreach ($this->_getParam('colors') as $key => $value) {
                 $colors[$key] = $value;
             }
-            $colors['version'] = md5( serialize($colors) );
-            $filename = $this->site->getDirectory('dist') . '/colors.json';
-            Ld_Files::putJson($filename, $colors);
+            $this->site->setColors($colors);
             $this->_redirector->gotoSimple('index', 'appearance', 'slotter');
             return;
         }
-        $this->view->colors = Ld_Ui::getSiteColors();
+        $this->view->colors = $this->site->getColors();
+    }
+
+    public function cssAction()
+    {
+        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
+            $this->_disallow();
+        }
+
+        if ($this->getRequest()->isPost() && $this->_hasParam('css')) {
+            $this->site->setCustomCss($this->_getParam('css'));
+            $this->_redirector->gotoSimple('css', 'appearance', 'slotter');
+        }
+
+        $this->view->css = $this->site->getCustomCss();
     }
 
     public function styleAction()
     {
-        // Cache-Control	max-age=604800, public
-        // Expires	Fri, 15 Oct 2010 12:19:44 GMT
-
         $this->getResponse()->setHeader('Content-Type', 'text/css');
         Zend_Layout::getMvcInstance()->disableLayout();
 

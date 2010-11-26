@@ -1,7 +1,7 @@
 <package>
   <id>wordpress</id>
   <name>WordPress</name>
-  <version>3.1.0-3-alpha</version>
+  <version>3.1.0-5-beta1</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
@@ -47,7 +47,7 @@
       <preference type="boolean" label="Anyone can register" name="users_can_register" defaultValue="false"/>
       <preference type="range" label="Post per page" name="posts_per_page" min="1" max="100" step="1"/>
       -->
-      <preference type="list" label="Display the bottom bar" name="superbar">
+      <preference type="list" label="Display Bottom Bar" name="superbar">
           <option value="everyone" label="For everyone"/>
           <option value="connected" label="For connected users"/>
           <option value="never" label="Never"/>
