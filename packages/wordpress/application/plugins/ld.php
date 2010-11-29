@@ -221,7 +221,8 @@ function ld_template_redirect()
 			$requested_url .= $_SERVER['HTTP_HOST'];
 			$requested_url .= $_SERVER['REQUEST_URI'];
 		}
-		if (strpos($requested_url, site_url()) !== false) {
+		$application = Zend_Registry::isRegistered('application') ? Zend_Registry::get('application') : null;
+		if ($application && $application->isRoot() && strpos($requested_url, site_url()) !== false) {
 			$redirect_url = str_replace(site_url(), home_url(), $requested_url);
 			wp_redirect($redirect_url, 301);
 			exit();

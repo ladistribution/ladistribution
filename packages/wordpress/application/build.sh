@@ -33,7 +33,6 @@ rm -rf $FOLDER/wp-content/themes/classic
 rm -rf $FOLDER/wp-content/themes/default
 
 echo "# Get kubrick theme with svn"
-mkdir themes
 svn export "http://svn.automattic.com/wordpress-i18n/theme/trunk/" "themes/default" --force --quiet
 
 echo "# Get minimal theme with git"
@@ -62,6 +61,5 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
-rm -rf themes
 rm -rf plugins/akismet
 rm content/object-cache-memcached.php

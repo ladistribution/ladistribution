@@ -1,0 +1,24 @@
+<package>
+  <id>wordpress-theme-minimal-block</id>
+  <name>Minimal with blocks</name>
+  <version>3.0.1-5</version>
+  <type>theme</type>
+  <need>css-h6e-minimal</need>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/minimal-block</directory>
+  <colors>
+      <scheme>base</scheme>
+      <scheme>bars</scheme>
+      <scheme>panels</scheme>
+  </colors>
+  <configuration>
+      <preference type="text" name="h6e_minimal_pagewidth" label="Width" defaultValue="auto"/>
+      <preference type="text" name="h6e_minimal_fontsize" label="Font Size" defaultValue="1.2em"/>
+      <preference type="list" label="Display Top Bar" name="topbar">
+          <option value="everyone" label="For everyone"/>
+          <option value="connected" label="For connected users"/>
+          <option value="never" label="Never"/>
+      </preference>
+      <preference type="text" name="h6e_minimal_footertext" label="Footer Text" defaultValue="Powered by &lt;a href=&quot;http://www.wordpress.org/&quot;&gt;WordPress&lt;/a&gt; with a touch of &lt;a href=&quot;http://h6e.net/&quot;&gt;h6e&lt;/a&gt;"/>
+  </configuration>
+</package>

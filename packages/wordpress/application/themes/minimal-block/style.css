@@ -1,0 +1,20 @@
+/*
+Theme Name: Minimal (with blocks)
+Theme URI: http://h6e.net/wordpress/themes/#minimal-blocks
+Description: A Minimal theme for Wordpress. With Blocks.
+Version: 3.1.0
+Author: h6e.net
+Author URI: http://h6e.net/
+Template: minimal
+*/
+
+@import url("../minimal/style.css");
+
+.h6e-block {
+	padding:0 1.5em;
+	background:white;
+}
+
+#sidebar .h6e-block {
+	margin-left:2em;
+}
