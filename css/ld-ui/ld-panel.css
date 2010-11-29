@@ -88,10 +88,12 @@ table.ld-form, table.ld-preferences  {
   overflow:auto;
 }
 
+/*
 .themes-container .themes {
   width:2000px;
   overflow:hidden;
 }
+*/
 
 .themes-container .theme {
   width:240px;

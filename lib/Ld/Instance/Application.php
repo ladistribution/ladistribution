@@ -293,11 +293,6 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         return $this->getInstaller()->setConfiguration($configuration, $type);
     }
 
-    public function getColorSchemes()
-    {
-        return $this->getInstaller()->getColorSchemes();
-    }
-
     // Roles
 
     public function getUsers()
@@ -566,6 +561,29 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         if (Ld_Files::exists($filename)) {
             Ld_Files::unlink($filename);
         }
+    }
+
+    // Appearance
+
+    public function getColorSchemes()
+    {
+        return $this->getInstaller()->getColorSchemes();
+    }
+
+    public function getColors()
+    {
+        $colors = $this->getSite()->getColors();
+        $filename = $this->getAbsolutePAth() . '/dist/colors.json';
+        $stored = Ld_Files::getJson($filename);
+        $colors = Ld_UI::computeColors($colors, $stored);
+        return $colors;
+    }
+
+    public function setColors($colors)
+    {
+        // $colors['version'] = md5( serialize($colors) );
+        $filename = $this->getAbsolutePAth() . '/dist/colors.json';
+        Ld_Files::putJson($filename, $colors);
     }
 
 }

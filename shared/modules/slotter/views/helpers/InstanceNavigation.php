@@ -13,7 +13,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
         $preferences = $instance->getPreferences('configuration');
         $themes = $instance->getThemes();
         $themePreferences = $installer->getPreferences('theme');
-        $extensions = $site->getPackageExtensions( $instance->getPackageId() );
+        $extensions = $site->getPackageExtensions( $instance->getPackageId(), 'plugin' );
         $roles = $instance->getRoles();
         if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
             $colorSchemes = $instance->getColorSchemes();
@@ -36,7 +36,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
             $actions['css'] = $this->translate('CSS');
         }
         if (!empty($extensions)) {
-            $actions['extensions'] = $this->translate('Extensions');
+            $actions['extensions'] = $this->translate('Plugins');
         }
         if (!empty($roles)) {
             $actions['roles'] = $this->translate('Roles');

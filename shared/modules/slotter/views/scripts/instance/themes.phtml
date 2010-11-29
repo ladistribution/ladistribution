@@ -18,7 +18,7 @@
 
             <div class="themes">
 
-                <?php foreach($this->themes as $id => $theme) : ?>
+                <?php foreach ($this->themes as $id => $theme) : ?>
 
                     <div class="theme">
                     <label for="theme-<?php echo $id ?>">
@@ -30,6 +30,22 @@
                     <input id="theme-<?php echo $id ?>" <?php echo ($theme['active'] ? 'checked="checked"' : '') ?>
                         type="radio" name="theme" value="<?php echo $id ?>" />
                     <?php echo $theme['name'] ?>
+                    </label>
+                    </div>
+
+                <?php endforeach ?>
+
+                <?php foreach ($this->availableThemes as $id => $package) : ?>
+
+                    <?php if ($this->instance->hasExtension($id)) continue ?>
+
+                    <div class="theme">
+                    <label for="theme-<?php echo $id ?>">
+                    <div class="no-theme-screenshot"></div>
+                    <input id="theme-<?php echo $id ?>" disabled="disabled" type="radio" />
+                    <?php echo $package->getName() ?>
+                    |
+                    <a href="<?php echo $this->instanceActionUrl('extensions') . '?add=' . $id ?>">Install</a>
                     </label>
                     </div>
 

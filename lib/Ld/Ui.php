@@ -249,23 +249,6 @@ class Ld_Ui
         );
     }
 
-    public static function getSiteColors()
-    {
-        return self::getSite()->getColors();
-    }
-
-    public static function getApplicationColors($application = null)
-    {
-        if (empty($application) && Zend_Registry::isRegistered('application')) {
-            $application = Zend_Registry::get('application');
-        }
-
-        $colors = self::getSiteColors();
-        $stored = Ld_Files::getJson($application->getAbsolutePath() . '/dist/colors.json');
-        $colors = self::computeColors($colors, $stored);
-        return $colors;
-    }
-
     public static function computeColors($colors, $stored = null)
     {
         foreach (array('base', 'bars', 'panels') as $scheme) {
@@ -305,7 +288,7 @@ class Ld_Ui
 
     public static function getSiteStyleUrl($parts = null)
     {
-        $colors = self::getSiteColors();
+        $colors = self::getSite()->getColors();
         $version = self::getSite()->getConfig('appearance_version');
         $siteStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
@@ -318,13 +301,22 @@ class Ld_Ui
         if (empty($application) && Zend_Registry::isRegistered('application')) {
             $application = Zend_Registry::get('application');
         }
-        $colors = self::getApplicationColors($application);
+        $colors = $application->getColors();
+        $colorSchemes = $application->getColorSchemes();
         $appearance_version = self::getSite()->getConfig('appearance_version');
-        $version = substr(md5($appearance_version . serialize($colors)), 0, 10);
+        $version = substr(md5($appearance_version . serialize($colorSchemes) . serialize($colors)), 0, 10);
         $applicationStyleUrl = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
             'id' => $application->getId(), 'parts' => $parts, 'v' => $version), 'default', false);
         return $applicationStyleUrl;
+    }
+
+    public static function getApplicationColors($application = null)
+    {
+        if (empty($application) && Zend_Registry::isRegistered('application')) {
+            $application = Zend_Registry::get('application');
+        }
+        return $application->getColors();
     }
 
     public static function relativeTime($time, $now = false)
@@ -355,6 +347,13 @@ class Ld_Ui
         }
 
         return "$diff $term ago";
+    }
+
+    /* Deprecated */
+
+    public static function getSiteColors()
+    {
+        return self::getSite()->getColors();
     }
 
 }

@@ -46,7 +46,8 @@ if ($light < 127) {
 
 <?php if (!isset($this->parts) || in_array('panels', $this->parts)) : ?>
 /* Panels */
-.ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, .ld-panel-content a, .h6e-block, .h6e-block a, a.h6e-page, .h6e-extra-title {
+.ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, .ld-panel-content a,
+.h6e-block, .h6e-main-content .h6e-block a, a.h6e-page, .h6e-block .h6e-extra-title {
     color:#<?php echo $this->colors['ld-colors-text-3'] ?>;
 }
 .ld-instance-menu li a, .h6e-tabs li a, .ld-panel-content, .h6e-block, .h6e-page {
@@ -59,6 +60,9 @@ if ($light < 127) {
 .h6e-comment-section {
     background:none;
     border-top:1px solid #<?php echo $this->colors['ld-colors-border-3'] ?>;
+}
+.ld-merger .hentry {
+    border-color:#<?php echo $this->colors['ld-colors-border-3'] ?>;
 }
 /* Instances */
 ul.blocks.mini li {

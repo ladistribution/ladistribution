@@ -5,7 +5,7 @@ Ld.sortInstancesUrl = null;
 Ld.init = function($)
 {
     this.dataTables($);
-    this.themesPanel($);
+    // this.themesPanel($);
     this.sortableBlocks($);
     this.sortableUserRoles($);
     // this.instanceMenu($);

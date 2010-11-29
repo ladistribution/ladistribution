@@ -25,6 +25,7 @@ class Slotter_InstanceController extends Slotter_BaseController
             if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
                 $this->view->headLink()->appendStylesheet(Ld_Ui::getApplicationStyleUrl(), 'screen');
             }
+            $this->appendTitle( $this->instance->getName() );
         }
 
         if (!$this->_acl->isAllowed($this->userRole, 'instances', 'admin')) {
@@ -152,7 +153,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
         }
 
-        $extensions = $this->site->getPackageExtensions($this->instance->getPackageId());
+        $extensions = $this->site->getPackageExtensions($this->instance->getPackageId(), 'plugin');
 
         $this->view->extensions = array();
         foreach ($extensions as $id => $extension) {
@@ -235,6 +236,8 @@ class Slotter_InstanceController extends Slotter_BaseController
       $this->view->preferences = $this->instance->getInstaller()->getPreferences('theme');
 
       $this->view->themes = $this->instance->getThemes();
+
+      $this->view->availableThemes = $this->site->getPackageExtensions($this->instance->getPackageId(), 'theme');
   }
 
   /**
@@ -251,13 +254,11 @@ class Slotter_InstanceController extends Slotter_BaseController
               $this->view->configuration = $application->setConfiguration($configuration, 'theme');
           }
           if ($this->_hasParam('colors')) {
-              $colors = Ld_Ui::getApplicationColors($application);
+              $colors = $application->getColors();
               foreach ($this->_getParam('colors') as $key => $value) {
                   $colors[$key] = $value;
               }
-              // $colors['version'] = md5( serialize($colors) );
-              $filename = $application->getAbsolutePAth() . '/dist/colors.json';
-              Ld_Files::putJson($filename, $colors);
+              $application->setColors($colors);
           }
           $this->_redirectToAction('appearance');
       }
@@ -265,8 +266,7 @@ class Slotter_InstanceController extends Slotter_BaseController
       $this->view->preferences = $installer->getPreferences('theme');
       $this->view->configuration = $application->getConfiguration('theme');
       $this->view->colorSchemes = $application->getColorSchemes();
-
-      $this->view->colors = Ld_Ui::getApplicationColors($application);
+      $this->view->colors = $application->getColors();
   }
 
   /**

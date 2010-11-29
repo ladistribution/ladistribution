@@ -62,9 +62,9 @@ class Slotter_AppearanceController extends Slotter_BaseController
             $application = $this->getSite()->getInstance( $this->_getParam('id') );
         }
         if (isset($application)) {
-            $colors = Ld_Ui::getApplicationColors($application);
+            $colors = $application->getColors();
         } else {
-            $colors = Ld_Ui::getSiteColors();
+            $colors = $this->getSite()->getColors();
         }
 
         if ($this->_hasParam('parts')) {
