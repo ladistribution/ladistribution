@@ -39,8 +39,6 @@ class Merger_IndexController extends Ld_Controller_Action
         $entries = Ld_Feed_Merger::getEntries($feeds);
 
         $this->view->entries = $entries;
-
-        Ld_Timer::mark('controller:end');
     }
 
 }
