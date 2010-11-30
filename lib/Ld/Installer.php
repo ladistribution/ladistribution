@@ -428,6 +428,9 @@ class Ld_Installer
 
     public function getConfiguration()
     {
+        if (isset($this->configuration)) {
+            return $this->configuration;
+        }
         $configuration = Ld_Files::getJson($this->getAbsolutePath() . '/dist/configuration.json');
         $instance = $this->getInstance();
         if (empty($configuration['name']) && isset($instance)) {
@@ -436,7 +439,7 @@ class Ld_Installer
         if (empty($configuration['locale']) && isset($instance)) {
             $configuration['locale'] = $this->getInstance()->getLocale();
         }
-        return $configuration;
+        return $this->configuration = $configuration;
     }
 
     public function setConfiguration($configuration)
@@ -449,7 +452,7 @@ class Ld_Installer
             $this->instance->setInfos(array('locale' => $configuration['locale']))->save();
         }
         Ld_Files::putJson($this->getAbsolutePath() . '/dist/configuration.json', $configuration);
-        return $configuration;
+        return $this->configuration = $configuration;
     }
 
     // Themes
@@ -486,28 +489,30 @@ class Ld_Installer
         return array();
     }
 
-    public $colorSchemes = array('bars');
-
     public function getColorSchemes()
     {
-        try {
-            $manifest = Ld_Manifest::loadFromDirectory($this->getAbsolutePath() . '/dist');
-            $applicationColorSchemes = $manifest->getColorSchemes();
-            $this->colorSchemes = array_merge($this->colorSchemes, $applicationColorSchemes);
-        } catch (Exception $e) {
+        if (isset($this->_colorSchemes)) {
+            return $this->_colorSchemes;
         }
+
+        $colorSchemes = isset($this->colorSchemes) ? $this->colorSchemes : $this->getManifest()->getColorSchemes();
+
         foreach ($this->getThemes() as $theme) {
             if ($theme['active']) {
                 try {
                     $manifest = Ld_Manifest::loadFromDirectory($theme['dir']);
-                    $themeColorSchemes = $manifest->getColorSchemes();
-                    return array_merge($this->colorSchemes, $themeColorSchemes);
+                    $colorSchemes = array_merge($colorSchemes, $manifest->getColorSchemes());
                 } catch (Exception $e) {
-                    break;
                 }
+                break;
             }
         }
-        return $this->colorSchemes;
+
+        if (empty($colorSchemes)) {
+            $colorSchemes = array('bars');
+        }
+
+        return $this->_colorSchemes = $colorSchemes;
     }
 
     // Roles
@@ -516,13 +521,17 @@ class Ld_Installer
 
     public function getUserRoles()
     {
+        if (isset($this->userRoles)) {
+            return $this->userRoles;
+        }
         $userRoles = Ld_Files::getJson($this->getAbsolutePath() . '/dist/roles.json');
-        return $userRoles;
+        return $this->userRoles = $userRoles;
     }
 
     public function setUserRoles($roles)
     {
         Ld_Files::putJson($this->getAbsolutePath() . '/dist/roles.json', $roles);
+        return $this->userRoles = $roles;
     }
 
     public function getUserOrder()
