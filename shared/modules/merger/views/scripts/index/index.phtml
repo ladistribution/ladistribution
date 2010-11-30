@@ -1,23 +1,34 @@
-<div class="ld-merger">
+<div class="ld-merger ld-feed">
+
+<?php if (Ld_Auth::isAuthenticated()) : ?>
+<ul class="h6e-tabs">
+    <li<?php if ($this->feedType == 'personal') echo ' class="active"' ?>>
+        <a href="<?php echo $this->url(array('feed' => 'personal'), 'merger-feed') ?>">Home Feed</a></li>
+    <li<?php if ($this->feedType != 'personal') echo ' class="active"' ?>>
+        <a href="<?php echo $this->url(array('feed' => 'public'), 'merger-feed') ?>">Public Feed</a></li>
+</ul>
+<?php endif ?>
 
 <div class="h6e-main">
-    <div class="h6e-block">
 
-    <?php foreach ($this->entries as $entry) : ?>
+<div class="h6e-page-content h6e-block has-tab">
+
+    <?php $n = 0; foreach ($this->entries as $entry) :  ?>
 
     <div class="hentry">
 
-    <?php if (!empty($entry['user'])) : $author = $entry['user']; ?>
-        <a class="avatar" href="<?php echo $entry['userUrl'] ?>"><?php
-            echo Ld_Ui::getAvatar($author, 32) ?></a>
-        <a class="username" href="<?php echo $entry['userUrl'] ?>"><?php
-            echo empty($author['fullname']) ? $author['username'] : $author['fullname'] ?></a>
-    <?php elseif (!empty($entry['name'])) : ?>
-        <strong><?php echo $entry['name'] ?></strong>
+    <?php printf('<img src="%1$s" width="%2$s" height="%2$s" alt="" class="avatar"/>', $entry['avatarUrl'], 32); ?>
+
+    <div class="entry-inner">
+
+    <?php if ($entry['screenName'] && $entry['userUrl']) : ?>
+        <a class="username" href="<?php echo $entry['userUrl'] ?>"><?php echo $entry['screenName'] ?></a>
+    <?php else  : ?>
+        <strong><?php echo $entry['screenName'] ?></strong>
     <?php endif ?>
 
     <?php if ($entry['type'] == 'link') : ?>
-          <?php if (!empty($entry['user']) || !empty($entry['name'])) : echo $entry['action']; endif ?>
+          <?php if (!empty($entry['screenName'])) : echo $entry['action']; endif ?>
           <?php if (!empty($entry['enclosure'])) : ?>
             <img class="enclosure" src="<?php echo $entry['enclosure']->url ?>"/>
           <?php endif ?>
@@ -31,7 +42,7 @@
 
     <?php else : ?>
 
-        <?php if (!empty($entry['user']) || !empty($entry['name'])) : echo $entry['action']; endif ?>
+        <?php if (!empty($entry['screenName'])) : echo $entry['action']; endif ?>
         <?php if ($entry['title'] != $entry['content']) : ?>
             <h2 class="h6e-entry-title"><a href="<?php echo $entry['link'] ?>"><?php echo $entry['title'] ?></a></h2>
         <?php endif ?>
@@ -41,14 +52,10 @@
 
     <?php endif ?>
 
-    <?php
-    if (!empty($entry['application'])) {
-        $instance = $entry['application'];
-    }
-    ?>
+    <?php $instance = $this->site->getInstance($entry['instance']);  ?>
 
     <div class="h6e-post-info ld-app-name <?php if ($instance) echo $instance->getPackageId() ?>" style="clear:both">
-        <?php echo $entry['time'] ?>
+        <?php echo Ld_Ui::relativeTime($entry['timestamp']) ?>
         <?php if ($instance) : ?>
             via <a href="<?php echo $instance->getUrl() ?>"><?php echo $instance->getName() ?></a>
         <?php endif ?>
@@ -56,9 +63,12 @@
 
     </div>
 
-    <?php endforeach ?>
-
     </div>
+
+    <?php $n++; if ($n > 50) break; endforeach ?>
+
+</div>
+
 </div>
 
 <div class="h6e-sidebar">

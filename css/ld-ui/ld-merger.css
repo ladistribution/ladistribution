@@ -19,15 +19,29 @@
   margin:0 0 2.5em;
 }
 
+.ld-merger .hentry, .ld-merger .hentry p, .ld-merger .hentry ul {
+  font-size:12px;
+}
+
+.ld-merger .hentry .h6e-entry-title {
+  font-size:13px;
+}
+
 .ld-merger .hentry {
   margin-bottom:10px;
   padding-bottom:10px;
   border-bottom:1px solid #ccc;
+  overflow:hidden;
 }
 
-.ld-merger .hentry a.avatar {
+.ld-merger .hentry img.avatar {
   float:left;
   margin-right:10px;
+}
+
+.ld-merger .hentry .entry-inner {
+  float:left;
+  width:550px;
 }
 
 .ld-merger h2.h6e-entry-title {
@@ -39,6 +53,10 @@
 .ld-merger .h6e-post-content {
   font-size:12px;
   overflow:hidden;
+}
+
+.ld-merger .h6e-post-content p {
+  margin:0;
 }
 
 .ld-merger .hentry img.enclosure {
@@ -53,7 +71,9 @@
 }
 
 .ld-merger .h6e-post-info {
+  font-size:11px;
   margin-bottom:0;
+  opacity:0.9;
 }
 
 .ld-merger .h6e-sidebar-inner {

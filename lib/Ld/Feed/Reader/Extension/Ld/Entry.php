@@ -14,6 +14,26 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
   }
 
   /**
+   * Get avatar
+   *
+   * @return string|null
+   */
+  public function getAvatarUrl()
+  {
+      return $this->_getData('avatar');
+  }
+
+  /**
+   * Get user url
+   *
+   * @return string|null
+   */
+  public function getUserUrl()
+  {
+      return $this->_getData('userurl');
+  }
+
+  /**
    * Get post type
    *
    * @return string|null
