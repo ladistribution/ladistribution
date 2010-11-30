@@ -45,7 +45,7 @@ class Slotter_BaseController extends Ld_Controller_Action
             }
             $plugins = $this->site->getPlugins();
             if (!empty($plugins)) {
-                $settings[] = array( 'label' => $t->translate('Extras'), 'module' => 'slotter', 'controller' => 'plugins' );
+                $settings[] = array( 'label' => $t->translate('Xtras'), 'module' => 'slotter', 'controller' => 'plugins' );
             }
         }
 
