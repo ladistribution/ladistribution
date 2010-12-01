@@ -20,7 +20,9 @@ class Ld_Feed_Merger_Feed
 
     protected $_type = null;
 
-    protected static $_httpClient = null;
+    protected $_httpClient = null;
+
+    protected $_feedReader = null;
 
     public function __construct($url, $application = null, $type = 'public')
     {
@@ -44,21 +46,25 @@ class Ld_Feed_Merger_Feed
         return $this->_type;
     }
 
-    public static function getHttpClient()
+    public function getHttpClient()
     {
-        if (isset(self::$_httpClient)) {
-            return self::$_httpClient;
+        if (isset($this->_httpClient)) {
+            return $this->_httpClient;
         }
 
         $httpClient = new Zend_Http_Client();
         $httpClient->setConfig(array('maxredirects' => 5, 'timeout' => 10, 'useragent' => 'La Distribution Feed Merger'));
 
-        return self::$_httpClient = $httpClient;
+        return $this->_httpClient = $httpClient;
     }
 
     public function getFeedReader()
     {
-        $httpClient = self::getHttpClient();
+        if (isset($this->_feedReader)) {
+            return $this->_feedReader;
+        }
+
+        $httpClient = $this->getHttpClient();
         if ($this->getType() == 'personal' && Ld_Auth::isAuthenticated()) {
             $httpClient->setCookie('ld-auth', $_COOKIE['ld-auth']);
         } else {
@@ -74,12 +80,17 @@ class Ld_Feed_Merger_Feed
 
         if ($cache = $this->getCache()) {
             Zend_Feed_Reader::setCache($cache);
-            Zend_Feed_Reader::useHttpConditionalGet();
+            // Zend_Feed_Reader::useHttpConditionalGet();
         }
 
         $feedReader = Zend_Feed_Reader::import($this->_url);
 
-        return $feedReader;
+        return $this->_feedReader = $feedReader;
+    }
+
+    public function getTitle()
+    {
+        return $this->getFeedReader()->getTitle();
     }
 
     public function getEntries()
@@ -88,7 +99,7 @@ class Ld_Feed_Merger_Feed
             $this->_url .= '#' . Ld_Auth::getUsername();
         }
 
-        $cache = self::getCache();
+        $cache = $this->getCache();
         if ($cache) {
             $cacheKey = 'Ld_Feed_Merger_Feed_' . md5($this->_url);
             if ($cache->test($cacheKey)) {
@@ -99,8 +110,9 @@ class Ld_Feed_Merger_Feed
         $entries = array();
         foreach ($this->getFeedReader() as $entry) {
             $instanceId = $this->getApplication()->getId();;
-            $packageId = $this->getApplication()->getPackageId();;
-            $entries[] = new Ld_Feed_Merger_Entry($entry, $packageId, $instanceId);
+            $packageId = $this->getApplication()->getPackageId();
+            $mergerEntry = new Ld_Feed_Merger_Entry($entry, $packageId, $instanceId);
+            $entries[] = $mergerEntry->toArray();
         }
 
         if ($cache) {

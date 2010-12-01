@@ -40,12 +40,33 @@ class Ld_Feed_Merger_Entry extends ArrayObject
         $this->enclosure = $this->_entry->getEnclosure();
         $this->content = $this->_entry->getContent();
         $this->summary = $this->_entry->getDescription();
+        $this->categories = $this->_entry->getCategories();
 
         $this->timestamp = $this->getTimestamp();
         $this->user = $this->getUser();
         $this->screenName = $this->getScreenName();
         $this->userUrl = $this->getUserUrl();
         $this->avatarUrl = $this->getAvatarUrl();
+    }
+
+    public function toArray()
+    {
+        return array(
+            'instance'   => $this->instance,
+            'title'      => $this->title,
+            'link'       => $this->link,
+            'type'       => $this->type,
+            'action'     => $this->action,
+            'enclosure'  => $this->enclosure,
+            'content'    => $this->content,
+            'summary'    => $this->summary,
+            'categories' => $this->categories,
+            'timestamp'  => $this->timestamp,
+            'user'       => $this->user,
+            'screenName' => $this->screenName,
+            'userUrl'    => $this->userUrl,
+            'avatarUrl'  => $this->avatarUrl
+        );
     }
 
     public function normaliseEntry()
@@ -117,6 +138,11 @@ class Ld_Feed_Merger_Entry extends ArrayObject
         if ($user = $this->getUser()) {
             return Ld_Ui::getAdminUrl(array('module' => 'merger', 'username' => $user['username']), 'merger-user');
         }
+        if ($author = $this->_entry->getAuthor()) {
+            if (isset($author['uri'])) {
+                return $author['uri'];
+            }
+        }
         return $this->_entry->getUserUrl();
     }
 
@@ -124,6 +150,9 @@ class Ld_Feed_Merger_Entry extends ArrayObject
     {
         if ($user = $this->getUser()) {
             return Ld_Ui::getAvatarUrl($user);
+        }
+        if ($link = $this->_entry->getAvatarLink()) {
+            return $link->url;
         }
         if ($avatarUrl = $this->_entry->getAvatarUrl()) {
             return $avatarUrl;

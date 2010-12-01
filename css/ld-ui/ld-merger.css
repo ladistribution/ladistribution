@@ -55,15 +55,18 @@
   overflow:hidden;
 }
 
+.ld-merger .h6e-post-content blockquote,
 .ld-merger .h6e-post-content p {
   margin:0;
 }
 
-.ld-merger .hentry img.enclosure {
-  width:100px;
+.ld-merger .hentry img.enclosure, .ld-merger .hentry img.screenshot {
   display:block;
   float:left;
   margin:0 10px 10px 0;
+  width:112px;
+  height:84px;
+  border:1px solid #ccc;
 }
 
 .ld-merger .entry a.username {
@@ -74,6 +77,7 @@
   font-size:11px;
   margin-bottom:0;
   opacity:0.9;
+  clear:both;
 }
 
 .ld-merger .h6e-sidebar-inner {

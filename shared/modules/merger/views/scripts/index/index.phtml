@@ -3,7 +3,7 @@
 <?php if (Ld_Auth::isAuthenticated()) : ?>
 <ul class="h6e-tabs">
     <li<?php if ($this->feedType == 'personal') echo ' class="active"' ?>>
-        <a href="<?php echo $this->url(array('feed' => 'personal'), 'merger-feed') ?>">Home Feed</a></li>
+        <a href="<?php echo $this->url(array('feed' => 'personal'), 'merger-feed') ?>">Personal Feed</a></li>
     <li<?php if ($this->feedType != 'personal') echo ' class="active"' ?>>
         <a href="<?php echo $this->url(array('feed' => 'public'), 'merger-feed') ?>">Public Feed</a></li>
 </ul>

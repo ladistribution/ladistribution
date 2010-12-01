@@ -33,6 +33,10 @@ class Merger_IndexController extends Ld_Controller_Action
             $this->view->feedType = $feedType = 'public';
         }
 
+        // code should be elsewhere 
+        $username = Ld_Auth::getUsername();
+        $this->view->userRole = $this->admin->getUserRole($username);
+
         $this->_setTitle('News Feed');
 
         $feeds = Ld_Feed_Merger::getFeeds($feedType);

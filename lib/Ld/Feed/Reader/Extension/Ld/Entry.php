@@ -13,21 +13,13 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
       return $this->_getData('username');
   }
 
-  /**
-   * Get avatar
-   *
-   * @return string|null
-   */
+  /* Deprecated */
   public function getAvatarUrl()
   {
       return $this->_getData('avatar');
   }
 
-  /**
-   * Get user url
-   *
-   * @return string|null
-   */
+  /* Deprecated */
   public function getUserUrl()
   {
       return $this->_getData('userurl');
@@ -79,6 +71,32 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
       return $data;
   }
 
+  /**
+   * Get the entry enclosure
+   *
+   * @return string
+   */
+  public function getAvatarLink()
+  {
+      if (array_key_exists('avatar', $this->_data)) {
+          return $this->_data['avatar'];
+      }
+
+      $avatar = null;
+
+      $nodeList = $this->getXpath()->query($this->getXpathPrefix() . '/atom:link[@rel="avatar"]');
+
+      if ($nodeList->length > 0) {
+          $avatar = new stdClass();
+          $avatar->url    = $nodeList->item(0)->getAttribute('href');
+          $avatar->type   = $nodeList->item(0)->getAttribute('type');
+      }
+
+      $this->_data['avatar'] = $avatar;
+
+      return $this->_data['avatar'];
+  }
+ 
   /**
    * Register Ld namespace
    *
