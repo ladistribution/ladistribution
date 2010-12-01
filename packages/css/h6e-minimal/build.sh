@@ -12,7 +12,7 @@ rm -rf $FOLDER/.git
 echo "# Merging"
 cd $FOLDER
 cat h6e-reset.css h6e-typography.css h6e-colors.css h6e-forms.css h6e-layout.css\
-    h6e-pagination.css h6e-comments.css > h6e-minimal.merged.css
+    h6e-tags.css h6e-pagination.css h6e-comments.css > h6e-minimal.merged.css
 cd ..
 
 echo "# Compressing"
