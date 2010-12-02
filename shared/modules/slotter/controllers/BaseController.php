@@ -22,8 +22,6 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->_initAcl();
 
-        $this->view->userRole = $this->userRole = $this->admin->getUserRole();
-
         $this->_initNavigation();
     }
 

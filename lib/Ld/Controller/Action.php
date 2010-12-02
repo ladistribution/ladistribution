@@ -44,6 +44,9 @@ class Ld_Controller_Action extends Zend_Controller_Action
             $this->view->currentUser = $this->currentUser = $this->_helper->auth->getUser();
         }
 
+        // Use Role
+        $this->view->userRole = $this->userRole = $this->admin->getUserRole();
+
         // Locale
         $this->initLocale();
         
