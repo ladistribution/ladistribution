@@ -270,7 +270,9 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
 
     public function getPreferences($type = 'preferences')
     {
-        return $this->getInstaller()->getPreferences($type);
+        $preferences = $this->getInstaller()->getPreferences($type);
+        $preferences = Ld_Plugin::applyFilters('Application:getPreferences', $preferences, $type, $this);
+        return $preferences;
     }
 
     public function getThemes()
@@ -285,7 +287,9 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
 
     public function getConfiguration($type = 'general')
     {
-        return $this->getInstaller()->getConfiguration($type);
+        $configuration = $this->getInstaller()->getConfiguration($type);
+        $configuration = Ld_Plugin::applyFilters('Application:getConfiguration', $configuration, $type, $this);
+        return $configuration;
     }
 
     public function setConfiguration($configuration, $type = 'general')
