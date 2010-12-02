@@ -23,26 +23,49 @@ class Merger_IndexController extends Ld_Controller_Action
         } else {
             $this->view->layoutTitle = "News Feed";
         }
+
+        $this->_setTitle('News Feed');
     }
 
     public function indexAction()
     {
         if (Ld_Auth::isAuthenticated()) {
-            $this->view->feedType = $feedType = $this->_getParam('feed', 'personal');
-        } else {
-            $this->view->feedType = $feedType = 'public';
+            $url = $this->view->url(array('action' => 'personal'), 'merger-feed');
+            $this->_redirector->gotoUrl($url, array('prependBase' => false));
+            return;
         }
+        $this->_forward('public');
+    }
 
-        // code should be elsewhere 
-        $username = Ld_Auth::getUsername();
-        $this->view->userRole = $this->admin->getUserRole($username);
-
-        $this->_setTitle('News Feed');
-
-        $feeds = Ld_Feed_Merger::getFeeds($feedType);
+    public function publicAction()
+    {
+        $feeds = Ld_Feed_Merger::getFeeds('public');
         $entries = Ld_Feed_Merger::getEntries($feeds);
-
         $this->view->entries = $entries;
+        $this->view->feedType = 'public';
+        $this->render('index');
+    }
+
+    public function personalAction()
+    {
+        if (!Ld_Auth::isAuthenticated()) {
+            $this->_disallow();
+            return;
+        }
+        $feeds = Ld_Feed_Merger::getFeeds('personal');
+        $entries = Ld_Feed_Merger::getEntries($feeds);
+        $this->view->entries = $entries;
+        $this->view->feedType = 'personal';
+        $this->render('index');
+    }
+
+    protected function _disallow()
+    {
+        if ($this->authenticated) {
+             $this->_forward('disallow', 'auth', 'default');
+         } else {
+             $this->_forward('login', 'auth', 'default');
+         }
     }
 
 }

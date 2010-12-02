@@ -116,7 +116,8 @@ class Ld_Feed_Merger_Feed
         }
 
         if ($cache) {
-            $cache->save($entries, $cacheKey);
+            $lifeTime = 90 + ( rand(0, 100) * 90 / 100 );
+            $cache->save($entries, $cacheKey, array(), $lifeTime);
         }
 
         return $entries;
