@@ -32,8 +32,8 @@ rm $FOLDER/wp-content/plugins/hello.php
 rm -rf $FOLDER/wp-content/themes/classic
 rm -rf $FOLDER/wp-content/themes/default
 
-echo "# Get kubrick theme with svn"
-svn export "http://svn.automattic.com/wordpress-i18n/theme/trunk/" "themes/default" --force --quiet
+# echo "# Get kubrick theme with svn"
+# svn export "http://svn.automattic.com/wordpress-i18n/theme/trunk/" "themes/default" --force --quiet
 
 echo "# Get minimal theme with git"
 git clone git://github.com/znarf/wordpress-minimal.git themes/minimal --quiet
@@ -61,5 +61,10 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
+
+
+
+rm -rf themes/minimal
 rm -rf plugins/akismet
+rm -rf plugins/wordpress-importer
 rm content/object-cache-memcached.php
