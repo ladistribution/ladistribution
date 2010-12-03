@@ -72,7 +72,7 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
   }
 
   /**
-   * Get the entry enclosure
+   * Get the entry avatar
    *
    * @return string
    */
@@ -85,6 +85,14 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
       $avatar = null;
 
       $nodeList = $this->getXpath()->query($this->getXpathPrefix() . '/atom:link[@rel="avatar"]');
+
+      if ($nodeList->length == 0) {
+          $nodeList = $this->getXpath()->query($this->getXpathPrefix() . '/activity:actor/atom:link[@rel="avatar"][@media:width="32"]');
+      }
+
+      if ($nodeList->length == 0) {
+          $nodeList = $this->getXpath()->query($this->getXpathPrefix() . '/activity:actor/atom:link[@rel="avatar"]');
+      }
 
       if ($nodeList->length > 0) {
           $avatar = new stdClass();
@@ -105,6 +113,8 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
   protected function _registerNamespaces()
   {
       $this->_xpath->registerNamespace('ld', 'http://ladistribution.net/#ns');
+      $this->_xpath->registerNamespace('activity', 'http://activitystrea.ms/spec/1.0/');
+      $this->_xpath->registerNamespace('media', 'http://purl.org/syndication/atommedia');
   }
 
 }

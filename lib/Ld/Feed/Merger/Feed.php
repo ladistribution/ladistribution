@@ -107,10 +107,11 @@ class Ld_Feed_Merger_Feed
             }
         }
 
+        $instanceId = $this->getApplication()->getId();;
+        $packageId = $this->getApplication()->getPackageId();
+
         $entries = array();
         foreach ($this->getFeedReader() as $entry) {
-            $instanceId = $this->getApplication()->getId();;
-            $packageId = $this->getApplication()->getPackageId();
             $mergerEntry = new Ld_Feed_Merger_Entry($entry, $packageId, $instanceId);
             $entries[] = $mergerEntry->toArray();
         }
