@@ -93,7 +93,7 @@ ul.blocks.mini li.current {
 
 ul.blocks.mini li .path {
   font-size:11px;
-  color:#999;
+  opacity:0.75;
 }
 
 ul.blocks.mini li .path, ul.blocks.mini li .manage  {

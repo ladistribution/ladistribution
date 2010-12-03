@@ -11,9 +11,9 @@
 
 <div class="h6e-main">
 
-<div class="h6e-page-content h6e-block has-tab">
+<div class="h6e-page-content h6e-block<?php if (Ld_Auth::isAuthenticated()) echo ' has-tab' ?>">
 
-    <?php $n = 0; foreach ($this->entries as $entry) :  ?>
+    <?php $n = 0; foreach ($this->entries as $entry) : ?>
 
     <div class="hentry">
 

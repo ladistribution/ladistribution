@@ -32,7 +32,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             if (!$all && $this->view->id != $id) {
                 continue;
             }
-            
+
             $className = 'sortable ';
             $className .= $application->getPackageId();
 
@@ -44,7 +44,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             printf('<a class="manage" href="%s">%s</a><br />', $application->getUrl(), $application->getName());
             printf('<span class="path">/%s/</span>', $application->getPath());
             printf('</div>');
-            
+
             if ($this->view->userRole == 'admin') {
                 printf('<div class="links">');
                 foreach ($application->getLinks() as $link) {
@@ -63,7 +63,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
         <?php if ($all && $this->view->userRole == 'admin') : ?>
         <li class="empty new">
-            <a href="<?php echo $this->view->url(array('module' => 'slotter', 'controller' => 'instance', 'action' => 'new')) ?>">
+            <a href="<?php echo $this->view->url(array('module' => 'slotter', 'controller' => 'instance', 'action' => 'new'), 'default') ?>">
                 <?php echo $this->translate("Add an application") ?>
             </a>
         </li>

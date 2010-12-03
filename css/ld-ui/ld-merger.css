@@ -55,6 +55,12 @@
   overflow:hidden;
 }
 
+.ld-merger .h6e-post-content blockquote {
+  color:inherit;
+  opacity:0.75;
+  border-width:5px;
+}
+
 .ld-merger .h6e-post-content blockquote,
 .ld-merger .h6e-post-content p {
   margin:0;
@@ -76,7 +82,7 @@
 .ld-merger .h6e-post-info {
   font-size:11px;
   margin-bottom:0;
-  opacity:0.9;
+  opacity:0.75;
   clear:both;
 }
 

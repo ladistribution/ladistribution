@@ -337,9 +337,12 @@ class Ld_Ui
         } elseif ($shift < 64800 * 28) {
             $diff = round($shift / 60 / 60 / 24);
             $term = "day";
-        } else {
+        } elseif ($shift < 64800 * 28 * 11) {
             $diff = round($shift / 60 / 60 / 24 / 30);
             $term = "month";
+        } else {
+            $diff = round($shift / 60 / 60 / 24 / 30 / 12);
+            $term = "year";
         }
 
         if ($diff > 1) {
