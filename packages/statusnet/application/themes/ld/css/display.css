@@ -112,7 +112,7 @@ ol.notices {
 -------------------------------------------------------------- */
 
 #content h1 {
-    font-size:2em;
+    font-size:1.85em;
     color:#009DFF;
     margin-bottom:0.5em;
     line-height:2em;
@@ -156,6 +156,10 @@ ol.notices {
     margin-bottom:0;
 }
 
+#content ol.notices {
+    font-size:1.1em;
+}
+
 #content ol.notices li,
 .hentry .entry-content ol.notices li {
     margin-left:0;
@@ -163,6 +167,16 @@ ol.notices {
 
 #content .notices li:hover {
     background:none;
+}
+
+/* avatar */
+#content .notice .author .photo {
+    width:40px;
+    height:40px;
+}
+#content .notice .entry-title,
+#content .notice div.entry-content {
+    margin-left:51px; /* 59 - (48 - 40) */;
 }
 
 .error, .success {
@@ -338,6 +352,13 @@ label[for=notice_data-text] {
 #oauthconnectionssettings #header,
 #peoplesearch #header {
     margin-bottom:0;
+}
+
+/* Pagination
+-------------------------------------------------------------- */
+
+.pagination .nav {
+    width:92%;
 }
 
 /* Footer

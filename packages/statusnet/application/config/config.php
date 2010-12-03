@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . "/dist/prepend.php");
+require_once(INSTALLDIR . "/dist/prepend.php");
 
 $site = Zend_Registry::get("site");
 $application = Zend_Registry::get("application");
@@ -90,7 +90,7 @@ foreach ($plugins as $key) {
 }
 
 foreach ($plugins as $key) {
-	if (file_exists(dirname(__FILE__) . "/plugins/{$key}/{$key}Plugin.php") || file_exists(dirname(__FILE__) . "/plugins/{$key}Plugin.php")) {
+	if (file_exists(INSTALLDIR . "/plugins/{$key}/{$key}Plugin.php") || file_exists(INSTALLDIR . "/plugins/{$key}Plugin.php")) {
 		addPlugin($key);
 	}
 }

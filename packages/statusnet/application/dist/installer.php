@@ -150,6 +150,28 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		return $this->roles;
 	}
 
+	/* Links */
+
+	public function getLinks()
+	{
+		$links = array();
+		$links[] = array(
+			'title' => 'Personal timeline',
+			'rel'   => 'public-feed',
+			'href'  => $this->getInstance()->getAbsoluteUrl("/api/statuses/public_timeline.atom"),
+			'type'  => 'application/atom+xml'
+		);
+		if (Ld_Auth::isAuthenticated() && $username = Ld_Auth::getUSername()) {
+			$links[] = array(
+				'title' => 'Personal timeline',
+				'rel'   => 'personal-feed',
+				'href'  => $this->getInstance()->getAbsoluteUrl("/api/statuses/friends_timeline/$username.atom"),
+				'type'  => 'application/atom+xml'
+			);
+		}
+		return $links;
+	}
+
 	/* Install Utilities */
 
 	public function writeHtaccess()

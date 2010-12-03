@@ -110,7 +110,7 @@ class LdPlugin extends Plugin
 	function onEndPrimaryNav($action)
 	{
 		if (Ld_Ui::isAdmin()) {
-			$action->menuItem(Ld_Ui::getApplicationSettingsUrl(), _m('MENU', 'Settings'));
+			$action->menuItem(Ld_Ui::getApplicationSettingsUrl(), _m('MENU', Ld_Translate::translate('Settings')));
 		}
 	}
 
