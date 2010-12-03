@@ -18,7 +18,8 @@ Author URI: http://h6e.net/
 load_plugin_textdomain('ld', null, 'ld');
 
 add_action('admin_menu', 'ld_custom_css_menu', 102);
-add_action('wp_head', 'ld_custom_css');
+
+add_action('wp_head', 'ld_custom_css', 99);
 
 function ld_custom_css()
 {
