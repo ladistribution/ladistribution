@@ -212,7 +212,7 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
     {
         $tables = array();
         if ($this->getManifest()->getDb()) {
-            $db = $this->getDbConnection();
+            $db = $this->getDbConnection('zend');
             $dbPrefix = $this->getDbPrefix();
             $result = $db->fetchCol('SHOW TABLES');
             foreach ($result as $tablename) {
@@ -225,31 +225,13 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         return $tables;
     }
 
-    public function getDbConnection($type = null)
+    public function getDbConnection($type = 'zend')
     {
         if (empty($this->dbConnections[$type])) {
             $dbName = $this->getDb();
             $databases = $this->getSite()->getDatabases();
-            $db = $databases[$dbName];
-            if (strpos($db['host'], ':')) {
-                list($db['host'], $db['port']) = explode(':', $db['host']);
-            }
-            switch ($type) {
-                 case 'php':
-                    $con = new mysqli($db['host'], $db['user'], $db['password'], $db['name'], isset($db['port']) ? $db['port'] : null);
-                    break;
-                 case 'zend':
-                 default:
-                    $params = array(
-                        'host' => $db['host'],
-                        'username' => $db['user'],
-                        'password' => $db['password'],
-                        'dbname' => $db['name'],
-                        'port' => isset($db['port']) ? $db['port'] : null
-                    );
-                    $con = Zend_Db::factory('Mysqli', $params);
-            }
-            $this->dbConnections[$type] = $con;
+            $dbParameters = $databases[$dbName];
+            $this->dbConnections[$type] = Ld_Utils::getDbConnection($dbParameters, $type);
         }
         return $this->dbConnections[$type];
     }

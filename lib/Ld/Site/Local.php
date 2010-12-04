@@ -804,9 +804,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function addDatabase($params)
     {
-        if (!$this->testDatabase($params)) {
-            throw new Exception("Database parameters are incorrect.");
-        }
+        $this->testDatabase($params);
         $databases = $this->getDatabases();
         $databases[$this->getUniqId()] = $params;
         $this->_writeDatabases($databases);
@@ -816,9 +814,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $databases = $this->getDatabases();
         $databases[$id] = array_merge($databases[$id], $params);
-        if (!$this->testDatabase($databases[$id])) {
-            throw new Exception("Database parameters are incorrect.");
-        }
+        $this->testDatabase($databases[$id]);
         $this->_writeDatabases($databases);
     }
 
@@ -834,24 +830,18 @@ class Ld_Site_Local extends Ld_Site_Abstract
         Ld_Files::putJson($this->getDirectory('dist') . '/databases.json', $databases);
     }
 
-    public function testDatabase($db)
+    public function testDatabase($dbParameters, $throwException = true)
     {
-        if (strpos($db['host'], ':')) {
-            list($db['host'], $db['port']) = explode(':', $db['host']);
-        }
         try {
-            $con = Zend_Db::factory('Mysqli', array(
-                'host'     => $db['host'],
-                'username' => $db['user'],
-                'password' => $db['password'],
-                'dbname'   => $db['name'],
-                'port'     => isset($db['port']) ? $db['port'] : null,
-                'driver_options' => array(MYSQLI_OPT_CONNECT_TIMEOUT => 1)
-            ));
-            $result = $con->fetchCol('SHOW TABLES');
+            $con = Ld_Utils::getDbConnection($dbParameters, 'zend');
+            $con->fetchCol('SHOW TABLES');
             return true;
         } catch (Exception $e) {
-            return false;
+            if ($throwException) {
+                throw new Exception("Can't connect to database: " . $e->getMessage());
+            } else {
+                return false;
+            }
         }
     }
 
