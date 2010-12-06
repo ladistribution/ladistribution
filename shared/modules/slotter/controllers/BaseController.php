@@ -20,7 +20,7 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->_setTitle( $this->site->getName() );
 
-        $this->_initAcl();
+        $this->_acl = $this->admin->getAcl();
 
         $this->_initNavigation();
     }
@@ -62,30 +62,6 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->_container = new Zend_Navigation($pages);
         $this->view->navigation($this->_container);
-    }
-
-    protected function _initAcl()
-    {
-        $this->_acl = new Zend_Acl();
-
-        $guest = new Zend_Acl_Role('guest');
-        $this->_acl->addRole($guest);
-        $user = new Zend_Acl_Role('user');
-        $this->_acl->addRole($user, $guest);
-        $admin = new Zend_Acl_Role('admin');
-        $this->_acl->addRole($admin, $user);
-
-        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins', 'sites', 'domains', 'locales');
-        foreach ($resources as $resource) {
-            $this->_acl->add( new Zend_Acl_Resource($resource) );
-            $this->_acl->allow('admin', $resource, 'manage');
-        }
-
-        $this->_acl->allow('admin', null, 'admin');
-        $this->_acl->allow('user', 'instances', 'view');
-        $this->_acl->allow('admin', 'instances', 'update');
-
-        Ld_Plugin::doAction('Slotter:acl', $this->_acl);
     }
 
     protected function _disallow()

@@ -103,6 +103,37 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         return $this->buildUrl();
     }
 
+    public function getAcl()
+    {
+        if (isset($this->_acl)) {
+            return $this->_acl;
+        }
+
+        $acl = new Zend_Acl();
+
+        $guest = new Zend_Acl_Role('guest');
+        $acl->addRole($guest);
+        $user = new Zend_Acl_Role('user');
+        $acl->addRole($user, $guest);
+        $admin = new Zend_Acl_Role('admin');
+        $acl->addRole($admin, $user);
+
+        $resources = array('instances', 'repositories', 'databases', 'users', 'plugins', 'sites', 'domains', 'locales');
+        foreach ($resources as $resource) {
+            $acl->add( new Zend_Acl_Resource($resource) );
+            $acl->allow('admin', $resource, 'manage');
+        }
+
+        $acl->allow('admin', null, 'admin');
+        $acl->allow('user', 'instances', 'view');
+        $acl->allow('admin', 'instances', 'update');
+
+        Ld_Plugin::doAction('Slotter:acl', $acl);
+        Ld_Plugin::doAction('Admin:acl', $acl);
+
+        return $this->_acl = $acl;
+    }
+
     public function getOpenidDir()
     {
         $openidDirectory = $this->getAbsolutePath() . '/openid';

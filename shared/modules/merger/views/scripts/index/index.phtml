@@ -3,9 +3,9 @@
 <?php if (Ld_Auth::isAuthenticated()) : ?>
 <ul class="h6e-tabs">
     <li<?php if ($this->feedType == 'personal') echo ' class="active"' ?>>
-        <a href="<?php echo $this->url(array('action' => 'personal'), 'merger-feed') ?>">Personal Feed</a></li>
+        <a href="<?php echo $this->url(array('action' => 'personal'), 'merger-feed') ?>"><?php echo $this->translate("Personal Feed") ?></a></li>
     <li<?php if ($this->feedType != 'personal') echo ' class="active"' ?>>
-        <a href="<?php echo $this->url(array('action' => 'public'), 'merger-feed') ?>">Public Feed</a></li>
+        <a href="<?php echo $this->url(array('action' => 'public'), 'merger-feed') ?>"><?php echo $this->translate("Public Feed") ?></a></li>
 </ul>
 <?php endif ?>
 
@@ -74,9 +74,39 @@
 <div class="h6e-sidebar">
     <div class="h6e-sidebar-inner">
 
-        <h3>Applications</h3>
+        <?php if ($this->canAdmin && $this->canUpdate && $this->hasUpdate) : ?>
+            <h3><?php echo $this->translate("Updates") ?></h3>
+            <?php
+            $updateUrl = $this->url(array('module' => 'slotter', 'controller' => 'index', 'action' => 'update'), 'update');
+            $updateString = $this->translate(
+                "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>");
+            ?>
+            <p><?php printf($updateString, $updateUrl); ?></p>
+            <br/>
+        <?php endif ?>
 
+        <h3><?php echo $this->translate("Applications") ?></h3>
         <?php $this->instancesList() ?>
+        <br/>
+
+        <?php if ($this->canAdmin) : ?>
+            <h3><?php echo $this->translate->translate("Administration") ?></h2>
+            <?php
+            $pages = array();
+            $pages[] = array('controller' => 'users', 'label' => "Users");
+            if ($this->canManageRepositories || $this->canManageDatabases) {
+                $pages[] = array('controller' => 'repositories', 'label' => "Ressources");
+            }
+            $pages[] = array('controller' => 'settings', 'label' => "Settings");
+            ?>
+            <ul>
+                <?php foreach ($pages as $page) :
+                    $label = $this->translate($page['label']);
+                    $url = $this->url(array('module' => 'slotter', 'controller' => $page['controller']), 'default', true);
+                    ?><li><a href="<?php echo $url ?>"><?php echo $label ?></a></li>
+                <?php endforeach ?>
+            </ul>
+        <?php endif ?>
 
     </div>
 </div>

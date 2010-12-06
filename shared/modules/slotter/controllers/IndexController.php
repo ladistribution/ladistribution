@@ -52,6 +52,7 @@ class Slotter_IndexController extends Slotter_BaseController
         foreach ($applications as $id => $instance) {
             if ($instance->hasUpdate = $instance->hasUpdate()) {
                 $this->view->hasUpdate = true;
+                break;
             }
         }
 

@@ -47,6 +47,9 @@ class Ld_Controller_Action extends Zend_Controller_Action
         // Use Role
         $this->view->userRole = $this->userRole = $this->admin->getUserRole();
 
+        // ACL
+        $this->_acl = $this->admin->getAcl();
+
         // Locale
         $this->initLocale();
         
@@ -97,12 +100,16 @@ class Ld_Controller_Action extends Zend_Controller_Action
         $this->view->headTitle( ' | ' . $title );
     }
 
+    function userCan($action, $ressource = null)
+    {
+        return $this->_acl->isAllowed($this->userRole, 'databases', 'manage');
+    }
+
     function noRender()
     {
         $this->_helper->viewRenderer->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
     }
-
     // Legacy
 
     function _setTitle($title) { return $this->setTitle($title); }

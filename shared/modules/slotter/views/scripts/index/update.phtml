@@ -1,3 +1,7 @@
+<h2><?php echo $this->translate('Update') ?></h2>
+
+<div class="ld-panel-content h6e-block no-tab">
+
 <?php if ($this->update) : ?>
     <?php
     // handle an issue when upgrading frrom barbes to a newer version
@@ -6,13 +10,15 @@
     ?>
 <?php endif ?>
 
-<h2><?php echo $this->translate('Update') ?></h2>
-
 <?php if (empty($this->libraries) && empty($this->applications)) : ?>
 
     <p><?php echo $this->translate('Congratulations! Everything is up to date.') ?></p>
 
+    <p><?php echo '<a href="' . $this->site->getUrl() . '">' . $this->translate("Continue to Home Page") . '</a>.' ?></p>
+
 <?php else : ?>
+
+<h3><?php echo $this->translate('Package updates available') ?></h3>
 
 <form action="" method="post">
 
@@ -86,3 +92,5 @@
 </form>
 
 <?php endif ?>
+
+</div>

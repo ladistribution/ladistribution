@@ -25,6 +25,20 @@ class Merger_IndexController extends Ld_Controller_Action
         }
 
         $this->_setTitle('News Feed');
+
+        if ($this->view->canAdmin = $this->userCan('admin')) {
+            $this->view->canManageDatabases = $this->userCan('manage', 'databases');
+            $this->view->canManageRepositories = $this->userCan('manage', 'repositories');
+            if ($this->view->canUpdate = $this->userCan('update', 'instances')) {
+                $applications = $this->site->getApplicationsInstances();
+                foreach ($applications as $id => $instance) {
+                    if ($instance->hasUpdate()) {
+                        $this->view->hasUpdate = true;
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public function indexAction()

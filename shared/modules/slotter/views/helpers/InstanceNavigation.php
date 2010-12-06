@@ -36,7 +36,7 @@ class View_Helper_InstanceNavigation extends Zend_View_Helper_Abstract
             $actions['css'] = $this->translate('CSS');
         }
         if (!empty($extensions)) {
-            $actions['extensions'] = $this->translate('Plugins');
+            $actions['extensions'] = $this->translate('Extensions');
         }
         if (!empty($roles)) {
             $actions['roles'] = $this->translate('Roles');
