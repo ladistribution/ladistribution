@@ -102,7 +102,7 @@ class Ld_Controller_Action extends Zend_Controller_Action
 
     function userCan($action, $ressource = null)
     {
-        return $this->_acl->isAllowed($this->userRole, 'databases', 'manage');
+        return $this->_acl->isAllowed($this->userRole, $ressource, 'manage');
     }
 
     function noRender()
