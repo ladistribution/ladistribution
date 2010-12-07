@@ -61,9 +61,6 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
-
-
-
 rm -rf themes/minimal
 rm -rf plugins/akismet
 rm -rf plugins/wordpress-importer
