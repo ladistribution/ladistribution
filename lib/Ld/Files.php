@@ -76,6 +76,11 @@ class Ld_Files
         }
     }
 
+    public static function rm($dir, $deleteRootToo = true, $initial = true)
+    {
+        return self::unlink($dir, $deleteRootToo, $initial);
+    }
+
     /**
      * Copy files recursively from $source to $target
      *
@@ -135,7 +140,7 @@ class Ld_Files
             }
 
         } else {
-            copy($source, $target);
+            $result = copy($source, $target);
             self::updatePermissions($target);
         }
     }
@@ -325,6 +330,31 @@ class Ld_Files
         // if (!Ld_Files::exists($index)) {
         //     Ld_Files::put($index, "<?php // Silence is golden.");
         // }
+    }
+
+    public static function size($filename)
+    {
+        return filesize($filename);
+    }
+
+    public static function sha1($filename)
+    {
+         $content = self::get($filename);
+         return sha1($content);
+    }
+
+    public static function check($filename, $size = null, $sha1 = null)
+    {
+        if (self::exists($filename) && self::size($filename) >= 0) {
+            if ($size && self::size($filename) != $size) {
+                return false;
+            }
+            if ($sha1 && self::sha1($filename) != $sha1) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public static function log($action, $message)

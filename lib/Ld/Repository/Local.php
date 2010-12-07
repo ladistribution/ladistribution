@@ -143,9 +143,13 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         $manifest = Ld_Manifest::loadFromDirectory($dir);
         $package =  new Ld_Package($manifest);
 
-        $baseUrl = str_replace($this->getSite()->getDirectory() . '/', $this->getSite()->getUrl(), $dir);
-        $package->url = $baseUrl . "/$package->id.zip";
-        $package->setAbsoluteFilename( realpath($dir) . "/$package->id.zip" );
+        $package->url = $this->getSite()->getUrl() . $this->getPath($params) . "/$package->id.zip";
+
+        $filename = $dir . "/$package->id.zip";
+        $package->sha1 = Ld_Files::sha1($filename);
+        $package->size = Ld_Files::size($filename);
+
+        $package->setAbsoluteFilename($filename);
 
         return $package;
     }
@@ -199,6 +203,11 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
     public function getDirectory($params)
     {
+        return $this->dir . '/' . $this->getPath($params);
+    }
+
+    public function getPath($params)
+    {
         if (is_array($params)) {
             extract($params); // id, type, extend
         } elseif ($params instanceof Ld_Package) {
@@ -209,16 +218,16 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
         if (isset($type)) {
             if (in_array($type, $this->types['libraries'])) {
-                return "$this->dir/$type/$id";
+                return "$type/$id";
             } else if (in_array($type, $this->types['extensions'])) {
                 if (empty($extend)) {
                     throw new Exception("Can't determine directory without application parameter.");
                 }
-                return "$this->dir/$extend/$type/$id";
+                return "$extend/$type/$id";
             }
         }
 
-        return $this->dir . '/' . $id;
+        return $id;
     }
 
     public function updatePackageList($packages)

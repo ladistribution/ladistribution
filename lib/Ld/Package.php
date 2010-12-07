@@ -26,6 +26,10 @@ class Ld_Package
 
     public $url = null;
 
+    public $size = null;
+
+    public $sha1 = null;
+
     protected $absoluteFilename = null;
 
     protected $_manifest = null;
@@ -44,7 +48,7 @@ class Ld_Package
 
     public function setParams($params = array())
     {
-        $infos = array('id', 'name', 'type', 'version', 'extend', 'url');
+        $infos = array('id', 'name', 'type', 'version', 'extend', 'url', 'sha1', 'size');
         foreach ($infos as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
@@ -77,10 +81,21 @@ class Ld_Package
         }
 
         $filename = LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '.zip';
-        if (!Ld_Files::exists($filename)) {
-            Ld_Http::download($this->url, $filename);
+
+        $attemps = 3;
+        while ($attemps > 0) {
+            if (!Ld_Files::exists($filename)) {
+                Ld_Http::download($this->url, $filename);
+            }
+            if (Ld_Files::check($filename, $this->size, $this->sha1)) {
+                return $filename;
+            }
+            Ld_Files::rm($filename);
+            usleep(rand(0, 1000000));
+            $attemps --;
         }
-        return $filename;
+
+        throw new Exception("Can't retrieve archive $this->url");
     }
 
     public function getTmpDir()
