@@ -64,7 +64,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
     public function getUrl()
     {
-        return $this->getSite()->getUrl() . 'repositories/' . $this->name . '/';
+        return $this->getSite()->getUrl('repositories') . '/' . $this->name . '/';
     }
 
     protected function _getApplicationsList()
@@ -143,7 +143,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         $manifest = Ld_Manifest::loadFromDirectory($dir);
         $package =  new Ld_Package($manifest);
 
-        $package->url = $this->getSite()->getUrl() . $this->getPath($params) . "/$package->id.zip";
+        $package->url = $this->getUrl() . '/' . $this->getPath($params) . "/$package->id.zip";
 
         $filename = $dir . "/$package->id.zip";
         $package->sha1 = Ld_Files::sha1($filename);
