@@ -1,14 +1,14 @@
 NAME="dokuwiki"
-VERSION="2009-12-25"
-SUBVERSION="c"
+VERSION="2010-11-07"
+SUB_VERSION=""
 GZ="$NAME.tgz"
-SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}{$SUBVERSION}.tgz"
+SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}{$SUB_VERSION}.tgz"
 FOLDER="locale"
 PACKAGE="$NAME-locale-fr-fr.zip"
 
-# Get source
-curl $SOURCE > $GZ
-tar zxvf $GZ
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > $GZ
+tar -x -f $GZ
 rm $GZ
 mv "$NAME-$VERSION/inc/lang/fr" $FOLDER
 rm -rf "$NAME-$VERSION"
@@ -16,8 +16,8 @@ rm -rf "$NAME-$VERSION"
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE dist $FOLDER -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE dist $FOLDER -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

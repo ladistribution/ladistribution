@@ -4,15 +4,17 @@ VERSION="1.0.2"
 SOURCE="http://svn.automattic.com/bbpress-i18n/$LOCALE/tags/$VERSION/"
 PACKAGE="$NAME-locale-fr-fr.zip"
 
-# Get source
+echo "# Building $NAME package"
+
+echo "# Get source from $SOURCE with svn"
 mkdir languages
-svn export "$SOURCE/messages/$LOCALE.mo" "languages/$LOCALE.mo"
+svn export "$SOURCE/messages/$LOCALE.mo" "languages/$LOCALE.mo" --quiet
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE dist languages -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE dist languages -q -x "*/.svn/*"
 mv $PACKAGE ../../
 
 # Clean

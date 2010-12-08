@@ -1,7 +1,11 @@
 VERSION="0.9.x"
 NAME="statusnet"
+FOLDER="application"
+SOURCE="http://gitorious.org/statusnet/ladistribution/archive-tarball/$VERSION"
 FOLDER="locale"
 PACKAGE="$NAME-locale-fr-fr.zip"
+
+echo "# Building $NAME package"
 
 # Get from GIT
 # git clone $SOURCE $FOLDER
@@ -10,13 +14,10 @@ PACKAGE="$NAME-locale-fr-fr.zip"
 # cd ..
 # rm -rf $FOLDER/.git
 
-# Get from GZ
-curl http://gitorious.org/statusnet/ladistribution/archive-tarball/0.9.x > statusnet.gz
-tar zxvf statusnet.gz
+echo "# Get source from $SOURCE with curl"
+curl $SOURCE -# > statusnet.gz
+tar -x -f statusnet.gz
 rm statusnet.gz
-
-# Get from Github with SVN
-# svn checkout http://svn.github.com/znarf/statusnet-ladistribution.git $FOLDER
 
 mv statusnet-ladistribution/locale/fr_FR $FOLDER
 rm -rf statusnet-ladistribution
@@ -24,8 +25,8 @@ rm -rf statusnet-ladistribution
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
 
-# Create zip package
-zip -rqv $PACKAGE $FOLDER dist -x "*/.svn/*"
+echo "# Packing $PACKAGE"
+zip -r $PACKAGE $FOLDER dist -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

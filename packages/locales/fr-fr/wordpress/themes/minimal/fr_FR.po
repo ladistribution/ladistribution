@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.3\n"
+"Project-Id-Version: 3.0.1-5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-04 14:21+0100\n"
-"PO-Revision-Date: 2010-05-04 14:23+0100\n"
+"POT-Creation-Date: 2010-12-08 17:26+0100\n"
+"PO-Revision-Date: 2010-12-08 17:27+0100\n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: French (France) <hello@ladistribution.net>\n"
 "MIME-Version: 1.0\n"
@@ -19,16 +19,15 @@ msgstr ""
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;esc_attr__;_e\n"
-"X-Poedit-Basepath: /Web/wordpress-trunk/wp-content/themes/\n"
+"X-Poedit-Basepath: /Web/ld-clean/wordpress/wp-content/themes/\n"
 "X-Poedit-SearchPath-0: minimal\n"
 
-#: minimal/404.php:8
+#: minimal/404.php:9
 #: minimal/functions.php:63
-#: minimal/header.php:19
 msgid "Not Found"
 msgstr "Non trouvée"
 
-#: minimal/404.php:10
+#: minimal/404.php:11
 msgid "Apologies, but the page you requested could not be found."
 msgstr "Désolé, la page demandée n'a pu être trouvée."
 
@@ -49,7 +48,7 @@ msgid "% Comments"
 msgstr "% commentaires"
 
 #: minimal/comments.php:22
-#: minimal/functions.php:33
+#: minimal/functions.php:31
 msgid "by"
 msgstr "par"
 
@@ -108,40 +107,43 @@ msgstr "Envoyer le commentaire"
 msgid "Sorry, the comment form is closed at this time."
 msgstr "Désolé, le formulaire de commentaire est fermé pour le moment."
 
-#: minimal/functions.php:18
+#: minimal/functions.php:6
+msgid "Primary Navigation"
+msgstr ""
+
+#: minimal/functions.php:12
 msgid "The primary widget area"
 msgstr "Zone de widgets principale"
 
-#: minimal/functions.php:35
+#: minimal/functions.php:34
 #, php-format
 msgid "View all posts by %s"
 msgstr "Voir tout les posts de %s"
 
-#: minimal/functions.php:45
+#: minimal/functions.php:44
 #, php-format
 msgid "Page %s"
 msgstr "Page %s"
 
 #: minimal/functions.php:61
-#: minimal/header.php:17
 #, php-format
 msgid "Search results for \"%s\""
 msgstr "Résultats de recherche pour \"%s\""
 
-#: minimal/functions.php:162
-#: minimal/functions.php:172
+#: minimal/functions.php:198
+#: minimal/functions.php:207
 msgid "Minimal options"
 msgstr ""
 
-#: minimal/functions.php:169
+#: minimal/functions.php:204
 msgid "Options saved."
 msgstr "Options enregistrées."
 
-#: minimal/index.php:15
+#: minimal/index.php:16
 msgid "&laquo; Previous Page"
 msgstr "&laquo; Page précédente"
 
-#: minimal/index.php:16
+#: minimal/index.php:17
 msgid "Next Page &raquo;"
 msgstr "Page suivante &raquo;"
 
@@ -187,6 +189,14 @@ msgstr "% commentaires &#187;"
 msgid "Comments Closed"
 msgstr "Commentaires fermés"
 
+#: minimal/search.php:13
+msgid "Nothing Found"
+msgstr "Rien trouvé"
+
+#: minimal/search.php:15
+msgid "Sorry, but nothing matched your search criteria. Please try again with some different keywords."
+msgstr ""
+
 #: minimal/searchform.php:1
 msgid "Search"
 msgstr "Recherche"
@@ -194,6 +204,10 @@ msgstr "Recherche"
 #: minimal/searchform.php:5
 msgid "Go"
 msgstr ""
+
+#: minimal/sidebar.php:13
+msgid "Meta"
+msgstr "Méta"
 
 #~ msgid "Customize Theme"
 #~ msgstr "Personnaliser le thème"
@@ -413,8 +427,6 @@ msgstr ""
 #~ msgstr "Archives"
 #~ msgid "Categories"
 #~ msgstr "Catégories"
-#~ msgid "Meta"
-#~ msgstr "Méta"
 #~ msgid "This page validates as XHTML 1.0 Transitional"
 #~ msgstr "Cette page est valide en XHTML 1.0 Transitional"
 #~ msgid ""
