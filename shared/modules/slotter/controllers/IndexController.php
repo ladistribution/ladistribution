@@ -101,6 +101,9 @@ class Slotter_IndexController extends Slotter_BaseController
     */
     public function updateAction()
     {
+        $translator = $this->getTranslator();
+        $this->view->layoutTitle = $translator->translate("Updates");
+    
         $this->view->applications = array();
         $this->view->libraries = array();
 

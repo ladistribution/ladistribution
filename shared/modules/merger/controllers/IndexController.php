@@ -10,6 +10,8 @@ class Merger_IndexController extends Ld_Controller_Action
     {
         parent::init();
 
+        $translator = $this->getTranslator();
+
         $this->view->addHelperPath(dirname(__FILE__) . '/../../slotter/views/helpers/', 'View_Helper');
 
         if ($this->_hasParam('username')) {
@@ -20,11 +22,9 @@ class Merger_IndexController extends Ld_Controller_Action
             $this->view->layoutTitle = $this->mergerUser['fullname'];
         // } else if ($this->getSite()->isChild() && $owner = $this->site->getOwner()) {
         //     $this->view->layoutTitle = $owner['fullname'];
-        } else {
-            $this->view->layoutTitle = "News Feed";
-        }
+        } 
 
-        $this->_setTitle('News Feed');
+        $this->view->layoutTitle = $translator->translate("News Feed");
 
         if ($this->view->canAdmin = $this->userCan('admin')) {
             $this->view->canManageDatabases = $this->userCan('manage', 'databases');
@@ -53,6 +53,8 @@ class Merger_IndexController extends Ld_Controller_Action
 
     public function publicAction()
     {
+        $translator = $this->getTranslator();
+        $this->appendTitle($translator->translate('Public Feed'));
         $feeds = Ld_Feed_Merger::getFeeds('public');
         $entries = Ld_Feed_Merger::getEntries($feeds);
         $this->view->entries = $entries;
@@ -66,6 +68,8 @@ class Merger_IndexController extends Ld_Controller_Action
             $this->_disallow();
             return;
         }
+        $translator = $this->getTranslator();
+        $this->appendTitle($translator->translate('Personal Feed'));
         $feeds = Ld_Feed_Merger::getFeeds('personal');
         $entries = Ld_Feed_Merger::getEntries($feeds);
         $this->view->entries = $entries;
@@ -75,6 +79,7 @@ class Merger_IndexController extends Ld_Controller_Action
 
     protected function _disallow()
     {
+        $this->view->layoutTitle = null;
         if ($this->authenticated) {
              $this->_forward('disallow', 'auth', 'default');
          } else {
