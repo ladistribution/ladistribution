@@ -95,6 +95,9 @@ class Ld_Feed_Merger_Entry extends ArrayObject
             case 'wordpress':
                 $this->action = 'published a post';
                 break;
+            case 'moonmoon':
+                $this->content = null;
+                break;
         }
     }
 
