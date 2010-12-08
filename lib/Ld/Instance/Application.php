@@ -250,6 +250,15 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         }
     }
 
+    public function getIcon($type = "ld-icon")
+    {
+        foreach ($this->getLinks() as $link) {
+              if ($link['rel'] == $type) {
+                  return $link['href'];
+              }
+        }
+    }
+
     public function getPreferences($type = 'preferences')
     {
         $preferences = $this->getInstaller()->getPreferences($type);

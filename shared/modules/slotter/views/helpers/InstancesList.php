@@ -36,9 +36,14 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             $className = 'sortable ';
             $className .= $application->getPackageId();
 
+            $inlineStyle = '';
+            if ($icon = $application->getIcon('ld-icon')) {
+                $inlineStyle .= "background-image:url($icon);";
+            }
+
             $manageUrl = $this->view->url(array('controller' => 'instance', 'id' => $id), 'instance-action', true);
 
-            printf('<li id="app_%s" class="%s">', $id, $className);
+            printf('<li id="app_%s" class="%s" style="%s">', $id, $className, $inlineStyle);
 
             printf('<div class="name">');
             printf('<a class="manage" href="%s">%s</a><br />', $application->getUrl(), $application->getName());

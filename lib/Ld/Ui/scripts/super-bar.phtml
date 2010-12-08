@@ -44,7 +44,12 @@
 
                 $className = $application->getPackageId();
 
-                printf("                " . '<li id="app_%s" class="%s">', $id, $className);
+                $inlineStyle = '';
+                if ($icon = $application->getIcon('icon')) {
+                    $inlineStyle .= "padding-left:25px;background-image:url($icon);";
+                }
+
+                printf("                " . '<li id="app_%s" class="%s" style="%s">', $id, $className, $inlineStyle);
 
                 if ($application->isCurrent() && !$settings && !$admin) {
                     printf('<strong><a href="%s">%s</a></strong>' . "\n  ", $application->getUrl(), $application->getName());
