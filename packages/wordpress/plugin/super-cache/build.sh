@@ -1,5 +1,5 @@
 NAME="wordpress-plugin-supercache"
-VERSION="0.9.9"
+VERSION="0.9.9.7"
 SOURCE="http://svn.wp-plugins.org/wp-super-cache/tags/$VERSION/"
 FOLDER="plugin"
 PACKAGE="$NAME.zip"

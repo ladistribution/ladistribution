@@ -3,7 +3,7 @@
 Plugin Name: LD Super Cache
 Plugin URI: http://h6e.net/wordpress/plugins/ld-super-cache
 Description: Tweak super cache with plugin hooks
-Version: 0.3
+Version: 0.5.3
 Author: h6e.net
 Author URI: http://h6e.net/
 */
