@@ -22,5 +22,7 @@
         </preference>
     </configuration>
     <link title="admin" rel="section" type="text/html" href="/admin/"/>
-    <link title="Recent Posts" rel="alternate" type="application/atom+xml" href="/?type=atom10"/>
+    <link title="Recent Posts" rel="feed" type="application/atom+xml" href="/?type=atom10"/>
+    <link rel="icon" type="image/png" href="/moonmoon-16.png"/>
+    <link rel="ld-icon" type="image/png" href="/moonmoon-48.png"/>
 </package>
