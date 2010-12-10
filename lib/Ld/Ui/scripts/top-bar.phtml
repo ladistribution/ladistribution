@@ -11,10 +11,14 @@
             <a class="ld-subsite-name" href="<?php echo $this->site->getUrl() ?>"><?php
                 echo $this->site->getName() ?></a>
 <?php endif ?>
-<?php if (Zend_Registry::isRegistered('application') && $application = Zend_Registry::get('application')) : ?>
+<?php if (Zend_Registry::isRegistered('application') && $application = Zend_Registry::get('application')) :
+            $inlineStyle = '';
+            if ($icon = $application->getIcon('icon')) {
+                $inlineStyle .= "padding-left:25px;background-image:url($icon);";
+            }
+            ?>
             &rarr;
-            <a class="ld-app-name <?php echo $application->getPackageId(); ?>" href="<?php echo $application->getUrl() ?>"><?php
-                echo $application->getName() ?></a>
+            <a class="ld-app-name <?php echo $application->getPackageId(); ?>" href="<?php echo $application->getUrl() ?>" style="<?php echo $inlineStyle ?>"><?php echo $application->getName() ?></a>
 <?php endif ?>
         </div>
         <div class="b">

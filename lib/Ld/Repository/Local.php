@@ -139,17 +139,21 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
             $params = array('id' => $params);
         }
 
-        $dir = $this->getDirectory($params);
-        $manifest = Ld_Manifest::loadFromDirectory($dir);
-        $package =  new Ld_Package($manifest);
+        $baseDir = $this->getPackageDirectory($params);
+        $baseUrl = $this->getUrl() . $this->getPath($params);
 
-        $package->url = $this->getUrl() . $this->getPath($params) . "/$package->id.zip";
+        $package = Ld_Package::loadFromDirectory($baseDir);
 
-        $filename = $dir . "/$package->id.zip";
+        $package->url = $baseUrl . "/$package->id.zip";
+        $filename = $baseDir . "/$package->id.zip";
+        $package->setAbsoluteFilename($filename);
+
         $package->sha1 = Ld_Files::sha1($filename);
         $package->size = Ld_Files::size($filename);
 
-        $package->setAbsoluteFilename($filename);
+        if (Ld_Files::exists($baseDir . "/ld-icon.png")) {
+            $package->icon = $baseUrl . "/ld-icon.png";
+        }
 
         return $package;
     }
@@ -157,7 +161,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
     public function deletePackage($packageId)
     {
         foreach ($this->getPackages() as $id => $package) {
-            $dir = $this->getDirectory($package);
+            $dir = $this->getPackageDirectory($package);
             if ($packageId == $id) {
                 if ($package->getType() == 'application') {
                     foreach (Ld_Files::getFiles($dir) as $file) {
@@ -178,16 +182,26 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
     public function importPackage($filename, $clean = true)
     {
-        $manifest = Ld_Manifest::loadFromZip($filename);
-        $package = new Ld_Package($manifest);
+        $tmpFolder = LD_TMP_DIR . '/package-' . date("d-m-Y-H-i-s");
 
-        $dir = $this->getDirectory($package);
+        Ld_Zip::extract($filename, $tmpFolder);
+
+        $package = Ld_Package::loadFromDirectory($tmpFolder);
+
+        // $manifest = Ld_Manifest::loadFromZip($filename);
+        // $package = new Ld_Package($manifest);
+
+        $dir = $this->getPackageDirectory($package);
         Ld_Files::createDirIfNotExists($dir);
 
         Ld_Files::copy($filename, $dir . "/$package->id.zip");
         Ld_Files::copy($filename, $dir . "/$package->id-$package->version.zip");
 
-        Ld_Files::put($dir . "/manifest.xml", $manifest->getRawXml());
+        Ld_Files::put($dir . "/manifest.xml", $package->getManifest()->getRawXml());
+
+        if ($icon = $package->getRawIcon('ld-icon')) {
+            Ld_Files::put($dir . "/ld-icon.png", $icon);
+        }
 
         $packages = $this->getPackagesJson();
         $id = $package->getId();
@@ -198,12 +212,14 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
             Ld_Files::unlink($filename);
         }
 
+        Ld_Files::unlink($tmpFolder);
+
         return $package;
     }
 
-    public function getDirectory($params)
+    public function getPackageDirectory($params)
     {
-        return $this->dir . '/' . $this->getPath($params);
+        return $this->getDir() . '/' . $this->getPath($params);
     }
 
     public function getPath($params)

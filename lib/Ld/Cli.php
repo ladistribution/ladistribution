@@ -305,8 +305,17 @@ class Ld_Cli
         }
         $packageId = $this->_args[1];
 
+        $preferences = $this->_getInstallPreferences($packageId);
+
+        $result = $this->getSite()->createInstance($packageId, $preferences);
+        $this->_write(sprintf("%s v%s successfully installed on %s",
+            $result->getPackageId(), $result->getVersion(), $result->getPath() ));
+    }
+
+    protected function _getInstallPreferences($package)
+    {
         $preferences = array();
-        foreach ($this->getSite()->getInstallPreferences($packageId) as $pref) {
+        foreach ($this->getSite()->getInstallPreferences($package) as $pref) {
             switch ($pref['type']) {
                 case 'hidden':
                     $preferences[ $pref['name'] ] = $pref['defaultValue'];
@@ -320,9 +329,36 @@ class Ld_Cli
                     $preferences[ $pref['name'] ] = $this->_prompt( $pref['label'], $defaultValue );
             }
         }
-        $result = $this->getSite()->createInstance($packageId, $preferences);
-        $this->_write(sprintf("%s v%s successfully installed on %s",
-            $result->getPackageId(), $result->getVersion(), $result->getPath() ));
+        return $preferences;
+    }
+
+    public function register()
+    {
+        if (empty($this->_args[1])) {
+            $path = getcwd();
+        } else {
+            $path = $this->_args[1];
+        }
+
+        $site = $this->getSite();
+        $directory = $site->getDirectory() . '/' . $path;
+
+        $package = Ld_Package::loadFromDirectory($directory);
+
+        $installer = $package->getInstaller();
+        $installer->setPath($path);
+        $installer->setAbsolutePath($directory);
+        $installer->createDistConfigFile($path);
+
+        $params = array('name' => $package->getName(), 'path' => $path);
+        $params['title'] = $params['name'];
+
+        $instance = $this->getSite()->registerInstance($package, $params);
+
+        $instance->getInstaller()->postInstall($params);
+
+        $this->_write(sprintf("%s v%s successfully registered on %s",
+            $instance->getPackageId(), $instance->getVersion(), $instance->getPath() ));
     }
 
     protected function getInstance()

@@ -131,6 +131,10 @@ class Ld_Installer
 
     public function getLinks()
     {
+        if (isset($this->links)) {
+            return $this->links;
+        }
+
         if (isset($this->instance)) {
             $baseUrl = $this->getInstance()->getAbsoluteUrl('');
         } else {
@@ -141,7 +145,8 @@ class Ld_Installer
         foreach ($links as $id => $link) {
             $links[$id]['href'] = $baseUrl . $link['href'];
         }
-        return $links;
+
+        return $this->links = $links;
     }
 
     public function getDeployments($type = null)
@@ -205,7 +210,7 @@ class Ld_Installer
         // Seems it's an application
         if (isset($preferences['path'])) {
             // Config
-            $this->_createDistConfigFile($preferences['path']);
+            $this->createDistConfigFile($preferences['path']);
             // Protect dist directory
             $dist = $this->getAbsolutePath() . '/dist';
             if (Ld_Files::exists($dist)) {
@@ -216,7 +221,7 @@ class Ld_Installer
 
     public function postInstall($preferences = array()) {}
 
-    protected function _createDistConfigFile($path)
+    public function createDistConfigFile($path)
     {
         $cfg_ld = "<?php\n";
 
@@ -357,7 +362,7 @@ class Ld_Installer
         $this->setPath($this->getInstance()->getPath());
         $this->setAbsolutePath($this->getInstance()->getAbsolutePath());
 
-        $this->_createDistConfigFile($path);
+        $this->createDistConfigFile($path);
     }
 
     public function postMove() {}

@@ -44,7 +44,7 @@ abstract class Ld_Repository_Abstract
             foreach ((array)$packages as $id => $params) {
                 $package = new Ld_Package($params);
                 if ($this->type == 'local') {
-                    $package->setAbsoluteFilename($this->getDirectory($package) . "/$package->id.zip");
+                    $package->setAbsoluteFilename($this->getPackageDirectory($package) . "/$package->id.zip");
                 }
                 $this->packages[$id] = $package;
             }

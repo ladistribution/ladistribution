@@ -8,8 +8,12 @@
         if ($package->id == 'admin') {
             continue;
         }
+        $inlineStyle = '';
+        if ($icon = $package->icon) {
+            $inlineStyle .= "background-image:url($icon);";
+        }
         $url = $this->url(array('controller' => 'instance', 'action' => 'new', 'site' => $this->site->id)) . '?packageId=' . $id;
-        printf("<li class='" . $id . "'><a href=\"%s\">%s</a></li>", $url, $package->name);
+        printf('<li class="%s" style="%s"><a href="%s">%s</a></li>' . "\n", $id, $inlineStyle, $url, $package->name);
     }
     ?>
 </ul>

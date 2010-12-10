@@ -30,11 +30,15 @@ class Ld_Package
 
     public $sha1 = null;
 
+    public $icon = null;
+
     protected $absoluteFilename = null;
 
     protected $_manifest = null;
 
     protected $_installer = null;
+
+    protected $_dir = null;
 
     public function __construct($params = array())
     {
@@ -46,9 +50,17 @@ class Ld_Package
         $this->setParams($params);
     }
 
+    public static function loadFromDirectory($dir)
+    {
+        $manifest = Ld_Manifest::loadFromDirectory($dir);
+        $package = new Ld_Package($manifest);
+        $package->setDir($dir);
+        return $package;
+    }
+
     public function setParams($params = array())
     {
-        $infos = array('id', 'name', 'type', 'version', 'extend', 'url', 'sha1', 'size');
+        $infos = array('id', 'name', 'type', 'version', 'extend', 'url', 'sha1', 'size', 'icon');
         foreach ($infos as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
@@ -98,14 +110,18 @@ class Ld_Package
         throw new Exception("Can't retrieve archive $this->url");
     }
 
-    public function getTmpDir()
+    public function setDir($dir)
     {
-        return LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '/';
+        $this->_dir = $dir;
     }
 
-    public function fetchFiles()
+    public function getDir()
     {
-        $dir = $this->getTmpDir();
+        if (isset($this->_dir)) {
+            return $this->_dir;
+        }
+
+        $dir = LD_TMP_DIR . '/' . $this->id . '-' . $this->version . '/';
         if (!Ld_Files::exists($dir)) {
             Ld_Files::purgeTmpDir();
             Ld_Files::createDirIfNotExists($dir);
@@ -118,7 +134,7 @@ class Ld_Package
     public function getManifest()
     {
         if (empty($this->_manifest)) {
-            $dir = $this->fetchFiles();
+            $dir = $this->getDir();
             $this->_manifest = Ld_Manifest::loadFromDirectory($dir);
         }
         return $this->_manifest;
@@ -127,7 +143,7 @@ class Ld_Package
     public function getInstaller()
     {
         if (empty($this->_installer)) {
-            $dir = $this->fetchFiles();
+            $dir = $this->getDir();
             $classFile = $dir . 'dist/installer.php';
             $className = $this->getManifest()->getClassName();
             if (!Ld_Files::exists($classFile)) {
@@ -177,6 +193,17 @@ class Ld_Package
         }
 
         return $preferences;
+    }
+
+    public function getRawIcon($type = 'ld-icon')
+    {
+        foreach ($this->getManifest()->getLinks() as $link) {
+              if ($link['rel'] == $type) {
+                  // this does the job but it's not ideal
+                  $filename = $this->getDir() . '/application' . $link['href'];
+                  return Ld_Files::get($filename);
+              }
+        }
     }
 
     // Legacy
