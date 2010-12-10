@@ -76,6 +76,7 @@ class Ld_Feed_Merger_Feed
         if (!Zend_Feed_Reader::isRegistered('Ld')) {
             Zend_Feed_Reader::addPrefixPath('Ld_Feed_Reader_Extension', LD_LIB_DIR . '/Ld/Feed/Reader/Extension');
             Zend_Feed_Reader::registerExtension('Ld');
+            Zend_Feed_Reader::registerExtension('Media');
         }
 
         if ($cache = $this->getCache()) {

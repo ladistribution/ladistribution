@@ -41,6 +41,7 @@ class Ld_Feed_Merger_Entry extends ArrayObject
         $this->content = $this->_entry->getContent();
         $this->summary = $this->_entry->getDescription();
         $this->categories = $this->_entry->getCategories();
+        $this->thumbnails = $this->_entry->getThumbnails();
 
         $this->timestamp = $this->getTimestamp();
         $this->user = $this->getUser();
@@ -61,6 +62,7 @@ class Ld_Feed_Merger_Entry extends ArrayObject
             'content'    => $this->content,
             'summary'    => $this->summary,
             'categories' => $this->categories,
+            'thumbnails' => $this->thumbnails,
             'timestamp'  => $this->timestamp,
             'user'       => $this->user,
             'screenName' => $this->screenName,
