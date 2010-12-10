@@ -131,6 +131,11 @@ class Ld_Package
         return $dir;
     }
 
+    public function fetchFiles()
+    {
+        return $this->getDir();
+    }
+
     public function getManifest()
     {
         if (empty($this->_manifest)) {
@@ -211,6 +216,11 @@ class Ld_Package
     public function getPreferences($type = 'configuration')
     {
         return $this->getManifest()->getPreferences($type);
+    }
+
+    public function getTmpDir()
+    {
+        return $this->getDir();
     }
 
 }

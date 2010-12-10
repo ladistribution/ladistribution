@@ -67,7 +67,7 @@ class Ld_Installer
 
     public function getDir()
     {
-        return $this->getPackage()->getTmpDir();
+        return $this->getPackage()->getDir();
     }
 
     public function getPackage()
