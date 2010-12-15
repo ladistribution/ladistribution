@@ -242,6 +242,15 @@ function ld_locale($locale = '')
 
 add_filter('locale', 'ld_locale');
 
+function ld_fix_globals()
+{
+	if (empty($GLOBALS['wp_rewrite'])) {
+		$GLOBALS['wp_rewrite'] =& new WP_Rewrite();
+	}
+}
+
+add_action('plugins_loaded', 'ld_fix_globals', 0);
+
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Wordpress:plugin');
 }
