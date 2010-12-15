@@ -376,7 +376,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	function load_wp()
 	{
 		if (empty($this->loaded)) {
-			define('WP_LD_INSTALLER', true);
+			defined('WP_LD_INSTALLER') || define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
 			global $blog_id, $table_prefix;
 			global $_wp_deprecated_widgets_callbacks;
@@ -437,7 +437,7 @@ class Ld_Installer_Wordpress_Plugin extends Ld_Installer
 	protected function load_wp()
 	{
 		if (empty($this->loaded)) {
-			define('WP_LD_INSTALLER', true);
+			defined('WP_LD_INSTALLER') || define('WP_LD_INSTALLER', true);
 			global $wpdb, $wp_embed;
 			global $blog_id, $table_prefix;
 			global $_wp_deprecated_widgets_callbacks;
