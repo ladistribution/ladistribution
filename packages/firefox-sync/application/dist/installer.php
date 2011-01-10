@@ -14,6 +14,19 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 		$this->writeHtaccess();
 	}
 
+	function postUpdate()
+	{
+		$db = $this->instance->getDbConnection();
+		$dbPrefix = $this->getInstance()->getDbPrefix();
+		try {
+			$db->query("ALTER TABLE `{$dbPrefix}wbo` add column ttl int");
+			$db->query("ALTER TABLE `{$dbPrefix}wbo` add index ttl_idx(ttl)");
+		} catch (Exception $e) {
+			// column, index, alread exists
+		}
+		$this->writeHtaccess();
+	}
+
 	function postMove()
 	{
 		$this->writeHtaccess();
@@ -60,7 +73,8 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 			$htaccess  = "RewriteEngine on\n";
 			$htaccess .= "RewriteBase {$path}\n";
-			$htaccess .= "RewriteRule ^1.0 sync/1.0/index.php [L]";
+			$htaccess .= "RewriteRule ^1.0 sync/1.1/index.php [L]\n";
+			$htaccess .= "RewriteRule ^1.1 sync/1.1/index.php [L]\n";
 			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 		}
 	}
