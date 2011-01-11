@@ -1,7 +1,7 @@
 <package>
   <id>wordpress-locale-fr-fr</id>
   <name>Wordpress en Français</name>
-  <version>3.1.0-13-rc2</version>
+  <version>3.1.0-14-rc2</version>
   <type>locale</type>
   <extend>wordpress</extend>
   <directory>dist/locales/fr_FR</directory>
@@ -15,7 +15,7 @@
   </deploy>
   <deploy>
       <origin>themes/twentyten/fr_FR.mo</origin>
-      <destination path="public">../../../wp-content/themes/twentyten/fr_FR.mo</destination>
+      <destination path="public">../../../wp-content/themes/twentyten/languages/fr_FR.mo</destination>
   </deploy>
   <deploy>
       <origin>themes/minimal/fr_FR.mo</origin>
