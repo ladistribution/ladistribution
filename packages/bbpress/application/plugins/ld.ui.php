@@ -3,7 +3,7 @@
 Plugin Name: Ld UI
 Plugin URI: http://h6e.net/bbpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.5.1
+Version: 0.5.5
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -17,7 +17,7 @@ function ld_bbpress_admin_head()
 	<style type="text/css">
 	<?php if (bb_get_option('topbar') != 'never') : ?>
 	html, body { height:auto }
-	body { padding-top:31px !important; }
+	body { padding-top:30px !important; }
 	#bbHead { display:none; }
 	</style>
 	<?php endif ?>
@@ -30,29 +30,50 @@ function ld_bbpress_template_head()
 {
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'ld-ui') .'" />'."\n";
 	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
-	echo '<style type="text/css"> body {  background:none; margin-bottom:50px; }</style>'."\n";
+	echo '<style type="text/css">' . "\n";
+	if (ld_display_bar('topbar')) {
+		echo 'body { padding-top:30px !important; }' . "\n";
+	}
+	if (ld_display_bar('super')) {
+		echo 'body { margin-bottom:50px !important; }' . "\n";
+	}
+	$theme = bb_get_option('bb_active_theme');
+	if ($theme == 'core#kakumei' || $theme == 'core#kakumei-blue' || $theme == 'core#kakumei-ld') {
+		echo 'body { background:none; }' . "\n";
+		if (ld_display_bar('topbar')) {
+			echo '#header p.login { display:none; }' . "\n";
+		}
+	}
+	echo '</style>' . "\n";
 }
 
 add_action('bb_head', 'ld_bbpress_template_head');
 
+function ld_display_bar($bar = 'topbar')
+{
+	$topbar = bb_get_option($bar);
+	if (empty($topbar) || $topbar == 'everyone' || ( $topbar == 'connected' && bb_is_user_logged_in() ) ) {
+		return true;
+	}
+	return false;
+}
+
 function ld_bbpress_footer()
 {
-	$superbar = bb_get_option('superbar');
-	if ($superbar == 'never') {
-		return;
+	if (ld_display_bar('topbar')) {
+		Ld_Ui::topBar(array('full-width' => true));
 	}
-	if ($superbar == 'connected' && !bb_is_user_logged_in()) {
-		return;
+	if (ld_display_bar('superbar')) {
+		Ld_Ui::superBar();
 	}
-	Ld_Ui::superBar();
 }
 
 function ld_bbpress_admin_footer()
 {
-	if (bb_get_option('topbar') != 'never') {
+	if (ld_display_bar('topbar')) {
 		Ld_Ui::topBar(array('full-width' => true));
 	}
-	if (bb_get_option('superbar') != 'never') {
+	if (ld_display_bar('superbar')) {
 		Ld_Ui::superBar();
 	}
 }

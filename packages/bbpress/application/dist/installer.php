@@ -232,6 +232,19 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		bb_update_option('bb_active_theme', $theme);
 	}
 
+	public function getCustomCss()
+	{
+		$this->load_bp();
+		return bb_get_option('ld_custom_css');
+	}
+
+	public function setCustomCss($css = '')
+	{
+		$this->load_bp();
+		bb_update_option('ld_custom_css', $css);
+		return bb_get_option('ld_custom_css');
+	}
+
 	// Roles
 
 	public $roles = array('keymaster', 'administrator', 'moderator', 'member');
