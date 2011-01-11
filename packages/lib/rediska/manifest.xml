@@ -1,0 +1,14 @@
+<package>
+  <id>lib-rediska</id>
+  <name>Rediska</name>
+  <version>0.5.1-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">Rediska</destination>
+  </deploy>
+  <deploy>
+      <origin>Rediska.php</origin>
+      <destination path="lib">Rediska.php</destination>
+  </deploy>
+</package>

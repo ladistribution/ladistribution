@@ -1,0 +1,15 @@
+<package>
+  <id>lib-bouncer</id>
+  <name>Bouncer</name>
+  <version>0.1.0-2</version>
+  <type>lib</type>
+  <need>lib-rediska</need>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">Bouncer</destination>
+  </deploy>
+  <deploy>
+      <origin>images</origin>
+      <destination path="shared">bouncer/images</destination>
+  </deploy>
+</package>
