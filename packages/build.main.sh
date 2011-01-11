@@ -140,4 +140,12 @@ cd lib
   ./build.sh
   cd ..
 
+  cd rediska
+  ./build.sh
+  cd ..
+
+  cd bouncer
+  ./build.sh
+  cd ..
+
 cd ..
