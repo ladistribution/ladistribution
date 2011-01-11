@@ -1,6 +1,6 @@
 FOLDER="lib"
 NAME="bouncer"
-SOURCE="git@github.com:znarf/Bouncer.git"
+SOURCE="git://github.com/znarf/Bouncer.git"
 ZIP="$NAME.zip"
 PACKAGE="lib-bouncer.zip"
 
@@ -16,7 +16,7 @@ mv $FOLDER/images images
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER manifest.xml
+zip -r $PACKAGE $FOLDER manifest.xml -q
 mv $PACKAGE ../../
 
 # Clean
