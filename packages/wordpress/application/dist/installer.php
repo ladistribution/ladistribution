@@ -369,7 +369,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	public function setCustomCss($css = '')
 	{
 		$this->load_wp();
-		update_option('ld_custom_css', $css);
+		update_option('ld_custom_css', stripslashes_deep($css));
 		return get_option('ld_custom_css');
 	}
 

@@ -33,7 +33,7 @@ function ld_custom_css()
 
 function ld_custom_css_menu()
 {
-	add_theme_page(__('Custom CSS', 'ld'), __('Custom CSS', 'ld'), 'edit_theme_options', __FILE__, 'ld_custom_css_edit');
+	add_theme_page(__('Custom CSS', 'ld'), __('Custom CSS', 'ld'), 'edit_theme_options', 'ld-custom-css', 'ld_custom_css_edit');
 }
 
 function ld_custom_css_edit()
@@ -46,7 +46,7 @@ function ld_custom_css_edit()
 	}
 
 	if (isset($_POST['action']) && $_POST['action'] == 'update' ) {
-		$css_val = $_POST[ $opt_name ];
+		$css_val = stripslashes_deep($_POST[ $opt_name ]);
 		update_option( $opt_name, $css_val );
 		?>
 		<div class="updated"><p><strong><?php _e('Options saved.', 'ld' ); ?></strong></p></div>

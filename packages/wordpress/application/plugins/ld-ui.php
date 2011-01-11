@@ -3,7 +3,7 @@
 Plugin Name: LD Ui
 Plugin URI: http://h6e.net/wordpress/plugins#ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.5.3
+Version: 0.5.5
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -35,16 +35,26 @@ add_action('admin_head', 'ld_admin_head');
 
 add_action('login_head', 'ld_admin_head');
 
+function ld_styles()
+{
+	wp_enqueue_style('ld-ui', Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui'));
+	if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
+		wp_enqueue_style('application-style', Ld_Ui::getApplicationStyleUrl(), array('ld-ui'));
+	}
+}
+
+add_action('wp_head', 'ld_styles', 1);
+
 function ld_template_head()
 {
-	echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
-	if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
-		echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl() . '" />'."\n";
-	}
+	$current_theme = get_current_theme();
 	echo '<style type="text/css">' . "\n";
+	if (ld_display_bar('topbar')) {
+		echo 'body { padding-top:30px !important; }' . "\n";
+	}
 	echo '.wp-pre-super-bar { ';
 	echo 'height:38px; ';
-	switch ( get_current_theme() ) {
+	switch ($current_theme) {
 		case 'Titan': echo 'background:#E7E1DE; '; break;
 		case 'Journalist': echo 'background:#222; '; break;
 	}
@@ -54,20 +64,32 @@ function ld_template_head()
 
 add_action('wp_head', 'ld_template_head');
 
+function ld_display_bar($bar = 'topbar')
+{
+	if (isset($_GET['preview'])) {
+		return false;
+	}
+
+	$display = get_option($bar);
+	if (empty($display) || $display == 'everyone' || ($display == 'connected' && is_user_logged_in())) {
+		return true;
+	}
+
+	return false;
+}
+
 function ld_footer()
 {
-	$superbar = get_option('superbar');
-	if ($superbar == 'never') {
-		return;
+	if (ld_display_bar('topbar')) {
+		Ld_Ui::topBar(array(
+			'loginUrl' => wp_login_url(), 'logoutUrl' => wp_logout_url($_SERVER["REQUEST_URI"])
+		));
 	}
-	if ($superbar == 'connected' && !is_user_logged_in()) {
-		return;
+
+	if (ld_display_bar('superbar')) {
+		echo '<div class="wp-pre-super-bar"></div>';
+		Ld_Ui::superBar();
 	}
-	if (isset($_GET['preview'])) {
-		return;
-	}
-	echo '<div class="wp-pre-super-bar"></div>';
-	Ld_Ui::superBar();
 }
 
 function ld_admin_footer()
@@ -85,14 +107,6 @@ add_action('wp_footer', 'ld_footer');
 add_action('admin_footer', 'ld_admin_footer');
 
 add_action('login_form', 'ld_admin_footer');
-
-function ld_body_class($classes)
-{
-	$classes[] = 'ld-layout';
-	return $classes;
-}
-
-add_filter('body_class', 'ld_body_class');
 
 function ld_show_admin_bar($classes)
 {
