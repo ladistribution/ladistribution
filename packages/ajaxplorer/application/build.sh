@@ -1,5 +1,5 @@
 NAME="ajaxplorer"
-VERSION="3.0"
+VERSION="3.2"
 ZIP="$NAME-core-$VERSION.zip"
 FOLDER="application"
 PACKAGE="$NAME.zip"
