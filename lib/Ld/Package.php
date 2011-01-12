@@ -18,6 +18,8 @@ class Ld_Package
 
     public $name = null;
 
+    public $description = null;
+
     public $type = null;
 
     public $version = null;
@@ -60,7 +62,7 @@ class Ld_Package
 
     public function setParams($params = array())
     {
-        $infos = array('id', 'name', 'type', 'version', 'extend', 'url', 'sha1', 'size', 'icon');
+        $infos = array('id', 'name', 'description', 'type', 'version', 'extend', 'url', 'sha1', 'size', 'icon');
         foreach ($infos as $key) {
             if (isset($params[$key])) {
                 $this->$key = $params[$key];
@@ -176,6 +178,11 @@ class Ld_Package
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     public function getVersion()

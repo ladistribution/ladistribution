@@ -70,7 +70,7 @@ class Ld_Manifest
     {
         $infos = array();
 
-        $keys = array('id', 'name', 'type', 'version', 'extend', 'url');
+        $keys = array('id', 'name', 'description', 'type', 'version', 'extend', 'url');
         foreach ($keys as $key) {
             if (isset($this->xml->$key)) {
                 $infos[$key] = (string)$this->xml->$key;
