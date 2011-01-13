@@ -1,0 +1,12 @@
+<package>
+  <id>wordpress-theme-twentyten</id>
+  <name>Twenty Ten</name>
+  <version>3.1.0-18-rc2</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/twentyten</directory>
+  <colors>
+      <scheme>base</scheme>
+      <scheme>bars</scheme>
+  </colors>
+</package>
