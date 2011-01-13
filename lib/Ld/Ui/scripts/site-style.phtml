@@ -26,10 +26,13 @@ ul.blocks.mini li.empty, ul.blocks.mini li.empty a {
 
 <?php if (!isset($this->parts) || in_array('bars', $this->parts)) : ?>
 /* Bars */
-.h6e-top-bar-inner, .h6e-super-bar-inner, .ld-top-menu-inner, #ld-login-box, .h6e-top-bar-inner .a a.ld-site-name {
+.h6e-top-bar-inner, .h6e-super-bar-inner, .ld-top-menu-inner, #ld-login-box {
     color:#<?php echo $this->colors['ld-colors-text-2'] ?>;
     border-color:#<?php echo $this->colors['ld-colors-border-2'] ?>;
     background-color:#<?php echo $this->colors['ld-colors-background-2'] ?>;
+}
+.h6e-top-bar-inner .a a.ld-site-name {
+    border-color:#<?php echo $this->colors['ld-colors-border-2'] ?>;
 }
 .h6e-super-bar ul.instances li, .h6e-super-bar ul.instances li a, .h6e-top-bar-inner a, .ld-top-menu-inner a {
     color:#<?php echo $this->colors['ld-colors-text-2'] ?>;

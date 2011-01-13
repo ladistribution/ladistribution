@@ -34,7 +34,7 @@
         'ld-colors-background-2' : {'property' : 'background-color',
             'selector' : 'ul.blocks.mini li, .h6e-top-bar-inner, .h6e-super-bar-inner'},
         'ld-colors-border-2' : {'property' : 'border-color',
-            'selector' : 'ul.blocks.mini li, .h6e-top-bar-inner, .h6e-super-bar-inner'},
+            'selector' : 'ul.blocks.mini li, .h6e-top-bar-inner, .h6e-super-bar-inner, .h6e-top-bar-inner .a a.ld-site-name'},
         'ld-colors-text-2' : {'property' : 'color',
             'selector' : '.h6e-top-bar, .h6e-top-bar a, .h6e-super-bar ul.instances li, .h6e-super-bar ul.instances li a'},
 

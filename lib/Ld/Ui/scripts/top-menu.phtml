@@ -3,9 +3,10 @@
         <?php
         $applications = $this->site->getApplicationsInstances(array('admin'));
         ?>
-        <div style="float:left">
+        <?php if (!empty($applications)) : ?>
+        <div class="applications">
         <h3><?php echo $this->translate('Applications') ?></h3>
-        <ul class="instances">
+        <ul class="instances"> 
             <?php foreach ($applications as $id => $application) : ?>
                 <?php
                 // Visibility
@@ -22,12 +23,13 @@
                     $application->getUrl(),  $application->getName(), $application->getPath());
                 printf("</li>\n");
                 ?>
-            <?php endforeach ?>
+            <?php endforeach; ?>
         </ul>
         </div>
+        <?php endif ?>
 
         <?php if (Ld_Ui::isAdmin()) : ?>
-            <div style="padding-left:0;float:left">
+            <div class="ladistribution">
             <h3>La Distribution</h3>
             <?php
             $admin = Ld_Ui::getSite()->getAdmin();

@@ -76,14 +76,6 @@ cd bbpress
   ./build.sh
   cd ..
 
-  cd theme
-
-    cd minimal
-    ./build.sh
-    cd ..
-
- cd ..
-
 cd ..
 
 cd statusnet

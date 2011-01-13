@@ -19,9 +19,6 @@ function ld_admin_head()
 	?>
 	<style type="text/css">
 	#dashboard_right_now a.button { display:none; }
-	<?php if (get_option('superbar') != 'never') : ?>
-	#footer { display:none !important; }
-	<?php endif ?>
 	<?php if (get_option('topbar') != 'never') : ?>
 	#wpcontent { padding-top:31px !important; }
 	#backtoblog { margin-top:31px !important; }
@@ -57,13 +54,10 @@ function ld_template_head()
 	if (ld_display_bar('topbar')) {
 		echo 'body { padding-top:30px !important; }' . "\n";
 	}
-	echo '.wp-pre-super-bar { ';
-	echo 'height:38px; ';
-	switch ($current_theme) {
-		case 'Titan': echo 'background:#E7E1DE; '; break;
-		case 'Journalist': echo 'background:#222; '; break;
+	if ($current_theme == 'Twenty Ten') {
+		$colors = Ld_Ui::getApplicationColors();
+		echo '#wrapper { border:1px solid #' . $colors['ld-colors-border-2'] . '; }' . "\n";
 	}
-	echo '}' . "\n";
 	echo '</style>'."\n";
 }
 
@@ -90,20 +84,12 @@ function ld_footer()
 			'loginUrl' => wp_login_url(), 'logoutUrl' => wp_logout_url($_SERVER["REQUEST_URI"])
 		));
 	}
-
-	if (ld_display_bar('superbar')) {
-		echo '<div class="wp-pre-super-bar"></div>';
-		Ld_Ui::superBar();
-	}
 }
 
 function ld_admin_footer()
 {
 	if (get_option('topbar') != 'never') {
 		Ld_Ui::topBar(array('full-width' => true));
-	}
-	if (get_option('superbar') != 'never') {
-		Ld_Ui::superBar();
 	}
 }
 

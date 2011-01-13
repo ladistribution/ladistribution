@@ -17,6 +17,7 @@
 .ld-merger .h6e-block {
   padding:1em 1.5em;
   margin:0 0 2.5em;
+  min-height:200px;
 }
 
 .ld-merger .hentry, .ld-merger .hentry p, .ld-merger .hentry ul {

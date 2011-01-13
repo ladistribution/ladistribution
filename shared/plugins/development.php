@@ -51,14 +51,14 @@ class Ld_Plugin_Development
             'name' => 'active_multi_domains', 'label' => ('Active Multi Domains'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
-        $preferences[] = array(
-            'name' => 'active_appearance', 'label' => ('Active Appearance'),
-            'type' => 'boolean', 'defaultValue' => '0'
-        );
-        $preferences[] = array(
-            'name' => 'active_merger', 'label' => ('Active Merger'),
-            'type' => 'boolean', 'defaultValue' => '0'
-        );
+        // $preferences[] = array(
+        //     'name' => 'active_appearance', 'label' => ('Active Appearance'),
+        //     'type' => 'boolean', 'defaultValue' => '0'
+        // );
+        // $preferences[] = array(
+        //     'name' => 'active_merger', 'label' => ('Active Merger'),
+        //     'type' => 'boolean', 'defaultValue' => '0'
+        // );
         return $preferences;
     }
 
@@ -99,14 +99,14 @@ class Ld_Plugin_Development
         if ($active_multi_domains) {
             defined('LD_MULTI_DOMAINS') OR define('LD_MULTI_DOMAINS', true);
         }
-        $active_appearance = $site->getConfig('active_appearance');
-        if ($active_appearance) {
-            defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
-        }
-        $active_merger = $site->getConfig('active_merger');
-        if ($active_merger) {
-            defined('LD_MERGER') OR define('LD_MERGER', true);
-        }
+        // $active_appearance = $site->getConfig('active_appearance');
+        // if ($active_appearance) {
+        //     defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
+        // }
+        // $active_merger = $site->getConfig('active_merger');
+        // if ($active_merger) {
+        //     defined('LD_MERGER') OR define('LD_MERGER', true);
+        // }
     }
 
 }

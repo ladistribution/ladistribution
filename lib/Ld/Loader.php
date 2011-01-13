@@ -89,6 +89,8 @@ class Ld_Loader
         // This constants should bet set after plugins are loaded
         defined('LD_DEBUG') OR define('LD_DEBUG', false);
         defined('LD_REWRITE') OR define('LD_REWRITE', true);
+        defined('LD_BREADCRUMBS') OR define('LD_BREADCRUMBS', false);
+        defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
 
         // Legacy CSS Constant
         defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));

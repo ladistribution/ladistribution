@@ -33,7 +33,6 @@ $IMPORT wordpress.zip
 $IMPORT dokuwiki.zip
 
 $IMPORT bbpress.zip
-$IMPORT bbpress-theme-minimal.zip
 
 $IMPORT firefox-sync.zip
 

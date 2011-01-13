@@ -25,4 +25,6 @@ $IMPORT wordpress-plugin-qtranslate.zip
 $IMPORT wordpress-plugin-supercache.zip
 $IMPORT wordpress-plugin-hypercache.zip
 
+$IMPORT bbpress-theme-minimal.zip
+
 $IMPORT dokuwiki-theme-monobook.zip

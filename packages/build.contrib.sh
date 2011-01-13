@@ -54,6 +54,18 @@ cd wordpress
 
 cd ..
 
+cd bbpress
+
+  cd theme
+
+    cd minimal
+    ./build.sh
+    cd ..
+
+ cd ..
+
+cd ..
+
 cd dokuwiki
 
   cd theme
