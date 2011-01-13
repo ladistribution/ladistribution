@@ -205,13 +205,14 @@ ul.instances li.moonmoon { padding-left:25px; background-image:url(img/moonmoon-
   overflow:hidden;
 }
 
-.ld-top-menu div.applications {
+.ld-top-menu div.applications, .ld-top-menu div.ladistribution {
   float:left;
-  padding-right:0;
-}
+  width:auto;
+  margin:0;
+} 
 
-.ld-top-menu div.ladistribution {
-  float:left;
+.ld-top-menu div.applications {
+  padding-right:0;
 }
 
 .ld-top-menu h3 {
