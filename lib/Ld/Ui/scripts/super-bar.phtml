@@ -12,7 +12,7 @@
     </style>
 <?php endif ?>
 
-<div id="ld-super-bar" class="h6e-super-bar">
+<div id="ld-super-bar" class="h6e-super-bar <?php echo $this->className ?>">
 
     <div class="h6e-super-bar-inner">
 
@@ -51,36 +51,36 @@
 
                 printf("                " . '<li id="app_%s" class="%s" style="%s">', $id, $className, $inlineStyle);
 
-                if ($application->isCurrent() && !$settings && !$admin) {
-                    printf('<strong><a href="%s">%s</a></strong>' . "\n  ", $application->getUrl(), $application->getName());
-                } else {
+                // if ($application->isCurrent() && !$settings && !$admin) {
+                //     printf('<strong><a href="%s">%s</a></strong>' . "\n  ", $application->getUrl(), $application->getName());
+                // } else {
                     printf('<a href="%s">%s</a>', $application->getUrl(), $application->getName());
-                }
+                // }
 
-                if ($this->isAdmin && $id != 'admin' && ($application->isCurrent() || $settings || $admin)) {
-                    if (isset($adminUrl) || isset($settingsUrl)) {
-                        echo "&nbsp; • &nbsp;";
-                    }
-                    if (isset($adminUrl)) {
-                        $link = sprintf('<a href="%s">%s</a>', $adminUrl, $this->translate("Admin"));
-                        if ($admin) {
-                            printf('<strong>%s</strong>', $link);
-                        } else {
-                            printf('%s', $link);
-                        }
-                    }
-                    if (isset($adminUrl) && isset($settingsUrl)) {
-                        printf(' | ');
-                    }
-                    if (isset($settingsUrl)) {
-                        $link = sprintf('<a class="ld-settings" href="%s">%s</a>', $settingsUrl, $this->translate("Settings"));
-                        if ($settings) {
-                            printf('<strong>%s</strong>', $link);
-                        } else {
-                            printf('%s', $link);
-                        }
-                    }
-                }
+                // if ($this->isAdmin && $id != 'admin' && ($application->isCurrent() || $settings || $admin)) {
+                //     if (isset($adminUrl) || isset($settingsUrl)) {
+                //         echo "&nbsp; • &nbsp;";
+                //     }
+                //     if (isset($adminUrl)) {
+                //         $link = sprintf('<a href="%s">%s</a>', $adminUrl, $this->translate("Admin"));
+                //         if ($admin) {
+                //             printf('<strong>%s</strong>', $link);
+                //         } else {
+                //             printf('%s', $link);
+                //         }
+                //     }
+                //     if (isset($adminUrl) && isset($settingsUrl)) {
+                //         printf(' | ');
+                //     }
+                //     if (isset($settingsUrl)) {
+                //         $link = sprintf('<a class="ld-settings" href="%s">%s</a>', $settingsUrl, $this->translate("Settings"));
+                //         if ($settings) {
+                //             printf('<strong>%s</strong>', $link);
+                //         } else {
+                //             printf('%s', $link);
+                //         }
+                //     }
+                // }
 
                 printf("</li>\n");
 

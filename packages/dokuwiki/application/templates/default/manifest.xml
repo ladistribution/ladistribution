@@ -1,0 +1,12 @@
+<package>
+  <id>dokuwiki-theme-default</id>
+  <name>Default</name>
+  <version>2010-11-07-11</version>
+  <type>theme</type>
+  <need>css-h6e-minimal</need>
+  <extend>dokuwiki</extend>
+  <directory>lib/tpl/default</directory>
+  <colors>
+      <scheme>bars</scheme>
+  </colors>
+</package>

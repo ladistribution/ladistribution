@@ -149,6 +149,11 @@ class Ld_Installer
         return $this->links = $links;
     }
 
+    public function isVisible()
+    {
+        return true;
+    }
+
     public function getDeployments($type = null)
     {
         $rules = $this->getManifest()->getDeploymentRules();

@@ -1,7 +1,8 @@
 <package>
   <id>bbpress</id>
   <name>bbPress</name>
-  <version>1.0.2-2011-01-1</version>
+  <description>Forum Software</description>
+  <version>1.0.2-2011-01-3</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>

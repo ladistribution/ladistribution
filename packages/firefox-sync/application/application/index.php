@@ -19,6 +19,8 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 <link href="<?php echo Ld_Ui::getApplicationStyleUrl() ?>" rel="stylesheet" type="text/css"/>
 <?php endif ?>
 
+<script type="text/javascript" src="<?php echo Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery') ?>"></script>
+
 <style type="text/css">
 #sync-logo {
     height:95px;
@@ -46,7 +48,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
 <div class="ld-main-content h6e-main-content">
 
-  <?php Ld_Ui::topNav(); ?>
+  <?php // Ld_Ui::topNav(); ?>
 
   <div class="h6e-page-content h6e-block">
 

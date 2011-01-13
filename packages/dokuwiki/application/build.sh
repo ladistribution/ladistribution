@@ -21,7 +21,6 @@ curl http://meta.wikimedia.org/wiki/Spam_blacklist?action=raw -# | grep -v '<pre
 cp screenshot.png $FOLDER/lib/tpl/default/
 
 echo "# Get minimal theme with git"
-mkdir templates
 git clone git://github.com/znarf/dokuwiki-minimal.git templates/minimal --quiet
 rm -rf templates/minimal/.git templates/minimal/Makefile
 
@@ -89,5 +88,5 @@ mv $PACKAGE ../../
 
 # Clean
 rm -rf $FOLDER
-rm -rf templates
+rm -rf templates/minimal
 rm -rf plugins/css

@@ -1,3 +1,5 @@
+<h2><?php echo $this->translate("News Feed"); ?></h2>
+
 <div class="ld-merger ld-feed">
 
 <?php if (Ld_Auth::isAuthenticated()) : ?>
@@ -75,6 +77,7 @@
     <div class="h6e-sidebar-inner">
 
         <?php if ($this->canAdmin && $this->canUpdate && $this->hasUpdate) : ?>
+            <div class="ld-merger-sidebar-widget">
             <h3><?php echo $this->translate("Updates") ?></h3>
             <?php
             $updateUrl = $this->url(array('module' => 'slotter', 'controller' => 'index', 'action' => 'update'), 'update');
@@ -82,14 +85,16 @@
                 "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>");
             ?>
             <p><?php printf($updateString, $updateUrl); ?></p>
-            <br/>
+            </div>
         <?php endif ?>
 
-        <h3><?php echo $this->translate("Applications") ?></h3>
-        <?php $this->instancesList() ?>
-        <br/>
+        <div class="ld-merger-sidebar-widget">
+            <h3><?php echo $this->translate("Applications") ?></h3>
+            <?php $this->instancesList() ?>
+        </div>
 
         <?php if ($this->canAdmin) : ?>
+            <div class="ld-merger-sidebar-widget">
             <h3><?php echo $this->translate->translate("Administration") ?></h2>
             <?php
             $pages = array();
@@ -106,6 +111,7 @@
                     ?><li><a href="<?php echo $url ?>"><?php echo $label ?></a></li>
                 <?php endforeach ?>
             </ul>
+            </div>
         <?php endif ?>
 
     </div>

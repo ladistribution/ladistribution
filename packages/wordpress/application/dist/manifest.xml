@@ -1,7 +1,8 @@
 <package>
   <id>wordpress</id>
   <name>WordPress</name>
-  <version>3.1.0-14-rc2</version>
+  <description>Blog Tool and Publishing Platform</description>
+  <version>3.1.0-15-rc2</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
@@ -50,13 +51,14 @@
       <preference type="list" label="Display Top Bar" name="topbar">
           <option value="everyone" label="For everyone"/>
           <option value="connected" label="For connected users"/>
-          <option value="never" label="Never"/>
       </preference>
+      <!--
       <preference type="list" label="Display Bottom Bar" name="superbar">
           <option value="everyone" label="For everyone"/>
           <option value="connected" label="For connected users"/>
           <option value="never" label="Never"/>
       </preference>
+      -->
       <!--
       <preference type="boolean" label="Enable Atom" name="enable_app"/>
       <preference type="boolean" label="Enable XML-RPC" name="enable_xmlrpc"/>

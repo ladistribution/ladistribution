@@ -1,6 +1,7 @@
 <package>
   <id>gallery</id>
   <name>Gallery</name>
+  <description>Photo album organizer</description>
   <version>3.0-17-final</version>
   <type>application</type>
   <db>mysql</db>

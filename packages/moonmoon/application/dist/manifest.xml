@@ -1,7 +1,8 @@
 <package>
     <id>moonmoon</id>
     <name>Moonmoon</name>
-    <version>8.12-50-5</version>
+    <description>Blend RSS feeds into a single page</description>
+    <version>8.12-50-6</version>
     <type>application</type>
     <need>lib-ld</need>
     <need>css-ld-ui</need>

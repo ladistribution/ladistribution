@@ -1,3 +1,5 @@
+<h2><?php echo $this->translate("Updates") ?></h2>
+
 <div class="ld-panel-content h6e-block no-tab">
 
 <?php if ($this->update) : ?>
@@ -12,7 +14,7 @@
 
     <p><?php echo $this->translate('Congratulations! Everything is up to date.') ?></p>
 
-    <p><?php echo '<a href="' . $this->site->getUrl() . '">' . $this->translate("Continue to Home Page") . '</a>.' ?></p>
+    <p><?php echo '<a href="' . $this->site->getUrl() . '">' . $this->translate("Back to Home") . '</a>.' ?></p>
 
 <?php else : ?>
 

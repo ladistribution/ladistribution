@@ -1,10 +1,12 @@
-<h2><?php echo $this->translate("Repositories") ?></h2>
+<h2><?php echo $this->translate("Settings") ?></h2>
 
 <div class="ld-panel">
 
-<?php $this->partialNavigationMenu('Ressources') ?>
+<?php $this->partialNavigationMenu('Settings') ?>
 
 <div class="ld-panel-content h6e-block">
+
+<h3><?php echo $this->translate("Repositories") ?></h3>
 
 <?php echo $this->partial('repositories/list.phtml', array('repositories' => $this->repositories)); ?>
 

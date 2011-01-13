@@ -105,10 +105,10 @@ class Slotter_SettingsController extends Slotter_BaseController
         );
         }
 
-        $preferences[] = array(
-            'name' => 'root_admin', 'label' => $translator->translate('Admin path on root?'),
-            'type' => 'boolean', 'defaultValue' => false
-        );
+        // $preferences[] = array(
+        //     'name' => 'root_admin', 'label' => $translator->translate('Admin path on root?'),
+        //     'type' => 'boolean', 'defaultValue' => false
+        // );
 
         $preferences = Ld_Plugin::applyFilters('Slotter:preferences', $preferences);
 

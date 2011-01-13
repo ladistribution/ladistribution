@@ -18,9 +18,9 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
         <div class="ld-instance-list">
           <?php if ($this->view->userRole == 'admin') : ?>
-              <ul class="blocks sortables mini is-admin">
+              <ul class="blocks sortables mini instance-list is-admin">
           <?php else : ?>
-              <ul class="blocks mini">
+              <ul class="blocks mini instance-list">
           <?php endif ?>
 
         <?php
@@ -29,7 +29,13 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
         foreach ($this->view->applications as $id => $application) {
 
+            // Only application with matching id
             if (!$all && $this->view->id != $id) {
+                continue;
+            }
+
+            // Visibility
+            if (!$application->isVisible()) {
                 continue;
             }
 
@@ -50,7 +56,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             printf('<span class="path">/%s/</span>', $application->getPath());
             printf('</div>');
 
-            if ($this->view->userRole == 'admin') {
+            if (/* disabled */ 1 != 1 && $this->view->userRole == 'admin') {
                 printf('<div class="links">');
                 foreach ($application->getLinks() as $link) {
                       if ($link['type'] == 'text/html' && $link['title'] == 'admin') {

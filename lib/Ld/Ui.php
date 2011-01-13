@@ -87,6 +87,7 @@ class Ld_Ui
 
     public static function superBar($options = array())
     {
+        return;
         echo self::getSuperBar($options);
     }
 
@@ -113,6 +114,8 @@ class Ld_Ui
         $view->applications = $applications;
 
         $view->isAdmin = self::isAdmin();
+
+        $view->className = 'full-width';
 
         return $view->render('super-bar.phtml');
     }
@@ -165,8 +168,13 @@ class Ld_Ui
         }
 
         $view->className = isset($options['full-width']) ? 'full-width' : 'default-width';
+        $view->className = 'full-width';
 
-        return $view->render('top-bar.phtml');
+        $out  = $view->render('top-bar.phtml');
+
+        $out .= $view->render('top-menu.phtml');
+
+        return $out;
     }
 
     public static function topNav($options = array())

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-08 17:11+0100\n"
+"POT-Creation-Date: 2011-01-12 23:03+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -144,6 +144,10 @@ msgstr "Administration"
 
 #: shared/modules/slotter/views/scripts/appearance/css.phtml:1
 #: shared/modules/slotter/views/scripts/appearance/index.phtml:1
+#: shared/modules/slotter/views/scripts/databases/delete.phtml:1
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:1
+#: shared/modules/slotter/views/scripts/databases/index.phtml:1
+#: shared/modules/slotter/views/scripts/databases/new.phtml:1
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -156,18 +160,11 @@ msgstr "CSS sur mesure"
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:45
 #: shared/modules/slotter/views/scripts/domains/edit.phtml:15
 msgid "Update"
-msgstr "Mise à jour"
+msgstr "Mettre à jour"
 
 #: shared/modules/slotter/views/scripts/appearance/index.phtml:9
 msgid "Colors"
 msgstr "Couleurs"
-
-#: shared/modules/slotter/views/scripts/databases/delete.phtml:1
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:1
-#: shared/modules/slotter/views/scripts/databases/index.phtml:1
-#: shared/modules/slotter/views/scripts/databases/new.phtml:1
-msgid "Databases"
-msgstr "Bases de données"
 
 #: shared/modules/slotter/views/scripts/databases/delete.phtml:9
 msgid "Delete a connection"
@@ -191,19 +188,19 @@ msgid "Update a connection"
 msgstr "Mettre à jour une connexion"
 
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:15
-#: shared/modules/slotter/views/scripts/databases/index.phtml:18
+#: shared/modules/slotter/views/scripts/databases/index.phtml:20
 #: shared/modules/slotter/views/scripts/databases/new.phtml:15
 msgid "Type"
 msgstr "Type"
 
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:26
-#: shared/modules/slotter/views/scripts/databases/index.phtml:19
+#: shared/modules/slotter/views/scripts/databases/index.phtml:21
 #: shared/modules/slotter/views/scripts/databases/new.phtml:26
 msgid "Host"
 msgstr "Hôte"
 
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:30
-#: shared/modules/slotter/views/scripts/databases/index.phtml:20
+#: shared/modules/slotter/views/scripts/databases/index.phtml:22
 msgid "Name"
 msgstr "Nom"
 
@@ -217,44 +214,48 @@ msgstr "Nom d'utilisateur"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:11
+#: shared/modules/slotter/views/scripts/databases/index.phtml:9
+msgid "Databases"
+msgstr "Bases de données"
+
+#: shared/modules/slotter/views/scripts/databases/index.phtml:13
 msgid "No database connection registered."
 msgstr "Aucune base de donnée enregistrée."
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:21
+#: shared/modules/slotter/views/scripts/databases/index.phtml:23
 msgid "Usage"
 msgstr "Utilisation"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:22
+#: shared/modules/slotter/views/scripts/databases/index.phtml:24
 msgid "Status"
 msgstr "Statut"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:23
+#: shared/modules/slotter/views/scripts/databases/index.phtml:25
 msgid "Actions"
 msgstr "Actions"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:35
+#: shared/modules/slotter/views/scripts/databases/index.phtml:37
 #, php-format
 msgid "used by %1$d applications"
 msgstr "utilisée par %1$d application"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:35
+#: shared/modules/slotter/views/scripts/databases/index.phtml:37
 msgid "unused"
 msgstr "inutilisé"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:43
+#: shared/modules/slotter/views/scripts/databases/index.phtml:45
 msgid "edit"
 msgstr "éditer"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:48
+#: shared/modules/slotter/views/scripts/databases/index.phtml:50
 msgid "delete"
 msgstr "supprimer"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:61
+#: shared/modules/slotter/views/scripts/databases/index.phtml:63
 msgid "You can:"
 msgstr "Vous pouvez :"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:65
+#: shared/modules/slotter/views/scripts/databases/index.phtml:67
 msgid "Add a database connection"
 msgstr "Ajouter une connexion à une base de donnée"
 
@@ -326,23 +327,23 @@ msgstr "Il n'y a aucun utilisateur enregistré pour le moment. Enregistrer un pr
 msgid "Register the first user now."
 msgstr "Enregistrer le premier utilisateur maintenant."
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:20
+#: shared/modules/slotter/views/scripts/index/index.phtml:24
 msgid "Sub Sites"
 msgstr ""
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:53
+#: shared/modules/slotter/views/scripts/index/index.phtml:59
 msgid "Manage"
 msgstr "Gérer"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:91
+#: shared/modules/slotter/views/scripts/index/index.phtml:97
 msgid "Everything fine, nothing to update."
 msgstr "Tout est ok, rien à mettre à jour."
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:102
+#: shared/modules/slotter/views/scripts/index/index.phtml:108
 msgid "Notice:"
 msgstr "Note :"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:103
+#: shared/modules/slotter/views/scripts/index/index.phtml:109
 msgid "There is no database connection registered yet. A database is often needed to install new applications."
 msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment. Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
 
@@ -433,9 +434,8 @@ msgid "Upload"
 msgstr "Envoyer"
 
 #: shared/modules/slotter/views/scripts/instance/clone.phtml:1
-#: shared/modules/slotter/views/scripts/instance/new.phtml:1
-msgid "Add an application"
-msgstr "Ajouter une application"
+msgid "Clone an application"
+msgstr "Cloner une application"
 
 #: shared/modules/slotter/views/scripts/instance/clone.phtml:5
 msgid "Clone from a backup"
@@ -544,6 +544,7 @@ msgid "You are going to install an extension. Are you sure?"
 msgstr "Vous allez installer une extension. Êtes-vous sûrs ?"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:36
+#: shared/modules/slotter/views/scripts/instance/new.phtml:41
 msgid "Install"
 msgstr "Installer"
 
@@ -583,22 +584,22 @@ msgstr "Ancien chemin :"
 msgid "New path:"
 msgstr "Nouveau chemin :"
 
-#: shared/modules/slotter/views/scripts/instance/new.phtml:17
+#: shared/modules/slotter/views/scripts/instance/new.phtml:1
+msgid "Add an application"
+msgstr "Ajouter une application"
+
+#: shared/modules/slotter/views/scripts/instance/new.phtml:22
 msgid "You can also:"
 msgstr "Vous pouvez aussi :"
 
-#: shared/modules/slotter/views/scripts/instance/new.phtml:21
+#: shared/modules/slotter/views/scripts/instance/new.phtml:26
 msgid "Clone an application from a backup"
 msgstr "Cloner une application depuis une sauvegarde"
 
-#: shared/modules/slotter/views/scripts/instance/new.phtml:29
+#: shared/modules/slotter/views/scripts/instance/new.phtml:34
 #, php-format
-msgid "New %s"
-msgstr "Nouveau %s"
-
-#: shared/modules/slotter/views/scripts/instance/new.phtml:36
-msgid "Create"
-msgstr "Créer"
+msgid "Install %s"
+msgstr "Installer %s"
 
 #: shared/modules/slotter/views/scripts/instance/ok.phtml:1
 msgid "Ok"
@@ -722,7 +723,7 @@ msgstr "Base"
 #: shared/modules/slotter/views/scripts/partials/color-schemes.phtml:40
 #: shared/modules/slotter/views/scripts/partials/color-schemes.phtml:55
 msgid "Custom"
-msgstr ""
+msgstr "Sur Mesure"
 
 #: shared/modules/slotter/views/scripts/partials/color-schemes.phtml:34
 msgid "Bars"
@@ -748,15 +749,6 @@ msgstr "Actif"
 msgid "Inactive"
 msgstr "Inactif"
 
-#: shared/modules/slotter/views/scripts/repositories/delete-package.phtml:1
-#: shared/modules/slotter/views/scripts/repositories/delete.phtml:1
-#: shared/modules/slotter/views/scripts/repositories/index.phtml:1
-#: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:1
-#: shared/modules/slotter/views/scripts/repositories/manage.phtml:1
-#: shared/modules/slotter/views/scripts/repositories/new.phtml:1
-msgid "Repositories"
-msgstr "Dépôts"
-
 #: shared/modules/slotter/views/scripts/repositories/delete-package.phtml:9
 msgid "Delete a package"
 msgstr "Supprimer un paquet"
@@ -774,11 +766,15 @@ msgstr "Êtes-vous sûrs de vouloir supprimer ce dépôt ?"
 msgid "Remove"
 msgstr "Supprimer"
 
-#: shared/modules/slotter/views/scripts/repositories/index.phtml:15
+#: shared/modules/slotter/views/scripts/repositories/index.phtml:9
+msgid "Repositories"
+msgstr "Dépôts"
+
+#: shared/modules/slotter/views/scripts/repositories/index.phtml:17
 msgid "Create a local repository"
 msgstr "Créer un dépôt local"
 
-#: shared/modules/slotter/views/scripts/repositories/index.phtml:18
+#: shared/modules/slotter/views/scripts/repositories/index.phtml:20
 msgid "Add a remote repository"
 msgstr "Ajouter un dépôt distant"
 
@@ -858,7 +854,7 @@ msgid "Add a new site"
 msgstr "Ajouter un nouveau site"
 
 #: shared/modules/slotter/views/scripts/users/add.phtml:1
-#: shared/modules/slotter/views/scripts/users/index.phtml:137
+#: shared/modules/slotter/views/scripts/users/index.phtml:139
 msgid "Add registered users"
 msgstr "Ajouter des utilisateurs enregistrés"
 
@@ -934,45 +930,44 @@ msgstr "Vous n'avez encore enregistré aucune identité OpenID. Vous pouvez ajou
 msgid "Add an identity:"
 msgstr "Ajouter une identité :"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:1
-#: shared/modules/slotter/views/scripts/users/invite-ok.phtml:1
-#: shared/modules/slotter/views/scripts/users/invite.phtml:1
-msgid "Users"
-msgstr "Utilisateurs"
-
-#: shared/modules/slotter/views/scripts/users/index.phtml:7
+#: shared/modules/slotter/views/scripts/users/index.phtml:9
 msgid "No user"
 msgstr "Aucun utilisateur"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:29
+#: shared/modules/slotter/views/scripts/users/index.phtml:31
 msgid "Action for selection:"
 msgstr "Action pour la sélection :"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:31
+#: shared/modules/slotter/views/scripts/users/index.phtml:33
 msgid "Choose an action..."
 msgstr "Choisir une action ..."
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:32
+#: shared/modules/slotter/views/scripts/users/index.phtml:34
 msgid "Remove users from list"
 msgstr "Retirer les utilisateurs de la liste"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:34
+#: shared/modules/slotter/views/scripts/users/index.phtml:36
 msgid "Delete users"
 msgstr "Supprimer les utilisateurs"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:37
+#: shared/modules/slotter/views/scripts/users/index.phtml:39
 msgid "Go"
 msgstr "Go"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:61
+#: shared/modules/slotter/views/scripts/users/index.phtml:63
 msgid "Activated"
 msgstr "Activé"
 
-#: shared/modules/slotter/views/scripts/users/index.phtml:134
+#: shared/modules/slotter/views/scripts/users/index.phtml:136
 #: shared/modules/slotter/views/scripts/users/invite-ok.phtml:7
 #: shared/modules/slotter/views/scripts/users/invite.phtml:7
 msgid "Invite new users"
 msgstr "Inviter de nouveaux utilisateurs"
+
+#: shared/modules/slotter/views/scripts/users/invite-ok.phtml:1
+#: shared/modules/slotter/views/scripts/users/invite.phtml:1
+msgid "Users"
+msgstr "Utilisateurs"
 
 #: shared/modules/slotter/views/scripts/users/invite-ok.phtml:9
 msgid "Invitations had been sent. Users will receive an email with all informations on how to finish their registration."
@@ -1052,20 +1047,15 @@ msgstr "Apparence"
 msgid "General"
 msgstr "Général"
 
-#: shared/modules/slotter/controllers/BaseController.php:37
+#: shared/modules/slotter/controllers/BaseController.php:38
 msgid "CSS"
 msgstr "CSS"
 
-#: shared/modules/slotter/controllers/BaseController.php:51
+#: shared/modules/slotter/controllers/BaseController.php:58
 msgid "Home"
 msgstr "Accueil"
 
-#: shared/modules/slotter/controllers/BaseController.php:54
-msgid "Ressources"
-msgstr "Ressources"
-
 #: shared/modules/slotter/controllers/DomainsController.php:27
-#: shared/modules/slotter/controllers/InstanceController.php:48
 msgid "New"
 msgstr "Nouveau"
 
@@ -1110,15 +1100,19 @@ msgstr "Aucune application installée pour le moment."
 msgid "Back to the application"
 msgstr "Retour à l'application"
 
-#: shared/modules/slotter/views/helpers/InstanceWidget.php:33
+#: shared/modules/slotter/views/helpers/InstanceWidget.php:37
 #, php-format
 msgid "Package: %s"
 msgstr "Paquet : %s"
 
-#: shared/modules/slotter/views/helpers/InstanceWidget.php:35
+#: shared/modules/slotter/views/helpers/InstanceWidget.php:39
 #, php-format
 msgid "Version: %s"
 msgstr "Version : %s"
+
+#: shared/modules/slotter/views/helpers/PartialNavigationMenu.php:15
+msgid "Back to Home"
+msgstr "Retour à l'accueil"
 
 #: shared/plugins/akismet.php:14
 msgid "Checks user submitted content to see if it look like spam."
@@ -1126,7 +1120,6 @@ msgstr "Vérifie le contenu soumis par les utilisateurs pour voir si ça ressemb
 
 #: shared/plugins/akismet.php:27
 #: shared/plugins/memcache.php:40
-#: shared/plugins/recaptcha.php:29
 #, php-format
 msgid "%s is configured and running."
 msgstr "%s est configuré et fonctionne."
@@ -1136,7 +1129,6 @@ msgid "Akismet API key is invalid."
 msgstr "La clé d'API Akismet est invalide."
 
 #: shared/plugins/akismet.php:31
-#: shared/plugins/recaptcha.php:26
 #, php-format
 msgid "%s is not running. Complete your configuration to enable it."
 msgstr "%s ne fonctionne pas. Complétez votre configuration pour l'activer."
@@ -1151,6 +1143,7 @@ msgstr "Détecte et bloque automatiquement les accès suspects au site."
 
 #: shared/plugins/bad-behavior.php:23
 #: shared/plugins/bad-behavior.php:25
+#: shared/plugins/bouncer.php:34
 #: shared/plugins/gloss.php:24
 #: shared/plugins/gravatar.php:21
 #, php-format
@@ -1169,6 +1162,32 @@ msgstr "Http:BL est configuré"
 msgid "Http:BL API Key"
 msgstr "Clé d'API Http:BL"
 
+#: shared/plugins/bouncer.php:14
+msgid "Track and block agents using the Bouncer library."
+msgstr ""
+
+#: shared/plugins/bouncer.php:28
+#: shared/plugins/memcache.php:25
+msgid "Memcache PHP extension is needed to run this plugin."
+msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greffon."
+
+#: shared/plugins/bouncer.php:39
+#, php-format
+msgid "%s library not available."
+msgstr "bibliothèque %s non disponible."
+
+#: shared/plugins/bouncer.php:46
+msgid "Backend"
+msgstr "Backend"
+
+#: shared/plugins/bouncer.php:53
+msgid "Server"
+msgstr "Serveur"
+
+#: shared/plugins/bouncer.php:57
+msgid "Bouncer Namespace"
+msgstr ""
+
 #: shared/plugins/development.php:14
 msgid "Customise configuration, enable debugging, new features..."
 msgstr "Personnaliser la configuration, activer le débugage, de nouvelles fonctionnalités ..."
@@ -1184,10 +1203,6 @@ msgstr "Affiche des avatars en utilisant le service Gravatar."
 #: shared/plugins/memcache.php:14
 msgid "Cache data with Memcache to enhance performances."
 msgstr "Met en cache des données avec Memcache pour améliorer les performances."
-
-#: shared/plugins/memcache.php:25
-msgid "Memcache PHP extension is needed to run this plugin."
-msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greffon."
 
 #: shared/plugins/memcache.php:38
 msgid "Can't connect to Memcache servers."
@@ -1256,20 +1271,20 @@ msgstr "Déverrouiller les plugins"
 msgid "Unlock users"
 msgstr "Déverrouiller les utilisateurs"
 
+#~ msgid "New %s"
+#~ msgstr "Nouveau %s"
+#~ msgid "Create"
+#~ msgstr "Créer"
+#~ msgid "Ressources"
+#~ msgstr "Ressources"
 #~ msgid "Cancel"
 #~ msgstr "Annuler"
-
-#, fuzzy
-#~ msgid "No plugin available."
-#~ msgstr "Aucun utilisateur disponible."
 #~ msgid "None|database"
 #~ msgstr "Aucune"
 #~ msgid "Add a new domain"
 #~ msgstr "Ajouter un nouveau domaine"
 #~ msgid "None available"
 #~ msgstr "Aucune disponible"
-#~ msgid "Clone an application"
-#~ msgstr "Cloner une application"
 #~ msgid "No preference available for this application."
 #~ msgstr "Aucune option pour cette application."
 
@@ -1280,8 +1295,6 @@ msgstr "Déverrouiller les utilisateurs"
 #~ msgstr "Parcourir le dépôt"
 #~ msgid "Manage repository"
 #~ msgstr "Gérer le dépôt"
-#~ msgid "OpenID Server"
-#~ msgstr "Serveur OpenID"
 #~ msgid "Other OpenID Identities"
 #~ msgstr "Autres identités OpenID"
 #~ msgid "Add registered users to the list"

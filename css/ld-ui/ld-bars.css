@@ -4,7 +4,6 @@
 
 .h6e-top-bar {
   width:100%;
-  overflow:hidden;
   position:absolute;
   top:0;
   left:0;
@@ -46,6 +45,7 @@
   -webkit-border-bottom-right-radius:5px;
   border-bottom-left-radius:5px;
   border-bottom-right-radius:5px;
+  height:29px;
 }
 
 .h6e-super-bar-inner {
@@ -71,9 +71,7 @@
 
 .h6e-top-bar-inner .a {
   font-size:12px;
-  font-weight:bold;
   line-height:2.35em;
-  margin-left:5px;
 }
 
 .h6e-top-bar-inner .a a {
@@ -81,8 +79,11 @@
 }
 
 .h6e-top-bar-inner .a a.ld-site-name {
-  background:url(img/star.png) 5px 50% no-repeat;
-  padding-left:30px;
+  background:url(img/star.png) 10px 50% no-repeat;
+  padding-left:35px;
+  padding-right:10px;
+  height:29px;
+  border-right:1px solid #ccc;
 }
 
 .h6e-top-bar-inner .a img.avatar {
@@ -111,11 +112,13 @@
   height:100%;
 }
 
-.h6e-top-bar.full-width .h6e-top-bar-inner {
+.h6e-top-bar.full-width .h6e-top-bar-inner,
+.h6e-super-bar.full-width .h6e-super-bar-inner {
   width:auto;
-  border:0 0 1px;
-  border-radius:0;
+  border-left:0;
+  border-right:0;
   -moz-border-radius:0;
+  border-radius:0;
 }
 
 /* Super Bar Instances
@@ -162,19 +165,78 @@
 }
 
 .ld-app-name.wordpress,
-.h6e-super-bar ul.instances li.wordpress { padding-left:25px; background-image:url(img/wp16.png); }
+ul.instances li.wordpress { padding-left:25px; background-image:url(img/wp16.png); }
 .ld-app-name.dokuwiki,
-.h6e-super-bar ul.instances li.dokuwiki  { padding-left:25px; background-image:url(img/dw16.png); }
+ul.instances li.dokuwiki  { padding-left:25px; background-image:url(img/dw16.png); }
 .ld-app-name.bbpress,
-.h6e-super-bar ul.instances li.bbpress   { padding-left:25px; background-image:url(img/bp16.png); }
+ul.instances li.bbpress   { padding-left:25px; background-image:url(img/bp16.png); }
 .ld-app-name.gallery,
-.h6e-super-bar ul.instances li.gallery   { padding-left:25px; background-image:url(img/ga16.png); }
+ul.instances li.gallery   { padding-left:25px; background-image:url(img/ga16.png); }
 .ld-app-name.statusnet,
-.h6e-super-bar ul.instances li.statusnet { padding-left:25px; background-image:url(img/statusnet-16.png); }
+ul.instances li.statusnet { padding-left:25px; background-image:url(img/statusnet-16.png); }
 .ld-app-name.firefox-sync,
-.h6e-super-bar ul.instances li.firefox-sync { padding-left:25px; background-image:url(img/firefox-sync-16.png); }
+ul.instances li.firefox-sync { padding-left:25px; background-image:url(img/firefox-sync-16.png); }
 .ld-app-name.blogmarks,
-.h6e-super-bar ul.instances li.blogmarks { padding-left:25px; background-image:url(img/blogmarks-16.png); }
+ul.instances li.blogmarks { padding-left:25px; background-image:url(img/blogmarks-16.png); }
+.ld-app-name.moonmoon,
+ul.instances li.moonmoon { padding-left:25px; background-image:url(img/moonmoon-16.png); }
+
+/* Top Menu
+-------------------------------------------------------------- */
+
+.ld-top-menu {
+  font:11px/12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-left:15px;
+  position:absolute;
+  left:0;
+  top:29px;
+  z-index:9991;
+}
+
+.ld-top-menu-inner {
+  border:1px solid #ccc;
+  background:inherit;
+  -moz-border-radius-bottomleft:10px;
+  -moz-border-radius-bottomright:10px;
+  -webkit-border-bottom-left-radius:10px;
+  -webkit-border-bottom-right-radius:10px;
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  overflow:hidden;
+}
+
+.ld-top-menu h3 {
+  font-size:12px;
+  padding:0;
+  margin:0;
+  font-weight:normal;
+  text-transform:uppercase;
+  letter-spacing:-0.05em;
+  padding:10px 15px 0;
+}
+
+.ld-top-menu ul.instances {
+  margin:0;
+  padding:5px 15px;
+  min-width:125px;
+}
+
+.ld-top-menu ul.instances li {
+  list-style-type:none;
+  background-repeat:no-repeat;
+  background-position:2px 5px;
+  padding-top:5px;
+  padding-bottom:5px;
+  border-top:1px dotted #666;
+  font-size:13px;
+  line-height:14px;
+  padding-left:0;
+}
+
+.ld-top-menu ul.instances li a { display:block; padding-left:25px; text-decoration:none; opacity:0.9; }
+.ld-top-menu ul.instances li a:hover span.name { text-decoration:underline; }
+
+.ld-top-menu ul.instances li span.path { font-size:10px; opacity:0.75; }
 
 /* Test New Things
 -------------------------------------------------------------- */

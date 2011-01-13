@@ -38,3 +38,5 @@ $IMPORT bbpress-theme-minimal.zip
 $IMPORT firefox-sync.zip
 
 $IMPORT statusnet.zip
+
+$IMPORT moonmoon.zip

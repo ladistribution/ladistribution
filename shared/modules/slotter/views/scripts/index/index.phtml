@@ -11,16 +11,22 @@
 
 <?php return; endif ?>
 
+<?php if ($this->canAdmin) : ?>
+<ul class="ld-nav">
+    <li><a href="<?php echo $this->url(array('module' => 'slotter', 'controller' => 'settings')) ?>"><?php echo $this->translate("Settings") ?></a></li>
+</ul>
+<?php endif ?>
+
 <h2><?php echo $this->translate("Applications") ?></h2>
 
 <?php $this->instancesList() ?>
 
 <?php if (!$this->site->isChild() && defined('LD_MULTI_SITES') && constant('LD_MULTI_SITES')) : ?>
-    
+
 <h2><?php echo $this->translate("Sub Sites") ?></h2>
 
 <div class="ld-instance-list">
-    
+
     <ul class="blocks mini is-admin">
         <?php foreach ($this->site->getSites() as $id => $config) : $subsite = new Ld_Site_Child($config); $subsite->setParentSite($this->site); ?>
         <li class="">
@@ -49,47 +55,15 @@
 
 <div class="ld-home">
 
-    <div class="manage">
-        <h2><?php echo $this->translate->translate("Manage") ?></h2>
-        <?php
-        $pages = array();
-        $pages[] = array('controller' => 'users', 'label' => "Users");
-        if ($this->canManageRepositories || $this->canManageDatabases) {
-            $pages[] = array('controller' => 'repositories', 'label' => "Ressources");
-        }
-        // if ($this->canManageDatabases) {
-        //     $pages[] = array('controller' => 'databases', 'label' => "Databases");
-        // }
-        // if ($this->canManageLocales) {
-        //     $pages[] = array('controller' => 'locales', 'label' => "Locales");
-        // }
-        // if ($this->canManagePlugins) {
-        //     $pages[] = array('controller' => 'plugins', 'label' => "Plugins");
-        // }
-        $pages[] = array('controller' => 'settings', 'label' => "Settings");
-        ?>
-        <ul>
-            <?php foreach ($pages as $page) :
-                $label = $this->translate($page['label']);
-                $url = $this->url(array('controller' => $page['controller'], 'action' => 'index'));
-            ?>
-            <li><a href="<?php echo $url ?>"><?php echo $label ?></a></li>
-            <?php endforeach ?>
-        </ul>
-    </div>
-    
-    <?php if ($this->canUpdate) : ?>
+    <?php if ($this->hasUpdate) : ?>
     <div class="update">
         <h2><?php echo $this->translate("Updates") ?></h2>
-        <?php if ($this->canAdmin && $this->hasUpdate) :
-            $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update');
-            $updateString = $this->translate(
-                "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>");
-            ?>
-            <p><?php printf($updateString, $updateUrl); ?></p>
-        <?php else: ?>
-            <p><?php echo $this->translate("Everything fine, nothing to update.") ?></p>
-        <?php endif ?>
+        <?php
+        $updateUrl = $this->url(array('controller' => 'index', 'action' => 'update'), 'update');
+        $updateString = $this->translate(
+            "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>");
+        ?>
+        <p><?php printf($updateString, $updateUrl); ?></p>
     </div>
     <?php endif ?>
 

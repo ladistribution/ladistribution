@@ -1,0 +1,69 @@
+<div id="ld-top-menu" class="ld-top-menu" style="display:none">
+    <div id="ld-top-menu-inner" class="ld-top-menu-inner">
+        <?php
+        $applications = $this->site->getApplicationsInstances(array('admin'));
+        ?>
+        <div style="float:left">
+        <h3><?php echo $this->translate('Applications') ?></h3>
+        <ul class="instances">
+            <?php foreach ($applications as $id => $application) : ?>
+                <?php
+                // Visibility
+                if (!$application->isVisible()) {
+                    continue;
+                }
+                $className = $application->getPackageId();
+                $inlineStyle = '';
+                if ($icon = $application->getIcon('icon')) {
+                    $inlineStyle .= "background-image:url($icon);";
+                }
+                printf('<li id="app_%s" class="%s" style="%s">', $id, $className, $inlineStyle);
+                printf('<a href="%s"><span class="name">%s</span><br /><span class="path">/%s/</span></a>',
+                    $application->getUrl(),  $application->getName(), $application->getPath());
+                printf("</li>\n");
+                ?>
+            <?php endforeach ?>
+        </ul>
+        </div>
+
+        <?php if (Ld_Ui::isAdmin()) : ?>
+            <div style="padding-left:0;float:left">
+            <h3>La Distribution</h3>
+            <?php
+            $admin = Ld_Ui::getSite()->getAdmin();
+            $pages = array();
+            $pages[] = array('label' => "Home", 'route' => array('module' => 'slotter', 'controller' => 'index'));
+            $pages[] = array('label' => "Timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
+            $pages[] = array('label' => "Settings", 'route' => array('module' => 'slotter', 'controller' => 'settings'));
+            ?>
+            <ul class="instances">
+                <?php foreach ($pages as $page) : ?>
+                    <li><a href="<?php echo Ld_Ui::getAdminUrl($page['route']) ?>">
+                        <span class="name"><?php echo $this->translate($page['label']) ?></span><br/>
+                        <span class="path">&nbsp;</span></a></li>
+                <?php endforeach ?>
+            </ul>
+            </div>
+        <?php endif ?>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+if (typeof jQuery != 'undefined') {
+    (function($) {
+        $(document).ready(function() {
+            $(".ld-site-name").mouseenter(function() {
+                $(".ld-top-menu").show();
+            }).mouseleave(function() {
+                $(".ld-top-menu").hide();
+            });
+            $(".ld-top-menu").mouseenter(function() {
+                $(".ld-top-menu").show();
+            }).mouseleave(function() {
+                $(".ld-top-menu").hide();
+            });
+        });
+    })(jQuery);
+}
+</script>

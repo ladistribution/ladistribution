@@ -114,3 +114,15 @@
     });
     </script>
 <?php endif ?>
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $('.h6e-simple-footer').hide();
+    $('#ld-login-box').each(function() {
+        var ah = $(this).outerHeight();
+        var ph = $(window).height();
+        var mh = (ph - ah) / 3;
+        $(this).css('margin-top', mh);
+    });
+});
+</script>

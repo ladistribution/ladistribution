@@ -79,4 +79,9 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 		}
 	}
 
+	function isVisible()
+	{
+		return Ld_Auth::isAuthenticated();
+	}
+
 }

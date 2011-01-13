@@ -13,7 +13,8 @@
             $inlineStyle .= "background-image:url($icon);";
         }
         $url = $this->url(array('controller' => 'instance', 'action' => 'new', 'site' => $this->site->id)) . '?packageId=' . $id;
-        printf('<li class="%s" style="%s"><a href="%s">%s</a></li>' . "\n", $id, $inlineStyle, $url, $package->name);
+        printf('<li class="%s" style="%s"><a href="%s">%s</a><br/><span class="description">%s</span></li>' . "\n",
+            $id, $inlineStyle, $url, $package->name, $package->description);
     }
     ?>
 </ul>
@@ -30,14 +31,14 @@
 
 <div class="ld-panel-content h6e-block no-tab">
 
-<h3><?php echo sprintf($this->translate("New %s"), '<strong>' . $this->escape($this->package->name) . '</strong>') ?></h3>
+<h3><?php echo sprintf($this->translate("Install %s"), '<strong>' . $this->escape($this->package->name) . '</strong>') ?></h3>
 
 <form method="post" action="">
 
     <?php $this->preferencesRenderer($this->preferences, array(), 'preferences'); ?>
 
     <input type="hidden" name="packageId" value="<?php echo $this->escape($this->package->id) ?>"/>
-    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Create") ?>"/>
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Install") ?>"/>
 
 </form>
 

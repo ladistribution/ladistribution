@@ -45,7 +45,10 @@ class Slotter_InstanceController extends Slotter_BaseController
 
         $applicationsPage = $this->_container->findOneByLabel( $translator->translate('Applications') );
         $applicationsPage->addPage(array(
-            'label' => $translator->translate("New"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'new'
+            'label' => $translator->translate("Add"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'new'
+        ));
+        $applicationsPage->addPage(array(
+            'label' => $translator->translate("Clone"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'clone'
         ));
         if (isset($this->id, $this->instance)) {
             $action = $this->getRequest()->action;

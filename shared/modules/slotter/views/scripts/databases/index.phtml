@@ -1,10 +1,12 @@
-<h2><?php echo $this->translate("Databases") ?></h2>
+<h2><?php echo $this->translate("Settings") ?></h2>
 
 <div class="ld-panel">
 
-<?php $this->partialNavigationMenu('Ressources') ?>
+<?php $this->partialNavigationMenu('Settings') ?>
 
 <div class="ld-panel-content h6e-block">
+
+<h3><?php echo $this->translate("Databases") ?></h3>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 

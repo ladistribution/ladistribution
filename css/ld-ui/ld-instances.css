@@ -36,6 +36,12 @@ ul.blocks li.empty {
 /* Alternative 'mini' Style
 -------------------------------------------------------------- */
 
+ul.blocks.instance-list, ul.blocks.new-instance {
+  width:980px;
+  position:relative;
+  left:-10px;
+}
+
 ul.blocks.mini li {
 
   padding:10px;
@@ -57,8 +63,20 @@ ul.blocks.mini li {
   line-height:1.2em;
 }
 
-ul.blocks.mini.is-admin li {
-  min-width:165px;
+ul.blocks.mini li {
+  width:160px;
+  height:32px;
+  margin:10px;
+}
+
+ul.blocks.mini.new-instance li {
+  width:240px;
+}
+
+ul.blocks.mini.instance-widget li {
+  margin:0;
+  width:auto;
+  height:auto;
 }
 
 ul.blocks.mini li .name {
@@ -96,6 +114,11 @@ ul.blocks.mini li .path {
   opacity:0.75;
 }
 
+ul.blocks.mini li .description {
+  font-size:12px;
+  opacity:0.9;
+}
+
 ul.blocks.mini li .path, ul.blocks.mini li .manage  {
   white-space:nowrap;
 }
@@ -106,7 +129,6 @@ ul.blocks.mini li.dokuwiki  { background-image:url(img/dokuwiki-48.png); }
 ul.blocks.mini li.bbpress   { background-image:url(img/bbpress-48.png); }
 ul.blocks.mini li.gallery   { background-image:url(img/gallery-48.png); }
 ul.blocks.mini li.statusnet { background-image:url(img/statusnet-48.png); }
-ul.blocks.mini li.dotclear  { background-image:url(img/dotclear-48.png); }
 ul.blocks.mini li.firefox-sync { background-image:url(img/firefox-sync-48.png); }
 ul.blocks.mini li.blogmarks { background-image:url(img/blogmarks-48.png); }
 ul.blocks.mini li.moonmoon { background-image:url(img/moonmoon-48.png); }

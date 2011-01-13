@@ -10,7 +10,7 @@ echo "# Building $NAME package"
 
 echo "# Get source from $SOURCE with curl"
 curl $SOURCE --user-agent "La Distribution Build system (http://ladistribution.net/)" -# > $ZIP
-unzip $ZIP
+unzip -q $ZIP
 rm $ZIP
 
 # Grab files we want
@@ -22,7 +22,7 @@ rm -rf "$BUILD"
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER manifest.xml Rediska.php
+zip -r $PACKAGE $FOLDER manifest.xml Rediska.php -q
 mv $PACKAGE ../../
 
 # Clean

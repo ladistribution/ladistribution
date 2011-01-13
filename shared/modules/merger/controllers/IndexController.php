@@ -24,7 +24,7 @@ class Merger_IndexController extends Ld_Controller_Action
         //     $this->view->layoutTitle = $owner['fullname'];
         } 
 
-        $this->view->layoutTitle = $translator->translate("News Feed");
+        // $this->view->layoutTitle = $translator->translate("News Feed");
 
         if ($this->view->canAdmin = $this->userCan('admin')) {
             $this->view->canManageDatabases = $this->userCan('manage', 'databases');

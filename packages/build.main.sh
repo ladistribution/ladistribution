@@ -102,6 +102,14 @@ cd firefox-sync
 
 cd ..
 
+cd moonmoon
+
+  cd application
+  ./build.sh
+  cd ..
+
+cd ..
+
 cd lib
 
   cd clearbricks

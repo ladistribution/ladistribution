@@ -134,6 +134,13 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         return $this->_acl = $acl;
     }
 
+    public function userCan($action, $ressource = null)
+    {
+        $acl = self::getAcl();
+        $userRole = self::getUserRole();
+        return $acl->isAllowed($userRole, $ressource, $action);
+    }
+
     public function getOpenidDir()
     {
         $openidDirectory = $this->getAbsolutePath() . '/openid';

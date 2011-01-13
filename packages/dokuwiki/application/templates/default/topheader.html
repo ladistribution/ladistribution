@@ -1,0 +1,19 @@
+<?php
+
+global $conf;
+
+$loginUrl = Ld_Ui::getAdminUrl(array(
+    'module' => 'default', 'controller' => 'auth', 'action' => 'login',
+));
+
+if (empty($loginUrl)) {
+    $loginUrl = wl($ID,'do=login&amp;sectok='.getSecurityToken());
+}
+
+if (empty($logoutUrl)) {
+    $logoutUrl = wl($ID,'do=logout&amp;sectok='.getSecurityToken());
+}
+
+if (empty($conf['topbar']) || $conf['topbar'] == 'everyone' || ($conf['topbar'] == 'connected' && isset($_SERVER['REMOTE_USER']))) {
+    Ld_Ui::topBar(array('full-width' => true, 'loginUrl' => $loginUrl, 'logoutUrl' => $logoutUrl));
+}

@@ -28,6 +28,7 @@
 
 .ld-panel h3 {
   font-size:18px;
+  font-weight:200;
   margin:0.5em 0 1em;
 }
 
@@ -48,7 +49,6 @@
 
 .ld-instance-menu li a {
   font-size:12px;
-  text-transform:capitalize;
 }
 
 .ld-instance-menu li.active a, .h6e-tabs li.active a  {

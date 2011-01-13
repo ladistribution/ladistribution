@@ -1,6 +1,8 @@
-<h2><?php echo $this->translate("Users") ?></h2>
+<h2><?php echo $this->translate("Settings") ?></h2>
 
-<div class="ld-panel-content h6e-block no-tab">
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content h6e-block">
 
 <?php if (empty($this->users)) : ?>
 

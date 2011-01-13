@@ -44,12 +44,6 @@ class Ld_Plugin_Gloss
                 background-image: -moz-linear-gradient(top, #<?php echo $darker ?>, #<?php echo $lighter ?> 450px);
                 background-image: -webkit-gradient(linear, left top, left 450, from(#<?php echo $darker ?>), to(#<?php echo $lighter ?>));
             }
-            .h6e-main-content h2, .h6e-main-content h2 a, .h6e-page-title, .h6e-page-title a {
-                text-shadow: 5px 5px 5px rgba(0,0,0,0.25);
-            }
-            .h6e-page-content h2, .h6e-page-content h2 a {
-                text-shadow: none;
-            }
             ul.blocks.mini li, .h6e-block {
                 -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.25);
                 -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.25);

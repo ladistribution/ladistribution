@@ -196,6 +196,11 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         return strpos( $_SERVER["REQUEST_URI"], $this->getSite()->getPath() . '/' . $this->getPath() . "/" ) === 0;
     }
 
+    public function isVisible()
+    {
+        return $this->getInstaller()->isVisible();
+    }
+
     public function getCurrentPath()
     {
         $basePath = $this->isRoot() ? $this->getSite()->getPath() : $this->getSite()->getPath() . '/' . $this->getPath();

@@ -31,11 +31,18 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $settings = array();
         $settings[] = array( 'label' => $t->translate('General'), 'module' => 'slotter', 'controller' => 'settings' );
+        $settings[] = array( 'label' => $t->translate('Users'), 'module' => 'slotter', 'controller' => 'users' );
         if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
             $settings[] = array( 'label' => $t->translate('Colors'), 'module' => 'slotter', 'controller' => 'appearance' );
             if (Ld_Plugin::applyFilters('Site:customCss', true)) {
                 $settings[] = array( 'label' => $t->translate('CSS'), 'module' => 'slotter', 'controller' => 'appearance', 'action' => 'css' );
             }
+        }
+        if ($this->admin->userCan('admin', 'repositories')) {
+            $settings[] = array( 'label' => $t->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' );
+        }
+        if ($this->admin->userCan('admin', 'databases')) {
+            $settings[] = array( 'label' => $t->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' );
         }
         if (!$this->site->isChild()) {
             if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
@@ -51,10 +58,10 @@ class Slotter_BaseController extends Ld_Controller_Action
             array( 'label' => $t->translate('Home'), 'module' => 'slotter', 'route' => 'default',
                 'pages' => array(
                     array( 'label' => $t->translate('Applications'), 'module'=> 'slotter', 'route' => 'default'),
-                    array( 'label' => $t->translate('Ressources'), 'module' => 'slotter', 'controller' => 'repositories', 'pages' => array(
-                        array( 'label' => $t->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
-                        array( 'label' => $t->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
-                    )),
+                    // array( 'label' => $t->translate('Ressources'), 'module' => 'slotter', 'controller' => 'repositories', 'pages' => array(
+                    //          array( 'label' => $t->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' ),
+                    //          array( 'label' => $t->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' ),
+                    //      )),
                     array( 'label' => $t->translate('Users'), 'module' => 'slotter', 'controller' => 'users' ),
                     array( 'label' => $t->translate('Settings'), 'module' => 'slotter', 'controller' => 'settings', 'pages' => $settings),
             ))

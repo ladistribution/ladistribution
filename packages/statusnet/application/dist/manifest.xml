@@ -1,7 +1,8 @@
 <package>
   <id>statusnet</id>
   <name>Status.net</name>
-  <version>0.9.6-7</version>
+  <description>Microblogging Engine</description>
+  <version>0.9.6-8</version>
   <type>application</type>
   <db>mysql</db>
   <php>

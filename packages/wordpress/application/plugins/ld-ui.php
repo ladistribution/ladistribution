@@ -37,6 +37,11 @@ add_action('login_head', 'ld_admin_head');
 
 function ld_styles()
 {
+	wp_enqueue_script('jquery', Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery'));
+	$current_theme = get_current_theme();
+	if ($current_theme == 'Minimal' || $current_theme == 'Minimal (with blocks)') {
+		wp_enqueue_style('h6e-minimal', Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'css-h6e-minimal'));
+	}
 	wp_enqueue_style('ld-ui', Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui'));
 	if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
 		wp_enqueue_style('application-style', Ld_Ui::getApplicationStyleUrl(), array('ld-ui'));

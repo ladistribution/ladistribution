@@ -9,6 +9,9 @@ echo "# Get source from $SOURCE with git"
 git clone --quiet git://github.com/znarf/moonmoon.git $FOLDER
 rm -rf $FOLDER/.git
 
+cp moonmoon-16.png $FOLDER
+cp moonmoon-48.png $FOLDER
+
 # Remove some useless (or not desired) files
 rm $FOLDER/install.php
 rm $FOLDER/admin/changepassword.php

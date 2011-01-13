@@ -13,7 +13,7 @@ class View_Helper_InstanceWidget extends Zend_View_Helper_Abstract
             <li><a href="<?php echo $application->getUrl() ?>"><?php echo $this->translate("Back to the application") ?></a></li>
         </ul>
 
-        <ul class="blocks mini">
+        <ul class="blocks mini instance-widget">
 
         <?php
 

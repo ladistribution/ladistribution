@@ -45,6 +45,7 @@ function ld_bbpress_template_head()
 		}
 	}
 	echo '</style>' . "\n";
+	echo '<script type="text/javascript" src="' . Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery') .'"></script>'."\n";
 }
 
 add_action('bb_head', 'ld_bbpress_template_head');

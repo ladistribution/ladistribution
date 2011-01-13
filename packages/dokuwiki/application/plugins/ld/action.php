@@ -68,11 +68,15 @@ class action_plugin_ld extends DokuWiki_Action_Plugin {
 
 	function tpl_metaheader_output(&$event, $param)
 	{
+		// Scripts
+		$event->data["script"][] = array('type' => 'text/javascript',
+			'src' => Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery'));
+		// Stylesheets
 		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
 			'href' => Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui'));
 		if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
-		$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
-			'href' => Ld_Ui::getApplicationStyleUrl());
+			$event->data['link'][] = array('rel' => 'stylesheet', 'type' => 'text/css',
+				'href' => Ld_Ui::getApplicationStyleUrl());
 		}
 	}
 

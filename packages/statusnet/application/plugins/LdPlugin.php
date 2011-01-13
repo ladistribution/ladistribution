@@ -13,6 +13,10 @@ class LdPlugin extends Plugin
 
 	function onEndShowHeadElements($action)
 	{
+		// Scripts
+		$action->element('script', array('type' => 'text/javascript',
+			'src' => Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery')));
+		// Stylesheets
 		if (common_config('site', 'theme') == 'ld') {
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',
 				'href' => Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'h6e-minimal')));

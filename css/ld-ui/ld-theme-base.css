@@ -1,7 +1,7 @@
 /* Top Bar & Super Bar
 -------------------------------------------------------------- */
 
-.h6e-super-bar-inner, .h6e-top-bar-inner {
+.h6e-super-bar-inner, .h6e-top-bar-inner, .ld-top-menu-inner {
   background:#EDEDED;
   border-color:#CCCCCC;
 }

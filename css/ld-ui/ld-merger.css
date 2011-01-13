@@ -93,3 +93,8 @@
 .ld-merger .h6e-sidebar ul.blocks.mini li {
   float:none;
 }
+
+.ld-merger .h6e-sidebar-inner .ld-merger-sidebar-widget {
+  font-size:1em;
+  margin-bottom:2em;
+}
