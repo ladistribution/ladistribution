@@ -2,7 +2,7 @@
   <id>statusnet</id>
   <name>Status.net</name>
   <description>Microblogging Engine</description>
-  <version>0.9.6-8</version>
+  <version>0.9.6-9</version>
   <type>application</type>
   <db>mysql</db>
   <php>
@@ -37,10 +37,9 @@
       <preference type="text" label="App Short Name" name="name"/>
       <preference type="text" label="App Title" name="title"/>
       <preference type="boolean" label="Private" name="private" defaultValue="false"/>
-      <preference type="list" label="Display the bottom bar" name="superbar">
+      <preference type="list" label="Display Top Bar" name="topbar">
           <option value="everyone" label="For everyone"/>
           <option value="connected" label="For connected users"/>
-          <option value="never" label="Never"/>
       </preference>
   </configuration>
 </package>

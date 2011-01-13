@@ -63,18 +63,22 @@ class LdPlugin extends Plugin
 	{
 		if (common_config('site', 'theme') == 'ld') {
 			$action->elementStart('div', array('class' => 'h6e-layout'));
-			$action->raw(Ld_Ui::getTopBar(array('logoutUrl' => common_local_url('logout'))));
+			$conf = Zend_Registry::get('application')->getConfiguration();
+			$topbar = isset($conf['topbar']) ? $conf['topbar'] : 'everyone';
+			if ($topbar == 'everyone' || ($topbar == 'connected' && common_current_user())) {
+				$action->raw(Ld_Ui::getTopBar(array('logoutUrl' => common_local_url('logout'))));
+			}
 			$action->elementStart('div', array('class' => 'h6e-main-content'));
 		}
 	}
 
 	function onEndShowFooter($action)
 	{
-		$conf = Zend_Registry::get('application')->getConfiguration();
-		$superbar = isset($conf['superbar']) ? $conf['superbar'] : 'everyone';
-		if ($superbar == 'everyone' || ($superbar == 'connected' && common_current_user())) {
-			$action->raw( Ld_Ui::getSuperBar() );
-		}
+		// $conf = Zend_Registry::get('application')->getConfiguration();
+		// $superbar = isset($conf['superbar']) ? $conf['superbar'] : 'everyone';
+		// if ($superbar == 'everyone' || ($superbar == 'connected' && common_current_user())) {
+		// 	$action->raw( Ld_Ui::getSuperBar() );
+		// }
 		if (common_config('site', 'theme') == 'ld') {
 			$action->elementEnd('div');
 			$action->elementEnd('div');
