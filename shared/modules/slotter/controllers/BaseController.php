@@ -38,10 +38,10 @@ class Slotter_BaseController extends Ld_Controller_Action
                 $settings[] = array( 'label' => $t->translate('CSS'), 'module' => 'slotter', 'controller' => 'appearance', 'action' => 'css' );
             }
         }
-        if ($this->admin->userCan('admin', 'repositories')) {
+        if ($this->admin->userCan('manage', 'repositories')) {
             $settings[] = array( 'label' => $t->translate('Repositories'), 'module' => 'slotter', 'controller' => 'repositories' );
         }
-        if ($this->admin->userCan('admin', 'databases')) {
+        if ($this->admin->userCan('manage', 'databases')) {
             $settings[] = array( 'label' => $t->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' );
         }
         if (!$this->site->isChild()) {
