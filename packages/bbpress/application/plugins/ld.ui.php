@@ -3,7 +3,7 @@
 Plugin Name: Ld UI
 Plugin URI: http://h6e.net/bbpress/plugins/ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.5.5
+Version: 0.5.6
 Author: h6e
 Author URI: http://h6e.net/
 */
@@ -38,7 +38,7 @@ function ld_bbpress_template_head()
 		echo 'body { margin-bottom:50px !important; }' . "\n";
 	}
 	$theme = bb_get_option('bb_active_theme');
-	if ($theme == 'core#kakumei' || $theme == 'core#kakumei-blue' || $theme == 'core#kakumei-ld') {
+	if ($theme == 'core#kakumei' || $theme == 'core#kakumei-blue') {
 		echo 'body { background:none; }' . "\n";
 		if (ld_display_bar('topbar')) {
 			echo '#header p.login { display:none; }' . "\n";
@@ -52,6 +52,9 @@ add_action('bb_head', 'ld_bbpress_template_head');
 
 function ld_display_bar($bar = 'topbar')
 {
+	if ($bar == 'superbar') {
+		return false;
+	}
 	$topbar = bb_get_option($bar);
 	if (empty($topbar) || $topbar == 'everyone' || ( $topbar == 'connected' && bb_is_user_logged_in() ) ) {
 		return true;

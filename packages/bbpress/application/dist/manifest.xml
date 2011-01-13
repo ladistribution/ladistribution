@@ -2,7 +2,7 @@
   <id>bbpress</id>
   <name>bbPress</name>
   <description>Forum Software</description>
-  <version>1.0.2-2011-01-3</version>
+  <version>1.0.2-2011-01-4</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>
@@ -25,12 +25,6 @@
       <preference type="list" label="Display the top bar" name="topbar">
           <option value="everyone" label="For everyone"/>
           <option value="connected" label="For connected users"/>
-          <option value="never" label="Never"/>
-      </preference>
-      <preference type="list" label="Display the bottom bar" name="superbar">
-          <option value="everyone" label="For everyone"/>
-          <option value="connected" label="For connected users"/>
-          <option value="never" label="Never"/>
       </preference>
   </configuration>
 </package>
