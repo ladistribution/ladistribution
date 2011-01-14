@@ -99,9 +99,16 @@ abstract class Ld_Instance_Abstract
 
     public function getPackage()
     {
-        $package = $this->getSite()->getPackage( $this->getPackageId() );
-        // $package = Ld_Package::loadFromDirectory( $this->getAbsolutePath() );
-        return $package;
+        if (empty($this->_package)) {
+            $site = $this->getSite();
+            $packageId = $this->getPackageId();
+            if ($site->hasPackage($packageId)) {
+                $this->_package = $site->getPackage($packageId);
+            } else {
+                $this->_package = Ld_Package::loadFromDirectory($this->getAbsolutePath());
+            }
+        }
+        return $this->_package;
     }
 
     public function hasUpdate()
