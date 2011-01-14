@@ -28,25 +28,24 @@
         </div>
         <?php endif ?>
 
-        <?php if (Ld_Ui::isAdmin()) : ?>
-            <div class="ladistribution">
-            <h3>La Distribution</h3>
-            <?php
-            $admin = Ld_Ui::getSite()->getAdmin();
-            $pages = array();
-            $pages[] = array('label' => "Home", 'route' => array('module' => 'slotter', 'controller' => 'index'));
-            $pages[] = array('label' => "Timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
+        <div class="ladistribution">
+        <h3>La Distribution</h3>
+        <?php
+        $pages = array();
+        $pages[] = array('label' => "Home", 'route' => array('module' => 'slotter', 'controller' => 'index'));
+        $pages[] = array('label' => "Timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
+        if (Ld_Ui::isAdmin()) {
             $pages[] = array('label' => "Settings", 'route' => array('module' => 'slotter', 'controller' => 'settings'));
-            ?>
-            <ul class="instances">
-                <?php foreach ($pages as $page) : ?>
-                    <li><a href="<?php echo Ld_Ui::getAdminUrl($page['route']) ?>">
-                        <span class="name"><?php echo $this->translate($page['label']) ?></span><br/>
-                        <span class="path">&nbsp;</span></a></li>
-                <?php endforeach ?>
-            </ul>
-            </div>
-        <?php endif ?>
+        }
+        ?>
+        <ul class="instances">
+            <?php foreach ($pages as $page) : ?>
+                <li><a href="<?php echo Ld_Ui::getAdminUrl($page['route']) ?>">
+                    <span class="name"><?php echo $this->translate($page['label']) ?></span><br/>
+                    <span class="path">&nbsp;</span></a></li>
+            <?php endforeach ?>
+        </ul>
+        </div>
 
     </div>
 </div>
