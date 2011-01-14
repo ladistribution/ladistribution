@@ -121,3 +121,4 @@ table.ld-form, table.ld-preferences  {
 
 .css-editor-textarea { width:855px; height:250px; }
 .css-editor-frame { background:white; }
+.CodeMirror-wrapping { border:1px solid #ccc; }

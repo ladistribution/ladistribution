@@ -44,7 +44,8 @@ class Slotter_AppearanceController extends Slotter_BaseController
         }
 
         if ($this->getRequest()->isPost() && $this->_hasParam('css')) {
-            $this->site->setCustomCss($this->_getParam('css'));
+            $css = trim($this->_getParam('css'));
+            $this->site->setCustomCss($css);
             $this->_redirector->gotoSimple('css', 'appearance', 'slotter');
         }
 

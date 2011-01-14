@@ -42,6 +42,10 @@ ul.blocks.instance-list, ul.blocks.new-instance {
   left:-10px;
 }
 
+ul.blocks.mini.instance-widget {
+  margin-bottom:2.5em;
+}
+
 ul.blocks.mini li {
 
   padding:10px;

@@ -3,10 +3,10 @@ $this->js()->append('/codemirror/codemirror.js', 'js-codemirror');
 ?>
 
 <textarea id="css-editor" class="css-editor-textarea" cols="100" rows="15" name="css"><?php
-    if (isset($this->css)) {
+    if (!empty($this->css)) {
         echo $this->escape($this->css);
     } else {
-        echo "/*\nEmpty for now\n*/";
+        echo "/*\nEmpty for now\n*/\n\n\n";
     }
 ?></textarea>
 
@@ -14,7 +14,6 @@ $this->js()->append('/codemirror/codemirror.js', 'js-codemirror');
   var editor = CodeMirror.fromTextArea('css-editor', {
     width: "860px",
     height: "250px",
-    // lineNumbers: true,
     path: "<?php echo $this->site->getUrl('js') ?>/codemirror/",
     parserfile: "parsecss.js",
     stylesheet: "<?php echo $this->site->getUrl('css') ?>/codemirror/csscolors.css",
