@@ -141,7 +141,24 @@ class Ld_Auth
         }
         $path = $site->getPath();
         $cookiePath = empty($path) ? '/' : $path;
+        $_COOKIE['ld-identities'] = implode(";", $identities);
         setCookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
+    }
+
+    public static function forgetIdentity($identity)
+    {
+        $site = Zend_Registry::get('site');
+        if (isset($_COOKIE['ld-identities'])) {
+            $identities = explode(";", $_COOKIE['ld-identities']);
+            $key = array_search($identity, $identities);
+            if ($key !== false) {
+                unset($identities[$key]);
+                $path = $site->getPath();
+                $cookiePath = empty($path) ? '/' : $path;
+                $_COOKIE['ld-identities'] = implode(";", $identities);
+                setCookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
+            }
+        }
     }
 
 }

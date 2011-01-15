@@ -10,6 +10,7 @@ Ld.init = function($)
     this.sortableUserRoles($);
     // this.instanceMenu($);
     this.langSwitcher($);
+    this.loginBox($);
 }
 
 Ld.dataTables = function($)
@@ -111,4 +112,15 @@ Ld.sortableUserRoles = function($)
     }).change();
 
     $(".ld-group.sortable .ld-user").addClass('movable');
+}
+
+Ld.loginBox = function($)
+{
+    $('#ld-login-box').each(function() {
+        $('.h6e-simple-footer').hide();
+        var ah = $(this).outerHeight();
+        var ph = $(window).height();
+        var mh = (ph - ah) / 3;
+        $(this).css('margin-top', mh);
+    });
 }

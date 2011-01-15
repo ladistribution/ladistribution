@@ -59,7 +59,7 @@
   margin:2px;
 }
 
-#ld-identities a {
+#ld-identities a.identity {
   display:block;
   padding:5px 5px;
   vertical-align:middle;
@@ -71,7 +71,7 @@
   border:1px solid #bbb;
 }
 
-#ld-identities a:hover {
+#ld-identities a.identity:hover {
   color:white;
   background-color:#4E5368;
   border-color:#333;
@@ -88,4 +88,17 @@
   line-height:0;
   color:#999;
   padding-left:10px;
+}
+
+#ld-identities a.forget {
+  float:right;
+  text-indent:-1000px;
+  background:url(iconic/x_7x7_gray_light.png) 7px 7px no-repeat;
+  width:7px;
+  height:7px;
+  padding:7px 7px 0;
+}
+
+#ld-identities a.forget:hover {
+  background-image:url(iconic/x_7x7_gray_dark.png);
 }

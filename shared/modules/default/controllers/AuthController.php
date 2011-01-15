@@ -62,6 +62,10 @@ class AuthController extends Ld_Controller_Action
             }
         }
 
+        if (isset($_GET['forget-identity'])) {
+            Ld_Auth::forgetIdentity($_GET['forget-identity']);
+        }
+
         $this->view->identities = Ld_Auth::getIdentities();
 
         $this->view->open_registration = $this->getSite()->getConfig('open_registration');

@@ -163,7 +163,7 @@ class Ld_Ui
 
         if ($user = Ld_Auth::getUser()) {
             $view->userUrl = self::getAdminUrl(array(
-                'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => urlencode($user['username'])
+                'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => $user['username']
             ));
         }
 
