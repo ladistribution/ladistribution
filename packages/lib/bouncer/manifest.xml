@@ -1,7 +1,7 @@
 <package>
   <id>lib-bouncer</id>
   <name>Bouncer</name>
-  <version>0.1.0-3</version>
+  <version>0.1.0-5</version>
   <type>lib</type>
   <need>lib-rediska</need>
   <deploy>
