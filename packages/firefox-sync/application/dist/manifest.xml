@@ -2,7 +2,7 @@
   <id>firefox-sync</id>
   <name>Firefox Sync</name>
   <description>Browser Synchronization</description>
-  <version>1.5-7</version>
+  <version>1.5-8</version>
   <type>application</type>
   <db>mysql</db>
   <deploy>

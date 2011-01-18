@@ -3,7 +3,9 @@
 function ld_weave_sync_path($path = '/')
 {
 	global $site, $application;
-	$path = str_replace("/1.0/", "/", $application->getCurrentPath());
+	$path = $application->getCurrentPath();
+	$path = str_replace("/1.0/", "/", $path);
+	$path = str_replace("/1.1/", "/", $path);
 	return $path;
 }
 

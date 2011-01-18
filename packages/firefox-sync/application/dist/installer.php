@@ -56,12 +56,10 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 			`modified` bigint(20) default NULL,
 			`payload` longtext,
 			`payload_size` int(11) default NULL,
+			`ttl` int NOT NULL,
 			PRIMARY KEY  (`username`,`collection`,`id`),
-			KEY `parentindex` (`username`,`collection`,`parentid`),
 			KEY `modified` (`username`,`collection`,`modified`),
-			KEY `weightindex` (`username`,`collection`,`sortindex`),
-			KEY `predecessorindex` (`username`,`collection`,`predecessorid`),
-			KEY `size_index` (`username`,`payload_size`)
+			KEY `ttl` (`ttl`)
 		) ENGINE=InnoDB;";
 
 		return $tables;
