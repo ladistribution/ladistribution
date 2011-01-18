@@ -321,7 +321,8 @@ class Slotter_UsersController extends Slotter_BaseController
             "You can activate your account by clicking on the link below." . "\n" .
             $activationUrl;
 
-        $mail = new Zend_Mail();
+        $mail = new Zend_Mail('UTF-8');
+        $mail = Ld_Plugin::applyFilters('Slotter:mail', $mail);
         $mail->setFrom($this->currentUser['email'], $this->currentUser['fullname']);
         $mail->addTo($user['email']);
         $mail->setSubject('Invitation to join ' . $this->site->getName());
