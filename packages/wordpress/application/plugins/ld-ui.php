@@ -54,9 +54,9 @@ function ld_template_head()
 	if (ld_display_bar('topbar')) {
 		echo 'body { padding-top:30px !important; }' . "\n";
 	}
-	if ($current_theme == 'Twenty Ten') {
+	if ($current_theme == 'Twenty Ten' || $current_theme == 'Coraline') {
 		$colors = Ld_Ui::getApplicationColors();
-		echo '#wrapper { border:1px solid #' . $colors['ld-colors-border-2'] . '; }' . "\n";
+		echo '#wrapper { border:1px solid #' . $colors['ld-colors-border-2'] . '; margin-bottom:30px; }' . "\n";
 	}
 	echo '</style>'."\n";
 }

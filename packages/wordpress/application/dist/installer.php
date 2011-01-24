@@ -384,6 +384,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 			global $PHP_SELF;
 			global $show_admin_bar;
 			$show_admin_bar = false;
+			global $allowedposttags, $allowedtags, $allowedentitynames;
 			require_once $this->getAbsolutePath() . "/wp-load.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
 			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";

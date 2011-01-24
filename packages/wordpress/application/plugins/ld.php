@@ -242,14 +242,26 @@ function ld_locale($locale = '')
 
 add_filter('locale', 'ld_locale');
 
-function ld_fix_globals()
+function ld_fix_globals_plugins_loaded()
 {
 	if (empty($GLOBALS['wp_rewrite'])) {
 		$GLOBALS['wp_rewrite'] =& new WP_Rewrite();
 	}
+	if (empty($GLOBALS['wp_widget_factory'])) {
+		$GLOBALS['wp_widget_factory'] =& new WP_Widget_Factory();
+	}
 }
 
-add_action('plugins_loaded', 'ld_fix_globals', 0);
+add_action('plugins_loaded', 'ld_fix_globals_plugins_loaded', 0);
+
+function ld_fix_globals_after_setup_theme()
+{
+	if (empty($GLOBALS['wp_locale'])) {
+		$GLOBALS['wp_locale'] =& new WP_Locale();
+	}
+}
+
+add_action('after_setup_theme', 'ld_fix_globals_after_setup_theme', 0);
 
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Wordpress:plugin');
