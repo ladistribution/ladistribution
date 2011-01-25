@@ -96,7 +96,8 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
               <li>When initialising, choose:
                   <ol>
                       <li>"<strong>I'm already using Sync on another computer</strong>"</li>
-                      <li>"<strong>Use a custom server</strong>"</li> 
+                      <li>"<strong>Use a custom server</strong>"</li>
+                      <li>Then, enter a new synchronization key</strong></li>
                   </ol>
               </li>
               <li>registration is not possible from Firefox extension</li>

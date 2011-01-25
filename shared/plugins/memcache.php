@@ -45,7 +45,7 @@ class Ld_Plugin_Memcache
         defined('LD_MEMCACHED') OR define('LD_MEMCACHED', class_exists('Memcache'));
 
         if (constant('LD_MEMCACHED') && class_exists('Memcache')) {
-            Ld_Plugin::addAction('Weave:prepend', array($this, 'weave_prepend'));
+            Ld_Plugin::addAction('Sync:prepend', array($this, 'sync_prepend'));
             Ld_Plugin::addAction('Statusnet:config', array($this, 'statusnet_config'));
             Ld_Plugin::addAction('Wordpress:prepend', array($this, 'wordpress_prepend'));
         }
@@ -94,7 +94,7 @@ class Ld_Plugin_Memcache
         }
     }
 
-    public function weave_prepend()
+    public function sync_prepend()
     {
         $servers = $this->servers();
         if (empty($servers)) {

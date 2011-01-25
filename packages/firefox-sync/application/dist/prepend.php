@@ -37,8 +37,18 @@ define('WEAVE_MYSQL_COLLECTION_TABLE_NAME', "{$dbPrefix}collections");
 // they can be difficult to trace and break JSON output
 error_reporting( E_ALL ^ E_NOTICE );
 
+// Search for Authentication
+if (empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['PHP_AUTH_PW'])) {
+    $keys = array('AUTHORIZATION', 'REDIRECT_AUTHORIZATION', 'REDIRECT_REDIRECT_AUTHORIZATION');
+    foreach ($keys as $key) {
+        if (isset($_SERVER[$key]) && preg_match('/Basic\s+(.*)$/i', $_SERVER[$key], $matches)) {
+            list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode($matches[1]));
+        }
+    }
+}
+
 if (class_exists('Ld_Plugin')) {
-	Ld_Plugin::doAction('Weave:prepend');
+    Ld_Plugin::doAction('Sync:prepend');
 }
 
 /*

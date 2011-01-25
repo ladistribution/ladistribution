@@ -71,8 +71,8 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 			$htaccess  = "RewriteEngine on\n";
 			$htaccess .= "RewriteBase {$path}\n";
-			$htaccess .= "RewriteRule ^1.0 sync/1.1/index.php [L]\n";
-			$htaccess .= "RewriteRule ^1.1 sync/1.1/index.php [L]\n";
+			$htaccess .= "RewriteRule ^1.0 sync/1.1/index.php [E=AUTHORIZATION:%{HTTP:Authorization},L]\n";
+			$htaccess .= "RewriteRule ^1.1 sync/1.1/index.php [E=AUTHORIZATION:%{HTTP:Authorization},L]\n";
 			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 		}
 	}
