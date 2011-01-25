@@ -1,8 +1,9 @@
 NAME="dokuwiki"
 VERSION="2010-11-07"
-SUB_VERSION=""
+SUB_VERSION="a"
 GZ="$NAME.tgz"
-SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-{$VERSION}{$SUB_VERSION}.tgz"
+SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-$VERSION$SUB_VERSION.tgz"
+TMP="$NAME-$VERSION$SUB_VERSION"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
@@ -12,7 +13,7 @@ echo "# Get source from $SOURCE with curl"
 curl $SOURCE -# > $GZ
 tar -x -f $GZ
 rm $GZ
-mv $NAME-$VERSION $FOLDER
+mv $TMP $FOLDER
 
 echo "# Get spam list with curl"
 curl http://meta.wikimedia.org/wiki/Spam_blacklist?action=raw -# | grep -v '<pre>' > $FOLDER/conf/wordblock.conf
