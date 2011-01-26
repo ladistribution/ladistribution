@@ -35,6 +35,14 @@ class Ld_Plugin_Development
             'name' => 'time_limit', 'label' => ('Time Limit'),
             'type' => 'text', 'defaultValue' => '30'
         );
+        $preferences[] = array(
+            'name' => 'no_rewrite', 'label' => ('URL Rewriting not available'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
+        $preferences[] = array(
+            'name' => 'nocompress_js_css', 'label' => ('Use non-compressed JS & CSS'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
         // $preferences[] = array(
         //     'name' => 'include_path', 'label' => ('Include Path'),
         //     'type' => 'text', 'defaultValue' => str_replace(LD_LIB_DIR . PATH_SEPARATOR, '', ini_get('include_path'))
@@ -87,10 +95,19 @@ class Ld_Plugin_Development
         //     $path = empty($include_path) ? LD_LIB_DIR : LD_LIB_DIR . PATH_SEPARATOR . $include_path;
         //     set_include_path($path);
         // }
-        $active_ajax_users = $site->getConfig('active_ajax_users');
-        if ($active_ajax_users) {
-            defined('LD_AJAX_USERS') OR define('LD_AJAX_USERS', true);
+        $no_rewrite = $site->getConfig('no_rewrite');
+        if ($no_rewrite) {
+            defined('LD_REWRITE') OR define('LD_REWRITE', false);
         }
+        $nocompress_js_css = $site->getConfig('nocompress_js_css');
+        if ($nocompress_js_css) {
+            defined('LD_COMPRESS_JS') OR define('LD_COMPRESS_JS', false);
+            defined('LD_COMPRESS_CSS') OR define('LD_COMPRESS_CSS', false);
+        }
+        // $active_ajax_users = $site->getConfig('active_ajax_users');
+        // if ($active_ajax_users) {
+        //     defined('LD_AJAX_USERS') OR define('LD_AJAX_USERS', true);
+        // }
         $active_multi_sites = $site->getConfig('active_multi_sites');
         if ($active_multi_sites) {
             defined('LD_MULTI_SITES') OR define('LD_MULTI_SITES', true);

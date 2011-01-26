@@ -96,7 +96,7 @@
   background:url(iconic/x_7x7_gray_light.png) 7px 7px no-repeat;
   width:7px;
   height:7px;
-  padding:7px 7px 0;
+  padding:7px;
 }
 
 #ld-identities a.forget:hover {
