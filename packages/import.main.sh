@@ -29,6 +29,8 @@ $IMPORT js-jquery-colorpicker.zip
 $IMPORT js-codemirror.zip
 
 $IMPORT wordpress.zip
+$IMPORT wordpress-theme-coraline.zip
+$IMPORT wordpress-theme-pilcrow.zip
 
 $IMPORT dokuwiki.zip
 

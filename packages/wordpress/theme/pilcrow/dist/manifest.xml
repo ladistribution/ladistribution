@@ -1,0 +1,8 @@
+<package>
+  <id>wordpress-theme-pilcrow</id>
+  <name>Pilcrow</name>
+  <version>1.0-1</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/pilcrow</directory>
+</package>

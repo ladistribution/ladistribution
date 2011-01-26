@@ -1,0 +1,8 @@
+<package>
+  <id>wordpress-theme-coraline</id>
+  <name>Coraline</name>
+  <version>1.0.2-1</version>
+  <type>theme</type>
+  <extend>wordpress</extend>
+  <directory>wp-content/themes/coraline</directory>
+</package>

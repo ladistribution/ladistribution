@@ -48,9 +48,17 @@ cd wordpress
   #
   # cd ..
 
-  # cd theme
-  #
-  # cd ..
+  cd theme
+  
+    cd coraline
+    ./build.sh
+    cd ..
+
+    cd pilcrow
+    ./build.sh
+    cd ..
+
+  cd ..
 
 cd ..
 
