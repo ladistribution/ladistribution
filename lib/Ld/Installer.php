@@ -356,6 +356,8 @@ class Ld_Installer
         Ld_Zip::pack($directories, $backupsPath . '/' . $filename);
 
         Ld_Files::unlink($this->getBackupFolder());
+
+        return $backupsPath . '/' . $filename;
     }
 
     public function move($path)

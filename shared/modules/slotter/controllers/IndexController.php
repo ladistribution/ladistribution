@@ -167,4 +167,67 @@ class Slotter_IndexController extends Slotter_BaseController
         $this->view->all = $this->_hasParam('all');
     }
 
+    /**
+    * Backup action.
+    */
+    public function backupAction()
+    {
+        $freshness = $this->_getParam('freshness', 24 * 60 * 60);
+
+        $backupsPath = $this->site->getDirectory('dist') . '/backups';
+        $siteBackups = Ld_Files::getFiles($backupsPath);
+        ksort($siteBackups);
+        foreach ($siteBackups as $filename) {
+            $absoluteFilename = $backupsPath . '/' . $filename;
+            if (time() - filemtime($absoluteFilename) < $freshness) {
+                $siteBackupFilename = $filename;
+                $siteBackupAbsoluteFilename = $absoluteFilename;
+                break;
+            }
+        }
+
+        if (empty($siteBackupFilename)) {
+
+            $instances = $this->site->getApplicationsInstances();
+            $files = array();
+            foreach ($instances as $id => $instance) {
+                $filename = null;
+                $backups = $instance->getBackups();
+                krsort($backups);
+                foreach ($backups as $backup) {
+                    if (time() - $backup['time'] < $freshness) {
+                        $filename = $backup['absoluteFilename'];
+                        break;
+                    }
+                }
+                if (empty($filename)) {
+                    $filename = $instance->doBackup();
+                }
+                $files["$id.zip"] = $filename;
+            }
+
+            $siteBackupFilename = 'site-' . date("Y-m-d-H-i-s") .'.zip';
+            $siteBackupAbsoluteFilename = $this->site->getDirectory('dist') . '/backups/' . $siteBackupFilename;
+            $fp = fopen($siteBackupAbsoluteFilename, 'wb');
+            $zip = new fileZip($fp);
+            foreach ($files as $name => $filename) {
+                $zip->addFile($filename, $name);
+            }
+            $zip->addExclusion('/dist\/backups/');
+            $zip->addDirectory($this->site->getDirectory('dist'), 'dist', true);
+
+            $zip->write();
+        }
+
+        ob_end_clean();
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . $siteBackupFilename . '"');
+        $handle = fopen($siteBackupAbsoluteFilename, "rb");
+        while ( ($buffer = fread($handle, 8192)) != '' ) {
+            echo $buffer;
+        }
+        fclose($handle);
+        exit;
+    }
+
 }

@@ -549,7 +549,8 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         foreach ($archives as $filename) {
             $absoluteFilename = $this->getBackupsPath() . '/' . $filename;
             $size = round( filesize($absoluteFilename) / 1024 ) . ' ko';
-            $backups[$filename] = compact('filename', 'absoluteFilename', 'size');
+            $time = filemtime($absoluteFilename);
+            $backups[$filename] = compact('filename', 'absoluteFilename', 'size', 'time');
         }
         ksort($backups);
         return $backups;
