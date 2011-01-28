@@ -23,9 +23,9 @@
 
 .h6e-page-title, .ld-main-content h2 {
 	margin:0 0 15px;
-	font-size:24px;
-	font-weight:100;
-	letter-spacing:normal;
+	font-size:25px;
+	font-weight:200;
+	letter-spacing:-1px;
 	line-height:1.75em;
 }
 
