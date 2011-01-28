@@ -1,0 +1,11 @@
+--- theme/functions.php.orig	2011-01-25 14:26:20.000000000 +0100
++++ theme/functions.php	2011-01-25 14:24:06.000000000 +0100
+@@ -401,7 +401,7 @@
+ 
+ function p2_add_head_content() {
+ 	if ( is_home() && is_user_logged_in() ) {
+-		include ABSPATH . '/wp-admin/includes/media.php';
++		include_once ABSPATH . '/wp-admin/includes/media.php';
+ 	}
+ }
+ add_action( 'wp_head', 'p2_add_head_content' );
