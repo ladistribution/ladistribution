@@ -13,7 +13,7 @@
 <?php if (empty($this->libraries) && empty($this->applications)) : ?>
 
     <p><?php echo $this->translate('Congratulations! Everything is up to date.') ?>
-    <?php echo '<a href="' . $this->site->getUrl() . '">' . $this->translate("Continue") . '</a>.' ?></p>
+    <?php echo '<a href="' . Ld_Ui::getAdminUrl() . '">' . $this->translate("Continue") . '</a>.' ?></p>
 
 <?php else : ?>
 
