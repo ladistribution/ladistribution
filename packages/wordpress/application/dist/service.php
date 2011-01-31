@@ -63,13 +63,16 @@ class Ld_Service_Wordpress
 		update_option('sidebars_widgets', $defaults);
 
 		// Activate plugins
-		$plugins = array('ld.php', 'ld-ui.php', 'ld-auth.php', 'ld-css.php', 'ld-feed.php', 'akismet/akismet.php');
+		$plugins = array('ld.php', 'ld-ui.php', 'ld-auth.php', 'ld-css.php', 'ld-feed.php',
+			'akismet/akismet.php', 'wordpress-importer/wordpress-importer.php');
 		foreach ($plugins as $plugin) {
 			activate_plugin($plugin);
 		}
 		update_option('active_plugins', $plugins);
 
-		self::setUserRoles(array($user_name => 'administrator'));
+		if (isset($user_name)) {
+			self::setUserRoles(array($user_name => 'administrator'));
+		}
 
 		if (isset($theme)) {
 			self::setTheme(array('id' => $theme));
@@ -85,7 +88,15 @@ class Ld_Service_Wordpress
 		$site = self::getSite();
 		$application = self::getApplication();
 
+		remove_filter('option_siteurl', 'ld_option_siteurl');
 		remove_filter('clean_url', 'qtrans_convertURL');
+
+		$oldSiteUrl = get_option('siteurl');
+		$newSiteUrl = $site->getBaseUrl() . $application->getPath();
+
+		global $wpdb;
+		$wpdb->query("UPDATE $wpdb->posts SET guid = replace(guid, '$oldSiteUrl', '$newSiteUrl')");
+		$wpdb->query("UPDATE $wpdb->posts SET post_content = replace(post_content, '$oldSiteUrl', '$newSiteUrl')");
 
 		self::setOptions(array(
 			'siteurl' 		=> $site->getBaseUrl() . $application->getPath(),
@@ -101,14 +112,13 @@ class Ld_Service_Wordpress
 	public function getOptions()
 	{
 		global $wpdb;
-		$options_table = $wpdb->options;
-		$options = $wpdb->get_results("SELECT * FROM $options_table ORDER BY option_name");
+		$options = $wpdb->get_results("SELECT * FROM $wpdb->options ORDER BY option_name");
 		$configuration = array();
 		foreach ( (array) $options as $option) {
 			if ( is_serialized($option->option_value) ) {
 				continue;
 			}
-			$configuration[$option->option_name] = $option->option_value;
+			$configuration[$option->option_name] = stripslashes_deep($option->option_value);
 		}
 
 		$application = self::getApplication();
@@ -157,6 +167,29 @@ class Ld_Service_Wordpress
 		$stylesheet = $id;
 		switch_theme($theme['template'], $stylesheet);
 		update_option('current_theme', $theme['name']);
+	}
+
+	public function activatePlugin($plugin_file)
+	{
+		wp_cache_delete('plugins', 'plugins');
+		activate_plugin($plugin_file);
+	}
+
+	public function deactivatePlugin($plugin_file)
+	{
+		wp_cache_delete('plugins', 'plugins');
+		deactivate_plugins($plugin_file);
+	}
+
+	public function getCustomCss()
+	{
+		return get_option('ld_custom_css');
+	}
+
+	public function setCustomCss($css)
+	{
+		update_option('ld_custom_css', $css);
+		return get_option('ld_custom_css');
 	}
 
 	// Users and Roles

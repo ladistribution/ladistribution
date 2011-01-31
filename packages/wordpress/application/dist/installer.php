@@ -3,100 +3,14 @@
 class Ld_Installer_Wordpress extends Ld_Installer
 {
 
-	function install($preferences = array())
+	public function install($preferences = array())
 	{
 		parent::install($preferences);
 
-		$this->create_config_file();
+		$this->_createConfigFile();
 	}
 
-	function postInstall($preferences = array())
-	{
-		parent::postInstall($preferences);
-
-		define('WP_INSTALLING', true);
-
-		if (isset($preferences['lang'])) {
-			$this->getInstance()->setInfos(array('locale' => $preferences['lang']))->save();
-		}
-
-		$this->load_wp();
-
-		wp_check_mysql_version();
-		wp_cache_flush();
-		make_db_current_silent();
-		populate_options();
-		populate_roles();
-
-		if (isset($preferences['administrator'])) {
-			$preferences['admin_username'] = $preferences['administrator']['username'];
-			$preferences['admin_email'] = $preferences['administrator']['email'];
-			$preferences['admin_password'] = '';
-		}
-
-		$user_name     = $preferences['admin_username'];
-		$user_password = $preferences['admin_password'];
-		$user_email    = $preferences['admin_email'];
-
-		$user_id = username_exists($user_name);
-		if ( !$user_id ) {
-			$user_id = wp_create_user($user_name, $user_password, $user_email);
-		}
-
-		// Update admin password
-		if (isset($preferences['administrator'])) {
-			$user = get_userdata($user_id);
-			$userdata = add_magic_quotes(get_object_vars($user));
-			$userdata['user_pass'] = $preferences['administrator']['hash'];
-			$user_id = wp_insert_user($userdata);
-		}
-
-		$this->setUserRoles(array($user_name => 'administrator'));
-
-		update_option('admin_email', $user_email);
-		update_option('blogname', $preferences['title']);
-
-		update_option('siteurl', $this->getSite()->getBaseUrl() . $preferences['path']);
-		update_option('home', $this->getSite()->getBaseUrl() . $preferences['path']);
-		wp_cache_flush();
-
-		if (constant('LD_REWRITE')) {
-			$this->enable_clean_urls();
-		}
-
-		$this->install_defaults($user_id);
-
-		$this->populate_sidebar_widgets();
-
-		$plugins = array(
-			'ld.php',
-			'ld-ui.php',
-			'ld-auth.php',
-			'ld-css.php',
-			'akismet/akismet.php',
-			'wordpress-importer/wordpress-importer.php'
-		);
-
-		foreach ($plugins as $plugin) {
-			activate_plugin($plugin);
-		}
-
-		update_option('active_plugins', $plugins);
-
-		if (isset($preferences['theme'])) {
-			$this->setTheme($preferences['theme']);
-		}
-
-		wp_cache_flush();
-
-	}
-
-	function postUpdate()
-	{
-		Ld_Http::get($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
-	}
-
-	function create_config_file()
+	private function _createConfigFile()
 	{
 		$cfg = "<?php\n";
 
@@ -117,25 +31,45 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		Ld_Files::put($this->getAbsolutePath() . "/wp-config.php", $cfg);
 	}
 
-	public function getThemes()
+	public function postInstall($preferences = array())
 	{
-		$this->load_wp();
-		$wp_themes = get_themes();
-		$current_theme = get_current_theme();
-		$themes = array();
-		foreach ($wp_themes as $theme) {
-			$id = $theme['Stylesheet'];
-			$name = $theme['Name'];
-			$template = $theme['Template'];
-			$folder = 'wp-content/themes/' . $theme['Stylesheet'];
-			$dir = $this->getAbsolutePath() . '/' . $folder;
-			$screenshot = $this->getSite()->getBaseUrl() .
-				$this->getPath() . '/' . $folder . '/' . $theme['Screenshot'];
-			$active = $current_theme == $theme['Name'];
-			$themes[$id] = compact('name', 'template', 'dir', 'screenshot', 'active');
+		parent::postInstall($preferences);
+
+		if (isset($preferences['lang'])) {
+			$this->getInstance()->setInfos(array('locale' => $preferences['lang']))->save();
 		}
-		return $themes;
+
+		$params = array(
+			'title'			=> $preferences['title'],
+			'url'			=> $this->getSite()->getBaseUrl() . $preferences['path'],
+			'rewrite'		=> defined('LD_REWRITE') && constant('LD_REWRITE') ? 1 : 0,
+			'theme'			=> isset($preferences['theme']) ? $preferences['theme'] : null
+		);
+		
+		if (isset($preferences['administrator'])) {
+			$params['user_name'] = $preferences['administrator']['username'];
+			$params['user_email'] = $preferences['administrator']['email'];
+			$params['user_password'] = '';
+			$params['user_hash'] = $preferences['administrator']['hash'];
+		}
+
+		$this->serviceRequest('init', $params);
+    }
+
+	public function postUpdate()
+	{
+		$this->httpClient = new Zend_Http_Client();
+		$this->httpClient->setCookieJar();
+		$this->httpClient->setUri($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
+		$response = $this->httpClient->request('GET');
 	}
+
+	public function postMove()
+	{
+		$this->serviceRequest('updateUrl');
+	}
+
+	// Backup / Restore
 
 	public function getBackupDirectories()
 	{
@@ -148,41 +82,18 @@ class Ld_Installer_Wordpress extends Ld_Installer
 	{
 		parent::restore($restoreFolder);
 
-		$this->_fixDb();
-
-		$this->load_wp();
-
-		wp_cache_flush();
+		$this->_fixDatabasePrefix();
 
 		if (file_exists($this->getRestoreFolder() . '/uploads')) {
 			Ld_Files::copy($this->getRestoreFolder() . '/uploads', $this->getAbsolutePath() . '/wp-content/uploads');
 		}
 
-		$this->_fixUrl();
+		$this->serviceRequest('updateUrl');
 
 		Ld_Files::unlink($this->getRestoreFolder());
 	}
 
-	public function postMove()
-	{
-		$this->load_wp();
-		$this->_fixUrl();
-		if (constant('LD_REWRITE')) {
-			$this->enable_clean_urls();
-		}
-	}
-
-	protected function _fixUrl()
-	{
-		remove_filter('clean_url', 'qtrans_convertURL');
-		delete_option('siteurl');
-		update_option('siteurl', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
-		delete_option('home');
-		update_option('home', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
-		update_option('upload_path', $this->getAbsolutePath() . '/wp-content/uploads');
-	}
-
-	protected function _fixDb()
+	private function _fixDatabasePrefix()
 	{
 		$infos = Ld_Files::getJson($this->getRestoreFolder() . '/dist/instance.json');
 		$oldDbPrefix = $infos['db_prefix'];
@@ -206,14 +117,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		}
 	}
 
-	public function setTheme($stylesheet)
-	{
-		$this->load_wp();
-		$themes = $this->getThemes();
-		$theme = $themes[$stylesheet];
-		switch_theme($theme['template'], $stylesheet);
-		update_option('current_theme', $theme['name']);
-	}
+	// Configuration, Preferences
 
 	public function getPreferences($type)
 	{
@@ -225,7 +129,23 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $preferences;
 	}
 
-	public function getLocales()
+	private function _getLangPreference()
+	{
+		$preference = array(
+			'name' => 'lang', 'label' => 'Language',
+			'type' => 'list', 'defaultValue' => 'auto',
+			'options' => array(
+				array('value' => 'auto', 'label' => 'auto'),
+				array('value' => 'en_US', 'label' => 'en_US')
+			)
+		);
+		foreach ($this->_getLocales() as $locale) {
+			$preference['options'][] = array('value' => $locale, 'label' => $locale);
+		}
+		return $preference;
+	}
+
+	private function _getLocales()
 	{
 		$locales = array();
 		foreach (Ld_Files::getFiles($this->getAbsolutePath() . '/wp-content/languages') as $mo) {
@@ -236,56 +156,25 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $locales;
 	}
 
-	protected function _getLangPreference()
-	{
-		$preference = array(
-			'name' => 'lang', 'label' => 'Language',
-			'type' => 'list', 'defaultValue' => 'auto',
-			'options' => array(
-				array('value' => 'auto', 'label' => 'auto'),
-				array('value' => 'en_US', 'label' => 'en_US')
-			)
-		);
-		foreach ($this->getLocales() as $locale) {
-			$preference['options'][] = array('value' => $locale, 'label' => $locale);
-		}
-		return $preference;
-	}
-
 	public function getConfiguration()
 	{
-		global $wpdb;
-		$this->load_wp();
-		$options_table = $wpdb->options;
-		$options = $wpdb->get_results("SELECT * FROM $options_table ORDER BY option_name");
-		$configuration = array();
-		foreach ( (array) $options as $option) {
-			if ( is_serialized($option->option_value) ) {
-				continue;
-			}
-			$configuration[$option->option_name] = stripslashes_deep($option->option_value);
-		}
-		$instance = $this->getInstance();
-		if (empty($configuration['name']) && isset($instance)) {
-			$configuration['name'] = $this->getInstance()->getName();
-		}
-		return $configuration;
+		return $this->serviceRequest('getOptions');
 	}
 
 	public function setConfiguration($configuration, $type = 'general')
 	{
-		$this->load_wp();
-
 		if ($type == 'general') {
 			$type = 'configuration';
 		}
 
+		$options = array();
 		foreach ($this->getPreferences($type) as $preference) {
 			$preference =  is_object($preference) ? $preference->toArray() : $preference;
-			$option = $preference['name'];
-			$value = isset($configuration[$option]) ? $configuration[$option] : null;
-			update_option($option, $value);
+			$name = $preference['name'];
+			$value = isset($configuration[$name]) ? $configuration[$name] : null;
+			$options[$name] = $value;
 		}
+		$this->serviceRequest('setOptions', $options);
 
 		if (isset($configuration['name']) && isset($this->instance)) {
 			$this->instance->setInfos(array('name' => $configuration['name']))->save();
@@ -298,28 +187,38 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $this->getConfiguration();
 	}
 
+	public function getThemes()
+	{
+		if (empty($this->themes)) {
+			$this->themes = $this->serviceRequest('getThemes');
+		}
+		return $this->themes;
+	}
+
+	public function setTheme($stylesheet)
+	{
+		return $this->serviceRequest('setTheme', array('id' => $stylesheet));
+	}
+
+	public function getCustomCss()
+	{
+		return $this->serviceRequest('getCustomCss');
+	}
+
+	public function setCustomCss($css = '')
+	{
+		return $this->serviceRequest('setCustomCss', $css);
+	}
+
+	// Users and Roles
+
 	public $roles = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
 
 	public $defaultRole = 'subscriber';
 
 	public function getUsers()
 	{
-		$this->load_wp();
-
-		$users = array();
-
-		$dbPrefix = $this->getInstance()->getDbPrefix();
-		$dbConnection = $this->getInstance()->getDbConnection('php');
-		$result = $dbConnection->query("SELECT * FROM {$dbPrefix}users");
-
-		while ($wp_user = $result->fetch_object()) {
-			$user = $this->getSite()->getUser($wp_user->user_login);
-			if (!empty($user)) {
-				$users[] = $user;
-			}
-		}
-
-		return $users;
+		return $this->serviceRequest('getUsers');
 	}
 
 	public function getRoles()
@@ -329,145 +228,90 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	public function getUserRoles()
 	{
-		$this->load_wp();
-		$roles = array();
-		$users = $this->getUsers();
-		foreach ($users as $user) {
-			$username = $user['username'];
-			$roles[$username] = $this->defaultRole; // default
-			$userdata = get_userdatabylogin($username);
-			$wp_user = new WP_User($userdata->ID);
-			foreach ($this->roles as $role) {
-				if (isset($wp_user->caps[$role]) && $wp_user->caps[$role]) {
-					$roles[$username] = $role;
-				}
-			}
-		}
-		return $roles;
+		return $this->serviceRequest('getUserRoles');
 	}
 
 	public function setUserRoles($roles)
 	{
-		$this->load_wp();
-		$current_user_roles = $this->getUserRoles();
-		foreach ($roles as $username => $role) {
-			if (isset($current_user_roles[$username]) && $current_user_roles[$username] == $role) {
-				continue;
+		return $this->serviceRequest('setUserRoles', $roles);
+	}
+
+	// Service
+
+	public function getSecret()
+	{
+		$infos = $this->instance->getInfos();
+		if (empty($infos['secret'])) {
+			$infos['secret'] = Ld_Auth::generatePhrase(32);
+			$this->instance->setInfos(array('secret' => $infos['secret']))->save();
+		}
+		return $infos['secret'];
+	}
+
+	public function getServiceUri($method)
+	{
+		return $this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . "/ld-service.php?method=$method";
+	}
+
+	public function serviceRequest($method, $params = array())
+	{
+		Ld_Files::log("Wordpress:serviceRequest", "$method");
+		if (empty($this->httpClient)) {
+			$this->httpClient = new Zend_Http_Client();
+			if (isset($_COOKIE['ld-auth'])) {
+				$this->httpClient->setCookie('ld-auth', stripslashes($_COOKIE['ld-auth']));
 			}
-			$userdata = get_userdatabylogin($username);
-			$wp_user = new WP_User($userdata->ID);
-			$wp_user->set_role($role);
+			$this->httpClient->setCookie('ld-secret', $this->getSecret());
 		}
-	}
 
-	public function getCustomCss()
-	{
-		$this->load_wp();
-		return get_option('ld_custom_css');
-	}
-
-	public function setCustomCss($css = '')
-	{
-		$this->load_wp();
-		update_option('ld_custom_css', stripslashes_deep($css));
-		return get_option('ld_custom_css');
-	}
-
-	function load_wp()
-	{
-		if (empty($this->loaded)) {
-			defined('WP_LD_INSTALLER') || define('WP_LD_INSTALLER', true);
-			global $wpdb, $wp_embed;
-			global $blog_id, $table_prefix;
-			global $_wp_deprecated_widgets_callbacks;
-			global $q_config, $sitepress, $wpcf7_shortcode_manager;
-			global $PHP_SELF;
-			global $show_admin_bar;
-			$show_admin_bar = false;
-			global $allowedposttags, $allowedtags, $allowedentitynames;
-			require_once $this->getAbsolutePath() . "/wp-load.php";
-			require_once $this->getAbsolutePath() . "/wp-admin/includes/upgrade.php";
-			require_once $this->getAbsolutePath() . "/wp-admin/includes/plugin.php";
-			require_once $this->getAbsolutePath() . "/wp-includes/theme.php";
-			$globals = array_keys( get_defined_vars() );
-			foreach ($globals as $key) {
-				if (empty($GLOBALS[$key])) {
-					$GLOBALS[$key] = $$key;
-				}
-			}
-			$this->loaded = true;
+		$this->httpClient->setUri( $this->getServiceUri($method) );
+		if (!empty($params)) {
+			$this->httpClient->setRawData(Zend_Json::encode($params),' application/json');
+			$this->httpClient->setMethod('POST');
 		}
-	}
+		$response = $this->httpClient->request();
 
-	// Add the .htaccess and active clean URLs
-	function enable_clean_urls()
-	{
-		global $wp_rewrite;
-		if (got_mod_rewrite()) {
-			$wp_rewrite->set_permalink_structure('/%year%/%monthnum%/%postname%/');
-			$wp_rewrite->permalink_structure = '/%year%/%monthnum%/%postname%/';
-			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
-			insert_with_markers($this->getAbsolutePath() . "/.htaccess", 'WordPress', $rules );
+		$body = $response->getBody();
+		if (empty($body)) {
+			return true;
 		}
-	}
-
-	function install_defaults($user_id)
-	{
-		wp_install_defaults($user_id);
-	}
-
-	function populate_sidebar_widgets()
-	{
-		$defaults = array(
-			'wp_inactive_widgets' => array(
-			),
-			'primary-widget-area' => array(
-				0 => 'search-2', 1 => 'pages', 2 => 'archives-2', 3 => 'categories-2', 4 => 'links', 5 => 'meta-2'
-			),
-			'array_version' => 3
-		);
-
-		update_option('sidebars_widgets', $defaults);
+		try {
+			$result = Zend_Json::decode($body);
+		} catch (Exception $e) {
+			var_dump($body);
+		}
+		return $result;
 	}
 
 }
 
-class Ld_Installer_Wordpress_Plugin extends Ld_Installer
+class Ld_Installer_Wordpress_Plugin extends Ld_Installer_Wordpress
 {
 
-	protected function load_wp()
+	public function getParentInstance()
 	{
-		if (empty($this->loaded)) {
-			defined('WP_LD_INSTALLER') || define('WP_LD_INSTALLER', true);
-			global $wpdb, $wp_embed;
-			global $blog_id, $table_prefix;
-			global $_wp_deprecated_widgets_callbacks;
-			global $q_config, $sitepress;
-			global $PHP_SELF;
-			require_once $this->getAbsolutePath() . "/../../../wp-load.php";
-			require_once $this->getAbsolutePath() . "/../../../wp-admin/includes/plugin.php";
-			$globals = array_keys( get_defined_vars() );
-			foreach ($globals as $key) {
-				if (empty($GLOBALS[$key])) {
-					$GLOBALS[$key] = $$key;
-				}
-			}
-			$this->loaded = true;
-		}
+		return $this->getSite()->getInstance( $this->getAbsolutePath() . "/../../.." );
+	}
+
+	public function getSecret()
+	{
+		return $this->getParentInstance()->getInstaller()->getSecret();
+	}
+
+	public function getServiceUri($method)
+	{
+		return $this->getParentInstance()->getAbsoluteUrl("/ld-service.php?method=$method");
 	}
 
 	public function install($preferences = array())
 	{
 		parent::install($preferences);
-		$this->load_wp();
-		wp_cache_delete('plugins', 'plugins');
-		activate_plugin($this->plugin_file);
+		return $this->serviceRequest('activatePlugin', $this->plugin_file);
 	}
 
 	public function uninstall()
 	{
-		$this->load_wp();
-		deactivate_plugins($this->plugin_file);
+		return $this->serviceRequest('deactivatePlugin', $this->plugin_file);
 		parent::uninstall();
 	}
 

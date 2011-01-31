@@ -3,7 +3,6 @@
 error_reporting(0);
 
 define('LD_DEBUG', false);
-require_once( 'dist/config.php' );
 
 function out($status, $message)
 {
@@ -21,18 +20,6 @@ function unauthorized($message)
 function bad($message)
 {
     out("400 Bad Request", $message);
-}
-
-if ( !Ld_Auth::isAuthenticated() ) {
-    unauthorized('Not authenticated');
-}
-
-$site = Zend_Registry::get('site');
-$admin = $site->getAdmin();
-$role = $admin->getUserRole();
-
-if ( $role != 'admin' ) {
-    unauthorized('Not admin');
 }
 
 if (isset($_GET['method'])) {
@@ -55,6 +42,18 @@ if (isset($_GET['method'])) {
     require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
     require_once( ABSPATH . '/wp-includes/theme.php' );
     require_once( ABSPATH . '/dist/service.php' );
+
+    $infos = $application->getInfos();
+    if (empty($_COOKIE['ld-secret']) || $_COOKIE['ld-secret'] != $infos['secret']) {
+        if ( !Ld_Auth::isAuthenticated() ) {
+            unauthorized('Not authenticated');
+        }
+        $admin = $site->getAdmin();
+        $role = $admin->getUserRole();
+        if ( $role != 'admin' ) {
+            unauthorized('Not admin');
+        }
+    }
 
     if (method_exists('Ld_Service_Wordpress', $method)) {
         $result = call_user_func(array('Ld_Service_Wordpress', $method), $params);
