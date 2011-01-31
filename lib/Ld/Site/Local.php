@@ -406,10 +406,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (isset($dir)) {
 
+            $dir = Ld_Files::real($dir);
+
             $registryKey = 'Ld_Instance_Application_' . md5($dir);
             if (Zend_Registry::isRegistered($registryKey)) {
                 $instance = Zend_Registry::get($registryKey);
-            } else {
+            }
+
+            if (empty($instance)) {
                 $instance = Ld_Instance_Application::loadFromDir($dir);
                 Zend_Registry::set($registryKey, $instance);
             }
@@ -433,7 +437,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if ($package->getType() == 'application') {
             foreach ($this->getInstances('application') as $application) {
                 if ($application['path'] == $preferences['path']) {
-                    throw new Exception('An application is already installed on this path.');
+                    throw new Exception(sprintf('An application is already installed on this path (%s).', $application['path']));
                 }
             }
         }
@@ -671,6 +675,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         $this->updateInstances($instances);
+
+        // Empty Registry cache
+        $dir = $instance->getAbsolutePath();
+        $registryKey = 'Ld_Instance_Application_' . md5($dir);
+        Zend_Registry::set($registryKey, null);
     }
 
     public function cloneInstance($archive, $preferences = array())
@@ -690,6 +699,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $instance->addExtension($extension['package']);
             }
         }
+
         $instance->restoreBackup($restoreFolder);
 
         return $instance;
