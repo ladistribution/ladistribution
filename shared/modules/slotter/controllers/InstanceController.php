@@ -423,7 +423,11 @@ class Slotter_InstanceController extends Slotter_BaseController
             $users[$username]['order'] = isset($userOrder[$username]) ? $userOrder[$username] : 999;
         }
 
-        uasort($users, array('Ld_Utils', "sortByOrder"));
+        if (defined('LD_AJAX_USERS') && constant('LD_AJAX_USERS')) {
+            uasort($users, array('Ld_Utils', "sortByOrder"));
+        } else {
+            ksort($users);
+        }
 
         return $users;
     }

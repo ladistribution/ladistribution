@@ -29,7 +29,11 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
             $users[$username] = $user;
         }
 
-        uasort($users, array('Ld_Utils', "sortByOrder"));
+        if (defined('LD_AJAX_USERS') && constant('LD_AJAX_USERS')) {
+            uasort($users, array('Ld_Utils', "sortByOrder"));
+        } else {
+            ksort($users);
+        }
 
         return $users;
     }
