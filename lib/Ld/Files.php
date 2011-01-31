@@ -143,12 +143,19 @@ class Ld_Files
             $result = copy($source, $target);
             self::updatePermissions($target);
         }
+
+        return true;
     }
 
     public static function move($old, $new)
     {
         self::log('move', "$old -> $new");
-        self::createDirIfNotExists($new);
+        if (Ld_Files::exists($new) || strpos($new, $old) === 0) {
+            $tmp = LD_TMP_DIR . '/move-' . date("d-m-Y-H-i-s");
+            self::copy($old, $tmp);
+            self::unlink($old);
+            $old = $tmp;
+        }
         $result = rename($old, $new);
         if (!$result) {
             self::copy($old, $new);
@@ -215,6 +222,7 @@ class Ld_Files
 
     public static function createDirIfNotExists($dir)
     {
+        // self::log('createDirIfNotExists', "$dir");
         if (!self::exists($dir)) {
             // doesn't works for recursive mkdir creations ...
             // if (!is_writable(dirname($dir))) {
@@ -319,17 +327,19 @@ class Ld_Files
         return $path;
     }
 
-    public static function denyAccess($directory)
+    public static function denyAccess($directory, $addIndex = false)
     {
         $htaccess = $directory . '/.htaccess';
         if (!Ld_Files::exists($htaccess)) {
             Ld_Files::put($htaccess, "Deny from all");
         }
-        // Disabled for now as it is not necessary a good idea if directory finish in the include path
-        // $index = $directory . '/index.php';
-        // if (!Ld_Files::exists($index)) {
-        //     Ld_Files::put($index, "<?php // Silence is golden.");
-        // }
+        if ($addIndex) {
+            $index = $directory . '/index.php';
+            if (!Ld_Files::exists($index)) {
+                Ld_Files::put($index, "<?php // Silence is golden.");
+            }
+        }
+        Ld_Plugin::doAction('Files:denyAccess', $directory);
     }
 
     public static function size($filename)
