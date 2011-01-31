@@ -79,6 +79,8 @@ class Ld_Service_Wordpress
 		}
 
 		wp_cache_flush();
+
+		return 'ok';
 	}
 
 	// Utilities

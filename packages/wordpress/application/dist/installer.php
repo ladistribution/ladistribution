@@ -278,7 +278,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		try {
 			$result = Zend_Json::decode($body);
 		} catch (Exception $e) {
-			var_dump($body);
+			echo htmlspecialchars('<response>' . $body . '</response>');
 		}
 		return $result;
 	}
