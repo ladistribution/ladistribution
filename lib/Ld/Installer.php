@@ -273,8 +273,12 @@ class Ld_Installer
 
     protected function _escapeCsv($string)
     {
-        $string = str_replace('\\', '\\\\', $string);
-        $string = addcslashes($string, '"');
+        if ($string == null) {
+            $string = "\N";
+        } else {
+            $string = str_replace('\\', '\\\\', $string);
+            $string = addcslashes($string, '"');
+        }
         return '"' . $string . '"';
     }
 
@@ -384,14 +388,16 @@ class Ld_Installer
             $this->restoreFolder = $this->tmpFolder = $archive;
         }
 
+        // Dist Files
+        Ld_Files::copy($this->restoreFolder . '/dist/roles.json', $this->getAbsolutePath() . '/dist/roles.json');
+        Ld_Files::copy($this->restoreFolder . '/dist/configuration.json', $this->getAbsolutePath() . '/dist/configuration.json');
+        Ld_Files::copy($this->restoreFolder . '/dist/colors.json', $this->getAbsolutePath() . '/dist/colors.json');
+
         if ($this->getManifest()->getDb()) {
 
             $tables = $this->getInstance()->getDbTables();
 
             // Restore Schema
-            foreach ($tables as $id => $tablename) {
-                $this->_query("DROP TABLE $tablename;");
-            }
             $backupInfos = Ld_Files::getJson($this->getRestoreFolder() . '/dist/instance.json');
             $schema = Ld_Files::get($this->getRestoreFolder() . '/tables/schema.sql');
             $statements = explode(';', $schema);
@@ -404,14 +410,16 @@ class Ld_Installer
                 }
             }
 
-            // Restore Datas
+            // Restore Data
             foreach ($tables as $id => $tablename) {
-                $this->_query("TRUNCATE TABLE $tablename");
                 $filename = $this->getRestoreFolder() . '/tables/' . $id . '.csv';
                 // not yet clear when we have to use
                 // CHARACTER SET utf8
                 // or not :-/
                 if (Ld_Files::exists($filename)) {
+                    // $this->_query("SET FOREIGN_KEY_CHECKS=0");
+                    // $this->_query("SET UNIQUE_CHECKS=0");
+                    // $this->_query("ALTER TABLE $tablename DISABLE KEYS");
                     $this->_query(
                         "LOAD DATA LOCAL INFILE '$filename'
                         REPLACE INTO TABLE $tablename
@@ -420,6 +428,7 @@ class Ld_Installer
                         ESCAPED BY '\\\\'
                         LINES TERMINATED BY '\n'"
                     ); // IGNORE 1 LINES;
+                    // $this->_query("ALTER TABLE $tablename ENABLE KEYS");
                 }
             }
 
@@ -434,6 +443,7 @@ class Ld_Installer
         if (!$result) {
             throw new Exception($dbConnection->error);
         }
+        return $result;
     }
 
     // Configuration
