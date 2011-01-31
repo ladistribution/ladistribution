@@ -89,7 +89,10 @@ function ld_footer()
 function ld_admin_footer()
 {
 	if (get_option('topbar') != 'never') {
-		Ld_Ui::topBar(array('full-width' => true));
+		Ld_Ui::topBar(array(
+			'loginUrl' => wp_login_url(), 'logoutUrl' => wp_logout_url($_SERVER["REQUEST_URI"]),
+			'full-width' => true)
+		);
 	}
 }
 

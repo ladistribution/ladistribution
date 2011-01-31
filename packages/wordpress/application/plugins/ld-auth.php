@@ -3,25 +3,10 @@
 Plugin Name: LD auth
 Plugin URI: http://h6e.net/wordpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.5.2
+Version: 0.5.5
 Author: h6e.net
 Author URI: http://h6e.net/
 */
-
-class Ld_Auth_Adapter_Wordpress implements Zend_Auth_Adapter_Interface
-{
-	public function authenticate()
-	{
-		if (is_user_logged_in()) {
-			$wp_user = wp_get_current_user();
-			$ld_user = Ld_Wordpress_Auth::get_ld_user($wp_user->user_login);
-			if ($ld_user) {
-				return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $ld_user['username']);
-			}
-		}
-		return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
-	}
-}
 
 class Ld_Wordpress_Auth
 {
@@ -33,28 +18,45 @@ class Ld_Wordpress_Auth
 
 	function auto_login()
 	{
-		if (!is_user_logged_in()) {
-			if (Ld_Auth::isAuthenticated()) {
-				$user = get_userdatabylogin(Ld_Auth::getUsername());
-				if (isset($user)) {
-					wp_set_current_user($user->ID, $user->user_login);
-				}
+		if (empty($_COOKIE[LOGGED_IN_COOKIE]) && Ld_Auth::isAuthenticated()) {
+			$wp_user = wp_get_current_user();
+			wp_set_auth_cookie($wp_user->ID);
+		} else if (isset($_COOKIE[LOGGED_IN_COOKIE]) && !Ld_Auth::isAuthenticated()) {
+			wp_set_current_user(0);
+			wp_logout();
+		}
+	}
+
+	function authenticate_username_password($user, $username, $password)
+	{
+		if ( is_a($user, 'WP_User') ) { return $user; }
+		
+		if ( !empty($username) && !empty($password) ) {
+			$result = Ld_Auth::authenticate($username, $password);
+			if ($result->isValid()) {
+				$user = get_userdatabylogin($username);
 			}
 		}
+
+		return $user;
+	}
+
+	function authenticate_ld_cookie($user, $username, $password)
+	{
+		if ( is_a($user, 'WP_User') ) { return $user; }
+
+		if ( empty($username) && empty($password) ) {
+			if (Ld_Auth::isAuthenticated()) {
+				$user = get_userdatabylogin(Ld_Auth::getUsername());
+			}
+		}
+
+		return $user;
 	}
 
 	function logout()
 	{
 		Ld_Auth::logout();
-	}
-
-	function set_current_user()
-	{
-		if (is_user_logged_in() && !Ld_Auth::isAuthenticated()) {
-			$auth = Zend_Auth::getInstance();
-			$adapter = new Ld_Auth_Adapter_Wordpress();
-			$auth->authenticate($adapter);
-		}
 	}
 
 	function get_user_by_openid( $openid , $id = null )
@@ -122,8 +124,6 @@ add_action('plugins_loaded', array('Ld_Wordpress_Auth', 'auto_login'), 3);
 
 add_action('wp_logout', array('Ld_Wordpress_Auth', 'logout'));
 
-add_action('set_current_user', array('Ld_Wordpress_Auth', 'set_current_user'));
-
 add_filter('openid_get_user_by_openid', array('Ld_Wordpress_Auth', 'get_user_by_openid'));
 
 add_action('user_register', array('Ld_Wordpress_Auth', 'user_register'));
@@ -131,6 +131,10 @@ add_action('user_register', array('Ld_Wordpress_Auth', 'user_register'));
 add_action('profile_update', array('Ld_Wordpress_Auth', 'profile_update'));
 
 add_filter('login_url', array('Ld_Wordpress_Auth', 'login_url'));
+
+add_filter('authenticate', array('Ld_Wordpress_Auth', 'authenticate_username_password'), 15, 3);
+
+add_filter('authenticate', array('Ld_Wordpress_Auth', 'authenticate_ld_cookie'), 25, 3);
 
 // Replacable WordPress functions
 
@@ -147,7 +151,7 @@ function auth_redirect()
 endif;
 
 if ( !function_exists('get_currentuserinfo') ) :
-function get_currentuserinfo($cookie = '', $scheme = '') {
+function get_currentuserinfo() {
 	global $current_user;
 
 	if ( defined('XMLRPC_REQUEST') && XMLRPC_REQUEST )
@@ -165,7 +169,7 @@ function get_currentuserinfo($cookie = '', $scheme = '') {
 	}
 
 	if ( ! $user = wp_validate_auth_cookie() ) {
-		 if ( empty($_COOKIE[LOGGED_IN_COOKIE]) || !$user = wp_validate_auth_cookie($_COOKIE[LOGGED_IN_COOKIE], 'logged_in') ) {
+		 if ( is_blog_admin() || is_network_admin() || empty($_COOKIE[LOGGED_IN_COOKIE]) || !$user = wp_validate_auth_cookie($_COOKIE[LOGGED_IN_COOKIE], 'logged_in') ) {
 		 	wp_set_current_user(0);
 		 	return false;
 		 }
