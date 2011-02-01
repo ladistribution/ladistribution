@@ -86,6 +86,10 @@ class Ld_Loader
         self::setupAuthentication();
         self::setupLocales();
 
+        if (!empty($config['timezone'])) {
+            date_default_timezone_set($config['timezone']);
+        }
+
         // This constants should bet set after plugins are loaded
         defined('LD_DEBUG') OR define('LD_DEBUG', false);
         defined('LD_REWRITE') OR define('LD_REWRITE', true);

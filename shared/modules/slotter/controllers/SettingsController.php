@@ -104,6 +104,18 @@ class Slotter_SettingsController extends Slotter_BaseController
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $options
         );
         }
+        
+        $tz_options = array();
+        $tz_options[] = array('value' => '', 'label' => '&#x2716; ' .  $translator->translate('Default'));
+        foreach (DateTimeZone::listIdentifiers() as $value) {
+            if (preg_match('/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $value)) {
+                $tz_options[] = array('value' => $value, 'label' => $value);
+            }
+        }
+        $preferences[] = array(
+            'name' => 'timezone', 'label' => $translator->translate('Timezone'),
+            'type' => 'list', 'defaultValue' => 'admin', 'options' => $tz_options
+        );
 
         // $preferences[] = array(
         //     'name' => 'root_admin', 'label' => $translator->translate('Admin path on root?'),
