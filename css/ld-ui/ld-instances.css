@@ -95,6 +95,22 @@ ul.blocks.mini li .links, ul.blocks.mini li .infos {
   padding-left:10px;
 }
 
+
+ul.blocks.mini li a.settings {
+  text-indent:18px;
+  background:none top left no-repeat;
+  float:right;
+  display:block;
+  width:12px;
+  font-size:12px;
+  overflow:hidden;
+  background-image:url(iconic/cog_alt_12x12_gray_dark.png);
+}
+
+ul.blocks.mini li a.settings { opacity:0; }
+ul.blocks.mini li:hover a.settings { opacity:0.25; }
+ul.blocks.mini li:hover a.settings:hover { opacity:1; }
+
 ul.blocks.mini li .infos {
   opacity:0.75;
 }
