@@ -162,6 +162,7 @@
 
 .h6e-top-bar .ld-app-name {
   background:4px 6px no-repeat;	
+  padding-left:10px;
 }
 
 .ld-app-name.wordpress,
@@ -243,10 +244,25 @@ ul.instances li.moonmoon { padding-left:25px; background-image:url(img/moonmoon-
   padding-left:0;
 }
 
+.ld-top-menu ul.instances li span.path {
+  display:block;
+}
+
+.ld-app-menu ul.instances li:first-child {
+  border-top:0;
+}
+
 .ld-top-menu ul.instances li a { display:block; padding-left:25px; text-decoration:none; opacity:0.9; }
 .ld-top-menu ul.instances li a:hover span.name { text-decoration:underline; }
 
 .ld-top-menu ul.instances li span.path { font-size:10px; opacity:0.75; }
+
+/* Icons */
+
+.ld-top-menu ul.instances li.home     { background-image:url(iconic/home_16x16_gray_dark.png); }
+.ld-top-menu ul.instances li.timeline { background-image:url(iconic/clock_16x16_gray_dark.png); }
+.ld-top-menu ul.instances li.admin    { background-image:url(iconic/pen_alt_fill_16x16_gray_dark.png); }
+.ld-top-menu ul.instances li.settings { background-image:url(iconic/cog_alt_16x16_gray_dark.png); }
 
 /* Test New Things
 -------------------------------------------------------------- */

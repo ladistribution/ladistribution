@@ -1,5 +1,5 @@
-<div id="ld-top-menu" class="ld-top-menu" style="display:none">
-    <div id="ld-top-menu-inner" class="ld-top-menu-inner">
+<div class="ld-top-menu ld-main-menu" style="display:none">
+    <div class="ld-top-menu-inner ld-main-menu-inner">
         <?php
         $applications = $this->site->getApplicationsInstances(array('admin'));
         ?>
@@ -32,15 +32,15 @@
         <h3>La Distribution</h3>
         <?php
         $pages = array();
-        $pages[] = array('label' => "Home", 'route' => array('module' => 'slotter', 'controller' => 'index'));
-        $pages[] = array('label' => "Timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
+        $pages[] = array('label' => "Home", 'class' => "home", 'route' => array('module' => 'slotter', 'controller' => 'index'));
+        $pages[] = array('label' => "Timeline", 'class' => "timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
         if (Ld_Ui::isAdmin()) {
-            $pages[] = array('label' => "Settings", 'route' => array('module' => 'slotter', 'controller' => 'settings'));
+            $pages[] = array('label' => "Settings", 'class' => "settings", 'route' => array('module' => 'slotter', 'controller' => 'settings'));
         }
         ?>
         <ul class="instances">
             <?php foreach ($pages as $page) : ?>
-                <li><a href="<?php echo Ld_Ui::getAdminUrl($page['route']) ?>">
+                <li class="<?php echo $page['class'] ?>"><a href="<?php echo Ld_Ui::getAdminUrl($page['route']) ?>">
                     <span class="name"><?php echo $this->translate($page['label']) ?></span><br/>
                     <span class="path">&nbsp;</span></a></li>
             <?php endforeach ?>
@@ -50,19 +50,54 @@
     </div>
 </div>
 
+<?php if (Ld_Ui::isAdmin() && Zend_Registry::isRegistered('application') && $application = Zend_Registry::get('application')) : ?>
+<div class="ld-top-menu ld-app-menu" style="display:none">
+    <div class="ld-top-menu-inner ld-app-menu-inner">
+        <ul class="instances">
+            <li class="home"><a href="<?php echo $application->getUrl() ?>">
+                <span class="name"><?php echo $this->translate("Home") ?></span>
+                <span class="path">/<?php echo $application->getPath() ?>/</span>
+            </a></li>
+            <?php if ($adminUrl = $application->getAdminUrl()) : ?>
+                <li class="admin"><a href="<?php echo $adminUrl ?>">
+                    <span class="name"><?php echo $this->translate("Admin") ?></span>
+                    <span class="path">/<?php echo str_replace($this->site->getUrl(), '', $adminUrl) ?></span>
+                </a></li>
+            <?php endif ?>
+            <li class="settings"><a href="<?php echo Ld_Ui::getApplicationSettingsUrl() ?>">
+                <span class="name"><?php echo $this->translate("Settings") ?></span>
+                <span class="path">&nbsp;</span>
+            </a></li>
+        </ul>
+    </div>
+</div>
+<?php endif ?>
+
 <script type="text/javascript">
 if (typeof jQuery != 'undefined') {
     (function($) {
         $(document).ready(function() {
             $(".ld-site-name").mouseenter(function() {
-                $(".ld-top-menu").show();
+                var left = Math.round( $(this).position().left );
+                $(".ld-main-menu").css('left', left + 'px').show();
             }).mouseleave(function() {
-                $(".ld-top-menu").hide();
+                $(".ld-main-menu").hide();
             });
-            $(".ld-top-menu").mouseenter(function() {
-                $(".ld-top-menu").show();
+            $(".ld-main-menu").mouseenter(function() {
+                $(".ld-main-menu").show();
             }).mouseleave(function() {
-                $(".ld-top-menu").hide();
+                $(".ld-main-menu").hide();
+            });
+            $(".ld-app-name").mouseenter(function() {
+                var left = Math.round( $(this).position().left );
+                $(".ld-app-menu").css('left', left + 'px').show();
+            }).mouseleave(function() {
+                $(".ld-app-menu").hide();
+            });
+            $(".ld-app-menu").mouseenter(function() {
+                $(".ld-app-menu").show();
+            }).mouseleave(function() {
+                $(".ld-app-menu").hide();
             });
         });
     })(jQuery);

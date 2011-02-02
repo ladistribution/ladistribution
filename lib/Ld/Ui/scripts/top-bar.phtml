@@ -20,13 +20,6 @@
 
             <a class="ld-app-name <?php echo $application->getPackageId(); ?>" href="<?php echo $application->getUrl() ?>" style="<?php echo $inlineStyle ?>"><?php echo $application->getName() ?></a>
 
-            <?php if (Ld_Ui::isAdmin()) : ?>
-                <?php if ($adminUrl = $application->getAdminUrl()) : ?>
-                &nbsp; - &nbsp; <a href="<?php echo $adminUrl ?>"><?php echo $this->translate("Admin") ?></a>
-                <?php endif ?>
-                &nbsp; | &nbsp; <a href="<?php echo Ld_Ui::getApplicationSettingsUrl() ?>"><?php echo $this->translate("Settings") ?></a>
-            <?php endif ?>
-
 <?php endif ?>
         </div>
         <div class="b">
