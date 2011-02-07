@@ -33,7 +33,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         Ld_Files::createDirIfNotExists($this->dir);
 
         if (!Ld_Files::exists($this->dir . '/packages.json')) {
-            Ld_Files::putJson($this->dir . '/packages.json', array());
+            Ld_Files::put($this->dir . '/packages.json', Zend_Json::encode(array()));
         }
     }
 
@@ -249,7 +249,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
     public function updatePackageList($packages)
     {
         // Generate Json Index
-        Ld_Files::putJson($this->getDir() . '/packages.json', $packages);
+        Ld_Files::put($this->getDir() . '/packages.json', Zend_Json::encode($packages));
 
         // Generate HTML Index
         Ld_Files::put($this->getDir() . '/index.html',
