@@ -42,7 +42,7 @@ class Ld_Feed_Merger
 
     public static function getFeeds($feedType = 'public')
     {
-        $config = Ld_Files::getJson(self::getSite()->getDirectory('dist') . '/merger.json');
+        $config = self::getSite()->getConfig('merger');
         $config = $config[$feedType];
 
         $types = array('application/rss+xml', 'application/atom+xml');
