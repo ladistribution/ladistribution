@@ -43,7 +43,7 @@ class Ld_Zip
         Ld_Files::log('pack (fileZip)', $archive);
         $fp = fopen($archive, 'wb');
         $zip = new fileZip($fp);
-        $zip->addExclusion('/\.preserve');
+        $zip->addExclusion('/\.preserve/');
         foreach ($directories as $name => $directory) {
             if (Ld_Files::exists($directory)) {
                 Ld_Files::log('addDirectory (fileZip)', "$directory => $name");
