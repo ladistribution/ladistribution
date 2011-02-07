@@ -22,6 +22,7 @@ function ld_bbpress_admin_head()
 	</style>
 	<?php endif ?>
 	<?php
+	echo '<script type="text/javascript" src="' . Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery') .'"></script>'."\n";
 }
 
 add_action('bb_get_admin_header', 'ld_bbpress_admin_head');

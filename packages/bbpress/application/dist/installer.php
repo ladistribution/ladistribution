@@ -18,70 +18,19 @@ class Ld_Installer_Bbpress extends Ld_Installer
 			$this->getInstance()->setInfos(array('locale' => $preferences['lang']))->save();
 		}
 
-		define('BB_INSTALLING', true);
-
-		$this->load_bp();
-
-		$params = array(
-			'name' => $preferences['title'],
-			'uri' => $this->getSite()->getBaseUrl() . $preferences['path'],
-			'keymaster_user_login' => $preferences['administrator']['username'],
-			// 'keymaster_user_email' => $preferences['administrator']['email'],
-			'keymaster_user_email' => 'null@null.ladistribution.net',
-			'keymaster_user_type' => 'new',
-			'forum_name' => 'First Forum'
-		);
-
-		$defaults = array(
-			'custom_user_meta_table', 'custom_user_table', 'user_bbdb_charset', 'user_bbdb_collate',
-			'user_bbdb_host', 'user_bbdb_name', 'user_bbdb_password', 'user_bbdb_user', 'wordpress_mu_primary_blog_id',
-			'wp_auth_key', 'wp_auth_salt', 'wp_home', 'wp_logged_in_key', 'wp_logged_in_salt', 'wp_secure_auth_key',
-			'wp_secure_auth_salt', 'wp_siteurl', 'wp_table_prefix',
-			'toggle_2_0'
-		);
-		foreach ($defaults as $default) {
-			$params[$default] = '';
-		}
-
-		$additionals = array(
-			'_wpnonce' => bb_create_nonce('bbpress-installer'),
-			'toggle_2_1' => 0, 'toggle_2_2' => 0, 'toggle_2_3' => 0,
-			'forward_3_1' => 'Complete the installation',
-			'step' => '4'
-		);
-		$params = array_merge($params, $additionals);
-
-		$this->httpClient = new Zend_Http_Client();
-		$this->httpClient->setCookieJar();
-
-		$this->httpClient->setUri($this->getInstance()->getUrl() . '/bb-admin/install.php');
-		$this->httpClient->setParameterPost($params);
-		$response = $this->httpClient->request('POST');
-
-		$activate_plugins = array('core#ld.php', 'core#ld.ui.php', 'core#ld.auth.php', 'core#ld.css.php', 'core#akismet.php');
-		foreach ($activate_plugins as $plugin) {
-			bb_activate_plugin($plugin);
-		}
-		bb_update_option( 'active_plugins', $activate_plugins );
-
-		bb_update_option( 'from_email', $preferences['administrator']['email'] );
-
-		bb_update_option( 'avatars_show', 1 );
-		bb_update_option( 'avatars_rating', 'g' );
-		bb_update_option( 'avatars_default', 'default' );
+		$this->serviceRequest('init', $preferences);
 	}
 
 	public function postUpdate()
 	{
-	    parent::postUpdate();
+		parent::postUpdate();
 		// post update must not includ bbpress files or rely on load_bp()
 	}
 
 	public function postMove()
 	{
-	    parent::postMove();
-		$this->load_bp();
-		bb_update_option('uri', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
+		parent::postMove();
+		$this->serviceRequest('updateUrl');
 	}
 
 	public function create_config_file()
@@ -101,26 +50,13 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		Ld_Files::put($this->getAbsolutePath() . "/bb-config.php", $cfg);
 	}
 
-	public function load_bp()
-	{
-		if (empty($this->loaded)) {
-			global $bbdb, $wp_users_object;
-			require_once($this->getAbsolutePath() . '/bb-load.php');
-			require_once($this->getAbsolutePath() . '/bb-admin/includes/functions.bb-plugin.php');
-			$this->bbdb = $bbdb;
-			$this->loaded = true;
-		}
-	}
-
 	// Operations
 
 	public function restore($restoreFolder)
 	{
 		parent::restore($restoreFolder);
 
-		$this->load_bp();
-
-		bb_update_option('uri', $this->getSite()->getBaseUrl() . $this->getInstance()->getPath());
+		$this->serviceRequest('updateUrl');
 	}
 
 	// Preferences
@@ -164,23 +100,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 
 	public function getConfiguration()
 	{
-		$this->load_bp();
-		$metas_table = $this->bbdb->meta;
-		$options = $this->bbdb->get_results("SELECT * FROM $metas_table WHERE object_type = 'bb_option' ORDER BY meta_key");
-		$configuration = array();
-		foreach ( (array) $options as $option) {
-			if ( is_serialized($option->option_value) ) {
-				continue;
-			}
-			$configuration[$option->meta_key] = $option->meta_value;
-		}
-		if (empty($configuration['short_name']) && $instance = $this->getInstance()) {
-			$configuration['short_name'] = $instance->getName();
-		}
-		if (empty($configuration['lang']) && $instance = $this->getInstance()) {
-			$configuration['lang'] = $instance->getLocale();
-		}
-		return $configuration;
+		return $this->serviceRequest('getOptions');
 	}
 
 	public function setConfiguration($configuration, $type = 'general')
@@ -188,19 +108,23 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		if ($type == 'general') {
 			$type = 'configuration';
 		}
-		$this->load_bp();
+		
+		$options = array();
 		foreach ($this->getPreferences($type) as $preference) {
 			$preference = is_object($preference) ? $preference->toArray() : $preference;
 			$option = $preference['name'];
 			$value = isset($configuration[$option]) ? $configuration[$option] : null;
-			bb_update_option($option, $value);
+			$options[$name] = $value;
 		}
+		$this->serviceRequest('setOptions', $options);
+
 		if (isset($configuration['short_name']) && isset($this->instance)) {
 			$this->instance->setInfos(array('name' => $configuration['short_name']))->save();
 		}
 		if (isset($configuration['lang']) && isset($this->instance)) {
 			$this->instance->setInfos(array('locale' => $configuration['lang']))->save();
 		}
+
 		return $this->getConfiguration();
 	}
 
@@ -208,41 +132,25 @@ class Ld_Installer_Bbpress extends Ld_Installer
 
 	public function getThemes()
 	{
-		$this->load_bp();
-		$bb_themes = bb_get_themes();
-		$activetheme = bb_get_option('bb_active_theme');
-		if (!$activetheme) {
-			$activetheme = BB_DEFAULT_THEME;
+		if (empty($this->themes)) {
+			$this->themes = $this->serviceRequest('getThemes');
 		}
-		$themes = array();
-		foreach ($bb_themes as $id) {
-			list($type, $name) = explode('#', $id);
-			$folder = $type == 'user' ? 'my-templates' : 'bb-templates';
-			$screenshot = $this->site->getBaseUrl() . $this->getPath() . '/' . $folder . '/' . $name . '/screenshot.png';
-			$dir = $this->getAbsolutePath() . '/' . $folder . '/' . $name;
-			$active = $activetheme == $id;
-			$themes[$id] = compact('name', 'dir', 'screenshot', 'active');
-		}
-		return $themes;
+		return $this->themes;
 	}
 
 	public function setTheme($theme)
 	{
-		$this->load_bp();
-		bb_update_option('bb_active_theme', $theme);
+		return $this->serviceRequest('setTheme', $theme);
 	}
 
 	public function getCustomCss()
 	{
-		$this->load_bp();
-		return bb_get_option('ld_custom_css');
+		return $this->serviceRequest('getCustomCss');
 	}
 
 	public function setCustomCss($css = '')
 	{
-		$this->load_bp();
-		bb_update_option('ld_custom_css', $css);
-		return bb_get_option('ld_custom_css');
+		return $this->serviceRequest('setCustomCss', $css);
 	}
 
 	// Roles
@@ -258,37 +166,12 @@ class Ld_Installer_Bbpress extends Ld_Installer
 
 	public function getUserRoles()
 	{
-		$this->load_bp();
-		$roles = array();
-		$users = $this->getSite()->getUsers();
-		foreach ($users as $user) {
-			$username = $user['username'];
-			$roles[$username] = $this->defaultRole; // default
-			$userdata = Ld_Bbpress_Auth::get_bb_user_by_login($username);
-			if ($userdata) {
-				$bb_user = new BP_User($userdata->ID);
-				foreach ($this->roles as $role) {
-					if (isset($bb_user->caps[$role]) && $bb_user->caps[$role]) {
-						$roles[$username] = $role;
-					}
-				}
-			}
-		}
-		return $roles;
+		return $this->serviceRequest('getUserRoles');
 	}
 
 	public function setUserRoles($roles)
 	{
-		$this->load_bp();
-		$current_user_roles = $this->getUserRoles();
-		foreach ($roles as $username => $role) {
-			if (isset($current_user_roles[$username]) && $current_user_roles[$username] == $role) {
-				continue;
-			}
-			$userdata = Ld_Bbpress_Auth::get_bb_user_by_login($username);
-			$bb_user = new BP_User($userdata->ID);
-			$bb_user->set_role($role);
-		}
+		return $this->serviceRequest('setUserRoles', $roles);
 	}
 
 }

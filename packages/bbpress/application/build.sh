@@ -17,7 +17,7 @@ patch -p0 -d $FOLDER < patches/global-bbdb.diff
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist plugins -q -x \*.svn/\*
+zip -r $PACKAGE $FOLDER dist plugins service -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean

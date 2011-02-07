@@ -2,7 +2,7 @@
   <id>bbpress</id>
   <name>bbPress</name>
   <description>Forum Software</description>
-  <version>1.0.2-2011-01-4</version>
+  <version>1.0.2-2011-02-3</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>
@@ -10,6 +10,10 @@
   <deploy>
       <origin>plugins</origin>
       <destination path="public">bb-plugins</destination>
+  </deploy>
+  <deploy>
+      <origin>service</origin>
+      <destination path="public">.</destination>
   </deploy>
   <link title="admin" rel="section" type="text/html" href="/bb-admin/"/>
   <link title="Recent Topics" rel="alternate" type="application/rss+xml" href="/rss/topics" />
