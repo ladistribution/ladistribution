@@ -10,7 +10,7 @@ class Ld_Plugin_Memcache
             'url' => 'http://ladistribution.net/wiki/plugins/#memcache',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.3',
+            'version' => '0.5.5',
             'description' => Ld_Translate::translate('Cache data with Memcache to enhance performances.'),
             'license' => 'MIT / GPL'
         );
@@ -25,11 +25,7 @@ class Ld_Plugin_Memcache
             return array(self::STATUS_ERROR, Ld_Translate::translate('Memcache PHP extension is needed to run this plugin.'));
         }
         try {
-            $memcache = new Memcache();
-            foreach ($this->servers() as $server) {
-                list($host, $port) = $server;
-                $memcache->addServer($host, $port);
-            }
+            $memcache = $this->getMemcache();
             $result = $memcache->set('ld-test', 1);
         } catch (Exception $e) {
             $result = false;
@@ -48,7 +44,42 @@ class Ld_Plugin_Memcache
             Ld_Plugin::addAction('Sync:prepend', array($this, 'sync_prepend'));
             Ld_Plugin::addAction('Statusnet:config', array($this, 'statusnet_config'));
             Ld_Plugin::addAction('Wordpress:prepend', array($this, 'wordpress_prepend'));
+
+            Ld_Plugin::addFilter('Files:getJson', array($this, 'get_json'), 10, 2);
+            Ld_Plugin::addAction('Files:putJson', array($this, 'set_json'), 10, 2);
+            Ld_Plugin::addAction('Files:setJson', array($this, 'set_json'), 10, 2);
         }
+    }
+
+    public $memcache = null;
+
+    public function getMemcache()
+    {
+        if (isset($this->memcache)) {
+            return $this->memcache;
+        }
+        $memcache = new Memcache();
+        foreach ($this->servers() as $server) {
+            list($host, $port) = $server;
+            $memcache->addServer($host, $port);
+        }
+        return $this->memcache = $memcache;
+    }
+
+    public $prefix = null;
+
+    public function getPrefix()
+    {
+        if (isset($this->prefix)) {
+            return $this->prefix;
+        }
+        $site = Zend_Registry::get('site');
+        $prefix = $site->getConfig('memcached_prefix');
+        if (empty($prefix)) {
+            $prefix = uniqid();
+            $site->setConfig('memcached_prefix', $prefix);
+        }
+        return $this->prefix = $prefix;
     }
 
     public function preferences()
@@ -77,6 +108,24 @@ class Ld_Plugin_Memcache
             }
         }
         return $servers;
+    }
+
+    public function get_json($content = null, $file)
+    {
+        $memcache = $this->getMemcache();
+        if ($memcache = $this->getMemcache()) {
+            $key = $this->getPrefix() . ':' . md5($file);
+            return $memcache->get($key);
+        }
+    }
+
+    public function set_json($content = null, $file)
+    {
+        $memcache = $this->getMemcache();
+        if ($memcache = $this->getMemcache()) {
+            $key = $this->getPrefix() . ':' . md5($file);
+            return $memcache->set($key, $content);
+        }
     }
 
     public function wordpress_prepend()

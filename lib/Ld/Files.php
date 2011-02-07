@@ -37,7 +37,7 @@ class Ld_Files
      * @param boolean $deleteRootToo Delete the directory itself or not
      * @return null
      */
-    public static function unlink($dir, $deleteRootToo = true, $initial = true)
+    public static function rm($dir, $deleteRootToo = true, $initial = true)
     {
         $dir = self::real($dir);
 
@@ -74,11 +74,6 @@ class Ld_Files
                 if (!$result) unlink($dir);
             }
         }
-    }
-
-    public static function rm($dir, $deleteRootToo = true, $initial = true)
-    {
-        return self::unlink($dir, $deleteRootToo, $initial);
     }
 
     /**
@@ -220,7 +215,7 @@ class Ld_Files
         return false;
     }
 
-    public static function createDirIfNotExists($dir)
+    public static function ensureDirExists($dir)
     {
         // self::log('createDirIfNotExists', "$dir");
         if (!self::exists($dir)) {
@@ -243,9 +238,15 @@ class Ld_Files
         self::updatePermissions($file);
     }
 
+    public static $jsonPrefix = '<?php /* ';
+
     public static function putJson($file, $content)
     {
-        self::put($file, Zend_Json::encode($content));
+        self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
+        if (self::exists($file)) {
+            self::rm($file);
+        }
+        Ld_Plugin::doAction('Files:putJson', $content, $file);
     }
 
     public static function get($file, $skipTest = false)
@@ -259,9 +260,18 @@ class Ld_Files
 
     public static function getJson($file)
     {
-        $content = self::get($file);
+        $content = Ld_Plugin::applyFilters('Files:getJson', null, $file);
         if (!empty($content)) {
-            return Zend_Json::decode($content);
+            return $content;
+        }
+        $content = str_replace(self::$jsonPrefix, '', self::get($file . '.php'));
+        if (empty($content)) {
+            $content = self::get($file);
+        }
+        if (!empty($content)) {
+            $content = Zend_Json::decode($content);
+            Ld_Plugin::doAction('Files:setJson', $content, $file);
+            return $content;
         }
         return array();
     }
@@ -382,5 +392,7 @@ class Ld_Files
     public static function upload() { return Ld_Http::upload(); }
     public static function download($url, $filename) { return Ld_Http::download($url, $filename); }
     public static function unzip($archive, $destination) { return Ld_Zip::extract($archive, $destination); }
+    public static function createDirIfNotExists($dir) { return self::ensureDirExists($dir); }
+    public static function unlink($dir, $deleteRootToo = true, $initial = true) { return self::rm($dir, $deleteRootToo, $initial); }
 
 }
