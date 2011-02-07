@@ -2,7 +2,7 @@
   <id>dokuwiki</id>
   <name>DokuWiki</name>
   <description>Simple Wiki Software</description>
-  <version>2010-11-07-15</version>
+  <version>2010-11-07-16</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
@@ -12,7 +12,7 @@
   <!--
   <link title="admin" rel="section" type="text/html" href="/?do=admin"/>
   -->
-  <link title="feed" rel="alternate" type="application/atom+xml" href="/feed.php?type=atom1&amp;linkto=current&amp;content=htmldiff"/>
+  <link title="Latest Edits" rel="feed" type="application/atom+xml" href="/feed.php?type=atom1&amp;linkto=current&amp;content=htmldiff"/>
   <deploy>
       <origin>plugins</origin>
       <destination path="public">./lib/plugins/</destination>

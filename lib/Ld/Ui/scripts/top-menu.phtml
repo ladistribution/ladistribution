@@ -33,7 +33,7 @@
         <?php
         $pages = array();
         $pages[] = array('label' => "Home", 'class' => "home", 'route' => array('module' => 'slotter', 'controller' => 'index'));
-        $pages[] = array('label' => "Timeline", 'class' => "timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
+        $pages[] = array('label' => "News Feed", 'class' => "timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
         if (Ld_Ui::isAdmin()) {
             $pages[] = array('label' => "Settings", 'class' => "settings", 'route' => array('module' => 'slotter', 'controller' => 'settings'));
         }

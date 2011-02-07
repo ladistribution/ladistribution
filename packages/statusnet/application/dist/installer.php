@@ -156,13 +156,15 @@ class Ld_Installer_Statusnet extends Ld_Installer
 	{
 		$links = array();
 		$links[] = array(
-			'title' => 'Personal timeline',
+			'id'  => 'public_timeline',
+			'title' => 'Public timeline',
 			'rel'   => 'public-feed',
 			'href'  => $this->getInstance()->getAbsoluteUrl("/api/statuses/public_timeline.atom"),
 			'type'  => 'application/atom+xml'
 		);
 		if (Ld_Auth::isAuthenticated() && $username = Ld_Auth::getUSername()) {
 			$links[] = array(
+				'id'  => 'friends_timeline',
 				'title' => 'Personal timeline',
 				'rel'   => 'personal-feed',
 				'href'  => $this->getInstance()->getAbsoluteUrl("/api/statuses/friends_timeline/$username.atom"),

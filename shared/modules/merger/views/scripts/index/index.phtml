@@ -1,3 +1,7 @@
+<ul class="ld-nav">
+    <li><a href="<?php echo $this->url(array('controller' => 'settings', 'action' => 'index'), 'merger-settings') ?>"><?php echo $this->translate("Settings") ?></a></li>
+</ul>
+
 <h2><?php echo $this->translate("News Feed"); ?></h2>
 
 <div class="ld-merger ld-feed">
@@ -34,7 +38,7 @@
           <?php if (!empty($entry['enclosure'])) : ?>
             <img class="enclosure" src="<?php echo $entry['enclosure']->url ?>"/>
           <?php endif ?>
-        <h2 class="h6e-entry-title"><a href="<?php echo $entry['link'] ?>"><?php echo $entry['title'] ?></a></h2>
+        <h2 class="h6e-entry-title"><a href="<?php echo $entry['link'] ?>"><?php echo $this->escape($entry['title']) ?></a></h2>
         <?php if (!empty($entry['content'])) : ?>
             <div class="h6e-post-content"><?php echo $entry['content'] ?></div>
         <?php endif ?>
@@ -46,7 +50,7 @@
 
         <?php if (!empty($entry['screenName'])) : echo $entry['action']; endif ?>
         <?php if ($entry['title'] != $entry['content']) : ?>
-            <h2 class="h6e-entry-title"><a href="<?php echo $entry['link'] ?>"><?php echo $entry['title'] ?></a></h2>
+            <h2 class="h6e-entry-title"><a href="<?php echo $entry['link'] ?>"><?php echo $this->escape($entry['title']) ?></a></h2>
         <?php endif ?>
         <?php if (!empty($entry['content'])) : ?>
             <div class="h6e-post-content"><?php echo $entry['content'] ?></div>

@@ -141,9 +141,14 @@ class Ld_Installer
             $baseUrl = $this->getSite()->getUrl() . $this->getPath();
         }
 
-        $links = $this->getManifest()->getLinks();
-        foreach ($links as $id => $link) {
-            $links[$id]['href'] = $baseUrl . $link['href'];
+        $links = array();
+        foreach ($this->getManifest()->getLinks() as $link) {
+            $id    = (string) $link['href'];
+            $rel   = (string) $link['rel'];
+            $type  = (string) $link['type'];
+            $title = (string) $link['title'];
+            $href  = $baseUrl . $link['href'];
+            $links[$id] = compact('id', 'rel', 'type', 'title', 'href');
         }
 
         return $this->links = $links;

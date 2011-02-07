@@ -32,7 +32,9 @@ class Ld_Feed_Merger
         foreach (self::getSites() as $site) {
             foreach ($site->getInstances('application') as $id => $infos) {
                 $instance = $site->getInstance($id);
-                $instances[] = $instance;
+                if ($instance) {
+                    $instances[$id] = $instance;
+                }
             }
         }
         return $instances;
@@ -40,19 +42,24 @@ class Ld_Feed_Merger
 
     public static function getFeeds($feedType = 'public')
     {
+        $config = Ld_Files::getJson(self::getSite()->getDirectory('dist') . '/merger.json');
+        $config = $config[$feedType];
+
         $types = array('application/rss+xml', 'application/atom+xml');
 
         $rels = array('feed', 'alternate');
         $rels[] = $feedType == 'public' ? 'public-feed' : 'personal-feed';
 
         $feeds = array();
-        foreach (self::getInstances() as $instance) {
+        foreach (self::getInstances() as $id => $instance) {
+            $package = $instance->getPackageId();
             foreach ($instance->getLinks() as $link) {
-                $rel  = (string) $link['rel'];
-                $url  = (string) $link['href'];
-                $type = (string) $link['type'];
-                if (in_array($rel, $rels) && in_array($type, $types)) {
-                    $feeds[] = new Ld_Feed_Merger_Feed($url, $instance, $feedType);
+                $feedId  = $link['id'];
+                if (in_array($link['rel'], $rels) && in_array($link['type'], $types)) {
+                    if (!isset($config[$id][$feedId]) || $config[$id][$feedId] == 1) {
+                        // $parseType = $feedType == 'personal' && $link['rel'] == 'personal-feed' ? 'personal' : 'public';
+                        $feeds[] = new Ld_Feed_Merger_Feed($link['href'], $instance, $feedType);
+                    }
                 }
             }
         }

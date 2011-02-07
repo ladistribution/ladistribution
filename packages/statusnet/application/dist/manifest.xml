@@ -2,7 +2,7 @@
   <id>statusnet</id>
   <name>Status.net</name>
   <description>Microblogging Engine</description>
-  <version>0.9.6-9</version>
+  <version>0.9.6-10</version>
   <type>application</type>
   <db>mysql</db>
   <php>
