@@ -623,10 +623,10 @@ class Ld_Installer
 		}
 		try {
 			$result = Zend_Json::decode($body);
+			return $result;
 		} catch (Exception $e) {
 			echo htmlspecialchars('<response>' . $body . '</response>');
 		}
-		return $result;
 	}
 
     // Legacy

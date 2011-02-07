@@ -2,7 +2,7 @@
 
 error_reporting(0);
 
-define('LD_DEBUG', false);
+defined('LD_DEBUG') || define('LD_DEBUG', false);
 
 require_once( 'dist/config.php' );
 

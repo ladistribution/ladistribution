@@ -511,6 +511,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
               $params['domain'] = $preferences['domain'];
           }
 
+          if (isset($preferences['order'])) {
+              $params['order'] = $preferences['order'];
+          }
+
           if (isset($preferences['db'])) {
               $params['db'] = $preferences['db'];
               $params['db_prefix'] = $installer->getDbPrefix();
@@ -534,7 +538,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
               'type'    => $params['type'],
               'path'    => isset($params['path']) ? $params['path'] : null,
               'name'    => isset($params['name']) ? $params['name'] : null,
-              'domain'  => isset($params['domain']) ? $params['domain'] : null
+              'domain'  => isset($params['domain']) ? $params['domain'] : null,
+              'order'   => isset($params['order']) ? $params['order'] : null
           );
           $this->updateInstances($instances);
 

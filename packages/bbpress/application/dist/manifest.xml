@@ -2,7 +2,7 @@
   <id>bbpress</id>
   <name>bbPress</name>
   <description>Forum Software</description>
-  <version>1.0.2-2011-02-3</version>
+  <version>1.0.2-2011-02-4</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-ld-ui</need>

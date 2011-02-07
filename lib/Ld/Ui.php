@@ -32,7 +32,7 @@ class Ld_Ui
         return $view;
     }
 
-    public function isAdmin()
+    public static function isAdmin()
     {
         if (isset(self::$_isAdmin)) {
             return self::$_isAdmin;

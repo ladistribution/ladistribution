@@ -22,7 +22,7 @@ class Ld_Dispatch
     {
         $site = Zend_Registry::get('site');
 
-        $root_application = self::_getRootApplicationPath();
+        $root_application = self::getRootApplicationPath();
 
         // Get Instance
         $instance = $site->getInstance($root_application);
@@ -31,18 +31,17 @@ class Ld_Dispatch
             $instance = $site->getInstance($root_application);
         }
 
-        switch ($instance->getPackageId()) {
-            case 'dokuwiki':
-                $script = 'doku.php';
-                break;
-            default:
-                $script = 'index.php';
+        $script = 'index.php';
+
+        // should be corrected in dokuwiki package
+        if ($instance && $instance->getPackageId() == 'dokuwiki') {
+            $script = 'doku.php';
         }
 
         return array($root_application, $script);
     }
 
-    protected static function _getRootApplicationPath()
+    protected static function getRootApplicationPath()
     {
         $site = Zend_Registry::get('site');
 
@@ -65,16 +64,19 @@ class Ld_Dispatch
             return $root_application;
         }
 
-        return self::_getDefaultRootApplicationPath();
+        return self::getDefaultRootApplicationPath();
     }
 
     protected static function getAdminPath()
     {
         $admin = Zend_Registry::get('site')->getAdmin();
-        return $admin->getPath();
+        if ($admin) {
+            return $admin->getPath();
+        }
+        return 'admin';
     }
 
-    protected static function _getDefaultRootApplicationPath()
+    protected static function getDefaultRootApplicationPath()
     {
         return self::getAdminPath();
     }
