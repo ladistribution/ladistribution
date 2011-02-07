@@ -236,53 +236,6 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $this->serviceRequest('setUserRoles', $roles);
 	}
 
-	// Service
-
-	public function getSecret()
-	{
-		$infos = $this->instance->getInfos();
-		if (empty($infos['secret'])) {
-			$infos['secret'] = Ld_Auth::generatePhrase(32);
-			$this->instance->setInfos(array('secret' => $infos['secret']))->save();
-		}
-		return $infos['secret'];
-	}
-
-	public function getServiceUri($method)
-	{
-		return $this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . "/ld-service.php?method=$method";
-	}
-
-	public function serviceRequest($method, $params = array())
-	{
-		Ld_Files::log("Wordpress:serviceRequest", "$method");
-		if (empty($this->httpClient)) {
-			$this->httpClient = new Zend_Http_Client();
-			if (isset($_COOKIE['ld-auth'])) {
-				$this->httpClient->setCookie('ld-auth', stripslashes($_COOKIE['ld-auth']));
-			}
-			$this->httpClient->setCookie('ld-secret', $this->getSecret());
-		}
-
-		$this->httpClient->setUri( $this->getServiceUri($method) );
-		if (!empty($params)) {
-			$this->httpClient->setRawData(Zend_Json::encode($params),' application/json');
-			$this->httpClient->setMethod('POST');
-		}
-		$response = $this->httpClient->request();
-
-		$body = $response->getBody();
-		if (empty($body)) {
-			return true;
-		}
-		try {
-			$result = Zend_Json::decode($body);
-		} catch (Exception $e) {
-			echo htmlspecialchars('<response>' . $body . '</response>');
-		}
-		return $result;
-	}
-
 }
 
 class Ld_Installer_Wordpress_Plugin extends Ld_Installer_Wordpress
