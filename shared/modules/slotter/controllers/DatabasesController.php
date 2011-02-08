@@ -33,6 +33,12 @@ class Slotter_DatabasesController extends Slotter_BaseController
         $databasesPage->addPage(array(
             'label' => 'New', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'new'
         ));
+        $databasesPage->addPage(array(
+            'label' => 'Master', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'master'
+        ));
+        $databasesPage->addPage(array(
+            'label' => 'Create', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'create'
+        ));
         if ($this->_hasParam('id')) {
             $action = $this->getRequest()->action;
             $databasesPage->addPage(array(
@@ -70,6 +76,49 @@ class Slotter_DatabasesController extends Slotter_BaseController
             $this->site->addDatabase($db);
             $this->_redirector->goto('index');
         }
+    }
+
+    /**
+     * Create action.
+     */
+    public function masterAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $db = array(
+                'type' => $this->_getParam('type'),
+                'host' => $this->_getParam('host'),
+                'user' => $this->_getParam('user'),
+                'password' => $this->_getParam('password')
+            );
+            $this->site->addDatabase($db);
+            $this->_redirector->goto('index');
+        }
+    }
+
+    /**
+     * Create action.
+     */
+    public function createAction()
+    {
+        $master = $this->site->getDatabase($this->_getParam('master'));
+        if (empty($master)) {
+            throw new Exception("Non existing master connection.");
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $db = array(
+                'master'   => $this->_getParam('master'),
+                'type'     => $this->_getParam('type'),
+                'name'     => $this->_getParam('name'),
+                'user'     => $this->_getParam('user'),
+                'password' => $this->_getParam('password')
+            );
+            $this->site->createDatabase($db);
+            $this->_redirector->goto('index');
+        }
+
+        $this->view->user = $this->view->name = Ld_Plugin::applyFilters('Slotter:createDatabase:name', 'ladistribution');
+        $this->view->password = Ld_Auth::generatePhrase(12);
     }
 
     /**

@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Package
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -147,9 +147,9 @@ class Ld_Package
         return $this->_manifest;
     }
 
-    public function getInstaller()
+    public function getInstaller($forceNew = false)
     {
-        if (empty($this->_installer)) {
+        if (empty($this->_installer) || $forceNew) {
             $dir = $this->getDir();
             $classFile = $dir . 'dist/installer.php';
             $className = $this->getManifest()->getClassName();

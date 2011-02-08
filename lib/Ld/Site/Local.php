@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Site
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -127,8 +127,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
                 $cfg .= 'Ld_Loader::loadSubSite(dirname(__FILE__) . "/..");' . "\n";
             } else {
                 $cfg .= '$dir = dirname(__FILE__) . "/..";' . "\n";
-                $cfg .= '$loader = $dir . "/lib/Ld/Loader.php";' . "\n";
-                $cfg .= 'if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
+                $cfg .= "if (!class_exists('Ld_Loader')) {" . "\n";
+                $cfg .= '  $loader = $dir . "/lib/Ld/Loader.php";' . "\n";
+                $cfg .= '  if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }' . "\n";
+                $cfg .= "}" . "\n";
                 $cfg .= 'Ld_Loader::loadSite($dir);' . "\n";
             }
 
@@ -432,7 +434,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $package = $this->getPackage($packageId);
 
-        $installer = $package->getInstaller();
+        $installer = $package->getInstaller(true);
 
         if ($package->getType() == 'application') {
             foreach ($this->getInstances('application') as $application) {
@@ -820,9 +822,51 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $databases;
     }
 
+    public function getDatabase($id)
+    {
+        $databases = $this->getDatabases();
+        if (isset($databases[$id])) {
+            return $databases[$id];
+        }
+    }
+
     public function addDatabase($params)
     {
         $this->testDatabase($params);
+        $databases = $this->getDatabases();
+        $databases[$this->getUniqId()] = $params;
+        $this->_writeDatabases($databases);
+    }
+
+    public function createDatabase($params)
+    {
+        $master = $this->getDatabase($params['master']);
+        $db = Ld_Utils::getDbConnection($master, 'php');
+
+        $params['type'] = 'mysql';
+
+        $dbName = $params['name'];
+
+        $dbUser = $params['user'];
+        if (strlen($dbUser > 16)) {
+            $dbUser = $params['user'] = substr($params['user'], 0, 16);
+        }
+
+        $dbPassword = $params['password'];
+        if (empty($dbPassword)) {
+            $dbPassword = $params['password'] = Ld_Auth::generatePhrase(12);
+        }
+
+        $db->query("CREATE USER '$dbUser'@'%' IDENTIFIED BY '$dbPassword';");
+        $db->query("GRANT USAGE ON * . * TO '$dbUser'@'%';");
+        $db->query("CREATE DATABASE IF NOT EXISTS `$dbName` ;");
+        $db->query("GRANT ALL ON `$dbName` . * TO '$dbUser'@'%';");
+
+        if (empty($params['host'])) {
+            $params['host'] = $master['host'];
+        }
+        unset($params['master']);
+
         $databases = $this->getDatabases();
         $databases[$this->getUniqId()] = $params;
         $this->_writeDatabases($databases);
@@ -852,7 +896,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         try {
             $con = Ld_Utils::getDbConnection($dbParameters, 'zend');
-            $con->fetchCol('SHOW TABLES');
+            if ($dbParameters == 'mysql-master') {
+                $dbName = "ld_test_" . uniqid();
+                $con->query("CREATE DATABASE $dbName");
+                $con->query("DROP DATABASE $dbName");
+            } else if ($dbParameters == 'mysql') {
+                $con->fetchCol('SHOW TABLES');
+            }
             return true;
         } catch (Exception $e) {
             if ($throwException) {

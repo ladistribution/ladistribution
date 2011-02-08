@@ -269,10 +269,10 @@ class Ld_Files
         if (!empty($content)) {
             return $content;
         }
-        if (self::exist($file . '.php')) {
+        if (self::exists($file . '.php')) {
             $content = str_replace(self::$jsonPrefix, '', self::get($file . '.php'));
         } else {
-             $content = self::get($file);
+            $content = self::get($file);
         }
         if (!empty($content)) {
             $content = Zend_Json::decode($content);

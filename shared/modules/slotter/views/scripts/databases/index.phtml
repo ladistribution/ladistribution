@@ -28,6 +28,7 @@
     <tbody>
 
     <?php foreach ($this->databases as $id => $database) : ?>
+        <?php if ($database['type'] == 'mysql-master') { $master = $database; $master['id'] = $id; continue; } ?>
         <?php $used = $this->site->isDatabaseUsed($id); ?>
         <?php $test = $this->site->testDatabase($database, false); ?>
         <tr>
@@ -64,8 +65,17 @@
 
 <ul>
     <li><a href="<?php echo $this->url(array('action' => 'new')); ?>"><?php
-        echo $this->translate("Add a database connection");
+        echo $this->translate("Register an existing database");
     ?></a></li>
+    <?php if (isset($master)) : ?>
+        <li><a href="<?php echo $this->url(array('action' => 'create', 'master' => $master['id'])); ?>"><?php
+            echo $this->translate("Create a new database");
+        ?></a></li>
+    <?php elseif (defined('LD_DB_MASTER') && constant('LD_DB_MASTER')) : ?>
+        <li><a href="<?php echo $this->url(array('action' => 'master')); ?>"><?php
+            echo $this->translate("Register master credentials");
+        ?></a></li>
+    <?php endif ?>
 </ul>
 
 </div>

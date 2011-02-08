@@ -280,12 +280,29 @@ class Ld_Cli
 
     public function addDatabase()
     {
-        $type = 'mysql';
-        $host = isset($this->_opts->host) ? $this->_opts->host : $this->_prompt('Host');
-        $name = isset($this->_opts->name) ? $this->_opts->name : $this->_prompt('Name');
+        $type = isset($this->_opts->type) ? $this->_opts->type : $this->_prompt('Type', 'mysql');
+        $host = isset($this->_opts->host) ? $this->_opts->host : $this->_prompt('Host', 'localhost');
+        if ($type == 'mysql') {
+            $name = isset($this->_opts->name) ? $this->_opts->name : $this->_prompt('Name');
+        }
         $user = isset($this->_opts->user) ? $this->_opts->user : $this->_prompt('User');
         $password = isset($this->_opts->password) ? $this->_opts->password : $this->_prompt('Password');
         $this->getSite()->addDatabase(compact('type', 'host', 'name', 'user', 'password'));
+    }
+
+    public function createDatabase()
+    {
+        $masters = $this->getSite()->getDatabases('mysql-master');
+        if (count($masters) > 0) {
+            $keys = array_keys($masters);
+            $master = $keys[0];
+        } else {
+            throw new Exception("No master connection available.");
+        }
+        $name = isset($this->_opts->name) ? $this->_opts->name : $this->_prompt('Name', 'ladistribution');
+        $user = isset($this->_opts->user) ? $this->_opts->user : $this->_prompt('User', 'ladistribution');
+        $password = isset($this->_opts->password) ? $this->_opts->password : $this->_prompt('Password', Ld_Auth::generatePhrase(12));
+        $this->getSite()->createDatabase(compact('master', 'name', 'user', 'password'));
     }
 
     public function deleteDatabase()
