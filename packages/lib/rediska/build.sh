@@ -1,15 +1,16 @@
 VERSION="0.5.1"
 FOLDER="lib"
 NAME="rediska"
-SOURCE="http://rediska.geometria-lab.ru/download/Rediska-0-5-1.zip"
+# SOURCE="http://rediska.geometria-lab.ru/download/Rediska-0-5-1.zip"
+SOURCE="https://github.com/Shumkov/Rediska/zipball/release-0-5-1"
 ZIP="$NAME.zip"
 PACKAGE="lib-$NAME.zip"
-BUILD="Rediska $VERSION"
+BUILD="Shumkov-Rediska-bd7b445"
 
 echo "# Building $NAME package"
 
 echo "# Get source from $SOURCE with curl"
-curl $SOURCE --user-agent "La Distribution Build system (http://ladistribution.net/)" -# > $ZIP
+curl -L $SOURCE --user-agent "La Distribution Build system (http://ladistribution.net/)" -# > $ZIP
 unzip -q $ZIP
 rm $ZIP
 
