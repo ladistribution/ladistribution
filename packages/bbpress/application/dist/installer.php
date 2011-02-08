@@ -56,7 +56,33 @@ class Ld_Installer_Bbpress extends Ld_Installer
 	{
 		parent::restore($restoreFolder);
 
+		$this->_fixDatabasePrefix();
+
 		$this->serviceRequest('updateUrl');
+	}
+
+	private function _fixDatabasePrefix()
+	{
+		$infos = Ld_Files::getJson($this->getRestoreFolder() . '/dist/instance.json');
+		$oldDbPrefix = $infos['db_prefix'];
+
+		$dbPrefix = $this->getInstance()->getDbPrefix();
+		$dbConnection = $this->getInstance()->getDbConnection('php');
+
+		foreach (array('usermeta' => 'meta_key') as $table => $key) {
+			$tablename = $dbPrefix . $table;
+			$result = $dbConnection->query("SELECT $key FROM $tablename WHERE $key LIKE '$oldDbPrefix%'");
+			if (!empty($result)) {
+				while ($row = $result->fetch_assoc()) {
+					$oldKey = $row[$key];
+					$newKey = str_replace($oldDbPrefix, $dbPrefix, $oldKey);
+					$update = $dbConnection->query("UPDATE $tablename SET $key = '$newKey' WHERE $key = '$oldKey'");
+					if (!$update) {
+						echo mysql_error();
+					}
+				}
+			}
+		}
 	}
 
 	// Preferences
