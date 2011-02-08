@@ -17,14 +17,23 @@ if (!file_exists(LD_LIB_DIR . '/Zend/Loader/Autoloader.php')) {
     include(LD_DIR . '/installer.php');
 }
 
-// Zend Loader
-require_once 'Zend/Loader/Autoloader.php';
-$autoloader = Zend_Loader_Autoloader::getInstance();
-$autoloader->registerNamespace('Ld_');
+$loader = LD_LIB_DIR . "/Ld/Loader.php";
+if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }
+
+Ld_Loader::registerAutoload();
 
 try {
-    $cli = new Ld_Cli();
+
+    if (isset($argv[1]) && $argv[1] == 'package') {
+        $cli = new Ld_Cli_Package();
+    } elseif (isset($argv[1]) && $argv[1] == 'site') {
+        $cli = new Ld_Cli_Site();
+    } else {
+        $cli = new Ld_Cli();
+    }
+
     $cli->dispatch();
+
 } catch (Exception $e) {
     fwrite(STDOUT, 'Error: ' . $e->getMessage() . PHP_EOL);
     if (defined('LD_DEBUG') && constant('LD_DEBUG')) {

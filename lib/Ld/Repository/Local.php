@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Repository
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -33,7 +33,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         Ld_Files::createDirIfNotExists($this->dir);
 
         if (!Ld_Files::exists($this->dir . '/packages.json')) {
-            Ld_Files::put($this->dir . '/packages.json', Zend_Json::encode(array()));
+            Ld_Files::putJson($this->dir . '/packages.json', array(), false);
         }
     }
 
@@ -249,7 +249,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
     public function updatePackageList($packages)
     {
         // Generate Json Index
-        Ld_Files::put($this->getDir() . '/packages.json', Zend_Json::encode($packages));
+        Ld_Files::putJson($this->getDir() . '/packages.json', $packages, false);
 
         // Generate HTML Index
         Ld_Files::put($this->getDir() . '/index.html',

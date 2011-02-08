@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Cli
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -27,9 +27,14 @@ class Ld_Cli
             'force|f' => 'force command'
         ));
 
-        $this->_args = $this->_opts->getRemainingArgs();
+        $this->_args = $this->_getArgs();
 
         $this->_action = isset($this->_args[0]) ? $this->_args[0] : 'about';
+    }
+
+    protected function _getArgs()
+    {
+        return $this->_args = $this->_opts->getRemainingArgs();
     }
 
     public function dispatch()
@@ -341,7 +346,7 @@ class Ld_Cli
         }
 
         $site = $this->getSite();
-        $directory = $site->getDirectory() . '/' . $path;
+        $directory = Ld_Files::cleanpath($path);
 
         $package = Ld_Package::loadFromDirectory($directory);
 
@@ -425,8 +430,6 @@ class Ld_Cli
         $instance = $this->getSite()->cloneInstance($filename, $preferences);
     }
 
-    // Repositories
-
     public function importPackage()
     {
         if (empty($this->_args[1])) {
@@ -440,38 +443,6 @@ class Ld_Cli
         $filename = $this->_args[2];
 
         $package = $repository->importPackage($filename, false);
-        $this->_write(sprintf("%s v%s successfully imported in '%s' repository",
-            $package->id, $package->version, $repository->name));
-    }
-
-    public function buildPackage()
-    {
-        if (empty($this->_args[1])) {
-            throw new Exception("No or invalid application name passed as argument.");
-        }
-        $package = $this->_args[1];
-
-        $dir = $this->getSite()->getDirectory() . "/packages/$package/application";
-        echo shell_exec("cd $dir && ./build.sh");
-    }
-
-    public function updatePackage()
-    {
-        if (empty($this->_args[1])) {
-            throw new Exception("No or invalid application name passed as argument.");
-        }
-        $package = $this->_args[1];
-
-        if (empty($this->_args[2])) {
-            throw new Exception("No or invalid repository passed as argument.");
-        }
-        $repository = $this->_getRepository($this->_args[2]);
-
-        $dir = $this->getSite()->getDirectory() . "/packages/$package/application";
-        echo shell_exec("cd $dir && ./build.sh");
-
-        $file = $this->getSite()->getDirectory() . "/packages/$package.zip";
-        $package = $repository->importPackage($file, false);
         $this->_write(sprintf("%s v%s successfully imported in '%s' repository",
             $package->id, $package->version, $repository->name));
     }

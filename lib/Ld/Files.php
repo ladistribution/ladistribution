@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Files
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -240,11 +240,15 @@ class Ld_Files
 
     public static $jsonPrefix = '<?php /* ';
 
-    public static function putJson($file, $content)
+    public static function putJson($file, $content, $protect = true)
     {
-        self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
-        if (self::exists($file)) {
-            self::rm($file);
+        if ($protect) {
+            self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
+            if (self::exists($file)) {
+                  self::rm($file);
+              }
+        } else {
+            self::put($file, Zend_Json::encode($content));
         }
         Ld_Plugin::doAction('Files:putJson', $content, $file);
     }
@@ -260,13 +264,15 @@ class Ld_Files
 
     public static function getJson($file)
     {
+        // From Plugin (cache, store, ...)
         $content = Ld_Plugin::applyFilters('Files:getJson', null, $file);
         if (!empty($content)) {
             return $content;
         }
-        $content = str_replace(self::$jsonPrefix, '', self::get($file . '.php'));
-        if (empty($content)) {
-            $content = self::get($file);
+        if (self::exist($file . '.php')) {
+            $content = str_replace(self::$jsonPrefix, '', self::get($file . '.php'));
+        } else {
+             $content = self::get($file);
         }
         if (!empty($content)) {
             $content = Zend_Json::decode($content);
