@@ -172,9 +172,12 @@ class AuthController extends Ld_Controller_Action
             throw new Exception("Invalid token");
         }
 
-        $username = $user['username'];
+        $temporary_username = $user['username'];
 
         if ($this->getRequest()->isGet()) {
+            
+            // unset temporary username
+            unset($user['username']);
 
             $this->view->user = $user;
             $this->view->finish = true;
@@ -185,7 +188,10 @@ class AuthController extends Ld_Controller_Action
             try {
 
                 // Update Username
-                $user['username'] = $this->_getParam('ld_register_username');
+                $user['username'] = $username = $this->_getParam('ld_register_username');
+                if ($exists = $this->site->getUsersBackend()->getUserBy('username', $user['username'])) {
+                    throw new Exception("User with this username already exists.");
+                }
 
                 // Update Password
                 $password = $this->_getParam('ld_register_password');
@@ -203,7 +209,16 @@ class AuthController extends Ld_Controller_Action
                 // Activated
                 $user['activated'] = true;
 
-                $this->site->updateUser($username, $user);
+                // Update user
+                $this->site->updateUser($temporary_username, $user);
+
+                // Fix roles
+                $userRoles = $this->admin->getUserRoles();
+                if (isset($userRoles[$temporary_username])) {
+                    $userRoles[$username] = $userRoles[$temporary_username];
+                    unset($userRoles[$temporary_username]);
+                }
+                $this->admin->setUserRoles($userRoles);
 
                 // Authenticate with credentials, and remember
                 Ld_Auth::rememberIdentity($user['username']);

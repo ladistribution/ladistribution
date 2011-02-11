@@ -6,9 +6,11 @@
 
 <form method="post" action="" autocomplete="off">
 
-    <h3><?php printf($this->translate("Edit profile: %s"), '<strong>' . $this->user['username'] . '</strong>') ?></h3>
+    <?php if ($this->currentUser != $this->user) : ?>
+        <h3><?php printf($this->translate("Edit profile: %s"), '<strong>' . $this->user['username'] . '</strong>') ?></h3>
+    <?php endif ?>
 
-    <h4><?php echo $this->translate("Infos") ?></h4>
+    <h3><?php echo $this->translate("Infos") ?></h4>
 
     <table class="ld-form">
     <tr>
@@ -23,7 +25,9 @@
     </tr>
     </table>
 
-    <h4><?php echo $this->translate("Change password") ?></h4>
+    <br/>
+
+    <h3><?php echo $this->translate("Change password") ?></h3>
 
     <p><em><?php echo $this->translate("If you would like to change the password type a new one. Otherwise leave this blank.") ?></em></p>
 
@@ -53,7 +57,7 @@
 <?php if ($this->currentUser['username'] == $this->user['username']) : ?>
 
 <?php if (isset($this->identity)) : ?>
-    
+
 <hr/>
 
 <h3><?php echo $this->translate("Connect to other websites using OpenID") ?></h3>

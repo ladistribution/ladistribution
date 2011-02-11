@@ -50,13 +50,17 @@ class Slotter_UsersController extends Slotter_BaseController
 
         $usersPage = $this->_container->findOneByLabel( $translator->translate('Users') );
 
-        $usersPage->addPage(array(
-            'label' => $translator->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
-        ));
+        if ($this->admin->userCan('manage', 'users')) {
 
-        $usersPage->addPage(array(
-            'label' => $translator->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
-        ));
+            $usersPage->addPage(array(
+                'label' => $translator->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
+            ));
+
+            $usersPage->addPage(array(
+                'label' => $translator->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
+            ));
+
+        }
 
         if (isset($this->currentUser)) {
             $usersPage->addPage(array(
@@ -328,8 +332,7 @@ class Slotter_UsersController extends Slotter_BaseController
                 $roles = $this->_getParam('roles');
                 $userRoles = $this->admin->getUserRoles();
                 foreach ($emails as $email) {
-                    $explode = explode('@', $email);
-                    $username = $explode[0];
+                    $username = Ld_Auth::generatePhrase(16);
                     $user = array(
                         'origin'     => 'Slotter:invite',
                         'username'   => $username,

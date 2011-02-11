@@ -74,7 +74,11 @@
 
     <tr>
         <td class="avatar"><?php echo Ld_Ui::getAvatar($user, 16) ?></td>
-        <td><?php echo $user['username'] ?></td>
+        <?php if (!isset($user['activated']) || $user['activated'] == true) : ?>
+            <td><?php echo $user['username'] ?></td>
+        <?php else: ?>
+            <td>/</td>
+        <?php endif ?>
         <td><?php echo isset($user['fullname']) ? $user['fullname'] : '' ?></td>
         <td><?php echo isset($user['email']) ? $user['email'] : '' ?></td>
 
