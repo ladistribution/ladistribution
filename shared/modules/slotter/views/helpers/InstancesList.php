@@ -68,7 +68,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             }
 
             if ( $this->view->userRole == 'admin') {
-                printf('<a class="settings" title="%2$s" href="%1$s">%2$s</a><br/>', $manageUrl, $this->translate("Settings"));
+                printf('<a class="settings" title="%2$s" href="%1$s">%2$s</a>', $manageUrl, $this->translate("Settings"));
             }
 
             printf("</li>\n");

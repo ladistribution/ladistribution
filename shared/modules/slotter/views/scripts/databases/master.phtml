@@ -1,0 +1,42 @@
+<h2><?php echo $this->translate("Settings") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content h6e-block">
+
+<h3><?php echo $this->translate("Register master credentials") ?></h3>
+
+<form method="post" action="">
+
+    <table class="ld-form">
+    <tr>
+        <th><label for="ld-db-add-type"><?php echo $this->translate("Type") ?></label></th>
+        <td>
+            <select id="ld-db-add-type" name="type">
+                <option value="mysql-master">MySQL</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th><label for="ld-db-add-host"><?php echo $this->translate("Host") ?></label></th>
+        <td><input id="ld-db-add-host" type="text" name="host" class="text" value="localhost"/></td>
+    </tr>
+    <tr>
+        <th><label for="ld-db-add-user"><?php echo $this->translate("Username") ?></label></th>
+        <td><input id="ld-db-add-user" type="text" name="user" class="text" value="" autocomplete="off"/></td>
+    </tr>
+    <tr>
+        <th><label for="ld-db-add-password"><?php echo $this->translate("Password") ?></label></th>
+        <td><input id="ld-db-add-password" type="password" name="password" class="text" value="" autocomplete="off"/></td>
+    </tr>
+    </table>
+
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add") ?>"/>
+
+</form>
+
+</div>
+
+</div>

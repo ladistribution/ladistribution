@@ -1,0 +1,50 @@
+<h2><?php echo $this->translate("Users") ?></h2>
+
+<?php $this->partialNavigationMenu('Users') ?>
+
+<div class="ld-panel-content h6e-block">
+
+<form action="" method="post">
+
+<table class="h6e-data" style="width:100%">
+
+   <tr>
+       <th><?php echo $this->translate("Username") ?></th>
+       <?php foreach ($this->applications as $application) : if (empty($application['roles'])) continue ?>
+           <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
+       <?php endforeach ?>
+   </tr>
+
+<?php foreach ($this->users as $user) : ?>
+
+    <tr>
+    <td><?php echo $user['username'] ?></td>
+
+ <?php foreach ($this->applications as $id => $application) : if (empty($application['roles'])) continue ?>
+
+     <td style="text-align:center">
+         <select name="roles[<?php echo $id ?>][<?php echo $user['username'] ?>]">
+             <?php foreach ($application['roles'] as $role) : ?>
+                 <?php
+                 $username = $user['username'];
+                 $selected = isset($application['userRoles'][$username]) && $application['userRoles'][$username] == $role ?
+                     'selected="selected"' : '';
+                 ?>
+                 <option <?php echo $selected ?> value="<?php echo $role ?>"><?php echo ucfirst($role) ?></option>
+             <?php endforeach ?>
+         </select>
+     </td>
+
+<?php endforeach ?>
+
+    </tr>
+
+<?php endforeach ?>
+
+</table>
+
+<input type="submit" class="submit button" value="<?php echo $this->translate("Update roles") ?>"/>
+
+</form>
+
+</div>

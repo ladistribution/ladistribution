@@ -1,0 +1,42 @@
+<h2><?php echo $this->translate("Settings") ?></h2>
+
+<div class="ld-panel">
+
+<?php $this->partialNavigationMenu('Settings') ?>
+
+<div class="ld-panel-content h6e-block">
+
+<h3><?php echo $this->translate("Create a new database") ?></h3>
+
+<form method="post" action="">
+
+    <table class="ld-form">
+    <tr>
+        <th><label for="ld-db-add-type"><?php echo $this->translate("Type") ?></label></th>
+        <td>
+            <select id="ld-db-add-type" name="type">
+                <option value="mysql">MySQL</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th><label for="ld-db-add-name"><?php echo $this->translate("DB Name") ?></label></th>
+        <td><input id="ld-db-add-name" type="text" name="name" class="text" value="<?php echo $this->escape($this->name) ?>"/></td>
+    </tr>
+    <tr>
+        <th><label for="ld-db-add-user"><?php echo $this->translate("Username") ?></label></th>
+        <td><input id="ld-db-add-user" type="text" name="user" class="text" value="<?php echo $this->escape($this->user) ?>" autocomplete="off"/></td>
+    </tr>
+    <tr>
+        <th><label for="ld-db-add-password"><?php echo $this->translate("Password") ?></label></th>
+        <td><input id="ld-db-add-password" type="text" name="password" class="text" value="<?php echo $this->escape($this->password) ?>" autocomplete="off"/></td>
+    </tr>
+    </table>
+
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add") ?>"/>
+
+</form>
+
+</div>
+
+</div>
