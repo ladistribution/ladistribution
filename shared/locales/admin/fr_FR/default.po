@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-11 11:13+0100\n"
+"POT-Creation-Date: 2011-02-11 17:21+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -27,53 +27,116 @@ msgstr "Propulsé par <a href=\"%s\">La Distribution</a>, un projet communautair
 msgid "Language:"
 msgstr "Langue :"
 
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:5
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:67
 #: shared/modules/default/views/scripts/auth/login.phtml:5
 #: shared/modules/default/views/scripts/auth/login.phtml:90
 msgid "Log In"
 msgstr "Se Connecter"
 
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:14
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:17
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:22
 #: shared/modules/default/views/scripts/auth/login.phtml:14
 #: shared/modules/default/views/scripts/auth/login.phtml:17
 #: shared/modules/default/views/scripts/auth/login.phtml:22
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:14
 #: shared/modules/default/views/scripts/auth/register.phtml:15
 msgid "Error:"
 msgstr "Erreur :"
 
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:14
 #: shared/modules/default/views/scripts/auth/login.phtml:14
 msgid "Invalid username."
 msgstr "Nom d'utilisateur invalide."
 
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:17
 #: shared/modules/default/views/scripts/auth/login.phtml:17
 msgid "Incorrect password."
 msgstr "Mot de passe incorrect"
+
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:44
+#: shared/modules/default/views/scripts/auth/login.phtml:39
+#: shared/modules/default/views/scripts/auth/register.phtml:41
+msgid "Password:"
+msgstr "Mot de passe :"
+
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:49
+#: shared/modules/default/views/scripts/auth/login.phtml:44
+msgid "Remember me"
+msgstr "Se souvenir de moi"
+
+#: shared/modules/default/views/scripts/auth/enter-password.phtml:74
+#: shared/modules/default/views/scripts/auth/login.phtml:102
+msgid "Lost Password?"
+msgstr "Mot de passe oublié ?"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:34
 #: shared/modules/default/views/scripts/auth/login.phtml:57
 msgid "Username (or OpenID):"
 msgstr "Nom d'utilisateur (ou OpenID) :"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:39
-#: shared/modules/default/views/scripts/auth/register.phtml:41
-msgid "Password:"
-msgstr "Mot de passe :"
-
-#: shared/modules/default/views/scripts/auth/login.phtml:44
-msgid "Remember me"
-msgstr "Se souvenir de moi"
-
 #: shared/modules/default/views/scripts/auth/login.phtml:66
 msgid "Forget"
 msgstr "Oublier"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:95
+#: shared/modules/default/views/scripts/auth/login.phtml:96
 msgid "Log In with another identity"
 msgstr "Se connecter avec une autre identité"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:97
+#: shared/modules/default/views/scripts/auth/login.phtml:99
 #: shared/modules/default/views/scripts/auth/register.phtml:8
 #: shared/modules/default/views/scripts/auth/register.phtml:55
 msgid "Register"
 msgstr "S'enregistrer"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:6
+msgid "Password Update"
+msgstr "Mise à jour du mot de passe"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:8
+msgid "Password Lost"
+msgstr "Mot de passe perdu"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:23
+msgid "An email has been sent to you."
+msgstr "Un email vous a été envoyé."
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:27
+msgid "Congratulations! Your password has been updated."
+msgstr "Félicitations ! Votre mot de passe a été mis à jour."
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:28
+msgid "Continue"
+msgstr "Continuer"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:32
+msgid "You're about to finish the password reset procedure. Please now submit your new password."
+msgstr "Vous êtes en train de finir la procédure de ré-initialisation du mot de passe. Veuillez maintenant soumettre votre nouveau mot de passe."
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:34
+msgid "New Password:"
+msgstr "Nouveau mot de passe:"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:37
+msgid "New Password again:"
+msgstr "Nouveau mot de passe à nouveau:"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:40
+msgid "Update my password"
+msgstr "Mettre à jour mon mot de passe"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:44
+msgid "Username (or Email, or OpenID):"
+msgstr "Nom d'utilisateur (ou Email, ou OpenID) :"
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:47
+msgid "An email will be sent with instructions on how to reset your password."
+msgstr "Un email contenant les instructions pour mettre à jour votre mot de passe vous sera envoyé."
+
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:49
+msgid "Reset my password"
+msgstr "Réinitialiser mon mot de passe"
 
 #: shared/modules/default/views/scripts/auth/register.phtml:6
 msgid "Complete Registration"
@@ -128,8 +191,6 @@ msgstr "Ceci est la page d'identité pour cet utilisateur: %1$s."
 #: shared/modules/slotter/views/scripts/databases/create.phtml:1
 #: shared/modules/slotter/views/scripts/databases/delete.phtml:1
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:1
-#: shared/modules/slotter/views/scripts/databases/index.phtml:1
-#: shared/modules/slotter/views/scripts/databases/master.phtml:1
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -150,7 +211,7 @@ msgstr "Fil public"
 
 #: shared/modules/merger/views/scripts/index/index.phtml:77
 msgid "This news feed is currently empty. Maybe installing some applications will help fill it."
-msgstr "Éditer un profil : %s"
+msgstr ""
 
 #: shared/modules/merger/views/scripts/index/index.phtml:89
 msgid "Updates"
@@ -185,14 +246,11 @@ msgid "Colors"
 msgstr "Couleurs"
 
 #: shared/modules/slotter/views/scripts/databases/create.phtml:9
-#: shared/modules/slotter/views/scripts/databases/index.phtml:72
 msgid "Create a new database"
 msgstr "Créer une nouvelle base de donnée"
 
 #: shared/modules/slotter/views/scripts/databases/create.phtml:15
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:15
-#: shared/modules/slotter/views/scripts/databases/index.phtml:20
-#: shared/modules/slotter/views/scripts/databases/master.phtml:15
 msgid "Type"
 msgstr "Type"
 
@@ -202,18 +260,15 @@ msgstr "Nom de la base"
 
 #: shared/modules/slotter/views/scripts/databases/create.phtml:27
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:34
-#: shared/modules/slotter/views/scripts/databases/master.phtml:27
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
 #: shared/modules/slotter/views/scripts/databases/create.phtml:31
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:38
-#: shared/modules/slotter/views/scripts/databases/master.phtml:31
 msgid "Password"
 msgstr "Mot de passe"
 
 #: shared/modules/slotter/views/scripts/databases/create.phtml:36
-#: shared/modules/slotter/views/scripts/databases/master.phtml:36
 msgid "Add"
 msgstr "Ajouter"
 
@@ -238,13 +293,10 @@ msgid "Update a connection"
 msgstr "Mettre à jour une connexion"
 
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:26
-#: shared/modules/slotter/views/scripts/databases/index.phtml:21
-#: shared/modules/slotter/views/scripts/databases/master.phtml:23
 msgid "Host"
 msgstr "Hôte"
 
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:30
-#: shared/modules/slotter/views/scripts/databases/index.phtml:22
 msgid "Name"
 msgstr "Nom"
 
@@ -265,6 +317,8 @@ msgid "Status"
 msgstr "Statut"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:25
+#: shared/modules/slotter/views/scripts/domains/index.phtml:25
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:15
 msgid "Actions"
 msgstr "Actions"
 
@@ -278,10 +332,12 @@ msgid "unused"
 msgstr "inutilisé"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:46
+#: shared/modules/slotter/views/scripts/domains/index.phtml:57
 msgid "edit"
 msgstr "éditer"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:51
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:39
 msgid "delete"
 msgstr "supprimer"
 
@@ -290,6 +346,7 @@ msgid "You can:"
 msgstr "Vous pouvez :"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:68
+#: shared/modules/slotter/views/scripts/databases/new.phtml:9
 msgid "Register an existing database"
 msgstr "Enregistrer une base de donnée existante"
 
@@ -375,10 +432,6 @@ msgstr "Ajouter une connexion à une base de donnée"
 #: shared/modules/slotter/views/scripts/index/update.phtml:15
 msgid "Congratulations! Everything is up to date."
 msgstr "Félicitations ! Tout est à jour."
-
-#: shared/modules/slotter/views/scripts/index/update.phtml:16
-msgid "Continue"
-msgstr "Continuer"
 
 #: shared/modules/slotter/views/scripts/index/update.phtml:20
 msgid "Package updates available"
@@ -563,6 +616,7 @@ msgid "You are going to install an extension. Are you sure?"
 msgstr "Vous allez installer une extension. Êtes-vous sûrs ?"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:34
+#: shared/modules/slotter/views/scripts/instance/new.phtml:41
 msgid "Install"
 msgstr "Installer"
 
@@ -571,22 +625,29 @@ msgid "Extensions"
 msgstr "Extensions"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:47
+#: shared/modules/slotter/views/scripts/instance/status.phtml:11
 msgid "Package"
 msgstr "Paquet"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:49
+#: shared/modules/slotter/views/scripts/instance/status.phtml:13
 msgid "Version"
 msgstr "Version"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:62
+#: shared/modules/slotter/views/scripts/instance/status.phtml:26
+#: shared/modules/slotter/views/scripts/instance/status.phtml:47
 msgid "update"
 msgstr "mettre à jour"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:64
+#: shared/modules/slotter/views/scripts/instance/status.phtml:23
+#: shared/modules/slotter/views/scripts/instance/status.phtml:43
 msgid "up to date"
 msgstr "à jour"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:67
+#: shared/modules/slotter/views/scripts/instance/status.phtml:53
 msgid "uninstall"
 msgstr "désinstaller"
 
@@ -896,14 +957,13 @@ msgstr "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
 #: shared/modules/slotter/views/scripts/users/index.phtml:1
 #: shared/modules/slotter/views/scripts/users/invite-ok.phtml:1
 #: shared/modules/slotter/views/scripts/users/invite.phtml:1
-#: shared/modules/slotter/views/scripts/users/roles.phtml:1
 msgid "Users"
 msgstr "Utilisateurs"
 
 #: shared/modules/slotter/views/scripts/users/edit.phtml:9
 #, php-format
 msgid "Edit profile: %s"
-msgstr ""
+msgstr "Éditer un profil : %s"
 
 #: shared/modules/slotter/views/scripts/users/edit.phtml:11
 msgid "Infos"
@@ -996,34 +1056,34 @@ msgid "Invitations had been sent. Users will receive an email with all informati
 msgstr "Les invitations ont été envoyées. Les utilisateurs recevront un email expliquant comment finaliser leur enregistrement."
 
 #: shared/modules/slotter/views/scripts/users/invite.phtml:11
-msgid "Enter user email adresses. Ideally one per line"
-msgstr "Entrez les adresses email des utilisateurs. Idéalement, une par ligne"
+msgid "Enter user email adresses. Ideally one per line."
+msgstr "Entrez les adresses email des utilisateurs. Idéalement, une par ligne."
 
 #: shared/modules/slotter/views/scripts/users/invite.phtml:12
 msgid "but practically you can paste whatever you want"
 msgstr "mais en pratique vous pouvez coller ce que vous voulez"
 
-#: shared/modules/slotter/views/scripts/users/invite.phtml:19
+#: shared/modules/slotter/views/scripts/users/invite.phtml:20
 msgid "You can safely go to next step, no email will be sent"
 msgstr "Vous pouvez aller tranquillement à l'étape suivante, aucun email ne sera envoyé."
 
-#: shared/modules/slotter/views/scripts/users/invite.phtml:25
+#: shared/modules/slotter/views/scripts/users/invite.phtml:24
 msgid "Confirm the list of users you want to invite:"
 msgstr "Confirmez la liste des utilisateurs que vous souhaitez inviter :"
 
-#: shared/modules/slotter/views/scripts/users/invite.phtml:44
+#: shared/modules/slotter/views/scripts/users/invite.phtml:43
 msgid "Already registered"
 msgstr "Déjà enregistré"
 
-#: shared/modules/slotter/views/scripts/users/invite.phtml:46
+#: shared/modules/slotter/views/scripts/users/invite.phtml:45
 msgid "Activation pending"
 msgstr "Activation en attente"
 
-#: shared/modules/slotter/views/scripts/users/invite.phtml:56
+#: shared/modules/slotter/views/scripts/users/invite.phtml:55
 msgid "Not yet registered"
 msgstr "Pas encore enregistré"
 
-#: shared/modules/slotter/views/scripts/users/invite.phtml:72
+#: shared/modules/slotter/views/scripts/users/invite.phtml:71
 msgid "Add users and send invitations"
 msgstr "Ajouter les utilisateurs et envoyer les invitations"
 
@@ -1045,13 +1105,19 @@ msgstr "L'email ne peut être vide."
 
 #: shared/modules/default/controllers/AuthController.php:135
 #: shared/modules/default/controllers/AuthController.php:194
+#: shared/modules/default/controllers/AuthController.php:279
 msgid "Password can't be empty."
 msgstr "Le mot de passe ne peut être vide."
 
 #: shared/modules/default/controllers/AuthController.php:137
 #: shared/modules/default/controllers/AuthController.php:196
+#: shared/modules/default/controllers/AuthController.php:281
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
+
+#: shared/modules/default/controllers/AuthController.php:308
+msgid "Identity not found."
+msgstr "Identité non trouvée."
 
 #: shared/modules/identity/controllers/OpenidController.php:13
 msgid "Identity"
@@ -1078,6 +1144,7 @@ msgid "New"
 msgstr "Nouveau"
 
 #: shared/modules/slotter/controllers/DomainsController.php:171
+#: shared/modules/slotter/controllers/SettingsController.php:90
 msgid "None"
 msgstr "Aucune"
 
@@ -1102,7 +1169,7 @@ msgstr "Fuseau horaire"
 msgid "Roles"
 msgstr "Roles"
 
-#: shared/modules/slotter/controllers/UsersController.php:62
+#: shared/modules/slotter/controllers/UsersController.php:63
 msgid "Your Profile"
 msgstr "Votre profil"
 
@@ -1121,6 +1188,11 @@ msgstr "Aucune application installée pour le moment."
 #: shared/modules/slotter/views/helpers/InstanceWidget.php:13
 msgid "Back to the application"
 msgstr "Retour à l'application"
+
+#: shared/modules/slotter/views/helpers/InstanceWidget.php:16
+#, php-format
+msgid "Settings <small>for %s</small>"
+msgstr "Paramètres <small>de %s</small>"
 
 #: shared/modules/slotter/views/helpers/InstanceWidget.php:37
 #, php-format
@@ -1141,6 +1213,8 @@ msgid "Checks user submitted content to see if it look like spam."
 msgstr "Vérifie le contenu soumis par les utilisateurs pour voir si ça ressemble à du spam."
 
 #: shared/plugins/akismet.php:27
+#: shared/plugins/memcache.php:36
+#: shared/plugins/recaptcha.php:29
 #, php-format
 msgid "%s is configured and running."
 msgstr "%s est configuré et fonctionne."
@@ -1150,6 +1224,7 @@ msgid "Akismet API key is invalid."
 msgstr "La clé d'API Akismet est invalide."
 
 #: shared/plugins/akismet.php:31
+#: shared/plugins/recaptcha.php:26
 #, php-format
 msgid "%s is not running. Complete your configuration to enable it."
 msgstr "%s ne fonctionne pas. Complétez votre configuration pour l'activer."
@@ -1298,6 +1373,16 @@ msgstr "Déverrouiller les plugins"
 #: shared/plugins/wordpress-unlocker.php:31
 msgid "Unlock users"
 msgstr "Déverrouiller les utilisateurs"
+
+#, fuzzy
+#~ msgid "Update Password"
+#~ msgstr "Mot de passe"
+#~ msgid ""
+#~ "An email has been sent with the instructions on how to reset your "
+#~ "password."
+#~ msgstr ""
+#~ "Un email contenant les instructions pour mettre à jour votre mot de passe "
+#~ "vous a été envoyé."
 
 #, fuzzy
 #~ msgid "Timeline Settings"

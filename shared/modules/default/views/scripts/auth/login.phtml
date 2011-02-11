@@ -92,10 +92,14 @@
     </form>
 
     <div class="links">
-      <a id="ld-auth-another-identity-link" style="display:none" href="?another-identity=1"><?php echo $this->translate("Log In with another identity") ?></a>
+      <a id="ld-auth-another-identity-link" style="display:none" href="?another-identity=1"><?php
+            echo $this->translate("Log In with another identity") ?></a>
       <?php if ($this->open_registration && empty($this->ld_auth_user)) : ?>
-          <a id="ld-auth-register-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php echo $this->translate("Register") ?></a>
+          <a id="ld-auth-register-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php
+            echo $this->translate("Register") ?></a><br/>
       <?php endif ?>
+      <a id="ld-auth-lost-password-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'lostPassword', 'controller' => 'auth')); ?>"><?php
+        echo $this->translate("Lost Password?") ?></a>
     </div>
 
   </div>
@@ -105,12 +109,8 @@
 <?php if (!empty($identities)) : ?>
     <script type="text/javascript">
     jQuery(document).ready(function($){
-        $('#ld-auth-username, label[for="ld-auth-username"], #ld-auth-login, #ld-auth-register-link').hide();
+        $('#ld-auth-username, label[for="ld-auth-username"], #ld-auth-login, #ld-auth-register-link, #ld-auth-lost-password-link').hide();
         $('#ld-identities, #ld-auth-another-identity-link').show();
-        // $('#ld-identities a.forget').click(function(e) {
-        //     e.stopPropagation();
-        //     return true;
-        // });
         $('#ld-identities a.identity').click(function() {
             $('#ld-auth-username').val( $(this).children('span.identity').text() );
             $('#ld-auth-form').submit();

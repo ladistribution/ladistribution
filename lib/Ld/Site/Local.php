@@ -960,13 +960,21 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getUser($username)
     {
-        $user = $this->getUsersBackend()->getUser($username);
+        // by username
+        $user = $this->getUsersBackend()->getUserBy('username', $username);
+        // by url
         if (empty($user) && Zend_Uri_Http::check($username)) {
-            $user = $this->getUserByUrl($username);
+            $user = $this->getUsersBackend()->getUserByUrl($username);
         }
-        if (empty($user)) {
-            $user = $this->getUsersBackend()->getUserBy('fullname', $username);
+        // by email
+        $validator = new Zend_Validate_EmailAddress();
+        if (empty($user) && $validator->isValid($username)) {
+            $user = $this->getUsersBackend()->getUserBy('email', $username);
         }
+        // what was the use case for this ? sounds unsecure
+        // if (empty($user)) {
+        //     $user = $this->getUsersBackend()->getUserBy('fullname', $username);
+        // }
         return $user;
     }
 

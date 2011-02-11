@@ -257,6 +257,98 @@ class AuthController extends Ld_Controller_Action
         }
     }
 
+    function lostpasswordAction()
+    {
+        $translator = $this->getTranslator();
+
+        if ($this->_hasParam('token')) {
+
+            $token = $this->_getParam('token');
+            $this->view->user = $user = $this->site->getUsersBackend()->getUserBy('lost_password_token', $token);
+            if (empty($user) || empty($token)) {
+                throw new Exception("Invalid token.");
+            }
+            $this->view->token = true;
+
+            if ($this->getRequest()->isPost() && $this->_hasParam('ld_reset_password')) {
+
+                try {
+
+                    $reset_password = $this->_getParam('ld_reset_password');
+                    $reset_password_again = $this->_getParam('ld_reset_password_again');
+                    if (empty($reset_password) && empty($reset_password_again)) {
+                        throw new Exception( $translator->translate("Password can't be empty.") );
+                    } else if ($reset_password != $reset_password_again) {
+                        throw new Exception( $translator->translate("Passwords must match.") );
+                    }
+
+                    $user['password'] = $reset_password;
+                    $user['lost_password_token'] = "";
+                    $this->site->updateUser($user['username'], $user);
+
+                    // Authenticate with credentials, and remember
+                    Ld_Auth::rememberIdentity($user['username']);
+                    Ld_Auth::authenticate($user['username'], $user['password']);
+
+                    $this->view->fertig = true;
+
+                } catch (Exception $e) {
+                    $this->view->error = $e->getMessage();
+                    return;
+                }
+            }
+
+        }
+
+        if ($this->getRequest()->isPost() && $this->_hasParam('openid_identifier')) {
+
+            try {
+
+                $this->view->user = $user = $this->getSite()->getUser( $this->_getParam('openid_identifier') );
+                if (empty($user)) {
+                    throw new Exception( $translator->translate("Identity not found.") );
+                }
+
+                $token = Ld_Auth::generatePhrase();
+                $user['lost_password_token'] = $token;
+                $this->site->updateUser($user['username'], $user);
+                $this->sendResetPasswordEmail($user);
+                $this->view->sent = true;
+
+            } catch (Exception $e) {
+
+                $this->view->error = $e->getMessage();
+                return;
+
+            }
+
+        }
+    }
+
+    function sendResetPasswordEmail($user)
+    {
+        $resetUrl = $this->admin->buildUrl(array(
+            'module' => 'default', 'controller' => 'auth', 'action' => 'lostPassword', 'token' => $user['lost_password_token']));
+
+        $text =
+            'Someone has asked to reset the password for the following site and username. ' . "\n" .
+            "\n" .
+            $this->site->getName() . " " . $this->site->getUrl() . "\n" .
+            "\n" .
+            "Username: " . $user['username'] . "\n" .
+            "\n" .
+            "To reset your password visit the following address, otherwise just ignore this email and nothing will happen." . "\n" .
+            $resetUrl;
+
+        $mail = new Zend_Mail('UTF-8');
+        $mail->addTo($user['email']);
+        $mail->setFrom('ladistribution@' . $this->site->getHost());
+        $mail->setSubject('Password Reset on ' . $this->site->getName());
+        $mail->setBodyText($text);
+        $mail = Ld_Plugin::applyFilters('Auth:resetPasswordEmail', $mail);
+        $mail->send();
+    }
+
     function disallowAction()
     {
     }

@@ -58,12 +58,14 @@ class Slotter_UsersController extends Slotter_BaseController
             'label' => $translator->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
         ));
 
-        $usersPage->addPage(array(
-            'label' => $translator->translate('Your Profile'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'edit',
-            'params' => array('id' => $this->currentUser['username'])
-        ));
+        if (isset($this->currentUser)) {
+            $usersPage->addPage(array(
+                'label' => $translator->translate('Your Profile'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'edit',
+                'params' => array('id' => $this->currentUser['username'])
+            ));
+        }
 
-        if ($this->_hasParam('id') && $this->_getParam('id') != $this->currentUser['username']) {
+        if (isset($this->currentUser) && $this->_hasParam('id') && $this->_getParam('id') != $this->currentUser['username']) {
             $indexPage = $usersPage->findOneByLabel( $translator->translate('Users') );
             $action = $this->getRequest()->action;
             $indexPage->addPage(array(
@@ -313,7 +315,7 @@ class Slotter_UsersController extends Slotter_BaseController
 
     public function emailRegexp()
     {
-        return "/([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]" . 
+        return "/([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]" .
             "+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)/i";
     }
 
@@ -372,11 +374,11 @@ class Slotter_UsersController extends Slotter_BaseController
             $activationUrl;
 
         $mail = new Zend_Mail('UTF-8');
-        $mail = Ld_Plugin::applyFilters('Slotter:mail', $mail);
         $mail->setFrom($this->currentUser['email'], $this->currentUser['fullname']);
         $mail->addTo($user['email']);
         $mail->setSubject('Invitation to join ' . $this->site->getName());
         $mail->setBodyText($text);
+        $mail = Ld_Plugin::applyFilters('Slotter:invitationEmail', $mail);
         $mail->send();
     }
 

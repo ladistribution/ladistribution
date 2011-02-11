@@ -13,7 +13,7 @@ class View_Helper_InstanceWidget extends Zend_View_Helper_Abstract
             <li><a href="<?php echo $application->getUrl() ?>"><?php echo $this->translate("Back to the application") ?></a></li>
         </ul>
 
-        <h2>Settings <small>for <strong><?php echo $application->getName() ?></strong></small></h2>
+        <h2><?php printf($this->translate("Settings <small>for %s</small>"), '<strong>' . $application->getName() . '</strong>') ?></h2>
 
         <?php return ?>
 

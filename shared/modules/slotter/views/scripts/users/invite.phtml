@@ -8,17 +8,16 @@
 
         <?php if (empty($this->emails)) : ?>
 
-        <p><?php echo $this->translate("Enter user email adresses. Ideally one per line") ?>
-            <em>(<?php echo $this->translate("but practically you can paste whatever you want") ?>)</em>.</p>
+        <p><?php echo $this->translate("Enter user email adresses. Ideally one per line.") ?>
+            <!-- <em>(<?php echo $this->translate("but practically you can paste whatever you want") ?>)</em>. --></p>
 
         <textarea rows="10" cols="60" style="font-size:1.25em" name="emails"></textarea>
 
         <p>
             <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Continue") ?>"/>
-            <!--
-            <em>(<?php echo $this->translate("You can safely go to next step, no email will be sent") ?>)</em>
-            -->
         </p>
+
+        <p><em><?php echo $this->translate("You can safely go to next step, no email will be sent") ?></em></p>
 
         <?php else : ?>
 
