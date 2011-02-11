@@ -10,7 +10,7 @@ class Ld_Plugin_Memcache
             'url' => 'http://ladistribution.net/wiki/plugins/#memcache',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.5',
+            'version' => '0.5.82',
             'description' => Ld_Translate::translate('Cache data with Memcache to enhance performances.'),
             'license' => 'MIT / GPL'
         );
@@ -42,7 +42,7 @@ class Ld_Plugin_Memcache
 
         if (constant('LD_MEMCACHED') && class_exists('Memcache')) {
             Ld_Plugin::addAction('Sync:prepend', array($this, 'sync_prepend'));
-            Ld_Plugin::addAction('Statusnet:config', array($this, 'statusnet_config'));
+            // Ld_Plugin::addAction('Statusnet:config', array($this, 'statusnet_config'));
             Ld_Plugin::addAction('Wordpress:prepend', array($this, 'wordpress_prepend'));
 
             // Ld_Plugin::addFilter('Files:getJson', array($this, 'get_json'), 10, 2);
