@@ -18,7 +18,8 @@ class Merger_SettingsController extends Ld_Controller_Action
         }
 
         $translator = $this->getTranslator();
-        $this->appendTitle( $translator->translate('Timeline Settings') );
+        $this->appendTitle( $translator->translate('News Feed') );
+        $this->appendTitle( $translator->translate('Settings') );
     }
 
     public function init()

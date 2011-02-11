@@ -51,16 +51,22 @@ class Slotter_UsersController extends Slotter_BaseController
         $usersPage = $this->_container->findOneByLabel( $translator->translate('Users') );
 
         $usersPage->addPage(array(
-            'label' => 'New', 'module'=> 'slotter', 'controller' => 'users', 'action' => 'new'
+            'label' => $translator->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
         ));
 
         $usersPage->addPage(array(
-            'label' => 'Add', 'module'=> 'slotter', 'controller' => 'users', 'action' => 'add'
+            'label' => $translator->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
         ));
 
-        if ($this->_hasParam('id')) {
+        $usersPage->addPage(array(
+            'label' => $translator->translate('Your Profile'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'edit',
+            'params' => array('id' => $this->currentUser['username'])
+        ));
+
+        if ($this->_hasParam('id') && $this->_getParam('id') != $this->currentUser['username']) {
+            $indexPage = $usersPage->findOneByLabel( $translator->translate('Users') );
             $action = $this->getRequest()->action;
-            $usersPage->addPage(array(
+            $indexPage->addPage(array(
                 'label' => ucfirst($action),
                 'module'=> 'slotter',
                 'route' => 'default',
@@ -125,6 +131,50 @@ class Slotter_UsersController extends Slotter_BaseController
         $this->view->users = $this->admin->getUsers();
         $this->view->roles = $this->admin->getRoles();
         $this->view->userRoles = $this->admin->getUserRoles();
+
+        $this->view->canManageRoles = $this->_acl->isAllowed($this->userRole, 'instances', 'manage');
+        $this->view->canManageUsers = $this->_acl->isAllowed($this->userRole, 'users', 'manage');
+    }
+
+    protected function _getApplications()
+    {
+        $applications = $this->site->getApplicationsInstances(array('admin'));
+        $applications = array_merge(array('admin' => $this->admin), $applications);
+        return $applications;
+    }
+
+    public function rolesAction()
+    {
+
+        if ($this->getRequest()->isPost()) {
+            $roles = $this->_getParam('roles');
+            foreach ($this->_getApplications() as $id => $instance) {
+                if (isset($roles[$id])) {
+                    $instance->setUserRoles($roles[$id]);
+                }
+            }
+            $this->_redirector->gotoSimple('roles', 'users');
+            return;
+        }
+
+        $this->view->users = $this->admin->getUsers();
+
+        $applications = array();
+        foreach ($this->_getApplications() as $id => $instance) {
+            $applications[$id]['name'] = $instance->getName();
+            $applications[$id]['path'] = $instance->getPath();
+            $applications[$id]['roles'] = $instance->getRoles();
+            $applications[$id]['userRoles'] = $instance->getUserRoles();
+            // Fix missing roles
+            $defaultRole = $instance->getInstaller()->defaultRole;
+            foreach ($this->view->users as $username => $user) {
+                if (empty( $applications[$id]['userRoles'][$username])) {
+                    $applications[$id]['userRoles'][$username] = $defaultRole;
+                }
+            }
+        }
+
+        $this->view->applications = $applications;
 
         $this->view->canManageRoles = $this->_acl->isAllowed($this->userRole, 'instances', 'manage');
         $this->view->canManageUsers = $this->_acl->isAllowed($this->userRole, 'users', 'manage');

@@ -1,6 +1,6 @@
-<h2><?php echo $this->translate("Settings") ?></h2>
+<h2><?php echo $this->translate("Users") ?></h2>
 
-<?php $this->partialNavigationMenu('Settings') ?>
+<?php $this->partialNavigationMenu('Users') ?>
 
 <div class="ld-panel-content h6e-block">
 
@@ -58,7 +58,9 @@
        <th><?php echo $this->translate("Full Name") ?></th>
        <th><?php echo $this->translate("Email") ?></th>
 
+       <!--
        <th><?php echo $this->translate("Role") ?></th>
+       -->
 
        <th><?php echo $this->translate("Activated") ?></th>
 
@@ -76,6 +78,7 @@
         <td><?php echo isset($user['fullname']) ? $user['fullname'] : '' ?></td>
         <td><?php echo isset($user['email']) ? $user['email'] : '' ?></td>
 
+        <!--
         <td>
             <?php if ($this->canManageRoles) : ?>
                 <select name="userRoles[<?php echo $user['username'] ?>]">
@@ -92,6 +95,7 @@
                 <?php echo $this->userRoles[ $user['username'] ] ?>
             <?php endif ?>
         </td>
+        -->
 
         <?php if (!isset($user['activated']) || $user['activated'] == true) : ?>
             <td class="ok"></td>
@@ -119,7 +123,9 @@
 </table>
 
 <?php if ($this->canManageRoles) : ?>
+    <!--
     <input type="submit" class="submit button" value="<?php echo $this->translate("Update roles") ?>"/>
+    -->
 <?php endif ?>
 
 <?php endif ?>

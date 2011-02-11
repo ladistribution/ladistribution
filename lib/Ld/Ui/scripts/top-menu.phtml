@@ -33,8 +33,11 @@
         <?php
         $pages = array();
         $pages[] = array('label' => "Home", 'class' => "home", 'route' => array('module' => 'slotter', 'controller' => 'index'));
-        $pages[] = array('label' => "News Feed", 'class' => "timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
+        if (!defined('LD_NEWS_FEED') || constant('LD_NEWS_FEED')) {
+            $pages[] = array('label' => "News Feed", 'class' => "timeline", 'route' => array('module' => 'merger', 'controller' => 'index'));
+        }
         if (Ld_Ui::isAdmin()) {
+            $pages[] = array('label' => "Users", 'class' => "users", 'route' => array('module' => 'slotter', 'controller' => 'users'));
             $pages[] = array('label' => "Settings", 'class' => "settings", 'route' => array('module' => 'slotter', 'controller' => 'settings'));
         }
         ?>
@@ -53,15 +56,12 @@
 <?php if (Ld_Ui::isAdmin() && Zend_Registry::isRegistered('application') && $application = Zend_Registry::get('application')) : ?>
 <div class="ld-top-menu ld-app-menu" style="display:none">
     <div class="ld-top-menu-inner ld-app-menu-inner">
+        <h3><?php echo $application->getPackage()->getName() ?></h3>
         <ul class="instances">
-            <li class="home"><a href="<?php echo $application->getUrl() ?>">
-                <span class="name"><?php echo $this->translate("Home") ?></span>
-                <span class="path">/<?php echo $application->getPath() ?>/</span>
-            </a></li>
             <?php if ($adminUrl = $application->getAdminUrl()) : ?>
                 <li class="admin"><a href="<?php echo $adminUrl ?>">
                     <span class="name"><?php echo $this->translate("Admin") ?></span>
-                    <span class="path">/<?php echo str_replace($this->site->getUrl(), '', $adminUrl) ?></span>
+                    <span class="path">&nbsp;</span>
                 </a></li>
             <?php endif ?>
             <li class="settings"><a href="<?php echo Ld_Ui::getApplicationSettingsUrl() ?>">

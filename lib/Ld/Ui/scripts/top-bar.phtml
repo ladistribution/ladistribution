@@ -1,3 +1,5 @@
+<?php Ld_Plugin::doAction('Ui:beforeTopBar') ?>
+
 <div id="ld-top-bar" class="h6e-top-bar <?php echo $this->className ?>">
     <div class="h6e-top-bar-inner">
         <div class="a">
@@ -46,3 +48,5 @@
     </div>
 
 </div>
+
+<?php Ld_Plugin::doAction('Ui:afterTopBar') ?>

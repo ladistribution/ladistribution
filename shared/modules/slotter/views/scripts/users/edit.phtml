@@ -1,8 +1,12 @@
-<h2><?php echo $this->translate("User infos") ?></h2>
+<h2><?php echo $this->translate("Users") ?></h2>
 
-<div class="ld-panel-content h6e-block no-tab">
+<?php $this->partialNavigationMenu('Users') ?>
+
+<div class="ld-panel-content h6e-block">
 
 <form method="post" action="" autocomplete="off">
+
+    <h2><?php printf($this->translate("Edit profile: %s"), '<strong>' . $this->user['username'] . '</strong>') ?></h2>
 
     <h3><?php echo $this->translate("Infos") ?></h3>
 
