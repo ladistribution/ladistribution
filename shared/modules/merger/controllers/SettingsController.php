@@ -13,8 +13,8 @@ class Merger_SettingsController extends Ld_Controller_Action
     {
         parent::preDispatch();
 
-        if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
-            $this->_disallow();
+        if (!$this->userCan('admin')) {
+            $this->disallow();
         }
 
         $translator = $this->getTranslator();

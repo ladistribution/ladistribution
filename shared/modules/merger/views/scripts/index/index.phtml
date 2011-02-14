@@ -1,6 +1,8 @@
+<?php if ($this->canAdmin) : ?>
 <ul class="ld-nav">
     <li><a href="<?php echo $this->url(array('controller' => 'settings', 'action' => 'index'), 'merger-settings') ?>"><?php echo $this->translate("Settings") ?></a></li>
 </ul>
+<?php endif ?>
 
 <h2><?php echo $this->translate("News Feed"); ?></h2>
 

@@ -102,7 +102,7 @@ class Ld_Controller_Action extends Zend_Controller_Action
 
     function userCan($action, $ressource = null)
     {
-        return $this->_acl->isAllowed($this->userRole, $ressource, $action);
+        return $this->admin->userCan($action, $ressource);
     }
 
     function noRender()
@@ -110,6 +110,16 @@ class Ld_Controller_Action extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
     }
+
+    function disallow()
+    {
+        if ($this->authenticated) {
+             $this->_forward('disallow', 'auth', 'default');
+         } else {
+             $this->_forward('login', 'auth', 'default');
+         }
+    }
+
     // Legacy
 
     function _setTitle($title) { return $this->setTitle($title); }
