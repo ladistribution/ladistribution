@@ -38,7 +38,9 @@ class Ld_Cli_Site extends Ld_Cli
                     try {
                         $site->deleteInstance($instance);
                     } catch (Exception $e) {
-                        echo "- Can't delete application on path '$path'. " . $e->getMessage() . '<br>';
+                        $path = $instance->getPath();
+                        $this->_write("Can't delete application on path '$path'.");
+                        $this->_write( $e->getMessage() );
                     }
                 }
             }

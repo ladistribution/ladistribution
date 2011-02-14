@@ -232,7 +232,7 @@ class Ld_Cli
     {
         $this->getSite();
         $this->_write("La Distribution '" . LD_RELEASE . "'");
-        $this->_write("Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)");
+        $this->_write("Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)");
         $this->_write("Licensed under the GPL and MIT licences.");
     }
 

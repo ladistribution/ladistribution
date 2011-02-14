@@ -88,7 +88,7 @@ function ld_mkdir($directory)
 function out($message, $class = 'ok')
 {
     if (defined('LD_CLI') && constant('LD_CLI')) {
-        fwrite(STDOUT, "- $message");
+        fwrite(STDOUT, "# $message");
         fwrite(STDOUT, PHP_EOL);
     } else {
         echo '<li class="' . $class . '">' . $message . "</li>\n";
