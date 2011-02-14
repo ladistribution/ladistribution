@@ -274,6 +274,8 @@ class Ld_Installer
         }
     }
 
+    public function postUninstall() {}
+
     // Backup / Restore
 
     protected function _escapeCsv($string)

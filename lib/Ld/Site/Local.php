@@ -672,6 +672,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Uninstall
         $installer = $instance->getInstaller();
         $installer->uninstall();
+        $installer->postUninstall();
 
         // Unregister
         $instances = $this->getInstances();
