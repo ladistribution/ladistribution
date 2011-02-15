@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Files
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -37,7 +37,7 @@ class Ld_Files
      * @param boolean $deleteRootToo Delete the directory itself or not
      * @return null
      */
-    public static function unlink($dir, $deleteRootToo = true, $initial = true)
+    public static function rm($dir, $deleteRootToo = true, $initial = true)
     {
         $dir = self::real($dir);
 
@@ -135,14 +135,22 @@ class Ld_Files
             }
 
         } else {
-            copy($source, $target);
+            $result = copy($source, $target);
             self::updatePermissions($target);
         }
+
+        return true;
     }
 
     public static function move($old, $new)
     {
-        self::createDirIfNotExists($new);
+        self::log('move', "$old -> $new");
+        if (Ld_Files::exists($new) || strpos($new, $old) === 0) {
+            $tmp = LD_TMP_DIR . '/move-' . date("d-m-Y-H-i-s");
+            self::copy($old, $tmp);
+            self::unlink($old);
+            $old = $tmp;
+        }
         $result = rename($old, $new);
         if (!$result) {
             self::copy($old, $new);
@@ -167,7 +175,7 @@ class Ld_Files
 
     public static function scanDir($dir, $exclude = array())
     {
-        $exclude = array_merge(array('.', '..', '.svn', '.DS_Store'), (array)$exclude);
+        $exclude = array_merge(array('.', '..', '.svn', '.preserve', '.DS_Store'), (array)$exclude);
 
         $files = array();
         $directories = array();
@@ -189,27 +197,10 @@ class Ld_Files
         return compact('files', 'directories');
     }
 
-    // http://fr2.php.net/manual/en/function.realpath.php
-    public static function realpath($path)
-    {
-        $out = array();
-        foreach (explode('/', $path) as $i => $fold) {
-            if ($fold == '' || $fold == '.') {
-                continue;
-            }
-            if ($fold == '..' && $i > 0 && end($out) != '..') {
-                array_pop($out);
-            } else {
-                $out[]= $fold;
-            }
-        }
-        return ($path{0}=='/'?'/':'').join('/', $out);
-    }
-
     public static function cleanpath($path)
     {
         $path = trim($path, " /\t\n\r");
-        $path = self::realpath( $path );
+        $path = self::real($path);
         return $path;
     }
 
@@ -224,10 +215,14 @@ class Ld_Files
         return false;
     }
 
-    public static function createDirIfNotExists($dir)
+    public static function ensureDirExists($dir)
     {
+        // self::log('createDirIfNotExists', "$dir");
         if (!self::exists($dir)) {
-            // self::log('mkdir', $dir);
+            // doesn't works for recursive mkdir creations ...
+            // if (!is_writable(dirname($dir))) {
+            //     throw new Exception("Can't create $dir.");
+            // }
             mkdir($dir, 0777, true);
             self::updatePermissions($dir);
         }
@@ -243,9 +238,19 @@ class Ld_Files
         self::updatePermissions($file);
     }
 
-    public static function putJson($file, $content)
+    public static $jsonPrefix = '<?php /* ';
+
+    public static function putJson($file, $content, $protect = true)
     {
-        self::put($file, Zend_Json::encode($content));
+        if ($protect) {
+            self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
+            if (self::exists($file)) {
+                  self::rm($file);
+              }
+        } else {
+            self::put($file, Zend_Json::encode($content));
+        }
+        Ld_Plugin::doAction('Files:putJson', $content, $file);
     }
 
     public static function get($file, $skipTest = false)
@@ -259,9 +264,20 @@ class Ld_Files
 
     public static function getJson($file)
     {
-        $content = self::get($file);
+        // From Plugin (cache, store, ...)
+        $content = Ld_Plugin::applyFilters('Files:getJson', null, $file);
         if (!empty($content)) {
-            return Zend_Json::decode($content);
+            return $content;
+        }
+        if (self::exists($file . '.php')) {
+            $content = str_replace(self::$jsonPrefix, '', self::get($file . '.php'));
+        } else {
+            $content = self::get($file);
+        }
+        if (!empty($content)) {
+            $content = Zend_Json::decode($content);
+            Ld_Plugin::doAction('Files:setJson', $content, $file);
+            return $content;
         }
         return array();
     }
@@ -327,6 +343,46 @@ class Ld_Files
         return $path;
     }
 
+    public static function denyAccess($directory, $addIndex = false)
+    {
+        $htaccess = $directory . '/.htaccess';
+        if (!Ld_Files::exists($htaccess)) {
+            Ld_Files::put($htaccess, "Deny from all");
+        }
+        if ($addIndex) {
+            $index = $directory . '/index.php';
+            if (!Ld_Files::exists($index)) {
+                Ld_Files::put($index, "<?php // Silence is golden.");
+            }
+        }
+        Ld_Plugin::doAction('Files:denyAccess', $directory);
+    }
+
+    public static function size($filename)
+    {
+        return filesize($filename);
+    }
+
+    public static function sha1($filename)
+    {
+         $content = self::get($filename);
+         return sha1($content);
+    }
+
+    public static function check($filename, $size = null, $sha1 = null)
+    {
+        if (self::exists($filename) && self::size($filename) >= 0) {
+            if ($size && self::size($filename) != $size) {
+                return false;
+            }
+            if ($sha1 && self::sha1($filename) != $sha1) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public static function log($action, $message)
     {
         if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
@@ -342,5 +398,7 @@ class Ld_Files
     public static function upload() { return Ld_Http::upload(); }
     public static function download($url, $filename) { return Ld_Http::download($url, $filename); }
     public static function unzip($archive, $destination) { return Ld_Zip::extract($archive, $destination); }
+    public static function createDirIfNotExists($dir) { return self::ensureDirExists($dir); }
+    public static function unlink($dir, $deleteRootToo = true, $initial = true) { return self::rm($dir, $deleteRootToo, $initial); }
 
 }

@@ -3,12 +3,39 @@
 class Ld_Installer_Admin extends Ld_Installer
 {
 
-	public function install($preferences = array())
+	public function postInstall($preferences = array())
 	{
-		parent::install($preferences);
-        
 		if (!defined('LD_REWRITE') || constant('LD_REWRITE')) {
 			$this->create_htaccess();
+		}
+	}
+
+	public function postUpdate()
+	{
+		$site = $this->getSite();
+
+		$endpoints = array();
+		$repositories = $site->getRepositoriesConfiguration();
+		foreach ($repositories as $id => $repository) {
+			if (isset($repository['endpoint'])) {
+				// upgrade old/deprecated releases
+				$old_releases = array('barbes', 'concorde', 'danube');
+				foreach ($old_releases as $release) {
+					if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
+						$repositories[$id]['endpoint'] = str_replace(
+							LD_SERVER . 'repositories/' . $release,
+							LD_SERVER . 'repositories/' . LD_RELEASE,
+							$repository['endpoint']
+						);
+						$repository_upgrade = true;
+					}
+				}
+				$endpoints[] = $repositories[$id]['endpoint'];
+			}
+		}
+
+		if (isset($repository_upgrade)) {
+			$site->saveRepositoriesConfiguration($repositories);
 		}
 	}
 

@@ -57,6 +57,7 @@ class Ld_Http
         }
         fclose($local);
         fclose($remote);
+        return true;
     }
 
     public static function upload()

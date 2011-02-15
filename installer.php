@@ -35,9 +35,22 @@ defined('LD_DEBUG') OR define('LD_DEBUG', false);
 
 // Functions
 
-function install_if_not_exists_and_require($file, $source)
+function is_installed()
 {
-    if (!file_exists($file)) {
+    if (file_exists('dist/site.php')) {
+        return true;
+    }
+    return false;
+}
+
+function is_update()
+{
+    return is_installed();
+}
+
+function download_and_require($file, $source, $force = false)
+{
+    if (!file_exists($file) || $force) {
         $context = stream_context_create(array(
             'http' => array(
                 'method'  => 'GET',
@@ -119,8 +132,8 @@ if (!defined('LD_CLI') || !constant('LD_CLI')) {
 <head>
     <title>La Distribution Installer</title>
     <meta charset="utf-8">
-    <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.1-3" rel="stylesheet" type="text/css">
-    <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.4-25" rel="stylesheet" type="text/css">
+    <link href="<?php echo LD_SERVER ?>css/h6e-minimal/h6e-minimal.css?v=0.2-10" rel="stylesheet" type="text/css">
+    <link href="<?php echo LD_SERVER ?>css/ld-ui/ld-ui.css?v=0.5-82" rel="stylesheet" type="text/css">
     <style type="text/css">
     .h6e-page-title { background:url("http://ladistribution.net/logo.png") no-repeat top center; height:75px; text-indent:-9999px; }
     .h6e-page-content { position:relative; }
@@ -148,7 +161,11 @@ if (!defined('LD_CLI') || !constant('LD_CLI')) {
                   it should be <strong>easy</strong> to fix!</p>
           <?php if (empty($_POST['install'])) : ?>
               <form method="post" action="">
-                  <input type="submit" class="submit button ld-button" name="install" value="Start">
+                  <?php if (is_installed()) : ?>
+                      <input type="submit" class="submit button ld-button" name="install" value="Update">
+                  <?php else : ?>
+                      <input type="submit" class="submit button ld-button" name="install" value="Install">
+                  <?php endif ?>
               </form>
           </div>
       </div>
@@ -192,12 +209,15 @@ $directories = array(
 foreach ($directories as $name => $directory) {
     if (!file_exists($directory)) {
         ld_mkdir($directory);
+        $directories_created = true;
     }
 }
 
-set_include_path( $directories['lib'] . PATH_SEPARATOR . get_include_path() );
+if (isset($directories_created)) {
+    out('Directories created');
+}
 
-out('Directories created');
+set_include_path( $directories['lib'] . PATH_SEPARATOR . get_include_path() );
 
 // Essentials
 
@@ -227,7 +247,7 @@ $essentials = array(
 );
 
 foreach ($essentials as $file => $source) {
-    install_if_not_exists_and_require($file, $source);
+    download_and_require($file, $source, is_update());
 }
 
 out('Essentials libraries loaded');
@@ -240,9 +260,8 @@ if (!is_requirable('Zend/Loader/Autoloader.php')) {
     $base_libs['Zend'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-zend-framework/lib-zend-framework.zip';
 }
 
-if (!is_requirable('Ld/Installer.php')) {
-    $base_libs['Ld'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-ld/lib-ld.zip';
-}
+// Always Copy LD. In case things need to be repaired
+$base_libs['Ld'] = LD_SERVER . 'repositories/' . LD_RELEASE . '/main/lib/lib-ld/lib-ld.zip';
 
 foreach ($base_libs as $name => $source) {
     $archiveName = $directories['tmp'] . '/' . $name . '.zip';
@@ -268,7 +287,7 @@ if (defined('LD_CLI_INSTALL') && constant('LD_CLI_INSTALL')) {
 
 $loader = $directories['lib'] . '/Ld/Loader.php';
 if (file_exists($loader)) { require_once $loader; } else { require_once 'Ld/Loader.php'; }
-$site = Ld_Loader::loadSite(dirname(__FILE__));
+$site = Ld_Loader::loadSite($root);
 
 // Detect base path
 if (!empty($_SERVER["SCRIPT_NAME"])) {
@@ -298,7 +317,7 @@ foreach ($repositories as $id => $repository) {
             }
         }
         // upgrade old releases repositories
-        $old_releases = LD_RELEASE == 'concorde' ? array('barbes') : array('barbes', 'concorde');
+        $old_releases = LD_RELEASE == 'danube' ? array('barbes', 'concorde') : array('barbes', 'concorde', 'danube');
         foreach ($old_releases as $release) {
             if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
                 $repositories[$id]['endpoint'] = str_replace(
