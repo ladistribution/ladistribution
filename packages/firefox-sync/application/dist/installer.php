@@ -35,8 +35,8 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 	function postUninstall()
 	{
 		if (defined('LD_NGINX') && constant('LD_NGINX')) {
-			$nginxDir = $site->getDirectory('dist') . '/nginx';
-			Ld_Files::rm($nginxDir . "/" . $this->getInstance()->getId() . ".conf", $conf);
+			$nginxDir = $this->getSite()->getDirectory('dist') . '/nginx';
+			Ld_Files::rm($nginxDir . "/" . $this->getInstance()->getId() . ".conf");
 		}
 	}
 
