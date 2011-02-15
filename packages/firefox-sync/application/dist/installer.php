@@ -11,7 +11,7 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 		foreach ($this->getSchemaTables() as $table) {
 			$db->query($table);
 		}
-		$this->writeHtaccess();
+		$this->handleRewrite();
 	}
 
 	function postUpdate()
@@ -24,12 +24,20 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 		} catch (Exception $e) {
 			// column, index, alread exists
 		}
-		$this->writeHtaccess();
+		$this->handleRewrite();
 	}
 
 	function postMove()
 	{
-		$this->writeHtaccess();
+		$this->handleRewrite();
+	}
+
+	function postUninstall()
+	{
+		if (defined('LD_NGINX') && constant('LD_NGINX')) {
+			$nginxDir = $site->getDirectory('dist') . '/nginx';
+			Ld_Files::rm($nginxDir . "/" . $this->getInstance()->getId() . ".conf", $conf);
+		}
 	}
 
 	function getSchemaTables()
@@ -74,6 +82,19 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 			$htaccess .= "RewriteRule ^1.0 sync/1.1/index.php [E=AUTHORIZATION:%{HTTP:Authorization},L]\n";
 			$htaccess .= "RewriteRule ^1.1 sync/1.1/index.php [E=AUTHORIZATION:%{HTTP:Authorization},L]\n";
 			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
+		}
+		if (defined('LD_NGINX') && constant('LD_NGINX')) {
+			// Generate configuration
+			$path = $this->getSite()->getPath() . '/' . $this->getPath() . '/';
+			$nginxConf  = 'location {PATH} {' . "\n";
+			$nginxConf .= '  rewrite ^{PATH}1.0  {PATH}sync/1.1/index.php$is_args$args last;' . "\n";
+			$nginxConf .= '  rewrite ^{PATH}1.1  {PATH}sync/1.1/index.php$is_args$args last;' . "\n";
+			$nginxConf .= '}' . "\n";
+			$nginxConf = str_replace('{PATH}', $path, $nginxConf);
+			// Write configuration
+			$nginxDir = $this->getSite()->getDirectory('dist') . '/nginx';
+			Ld_Files::ensureDirExists($nginxDir);
+			Ld_Files::put($nginxDir . "/" . $this->getInstance()->getId() . ".conf", $nginxConf);
 		}
 	}
 
