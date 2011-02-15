@@ -12,7 +12,7 @@ hg clone --quiet --rev $REVISION_SYNC $SOURCE_SYNC $FOLDER/sync
 
 echo "# Apply patches"
 patch -p0 -d $FOLDER < patches/sync_index2.diff
-# patch -p0 -d $FOLDER < patches/sync_storage_mysql.diff
+patch -p0 -d $FOLDER < patches/compressed_flag.diff
 
 # mv
 mv $FOLDER/sync/1.1/default_constants.php.dist $FOLDER/sync/1.1/default_constants.php

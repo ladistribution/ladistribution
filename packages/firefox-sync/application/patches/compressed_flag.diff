@@ -1,0 +1,56 @@
+--- sync/1.1/weave_storage/memcache_layer.php	Mon Dec 06 14:19:50 2010 -0800
++++ sync/1.1/weave_storage/memcache_layer.php	Tue Feb 15 11:26:41 2011 +0100
+@@ -229,7 +229,7 @@
+ 		{
+ 			if ($wbos[0]->collection() == 'meta' && $wbos[0]->id() == 'global' && $this->_memc)
+ 			{
+-				$this->_memc->set('metaglobal:' . $this->_username, $wbos[0], true, WEAVE_STORAGE_MEMCACHE_DECAY);	
++				$this->_memc->set('metaglobal:' . $this->_username, $wbos[0], MEMCACHE_COMPRESSED, WEAVE_STORAGE_MEMCACHE_DECAY);	
+ 			}
+ 						
+ 			$affected = $this->_dbh->store_object($wbos);
+@@ -280,7 +280,7 @@
+ 		{
+ 			if ($wbo->collection() == 'meta' && $wbo->id() == 'global' && $this->_memc)
+ 			{
+-				$this->_memc->set('metaglobal:' . $this->_username, $wbo, true, WEAVE_STORAGE_MEMCACHE_DECAY);	
++				$this->_memc->set('metaglobal:' . $this->_username, $wbo, MEMCACHE_COMPRESSED, WEAVE_STORAGE_MEMCACHE_DECAY);	
+ 			}
+ 
+ 			$affected = $this->_dbh->update_object($wbo);		
+@@ -430,7 +430,7 @@
+ 			
+ 			if ($collection == 'meta' && $id == 'global' && $this->_memc)
+ 			{
+-				$this->_memc->set('metaglobal:' . $this->_username, $wbo, true, WEAVE_STORAGE_MEMCACHE_DECAY);	
++				$this->_memc->set('metaglobal:' . $this->_username, $wbo, MEMCACHE_COMPRESSED, WEAVE_STORAGE_MEMCACHE_DECAY);	
+ 			}
+ 			return $wbo;
+ 		}
+@@ -496,7 +496,7 @@
+ 			
+ 			if ($collection == 'meta' && $id == 'global' && $this->_memc && count($wbos) > 0)
+ 			{
+-				$this->_memc->set('metaglobal:' . $this->_username, $wbos[0], true, WEAVE_STORAGE_MEMCACHE_DECAY);	
++				$this->_memc->set('metaglobal:' . $this->_username, $wbos[0], MEMCACHE_COMPRESSED, WEAVE_STORAGE_MEMCACHE_DECAY);	
+ 			}
+ 			return $wbos;
+ 		}
+@@ -573,7 +573,7 @@
+ 	function tabs_set()
+ 	{
+ 		if ($this->_memc && $this->_tabs)
+-			$this->_memc->set('tabs:' . $this->_username, $this->_tabs, true, WEAVE_STORAGE_MEMCACHE_DECAY);	
++			$this->_memc->set('tabs:' . $this->_username, $this->_tabs, MEMCACHE_COMPRESSED, WEAVE_STORAGE_MEMCACHE_DECAY);	
+ 	}
+ 	
+ 	function tabs_flush()
+@@ -634,7 +634,7 @@
+ 	function collections_set()
+ 	{
+ 		if ($this->_memc && $this->_collections)
+-			$this->_memc->set('coll:' . $this->_username, $this->_collections, true, WEAVE_STORAGE_MEMCACHE_DECAY);	
++			$this->_memc->set('coll:' . $this->_username, $this->_collections, MEMCACHE_COMPRESSED, WEAVE_STORAGE_MEMCACHE_DECAY);	
+ 	}
+ 
+ 	function collections_update($collection, $modified)
