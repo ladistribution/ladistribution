@@ -73,7 +73,7 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 		return $tables;
 	}
 
-	function writeHtaccess()
+	function handleRewrite()
 	{
 		if (constant('LD_REWRITE')) {
 			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
