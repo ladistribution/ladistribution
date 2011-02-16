@@ -14,7 +14,7 @@
 class Ld_Zip
 {
 
-    public function pack($directories, $archive)
+    public static function pack($directories, $archive)
     {
         // with PHP PECL extension
         /*
