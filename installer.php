@@ -16,7 +16,7 @@
 
 // Uncomment & modify this line if you want to target a specific release
 // instead of the default one (edge)
-// define('LD_RELEASE', 'danube');
+// define('LD_RELEASE', 'europe');
 
 // Uncomment & modify this line if you want the installer to talk to another server
 // eg: 'http://localhost/ld/'
@@ -59,8 +59,7 @@ function download_and_require($file, $source, $force = false)
         ));
         $content = file_get_contents($source, false, $context);
         if (empty($content)) {
-            $msg = "- Failure. Can't retrieve file $source.";
-            die($msg);
+            error("Can't retrieve file $source.");
         }
         file_put_contents($file, $content);
         fix_perms($file);
@@ -406,6 +405,8 @@ out('Installation finished. Please, continue to <a href="' . $admin->getUrl() . 
 }
 
 ?>
+
+</ul>
 
 </div></div></div>
 </body></html>

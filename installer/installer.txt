@@ -59,8 +59,7 @@ function download_and_require($file, $source, $force = false)
         ));
         $content = file_get_contents($source, false, $context);
         if (empty($content)) {
-            $msg = "- Failure. Can't retrieve file $source.";
-            die($msg);
+            error("Can't retrieve file $source.");
         }
         file_put_contents($file, $content);
         fix_perms($file);
@@ -406,6 +405,8 @@ out('Installation finished. Please, continue to <a href="' . $admin->getUrl() . 
 }
 
 ?>
+
+</ul>
 
 </div></div></div>
 </body></html>

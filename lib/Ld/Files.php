@@ -250,7 +250,9 @@ class Ld_Files
         } else {
             self::put($file, Zend_Json::encode($content));
         }
-        Ld_Plugin::doAction('Files:putJson', $content, $file);
+        if (class_exists('Ld_Plugin')) {
+            Ld_Plugin::doAction('Files:putJson', $content, $file);
+        }
     }
 
     public static function get($file, $skipTest = false)
@@ -265,7 +267,9 @@ class Ld_Files
     public static function getJson($file)
     {
         // From Plugin (cache, store, ...)
-        $content = Ld_Plugin::applyFilters('Files:getJson', null, $file);
+        if (class_exists('Ld_Plugin')) {
+            $content = Ld_Plugin::applyFilters('Files:getJson', null, $file);
+        }
         if (!empty($content)) {
             return $content;
         }
@@ -276,7 +280,9 @@ class Ld_Files
         }
         if (!empty($content)) {
             $content = Zend_Json::decode($content);
-            Ld_Plugin::doAction('Files:setJson', $content, $file);
+            if (class_exists('Ld_Plugin')) {
+                Ld_Plugin::doAction('Files:setJson', $content, $file);
+            }
             return $content;
         }
         return array();
@@ -355,7 +361,9 @@ class Ld_Files
                 Ld_Files::put($index, "<?php // Silence is golden.");
             }
         }
-        Ld_Plugin::doAction('Files:denyAccess', $directory);
+        if (class_exists('Ld_Plugin')) {
+            Ld_Plugin::doAction('Files:denyAccess', $directory);
+        }
     }
 
     public static function size($filename)
