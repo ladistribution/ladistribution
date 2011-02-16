@@ -29,6 +29,16 @@ class Slotter_RepositoriesController extends Slotter_BaseController
     {
         parent::preDispatch();
 
+        // HACK: If a repository URL is used as a public URL
+        if (isset($this->repository) && strpos($_SERVER['REQUEST_URI'], 'packages.json') !== false) {
+            if ($this->repository->type == 'local') {
+                echo Ld_Files::get($this->repository->getDir() . '/packages.json');
+            } else {
+                echo Ld_Http::get($this->repository->getUrl() . '/packages.json');
+            }
+            exit;
+        }
+
         if (!$this->_acl->isAllowed($this->userRole, 'repositories', 'manage')) {
             $this->_disallow();
         }

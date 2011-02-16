@@ -64,7 +64,12 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
 
     public function getUrl()
     {
-        return $this->getSite()->getUrl('repositories') . '/' . $this->name . '/';
+        return $this->getSite()->getUrl('repositories') . '/' . $this->name . '';
+    }
+
+    public function getPushUrl()
+    {
+        return Ld_Ui::getAdminUrl(array('module' => 'slotter', 'controller' => 'repositories', 'action' => 'manage', 'id' => $this->id));
     }
 
     protected function _getApplicationsList()

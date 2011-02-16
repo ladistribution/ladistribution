@@ -8,7 +8,12 @@
 
 <h3><?php echo $this->translate("Local repository") ?></h3>
 
-<p><strong><?php echo $this->translate("Repository URL:") ?></strong> <?php echo $this->repository->getUrl() ?></p>
+<dl>
+    <dt><?php echo $this->translate("Repository URL (public):") ?></dt>
+    <dd><?php echo $this->repository->getUrl() ?></dd>
+    <dt><?php echo $this->translate("Push URL (private):") ?></dt>
+    <dd><?php echo $this->repository->getPushUrl() ?></dd>
+</dl>
 
 <?php require('repository.phtml') ?>
 
