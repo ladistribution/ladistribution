@@ -22,12 +22,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
     public function install($preferences = array())
     {
-        // Deploy the files
         parent::install($preferences);
-
-        $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
-
-        $this->handleRewrite();
 
         // Configuration file
         $conf = $this->defaultConfiguration;
@@ -44,7 +39,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
                 $conf['lang'] = substr($conf['lang'], 0, 2);
             }
         }
-        $conf['basedir'] = $path;
+        $conf['basedir'] = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
         $this->setConfiguration($conf);
 
         // Users
@@ -86,6 +81,8 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         }
 
         Ld_Files::unlink($this->getAbsolutePath() . '/lib/tpl/minimal/dist');
+
+        $this->handleRewrite();
     }
 
     public function setConfiguration($configuration, $type = 'general')
@@ -276,6 +273,10 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         $this->setConfiguration($conf);
     }
 
+    public function postUpdate()
+    {
+        $this->handleRewrite();
+    }
 
     public function postUninstall()
     {
@@ -287,7 +288,6 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
     public function handleRewrite()
     {
-        $id = $this->getInstance()->getId();
         $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
         if (!defined('LD_REWRITE') || constant('LD_REWRITE')) {
             $htaccess  = "RewriteEngine on\n";
@@ -302,6 +302,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
             Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
         }
         if (defined('LD_NGINX') && constant('LD_NGINX')) {
+            $id = $this->getInstance()->getId();
             $nginxConf  = 'location {PATH} {' . "\n";
             $nginxConf .= '  index doku.php index.php;' . "\n";
             $nginxConf .= '  try_files $uri $uri/ @{ID};' . "\n";
