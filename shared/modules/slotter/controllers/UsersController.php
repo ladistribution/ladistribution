@@ -204,6 +204,7 @@ class Slotter_UsersController extends Slotter_BaseController
             $users = $this->site->getUsers();
             if (count($users) == 1) {
                 $this->admin->setUserRoles(array($username => 'admin'));
+                Ld_Auth::rememberIdentity($user['username']);
                 Ld_Auth::authenticate($user['username'], $user['password']);
                 // in this case, we believe the user wants to go back to the index
                 $this->_redirector->gotoSimple('index', 'index');

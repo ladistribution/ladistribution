@@ -54,8 +54,8 @@ class Ld_Feed_Merger
         foreach (self::getInstances() as $id => $instance) {
             $package = $instance->getPackageId();
             foreach ($instance->getLinks() as $link) {
-                $feedId  = $link['id'];
                 if (in_array($link['rel'], $rels) && in_array($link['type'], $types)) {
+                    $feedId = $link['id'];
                     if (!isset($config[$id][$feedId]) || $config[$id][$feedId] == 1) {
                         // $parseType = $feedType == 'personal' && $link['rel'] == 'personal-feed' ? 'personal' : 'public';
                         $feeds[] = new Ld_Feed_Merger_Feed($link['href'], $instance, $feedType);

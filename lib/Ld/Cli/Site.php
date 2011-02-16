@@ -25,7 +25,7 @@ class Ld_Cli_Site extends Ld_Cli
     {
         $site = $this->getSite();
 
-        $confirm = isset($this->_opts->force) ? $this->_opts->force : $this->_confirm("Empty site?");
+        $confirm = isset($this->_opts->force) ? $this->_opts->force : $this->_confirm("Reset site?");
         if (!$confirm) {
             $this->_write("Cancelled.");
             return;
