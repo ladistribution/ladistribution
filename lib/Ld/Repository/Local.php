@@ -145,7 +145,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         }
 
         $baseDir = $this->getPackageDirectory($params);
-        $baseUrl = $this->getUrl() . $this->getPath($params);
+        $baseUrl = $this->getUrl() . '/' . $this->getPath($params);
 
         $package = Ld_Package::loadFromDirectory($baseDir);
 
