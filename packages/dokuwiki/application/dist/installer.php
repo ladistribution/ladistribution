@@ -27,7 +27,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
 
         $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 
-        $this->_buildHtaccess();
+        $this->handleRewrite();
 
         // Configuration file
         $conf = $this->defaultConfiguration;
@@ -266,7 +266,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     public function postMove()
     {
         $this->_fixUrl();
-        $this->_buildHtaccess();
+        $this->handleRewrite();
     }
 
     protected function _fixUrl()
@@ -276,12 +276,20 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         $this->setConfiguration($conf);
     }
 
-    protected function _buildHtaccess()
-    {
-        $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
 
-        // Rewrite Rules
-        if (constant('LD_REWRITE')) {
+    public function postUninstall()
+    {
+        if (defined('LD_NGINX') && constant('LD_NGINX')) {
+            $nginxDir = $this->getSite()->getDirectory('dist') . '/nginx';
+            Ld_Files::rm($nginxDir . "/" . $this->getInstance()->getId() . ".conf");
+        }
+    }
+
+    public function handleRewrite()
+    {
+        $id = $this->getInstance()->getId();
+        $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
+        if (!defined('LD_REWRITE') || constant('LD_REWRITE')) {
             $htaccess  = "RewriteEngine on\n";
             $htaccess .= "RewriteBase $path\n";
             $htaccess .= "RewriteRule ^_media/(.*)              lib/exe/fetch.php?media=$1  [QSA,L]\n";
@@ -293,6 +301,27 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
             $htaccess .= "RewriteRule (.*)                      doku.php?id=$1  [QSA,L]\n";
             Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
         }
+        if (defined('LD_NGINX') && constant('LD_NGINX')) {
+            $nginxConf  = 'location {PATH} {' . "\n";
+            $nginxConf .= '  index doku.php index.php;' . "\n";
+            $nginxConf .= '  try_files $uri $uri/ @{ID};' . "\n";
+            $nginxConf .= '}' . "\n";
+            $nginxConf  = 'location ~ ^{PATH}(bin|conf|data|inc)/ {' . "\n";
+            $nginxConf .= '  deny all;' . "\n";
+            $nginxConf .= '}' . "\n";
+            $nginxConf  = 'location @{ID} {' . "\n";
+            $nginxConf .= '  rewrite ^{PATH}_media/(.*) {PATH}lib/exe/fetch.php?media=$1 last;' . "\n";
+            $nginxConf .= '  rewrite ^{PATH}_detail/(.*) {PATH}lib/exe/detail.php?media=$1 last;' . "\n";
+            $nginxConf .= '  rewrite ^{PATH}_export/([^/]+)/(.*) {PATH}doku.php?do=export_$1&id=$2 last;' . "\n";
+            $nginxConf .= '  rewrite ^{PATH}(.*) {PATH}doku.php?id=$1&$args last;' . "\n";
+            $nginxConf .= '}' . "\n";
+            $nginxConf = str_replace('{ID}', $id, $nginxConf);
+            $nginxConf = str_replace('{PATH}', $path, $nginxConf);
+            $nginxDir = $this->getSite()->getDirectory('dist') . '/nginx';
+            Ld_Files::ensureDirExists($nginxDir);
+            Ld_Files::put($nginxDir . "/" . $id . ".conf", $nginxConf);
+        }
+
     }
 
 }
