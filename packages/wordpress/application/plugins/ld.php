@@ -263,6 +263,16 @@ function ld_fix_globals_after_setup_theme()
 
 add_action('after_setup_theme', 'ld_fix_globals_after_setup_theme', 0);
 
+function ld_got_rewrite($got)
+{
+	if (defined('LD_REWRITE') && constant('LD_REWRITE')) {
+		return true;
+	}
+	return false;
+}
+
+add_filter('got_rewrite', 'ld_got_rewrite');
+
 if (class_exists('Ld_Plugin')) {
 	Ld_Plugin::doAction('Wordpress:plugin');
 }

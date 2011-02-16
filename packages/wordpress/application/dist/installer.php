@@ -54,6 +54,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		}
 
 		$this->serviceRequest('init', $params);
+
+		$this->handleRewrite();
     }
 
 	public function postUpdate()
@@ -62,11 +64,39 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		$this->httpClient->setCookieJar();
 		$this->httpClient->setUri($this->getSite()->getBaseUrl() . $this->getInstance()->getPath() . '/wp-admin/upgrade.php?step=1');
 		$response = $this->httpClient->request('GET');
+
+		$this->handleRewrite();
 	}
 
 	public function postMove()
 	{
 		$this->serviceRequest('updateUrl');
+
+		$this->handleRewrite();
+	}
+
+	public function postUninstall()
+	{
+		if (defined('LD_NGINX') && constant('LD_NGINX')) {
+			$nginxDir = $this->getSite()->getDirectory('dist') . '/nginx';
+			Ld_Files::rm($nginxDir . "/" . $this->getInstance()->getId() . ".conf");
+		}
+	}
+
+	public function handleRewrite()
+	{
+		if (defined('LD_NGINX') && constant('LD_NGINX')) {
+			// Generate configuration
+			$path = $this->getSite()->getPath() . '/' . $this->getPath() . '/';
+			$nginxConf  = 'location {PATH} {' . "\n";
+			$nginxConf .= '  try_files $uri $uri/ {PATH}index.php$is_args$args;' . "\n";
+			$nginxConf .= '}' . "\n";
+			$nginxConf = str_replace('{PATH}', $path, $nginxConf);
+			// Write configuration
+			$nginxDir = $this->getSite()->getDirectory('dist') . '/nginx';
+			Ld_Files::ensureDirExists($nginxDir);
+			Ld_Files::put($nginxDir . "/" . $this->getInstance()->getId() . ".conf", $nginxConf);
+		}
 	}
 
 	// Backup / Restore
