@@ -307,10 +307,10 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
             $nginxConf .= '  index doku.php index.php;' . "\n";
             $nginxConf .= '  try_files $uri $uri/ @{ID};' . "\n";
             $nginxConf .= '}' . "\n";
-            $nginxConf  = 'location ~ ^{PATH}(bin|conf|data|inc)/ {' . "\n";
+            $nginxConf .= 'location ~ ^{PATH}(bin|conf|data|inc)/ {' . "\n";
             $nginxConf .= '  deny all;' . "\n";
             $nginxConf .= '}' . "\n";
-            $nginxConf  = 'location @{ID} {' . "\n";
+            $nginxConf .= 'location @{ID} {' . "\n";
             $nginxConf .= '  rewrite ^{PATH}_media/(.*) {PATH}lib/exe/fetch.php?media=$1 last;' . "\n";
             $nginxConf .= '  rewrite ^{PATH}_detail/(.*) {PATH}lib/exe/detail.php?media=$1 last;' . "\n";
             $nginxConf .= '  rewrite ^{PATH}_export/([^/]+)/(.*) {PATH}doku.php?do=export_$1&id=$2 last;' . "\n";
