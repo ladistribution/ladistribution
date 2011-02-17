@@ -2,7 +2,7 @@
     <id>moonmoon</id>
     <name>Moonmoon</name>
     <description>Blend RSS feeds into a single page</description>
-    <version>8.12-50-6</version>
+    <version>8.12-50-7</version>
     <type>application</type>
     <need>lib-ld</need>
     <need>css-ld-ui</need>
