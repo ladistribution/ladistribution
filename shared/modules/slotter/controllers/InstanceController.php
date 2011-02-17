@@ -212,6 +212,10 @@ class Slotter_InstanceController extends Slotter_BaseController
    */
   public function themesAction()
   {
+      if ($this->_hasParam('add')) {
+          return $this->_forward('extensions');
+      }
+
       $extensions = $this->site->getPackageExtensions($this->instance->getPackageId(), 'theme');
 
       $this->view->extensions = array();

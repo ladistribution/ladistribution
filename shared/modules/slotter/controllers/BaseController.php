@@ -16,7 +16,9 @@ class Slotter_BaseController extends Ld_Controller_Action
 
         $this->view->addHelperPath(dirname(__FILE__) . '/../views/helpers/', 'View_Helper');
 
-        $this->view->action = $this->action = $this->getRequest()->getActionName();
+        if (empty($this->view->action)) {
+            $this->view->action = $this->action = $this->getRequest()->getActionName();
+        }
 
         $this->_setTitle( $this->site->getName() );
 
