@@ -1,6 +1,6 @@
 FOLDER="js"
 NAME="codemirror"
-VERSION="0.93"
+VERSION="0.94"
 ZIP="colorpicker.zip"
 SOURCE="http://codemirror.net/$NAME-$VERSION.zip"
 PACKAGE="js-$NAME.zip"
