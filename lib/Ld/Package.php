@@ -194,14 +194,22 @@ class Ld_Package
     {
         $preferences = array();
 
-        if ($this->type == 'application' || $this->type == 'bundle') {
-            $preferences[] = array('type' => 'text', 'name' => 'title', 'label' => 'Title', 'defaultValue' => $this->name);
-            $preferences[] = array('type' => 'text', 'name' => 'path', 'label' => 'Path', 'defaultValue' => $this->id);
-        }
-
         $prefs = $this->getManifest()->getPreferences('install');
         foreach ($prefs as $pref) {
-            $preferences[] = is_object($pref) ? $pref->toArray() : $pref;
+            $pref = is_object($pref) ? $pref->toArray() : $pref;
+            $name = $pref['name'];
+            $preferences[$name] = $pref;
+        }
+
+        if ($this->type == 'application' || $this->type == 'bundle') {
+            if (empty($preferences['path'])) {
+                $path = array('type' => 'text', 'name' => 'path', 'label' => 'Path', 'defaultValue' => $this->id);
+                array_unshift($preferences, $path);
+            }
+            if (empty($preferences['title'])) {
+                $title = array('type' => 'text', 'name' => 'title', 'label' => 'Title', 'defaultValue' => $this->name);
+                array_unshift($preferences, $title);
+            }
         }
 
         return $preferences;
