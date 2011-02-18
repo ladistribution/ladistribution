@@ -81,6 +81,10 @@ Ld.saveUserRoles = null;
 
 Ld.sortableUserRoles = function($)
 {
+    if ($(".ld-group.sortable").size() == 0) {
+        return;
+    }
+
     $(".ld-group.sortable").sortable({
         items: '.ld-user', connectWith: '.ld-group', placeholder: 'ld-user empty',
         update: function() {
