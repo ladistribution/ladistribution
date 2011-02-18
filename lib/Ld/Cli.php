@@ -76,7 +76,7 @@ class Ld_Cli
             return strtolower(trim(fgets(STDIN))) != 'n';
         } else {
             $this->_write(sprintf("ladis: %s [y/N] ", $label), false);
-            return strtolower(trim(fgets(STDIN))) != 'y';
+            return strtolower(trim(fgets(STDIN))) == 'y';
         }
     }
 
