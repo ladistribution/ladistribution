@@ -30,7 +30,7 @@
         <?php endif ?>
 
         <label for="ld-register-email"><?php echo $this->translate("Email:") ?></label>
-        <?php if (isset($this->finish, $this->user, $this->user['email'])) : ?>
+        <?php if (FALSE && isset($this->finish, $this->user, $this->user['email'])) : ?>
             <span class="text"><?php echo $this->escape($this->user['email']); ?></span>
         <?php else : ?>
             <input id="ld-register-email" class="text" type="text" name="ld_register_email" value="<?php
