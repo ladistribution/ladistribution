@@ -9,7 +9,8 @@ BUILD="build"
 echo "# Building $NAME package"
 
 echo "# Get source from $SOURCE with curl"
-curl $SOURCE -# > $ZIP
+curl -L $SOURCE --user-agent "La Distribution Build system (http://ladistribution.net/)"  -# > $ZIP
+
 unzip -q $ZIP -d $BUILD
 rm $ZIP
 
