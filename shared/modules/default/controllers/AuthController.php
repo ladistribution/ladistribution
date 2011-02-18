@@ -189,6 +189,9 @@ class AuthController extends Ld_Controller_Action
 
                 // Update Username
                 $user['username'] = $username = $this->_getParam('ld_register_username');
+                if (empty($user['username'])) {
+                    throw new Exception( $translator->translate("Username can't be empty.") );
+                }
                 if ($exists = $this->site->getUsersBackend()->getUserBy('username', $user['username'])) {
                     throw new Exception("User with this username already exists.");
                 }
@@ -196,6 +199,9 @@ class AuthController extends Ld_Controller_Action
                 // Email
                 if ($this->_hasParam('ld_register_email')) {
                     $user['email'] = $email = $this->_getParam('ld_register_email');
+                    if (empty($user['email'])) {
+                        throw new Exception( $translator->translate("Email can't be empty.") );
+                    }
                 }
 
                 // Update Password
