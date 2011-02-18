@@ -193,6 +193,11 @@ class AuthController extends Ld_Controller_Action
                     throw new Exception("User with this username already exists.");
                 }
 
+                // Email
+                if ($this->_hasParam('ld_register_email')) {
+                    $user['email'] = $email = $this->_getParam('ld_register_email');
+                }
+
                 // Update Password
                 $password = $this->_getParam('ld_register_password');
                 $password_again = $this->_getParam('ld_register_password_again');
