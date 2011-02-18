@@ -42,7 +42,7 @@ class Ld_Files
         $dir = self::real($dir);
 
         if ($initial) {
-            self::log('unlink', $dir);
+            self::log('rm', $dir);
         }
 
         if (self::exists($dir . '/.preserve')) {

@@ -72,10 +72,10 @@ class Ld_Cli
     protected function _confirm($label, $default = 'y')
     {
         if ($default == 'y') {
-            $this->_write(sprintf("ladis: %s [Y/n] ", $label), false);
+            $this->_write(sprintf("    %s [Y/n] ", $label), false);
             return strtolower(trim(fgets(STDIN))) != 'n';
         } else {
-            $this->_write(sprintf("ladis: %s [y/N] ", $label), false);
+            $this->_write(sprintf("    %s [y/N] ", $label), false);
             return strtolower(trim(fgets(STDIN))) == 'y';
         }
     }
