@@ -1,7 +1,7 @@
 <package>
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.5-86</version>
+  <version>0.5-87</version>
   <type>application</type>
   <need>lib-admin</need>
   <need>lib-ld</need>
