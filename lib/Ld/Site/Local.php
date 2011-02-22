@@ -531,18 +531,18 @@ class Ld_Site_Local extends Ld_Site_Abstract
               $instance->setInfos($params)->save();
           }
 
-          $id = $this->getUniqId();
+          // Site registration
 
           $instances = $this->getInstances();
-          $instances[$id] = array(
-              'package' => $params['package'],
-              'version' => $params['version'],
-              'type'    => $params['type'],
-              'path'    => isset($params['path']) ? $params['path'] : null,
-              'name'    => isset($params['name']) ? $params['name'] : null,
-              'domain'  => isset($params['domain']) ? $params['domain'] : null,
-              'order'   => isset($params['order']) ? $params['order'] : null
-          );
+
+          $id = $this->getUniqId();
+          $instances[$id] = array();
+          foreach (array('package', 'version', 'type', 'path', 'name', 'domain', 'order') as $key) {
+              if (isset($params[$key])) {
+                  $instances[$id][$key] = $params[$key];
+              }
+          }
+
           $this->updateInstances($instances);
 
           $instance = $this->getInstance($id);
