@@ -6,12 +6,19 @@
 
 <form action="" method="post">
 
+<h3><?php echo $this->translate("User Roles") ?></h3>
+
+<?php $this->notification() ?>
+
 <table class="h6e-data">
 
    <tr>
        <th><?php echo $this->translate("Username") ?></th>
        <?php foreach ($this->applications as $application) : if (empty($application['roles'])) continue ?>
-           <th style="text-align:center"><?php echo $application['name'] ?><br/><small>/<?php echo $application['path'] ?>/</small></th>
+           <th style="text-align:center">
+               <?php echo $application['name'] ?>
+               <br/><small>/<?php echo $application['path'] ?>/</small>
+           </th>
        <?php endforeach ?>
    </tr>
 

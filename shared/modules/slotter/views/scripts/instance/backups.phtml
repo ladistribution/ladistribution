@@ -8,6 +8,8 @@
 
 <h3><?php echo $this->translate('Existing backups') ?></h3>
 
+<?php echo $this->notification() ?>
+
 <table class="h6e-data ld-data">
     <tr class="th1">
         <th><?php echo $this->translate('File') ?></th>
@@ -27,16 +29,28 @@
         <?php
     }
     foreach ($this->backups as $backup) {
-        $downloadUrl = $this->instanceActionUrl('backups') . '?download=' . $backup['filename'];
-        $restoreUrl = $this->instanceActionUrl('backups') . '?restore=' .   $backup['filename'];
-        $deleteUrl = $this->instanceActionUrl('backups') . '?delete=' .   $backup['filename'];
         ?>
         <tr>
             <td><?php echo $backup['filename'] ?></td>
             <td><?php echo $backup['size'] ?></td>
-            <td><a href="<?php echo $downloadUrl ?>"><?php echo $this->translate('download') ?></a></td>
-            <td><a href="<?php echo $restoreUrl ?>"><?php echo $this->translate('restore') ?></a></td>
-            <td><a href="<?php echo $deleteUrl ?>"><?php echo $this->translate('delete') ?></a></td>
+            <td>
+                <form method="get" action="<?php $this->url() ?>">
+                    <input type="hidden" name="download" value="<?php echo $backup['filename'] ?>"/>
+                    <input type="submit" value="<?php echo $this->translate('download') ?>"/>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="<?php $this->url() ?>">
+                    <input type="hidden" name="restore" value="<?php echo $backup['filename'] ?>"/>
+                    <input type="submit" value="<?php echo $this->translate('restore') ?>"/>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="<?php $this->url() ?>">
+                    <input type="hidden" name="delete" value="<?php echo $backup['filename'] ?>"/>
+                    <input type="submit" value="<?php echo $this->translate('delete') ?>"/>
+                </form>
+            </td>
         </tr>
         <?php
     }

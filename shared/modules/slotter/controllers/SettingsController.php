@@ -19,8 +19,7 @@ class Slotter_SettingsController extends Slotter_BaseController
             $this->_disallow();
         }
 
-        $translator = $this->getTranslator();
-        $this->appendTitle( $translator->translate('General Settings') );
+        $this->appendTitle( $this->translate('General Settings') );
     }
 
     public function indexAction()
@@ -31,6 +30,7 @@ class Slotter_SettingsController extends Slotter_BaseController
                 $configuration[$key] = $value;
             }
             $this->getSite()->setConfig($configuration);
+            $this->view->notification = $this->translate("Settings updated");
             $this->_updateAdminBaseUrl($configuration);
         }
 
@@ -60,17 +60,15 @@ class Slotter_SettingsController extends Slotter_BaseController
 
     protected function _getPreferences()
     {
-        $translator = $this->getTranslator();
-
         $preferences = array();
 
         $preferences[] = array(
-            'name' => 'name', 'label' => $translator->translate('Site Name'), 'type' => 'text', 'defaultValue' => 'La Distribution'
+            'name' => 'name', 'label' => $this->translate('Site Name'), 'type' => 'text', 'defaultValue' => 'La Distribution'
         );
 
         if (!defined('LD_MULTI_DOMAINS') || !constant('LD_MULTI_DOMAINS')) {
         $preferences[] = array(
-            'name' => 'host', 'label' => $translator->translate('Host'), 'type' => 'text'
+            'name' => 'host', 'label' => $this->translate('Host'), 'type' => 'text'
         );
         }
 
@@ -79,7 +77,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         // );
 
         $preferences[] = array(
-            'name' => 'open_registration', 'label' => $translator->translate('Anyone can register?'),
+            'name' => 'open_registration', 'label' => $this->translate('Anyone can register?'),
             'type' => 'boolean', 'defaultValue' => false
         );
 
@@ -87,7 +85,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         $options = array();
         $options[] = array(
             'value' => '',
-            'label' => '&#x2716; ' .  $translator->translate('None')
+            'label' => '&#x2716; ' .  $this->translate('None')
         );
         $options[] = array(
             'value' => $this->admin->getPath(),
@@ -100,20 +98,20 @@ class Slotter_SettingsController extends Slotter_BaseController
             );
         }
         $preferences[] = array(
-            'name' => 'root_application', 'label' => $translator->translate('Default Application'),
+            'name' => 'root_application', 'label' => $this->translate('Default Application'),
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $options
         );
         }
         
         $tz_options = array();
-        $tz_options[] = array('value' => '', 'label' => '&#x2716; ' .  $translator->translate('Default'));
+        $tz_options[] = array('value' => '', 'label' => '&#x2716; ' .  $this->translate('Default'));
         foreach (DateTimeZone::listIdentifiers() as $value) {
             if (preg_match('/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $value)) {
                 $tz_options[] = array('value' => $value, 'label' => $value);
             }
         }
         $preferences[] = array(
-            'name' => 'timezone', 'label' => $translator->translate('Timezone'),
+            'name' => 'timezone', 'label' => $this->translate('Timezone'),
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $tz_options
         );
 

@@ -1,6 +1,8 @@
 <h2><?php echo $this->translate("Users") ?></h2>
 
-<div class="ld-panel-content h6e-block no-tab">
+<?php $this->partialNavigationMenu('Users') ?>
+
+<div class="ld-panel-content h6e-block">
 
     <form method="post" action="">
 
@@ -52,7 +54,7 @@
                     <td><input type="checkbox" checked="checked" name="emails[]" value="<?php echo $email ?>"/></td>
                     <td><?php echo Ld_Ui::getAvatar(array('email' => $email), 16) ?></td>
                     <td><?php echo $this->escape($email) ?></td>
-                    <td>/</td>
+                    <td><input name="usernames[<?php echo $this->escape($email) ?>]" type="text" class="text" value="<?php echo $this->escape($this->usernames[$email]) ?>"/></td>
                     <td><?php echo $this->translate("Not yet registered") ?></td>
                     <td>
                     <select name="roles[<?php echo $this->escape($email) ?>]">

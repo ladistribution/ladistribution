@@ -15,8 +15,7 @@ class Slotter_AppearanceController extends Slotter_BaseController
     {
         parent::preDispatch();
 
-        $translator = $this->getTranslator();
-        $this->appendTitle( $translator->translate('Appearance') );
+        $this->appendTitle( $this->translate('Appearance') );
     }
 
     public function indexAction()
@@ -31,8 +30,7 @@ class Slotter_AppearanceController extends Slotter_BaseController
                 $colors[$key] = $value;
             }
             $this->site->setColors($colors);
-            $this->_redirector->gotoSimple('index', 'appearance', 'slotter');
-            return;
+            $this->view->notification = $this->translate("Colors updated");
         }
         $this->view->colors = $this->site->getColors();
     }
@@ -46,7 +44,7 @@ class Slotter_AppearanceController extends Slotter_BaseController
         if ($this->getRequest()->isPost() && $this->_hasParam('css')) {
             $css = trim($this->_getParam('css'));
             $this->site->setCustomCss($css);
-            $this->_redirector->gotoSimple('css', 'appearance', 'slotter');
+            $this->view->notification = $this->translate("CSS updated");
         }
 
         $this->view->css = $this->site->getCustomCss();

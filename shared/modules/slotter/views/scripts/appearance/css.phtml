@@ -8,6 +8,8 @@
 
     <h3><?php echo $this->translate('Custom CSS') ?></h3>
 
+    <?php echo $this->notification() ?>
+
     <form action="<?php echo $this->url() ?>" method="post">
 
     <?php echo $this->partial('partials/css-editor.phtml', array('site' => $this->site, 'css' => $this->css)) ?>
@@ -17,7 +19,5 @@
     </form>
 
 </div>
-
-</script>
 
 </div>

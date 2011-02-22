@@ -4,13 +4,15 @@
 
 <div class="ld-panel-content h6e-block">
 
-<form method="post" action="" autocomplete="off">
+<form method="post" action="<?php $this->url() ?>" autocomplete="off">
 
-    <?php if ($this->currentUser != $this->user) : ?>
+    <?php if ($this->currentUser['username'] != $this->user['username']) : ?>
         <h3><?php printf($this->translate("Edit profile: %s"), '<strong>' . $this->user['username'] . '</strong>') ?></h3>
     <?php endif ?>
 
     <h3><?php echo $this->translate("Infos") ?></h4>
+    
+    <?php $this->notification() ?>
 
     <table class="ld-form">
     <tr>
@@ -20,7 +22,7 @@
     </tr>
     <tr>
         <th><label for="edit-user-email"><?php echo $this->translate("Email") ?></label></td>
-        <td><input id="edit-user-email" type="text" name="email" class="text" value="<?php
+        <td><input id="edit-user-email" type="email" name="email" class="text" value="<?php
             if (isset($this->user['email'])) echo $this->escape($this->user['email']) ?>"/></td>
     </tr>
     </table>

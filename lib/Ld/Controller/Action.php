@@ -81,6 +81,14 @@ class Ld_Controller_Action extends Zend_Controller_Action
         return $translator;
     }
 
+    function translate($string)
+    {
+        if (empty($this->_translator)) {
+            $this->_translator = $this->getTranslator();
+        }
+        return $this->_translator->translate($string);
+    }
+
     function getSite()
     {
         if (Zend_Registry::isRegistered('site')) {

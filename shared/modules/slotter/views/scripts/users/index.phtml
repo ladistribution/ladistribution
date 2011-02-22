@@ -77,7 +77,7 @@
         <?php if (!isset($user['activated']) || $user['activated'] == true) : ?>
             <td><?php echo $user['username'] ?></td>
         <?php else: ?>
-            <td>/</td>
+            <td><em><?php echo $user['username'] ?></em></td>
         <?php endif ?>
         <td><?php echo isset($user['fullname']) ? $user['fullname'] : '' ?></td>
         <td><?php echo isset($user['email']) ? $user['email'] : '' ?></td>

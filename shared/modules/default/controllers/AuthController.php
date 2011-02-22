@@ -17,8 +17,7 @@ class AuthController extends Ld_Controller_Action
             return;
         }
 
-        $translator = $this->getTranslator();
-        $this->appendTitle( $translator->translate('Log In') );
+        $this->appendTitle( $this->translate('Log In') );
 
         $this->view->postParams = array();
         foreach ($_POST as $key => $value) {
@@ -80,9 +79,7 @@ class AuthController extends Ld_Controller_Action
 
     function registerAction()
     {
-        $translator = $this->getTranslator();
-
-        $this->appendTitle( $translator->translate('Register') );
+        $this->appendTitle( $this->translate('Register') );
 
         // get the referer
         $this->view->referer = $this->_getReferer();
@@ -101,7 +98,7 @@ class AuthController extends Ld_Controller_Action
             } elseif ($this->_hasParam('token')) {
                 // skip exception
             } else {
-                throw new Exception( $translator->translate('Registration is closed.') );
+                throw new Exception( $this->translate('Registration is closed.') );
             }
         }
 
@@ -128,13 +125,13 @@ class AuthController extends Ld_Controller_Action
 
                 // Basic validation
                 if (empty($user['username'])) {
-                    throw new Exception( $translator->translate("Username can't be empty.") );
+                    throw new Exception( $this->translate("Username can't be empty.") );
                 } else if (empty($user['email'])) {
-                    throw new Exception( $translator->translate("Email can't be empty.") );
+                    throw new Exception( $this->translate("Email can't be empty.") );
                 } else if (empty($user['password']) && empty($user['password_again'])) {
-                    throw new Exception( $translator->translate("Password can't be empty.") );
+                    throw new Exception( $this->translate("Password can't be empty.") );
                 } else if ($user['password'] != $user['password_again']) {
-                    throw new Exception( $translator->translate("Passwords must match.") );
+                    throw new Exception( $this->translate("Passwords must match.") );
                 }
 
                 Ld_Plugin::doAction('Auth:register:validate', $this->_getAllParams());
@@ -161,25 +158,20 @@ class AuthController extends Ld_Controller_Action
 
     function activateAction()
     {
-        $translator = $this->getTranslator();
-
         if (!$this->_hasParam('token')) {
             throw new Exception("No token given.");
         }
 
-        $user = $this->site->getUsersBackend()->getUserBy('token', $this->_getParam('token'));
-        if (empty($user)) {
+        $tokenUser = $this->site->getUsersBackend()->getUserBy('token', $this->_getParam('token'));
+        if (empty($tokenUser)) {
             throw new Exception("Invalid token");
         }
 
-        $temporary_username = $user['username'];
+        $tokenUsername = $tokenUser['username'];
 
         if ($this->getRequest()->isGet()) {
-            
-            // unset temporary username
-            unset($user['username']);
 
-            $this->view->user = $user;
+            $this->view->user = $tokenUser;
             $this->view->finish = true;
             $this->render('register');
 
@@ -187,32 +179,27 @@ class AuthController extends Ld_Controller_Action
 
             try {
 
-                // Update Username
+                $user = $tokenUser;
                 $user['username'] = $username = $this->_getParam('ld_register_username');
-                if (empty($user['username'])) {
-                    throw new Exception( $translator->translate("Username can't be empty.") );
-                }
-                if ($exists = $this->site->getUsersBackend()->getUserBy('username', $user['username'])) {
-                    throw new Exception("User with this username already exists.");
-                }
-
-                // Email
                 if ($this->_hasParam('ld_register_email')) {
                     $user['email'] = $email = $this->_getParam('ld_register_email');
-                    if (empty($user['email'])) {
-                        throw new Exception( $translator->translate("Email can't be empty.") );
-                    }
                 }
-
-                // Update Password
-                $password = $this->_getParam('ld_register_password');
+                $user['password'] = $password = $this->_getParam('ld_register_password');
                 $password_again = $this->_getParam('ld_register_password_again');
-                if (empty($password) && empty($password_again)) {
-                    throw new Exception( $translator->translate("Password can't be empty.") );
+
+                // Basic validation
+                if (empty($username)) {
+                    throw new Exception( $this->translate("Username can't be empty.") );
+                } else if ($tokenUser['username'] != $username
+                    && $exists = $this->site->getUsersBackend()->getUserBy('username', $username)) {
+                    throw new Exception( $this->translate("User with this username already exists.") );
+                } else if (empty($email)) {
+                    throw new Exception( $this->translate("Email can't be empty.") );
+                } else if (empty($password) && empty($password_again)) {
+                    throw new Exception( $this->translate("Password can't be empty.") );
                 } else if ($password != $password_again) {
-                    throw new Exception( $translator->translate("Passwords must match.") );
+                    throw new Exception( $this->translate("Passwords must match.") );
                 }
-                $user['password'] = $password;
 
                 // Empty token
                 $user['token'] = '';
@@ -223,13 +210,13 @@ class AuthController extends Ld_Controller_Action
                 Ld_Plugin::doAction('Auth:activate:validate', $this->_getAllParams());
 
                 // Update user
-                $this->site->updateUser($temporary_username, $user);
+                $this->site->updateUser($tokenUsername, $user);
 
-                // Fix roles
+                // Fix Admin roles
                 $userRoles = $this->admin->getUserRoles();
-                if (isset($userRoles[$temporary_username])) {
-                    $userRoles[$username] = $userRoles[$temporary_username];
-                    unset($userRoles[$temporary_username]);
+                if (isset($userRoles[$tokenUsername])) {
+                    $userRoles[$username] = $userRoles[$tokenUsername];
+                    unset($userRoles[$tokenUsername]);
                 }
                 $this->admin->setUserRoles($userRoles);
 
@@ -287,8 +274,6 @@ class AuthController extends Ld_Controller_Action
 
     function lostpasswordAction()
     {
-        $translator = $this->getTranslator();
-
         if ($this->_hasParam('token')) {
 
             $token = $this->_getParam('token');
@@ -305,9 +290,9 @@ class AuthController extends Ld_Controller_Action
                     $reset_password = $this->_getParam('ld_reset_password');
                     $reset_password_again = $this->_getParam('ld_reset_password_again');
                     if (empty($reset_password) && empty($reset_password_again)) {
-                        throw new Exception( $translator->translate("Password can't be empty.") );
+                        throw new Exception( $this->translate("Password can't be empty.") );
                     } else if ($reset_password != $reset_password_again) {
-                        throw new Exception( $translator->translate("Passwords must match.") );
+                        throw new Exception( $this->translate("Passwords must match.") );
                     }
 
                     $user['password'] = $reset_password;
@@ -334,7 +319,7 @@ class AuthController extends Ld_Controller_Action
 
                 $this->view->user = $user = $this->getSite()->getUser( $this->_getParam('openid_identifier') );
                 if (empty($user)) {
-                    throw new Exception( $translator->translate("Identity not found.") );
+                    throw new Exception( $this->translate("Identity not found.") );
                 }
 
                 $token = Ld_Auth::generatePhrase();

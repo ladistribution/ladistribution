@@ -10,6 +10,8 @@
 
     <h3><?php echo $this->translate('Custom CSS') ?></h3>
 
+    <?php echo $this->notification() ?>
+
     <?php echo $this->partial('partials/css-editor.phtml', array('site' => $this->site, 'css' => $this->css)) ?>
 
     <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>

@@ -44,33 +44,36 @@ class Slotter_UsersController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $translator = $this->getTranslator();
+        $this->appendTitle( $this->translate('Users') );
 
-        $this->appendTitle( $translator->translate('Users') );
-
-        $usersPage = $this->_container->findOneByLabel( $translator->translate('Users') );
+        $usersPage = $this->_container->findOneByLabel( $this->translate('Users') );
 
         if ($this->admin->userCan('manage', 'users')) {
 
-            $usersPage->addPage(array(
-                'label' => $translator->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
+            $indexPage = $usersPage->addPage(array(
+                'label' => $this->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
+            ));
+
+            $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
+            $indexPage->addPage(array(
+                'label' => $this->translate('Invite Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'invite'
             ));
 
             $usersPage->addPage(array(
-                'label' => $translator->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
+                'label' => $this->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
             ));
 
         }
 
         if (isset($this->currentUser)) {
             $usersPage->addPage(array(
-                'label' => $translator->translate('Your Profile'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'edit',
+                'label' => $this->translate('Your Profile'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'edit',
                 'params' => array('id' => $this->currentUser['username'])
             ));
         }
 
         if (isset($this->currentUser) && $this->_hasParam('id') && $this->_getParam('id') != $this->currentUser['username']) {
-            $indexPage = $usersPage->findOneByLabel( $translator->translate('Users') );
+            $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
             $action = $this->getRequest()->action;
             $indexPage->addPage(array(
                 'label' => ucfirst($action),
@@ -159,6 +162,7 @@ class Slotter_UsersController extends Slotter_BaseController
                     $instance->setUserRoles($roles[$id]);
                 }
             }
+            $this->_flashMessenger->addMessage( $this->translate("Roles updated") );
             $this->_redirector->gotoSimple('roles', 'users');
             return;
         }
@@ -277,6 +281,7 @@ class Slotter_UsersController extends Slotter_BaseController
                 $params['password'] = $new_password;
             }
             $this->site->updateUser($id, $params);
+            $this->view->notification = $this->translate("Profile updated");
         }
 
         $this->view->user = $user = $this->site->getUser($id);
@@ -331,9 +336,10 @@ class Slotter_UsersController extends Slotter_BaseController
 
             if ($this->_hasParam('confirm')) {
                 $roles = $this->_getParam('roles');
+                $usernames = $this->_getParam('usernames');
                 $userRoles = $this->admin->getUserRoles();
                 foreach ($emails as $email) {
-                    $username = Ld_Auth::generatePhrase(16);
+                    $username = isset($usernames[$email]) ? $usernames[$email] : Ld_Auth::generatePhrase(16);
                     $user = array(
                         'origin'     => 'Slotter:invite',
                         'username'   => $username,
@@ -354,8 +360,11 @@ class Slotter_UsersController extends Slotter_BaseController
                 if (!empty($matches[0])) {
                     $usersBackend = $this->site->getUsersBackend();
                     $this->view->emails = array();
+                    $this->view->usernames = array();
                     foreach ($matches[0] as $email) {
                         $this->view->emails[$email] = $usersBackend->getUserByEmail($email);
+                        $explode = explode('@', $email); 
+                        $this->view->usernames[$email] = $explode[0];
                     }
                 }
             }

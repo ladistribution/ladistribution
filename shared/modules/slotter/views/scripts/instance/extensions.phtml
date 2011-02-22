@@ -40,6 +40,8 @@
 
     <h3><?php echo $this->translate('Extensions') ?></h3>
 
+    <?php echo $this->notification() ?>
+
     <?php if (isset($this->extensions) && count($this->extensions) > 0) : ?>
 
         <table class="h6e-data">

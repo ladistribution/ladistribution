@@ -41,14 +41,12 @@ class Slotter_InstanceController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $translator = $this->getTranslator();
-
-        $applicationsPage = $this->_container->findOneByLabel( $translator->translate('Applications') );
+        $applicationsPage = $this->_container->findOneByLabel( $this->translate('Applications') );
         $applicationsPage->addPage(array(
-            'label' => $translator->translate("Add"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'new'
+            'label' => $this->translate("Add"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'new'
         ));
         $applicationsPage->addPage(array(
-            'label' => $translator->translate("Clone"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'clone'
+            'label' => $this->translate("Clone"), 'module'=> 'slotter', 'controller' => 'instance', 'action' => 'clone'
         ));
         if (isset($this->id, $this->instance)) {
             $action = $this->getRequest()->action;
@@ -60,7 +58,7 @@ class Slotter_InstanceController extends Slotter_BaseController
                 'params' => array('id' => $this->id)
             ));
             $instancePage->addPage(array(
-                'label' => ucfirst($translator->translate($action)),
+                'label' => ucfirst($this->translate($action)),
                 'module'=> 'slotter',
                 'route' => 'instance-action',
                 'controller' => 'instance',
@@ -122,6 +120,7 @@ class Slotter_InstanceController extends Slotter_BaseController
             if ($this->getRequest()->isPost()) {
                 $preferences = $this->_getParam('preferences');
                 $this->instance->addExtension($extension, $preferences);
+                $this->_flashMessenger->addMessage( $this->translate("Extension installed") );
                 if ($this->_hasParam('referer')) {
                     $this->_redirectTo($this->_getParam('referer'));
                 } else {
@@ -135,6 +134,7 @@ class Slotter_InstanceController extends Slotter_BaseController
             if ($this->getRequest()->isPost()) {
                 if ($this->_hasParam('confirm')) {
                     $this->instance->updateExtension($extension);
+                    $this->_flashMessenger->addMessage( $this->translate("Extension updated") );
                 }
                 $this->_redirectToAction('extensions');
             } else {
@@ -147,6 +147,7 @@ class Slotter_InstanceController extends Slotter_BaseController
             if ($this->getRequest()->isPost()) {
                 if ($this->_hasParam('confirm')) {
                     $this->instance->removeExtension($extension);
+                    $this->_flashMessenger->addMessage( $this->translate("Extension uninstalled") );
                 }
                 $this->_redirectToAction('extensions');
             } else {
@@ -202,6 +203,7 @@ class Slotter_InstanceController extends Slotter_BaseController
       if ($this->getRequest()->isPost() && $this->_hasParam('configuration')) {
           $configuration = $this->_getParam('configuration');
           $this->view->configuration = $this->instance->setConfiguration($configuration);
+          $this->view->updateConfirmation = $this->translate("Configuration updated");
       } else {
           $this->view->configuration = $this->instance->getConfiguration();
       }
@@ -267,7 +269,7 @@ class Slotter_InstanceController extends Slotter_BaseController
               }
               $application->setColors($colors);
           }
-          $this->_redirectToAction('appearance');
+          $this->view->notification = $this->translate("Colors updated");
       }
 
       $this->view->preferences = $installer->getPreferences('theme');
@@ -288,7 +290,7 @@ class Slotter_InstanceController extends Slotter_BaseController
           if (method_exists($installer, 'setCustomCss')) {
               $installer->setCustomCss($this->_getParam('css'));
           }
-          $this->_redirectToAction('css');
+          $this->view->notification = $this->translate("CSS updated");
       }
 
       if (method_exists($installer, 'getCustomCss')) {
@@ -301,19 +303,16 @@ class Slotter_InstanceController extends Slotter_BaseController
    */
   public function backupsAction()
   {
-      $availableBackups = $this->instance->getBackups();
-
       // Do backup
       if ($this->getRequest()->isPost() && $this->_hasParam('dobackup')) {
           $this->instance->doBackup();
-          return $this->_redirectToAction('backups');
+          $this->view->notification = $this->translate("Backup generated");
       }
-
 
       // Download
       if ($this->_hasParam('download')) {
           $backup = $this->_getParam('download');
-          foreach ($availableBackups as $backup) {
+          foreach ($this->instance->getBackups() as $backup) {
               if ($backup['filename'] == $this->_getParam('download')) {
                   ob_end_clean();
                   header('Content-Type: application/zip');
@@ -332,26 +331,16 @@ class Slotter_InstanceController extends Slotter_BaseController
       // Delete
       if ($this->_hasParam('delete')) {
           $this->instance->deleteBackup( $this->_getParam('delete') );
-          return $this->_redirectToAction('backups');
+          $this->view->notification = $this->translate("Backup deleted");
       }
 
       // Restore
       if ($this->_hasParam('restore')) {
           $this->instance->restoreBackup( $this->_getParam('restore') );
-          return $this->_redirectToAction('backups');
+          $this->view->notification = $this->translate("Backup restored");
       }
 
-      // Upload
-      // if ($this->_hasParam('upload')) {
-      //     $dir = $this->instance->getAbsolutePath() . '/backups/';
-      //     Ld_Files::createDirIfNotExists($dir);
-      //     $adapter = new Zend_File_Transfer_Adapter_Http();
-      //     $adapter->setDestination($dir);
-      //     $result = $adapter->receive();
-      //     return $this->_redirectToAction('backups');
-      // }
-
-      $this->view->backups = $availableBackups;
+      $this->view->backups = $this->instance->getBackups();
   }
 
     /**
@@ -394,6 +383,7 @@ class Slotter_InstanceController extends Slotter_BaseController
                 $this->getResponse()->appendBody('ok');
                 return;
             }
+            $this->view->notification = $this->translate("Roles updated");
         }
 
         $this->view->users = $this->_getUsers();

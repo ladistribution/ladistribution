@@ -12,6 +12,8 @@
 
     <h3><?php echo $this->translate("Colors") ?></h3>
 
+    <?php echo $this->notification() ?>
+
     <?php echo $this->partial('partials/color-schemes.phtml', array('colorSchemes' => $this->colorSchemes, 'colors' => $this->colors)) ?>
 
     <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Update") ?>"/>

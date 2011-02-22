@@ -12,6 +12,8 @@
 
 <form method="post" action="<?php echo $this->url() ?>">
 
+    <?php echo $this->notification() ?>
+
     <?php
     $options = array('ns' => 'configuration', 'configuration' => $this->configuration, 'preferences' => $this->preferences);
     $this->preferencesRenderer()->setOptions($options)->renderTable();

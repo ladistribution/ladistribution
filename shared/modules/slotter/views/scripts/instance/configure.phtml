@@ -23,6 +23,8 @@
 
 <h3><?php echo $this->translate("Configuration") ?></h3>
 
+<?php if (isset($this->updateConfirmation)) { $this->notification($this->updateConfirmation); } ?>
+
 <form method="post" action="<?php echo $this->url() ?>">
 
     <?php $this->preferencesRenderer($this->preferences, $this->configuration, 'configuration'); ?>
