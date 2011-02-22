@@ -74,6 +74,8 @@ class Ld_Cli_Package extends Ld_Cli
         $zip->addDirectory($path, '/application', true);
 
         $zip->write();
+
+        $this->_log("build", "package $archive successfully built");
     }
 
     public function push()
@@ -85,7 +87,7 @@ class Ld_Cli_Package extends Ld_Cli
 
         $ladis = Ld_Files::getJson($path . '/.ladis');
         if (empty($ladis['repositories'][$name])) {
-            throw new Exception("Repository not registered yet. Use ladis package add-remote");
+            throw new Exception("Repository not registered yet. Use 'ladis package add-remote' to register a repository.");
         }
 
         extract($ladis['repositories'][$name]);
@@ -99,6 +101,8 @@ class Ld_Cli_Package extends Ld_Cli
         $response = $httpClient->request('POST');
 
         Ld_Files::rm($archive);
+
+        $this->_log("push", "package successfully pushed to $url");
     }
 
     public function bump()
@@ -111,9 +115,11 @@ class Ld_Cli_Package extends Ld_Cli
         foreach ($manifest->getElementsByTagName('version') as $element) {
             $version = explode('-', $element->nodeValue);
             $version[1] = (int)$version[1] + 1;
-            $element->nodeValue = implode('-', $version);
+            $element->nodeValue = $version = implode('-', $version);
         }
         $manifest->save($filename);
+
+        $this->_log("bump", "package bumped to version $version");
     }
 
     public function bbp()
