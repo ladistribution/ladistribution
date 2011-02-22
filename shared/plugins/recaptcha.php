@@ -33,6 +33,7 @@ class Ld_Plugin_Recaptcha
     {
         Ld_Plugin::addAction('Auth:register:form', array($this, 'auth_register_form'));
         Ld_Plugin::addAction('Auth:register:validate', array($this, 'auth_register_validate'));
+        Ld_Plugin::addAction('Auth:activate:validate', array($this, 'auth_register_validate'));
         Ld_Plugin::addAction('Wordpress:plugin', array($this, 'wordpress_init'));
         Ld_Plugin::addAction('Bbpress:plugin', array($this, 'bbpress_init'));
         Ld_Plugin::addAction('Dokuwiki:plugin', array($this, 'dokuwiki_init'));

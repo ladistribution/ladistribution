@@ -220,6 +220,8 @@ class AuthController extends Ld_Controller_Action
                 // Activated
                 $user['activated'] = true;
 
+                Ld_Plugin::doAction('Auth:activate:validate', $this->_getAllParams());
+
                 // Update user
                 $this->site->updateUser($temporary_username, $user);
 
