@@ -10,7 +10,7 @@ class Ld_Plugin_BadBehavior
             'url' => 'http://ladistribution.net/wiki/plugins/#bad-behavior',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.2',
+            'version' => '0.5.91',
             'description' => Ld_Translate::translate('Detects and automatically blocks suspicious accesses to site.'),
             'license' => 'MIT / GPL'
         );
@@ -61,7 +61,6 @@ class Ld_Plugin_BadBehavior
 
         define('BB2_CWD', LD_LIB_DIR);
 
-        require_once(LD_LIB_DIR . "/bad-behavior/version.inc.php");
         require_once(LD_LIB_DIR . "/bad-behavior/core.inc.php");
 
         $httpbl_key = Zend_Registry::get('site')->getConfig('httpbl_key', '');
@@ -75,7 +74,8 @@ class Ld_Plugin_BadBehavior
             'httpbl_key'    => $httpbl_key,
             'httpbl_threat' => '25',
             'httpbl_maxage' => '30',
-            'offsite_forms' => false
+            'offsite_forms' => false,
+            'reverse_proxy' => false
         );
 
         bb2_start($options);
@@ -97,7 +97,7 @@ class Ld_Plugin_BadBehavior
 
 // Global Bad Behavior functions
 
-function bb2_relative_path() {  return Zend_Registry::get('site')->getPath(); }
+function bb2_relative_path() { return Zend_Registry::get('site')->getPath(); }
 function bb2_db_date() { return gmdate('Y-m-d H:i:s'); }
 function bb2_db_affected_rows() { return false; }
 function bb2_db_escape($string) { return $string; }
