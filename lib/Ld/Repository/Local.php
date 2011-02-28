@@ -14,6 +14,8 @@
 class Ld_Repository_Local extends Ld_Repository_Abstract
 {
 
+    public $type = 'local';
+
     protected $dir = null;
 
     public function __construct($params = array())

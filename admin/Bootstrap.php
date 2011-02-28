@@ -30,7 +30,7 @@ class Bootstrap
         self::setupRoutes();
         self::setupMvc();
         self::setupCache();
-        self::setupLocales();
+        // self::setupLocales();
 
         if ( get_magic_quotes_gpc() ) {
             $fn = array('self', '_stripslashesDeep');
@@ -74,9 +74,9 @@ class Bootstrap
         $view->js()->append('/jquery/jquery-ui.js', 'js-jquery-ui');
 
         if (defined('LD_COMPRESS_JS') && constant('LD_COMPRESS_JS')) {
-            $view->js()->append('/ld/ld.c.js', 'admin');
+            $view->js()->append('/ld/ld.c.js', 'lib-admin');
         } else {
-            $view->js()->append('/ld/ld.js', 'admin');
+            $view->js()->append('/ld/ld.js', 'lib-admin');
         }
 
         if (defined('LD_MERGER') && constant('LD_MERGER')) {
@@ -133,17 +133,17 @@ class Bootstrap
         $router->addConfig($config);
     }
 
-    public static function setupLocales()
-    {
-        if (Zend_Registry::isRegistered('Zend_Translate')) {
-            $site = self::getSite();
-            $adapter = Zend_Registry::get('Zend_Translate');
-            $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/admin/');
-            foreach ($locales as $locale) {
-                $adapter->addTranslation($site->getDirectory('shared') . "/locales/admin/$locale/default.mo", $locale);
-            }
-        }
-    }
+    // public static function setupLocales()
+    // {
+    //     if (Zend_Registry::isRegistered('Zend_Translate')) {
+    //         $site = self::getSite();
+    //         $adapter = Zend_Registry::get('Zend_Translate');
+    //         $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/admin/');
+    //         foreach ($locales as $locale) {
+    //             $adapter->addTranslation($site->getDirectory('shared') . "/locales/admin/$locale/default.mo", $locale);
+    //         }
+    //     }
+    // }
 
     public static function setupCache()
     {

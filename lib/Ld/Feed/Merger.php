@@ -77,11 +77,11 @@ class Ld_Feed_Merger
                 echo "Error with " . $feed->getUrl() . ".<br>" . $e->getMessage() . "<br>";
             }
         }
-        usort($entries, array('self', '_cmpEntries'));
+        usort($entries, array('self', 'cmpEntries'));
         return $entries;
     }
 
-    private function _cmpEntries($a , $b)
+    public static function cmpEntries($a , $b)
     {
         $a_time = $a['timestamp'];
         $b_time = $b['timestamp'];

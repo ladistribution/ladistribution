@@ -27,7 +27,11 @@
             <td><?php echo $repository->type ?></td>
             <td><a href="<?php echo $manageUrl ?>"><?php echo $repository->type == 'local' ?
                 $this->translate('manage') : $this->translate('browse') ?></a></td>
-            <td><a href="<?php echo $removeUrl ?>"><?php echo $this->translate("remove") ?></a></td>
+            <?php if ($repository->locked !== true) : ?>
+                <td><a href="<?php echo $removeUrl ?>"><?php echo $this->translate("remove") ?></a></td>
+            <?php else : ?>
+                <td><del><?php echo $this->translate("remove") ?></del></td>
+            <?php endif?>
         </tr>
         <?php
     }

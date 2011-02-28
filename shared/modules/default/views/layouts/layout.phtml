@@ -46,9 +46,10 @@ echo $this->doctype('XHTML5') . "\n"
 
   <div class="h6e-simple-footer">
           <?php
-          printf(
+          $text = sprintf(
               $this->translate('Powered by <a href="%s">La Distribution</a>, a community project initiated by <a href="%s">h6e</a>.'),
               'http://ladistribution.net/', 'http://h6e.net/' );
+          echo Ld_Plugin::applyFilters('Admin:footerText', $text);
           ?>
           <form class="inline" action="" method="post" id="ld-lang-switcher">
               <label><?php echo $this->translate("Language:") ?></label>

@@ -186,15 +186,19 @@ class Ld_Loader
     {
         $site = self::$site;
 
-        // Locale
-        $default_mo = $site->getDirectory('shared') . '/locales/ld/en_US/default.mo';
-        if (file_exists($default_mo)) {
+        $dir = $site->getDirectory('shared') . '/locales';
+
+        $default_mo = $dir . '/ld/en_US/default.mo';
+        if (Ld_Files::exists($default_mo)) {
             $options = array();
             $options['disableNotices'] = true; // 'auto' locale can generate notices we better avoid
             $adapter = new Zend_Translate('gettext', $default_mo, 'en_US', $options);
-            $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/ld/', array('en_US'));
+            $locales = Ld_Files::getDirectories($dir . '/ld/', array('en_US'));
             foreach ($locales as $locale) {
-                $adapter->addTranslation($site->getDirectory('shared') . "/locales/ld/$locale/default.mo", $locale);
+                $adapter->addTranslation($dir . "/ld/$locale/default.mo", $locale);
+                if (Ld_Files::exists($dir . "/admin/$locale/default.mo")) {
+                    $adapter->addTranslation($dir . "/admin/$locale/default.mo", $locale);
+                }
             }
             if (isset($_COOKIE['ld-lang']) && $adapter->isAvailable($_COOKIE['ld-lang'])) {
                 $adapter->setLocale($_COOKIE['ld-lang']);

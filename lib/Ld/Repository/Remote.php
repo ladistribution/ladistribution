@@ -14,15 +14,19 @@
 class Ld_Repository_Remote extends Ld_Repository_Abstract
 {
 
+    public $type = 'remote';
+
     public $endpoint = null;
 
     public function __construct($params = array())
     {
         if (is_array($params)) {
-            $this->id = $params['id'];
-            $this->type = $params['type'];
-            $this->name = $params['name'];
-            $this->endpoint = $params['endpoint'];
+            $keys = array('id', 'type', 'name', 'endpoint', 'locked');
+            foreach ($keys as $key) {
+                if (isset($params[$key])) {
+                    $this->$key = $params[$key];
+                }
+            }
         }
 
         $this->getPackages();

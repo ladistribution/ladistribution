@@ -20,6 +20,8 @@ abstract class Ld_Repository_Abstract
 
     public $type = null;
 
+    public $locked = false;
+
     protected $types = array(
         'applications'  => array('application', 'bundle'),
         'libraries'     => array('shared', 'lib', 'css', 'js'),

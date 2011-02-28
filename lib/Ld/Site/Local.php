@@ -1109,19 +1109,23 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getPackages()
     {
-        return $this->_getFromRepositories('packages');
+        $packages = $this->_getFromRepositories('packages');
+        $packages = Ld_Plugin::applyFilters('Site:getPackages', $packages);
+        return $packages;
     }
 
     public function getApplications()
     {
-        return $this->_getFromRepositories('applications');
+        $applications = $this->_getFromRepositories('applications');
+        $applications = Ld_Plugin::applyFilters('Site:getApplications', $applications);
+        return $applications;
     }
 
     protected function _getFromRepositories($type)
     {
         $method = 'get' . ucfirst($type);
         $packages = array();
-        foreach ($this->getRepositories() as $id => $repository) {
+        foreach ((array)$this->getRepositories() as $id => $repository) {
             $packages = array_merge($repository->$method(), $packages);
         }
         return $packages;
