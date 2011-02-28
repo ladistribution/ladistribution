@@ -214,11 +214,11 @@ class AuthController extends Ld_Controller_Action
 
                 // Fix Admin roles
                 $userRoles = $this->admin->getUserRoles();
-                if (isset($userRoles[$tokenUsername])) {
+                if ($tokenUsername != $username && isset($userRoles[$tokenUsername])) {
                     $userRoles[$username] = $userRoles[$tokenUsername];
                     unset($userRoles[$tokenUsername]);
+                    $this->admin->setUserRoles($userRoles);
                 }
-                $this->admin->setUserRoles($userRoles);
 
                 // Authenticate with credentials, and remember
                 Ld_Auth::rememberIdentity($user['username']);
@@ -234,6 +234,7 @@ class AuthController extends Ld_Controller_Action
                 $this->view->error = $e->getMessage();
                 $this->view->finish = true;
                 $this->render('register');
+
             }
 
         }
