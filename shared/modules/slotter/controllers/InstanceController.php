@@ -124,7 +124,7 @@ class Slotter_InstanceController extends Slotter_BaseController
                 if ($this->_hasParam('referer')) {
                     $this->_redirectTo($this->_getParam('referer'));
                 } else {
-                    $this->_redirectToAction('status');
+                    $this->_redirectToAction('configure');
                 }
                 return;
             }
@@ -172,25 +172,8 @@ class Slotter_InstanceController extends Slotter_BaseController
     {
         // TODO: we should update only from a POST
         $this->site->updateInstance($this->instance);
-        $this->_redirectToAction('status');
-    }
-
-    /**
-    * Status action.
-    */
-    public function statusAction()
-    {
-        $this->_forward('configure');
-        return;
-        $this->view->extensions = $this->instance->getExtensions();
-        foreach ($this->view->extensions as $id => $extension) {
-            $this->view->extensions[$id]->hasUpdate = $extension->hasUpdate();
-        }
-    }
-
-    public function manageAction()
-    {
-        $this->_forward('status');
+        $this->_flashMessenger->addMessage( $this->translate("Instance updated") );
+        $this->_redirectToAction('configure');
     }
 
   /**
@@ -444,7 +427,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
             $instance = $this->site->cloneInstance($filename, $preferences);
 
-            $this->_redirectToAction('status', $instance->id);
+            $this->_redirectToAction('configure', $instance->id);
         }
     }
 
@@ -452,8 +435,9 @@ class Slotter_InstanceController extends Slotter_BaseController
     {
         if ($this->getRequest()->isPost() && $this->_hasParam('path')) {
             $path = Ld_Files::cleanpath($this->_getParam('path'));
-            $instance = $this->site->moveInstance($this->instance, $path);
-            $this->_redirectToAction('status');
+            $this->site->moveInstance($this->instance, $path);
+            $this->_flashMessenger->addMessage( $this->translate("Instance moved") );
+            $this->_redirectToAction('configure');
         }
     }
 
@@ -472,5 +456,11 @@ class Slotter_InstanceController extends Slotter_BaseController
             $this->_redirector->gotoUrl($url, array('prependBase' => false));
         }
     }
+
+    /* Deprecated */
+
+    public function statusAction() { $this->_forward('configure'); }
+
+    public function manageAction() { $this->_forward('configure'); }
 
 }

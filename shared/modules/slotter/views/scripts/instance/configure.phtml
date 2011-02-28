@@ -6,6 +6,8 @@
 
 <div class="ld-panel-content h6e-block">
 
+<?php echo $this->notification() ?>
+
 <?php if ($updateVersion = $this->instance->hasUpdate()) : ?>
 
 <h3><?php echo $this->translate("Update available") ?></h3>
