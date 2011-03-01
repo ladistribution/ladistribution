@@ -22,23 +22,9 @@ class Merger_IndexController extends Ld_Controller_Action
             $this->view->layoutTitle = $this->mergerUser['fullname'];
         // } else if ($this->getSite()->isChild() && $owner = $this->site->getOwner()) {
         //     $this->view->layoutTitle = $owner['fullname'];
-        } 
-
-        // $this->view->layoutTitle = $translator->translate("News Feed");
-
-        if ($this->view->canAdmin = $this->userCan('admin')) {
-            $this->view->canManageDatabases = $this->userCan('manage', 'databases');
-            $this->view->canManageRepositories = $this->userCan('manage', 'repositories');
-            if ($this->view->canUpdate = $this->userCan('update', 'instances')) {
-                $applications = $this->site->getApplicationsInstances();
-                foreach ($applications as $id => $instance) {
-                    if ($instance->hasUpdate()) {
-                        $this->view->hasUpdate = true;
-                        break;
-                    }
-                }
-            }
         }
+
+        $this->view->canAdmin = $this->admin->userCan('admin');
     }
 
     public function indexAction()

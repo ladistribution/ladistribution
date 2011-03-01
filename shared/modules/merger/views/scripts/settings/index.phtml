@@ -1,41 +1,56 @@
-<ul class="ld-nav">
-    <li><a href="<?php echo $this->url(array('module' => 'merger', 'controller' => 'index', 'action' => 'index'), 'default') ?>"><?php echo $this->translate("Back to News Feed") ?></a></li>
-</ul>
-
 <h2><?php echo $this->translate("News Feed") ?></h2>
 
-<div class="ld-panel">
+<div class="ld-merger ld-feed">
 
-<div class="ld-panel-content h6e-block no-tab">
+<?php if (Ld_Auth::isAuthenticated()) : ?>
+    <ul class="h6e-tabs">
+        <li>
+            <a href="<?php echo $this->url(array('action' => 'personal'), 'merger-feed') ?>"><?php
+                echo $this->translate("Personal Feed");
+        ?></a></li>
+        <li>
+            <a href="<?php echo $this->url(array('action' => 'public'), 'merger-feed') ?>"><?php
+                echo $this->translate("Public Feed");
+        ?></a></li>
+        <li class="active more">
+            <a href="<?php echo $this->url(array('controller' => 'settings', 'action' => 'index'), 'merger-settings') ?>"><?php
+                echo $this->translate("Configure");
+        ?></a></li>
+    </ul>
+<?php endif ?>
 
-<h3><?php echo $this->translate("Settings") ?></h3>
+<div class="h6e-main">
 
-<form method="post" action="">
+<div class="h6e-page-content h6e-block has-tab">
+
+<form method="post" action="" class="merger-settings">
+
+<?php $this->notification() ?>
 
 <table class="h6e-data">
     <tr>
         <th></th>
-        <th style="width:100px;text-align:center"><?php echo $this->translate("Personal Feed") ?></th>
-        <th style="width:100px;text-align:center"><?php echo $this->translate("Public Feed") ?></th>
+        <th><?php echo $this->translate("Personal Feed") ?></th>
+        <th><?php echo $this->translate("Public Feed") ?></th>
     </tr>
     <?php foreach ($this->applications as $id => $feeds) : ?>
         <?php $instance = $this->site->getInstance($id); ?>
         <tr class="th2">
-            <th><?php echo $instance->getName() ?></th>
+            <th class="title"><?php echo $instance->getName() ?></th>
             <td></td>
             <td></td>
         </tr>
         <?php foreach ($feeds as $feed) : $feedId = $feed['id']; ?>
             <tr>
-                <td><?php echo $feed['title'] ?></td>
-                <td style="text-align:center">
+                <td class="title"><?php echo $feed['title'] ?></td>
+                <td>
                     <?php if ($feed['rel'] != 'public-feed') : ?>
                         <?php $checked = !isset($this->config['personal'][$id][$feedId]) || $this->config['personal'][$id][$feedId] == 1;  ?>
                         <input name="<?php echo "personal[$id][$feedId]" ?>" type="hidden" value="0"/>
                         <input name="<?php echo "personal[$id][$feedId]" ?>" type="checkbox" <?php if ($checked) echo 'checked="checked"' ?> value="1"/>
                     <?php endif ?>
                 </td>
-                <td style="text-align:center">
+                <td>
                     <?php if ($feed['rel'] != 'personal-feed') : ?>
                         <?php $checked = !isset($this->config['public'][$id][$feedId]) || $this->config['public'][$id][$feedId] == 1;  ?>
                         <input name="<?php echo "public[$id][$feedId]" ?>" type="hidden" value="0"/>
@@ -52,5 +67,12 @@
 </form>
 
 </div>
+
+</div>
+
+<?php
+$parameters = array('admin' => $this->admin, 'site' => $this->site);
+echo $this->partial('partials/sidebar.phtml', $parameters);
+?>
 
 </div>

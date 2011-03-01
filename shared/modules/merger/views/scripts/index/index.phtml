@@ -1,20 +1,24 @@
-<?php if ($this->canAdmin) : ?>
-<ul class="ld-nav">
-    <li><a href="<?php echo $this->url(array('controller' => 'settings', 'action' => 'index'), 'merger-settings') ?>"><?php echo $this->translate("Settings") ?></a></li>
-</ul>
-<?php endif ?>
-
 <h2><?php echo $this->translate("News Feed"); ?></h2>
 
 <div class="ld-merger ld-feed">
 
 <?php if (Ld_Auth::isAuthenticated()) : ?>
-<ul class="h6e-tabs">
-    <li<?php if ($this->feedType == 'personal') echo ' class="active"' ?>>
-        <a href="<?php echo $this->url(array('action' => 'personal'), 'merger-feed') ?>"><?php echo $this->translate("Personal Feed") ?></a></li>
-    <li<?php if ($this->feedType != 'personal') echo ' class="active"' ?>>
-        <a href="<?php echo $this->url(array('action' => 'public'), 'merger-feed') ?>"><?php echo $this->translate("Public Feed") ?></a></li>
-</ul>
+    <ul class="h6e-tabs">
+        <li<?php if ($this->feedType == 'personal') echo ' class="active"' ?>>
+            <a href="<?php echo $this->url(array('action' => 'personal'), 'merger-feed') ?>"><?php
+                echo $this->translate("Personal Feed");
+        ?></a></li>
+        <li<?php if ($this->feedType != 'personal') echo ' class="active"' ?>>
+            <a href="<?php echo $this->url(array('action' => 'public'), 'merger-feed') ?>"><?php
+                echo $this->translate("Public Feed");
+        ?></a></li>
+        <?php if ($this->canAdmin) : ?>
+        <li class="more">
+            <a href="<?php echo $this->url(array('controller' => 'settings', 'action' => 'index'), 'merger-settings') ?>"><?php
+                echo $this->translate("Configure");
+        ?></a></li>
+        <?php endif ?>
+    </ul>
 <?php endif ?>
 
 <div class="h6e-main">
@@ -83,27 +87,9 @@
 
 </div>
 
-<div class="h6e-sidebar">
-    <div class="h6e-sidebar-inner">
-
-        <?php if ($this->canAdmin && $this->canUpdate && $this->hasUpdate) : ?>
-            <div class="ld-merger-sidebar-widget">
-            <h3><?php echo $this->translate("Updates") ?></h3>
-            <?php
-            $updateUrl = $this->url(array('module' => 'slotter', 'controller' => 'index', 'action' => 'update'), 'update');
-            $updateString = $this->translate(
-                "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>");
-            ?>
-            <p><?php printf($updateString, $updateUrl); ?></p>
-            </div>
-        <?php endif ?>
-
-        <div class="ld-merger-sidebar-widget">
-            <h3><?php echo $this->translate("Applications") ?></h3>
-            <?php $this->instancesList() ?>
-        </div>
-
-    </div>
-</div>
+<?php
+$parameters = array('admin' => $this->admin, 'site' => $this->site);
+echo $this->partial('partials/sidebar.phtml', $parameters);
+?>
 
 </div>

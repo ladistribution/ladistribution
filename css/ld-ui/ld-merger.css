@@ -99,3 +99,16 @@
   font-size:1em;
   margin-bottom:2em;
 }
+
+/* Tabs */
+
+.ld-merger .h6e-tabs { width:672px; }
+.ld-merger .h6e-tabs .more { float:right; }
+.ld-merger .h6e-tabs .more a { margin-right:25px; }
+
+/* Settings */
+
+.ld-merger .merger-settings { padding:1em 0.5em; }
+.ld-merger .merger-settings table { width:100%; }
+.ld-merger .merger-settings table td, .ld-merger .merger-settings table th { width:33%; text-align:center; }
+.ld-merger .merger-settings table td.title, .ld-merger .merger-settings table th.title { text-align:left; }

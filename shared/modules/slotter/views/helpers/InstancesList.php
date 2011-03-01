@@ -47,7 +47,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
                 $inlineStyle .= "background-image:url($icon);";
             }
 
-            $manageUrl = $this->view->url(array('controller' => 'instance', 'id' => $id), 'instance-action', true);
+            $manageUrl = $this->view->admin->buildUrl(array('controller' => 'instance', 'id' => $id), 'instance-action', true);
 
             printf('<li id="app_%s" class="%s" style="%s">', $id, $className, $inlineStyle);
 

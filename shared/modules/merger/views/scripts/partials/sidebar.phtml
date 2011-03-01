@@ -1,0 +1,37 @@
+<div class="h6e-sidebar">
+    <div class="h6e-sidebar-inner">
+
+        <?php
+        if ($canAdmin = $this->admin->userCan('admin')) {
+            if ($canUpdate = $this->admin->userCan('update', 'instances')) {
+                $hasUpdate = false;
+                $applications = $this->site->getApplicationsInstances();
+                foreach ($applications as $id => $instance) {
+                    if ($instance->hasUpdate()) {
+                        $hasUpdate = true;
+                        break;
+                    }
+                }
+            }
+        }
+        ?>
+
+        <?php if ($canAdmin && $canUpdate && $hasUpdate) : ?>
+            <div class="ld-merger-sidebar-widget">
+            <h3><?php echo $this->translate("Updates") ?></h3>
+            <?php
+            $updateUrl = $this->url(array('module' => 'slotter', 'controller' => 'index', 'action' => 'update'), 'update');
+            $updateString = $this->translate(
+                "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>");
+            ?>
+            <p><?php printf($updateString, $updateUrl); ?></p>
+            </div>
+        <?php endif ?>
+
+        <div class="ld-merger-sidebar-widget">
+            <h3><?php echo $this->translate("Applications") ?></h3>
+            <?php $this->instancesList() ?>
+        </div>
+
+    </div>
+</div>

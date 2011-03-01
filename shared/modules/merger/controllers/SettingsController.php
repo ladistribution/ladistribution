@@ -36,6 +36,7 @@ class Merger_SettingsController extends Ld_Controller_Action
             $personal = $this->_getParam('personal');
             $merger = compact('public', 'personal');
             $this->site->setConfig('merger', $merger);
+            $this->view->notification = $this->translate("Configuration updated");
         }
 
         $types = array('application/rss+xml', 'application/atom+xml');
