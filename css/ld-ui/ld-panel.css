@@ -11,7 +11,7 @@
   padding:20px;
 }
 
-.ld-panel-content, .ld-panel-content.has-tab, .h6e-page-content.has-tab {
+.ld-panel-content, .ld-panel-content.has-tab, .h6e-block.has-tab {
   border-top-left-radius:0;
   -moz-border-radius-topleft:0;
 }
@@ -37,6 +37,7 @@
   border:none;
   text-decoration:underline;
   cursor:pointer;
+  color:inherit;
 }
 
 .ld-panel input.cancel:hover { text-decoration:none; }

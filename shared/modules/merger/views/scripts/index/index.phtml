@@ -23,7 +23,9 @@
 
 <div class="h6e-main">
 
-<div class="h6e-page-content h6e-block<?php if (Ld_Auth::isAuthenticated()) echo ' has-tab' ?>">
+<div class="h6e-block<?php if (Ld_Auth::isAuthenticated()) echo ' has-tab' ?>">
+
+    <?php $this->notification() ?>
 
     <?php $n = 0; foreach ($this->entries as $entry) : ?>
 
@@ -93,3 +95,47 @@ echo $this->partial('partials/sidebar.phtml', $parameters);
 ?>
 
 </div>
+
+<script type="text/javascript">
+
+<?php
+$updateUrl = $this->url() . '?format=json';
+$hashes = array();
+for ($i = 0; $i < 3; $i ++) {
+    if (isset($this->entries[$i])) $hashes[] = $this->entries[$i]['hash'];
+}
+$updateUrl .= '&hashes=' . urlencode(implode(';', $hashes));
+?>
+
+$(function() {
+
+    var title = document.title;
+
+    var msg_singular = "<?php echo $this->translate("1 new update") ?>";
+    var msg_plural = "<?php echo $this->translate("%s new updates") ?>";
+
+    function update() {
+        $.ajax({
+          url: "<?php echo $updateUrl ?>",
+          dataType: 'json',
+          success: function(updates) {
+              var n = updates.length;
+              if (n > 0) {
+                  document.title = title + ' (' + n + ')';
+                  var notice = $("#merger-notification");
+                  if (notice.length == 0) {
+                      notice = $('<div id="merger-notification" class="ld-notice"></div>').prependTo(".h6e-main .h6e-block");
+                  }
+                  var x = (n >= 50 ? '50+' : n);
+                  var message = n == 1 ? msg_singular : msg_plural.replace('%s', x);
+                  notice.html('<a href="<?php echo $this->url() ?>">' + message + '</a>');
+              }
+          }
+        });
+    }
+
+    setInterval(update, (1000 * 60 / 2));
+
+});
+
+</script>

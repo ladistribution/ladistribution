@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-26 15:26+0100\n"
+"POT-Creation-Date: 2011-03-01 21:41+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Powered by <a href=\"%s\">La Distribution</a>, a community project initiated by <a href=\"%s\">h6e</a>."
 msgstr "Propulsé par <a href=\"%s\">La Distribution</a>, un projet communautaire initié par <a href=\"%s\">h6e</a>."
 
-#: shared/modules/default/views/layouts/layout.phtml:54
+#: shared/modules/default/views/layouts/layout.phtml:55
 msgid "Language:"
 msgstr "Langue :"
 
@@ -174,59 +174,68 @@ msgstr "Identité OpenID"
 msgid "This is the identity page for this site user: %1$s."
 msgstr "Ceci est la page d'identité pour cet utilisateur: %1$s."
 
-#: shared/modules/merger/views/scripts/index/index.phtml:3
-#: shared/modules/merger/views/scripts/settings/index.phtml:11
-#: shared/modules/slotter/views/scripts/appearance/css.phtml:1
-#: shared/modules/slotter/views/scripts/appearance/index.phtml:1
-#: shared/modules/slotter/views/scripts/databases/create.phtml:1
-#: shared/modules/slotter/views/scripts/databases/delete.phtml:1
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:1
-#: shared/modules/slotter/views/scripts/databases/index.phtml:1
-msgid "Settings"
-msgstr "Paramètres"
-
-#: shared/modules/merger/views/scripts/index/index.phtml:7
-#: shared/modules/merger/views/scripts/settings/index.phtml:5
+#: shared/modules/merger/views/scripts/index/index.phtml:1
+#: shared/modules/merger/views/scripts/settings/index.phtml:1
 msgid "News Feed"
 msgstr "Fil d'actualité"
 
-#: shared/modules/merger/views/scripts/index/index.phtml:14
-#: shared/modules/merger/views/scripts/settings/index.phtml:18
+#: shared/modules/merger/views/scripts/index/index.phtml:9
+#: shared/modules/merger/views/scripts/settings/index.phtml:9
+#: shared/modules/merger/views/scripts/settings/index.phtml:33
 msgid "Personal Feed"
 msgstr "Fil personnalisé"
 
-#: shared/modules/merger/views/scripts/index/index.phtml:16
-#: shared/modules/merger/views/scripts/settings/index.phtml:19
+#: shared/modules/merger/views/scripts/index/index.phtml:13
+#: shared/modules/merger/views/scripts/settings/index.phtml:13
+#: shared/modules/merger/views/scripts/settings/index.phtml:34
 msgid "Public Feed"
 msgstr "Fil public"
 
-#: shared/modules/merger/views/scripts/index/index.phtml:79
+#: shared/modules/merger/views/scripts/index/index.phtml:18
+#: shared/modules/merger/views/scripts/settings/index.phtml:17
+msgid "Configure"
+msgstr "Configurer"
+
+#: shared/modules/merger/views/scripts/index/index.phtml:85
 msgid "This news feed is currently empty. Maybe installing some applications will help fill it."
 msgstr ""
 
-#: shared/modules/merger/views/scripts/index/index.phtml:91
+#: shared/modules/merger/views/scripts/index/index.phtml:114
+msgid "1 new update"
+msgstr "1 nouvelle mise à jour"
+
+#: shared/modules/merger/views/scripts/index/index.phtml:115
+#, php-format
+msgid "%s new updates"
+msgstr "%s nouvelles mises à jour"
+
+#: shared/modules/merger/views/scripts/partials/sidebar.phtml:21
 msgid "Updates"
 msgstr "Mises à jour"
 
-#: shared/modules/merger/views/scripts/index/index.phtml:95
+#: shared/modules/merger/views/scripts/partials/sidebar.phtml:25
 #, php-format
 msgid "There is some updates available. It's recommended to <a href=\"%s\">upgrade now.</a>"
 msgstr "Des mises à jours sont disponibles. Il est conseillé de <a href=\"%s\">mettre à jour maintenant.</a>"
 
-#: shared/modules/merger/views/scripts/index/index.phtml:102
+#: shared/modules/merger/views/scripts/partials/sidebar.phtml:32
 msgid "Applications"
 msgstr "Applications"
 
-#: shared/modules/merger/views/scripts/settings/index.phtml:2
-msgid "Back to News Feed"
-msgstr "Retour au fil d'actualité"
-
-#: shared/modules/merger/views/scripts/settings/index.phtml:50
+#: shared/modules/merger/views/scripts/settings/index.phtml:65
 #: shared/modules/slotter/views/scripts/appearance/css.phtml:17
 #: shared/modules/slotter/views/scripts/appearance/index.phtml:20
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:45
 msgid "Update"
 msgstr "Mettre à jour"
+
+#: shared/modules/slotter/views/scripts/appearance/css.phtml:1
+#: shared/modules/slotter/views/scripts/appearance/index.phtml:1
+#: shared/modules/slotter/views/scripts/databases/create.phtml:1
+#: shared/modules/slotter/views/scripts/databases/delete.phtml:1
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:1
+msgid "Settings"
+msgstr "Paramètres"
 
 #: shared/modules/slotter/views/scripts/appearance/css.phtml:9
 msgid "Custom CSS"
@@ -237,13 +246,11 @@ msgid "Colors"
 msgstr "Couleurs"
 
 #: shared/modules/slotter/views/scripts/databases/create.phtml:9
-#: shared/modules/slotter/views/scripts/databases/index.phtml:72
 msgid "Create a new database"
 msgstr "Créer une nouvelle base de donnée"
 
 #: shared/modules/slotter/views/scripts/databases/create.phtml:15
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:15
-#: shared/modules/slotter/views/scripts/databases/index.phtml:20
 msgid "Type"
 msgstr "Type"
 
@@ -286,12 +293,10 @@ msgid "Update a connection"
 msgstr "Mettre à jour une connexion"
 
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:26
-#: shared/modules/slotter/views/scripts/databases/index.phtml:21
 msgid "Host"
 msgstr "Hôte"
 
 #: shared/modules/slotter/views/scripts/databases/edit.phtml:30
-#: shared/modules/slotter/views/scripts/databases/index.phtml:22
 msgid "Name"
 msgstr "Nom"
 
@@ -312,6 +317,8 @@ msgid "Status"
 msgstr "Statut"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:25
+#: shared/modules/slotter/views/scripts/domains/index.phtml:25
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:17
 msgid "Actions"
 msgstr "Actions"
 
@@ -325,10 +332,12 @@ msgid "unused"
 msgstr "inutilisé"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:46
+#: shared/modules/slotter/views/scripts/domains/index.phtml:57
 msgid "edit"
 msgstr "éditer"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:51
+#: shared/modules/slotter/views/scripts/instance/backups.phtml:51
 msgid "delete"
 msgstr "supprimer"
 
@@ -337,10 +346,12 @@ msgid "You can:"
 msgstr "Vous pouvez :"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:68
+#: shared/modules/slotter/views/scripts/databases/new.phtml:9
 msgid "Register an existing database"
 msgstr "Enregistrer une base de donnée existante"
 
 #: shared/modules/slotter/views/scripts/databases/index.phtml:76
+#: shared/modules/slotter/views/scripts/databases/master.phtml:9
 msgid "Register master credentials"
 msgstr "Enregistrer les"
 
@@ -524,44 +535,44 @@ msgstr "Distante (URL)"
 msgid "Clone"
 msgstr "Cloner"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:11
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:13
 msgid "Update available"
 msgstr "Mise à jour disponible"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:13
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:15
 #, php-format
 msgid "A new version (%s) is available."
 msgstr "Une nouvelle version (%s) est disponible."
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:16
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:18
 msgid "You can update now."
 msgstr "Vous pouvez mettre à jour maintenant."
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:24
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:26
 msgid "Configuration"
 msgstr "Configuration"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:32
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:34
 msgid "Update configuration"
 msgstr "Mettre à jour la configuration"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:40
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:42
 msgid "Move"
 msgstr "Déplacer"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:46
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:48
 msgid "Old path"
 msgstr "Ancien chemin"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:50
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:52
 msgid "New path"
 msgstr "Nouveau chemin"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:52
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:54
 msgid "Move this application"
 msgstr "Déplacer cette application"
 
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:64
+#: shared/modules/slotter/views/scripts/instance/configure.phtml:66
 msgid "Delete this application"
 msgstr "Supprimer cette application"
 
@@ -614,29 +625,22 @@ msgid "Extensions"
 msgstr "Extensions"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:49
-#: shared/modules/slotter/views/scripts/instance/status.phtml:11
 msgid "Package"
 msgstr "Paquet"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:51
-#: shared/modules/slotter/views/scripts/instance/status.phtml:13
 msgid "Version"
 msgstr "Version"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:64
-#: shared/modules/slotter/views/scripts/instance/status.phtml:26
-#: shared/modules/slotter/views/scripts/instance/status.phtml:47
 msgid "update"
 msgstr "mettre à jour"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:66
-#: shared/modules/slotter/views/scripts/instance/status.phtml:23
-#: shared/modules/slotter/views/scripts/instance/status.phtml:43
 msgid "up to date"
 msgstr "à jour"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:69
-#: shared/modules/slotter/views/scripts/instance/status.phtml:53
 msgid "uninstall"
 msgstr "désinstaller"
 
@@ -661,7 +665,6 @@ msgid "Add an application"
 msgstr "Ajouter une application"
 
 #: shared/modules/slotter/views/scripts/instance/new.phtml:22
-#: shared/modules/slotter/views/scripts/instance/status.phtml:64
 msgid "You can also:"
 msgstr "Vous pouvez aussi :"
 
@@ -742,15 +745,6 @@ msgstr "Role"
 #: shared/modules/slotter/views/scripts/instance/roles.phtml:109
 msgid "Update roles"
 msgstr "Mettre à jour les rôles"
-
-#: shared/modules/slotter/views/scripts/instance/status.phtml:23
-#: shared/modules/slotter/views/scripts/instance/status.phtml:43
-msgid "update available"
-msgstr "mise à jour disponible"
-
-#: shared/modules/slotter/views/scripts/instance/status.phtml:29
-msgid "move"
-msgstr "déplacer"
 
 #: shared/modules/slotter/views/scripts/instance/themes.phtml:15
 msgid "Available Themes"
@@ -1104,13 +1098,13 @@ msgstr "L'email ne peut être vide."
 
 #: shared/modules/default/controllers/AuthController.php:132
 #: shared/modules/default/controllers/AuthController.php:199
-#: shared/modules/default/controllers/AuthController.php:293
+#: shared/modules/default/controllers/AuthController.php:294
 msgid "Password can't be empty."
 msgstr "Le mot de passe ne peut être vide."
 
 #: shared/modules/default/controllers/AuthController.php:134
 #: shared/modules/default/controllers/AuthController.php:201
-#: shared/modules/default/controllers/AuthController.php:295
+#: shared/modules/default/controllers/AuthController.php:296
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
 
@@ -1118,13 +1112,17 @@ msgstr "Les mots de passe doivent correspondre."
 msgid "User with this username already exists."
 msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"
 
-#: shared/modules/default/controllers/AuthController.php:322
+#: shared/modules/default/controllers/AuthController.php:323
 msgid "Identity not found."
 msgstr "Identité non trouvée."
 
 #: shared/modules/identity/controllers/OpenidController.php:13
 msgid "Identity"
 msgstr "Identité"
+
+#: shared/modules/merger/controllers/SettingsController.php:39
+msgid "Configuration updated"
+msgstr "Configuration mise à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:18
 msgid "Appearance"
@@ -1138,15 +1136,15 @@ msgstr "Couleurs mises à jour"
 msgid "CSS updated"
 msgstr "CSS mise à jour"
 
-#: shared/modules/slotter/controllers/BaseController.php:35
+#: shared/modules/slotter/controllers/BaseController.php:33
 msgid "General"
 msgstr "Général"
 
-#: shared/modules/slotter/controllers/BaseController.php:40
+#: shared/modules/slotter/controllers/BaseController.php:38
 msgid "CSS"
 msgstr "CSS"
 
-#: shared/modules/slotter/controllers/BaseController.php:60
+#: shared/modules/slotter/controllers/BaseController.php:58
 msgid "Home"
 msgstr "Accueil"
 
@@ -1170,26 +1168,30 @@ msgstr "Extension mise à jour"
 msgid "Extension uninstalled"
 msgstr "Extension désinstallée"
 
-#: shared/modules/slotter/controllers/InstanceController.php:206
-msgid "Configuration updated"
-msgstr "Configuration mise à jour"
+#: shared/modules/slotter/controllers/InstanceController.php:175
+msgid "Instance updated"
+msgstr "Instance mise à jour"
 
-#: shared/modules/slotter/controllers/InstanceController.php:309
+#: shared/modules/slotter/controllers/InstanceController.php:292
 msgid "Backup generated"
 msgstr "Sauvegarde générée"
 
-#: shared/modules/slotter/controllers/InstanceController.php:334
+#: shared/modules/slotter/controllers/InstanceController.php:317
 msgid "Backup deleted"
 msgstr "Sauvegarde supprimée"
 
-#: shared/modules/slotter/controllers/InstanceController.php:340
+#: shared/modules/slotter/controllers/InstanceController.php:323
 msgid "Backup restored"
 msgstr "Sauvegarde restaurée"
 
-#: shared/modules/slotter/controllers/InstanceController.php:386
+#: shared/modules/slotter/controllers/InstanceController.php:369
 #: shared/modules/slotter/controllers/UsersController.php:165
 msgid "Roles updated"
 msgstr "Rôles mis à jour"
+
+#: shared/modules/slotter/controllers/InstanceController.php:439
+msgid "Instance moved"
+msgstr "Instance déplacée"
 
 #: shared/modules/slotter/controllers/PluginsController.php:20
 msgid "Plugins"
@@ -1297,6 +1299,7 @@ msgstr "Détecte et bloque automatiquement les accès suspects au site."
 #: shared/plugins/bouncer.php:34
 #: shared/plugins/gloss.php:24
 #: shared/plugins/gravatar.php:21
+#: shared/plugins/test.php:24
 #: shared/plugins/wordpress-unlocker.php:39
 #, php-format
 msgid "%s is running."
@@ -1328,20 +1331,6 @@ msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greff
 msgid "%s library not available."
 msgstr "bibliothèque %s non disponible."
 
-#: shared/plugins/bouncer.php:46
-#: shared/plugins/mail.php:45
-msgid "Backend"
-msgstr "Backend"
-
-#: shared/plugins/bouncer.php:54
-#: shared/plugins/mail.php:51
-msgid "Server"
-msgstr "Serveur"
-
-#: shared/plugins/bouncer.php:58
-msgid "Bouncer Namespace"
-msgstr ""
-
 #: shared/plugins/development.php:14
 msgid "Customise configuration, enable debugging, new features..."
 msgstr "Personnaliser la configuration, activer le débugage, de nouvelles fonctionnalités ..."
@@ -1357,6 +1346,14 @@ msgstr "Affiche des avatars en utilisant le service Gravatar."
 #: shared/plugins/mail.php:14
 msgid "Make Mail backend configurable."
 msgstr ""
+
+#: shared/plugins/mail.php:45
+msgid "Backend"
+msgstr "Backend"
+
+#: shared/plugins/mail.php:51
+msgid "Server"
+msgstr "Serveur"
 
 #: shared/plugins/memcache.php:14
 msgid "Cache data with Memcache to enhance performances."
@@ -1428,6 +1425,13 @@ msgstr "Déverrouiller les plugins"
 #: shared/plugins/wordpress-unlocker.php:31
 msgid "Unlock users"
 msgstr "Déverrouiller les utilisateurs"
+
+#~ msgid "Back to News Feed"
+#~ msgstr "Retour au fil d'actualité"
+#~ msgid "update available"
+#~ msgstr "mise à jour disponible"
+#~ msgid "move"
+#~ msgstr "déplacer"
 
 #, fuzzy
 #~ msgid "Update Password"

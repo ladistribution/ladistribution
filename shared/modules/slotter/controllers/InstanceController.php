@@ -35,7 +35,7 @@ class Slotter_InstanceController extends Slotter_BaseController
         $this->_handleNavigation();
 
         if ($this->getRequest()->isXmlHttpRequest()) {
-            Zend_Layout::getMvcInstance()->disableLayout();
+            $this->disableLayout();
         }
     }
 

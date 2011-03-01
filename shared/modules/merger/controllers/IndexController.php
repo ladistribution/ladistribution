@@ -57,10 +57,31 @@ class Merger_IndexController extends Ld_Controller_Action
         $translator = $this->getTranslator();
         $this->appendTitle($translator->translate('Personal Feed'));
         $feeds = Ld_Feed_Merger::getFeeds('personal');
-        $entries = Ld_Feed_Merger::getEntries($feeds);
+        $hashes = $this->_hasParam('hashes') ? explode(";", $this->_getParam('hashes')) : array();
+        $entries = Ld_Feed_Merger::getEntries($feeds, $hashes);
         $this->view->entries = $entries;
         $this->view->feedType = 'personal';
-        $this->render('index');
+        $this->_render();
+    }
+
+    protected function _render()
+    {
+        $format = $this->_getParam('format', 'html');
+        switch ($format) {
+            case 'xml':
+            case 'atom':
+                $this->disableLayout();
+                $this->getResponse()->setHeader('Content-Type', "text/html; charset=utf-8");
+                $this->renderScript('index/index.atom');
+                break;
+            case 'json':
+                $this->noRender();
+                echo $this->view->json($this->view->entries);
+                break;
+            case 'html':
+            default:
+                $this->render('index');
+        }
     }
 
     protected function _disallow()

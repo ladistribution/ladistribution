@@ -33,6 +33,7 @@ class Ld_Feed_Merger_Entry extends ArrayObject
 
     public function parseEntry()
     {
+        $this->id = $this->_entry->getId();
         $this->title = $this->_entry->getTitle();
         $this->link = $this->_entry->getLink();
         $this->type = $this->_entry->getPostType();
@@ -53,6 +54,8 @@ class Ld_Feed_Merger_Entry extends ArrayObject
     public function toArray()
     {
         return array(
+            'id'         => $this->id,
+            'hash'       => $this->hash,
             'instance'   => $this->instance,
             'title'      => $this->title,
             'link'       => $this->link,
@@ -76,7 +79,6 @@ class Ld_Feed_Merger_Entry extends ArrayObject
         switch ($this->package) {
             case 'blogmarks':
                 $this->type = 'link';
-                $this->action = 'posted a link';
                 break;
             case 'statusnet':
                 $this->type = 'status';
@@ -100,6 +102,20 @@ class Ld_Feed_Merger_Entry extends ArrayObject
             case 'moonmoon':
                 $this->content = null;
                 break;
+        }
+
+        if (empty($this->action)) {
+            switch ($this->type) {
+                case 'link':
+                    $this->action = 'posted a link';
+                    break;
+            }
+        }
+
+        if (empty($this->hash)) {
+            if (isset($this->id)) {
+                $this->hash = substr(md5($this->id), 0, 6);
+            }
         }
     }
 

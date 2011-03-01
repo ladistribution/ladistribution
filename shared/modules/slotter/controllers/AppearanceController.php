@@ -53,7 +53,7 @@ class Slotter_AppearanceController extends Slotter_BaseController
     public function styleAction()
     {
         $this->getResponse()->setHeader('Content-Type', 'text/css');
-        Zend_Layout::getMvcInstance()->disableLayout();
+        $this->disableLayout();
 
         $this->view->addScriptPath(LD_LIB_DIR . '/Ld/Ui/scripts');
 

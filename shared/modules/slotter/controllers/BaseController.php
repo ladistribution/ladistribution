@@ -25,8 +25,6 @@ class Slotter_BaseController extends Ld_Controller_Action
         $this->_acl = $this->admin->getAcl();
 
         $this->_initNavigation();
-
-        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
     }
 
     protected function _initNavigation()
@@ -73,13 +71,8 @@ class Slotter_BaseController extends Ld_Controller_Action
         $this->view->navigation($this->_container);
     }
 
-    protected function _disallow()
-    {
-        if ($this->authenticated) {
-             $this->_forward('disallow', 'auth', 'default');
-         } else {
-             $this->_forward('login', 'auth', 'default');
-         }
-    }
+    /* Deprecated */
+
+    protected function _disallow() { return $this->disallow(); }
 
 }

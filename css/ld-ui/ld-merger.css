@@ -112,3 +112,8 @@
 .ld-merger .merger-settings table { width:100%; }
 .ld-merger .merger-settings table td, .ld-merger .merger-settings table th { width:33%; text-align:center; }
 .ld-merger .merger-settings table td.title, .ld-merger .merger-settings table th.title { text-align:left; }
+
+/* Notifications */
+
+.ld-merger #ld-notification, #merger-notification { margin:1em 0 2em; }
+#merger-notification a { width:100%; display:block; text-align:center; }

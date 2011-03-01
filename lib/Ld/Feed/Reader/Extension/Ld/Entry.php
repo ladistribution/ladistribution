@@ -43,6 +43,22 @@ class Ld_Feed_Reader_Extension_Ld_Entry extends Zend_Feed_Reader_Extension_Entry
    */
   public function getPostType()
   {
+      $nodeList = $this->getXpath()->query($this->getXpathPrefix() . '/activity:object-type');
+
+      if ($nodeList->length == 0) {
+          $nodeList = $this->getXpath()->query($this->getXpathPrefix() . '/activity:object/activity:object-type');
+      }
+
+      if ($nodeList->length > 0) {
+          $value = $nodeList->item(0)->nodeValue;
+          switch ($value) {
+              case 'http://activitystrea.ms/schema/1.0/bookmark':
+                return 'link';
+              case 'http://activitystrea.ms/schema/1.0/note':
+                return 'status';
+          }
+      }
+
       return $this->_getData('type');
   }
 

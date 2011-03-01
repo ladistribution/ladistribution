@@ -66,7 +66,7 @@ class Ld_Feed_Merger
         return $feeds;
     }
 
-    public static function getEntries($feeds)
+    public static function getEntries($feeds, $hashes = array())
     {
         $entries = array();
         foreach ($feeds as $feed) {
@@ -78,6 +78,14 @@ class Ld_Feed_Merger
             }
         }
         usort($entries, array('self', 'cmpEntries'));
+
+        // hashes filtering
+        foreach ($entries as $n => $entry) {
+            if (in_array($entry['hash'], $hashes)) {
+                return array_slice($entries, 0, $n);
+            }
+        }
+
         return $entries;
     }
 

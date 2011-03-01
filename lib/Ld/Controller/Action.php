@@ -57,6 +57,9 @@ class Ld_Controller_Action extends Zend_Controller_Action
         if ($site = $this->getSite()) {
             $this->setTitle( $site->getName() );
         }
+
+        // Flash Messenger
+        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
     }
 
     function initLocale()
@@ -113,10 +116,15 @@ class Ld_Controller_Action extends Zend_Controller_Action
         return $this->admin->userCan($action, $ressource);
     }
 
+    function disableLayout()
+    {
+        Zend_Layout::getMvcInstance()->disableLayout();
+    }
+
     function noRender()
     {
         $this->_helper->viewRenderer->setNoRender(true);
-        Zend_Layout::getMvcInstance()->disableLayout();
+        $this->disableLayout();
     }
 
     function disallow()
