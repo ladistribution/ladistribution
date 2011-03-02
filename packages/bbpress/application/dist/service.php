@@ -113,8 +113,8 @@ class Ld_Service_Bbpress
 	public function setOptions($params)
 	{
 		foreach ($params as $key => $value) {
-			update_option($key, '');
-			update_option($key, $value);
+			bb_update_option($key, '');
+			bb_update_option($key, $value);
 		}
 	}
 

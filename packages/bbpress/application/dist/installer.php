@@ -138,8 +138,8 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		$options = array();
 		foreach ($this->getPreferences($type) as $preference) {
 			$preference = is_object($preference) ? $preference->toArray() : $preference;
-			$option = $preference['name'];
-			$value = isset($configuration[$option]) ? $configuration[$option] : null;
+			$name = $preference['name'];
+			$value = isset($configuration[$name]) ? $configuration[$name] : null;
 			$options[$name] = $value;
 		}
 		$this->serviceRequest('setOptions', $options);
