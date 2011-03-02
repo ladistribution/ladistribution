@@ -52,9 +52,6 @@ class Slotter_AppearanceController extends Slotter_BaseController
 
     public function styleAction()
     {
-        $this->getResponse()->setHeader('Content-Type', 'text/css');
-        $this->disableLayout();
-
         $this->view->addScriptPath(LD_LIB_DIR . '/Ld/Ui/scripts');
 
         if ($this->_hasParam('id')) {
@@ -80,9 +77,12 @@ class Slotter_AppearanceController extends Slotter_BaseController
         $this->view->colors = $colors;
 
         $expires = 60 * 60 * 24 * 7;
-        $this->getResponse()->setHeader('Cache-Control', "max-age=$expires, public");
-        $this->getResponse()->setHeader('Expires', gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+        $this->getResponse()->setHeader('Content-Type', 'text/css', true);
+        $this->getResponse()->setHeader('Cache-Control', "max-age=$expires, public", true);
+        $this->getResponse()->setHeader('Expires', gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT', true);
 
+        $this->disableLayout();
+        $this->view->addScriptPath(LD_LIB_DIR . '/Ld/Ui/scripts');
         $this->renderScript('site-style.phtml');
     }
 
