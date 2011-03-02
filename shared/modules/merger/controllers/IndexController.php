@@ -45,7 +45,7 @@ class Merger_IndexController extends Ld_Controller_Action
         $entries = Ld_Feed_Merger::getEntries($feeds);
         $this->view->entries = $entries;
         $this->view->feedType = 'public';
-        $this->render('index');
+        $this->_render();
     }
 
     public function personalAction()
