@@ -77,17 +77,29 @@
 if (typeof jQuery != 'undefined') {
     (function($) {
         $(document).ready(function() {
-            $(".ld-site-name").mouseenter(function() {
-                var left = Math.round( $(this).position().left );
-                $(".ld-main-menu").css('left', left + 'px').show();
-            }).mouseleave(function() {
-                $(".ld-main-menu").hide();
-            });
+
+            if ($(".ld-subsite-name").length) {
+                $(".ld-subsite-name").mouseenter(function() {
+                    var left = Math.round( $(this).position().left );
+                    $(".ld-main-menu").css('left', left + 'px').show();
+                }).mouseleave(function() {
+                    $(".ld-main-menu").hide();
+                });
+            } else {
+                $(".ld-site-name").mouseenter(function() {
+                    var left = Math.round( $(this).position().left );
+                    $(".ld-main-menu").css('left', left + 'px').show();
+                }).mouseleave(function() {
+                    $(".ld-main-menu").hide();
+                });
+            }
+
             $(".ld-main-menu").mouseenter(function() {
                 $(".ld-main-menu").show();
             }).mouseleave(function() {
                 $(".ld-main-menu").hide();
             });
+
             $(".ld-app-name").mouseenter(function() {
                 var left = Math.round( $(this).position().left );
                 $(".ld-app-menu").css('left', left + 'px').show();

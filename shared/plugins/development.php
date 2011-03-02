@@ -51,10 +51,10 @@ class Ld_Plugin_Development
         //     'name' => 'active_ajax_users', 'label' => ('Active ajax style user management'),
         //     'type' => 'boolean', 'defaultValue' => '0'
         // );
-        // $preferences[] = array(
-        //     'name' => 'active_multi_sites', 'label' => ('Active Multi Sites'),
-        //     'type' => 'boolean', 'defaultValue' => '0'
-        // );
+        $preferences[] = array(
+            'name' => 'active_multi_sites', 'label' => ('Active Multi Sites'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
         $preferences[] = array(
             'name' => 'active_multi_domains', 'label' => ('Active Multi Domains'),
             'type' => 'boolean', 'defaultValue' => '0'

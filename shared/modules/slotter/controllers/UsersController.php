@@ -28,6 +28,7 @@ class Slotter_UsersController extends Slotter_BaseController
                 break;
             case 'add':
             case 'index':
+            case 'roles':
                 // allow
                 if (!$this->_acl->isAllowed($this->userRole, 'instances', 'manage')) {
                     $this->_disallow();
@@ -48,15 +49,10 @@ class Slotter_UsersController extends Slotter_BaseController
 
         $usersPage = $this->_container->findOneByLabel( $this->translate('Users') );
 
-        if ($this->admin->userCan('manage', 'users')) {
+        if ($this->admin->userCan('manage', 'instances')) {
 
             $indexPage = $usersPage->addPage(array(
                 'label' => $this->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
-            ));
-
-            $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
-            $indexPage->addPage(array(
-                'label' => $this->translate('Invite Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'invite'
             ));
 
             $usersPage->addPage(array(
@@ -64,6 +60,14 @@ class Slotter_UsersController extends Slotter_BaseController
             ));
 
         }
+
+        $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
+        $indexPage->addPage(array(
+            'label' => $this->translate('Invite Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'invite'
+        ));
+        $indexPage->addPage(array(
+            'label' => $this->translate('Add Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'add'
+        ));
 
         if (isset($this->currentUser)) {
             $usersPage->addPage(array(

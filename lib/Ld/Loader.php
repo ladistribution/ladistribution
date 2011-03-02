@@ -123,16 +123,12 @@ class Ld_Loader
             self::$config['host'] = $_SERVER['SERVER_NAME'];
         }
 
-        // Plugins
-        if (empty(self::$config['active_plugins'])) {
-            self::$config['active_plugins'] = array('subsite');
-        }
-        self::setupPlugins();
-
         // Site object
         $site = self::$site = new Ld_Site_Child(self::$config);
         $site->setParentSite( Zend_Registry::get('site') );
         Zend_Registry::set('site', $site);
+
+        self::loadPlugin('subsite');
 
         return $site;
     }
@@ -151,16 +147,21 @@ class Ld_Loader
         }
 
         foreach ($active_plugins as $plugin) {
-            $plugin = strtolower($plugin);
-            $fileName = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
-            $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
-            if (class_exists($className, false) == false && Ld_Files::exists($fileName)) {
-                require_once $fileName;
-            }
-            if (class_exists($className, false) && method_exists($className, 'load')) {
-                $class = new $className;
-                $class->load();
-            }
+            self::loadPlugin($plugin);
+        }
+    }
+    
+    public static function loadPlugin($plugin)
+    {
+        $plugin = strtolower($plugin);
+        $fileName = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
+        $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
+        if (class_exists($className, false) == false && Ld_Files::exists($fileName)) {
+            require_once $fileName;
+        }
+        if (class_exists($className) && method_exists($className, 'load')) {
+            $class = new $className;
+            $class->load();
         }
     }
 

@@ -64,6 +64,12 @@ class Ld_Site_Child extends Ld_Site_Local
         return $this->getParentSite()->getLocales();
     }
 
+    public function getHost($domain = null)
+    {
+        $host = $this->getParentSite()->getHost();
+        return $host;
+    }
+
     public function getUrl($dir = null)
     {
         $domain = !empty($this->domain) ? $this->domain : null;

@@ -23,27 +23,26 @@
 
 <?php if (!$this->site->isChild() && defined('LD_MULTI_SITES') && constant('LD_MULTI_SITES')) : ?>
 
-<h2><?php echo $this->translate("Sub Sites") ?></h2>
+<h2><?php echo $this->translate("Sites") ?></h2>
 
 <div class="ld-instance-list">
 
-    <ul class="blocks mini is-admin">
+    <ul class="blocks mini is-admin instance-list">
         <?php foreach ($this->site->getSites() as $id => $config) : $subsite = new Ld_Site_Child($config); $subsite->setParentSite($this->site); ?>
         <li class="">
             <div class="name">
-                → <a href="<?php echo $subsite->getUrl() ?>"><?php echo $subsite->getName() ?></a><br/>
+                <a href="<?php echo $subsite->getUrl() ?>"><?php echo $subsite->getName() ?></a><br/>
             </div>
             <?php if ($this->userRole == 'admin') :?>
-            <div class="links">
                 <?php $manageUrl = $this->url(array('controller' => 'sites', 'action' => 'edit', 'id' => $id)); ?>
-                <?php printf('<a class="view" href="%s">%s</a>', $manageUrl, $this->translate("Settings")); ?>
-            </div>
+                <?php printf('<a class="settings" href="%s">%s</a>', $manageUrl, $this->translate("Settings")); ?>
             <?php endif ?>
         </li>
         <?php endforeach ?>
         <?php if ($this->canManageSites) : ?>
             <li class="empty new">
-                <a href="/ld-mu/slotter/sites/new">Ajouter un nouveau site</a>
+                <?php $newSiteUrl = $this->url(array('controller' => 'sites', 'action' => 'new')); ?>
+                <a href="<?php echo $newSiteUrl ?>"><?php echo $this->translate("Create a new site") ?></a>
             </li>
         <?php endif ?>
     </ul>

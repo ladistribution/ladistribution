@@ -18,12 +18,7 @@ class Slotter_SitesController extends Slotter_BaseController
     {
         if ($this->getRequest()->isPost()) {
 
-            $config = array(
-                'name'   => $this->_getParam('name'),
-                'path'   => $this->_getParam('path'),
-                'domain' => $this->_getParam('domain'),
-                'dir'    => $this->_getParam('dir')
-            );
+            $config = $this->_getParams();
 
             $subsite = new Ld_Site_Child($config);
             $subsite->setParentSite( Zend_Registry::get('site') );
@@ -58,18 +53,17 @@ class Slotter_SitesController extends Slotter_BaseController
         $siteConfig = $this->site->getSite( $this->_getParam('id') );
         $subsite = new Ld_Site_Child($siteConfig);
         $subsite->setParentSite( $this->site );
-        
+
         $this->view->configuration = $siteConfig;
         $this->view->preferences = $this->_getPreferences();
 
+        if ($this->_getParam('mode', 'normal') == 'normal') {
+            $this->view->configuration['path'] = $siteConfig['path'] = str_replace($this->getSite()->getPath() . '/', '', $siteConfig['path']);
+        }
+
         if ($this->getRequest()->isPost()) {
 
-          $newConfig = array(
-              'name'   => $this->_getParam('name'),
-              'path'   => $this->_getParam('path'),
-              'domain' => $this->_getParam('domain'),
-              'dir'    => $this->_getParam('dir')
-          );
+          $newConfig = $this->_getParams();
 
           if ($siteConfig['path'] != $newConfig['path']) {
               $subsite->path = $newConfig['path'];
@@ -81,6 +75,9 @@ class Slotter_SitesController extends Slotter_BaseController
           if ($config['dir'] != $newConfig['dir']) {
               $subsite->dir = $newConfig['dir'];
               Ld_Files::move($siteConfig['dir'], $newConfig['dir']);
+              // Htaccess
+              Ld_Files::rm($newConfig['dir'] . '/.htaccess');
+              $subsite->init();
               // update all site applications
               foreach ($subsite->getApplicationsInstances() as $instance) {
                   $installer = $instance->getInstaller();
@@ -99,7 +96,9 @@ class Slotter_SitesController extends Slotter_BaseController
     protected function _getPreferences()
     {
         $preferences = array();
+
         $preferences[] = array('type' => 'text', 'name' => 'name', 'label' => 'Name', 'defaultValue' => 'My New Site');
+
         if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
             $domainPreference = array('type' => 'list', 'name' => 'domain', 'label' => 'Domain', 'options' => array());
             foreach ($this->getSite()->getDomains() as $id => $domain) {
@@ -113,10 +112,38 @@ class Slotter_SitesController extends Slotter_BaseController
             }
             $preferences[] = $domainPreference;
         }
-        $preferences[] = array('type' => 'text', 'name' => 'path', 'label' => 'Path', 'defaultValue' => $this->getSite()->getPath() . '/new-site');
-        $preferences[] = array('type' => 'text', 'name' => 'dir', 'label' => 'System Directory', 'defaultValue' => $this->getSite()->getDirectory() . '/' . 'new-site');
+
+        if ($this->_getParam('mode', 'normal') == 'advanced') {
+            $preferences[] = array('type' => 'hidden', 'name' => 'mode', 'value' => 'advanced');
+            $preferences[] = array('type' => 'text', 'name' => 'path', 'label' => 'Path', 'defaultValue' => $this->getSite()->getPath() . '/new-site');
+            $preferences[] = array('type' => 'text', 'name' => 'dir', 'label' => 'System Directory', 'defaultValue' => $this->getSite()->getDirectory() . '/' . 'new-site');
+        } else {
+            $preferences[] = array('type' => 'hidden', 'name' => 'mode', 'value' => 'normal');
+            $preferences[] = array('type' => 'text', 'name' => 'path', 'label' => 'Path', 'defaultValue' => 'new-site');
+        }
 
         return $preferences;
+    }
+
+    protected function _getParams()
+    {
+        if ($this->_getParam('mode', 'normal') == 'advanced') {
+            $config = array(
+                'name'   => $this->_getParam('name'),
+                'path'   => $this->_getParam('path'),
+                'domain' => $this->_getParam('domain'),
+                'dir'    => $this->_getParam('dir')
+            );
+        } else {
+            $config = array(
+                'name'   => $this->_getParam('name'),
+                'host'   => $this->getSite()->getHost(),
+                'path'   => $this->getSite()->getPath() . '/' . $this->_getParam('path'),
+                'domain' => $this->_getParam('domain'),
+                'dir'    => $this->getSite()->getDirectory() . '/' . $this->_getParam('path')
+            );
+        }
+        return $config;
     }
 
 }

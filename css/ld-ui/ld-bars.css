@@ -86,6 +86,12 @@
   border-right:1px solid #ccc;
 }
 
+.h6e-top-bar-inner .a a.ld-subsite-name {
+  padding-left:10px;
+  border-right:1px solid #ccc;
+  padding-right:10px;
+}
+
 .h6e-top-bar-inner .a img.avatar {
   padding:0 5px 0;
   vertical-align:middle;
