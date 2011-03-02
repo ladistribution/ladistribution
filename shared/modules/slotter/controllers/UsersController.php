@@ -59,15 +59,15 @@ class Slotter_UsersController extends Slotter_BaseController
                 'label' => $this->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
             ));
 
-        }
+            $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
+            $indexPage->addPage(array(
+                'label' => $this->translate('Invite Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'invite'
+            ));
+            $indexPage->addPage(array(
+                'label' => $this->translate('Add Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'add'
+            ));
 
-        $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
-        $indexPage->addPage(array(
-            'label' => $this->translate('Invite Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'invite'
-        ));
-        $indexPage->addPage(array(
-            'label' => $this->translate('Add Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'add'
-        ));
+        }
 
         if (isset($this->currentUser)) {
             $usersPage->addPage(array(
@@ -79,7 +79,7 @@ class Slotter_UsersController extends Slotter_BaseController
         if (isset($this->currentUser) && $this->_hasParam('id') && $this->_getParam('id') != $this->currentUser['username']) {
             $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
             $action = $this->getRequest()->action;
-            $indexPage->addPage(array(
+            if ($indexPage) $indexPage->addPage(array(
                 'label' => ucfirst($action),
                 'module'=> 'slotter',
                 'route' => 'default',
@@ -298,7 +298,8 @@ class Slotter_UsersController extends Slotter_BaseController
 
     public function addIdentityAction()
     {
-        $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
+        // $root = 'http://' . $this->getRequest()->getServer('SERVER_NAME') . $this->getRequest()->getBaseUrl();
+        $root = $this->site->getBaseUrl();
 
         if ($this->_hasParam('openid_identifier')) {
 

@@ -44,7 +44,7 @@ class Ld_Controller_Action extends Zend_Controller_Action
             $this->view->currentUser = $this->currentUser = $this->_helper->auth->getUser();
         }
 
-        // Use Role
+        // User Role
         $this->view->userRole = $this->userRole = $this->admin->getUserRole();
 
         // ACL
@@ -52,10 +52,14 @@ class Ld_Controller_Action extends Zend_Controller_Action
 
         // Locale
         $this->initLocale();
-        
+
         // Title
         if ($site = $this->getSite()) {
-            $this->setTitle( $site->getName() );
+            if ($this->site->isChild()) {
+                $this->setTitle( $site->getParentSite()->getName() . ' | ' . $site->getName() );
+            } else {
+                $this->setTitle( $site->getName() );
+            }
         }
 
         // Flash Messenger

@@ -37,9 +37,6 @@ class Ld_Site_Child extends Ld_Site_Local
     {
         if (empty($this->_parent)) {
             throw new Exception('No parent site defined');
-            // if (Zend_Registry::isRegistered('rootSite')) {
-            //     $this->_parent = Zend_Registry::get('rootSite');
-            // }
         }
         return $this->_parent;
     }
@@ -113,6 +110,8 @@ class Ld_Site_Child extends Ld_Site_Local
         }
     }
 
+    /* Users */
+
     public function getUsers($params = array())
     {
         echo "getUsers should not be called without a good reason. never.<br>";
@@ -141,9 +140,24 @@ class Ld_Site_Child extends Ld_Site_Local
         return $this->getParentSite()->getUser($username);
     }
 
+    public function getUserByUrl($url)
+    {
+        return $this->getParentSite()->getUserByUrl($url);
+    }
+
     public function getDomains()
     {
         return $this->getParentSite()->getDomains();
+    }
+
+    // Colors
+
+    public function getColors()
+    {
+        $default = $this->getParentSite()->getColors();
+        $stored = Ld_Files::getJson($this->getDirectory('dist') . '/colors.json');
+        $colors = Ld_Ui::computeColors($default, $stored);
+        return $colors;
     }
 
 }

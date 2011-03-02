@@ -86,7 +86,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
     protected function _getOpenidAuthAdapter()
     {
-        $root = Zend_Registry::get('site')->getUrl();
+        $root = Zend_Registry::get('site')->getBaseUrl();
 
         $sreg = new Ld_OpenId_Extension_Sreg(
             array('nickname' => true, 'email' => true, 'fullname' => true), null, 1.1);

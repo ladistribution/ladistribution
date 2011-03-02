@@ -20,10 +20,6 @@ class Slotter_BaseController extends Ld_Controller_Action
             $this->view->action = $this->action = $this->getRequest()->getActionName();
         }
 
-        $this->_setTitle( $this->site->getName() );
-
-        $this->_acl = $this->admin->getAcl();
-
         $this->_initNavigation();
     }
 
