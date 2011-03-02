@@ -116,4 +116,4 @@
 /* Notifications */
 
 .ld-merger #ld-notification, #merger-notification { margin:1em 0 2em; }
-#merger-notification a { width:100%; display:block; text-align:center; }
+#merger-notification a { width:100%; display:block; text-align:center; color: #514721; }
