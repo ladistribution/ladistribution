@@ -26,8 +26,7 @@ svn export "$SOURCE/shared/plugins" plugins --force --quiet
 # cp -R /Web/ld/shared/plugins plugins
 
 # Remove some plugins
-# rm plugins/subsite.php
-# rm plugins/user-database.php
+rm plugins/bouncer.php
 
 mkdir locales
 # Export from SVN
