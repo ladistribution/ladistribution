@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Site
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -110,6 +110,25 @@ class Ld_Site_Child extends Ld_Site_Local
         }
     }
 
+    public function getConfig($key = null, $default = null)
+    {
+        $config = $this->_config;
+        if (empty($config)) {
+            $config = $this->_config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
+        }
+
+        if ($this->hasParentSite()) {
+            $config['open_registration'] = isset($config['open_registration']) && $this->getParentSite()->getConfig('open_registration') == 1 ? $config['open_registration'] : 0;
+        }
+
+        if (isset($key)) {
+            $value = isset($config[$key]) ? $config[$key] : $default;
+            return $value;
+        }
+
+        return $config;
+    }
+
     /* Users */
 
     public function getUsers($params = array())
@@ -121,8 +140,14 @@ class Ld_Site_Child extends Ld_Site_Local
 
     public function addUser($user, $validate = true)
     {
-        return $this->getParentSite()->addUser($user, $validate);
-        throw new Exception('addUser: not available in Child sites');
+        $user = $this->getParentSite()->addUser($user, $validate);
+        // Set User Role in Admin
+        if ($admin = $this->getAdmin()) {
+            $roles = array_merge($admin->getUserRoles(), array($user['username'] => 'user'));
+            $admin->setUserRoles($roles);
+        }
+        return $user;
+        // throw new Exception('addUser: not available in Child sites');
     }
 
     public function updateUser($username, $infos = array())
