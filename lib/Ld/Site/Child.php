@@ -152,7 +152,8 @@ class Ld_Site_Child extends Ld_Site_Local
 
     public function updateUser($username, $infos = array())
     {
-        throw new Exception('updateUser: not available in Child sites');
+        return $this->getParentSite()->updateUser($username, $infos);
+        // throw new Exception('updateUser: not available in Child sites');
     }
 
     public function deleteUser($username)
