@@ -1,7 +1,20 @@
-<div class="ld-top-menu ld-main-menu" style="display:none">
+<?php
+$siteMenus = array();
+if ($this->site->isChild() && $this->site->hasParentSite()) {
+    $siteMenus[] = array('site' => $this->site->getParentSite(), 'class' => 'ld-site-menu');
+    $siteMenus[] = array('site' => $this->site, 'class' => 'ld-subsite-menu');
+} else {
+    $siteMenus[] = array('site' => $this->site, 'class' => 'ld-site-menu');  
+}
+?>
+
+<?php foreach ($siteMenus as $menu) : extract($menu); ?>
+
+<div class="ld-top-menu ld-main-menu <?php echo $class ?>" style="display:none">
     <div class="ld-top-menu-inner ld-main-menu-inner">
         <?php
-        $applications = $this->site->getApplicationsInstances(array('admin'));
+        $admin = $site->getAdmin();
+        $applications = $site->getApplicationsInstances(array('admin'));
         ?>
         <?php if (!empty($applications)) : ?>
         <div class="applications">
@@ -9,7 +22,6 @@
         <ul class="instances"> 
             <?php foreach ($applications as $id => $application) : ?>
                 <?php
-                // Visibility
                 if (!$application->isVisible()) {
                     continue;
                 }
@@ -43,7 +55,7 @@
         ?>
         <ul class="instances">
             <?php foreach ($pages as $page) : ?>
-                <li class="<?php echo $page['class'] ?>"><a href="<?php echo Ld_Ui::getAdminUrl($page['route']) ?>">
+                <li class="<?php echo $page['class'] ?>"><a href="<?php echo $admin->buildUrl($page['route']) ?>">
                     <span class="name"><?php echo $this->translate($page['label']) ?></span><br/>
                     <span class="path">&nbsp;</span></a></li>
             <?php endforeach ?>
@@ -52,6 +64,8 @@
 
     </div>
 </div>
+
+<?php endforeach ?>
 
 <?php if (Ld_Ui::isAdmin() && Zend_Registry::isRegistered('application') && $application = Zend_Registry::get('application')) : ?>
 <div class="ld-top-menu ld-app-menu" style="display:none">
@@ -72,46 +86,3 @@
     </div>
 </div>
 <?php endif ?>
-
-<script type="text/javascript">
-if (typeof jQuery != 'undefined') {
-    (function($) {
-        $(document).ready(function() {
-
-            if ($(".ld-subsite-name").length) {
-                $(".ld-subsite-name").mouseenter(function() {
-                    var left = Math.round( $(this).position().left );
-                    $(".ld-main-menu").css('left', left + 'px').show();
-                }).mouseleave(function() {
-                    $(".ld-main-menu").hide();
-                });
-            } else {
-                $(".ld-site-name").mouseenter(function() {
-                    var left = Math.round( $(this).position().left );
-                    $(".ld-main-menu").css('left', left + 'px').show();
-                }).mouseleave(function() {
-                    $(".ld-main-menu").hide();
-                });
-            }
-
-            $(".ld-main-menu").mouseenter(function() {
-                $(".ld-main-menu").show();
-            }).mouseleave(function() {
-                $(".ld-main-menu").hide();
-            });
-
-            $(".ld-app-name").mouseenter(function() {
-                var left = Math.round( $(this).position().left );
-                $(".ld-app-menu").css('left', left + 'px').show();
-            }).mouseleave(function() {
-                $(".ld-app-menu").hide();
-            });
-            $(".ld-app-menu").mouseenter(function() {
-                $(".ld-app-menu").show();
-            }).mouseleave(function() {
-                $(".ld-app-menu").hide();
-            });
-        });
-    })(jQuery);
-}
-</script>

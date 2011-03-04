@@ -128,3 +128,41 @@ Ld.loginBox = function($)
         $(this).css('margin-top', mh);
     });
 }
+
+// Top Menus
+
+jQuery(function($) {
+
+    $(".ld-site-name").mouseenter(function() {
+        var left = Math.round( $(this).position().left );
+        $(".ld-site-menu").css('left', left + 'px').show();
+    }).mouseleave(function() {
+        $(".ld-site-menu").hide();
+    });
+
+    $(".ld-subsite-name").mouseenter(function() {
+        var left = Math.round( $(this).position().left );
+        $(".ld-subsite-menu").css('left', left + 'px').show();
+    }).mouseleave(function() {
+        $(".ld-subsite-menu").hide();
+    });
+
+    $(".ld-main-menu").mouseenter(function() {
+        $(this).show();
+    }).mouseleave(function() {
+        $(this).hide();
+    });
+
+    $(".ld-app-name").mouseenter(function() {
+        var left = Math.round( $(this).position().left );
+        $(".ld-app-menu").css('left', left + 'px').show();
+    }).mouseleave(function() {
+        $(".ld-app-menu").hide();
+    });
+    $(".ld-app-menu").mouseenter(function() {
+        $(".ld-app-menu").show();
+    }).mouseleave(function() {
+        $(".ld-app-menu").hide();
+    });
+
+});
