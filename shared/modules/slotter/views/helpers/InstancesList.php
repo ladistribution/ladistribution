@@ -9,7 +9,9 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
             $this->view->applications = Zend_Registry::get('site')->getApplicationsInstances(array('admin', 'identity'));
         }
 
-        if ($all && empty($this->view->applications) && !$this->view->admin->userCan('admin')) {
+        $isAdmin = $this->view->admin->userCan('admin');
+
+        if ($all && empty($this->view->applications) && !$isAdmin) {
             echo '<p>' . $this->translate("No application installed yet.") . '</p>';
             return;
         }
@@ -67,7 +69,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
                 printf('</div>');
             }
 
-            if ( $this->view->userRole == 'admin') {
+            if ($isAdmin) {
                 printf('<a class="settings" title="%2$s" href="%1$s">%2$s</a>', $manageUrl, $this->translate("Settings"));
             }
 
@@ -76,7 +78,7 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
 
         ?>
 
-        <?php if ($all && $this->view->admin->userCan('admin')) : ?>
+        <?php if ($all && $isAdmin) : ?>
         <li class="empty new">
             <a href="<?php echo $this->view->url(array('module' => 'slotter', 'controller' => 'instance', 'action' => 'new'), 'default') ?>">
                 <?php echo $this->translate("Add an application") ?>

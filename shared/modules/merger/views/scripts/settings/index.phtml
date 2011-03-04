@@ -23,6 +23,12 @@
 
 <div class="h6e-page-content h6e-block has-tab">
 
+<?php if (empty($this->applications)) : ?>
+
+    <p><?php echo $this->translate("No application installed yet.") ?></p>
+
+<?php else : ?>
+
 <form method="post" action="" class="merger-settings">
 
 <?php $this->notification() ?>
@@ -65,6 +71,8 @@
 <input type="submit" class="submit button" value="<?php echo $this->translate('Update') ?>"/>
 
 </form>
+
+<?php endif ?>
 
 </div>
 
