@@ -40,18 +40,16 @@
     </table>
 
     <script type="text/javascript">
-    (function($) {
-        $(document).ready(function() {
-            $("#repositories").tableDnD({
-                onDragClass: "dragging",
-                onDrop: function(table, row) {
-                    $.post("<?php echo $this->url(array('action' => 'order')) ?>", $("#repositories").tableDnDSerialize());
-                    $("#repositories tr").removeClass('even');
-                    $("#repositories tr:even").addClass('even');
-                },
-            });
+    jQuery(function($) {
+        $("#repositories").tableDnD({
+            onDragClass: "dragging",
+            onDrop: function(table, row) {
+                $.post("<?php echo $this->url(array('action' => 'order')) ?>", $("#repositories").tableDnDSerialize());
+                $("#repositories tr").removeClass('even');
+                $("#repositories tr:even").addClass('even');
+            },
         });
-    })(jQuery);
+    });
     </script>
 
 <?php endif ?>

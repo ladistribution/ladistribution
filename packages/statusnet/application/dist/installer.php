@@ -162,7 +162,7 @@ class Ld_Installer_Statusnet extends Ld_Installer
 			'href'  => $this->getInstance()->getAbsoluteUrl("/api/statuses/public_timeline.atom"),
 			'type'  => 'application/atom+xml'
 		);
-		if (Ld_Auth::isAuthenticated() && $username = Ld_Auth::getUSername()) {
+		if (Ld_Auth::isAuthenticated() && $username = Ld_Auth::getUsername()) {
 			$links[] = array(
 				'id'  => 'friends_timeline',
 				'title' => 'Personal timeline',

@@ -75,23 +75,20 @@ class Ld_Installer_FirefoxSync extends Ld_Installer
 
 	function handleRewrite()
 	{
-		if (constant('LD_REWRITE')) {
-			$path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
+	    $path = $this->getSite()->getBasePath() . '/' . $this->getPath() . '/';
+		if (!defined('LD_REWRITE') || constant('LD_REWRITE')) {
 			$htaccess  = "RewriteEngine on\n";
-			$htaccess .= "RewriteBase {$path}\n";
+			$htaccess .= "RewriteBase $path\n";
 			$htaccess .= "RewriteRule ^1.0 sync/1.1/index.php [E=AUTHORIZATION:%{HTTP:Authorization},L]\n";
 			$htaccess .= "RewriteRule ^1.1 sync/1.1/index.php [E=AUTHORIZATION:%{HTTP:Authorization},L]\n";
 			Ld_Files::put($this->getAbsolutePath() . "/.htaccess", $htaccess);
 		}
 		if (defined('LD_NGINX') && constant('LD_NGINX')) {
-			// Generate configuration
-			$path = $this->getSite()->getPath() . '/' . $this->getPath() . '/';
 			$nginxConf  = 'location {PATH} {' . "\n";
 			$nginxConf .= '  rewrite ^{PATH}1.0  {PATH}sync/1.1/index.php$is_args$args last;' . "\n";
 			$nginxConf .= '  rewrite ^{PATH}1.1  {PATH}sync/1.1/index.php$is_args$args last;' . "\n";
 			$nginxConf .= '}' . "\n";
 			$nginxConf = str_replace('{PATH}', $path, $nginxConf);
-			// Write configuration
 			$nginxDir = $this->getSite()->getDirectory('dist') . '/nginx';
 			Ld_Files::ensureDirExists($nginxDir);
 			Ld_Files::put($nginxDir . "/" . $this->getInstance()->getId() . ".conf", $nginxConf);

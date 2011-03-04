@@ -16,6 +16,8 @@ class LdPlugin extends Plugin
 		// Scripts
 		$action->element('script', array('type' => 'text/javascript',
 			'src' => Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery')));
+		$action->element('script', array('type' => 'text/javascript',
+			'src' => Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin')));
 		// Stylesheets
 		if (common_config('site', 'theme') == 'ld') {
 			$action->element('link', array('rel' => 'stylesheet', 'type' => 'text/css',

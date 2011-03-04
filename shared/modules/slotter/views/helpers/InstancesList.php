@@ -90,13 +90,9 @@ class View_Helper_InstancesList extends Zend_View_Helper_Abstract
         </div>
 
         <script type="text/javascript">
-        (function($) {
-            $(document).ready(function($){
-                if (typeof Ld == "undefined") Ld = {};
-                Ld.sortInstancesUrl = "<?php echo $this->view->url(
-                    array('module' => 'slotter', 'controller' => 'index', 'action' => 'order', 'id' => null), 'default'); ?>";
-            });
-        })(jQuery);
+        if (typeof Ld == "undefined") Ld = {};
+        Ld.sortInstancesUrl = "<?php echo $this->view->url(
+            array('module' => 'slotter', 'controller' => 'index', 'action' => 'order', 'id' => null), 'default'); ?>";
         </script>
 
         <?php

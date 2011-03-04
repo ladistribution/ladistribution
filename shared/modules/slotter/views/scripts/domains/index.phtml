@@ -81,18 +81,16 @@
     ?>
 
     <script type="text/javascript">
-    (function($) {
-        $(document).ready(function() {
-            $("#domains").tableDnD({
-                onDragClass: "dragging",
-                onDrop: function(table, row) {
-                    $.post("<?php echo $this->url(array('action' => 'order')) ?>", $("#domains").tableDnDSerialize());
-                    $("#domains tr").removeClass('even');
-                    $("#domains tr:even").addClass('even');
-                },
-            });
+    jQuery(function($) {
+        $("#domains").tableDnD({
+            onDragClass: "dragging",
+            onDrop: function(table, row) {
+                $.post("<?php echo $this->url(array('action' => 'order')) ?>", $("#domains").tableDnDSerialize());
+                $("#domains tr").removeClass('even');
+                $("#domains tr:even").addClass('even');
+            },
         });
-    })(jQuery);
+    });
     </script>
 
     <h3>Applications</h3>

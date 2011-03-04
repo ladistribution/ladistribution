@@ -10,31 +10,36 @@ Author URI: http://h6e.net/
 
 function ld_admin_head()
 {
+?>
+<script type='text/javascript' src='<?php echo  Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin') ?>'></script>
+<?php
+	wp_enqueue_script('ld', Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin'));
 	if (get_option('topbar') != 'never' || get_option('superbar') != 'never') {
 		echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
 		if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
 			echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
 		}
 	}
-	?>
-	<style type="text/css">
-	#dashboard_right_now a.button { display:none; }
-	<?php if (get_option('topbar') != 'never') : ?>
-	#wpcontent { padding-top:31px !important; }
-	#backtoblog { margin-top:31px !important; }
-	#wphead, #user_info { display:none; }
-	<?php endif ?>
-	</style>
-	<?php
+?>
+<style type="text/css">
+#dashboard_right_now a.button { display:none; }
+<?php if (get_option('topbar') != 'never') : ?>
+#wpcontent { padding-top:31px !important; }
+#backtoblog { margin-top:31px !important; }
+#wphead, #user_info { display:none; }
+<?php endif ?>
+</style>
+<?php
 }
 
-add_action('admin_head', 'ld_admin_head');
+add_action('admin_head', 'ld_admin_head', 1);
 
 add_action('login_head', 'ld_admin_head');
 
 function ld_styles()
 {
 	wp_enqueue_script('jquery', Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery'));
+	wp_enqueue_script('ld', Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin'), array('jquery'));
 	$current_theme = get_current_theme();
 	if ($current_theme == 'Minimal' || $current_theme == 'Minimal (with blocks)') {
 		wp_enqueue_style('h6e-minimal', Ld_Ui::getCssUrl('/h6e-minimal/h6e-minimal.css', 'css-h6e-minimal'));

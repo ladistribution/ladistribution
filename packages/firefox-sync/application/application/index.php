@@ -20,6 +20,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 <?php endif ?>
 
 <script type="text/javascript" src="<?php echo Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery') ?>"></script>
+<script type="text/javascript" src="<?php echo Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin') ?>"></script>
 
 <style type="text/css">
 #sync-logo {
@@ -97,7 +98,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
                   <ol>
                       <li>"<strong>I'm already using Sync on another computer</strong>"</li>
                       <li>"<strong>Use a custom server</strong>"</li>
-                      <li>Then, enter a new synchronization key</strong></li>
+                      <li>Then, <strong>Enter a new synchronization key</strong></li>
                   </ol>
               </li>
               <li>registration is not possible from Firefox extension</li>

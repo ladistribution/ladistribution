@@ -20,7 +20,7 @@ class View_Helper_Notification extends Zend_View_Helper_Abstract
         ?>
         <div id="ld-notification" class="ld-notice"><?php echo $notification ?></div>
         <script type="text/javascript">
-        $("#ld-notification").delay(1000).fadeOut('slow');
+        jQuery("#ld-notification").delay(1000).fadeOut('slow');
         </script>
         <?php
     }

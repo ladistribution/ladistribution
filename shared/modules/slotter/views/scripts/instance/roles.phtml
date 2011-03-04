@@ -59,12 +59,8 @@ function role_label($role, $labels)
 </div>
 
 <script type="text/javascript">
-(function($) {
-    $(document).ready(function($){
-        if (typeof Ld == "undefined") Ld = {};
-        Ld.setRolesUrl = "<?php echo $this->url(); ?>";
-    });
-})(jQuery);
+if (typeof Ld == "undefined") Ld = {};
+Ld.setRolesUrl = "<?php echo $this->url(); ?>";
 </script>
 
 <?php else : ?>

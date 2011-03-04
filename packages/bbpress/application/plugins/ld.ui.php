@@ -23,6 +23,7 @@ function ld_bbpress_admin_head()
 	<?php endif ?>
 	<?php
 	echo '<script type="text/javascript" src="' . Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery') .'"></script>'."\n";
+	echo '<script type="text/javascript" src="' . Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin') .'"></script>'."\n";
 }
 
 add_action('bb_get_admin_header', 'ld_bbpress_admin_head');
@@ -47,6 +48,7 @@ function ld_bbpress_template_head()
 	}
 	echo '</style>' . "\n";
 	echo '<script type="text/javascript" src="' . Ld_Ui::getJsUrl('/jquery/jquery.js', 'js-jquery') .'"></script>'."\n";
+	echo '<script type="text/javascript" src="' . Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin') .'"></script>'."\n";
 }
 
 add_action('bb_head', 'ld_bbpress_template_head');

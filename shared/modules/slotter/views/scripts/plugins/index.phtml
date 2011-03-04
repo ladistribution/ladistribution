@@ -62,14 +62,13 @@ foreach ($this->plugins as $id => $plugin) {
 </form>
 
 <script type="text/javascript">
-Ld.dataTables = function($)
-{
+jQuery(function($) {
     $(".h6e-data tbody").each(function() {
         $(this).children('tr').each(function(i) {
             if (i % 4 == 2) $(this).addClass('th2');
         });
     })
-}
+});
 </script>
 
 <?php endif ?>
