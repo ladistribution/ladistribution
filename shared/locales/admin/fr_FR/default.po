@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-01 21:41+0100\n"
+"POT-Creation-Date: 2011-03-02 15:07+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -414,18 +414,22 @@ msgid "Register the first user now."
 msgstr "Enregistrer le premier utilisateur maintenant."
 
 #: shared/modules/slotter/views/scripts/index/index.phtml:26
-msgid "Sub Sites"
-msgstr ""
+msgid "Sites"
+msgstr "Sites"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:76
+#: shared/modules/slotter/views/scripts/index/index.phtml:45
+msgid "Create a new site"
+msgstr "Créer un nouveau site"
+
+#: shared/modules/slotter/views/scripts/index/index.phtml:75
 msgid "Notice:"
 msgstr "Note :"
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:77
+#: shared/modules/slotter/views/scripts/index/index.phtml:76
 msgid "There is no database connection registered yet. A database is often needed to install new applications."
 msgstr "Il n'y a aucune connexion à une base de donnée enregistrée pour le moment. Une base de donnée est souvent nécessaire pour installer de nouvelles applications."
 
-#: shared/modules/slotter/views/scripts/index/index.phtml:79
+#: shared/modules/slotter/views/scripts/index/index.phtml:78
 msgid "Add a database connection"
 msgstr "Ajouter une connexion à une base de donnée"
 
@@ -625,22 +629,29 @@ msgid "Extensions"
 msgstr "Extensions"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:49
+#: shared/modules/slotter/views/scripts/instance/status.phtml:11
 msgid "Package"
 msgstr "Paquet"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:51
+#: shared/modules/slotter/views/scripts/instance/status.phtml:13
 msgid "Version"
 msgstr "Version"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:64
+#: shared/modules/slotter/views/scripts/instance/status.phtml:26
+#: shared/modules/slotter/views/scripts/instance/status.phtml:47
 msgid "update"
 msgstr "mettre à jour"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:66
+#: shared/modules/slotter/views/scripts/instance/status.phtml:23
+#: shared/modules/slotter/views/scripts/instance/status.phtml:43
 msgid "up to date"
 msgstr "à jour"
 
 #: shared/modules/slotter/views/scripts/instance/extensions.phtml:69
+#: shared/modules/slotter/views/scripts/instance/status.phtml:53
 msgid "uninstall"
 msgstr "désinstaller"
 
@@ -665,6 +676,7 @@ msgid "Add an application"
 msgstr "Ajouter une application"
 
 #: shared/modules/slotter/views/scripts/instance/new.phtml:22
+#: shared/modules/slotter/views/scripts/instance/status.phtml:64
 msgid "You can also:"
 msgstr "Vous pouvez aussi :"
 
@@ -745,6 +757,15 @@ msgstr "Role"
 #: shared/modules/slotter/views/scripts/instance/roles.phtml:109
 msgid "Update roles"
 msgstr "Mettre à jour les rôles"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:23
+#: shared/modules/slotter/views/scripts/instance/status.phtml:43
+msgid "update available"
+msgstr "mise à jour disponible"
+
+#: shared/modules/slotter/views/scripts/instance/status.phtml:29
+msgid "move"
+msgstr "déplacer"
 
 #: shared/modules/slotter/views/scripts/instance/themes.phtml:15
 msgid "Available Themes"
@@ -862,6 +883,7 @@ msgid "Repository URL:"
 msgstr "Adresse du dépôt:"
 
 #: shared/modules/slotter/views/scripts/repositories/manage-remote.phtml:20
+#: shared/modules/slotter/views/scripts/repositories/manage.phtml:40
 msgid "Remove this repository"
 msgstr "Supprimer ce dépôt"
 
@@ -913,35 +935,35 @@ msgstr "Paramètres généraux"
 msgid "No preference available."
 msgstr "Aucun préference disponible."
 
-#: shared/modules/slotter/views/scripts/sites/edit.phtml:1
-msgid "Edit a sub site"
-msgstr ""
+#: shared/modules/slotter/views/scripts/sites/edit.phtml:7
+msgid "Edit a site"
+msgstr "Editer un site"
 
-#: shared/modules/slotter/views/scripts/sites/new.phtml:1
-msgid "Add a new site"
-msgstr "Ajouter un nouveau site"
+#: shared/modules/slotter/views/scripts/sites/new.phtml:13
+msgid "Create"
+msgstr "Créer"
 
 #: shared/modules/slotter/views/scripts/users/add.phtml:1
-#: shared/modules/slotter/views/scripts/users/index.phtml:149
-msgid "Add registered users"
-msgstr "Ajouter des utilisateurs enregistrés"
-
-#: shared/modules/slotter/views/scripts/users/add.phtml:12
-msgid "Search"
-msgstr "Rechercher"
-
-#: shared/modules/slotter/views/scripts/users/add.phtml:73
-msgid "Add selected users"
-msgstr "Ajouter les utilisateurs sélectionnés"
-
 #: shared/modules/slotter/views/scripts/users/delete.phtml:1
 #: shared/modules/slotter/views/scripts/users/edit.phtml:1
 #: shared/modules/slotter/views/scripts/users/index.phtml:1
 #: shared/modules/slotter/views/scripts/users/invite-ok.phtml:1
 #: shared/modules/slotter/views/scripts/users/invite.phtml:1
-#: shared/modules/slotter/views/scripts/users/roles.phtml:1
 msgid "Users"
 msgstr "Utilisateurs"
+
+#: shared/modules/slotter/views/scripts/users/add.phtml:7
+#: shared/modules/slotter/views/scripts/users/index.phtml:149
+msgid "Add registered users"
+msgstr "Ajouter des utilisateurs enregistrés"
+
+#: shared/modules/slotter/views/scripts/users/add.phtml:18
+msgid "Search"
+msgstr "Rechercher"
+
+#: shared/modules/slotter/views/scripts/users/add.phtml:79
+msgid "Add selected users"
+msgstr "Ajouter les utilisateurs sélectionnés"
 
 #: shared/modules/slotter/views/scripts/users/delete.phtml:7
 msgid "Delete an user"
@@ -1153,6 +1175,7 @@ msgid "New"
 msgstr "Nouveau"
 
 #: shared/modules/slotter/controllers/DomainsController.php:171
+#: shared/modules/slotter/controllers/SettingsController.php:88
 msgid "None"
 msgstr "Aucune"
 
@@ -1185,7 +1208,7 @@ msgid "Backup restored"
 msgstr "Sauvegarde restaurée"
 
 #: shared/modules/slotter/controllers/InstanceController.php:369
-#: shared/modules/slotter/controllers/UsersController.php:165
+#: shared/modules/slotter/controllers/UsersController.php:169
 msgid "Roles updated"
 msgstr "Rôles mis à jour"
 
@@ -1214,19 +1237,23 @@ msgid "Timezone"
 msgstr "Fuseau horaire"
 
 #: shared/modules/slotter/controllers/UsersController.php:59
-msgid "Invite Users"
-msgstr "Inviter des utilisateurs"
-
-#: shared/modules/slotter/controllers/UsersController.php:63
 #: shared/modules/slotter/views/helpers/InstanceNavigation.php:42
 msgid "Roles"
 msgstr "Roles"
 
-#: shared/modules/slotter/controllers/UsersController.php:70
+#: shared/modules/slotter/controllers/UsersController.php:66
+msgid "Invite Users"
+msgstr "Inviter des utilisateurs"
+
+#: shared/modules/slotter/controllers/UsersController.php:69
+msgid "Add Users"
+msgstr "Ajouter des utilisateurs"
+
+#: shared/modules/slotter/controllers/UsersController.php:74
 msgid "Your Profile"
 msgstr "Votre profil"
 
-#: shared/modules/slotter/controllers/UsersController.php:284
+#: shared/modules/slotter/controllers/UsersController.php:288
 msgid "Profile updated"
 msgstr "Profil mis à jour"
 
@@ -1426,12 +1453,10 @@ msgstr "Déverrouiller les plugins"
 msgid "Unlock users"
 msgstr "Déverrouiller les utilisateurs"
 
+#~ msgid "Add a new site"
+#~ msgstr "Ajouter un nouveau site"
 #~ msgid "Back to News Feed"
 #~ msgstr "Retour au fil d'actualité"
-#~ msgid "update available"
-#~ msgstr "mise à jour disponible"
-#~ msgid "move"
-#~ msgstr "déplacer"
 
 #, fuzzy
 #~ msgid "Update Password"
@@ -1460,8 +1485,6 @@ msgstr "Déverrouiller les utilisateurs"
 #~ msgstr "Chemin vers l'admin à la racine ?"
 #~ msgid "New %s"
 #~ msgstr "Nouveau %s"
-#~ msgid "Create"
-#~ msgstr "Créer"
 #~ msgid "Ressources"
 #~ msgstr "Ressources"
 #~ msgid "Cancel"
