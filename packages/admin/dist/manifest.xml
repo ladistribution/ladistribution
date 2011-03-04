@@ -1,7 +1,7 @@
 <package>
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.5-96</version>
+  <version>0.5-97</version>
   <type>application</type>
   <need>lib-admin</need>
   <need>lib-ld</need>
@@ -19,5 +19,9 @@
   <link title="Users" rel="section" type="text/html" href="/slotter/users"/>
   <configuration>
       <preference type="text" label="App Name" name="name"/>
+      <preference type="list" label="Default Module" name="default_module">
+          <option value="slotter" label="Slotter (Applications)"/>
+          <option value="merger" label="Merger (News Feed)"/>
+      </preference>
   </configuration>
 </package>

@@ -51,6 +51,8 @@ class Bootstrap
     {
         $site = self::$_registry['site'];
         $instance = self::$_registry['instance'];
+        
+        $configuration = $instance->getConfiguration();
 
         $mvc = Zend_Layout::startMvc(array('layoutPath' => $site->getDirectory('shared') . '/modules/default/views/layouts'));
 
@@ -79,10 +81,13 @@ class Bootstrap
             $view->js()->append('/ld/ld.js', 'lib-admin');
         }
 
-        if (defined('LD_MERGER') && constant('LD_MERGER')) {
-            $modules = array('merger', 'slotter', 'identity', 'default');
-        } else {
-            $modules = array('slotter', 'merger', 'identity', 'default');
+        $modules = array('slotter', 'merger', 'identity', 'default');
+
+        if (isset($configuration['default_module'])) {
+            if (in_array($configuration['default_module'], $modules)) {
+                array_unshift($modules, $configuration['default_module']);
+                $modules = array_unique($modules);
+            }
         }
 
         foreach ($modules as $module) {
