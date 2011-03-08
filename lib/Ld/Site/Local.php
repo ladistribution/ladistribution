@@ -897,13 +897,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         try {
             $con = Ld_Utils::getDbConnection($dbParameters, 'zend');
-            if ($dbParameters == 'mysql-master') {
+            if ($dbParameters['type'] == 'mysql-master') {
                 $dbName = "ld_test_" . uniqid();
                 $con->query("CREATE DATABASE $dbName");
                 $con->query("DROP DATABASE $dbName");
-            } else if ($dbParameters == 'mysql') {
+            } else if ($dbParameters['type'] == 'mysql') {
                 $con->fetchCol('SHOW TABLES');
             }
+            $con->closeConnection();
             return true;
         } catch (Exception $e) {
             if ($throwException) {
