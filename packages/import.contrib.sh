@@ -9,7 +9,6 @@ $IMPORT habari.zip
 $IMPORT dotclear.zip
 $IMPORT spip.zip
 $IMPORT indexhibit.zip
-$IMPORT moonmoon.zip
 $IMPORT gallery.zip
 $IMPORT roundcube.zip
 $IMPORT ajaxplorer.zip

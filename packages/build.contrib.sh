@@ -86,14 +86,6 @@ cd gallery
 
 cd ..
 
-cd moonmoon
-
-  cd application
-  ./build.sh
-  cd ..
-
-cd ..
-
 cd roundcube
 
   cd application

@@ -39,5 +39,6 @@ $IMPORT bbpress.zip
 $IMPORT firefox-sync.zip
 
 $IMPORT statusnet.zip
+$IMPORT statusnet-plugin-ostatus.zip
 
 $IMPORT moonmoon.zip

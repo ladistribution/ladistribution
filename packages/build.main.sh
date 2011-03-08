@@ -92,6 +92,10 @@ cd statusnet
   ./build.sh
   cd ..
 
+  cd plugin/ostatus
+  ./build.sh
+  cd ../..
+
 cd ..
 
 cd firefox-sync
