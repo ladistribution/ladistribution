@@ -2,17 +2,13 @@
     <id>moonmoon</id>
     <name>Moonmoon</name>
     <description>Blend RSS feeds into a single page</description>
-    <version>8.12-50-8</version>
+    <version>8.12-99</version>
     <type>application</type>
     <need>lib-ld</need>
     <need>css-ld-ui</need>
     <install>
         <preference type="user" label="Administrator" name="administrator" value=""/>
     </install>
-    <deploy>
-        <origin>admin</origin>
-        <destination path="public">admin</destination>
-    </deploy>
     <configuration>
         <preference type="text" label="Title" name="name" value="Moonmoon"/>
         <preference type="range" label="Items per page" name="items" min="5" max="100" step="5"/>
@@ -24,6 +20,8 @@
     </configuration>
     <link title="admin" rel="section" type="text/html" href="/admin/"/>
     <link title="Recent Posts" rel="feed" type="application/atom+xml" href="/?type=atom10"/>
+    <!--
     <link rel="icon" type="image/png" href="/moonmoon-16.png"/>
     <link rel="ld-icon" type="image/png" href="/moonmoon-48.png"/>
+    -->
 </package>

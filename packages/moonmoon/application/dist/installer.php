@@ -34,10 +34,10 @@ class Ld_Installer_Moonmoon extends Ld_Installer
 	public function update()
 	{
 		/* prevent erasing people.opml when updating */
-		Ld_Files::unlink($this->getDir() . 'application/custom/people.opml');
+		Ld_Files::rm($this->getDir() . 'application/custom/people.opml');
 
-		Ld_Files::unlink($this->getAbsolutePath() . '/.htaccess');
-		Ld_Files::unlink($this->getAbsolutePath() . '/admin/.htaccess');
+		Ld_Files::rm($this->getAbsolutePath() . '/.htaccess');
+		Ld_Files::rm($this->getAbsolutePath() . '/admin/.htaccess');
 
 		parent::update();
 	}
@@ -81,7 +81,7 @@ class Ld_Installer_Moonmoon extends Ld_Installer
 	{
 		parent::restore($filename, $absolute);
 		Ld_Files::copy($this->getBackupFolder() . '/custom', $this->getAbsolutePath() . '/custom');
-		Ld_Files::unlink($this->getBackupFolder());
+		Ld_Files::rm($this->getBackupFolder());
 	}
 
 	// public function getCurrentTheme()

@@ -8,9 +8,10 @@ echo "# Building $NAME package"
 echo "# Get source from $SOURCE with git"
 git clone --quiet git://github.com/znarf/moonmoon.git $FOLDER
 rm -rf $FOLDER/.git
+rm $FOLDER/.gitignore
 
-cp moonmoon-16.png $FOLDER
-cp moonmoon-48.png $FOLDER
+rm -rf $FOLDER/dist
+# mv $FOLDER/dist .
 
 # Remove some useless (or not desired) files
 rm $FOLDER/install.php
@@ -25,7 +26,7 @@ echo "dummy" > $FOLDER/cache/dummy
 find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist admin theme -q -x \*.svn/\*
+zip -r $PACKAGE $FOLDER dist -q -x \*.svn/\*
 mv $PACKAGE ../../
 
 # Clean
