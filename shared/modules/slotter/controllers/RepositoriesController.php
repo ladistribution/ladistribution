@@ -48,27 +48,28 @@ class Slotter_RepositoriesController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $translator = $this->getTranslator();
+        $this->appendTitle( $this->translate('Repositories') );
 
-        $this->appendTitle( $translator->translate('Repositories') );
+        if ( $repositoriesPage = $this->_container->findOneByLabel( $this->translate('Repositories') ) ) {
 
-        $repositoriesPage = $this->_container->findOneByLabel( $translator->translate('Repositories') );
-
-        $repositoriesPage->addPage(array(
-            'label' => 'New', 'module'=> 'slotter', 'controller' => 'repositories', 'action' => 'new'
-        ));
-        if ($this->_hasParam('id')) {
-            $id = $this->repository->type == 'local' ? $this->repository->name : $this->repository->getUrl();
-            $label = sprintf("%s (%s)", $id, $this->repository->type);
-            $action = $this->getRequest()->action;
             $repositoriesPage->addPage(array(
-                'label' => $label,
-                'module'=> 'slotter',
-                'route' => 'default',
-                'controller' => 'repositories',
-                'action' => $action,
-                'params' => array('id' => $this->_getParam('id'))
+                'label' => 'New', 'module'=> 'slotter', 'controller' => 'repositories', 'action' => 'new'
             ));
+
+            if ($this->_hasParam('id')) {
+                $id = $this->repository->type == 'local' ? $this->repository->name : $this->repository->getUrl();
+                $label = sprintf("%s (%s)", $id, $this->repository->type);
+                $action = $this->getRequest()->action;
+                $repositoriesPage->addPage(array(
+                    'label' => $label,
+                    'module'=> 'slotter',
+                    'route' => 'default',
+                    'controller' => 'repositories',
+                    'action' => $action,
+                    'params' => array('id' => $this->_getParam('id'))
+                ));
+            }
+
         }
     }
 
