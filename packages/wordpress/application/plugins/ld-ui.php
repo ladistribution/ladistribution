@@ -13,8 +13,7 @@ function ld_admin_head()
 ?>
 <script type='text/javascript' src='<?php echo  Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin') ?>'></script>
 <?php
-	wp_enqueue_script('ld', Ld_Ui::getJsUrl('/ld/ld.js', 'lib-admin'));
-	if (get_option('topbar') != 'never' || get_option('superbar') != 'never') {
+	if (ld_display_bar('topbar')) {
 		echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getCssUrl('/ld-ui/ld-ui.css', 'css-ld-ui') . '" />'."\n";
 		if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
 			echo '<link rel="stylesheet" type="text/css" href="' . Ld_Ui::getApplicationStyleUrl('bars') . '" />'."\n";
@@ -91,21 +90,13 @@ function ld_footer()
 	}
 }
 
-function ld_admin_footer()
-{
-	if (get_option('topbar') != 'never') {
-		Ld_Ui::topBar(array(
-			'loginUrl' => wp_login_url(), 'logoutUrl' => wp_logout_url($_SERVER["REQUEST_URI"]),
-			'full-width' => true)
-		);
-	}
-}
-
 add_action('wp_footer', 'ld_footer');
 
-add_action('admin_footer', 'ld_admin_footer');
+add_action('login_footer', 'ld_footer');
 
-add_action('login_form', 'ld_admin_footer');
+add_action('admin_footer', 'ld_footer');
+
+add_action('login_form', 'ld_footer');
 
 function ld_show_admin_bar($classes)
 {
