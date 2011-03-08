@@ -140,7 +140,8 @@ class AuthController extends Ld_Controller_Action
                 $this->getSite()->addUser($user);
 
                 if (!Ld_Auth::isOpenid()) {
-                    Ld_Auth::authenticate($this->_getParam('ld_register_username'), $this->_getParam('ld_register_password'));
+                    Ld_Auth::rememberIdentity($user['username']);
+                    Ld_Auth::authenticate($user['username'], $user['password']);
                 }
 
                 $this->_redirectToRefererOrRoot();
