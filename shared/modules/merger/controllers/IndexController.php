@@ -42,7 +42,8 @@ class Merger_IndexController extends Ld_Controller_Action
         $translator = $this->getTranslator();
         $this->appendTitle($translator->translate('Public Feed'));
         $feeds = Ld_Feed_Merger::getFeeds('public');
-        $entries = Ld_Feed_Merger::getEntries($feeds);
+        $hashes = $this->_hasParam('hashes') ? explode(";", $this->_getParam('hashes')) : array();
+        $entries = Ld_Feed_Merger::getEntries($feeds, $hashes);
         $this->view->entries = $entries;
         $this->view->feedType = 'public';
         $this->_render();
@@ -66,6 +67,8 @@ class Merger_IndexController extends Ld_Controller_Action
 
     protected function _render()
     {
+        $this->view->entries = array_slice($this->view->entries, 0, 50);
+
         $format = $this->_getParam('format', 'html');
         switch ($format) {
             case 'xml':
