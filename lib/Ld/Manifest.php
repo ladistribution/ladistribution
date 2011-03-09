@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Manifest
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -39,7 +39,7 @@ class Ld_Manifest
         $tmpFolder = LD_TMP_DIR . '/package-' . date("d-m-Y-H-i-s");
         Ld_Zip::extract($zip, $tmpFolder);
         $manifest = self::loadFromDirectory($tmpFolder);
-        Ld_Files::unlink($tmpFolder);
+        Ld_Files::rm($tmpFolder);
         return $manifest;
     }
 
@@ -212,13 +212,28 @@ class Ld_Manifest
 
     public function getColorSchemes()
     {
-        $schemes = array();
-        if (isset($this->xml->colors) && isset($this->xml->colors->scheme)) {
-            foreach ($this->xml->colors->scheme as $scheme) {
-                $schemes[] = (string)$scheme;
+        return $this->_collectAsArray('colors', 'scheme');
+    }
+
+    public function getBuildIgnores()
+    {
+        return $this->_collectAsArray('build', 'ignore');
+    }
+
+    public function getBackupPaths()
+    {
+        return $this->_collectAsArray('backup', 'path');
+    }
+
+    protected function _collectAsArray($container, $tag)
+    {
+        $array = array();
+        if (isset($this->xml->$container) && isset($this->xml->$container->$tag)) {
+            foreach ($this->xml->$container->$tag as $value) {
+                $array[] = (string)$value;
             }
         }
-        return $schemes;
+        return $array;
     }
 
 }

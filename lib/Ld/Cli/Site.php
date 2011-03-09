@@ -92,7 +92,7 @@ class Ld_Cli_Site extends Ld_Cli
         $site->saveRepositoriesConfiguration($repositories);
 
         // Dist files
-        foreach(array('colors.json', 'users.json', 'locales.json') as $file) {
+        foreach (array('colors.json', 'users.json', 'locales.json') as $file) {
             Ld_Files::copy("$tmpDistDir/$file", "$siteDistDir/$file");
             Ld_Files::copy("$tmpDistDir/$file.php", "$siteDistDir/$file.php");
         }

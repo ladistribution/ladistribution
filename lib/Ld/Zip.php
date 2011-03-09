@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Zip
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -48,6 +48,8 @@ class Ld_Zip
             if (Ld_Files::exists($directory)) {
                 Ld_Files::log('addDirectory (fileZip)', "$directory => $name");
                 $zip->addDirectory($directory, $name, true);
+            } else {
+                Ld_Files::log('skipped (fileZip)', "$directory => $name");
             }
         }
         $zip->write();

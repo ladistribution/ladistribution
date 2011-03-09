@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Installer
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -291,6 +291,10 @@ class Ld_Installer
 
     public function getBackupDirectories()
     {
+        foreach ($this->getManifest()->getBackupPaths() as $path) {
+            $this->_backupDirectories[$path] = $this->getAbsolutePath() . "/$path/";
+        }
+
         if ($this->getManifest()->getDb() && $dbConnection = $this->getInstance()->getDbConnection('php')) {
 
             Ld_Files::createDirIfNotExists($this->getBackupFolder() . '/tables');
@@ -346,29 +350,27 @@ class Ld_Installer
         return $this->restoreFolder;
     }
 
-    public function getBackupsPath()
+    public function getBackupStorageFolder()
     {
-        return $this->getSite()->getDirectory('dist') . '/backups/' . $this->getInstance()->getId();
-        // old emplacement
-        // return $this->getAbsolutePath() . '/backups';
+        return $this->getInstance()->getBackupStorageFolder();
     }
 
     public function backup()
     {
-        $backupsPath = $this->getBackupsPath();
-
-        Ld_Files::createDirIfNotExists($backupsPath);
+        $storageFolder = $this->getInstance()->getBackupStorageFolder();
+        Ld_Files::createDirIfNotExists($storageFolder);
 
         $directories = array('dist' => $this->getAbsolutePath() . '/dist/');
         $directories = array_merge($directories, $this->getBackupDirectories());
 
         $filename = /* 'backup-' . */ $this->getId() . '-' . $this->getInstance()->getId() . '-' . date("Y-m-d-H-i-s") . '.zip';
 
-        Ld_Zip::pack($directories, $backupsPath . '/' . $filename);
+        Ld_Zip::pack($directories, $storageFolder . '/' . $filename);
 
-        Ld_Files::unlink($this->getBackupFolder());
+        // Doesn't always exists
+        Ld_Files::rm($this->getBackupFolder());
 
-        return $backupsPath . '/' . $filename;
+        return $storageFolder . '/' . $filename;
     }
 
     public function move($path)
@@ -387,7 +389,7 @@ class Ld_Installer
 
     public function restore($archive)
     {
-        $filename = $this->getBackupsPath() . '/' . $archive;
+        $filename = $this->getBackupStorageFolder() . '/' . $archive;
         if (is_file($filename)) {
             $this->restoreFolder = $this->tmpFolder = $this->getRestoreFolder();
             Ld_Zip::extract($filename, $this->restoreFolder);
@@ -395,10 +397,15 @@ class Ld_Installer
             $this->restoreFolder = $this->tmpFolder = $archive;
         }
 
-        // Dist Files
-        Ld_Files::copy($this->restoreFolder . '/dist/roles.json', $this->getAbsolutePath() . '/dist/roles.json');
-        Ld_Files::copy($this->restoreFolder . '/dist/configuration.json', $this->getAbsolutePath() . '/dist/configuration.json');
-        Ld_Files::copy($this->restoreFolder . '/dist/colors.json', $this->getAbsolutePath() . '/dist/colors.json');
+        // Dist files
+        foreach (array('roles.json', 'configuration.json', 'colors.json') as $file) {
+            Ld_Files::copy($this->restoreFolder . "/dist/$file", $this->getAbsolutePath() . "/dist/$file");
+            Ld_Files::copy($this->restoreFolder . "/dist/$file.php", $this->getAbsolutePath() . "/dist/$file.php");
+        }
+
+        foreach ($this->getManifest()->getBackupPaths() as $path) {
+            Ld_Files::copy($this->getRestoreFolder() . '/' . $path, $this->getAbsolutePath() . '/' . $path);
+        }
 
         if ($this->getManifest()->getDb()) {
 
@@ -638,5 +645,6 @@ class Ld_Installer
     protected function _unlink($src) { return Ld_Files::unlink($src); }
     protected function _getDirectories($dir) { return Ld_Files::getDirectories($dir); }
     protected function _generate_phrase($length = 64) { return Ld_Auth::generatePhrase($length); }
+    public function getBackupsPath() { return $this->getBackupStorageFolder(); }
 
 }

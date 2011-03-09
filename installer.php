@@ -64,7 +64,7 @@ function download_and_require($file, $source, $force = false)
         file_put_contents($file, $content);
         fix_perms($file);
     }
-    require($file);
+    require_once($file);
 }
 
 function fix_perms($target)

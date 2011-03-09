@@ -406,6 +406,7 @@ class Ld_Cli
         $infos = $instance->getInfos();
         $infos['relativePath'] = $infos['path'];
         $infos['absolutePath'] = realpath($this->getSite()->getDirectory() . '/' . $infos['path']);
+        $infos['url'] = $instance->getUrl();
         foreach (array('name', 'type', 'package', 'version', 'relativePath', 'absolutePath', 'url') as $k) {
             $this->_write(sprintf("    [$k] -> %s", $infos[$k]));
         }

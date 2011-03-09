@@ -1,24 +1,29 @@
 #!/usr/bin/php
 <?php
 
-error_reporting( E_ALL | E_NOTICE | E_STRICT );
-
 define('LD_CLI', true);
 
 define('LD_DIR', realpath( dirname(__FILE__) . '/..' ) );
 
 define('LD_LIB_DIR', LD_DIR . '/lib');
 
-set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
+define('LD_TMP_DIR', LD_DIR . '/tmp');
+
+$classes = array('Loader', 'Files');
+foreach ($classes as $class) {
+    if (!class_exists("Ld_$class")) {
+        $loader = LD_LIB_DIR . "/Ld/$class.php";
+        if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/$class.php"; }
+    }
+}
+
+Ld_Loader::defineConstants(LD_DIR);
 
 // In case ZF is not available
-if (!file_exists(LD_LIB_DIR . '/Zend/Loader/Autoloader.php')) {
+if (!Ld_Files::is_requirable('Zend/Loader/Autoloader.php')) {
     define('LD_CLI_INSTALL', true);
     include(LD_DIR . '/installer.php');
 }
-
-$loader = LD_LIB_DIR . "/Ld/Loader.php";
-if (file_exists($loader)) { require_once $loader; } else { require_once "Ld/Loader.php"; }
 
 Ld_Loader::registerAutoload();
 

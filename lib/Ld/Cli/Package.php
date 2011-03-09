@@ -40,12 +40,22 @@ class Ld_Cli_Package extends Ld_Cli
         return Ld_Package::loadFromDirectory($path);
     }
 
+    public function about()
+    {
+        $path = $this->_getPath();
+        $package = $this->_getPackage();
+
+        // to be continued
+    }
+
     public function build()
     {
         $path = $this->_getPath();
         $package = $this->_getPackage();
 
         $archive = $package->getId() . '.zip';
+
+        Ld_Files::rm($archive);
 
         $fp = fopen($archive, 'wb');
         $zip = new fileZip($fp);
@@ -64,6 +74,8 @@ class Ld_Cli_Package extends Ld_Cli
             'dist/roles.json',
             'dist/instance.json'
         );
+
+        $exclusions = array_merge($exclusions, $package->getManifest()->getBuildIgnores());
 
         foreach ($exclusions as $value) {
             $zip->addExclusion('/' . preg_quote($value, '/') . '/');
@@ -99,8 +111,6 @@ class Ld_Cli_Package extends Ld_Cli
         $httpClient->setFileUpload($archive, 'file');
         $httpClient->setParameterPost('upload', 1);
         $response = $httpClient->request('POST');
-
-        Ld_Files::rm($archive);
 
         $this->_log("push", "package successfully pushed to $url");
     }

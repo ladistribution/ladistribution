@@ -7,7 +7,7 @@
  * @package    Ld_Instance
  * @subpackage Ld_Instance_Application
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -537,15 +537,16 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         return $this->getInstaller()->restore($folder);
     }
 
-    public function getBackupsPath()
+    public function getBackupStorageFolder()
     {
-        return $this->getInstaller()->getBackupsPath();
+        return $this->getSite()->getDirectory('dist') . '/backups/' . $this->getId();
     }
 
     public function getBackups()
     {
         $backups = array();
-        $archives = Ld_Files::getFiles($this->getBackupsPath());
+        $storageFolder = $this->getBackupStorageFolder();
+        $archives = Ld_Files::getFiles($storageFolder);
         foreach ($archives as $filename) {
             $absoluteFilename = $this->getBackupsPath() . '/' . $filename;
             $size = round( filesize($absoluteFilename) / 1024 ) . ' ko';
@@ -586,5 +587,8 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         $filename = $this->getAbsolutePAth() . '/dist/colors.json';
         Ld_Files::putJson($filename, $colors);
     }
+
+    /* Deprecated */
+    public function getBackupsPath() { return $this->getBackupStorageFolder(); }
 
 }

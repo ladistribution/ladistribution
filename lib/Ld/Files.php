@@ -245,8 +245,8 @@ class Ld_Files
         if ($protect) {
             self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
             if (self::exists($file)) {
-                  self::rm($file);
-              }
+                self::rm($file);
+            }
         } else {
             self::put($file, Zend_Json::encode($content));
         }
