@@ -19,8 +19,7 @@ class Slotter_LocalesController extends Slotter_BaseController
             $this->_disallow();
         }
 
-        $translator = $this->getTranslator();
-        $this->appendTitle( $translator->translate('Locales') );
+        $this->appendTitle( $this->translate('Locales') );
     }
 
     public function indexAction()

@@ -20,23 +20,26 @@ class Slotter_DomainsController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $translator = $this->getTranslator();
+        $domainsPage = $this->_container->findOneByLabel( $this->translate('Domains') );
 
-        $domainsPage = $this->_container->findOneByLabel( $translator->translate('Domains') );
-        $domainsPage->addPage(array(
-            'label' => $translator->translate("New"), 'module'=> 'slotter', 'controller' => 'domains', 'action' => 'new'
-        ));
+        if ($domainsPage) {
 
-        if (isset($this->id)) {
-            $action = $this->getRequest()->action;
             $domainsPage->addPage(array(
-                'label' => ucfirst($action),
-                'module'=> 'slotter',
-                'route' => 'default',
-                'controller' => 'domains',
-                'action' => $action,
-                'params' => array('id' => $this->_getParam('id'))
+                'label' => $this->translate("New"), 'module'=> 'slotter', 'controller' => 'domains', 'action' => 'new'
             ));
+
+            if (isset($this->id)) {
+                $action = $this->getRequest()->action;
+                $domainsPage->addPage(array(
+                    'label' => ucfirst($action),
+                    'module'=> 'slotter',
+                    'route' => 'default',
+                    'controller' => 'domains',
+                    'action' => $action,
+                    'params' => array('id' => $this->_getParam('id'))
+                ));
+            }
+
         }
     }
 
@@ -160,15 +163,13 @@ class Slotter_DomainsController extends Slotter_BaseController
 
     protected function _getPreferences()
     {
-        $translator = $this->getTranslator();
-
         $preferences = array();
-        $preferences[] = array('type' => 'text', 'name' => 'host', 'label' => $translator->translate('Host'));
+        $preferences[] = array('type' => 'text', 'name' => 'host', 'label' => $this->translate('Host'));
 
         $options = array();
         $options[] = array(
             'value' => '',
-            'label' => '✖ ' .  $translator->translate('None')
+            'label' => '✖ ' .  $this->translate('None')
         );
         $options[] = array(
             'value' => $this->admin->getPath(),
@@ -182,7 +183,7 @@ class Slotter_DomainsController extends Slotter_BaseController
         }
 
         $preferences[] = array(
-            'name' => 'default_application', 'label' => $translator->translate('Default Application'),
+            'name' => 'default_application', 'label' => $this->translate('Default Application'),
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $options
         );
 

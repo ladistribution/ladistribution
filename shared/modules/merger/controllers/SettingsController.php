@@ -17,9 +17,8 @@ class Merger_SettingsController extends Ld_Controller_Action
             $this->disallow();
         }
 
-        $translator = $this->getTranslator();
-        $this->appendTitle( $translator->translate('News Feed') );
-        $this->appendTitle( $translator->translate('Settings') );
+        $this->appendTitle( $this->translate('News Feed') );
+        $this->appendTitle( $this->translate('Settings') );
     }
 
     public function init()

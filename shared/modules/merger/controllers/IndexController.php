@@ -10,8 +10,6 @@ class Merger_IndexController extends Ld_Controller_Action
     {
         parent::init();
 
-        $translator = $this->getTranslator();
-
         $this->view->addHelperPath(dirname(__FILE__) . '/../../slotter/views/helpers/', 'View_Helper');
 
         if ($this->_hasParam('username')) {
@@ -39,8 +37,7 @@ class Merger_IndexController extends Ld_Controller_Action
 
     public function publicAction()
     {
-        $translator = $this->getTranslator();
-        $this->appendTitle($translator->translate('Public Feed'));
+        $this->appendTitle($this->translate('Public Feed'));
         $feeds = Ld_Feed_Merger::getFeeds('public');
         $hashes = $this->_hasParam('hashes') ? explode(";", $this->_getParam('hashes')) : array();
         $entries = Ld_Feed_Merger::getEntries($feeds, $hashes);
@@ -55,8 +52,7 @@ class Merger_IndexController extends Ld_Controller_Action
             $this->_disallow();
             return;
         }
-        $translator = $this->getTranslator();
-        $this->appendTitle($translator->translate('Personal Feed'));
+        $this->appendTitle($this->translate('Personal Feed'));
         $feeds = Ld_Feed_Merger::getFeeds('personal');
         $hashes = $this->_hasParam('hashes') ? explode(";", $this->_getParam('hashes')) : array();
         $entries = Ld_Feed_Merger::getEntries($feeds, $hashes);

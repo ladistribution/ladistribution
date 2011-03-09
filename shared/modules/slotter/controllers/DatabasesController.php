@@ -24,32 +24,35 @@ class Slotter_DatabasesController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $translator = $this->getTranslator();
+        $this->appendTitle( $this->translate('Databases') );
 
-        $this->appendTitle( $translator->translate('Databases') );
+        $databasesPage = $this->_container->findOneByLabel( $this->translate('Databases') );
 
-        $databasesPage = $this->_container->findOneByLabel( $translator->translate('Databases') );
+        if ($databasesPage) {
 
-        $databasesPage->addPage(array(
-            'label' => 'New', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'new'
-        ));
-        $databasesPage->addPage(array(
-            'label' => 'Master', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'master'
-        ));
-        $databasesPage->addPage(array(
-            'label' => 'Create', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'create'
-        ));
-        if ($this->_hasParam('id')) {
-            $action = $this->getRequest()->action;
             $databasesPage->addPage(array(
-                'label' => ucfirst($action),
-                'module'=> 'slotter',
-                'route' => 'default',
-                'controller' => 'databases',
-                'action' => $action,
-                'params' => array('id' => $this->_getParam('id'))
+                'label' => 'New', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'new'
             ));
+            $databasesPage->addPage(array(
+                'label' => 'Master', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'master'
+            ));
+            $databasesPage->addPage(array(
+                'label' => 'Create', 'module'=> 'slotter', 'controller' => 'databases', 'action' => 'create'
+            ));
+            if ($this->_hasParam('id')) {
+                $action = $this->getRequest()->action;
+                $databasesPage->addPage(array(
+                    'label' => ucfirst($action),
+                    'module'=> 'slotter',
+                    'route' => 'default',
+                    'controller' => 'databases',
+                    'action' => $action,
+                    'params' => array('id' => $this->_getParam('id'))
+                ));
+            }
+
         }
+
     }
 
     /**

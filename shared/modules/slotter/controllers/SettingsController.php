@@ -73,7 +73,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         }
 
         // $preferences[] = array(
-        //     'name' => 'path', 'label' => $translator->translate('Path'), 'type' => 'text'
+        //     'name' => 'path', 'label' => $this->translate('Path'), 'type' => 'text'
         // );
 
         $preferences[] = array(
@@ -102,7 +102,7 @@ class Slotter_SettingsController extends Slotter_BaseController
             'type' => 'list', 'defaultValue' => 'admin', 'options' => $options
         );
         }
-        
+
         $tz_options = array();
         $tz_options[] = array('value' => '', 'label' => '&#x2716; ' .  $this->translate('Default'));
         foreach (DateTimeZone::listIdentifiers() as $value) {
@@ -116,7 +116,7 @@ class Slotter_SettingsController extends Slotter_BaseController
         );
 
         // $preferences[] = array(
-        //     'name' => 'root_admin', 'label' => $translator->translate('Admin path on root?'),
+        //     'name' => 'root_admin', 'label' => $this->translate('Admin path on root?'),
         //     'type' => 'boolean', 'defaultValue' => false
         // );
 

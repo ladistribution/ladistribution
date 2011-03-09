@@ -33,12 +33,13 @@ class Slotter_IndexController extends Slotter_BaseController
 
     protected function _handleNavigation()
     {
-        $translator = $this->getTranslator();
+        $applicationsPage = $this->_container->findOneByLabel( $this->translate('Applications') );
 
-        $applicationsPage = $this->_container->findOneByLabel( $translator->translate('Applications') );
-        $applicationsPage->addPage(array(
-            'label' =>  $translator->translate('Update'), 'module'=> 'slotter', 'controller' => 'index', 'action' => 'update'
-        ));
+        if ($applicationsPage) {
+            $applicationsPage->addPage(array(
+                'label' =>  $this->translate('Update'), 'module'=> 'slotter', 'controller' => 'index', 'action' => 'update'
+            ));
+        }
     }
 
     /**
@@ -71,7 +72,7 @@ class Slotter_IndexController extends Slotter_BaseController
         $this->view->canManagePlugins = $this->_acl->isAllowed($this->userRole, 'plugins', 'manage');
 
         $this->view->canManageSites = $this->_acl->isAllowed($this->userRole, 'sites', 'manage');
-        
+
         $this->view->canUpdate = $this->_acl->isAllowed($this->userRole, 'instances', 'update');
     }
 
@@ -101,9 +102,6 @@ class Slotter_IndexController extends Slotter_BaseController
     */
     public function updateAction()
     {
-        $translator = $this->getTranslator();
-        // $this->view->layoutTitle = $translator->translate("Updates");
-    
         $this->view->applications = array();
         $this->view->libraries = array();
 

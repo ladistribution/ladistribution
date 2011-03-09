@@ -449,7 +449,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
     protected function _redirectTo($url)
     {
-        if (constant('LD_DEBUG')) {
+        if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
             $this->view->redirectUrl = $url;
             $this->render('ok');
         } else {

@@ -10,7 +10,7 @@ class Identity_OpenidController extends Ld_Controller_Action
     {
         parent::init();
 
-        $this->appendTitle( $this->getTranslator()->translate('Identity') );
+        $this->appendTitle( $this->translate('Identity') );
 
         if (isset($this->user)) {
             $this->username = $this->user['username'];

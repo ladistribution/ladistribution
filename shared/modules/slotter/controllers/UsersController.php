@@ -51,25 +51,29 @@ class Slotter_UsersController extends Slotter_BaseController
 
         if ($this->admin->userCan('manage', 'instances')) {
 
-            $indexPage = $usersPage->addPage(array(
-                'label' => $this->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
-            ));
-
-            $usersPage->addPage(array(
-                'label' => $this->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
-            ));
+            if ($usersPage) {
+                $usersPage->addPage(array(
+                    'label' => $this->translate('Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'index'
+                ));
+                $usersPage->addPage(array(
+                    'label' => $this->translate('Roles'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'roles'
+                ));
+            }
 
             $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
-            $indexPage->addPage(array(
-                'label' => $this->translate('Invite Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'invite'
-            ));
-            $indexPage->addPage(array(
-                'label' => $this->translate('Add Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'add'
-            ));
+
+            if ($indexPage) {
+                $indexPage->addPage(array(
+                    'label' => $this->translate('Invite Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'invite'
+                ));
+                $indexPage->addPage(array(
+                    'label' => $this->translate('Add Users'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'add'
+                ));
+            }
 
         }
 
-        if (isset($this->currentUser)) {
+        if (isset($this->currentUser) && $usersPage) {
             $usersPage->addPage(array(
                 'label' => $this->translate('Your Profile'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'edit',
                 'params' => array('id' => $this->currentUser['username'])
@@ -79,14 +83,16 @@ class Slotter_UsersController extends Slotter_BaseController
         if (isset($this->currentUser) && $this->_hasParam('id') && $this->_getParam('id') != $this->currentUser['username']) {
             $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
             $action = $this->getRequest()->action;
-            if ($indexPage) $indexPage->addPage(array(
-                'label' => ucfirst($action),
-                'module'=> 'slotter',
-                'route' => 'default',
-                'controller' => 'users',
-                'action' => $action,
-                'params' => array('id' => $this->_getParam('id'))
-            ));
+            if ($indexPage) {
+                $indexPage->addPage(array(
+                    'label' => ucfirst($action),
+                    'module'=> 'slotter',
+                    'route' => 'default',
+                    'controller' => 'users',
+                    'action' => $action,
+                    'params' => array('id' => $this->_getParam('id'))
+                ));
+            }
         }
     }
 
@@ -368,7 +374,7 @@ class Slotter_UsersController extends Slotter_BaseController
                     $this->view->usernames = array();
                     foreach ($matches[0] as $email) {
                         $this->view->emails[$email] = $usersBackend->getUserByEmail($email);
-                        $explode = explode('@', $email); 
+                        $explode = explode('@', $email);
                         $this->view->usernames[$email] = $explode[0];
                     }
                 }

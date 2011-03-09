@@ -40,7 +40,7 @@
         <th><?php echo $this->translate("Public Feed") ?></th>
     </tr>
     <?php foreach ($this->applications as $id => $feeds) : ?>
-        <?php $instance = $this->site->getInstance($id); ?>
+        <?php if ($instance = $this->site->getInstance($id)) : ?>
         <tr class="th2">
             <th class="title"><?php echo $instance->getName() ?></th>
             <td></td>
@@ -65,6 +65,7 @@
                 </td>
             </tr>
         <?php endforeach ?>
+        <?php endif ?>
     <?php endforeach ?>
 </table>
 
