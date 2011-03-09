@@ -29,7 +29,7 @@ class Bootstrap
 
         self::setupRoutes();
         self::setupMvc();
-        self::setupCache();
+        // self::setupCache();
         // self::setupLocales();
 
         if ( get_magic_quotes_gpc() ) {
@@ -150,23 +150,23 @@ class Bootstrap
     //     }
     // }
 
-    public static function setupCache()
-    {
-        $cacheDirectory = LD_TMP_DIR . '/cache/';
-
-        Ld_Files::createDirIfNotExists($cacheDirectory);
-
-        if (file_exists($cacheDirectory) && is_writable($cacheDirectory)) {
-            $frontendOptions = array(
-               'lifetime' => 60, // cache lifetime of 1 minute
-               'automatic_serialization' => true
-            );
-            $backendOptions = array(
-                'cache_dir' => $cacheDirectory
-            );
-            self::$_registry['cache'] = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-        }
-    }
+    // public static function setupCache()
+    // {
+    //     $cacheDirectory = LD_TMP_DIR . '/cache/';
+    // 
+    //     Ld_Files::createDirIfNotExists($cacheDirectory);
+    // 
+    //     if (file_exists($cacheDirectory) && is_writable($cacheDirectory)) {
+    //         $frontendOptions = array(
+    //            'lifetime' => 60, // cache lifetime of 1 minute
+    //            'automatic_serialization' => true
+    //         );
+    //         $backendOptions = array(
+    //             'cache_dir' => $cacheDirectory
+    //         );
+    //         self::$_registry['cache'] = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+    //     }
+    // }
 
     /**
      * Dispatch the request.

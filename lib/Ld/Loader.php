@@ -85,6 +85,7 @@ class Ld_Loader
         self::setupPlugins();
         self::setupAuthentication();
         self::setupLocales();
+        self::setupCache();
 
         if (!empty($config['timezone'])) {
             date_default_timezone_set($config['timezone']);
@@ -205,6 +206,25 @@ class Ld_Loader
                 $adapter->setLocale($_COOKIE['ld-lang']);
             }
             Zend_Registry::set('Zend_Translate', $adapter);
+        }
+    }
+
+    public static function setupCache()
+    {
+        $cacheDirectory = LD_TMP_DIR . '/cache/';
+
+        Ld_Files::createDirIfNotExists($cacheDirectory);
+
+        if (Ld_Files::exists($cacheDirectory) && is_writable($cacheDirectory)) {
+            $frontendOptions = array(
+               'lifetime' => 60, // cache lifetime of 1 minute
+               'automatic_serialization' => true
+            );
+            $backendOptions = array(
+                'cache_dir' => $cacheDirectory
+            );
+            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+            Zend_Registry::set('cache', $cache);
         }
     }
 

@@ -70,7 +70,8 @@ if ($this->site->isChild() && $this->site->hasParentSite()) {
 <?php if (Ld_Ui::isAdmin() && Zend_Registry::isRegistered('application') && $application = Zend_Registry::get('application')) : ?>
 <div class="ld-top-menu ld-app-menu" style="display:none">
     <div class="ld-top-menu-inner ld-app-menu-inner">
-        <h3><?php echo $application->getPackage()->getName() ?></h3>
+        <?php $packageInfos = $application->getManifest()->getInfos() ?>
+        <h3><?php echo $packageInfos['name'] ?></h3>
         <ul class="instances">
             <?php if ($adminUrl = $application->getAdminUrl()) : ?>
                 <li class="admin"><a href="<?php echo $adminUrl ?>">
