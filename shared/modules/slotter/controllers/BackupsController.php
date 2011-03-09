@@ -26,7 +26,7 @@ class Slotter_BackupsController extends Slotter_BaseController
         }
 
         // Download
-        if ($this->getRequest()->isPost() && $this->_hasParam('download')) {
+        if ($this->_hasParam('download')) {
             foreach ($this->_getBackups() as $backup) {
                 if ($backup['filename'] == $this->_getParam('download')) {
                     return $this->_sendBackup($backup['absoluteFilename'], $backup['filename']);
@@ -49,7 +49,7 @@ class Slotter_BackupsController extends Slotter_BaseController
         if ($this->getRequest()->isPost() && $this->_hasParam('restore')) {
             foreach ($this->_getBackups() as $backup) {
                 if ($backup['filename'] == $this->_getParam('restore')) {
-                    $this->instance->restoreBackup( $backup['filename'] );
+                    $this->_restoreBackup( $backup['absoluteFilename'] );
                 }
             }
             $this->view->notification = $this->translate("Backup restored");
@@ -64,13 +64,10 @@ class Slotter_BackupsController extends Slotter_BaseController
 
         $backupsPath = $this->site->getDirectory('dist') . '/backups';
 
-        $siteBackups = Ld_Files::getFiles($backupsPath);
-        ksort($siteBackups);
-        foreach ($siteBackups as $filename) {
-            $absoluteFilename = $backupsPath . '/' . $filename;
-            if (time() - filemtime($absoluteFilename) < $freshness) {
-                $siteBackupFilename = $filename;
-                $siteBackupAbsoluteFilename = $absoluteFilename;
+        foreach ($this->_getBackups() as $backup) {
+            if (time() - filemtime($backup['absoluteFilename']) < $freshness) {
+                $siteBackupFilename = $backup['filename'];
+                $siteBackupAbsoluteFilename = $backup['absoluteFilename'];
                 break;
             }
         }
@@ -127,7 +124,17 @@ class Slotter_BackupsController extends Slotter_BaseController
         foreach ($files as $name => $filename) {
             $zip->addFile($filename, $name);
         }
-        $zip->addExclusion('/dist\/backups/');
+
+        $exclusions = array(
+            'dist/.htaccess',
+            'dist/.DS_Store',
+            'dist/backups'
+        );
+
+        foreach ($exclusions as $value) {
+            $zip->addExclusion('/' . preg_quote($value, '/') . '/');
+        }
+
         $zip->addDirectory($this->site->getDirectory('dist'), 'dist', true);
 
         $zip->write();
@@ -165,7 +172,11 @@ class Slotter_BackupsController extends Slotter_BaseController
                 if ($instance = $site->getInstance($infos['path'])) {
                     $site->deleteInstance($instance);
                 }
-                $instance = $site->cloneInstance("$tmpDir/$id.zip", $infos);
+                try {
+                    $instance = $site->cloneInstance("$tmpDir/$id.zip", $infos);
+                } catch (Exception $e) {
+                    Ld_Files::log('cloneInstance', "exception with instance $id: " . $e->getMessage());
+                }
             }
         }
 
