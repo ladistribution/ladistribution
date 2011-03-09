@@ -1,0 +1,59 @@
+<h3><?php echo $this->translate('Existing backups') ?></h3>
+
+<?php echo $this->notification() ?>
+
+<table class="h6e-data ld-data">
+    <tr class="th1">
+        <th><?php echo $this->translate('File') ?></th>
+        <th><?php echo $this->translate('Size') ?></th>
+        <th colspan="3"><?php echo $this->translate('Actions') ?></th>
+    </tr>
+    <?php
+    if (empty($this->backups) || count($this->backups) == 0) {
+        ?>
+        <tfoot>
+            <tr>
+                <td>None</td>
+                <td>/</td>
+                <td colspan="3">/</td>
+            </tr>
+        </tfoot>
+        <?php
+    }
+    foreach ($this->backups as $backup) {
+        ?>
+        <tr>
+            <td><?php echo $backup['filename'] ?></td>
+            <td><?php echo $backup['size'] ?></td>
+            <td>
+                <form method="get" action="<?php $this->url() ?>">
+                    <input type="hidden" name="download" value="<?php echo $backup['filename'] ?>"/>
+                    <input type="submit" value="<?php echo $this->translate('download') ?>"/>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="<?php $this->url() ?>">
+                    <input type="hidden" name="restore" value="<?php echo $backup['filename'] ?>"/>
+                    <input type="submit" value="<?php echo $this->translate('restore') ?>"/>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="<?php $this->url() ?>">
+                    <input type="hidden" name="delete" value="<?php echo $backup['filename'] ?>"/>
+                    <input type="submit" value="<?php echo $this->translate('delete') ?>"/>
+                </form>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
+</table>
+
+<hr/>
+
+<h3><?php echo $this->translate('New backup') ?></h3>
+
+<form action="<?php echo $this->url() ?>" method="post">
+    <input type="hidden" name="dobackup" value="now" />
+    <input type="submit" class="submit button ld-button" value="<?php echo $this->translate('Generate a backup now') ?>" />
+</form>

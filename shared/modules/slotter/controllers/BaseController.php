@@ -40,6 +40,9 @@ class Slotter_BaseController extends Ld_Controller_Action
         if ($this->admin->userCan('manage', 'databases')) {
             $settings[] = array( 'label' => $this->translate('Databases'), 'module' => 'slotter', 'controller' => 'databases' );
         }
+        if ($this->admin->userCan('admin')) {
+            $settings[] = array( 'label' => $this->translate('Backups'), 'module' => 'slotter', 'controller' => 'backups' );
+        }
         if (!$this->site->isChild()) {
             if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
                 $settings[] = array( 'label' => $this->translate('Domains'), 'module' => 'slotter', 'controller' => 'domains' );

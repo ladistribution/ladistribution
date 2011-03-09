@@ -548,7 +548,7 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
         $storageFolder = $this->getBackupStorageFolder();
         $archives = Ld_Files::getFiles($storageFolder);
         foreach ($archives as $filename) {
-            $absoluteFilename = $this->getBackupsPath() . '/' . $filename;
+            $absoluteFilename = $storageFolder . '/' . $filename;
             $size = round( filesize($absoluteFilename) / 1024 ) . ' ko';
             $time = filemtime($absoluteFilename);
             $backups[$filename] = compact('filename', 'absoluteFilename', 'size', 'time');
@@ -559,7 +559,7 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
 
     public function deleteBackup($backup)
     {
-        $filename = $this->getBackupsPath() . '/' . $backup;
+        $filename = $this->getBackupStorageFolder() . '/' . $backup;
         if (Ld_Files::exists($filename)) {
             Ld_Files::unlink($filename);
         }

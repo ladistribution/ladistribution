@@ -1,13 +1,13 @@
-<?php $this->instanceWidget() ?>
+<h2><?php echo $this->translate("Settings") ?></h2>
 
 <div class="ld-panel">
 
-<?php $this->instanceNavigation() ?>
+<?php $this->partialNavigationMenu('Settings') ?>
 
 <div class="ld-panel-content h6e-block">
 
 <?php echo $this->partial('partials/backups.phtml', array('notification' => $this->notification, 'backups' => $this->backups)) ?>
 
-</div> <!-- .ld-panel-content -->
+</div>
 
-</div> <!-- .ld-panel -->
+</div>
