@@ -20,8 +20,7 @@ class Slotter_BackupsController extends Slotter_BaseController
     {
         // Do backup
         if ($this->getRequest()->isPost() && $this->_hasParam('dobackup')) {
-            $freshness = $this->_getParam('freshness', 24 * 60 * 60);
-            $this->_doBackup($freshness);
+            $this->_doBackup();
             $this->view->notification = $this->translate("Backup generated");
         }
 
@@ -73,7 +72,7 @@ class Slotter_BackupsController extends Slotter_BaseController
         }
 
         if (empty($siteBackupFilename)) {
-            $siteBackupFilename = $this->_doBackup($freshness);
+            $siteBackupFilename = $this->_doBackup();
             $siteBackupAbsoluteFilename = $backupsPath . '/' . $siteBackupFilename;
         }
 
@@ -95,33 +94,22 @@ class Slotter_BackupsController extends Slotter_BaseController
         return $backups;
     }
 
-    protected function _doBackup($freshness)
+    protected function _doBackup()
     {
         $backupsPath = $this->site->getDirectory('dist') . '/backups';
 
         $instances = $this->site->getApplicationsInstances();
-        $files = array();
+        $archives = array();
         foreach ($instances as $id => $instance) {
-            $filename = null;
-            $backups = $instance->getBackups();
-            krsort($backups);
-            foreach ($backups as $backup) {
-                if (time() - $backup['time'] < $freshness) {
-                    $filename = $backup['absoluteFilename'];
-                    break;
-                }
-            }
-            if (empty($filename)) {
-                $filename = $instance->doBackup();
-            }
-            $files["$id.zip"] = $filename;
+            $filename = $instance->doBackup();
+            $archives["$id.zip"] = $filename;
         }
 
         $siteBackupFilename = 'site-' . date("Y-m-d-H-i-s") .'.zip';
         $siteBackupAbsoluteFilename = $backupsPath . '/' . $siteBackupFilename;
         $fp = fopen($siteBackupAbsoluteFilename, 'wb');
         $zip = new fileZip($fp);
-        foreach ($files as $name => $filename) {
+        foreach ($archives as $name => $filename) {
             $zip->addFile($filename, $name);
         }
 
@@ -136,8 +124,11 @@ class Slotter_BackupsController extends Slotter_BaseController
         }
 
         $zip->addDirectory($this->site->getDirectory('dist'), 'dist', true);
-
         $zip->write();
+
+        foreach ($archives as $filename) {
+            Ld_Files::rm($filename);
+        }
 
         return $siteBackupFilename;
     }
