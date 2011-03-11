@@ -42,7 +42,7 @@ class Ld_Files
         $dir = self::real($dir);
 
         if ($initial) {
-            self::log('unlink', $dir);
+            self::log('rm', $dir);
         }
 
         if (self::exists($dir . '/.preserve')) {
@@ -240,13 +240,13 @@ class Ld_Files
 
     public static $jsonPrefix = '<?php /* ';
 
-    public static function putJson($file, $content, $protect = false)
+    public static function putJson($file, $content, $protect = true)
     {
         if ($protect) {
             self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
             if (self::exists($file)) {
-                  self::rm($file);
-              }
+                self::rm($file);
+            }
         } else {
             self::put($file, Zend_Json::encode($content));
         }

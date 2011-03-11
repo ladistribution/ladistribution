@@ -63,8 +63,6 @@ class Slotter_IndexController extends Slotter_BaseController
 
         $this->view->roles = $this->admin->getUserRoles();
 
-        $this->view->repositories = $this->site->getRepositories();
-
         $this->view->canAdmin = $this->_acl->isAllowed($this->userRole, null, 'admin');
 
         $this->view->canManageDatabases = $this->_acl->isAllowed($this->userRole, 'databases', 'manage');
