@@ -1,7 +1,7 @@
 <?php
 
-if (file_exists(dirname(__FILE__) . '/config.php')) {
-	require_once dirname(__FILE__) . '/config.php';
+if (file_exists(DOKU_INC . 'dist/config.php')) {
+	require_once DOKU_INC . 'dist/config.php';
 }
 
 $site = Zend_Registry::get('site');
