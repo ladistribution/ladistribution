@@ -79,10 +79,12 @@ if ($this->site->isChild() && $this->site->hasParentSite()) {
                     <span class="path">&nbsp;</span>
                 </a></li>
             <?php endif ?>
-            <li class="settings"><a href="<?php echo Ld_Ui::getApplicationSettingsUrl() ?>">
-                <span class="name"><?php echo $this->translate("Settings") ?></span>
-                <span class="path">&nbsp;</span>
-            </a></li>
+            <?php if ($settingsUrl = Ld_Ui::getApplicationSettingsUrl()) : ?>
+                <li class="settings"><a href="<?php echo $settingsUrl ?>">
+                    <span class="name"><?php echo $this->translate("Settings") ?></span>
+                    <span class="path">&nbsp;</span>
+                </a></li>
+            <?php endif ?>
         </ul>
     </div>
 </div>

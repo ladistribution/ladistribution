@@ -92,6 +92,13 @@ class Ld_Auth
         return true;
     }
 
+    public static function isAdmin()
+    {
+        $site = Zend_Registry::get('site');
+        $role = $site->getAdmin()->getUserRole();
+        return $role == 'admin';
+    }
+
     public static function getUser()
     {
         if (self::isAuthenticated()) {
