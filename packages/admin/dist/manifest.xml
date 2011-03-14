@@ -1,7 +1,7 @@
 <package>
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.5-100</version>
+  <version>0.5-101</version>
   <type>application</type>
   <need>lib-admin</need>
   <need>lib-ld</need>
@@ -13,10 +13,16 @@
   <need>js-jquery-tablednd</need>
   <need>js-jquery-colorpicker</need>
   <need>js-codemirror</need>
+  <!--
   <link title="Applications" rel="index" type="text/html" href="/slotter/"/>
   <link title="Repositories" rel="section" type="text/html" href="/slotter/repositories"/>
   <link title="Databases" rel="section" type="text/html" href="/slotter/databases"/>
   <link title="Users" rel="section" type="text/html" href="/slotter/users"/>
+  -->
+  <install>
+      <preference type="text" label="Title" name="title" defaultValue="Admin"/>
+      <preference type="text" label="Path" name="path" defaultValue="admin"/>
+  </install>
   <configuration>
       <preference type="text" label="App Name" name="name"/>
       <preference type="list" label="Default Module" name="default_module">

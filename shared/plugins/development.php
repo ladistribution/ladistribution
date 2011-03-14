@@ -29,7 +29,7 @@ class Ld_Plugin_Development
         );
         $preferences[] = array(
             'name' => 'memory_limit', 'label' => ('Memory Limit'),
-            'type' => 'text', 'defaultValue' => '32M'
+            'type' => 'text', 'defaultValue' => '128M'
         );
         $preferences[] = array(
             'name' => 'time_limit', 'label' => ('Time Limit'),
