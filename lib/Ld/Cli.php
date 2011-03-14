@@ -23,8 +23,9 @@ class Ld_Cli
     public function __construct()
     {
         $this->_opts = new Zend_Console_Getopt(array(
-            'site|s-s' => 'a path to a ladistribution intialised site',
-            'force|f' => 'force command'
+            'site|s-s' => 'a path to a ladistribution site',
+            'path|p-s' => 'a path to a ladistribution site/package',
+            'force|f' => 'force command',
         ));
 
         $this->_args = $this->_getArgs();
@@ -117,7 +118,9 @@ class Ld_Cli
             if (file_exists($config)) {
                 require_once($config);
                 $this->_log('config', $config);
-                return $this->_site = Zend_Registry::get('site');
+                $site = Zend_Registry::get('site');
+                $this->_log('site', $site->getDirectory() . '/');
+                return $this->_site = $site;
             }
         }
 
@@ -145,15 +148,16 @@ class Ld_Cli
         Ld_Loader::defineConstants(LD_DIR);
 
         if (!empty($this->_args[1])) {
-            if (!file_exists($this->_args[1])) {
-                throw new Exception("Non existing directory passed as argument.");
-            }
             $dir = $this->_args[1];
+            Ld_Files::ensureDirExists($dir);
+            if (!Ld_Files::exists($dir)) {
+                throw new Exception("Non existing directory / Can't create directory.");
+            }
         } else {
             $dir = getcwd();
         }
 
-        $dir = '/' . Ld_Files::cleanpath($dir);
+        $dir = Ld_Files::real($dir);
         $this->_log('dir', $dir);
 
         $host = $this->_prompt('host');
@@ -283,7 +287,7 @@ class Ld_Cli
         $type = isset($this->_opts->type) ? $this->_opts->type : $this->_prompt('Type', 'mysql');
         $host = isset($this->_opts->host) ? $this->_opts->host : $this->_prompt('Host', 'localhost');
         if ($type == 'mysql') {
-            $name = isset($this->_opts->name) ? $this->_opts->name : $this->_prompt('Name');
+            $name = isset($this->_opts->name) ? $this->_opts->name : $this->_prompt('Db Name');
         }
         $user = isset($this->_opts->user) ? $this->_opts->user : $this->_prompt('User');
         $password = isset($this->_opts->password) ? $this->_opts->password : $this->_prompt('Password');
@@ -327,17 +331,27 @@ class Ld_Cli
         }
         $packageId = $this->_args[1];
 
-        $preferences = $this->_getInstallPreferences($packageId);
+        $package = $this->getSite()->getPackage($packageId);
 
-        $result = $this->getSite()->createInstance($packageId, $preferences);
-        $this->_write(sprintf("%s v%s successfully installed on %s",
-            $result->getPackageId(), $result->getVersion(), $result->getPath() ));
+        if ($package->getType() == 'application') {
+            $preferences = $this->_getInstallPreferences($packageId);
+            $result = $this->getSite()->createInstance($packageId, $preferences);
+            $this->_write(sprintf("%s v%s successfully installed on %s",
+                $result->getPackageId(), $result->getVersion(), $result->getPath() ));
+        } else {
+            $this->getSite()->createInstance($packageId);
+            $this->_write(sprintf("%s successfully installed", $package->getId()));
+        }
+
     }
 
-    protected function _getInstallPreferences($package)
+    protected function _getInstallPreferences($package, $ignore = array())
     {
         $preferences = array();
         foreach ($this->getSite()->getInstallPreferences($package) as $pref) {
+            if (in_array($pref['name'], $ignore)) {
+                continue;
+            }
             switch ($pref['type']) {
                 case 'hidden':
                     $preferences[ $pref['name'] ] = $pref['defaultValue'];
@@ -357,27 +371,37 @@ class Ld_Cli
     public function register()
     {
         if (empty($this->_args[1])) {
-            $path = getcwd();
-        } else {
-            $path = $this->_args[1];
+            throw new Exception("No path passed as argument.");
         }
+        $path = $this->_args[1];
 
         $site = $this->getSite();
         $directory = Ld_Files::cleanpath($path);
 
+        $path = str_replace($site->getDirectory() . '/', '', $directory);
+
         $package = Ld_Package::loadFromDirectory($directory);
+
+        $preferences = $this->_getInstallPreferences($package, array('title', 'path'));
+
+        $preferences['name'] = $package->getName();
+        $preferences['path'] = $path;
+        $preferences['title'] = $preferences['name'];
+
+        if (isset($preferences['administrator']) && is_string($preferences['administrator'])) {
+            $preferences['administrator'] = $site->getUser($preferences['administrator']);
+        }
+
+        $site->checkDependencies($package);
 
         $installer = $package->getInstaller();
         $installer->setPath($path);
         $installer->setAbsolutePath($directory);
         $installer->createDistConfigFile($path);
 
-        $params = array('name' => $package->getName(), 'path' => $path);
-        $params['title'] = $params['name'];
+        $instance = $this->getSite()->registerInstance($package, $preferences);
 
-        $instance = $this->getSite()->registerInstance($package, $params);
-
-        $instance->getInstaller()->postInstall($params);
+        $instance->getInstaller()->postInstall($preferences);
 
         $this->_write(sprintf("%s v%s successfully registered on %s",
             $instance->getPackageId(), $instance->getVersion(), $instance->getPath() ));
@@ -433,6 +457,11 @@ class Ld_Cli
             $result = $this->getSite()->deleteInstance($instance);
             $this->_write("Instance deleted.");
         }
+    }
+
+    public function uninstall()
+    {
+        return $this->delete();
     }
 
     public function duplicate()

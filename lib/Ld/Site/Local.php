@@ -552,7 +552,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
           }
     }
 
-    protected function checkDependencies($package)
+    public function checkDependencies($package)
     {
         $ignoredDependencies = array();
         $ignoredDependencies = Ld_Plugin::applyFilters('Site:ignoredDependencies', $ignoredDependencies);

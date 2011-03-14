@@ -234,7 +234,10 @@ class Ld_Files
         if (self::exists($file) && !is_writable($file)) {
             throw new Exception("Can't write $file.");
         }
-        file_put_contents($file, $content);
+        $result = file_put_contents($file, $content);
+        if (!$result) {
+            throw new Exception("Write failed on $file");
+        }
         self::updatePermissions($file);
     }
 

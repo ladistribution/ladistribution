@@ -81,8 +81,10 @@ class Ld_Ui
         if (empty($application)) {
             $application = Zend_Registry::get('application');
         }
-        $params = array('controller' => 'instance', 'id' => $application->getId(), 'action' => $action);
-        return self::getAdminUrl($params, 'instance-action');
+        if ($id = $application->getId()) {
+            $params = array('controller' => 'instance', 'id' => $id, 'action' => $action);
+            return self::getAdminUrl($params, 'instance-action');
+        }
     }
 
     public static function superBar($options = array())

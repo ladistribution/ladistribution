@@ -23,8 +23,8 @@ class Ld_Cli_Package extends Ld_Cli
 
     protected function _getPath()
     {
-        if (isset($this->_opts->package)) {
-            $path = $this->_opts->package;
+        if (isset($this->_opts->path)) {
+            $path = $this->_opts->path;
         } else {
             $path = getcwd();
         }
@@ -150,7 +150,12 @@ class Ld_Cli_Package extends Ld_Cli
             $name = $this->_args[1];
         }
 
-        $url = isset($this->_opts->id) ? $this->_opts->url : $this->_prompt('Repository Push URL');
+        if (empty($this->_args[2])) {
+            $url = $this->_prompt('Repository Push URL');
+        } else {
+            $url = $this->_args[2];
+        }
+
         /* To be replaced by Api Key */
         $username = isset($this->_opts->username) ? $this->_opts->username : $this->_prompt('Username');
         $password = isset($this->_opts->password) ? $this->_opts->password : $this->_prompt('Password');
