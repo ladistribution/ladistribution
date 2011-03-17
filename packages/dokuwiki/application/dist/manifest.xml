@@ -2,7 +2,7 @@
   <id>dokuwiki</id>
   <name>DokuWiki</name>
   <description>Simple Wiki Software</description>
-  <version>2010-11-07-21</version>
+  <version>2010-11-07-24</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>

@@ -4,7 +4,7 @@
  }
  
  // load and initialize the core system
-+require_once(DOKU_INC.'dist/prepend.php');
++require_once(DOKU_INC.'dist/config.php');
  require_once(DOKU_INC.'inc/init.php');
  
  //import variables

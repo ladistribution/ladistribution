@@ -250,12 +250,12 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
     {
         parent::restore($restoreFolder);
 
-        Ld_Files::unlink($this->getAbsolutePath() . '/data');
+        Ld_Files::rm($this->getAbsolutePath() . '/data');
 
         Ld_Files::copy($this->getRestoreFolder() . '/data', $this->getAbsolutePath() . '/data');
         Ld_Files::copy($this->getRestoreFolder() . '/conf', $this->getAbsolutePath() . '/conf');
 
-        Ld_Files::unlink($this->getRestoreFolder());
+        Ld_Files::rm($this->getRestoreFolder());
 
         $this->_fixUrl();
     }
