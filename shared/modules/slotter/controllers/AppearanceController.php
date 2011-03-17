@@ -2,15 +2,9 @@
 
 require_once 'BaseController.php';
 
-/**
- * Appearance controller
- */
 class Slotter_AppearanceController extends Slotter_BaseController
 {
 
-    /**
-     * preDispatch
-     */
     public function preDispatch()
     {
         parent::preDispatch();
@@ -79,6 +73,7 @@ class Slotter_AppearanceController extends Slotter_BaseController
         $expires = 60 * 60 * 24 * 7;
         $this->getResponse()->setHeader('Content-Type', 'text/css', true);
         $this->getResponse()->setHeader('Cache-Control', "max-age=$expires, public", true);
+        $this->getResponse()->setHeader('Pragma', "public", true);
         $this->getResponse()->setHeader('Expires', gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT', true);
 
         $this->disableLayout();
