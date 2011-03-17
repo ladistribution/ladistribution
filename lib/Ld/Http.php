@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Http
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -14,11 +14,13 @@
 class Ld_Http
 {
 
+    public static $userAgent = 'La Distribution HTTP Library';
+
     public static function context()
     {
         $httpParams = array(
             'method'  => 'GET',
-            'user_agent' => 'La Distribution HTTP Library',
+            'user_agent' => self::$userAgent,
             'timeout' => 5
         );
         if (method_exists('Zend_Registry', 'isRegistered') && Zend_Registry::isRegistered('site')) {
@@ -29,34 +31,55 @@ class Ld_Http
         return $context;
     }
 
+    public static function curl_context($ch)
+    {
+        curl_setopt($ch, CURLOPT_USERAGENT, self::$userAgent . ' (curl)');
+        if (method_exists('Zend_Registry', 'isRegistered') && Zend_Registry::isRegistered('site')) {
+            $referer = Zend_Registry::get('site')->getUrl();
+            curl_setopt($ch, CURLOPT_REFERER, $referer);
+        }
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    }
+
     public static function get($url)
     {
-        // Ld_Files::log('Ld_Http::get', "$url");
-        $contents = '';
-        $remote = fopen($url, "r", false, self::context());
-        if (!$remote) {
-            return false;
+        if (function_exists('curl_init')) {
+            $ch = curl_init();
+            self::curl_context($ch);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            $content = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $content = file_get_contents($url, false, self::context());
         }
-        while ( ($buffer = fread($remote, 8192)) != '' ) {
-            $contents .= $buffer;
-        }
-        fclose($remote);
-        return $contents;
+        return $content;
     }
 
     public static function download($url, $filename)
     {
-        // Ld_Files::log('Ld_Http::download', "$url");
         $local = fopen($filename, "w+");
-        $remote = fopen($url, "r", false, self::context());
-        if (!$local || !$remote) {
-            return false;
-        }
-        while ( ($buffer = fread($remote, 8192)) != '' ) {
-            fwrite($local, $buffer);
+        if (function_exists('curl_init')) {
+            $ch = curl_init();
+            self::curl_context($ch);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FILE, $local); 
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $remote = fopen($url, "r", false, self::context());
+            if (!$local || !$remote) {
+                return false;
+            }
+            while ( ($buffer = fread($remote, 8192)) != '' ) {
+                fwrite($local, $buffer);
+            }
+            fclose($remote);
         }
         fclose($local);
-        fclose($remote);
         return true;
     }
 

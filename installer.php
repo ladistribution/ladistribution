@@ -48,16 +48,32 @@ function is_update()
     return is_installed();
 }
 
-function download_and_require($file, $source, $force = false)
+function http_get($url, $user_agent = "La Distribution Installer")
 {
-    if (!file_exists($file) || $force) {
+    if (function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_USERAGENT, $user_agent . ' (curl)');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $content = curl_exec($ch);
+        curl_close($ch);
+    } else {
         $context = stream_context_create(array(
             'http' => array(
                 'method'  => 'GET',
-                'header'  => "User-Agent: La Distribution Installer\r\n"
+                'header'  => "User-Agent: $user_agent\r\n"
             )
         ));
-        $content = file_get_contents($source, false, $context);
+        $content = file_get_contents($url, false, $context);
+    }
+    return $content;
+}
+
+function download_and_require($file, $source, $force = false)
+{
+    if (!file_exists($file) || $force) {
+        $content = http_get($source);
         if (empty($content)) {
             error("Can't retrieve file $source.");
         }
