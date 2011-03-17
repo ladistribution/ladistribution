@@ -47,31 +47,28 @@ class Slotter_IndexController extends Slotter_BaseController
     */
     public function indexAction()
     {
-        $this->view->hasUpdate = false;
-
-        $applications = $this->site->getApplicationsInstances();
-        foreach ($applications as $id => $instance) {
-            if ($instance->hasUpdate = $instance->hasUpdate()) {
-                $this->view->hasUpdate = true;
-                break;
-            }
-        }
-
         $this->view->applications = $this->site->getApplicationsInstances(array('admin'));
 
         $this->view->databases = $this->site->getDatabases();
 
         $this->view->roles = $this->admin->getUserRoles();
 
-        $this->view->canAdmin = $this->_acl->isAllowed($this->userRole, null, 'admin');
+        $this->view->canAdmin = $this->userCan('admin');
 
-        $this->view->canManageDatabases = $this->_acl->isAllowed($this->userRole, 'databases', 'manage');
-        $this->view->canManageRepositories = $this->_acl->isAllowed($this->userRole, 'repositories', 'manage');
-        $this->view->canManagePlugins = $this->_acl->isAllowed($this->userRole, 'plugins', 'manage');
+        if (defined('LD_MULTI_SITES') && constant('LD_MULTI_SITES')) {
+            $this->view->canManageSites = $this->userCan('manage', 'sites');
+        }
 
-        $this->view->canManageSites = $this->_acl->isAllowed($this->userRole, 'sites', 'manage');
-
-        $this->view->canUpdate = $this->_acl->isAllowed($this->userRole, 'instances', 'update');
+        if ($this->view->canUpdate = $this->userCan('update', 'instances')) {
+            $this->view->hasUpdate = false;
+            $applications = $this->site->getApplicationsInstances();
+            foreach ($applications as $id => $instance) {
+                if ($instance->hasUpdate = $instance->hasUpdate()) {
+                    $this->view->hasUpdate = true;
+                    break;
+                }
+            }
+        }
     }
 
     /**
