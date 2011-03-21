@@ -17,6 +17,9 @@
             if (rules[id]) {
                 var rule = rules[id];
                 $(rule.selector).css(rule.property, '#' + hex + '');
+                if (id == 'ld-colors-background') {
+                    $(rule.selector).css('background-image', 'none');
+                }
             }
         }
     }

@@ -8,8 +8,6 @@ class Slotter_AppearanceController extends Slotter_BaseController
     public function preDispatch()
     {
         parent::preDispatch();
-
-        $this->appendTitle( $this->translate('Appearance') );
     }
 
     public function indexAction()
@@ -18,13 +16,16 @@ class Slotter_AppearanceController extends Slotter_BaseController
             $this->_disallow();
         }
 
+        $this->appendTitle( $this->translate('Colors') );
+
         if ($this->getRequest()->isPost() && $this->_hasParam('colors')) {
             $colors = $this->site->getColors();
             foreach ($this->_getParam('colors') as $key => $value) {
                 $colors[$key] = $value;
             }
             $this->site->setColors($colors);
-            $this->view->notification = $this->translate("Colors updated");
+            $this->_flashMessenger->addMessage( $this->translate("Colors updated") );
+            return $this->redirectTo( $this->view->url() );
         }
         $this->view->colors = $this->site->getColors();
     }
@@ -35,10 +36,13 @@ class Slotter_AppearanceController extends Slotter_BaseController
             $this->_disallow();
         }
 
+        $this->appendTitle( $this->translate('Custom CSS') );
+
         if ($this->getRequest()->isPost() && $this->_hasParam('css')) {
             $css = trim($this->_getParam('css'));
             $this->site->setCustomCss($css);
-            $this->view->notification = $this->translate("CSS updated");
+            $this->_flashMessenger->addMessage( $this->translate("CSS updated") );
+            return $this->redirectTo( $this->view->url() );
         }
 
         $this->view->css = $this->site->getCustomCss();

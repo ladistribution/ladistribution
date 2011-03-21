@@ -252,7 +252,8 @@ class Slotter_InstanceController extends Slotter_BaseController
               }
               $application->setColors($colors);
           }
-          $this->view->notification = $this->translate("Colors updated");
+          $this->_flashMessenger->addMessage( $this->translate("Colors updated") );
+          return $this->_redirectToAction('appearance');
       }
 
       $this->view->preferences = $installer->getPreferences('theme');
@@ -273,7 +274,8 @@ class Slotter_InstanceController extends Slotter_BaseController
           if (method_exists($installer, 'setCustomCss')) {
               $installer->setCustomCss($this->_getParam('css'));
           }
-          $this->view->notification = $this->translate("CSS updated");
+          $this->_flashMessenger->addMessage( $this->translate("CSS updated") );
+          return $this->_redirectToAction('css');
       }
 
       if (method_exists($installer, 'getCustomCss')) {
@@ -444,20 +446,12 @@ class Slotter_InstanceController extends Slotter_BaseController
     protected function _redirectToAction($action = 'status', $id = null)
     {
         $url = $this->view->instanceActionUrl($action, $id);
-        $this->_redirectTo($url);
-    }
-
-    protected function _redirectTo($url)
-    {
-        if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
-            $this->view->redirectUrl = $url;
-            $this->render('ok');
-        } else {
-            $this->_redirector->gotoUrl($url, array('prependBase' => false));
-        }
+        $this->redirectTo($url);
     }
 
     /* Deprecated */
+
+    protected function _redirectTo($url) { return $this->redirectTo($url); }
 
     public function statusAction() { $this->_forward('configure'); }
 

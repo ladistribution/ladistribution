@@ -140,6 +140,19 @@ class Ld_Controller_Action extends Zend_Controller_Action
          }
     }
 
+    function redirectTo($url)
+    {
+        if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->getResponse()
+                ->appendBody( sprintf('<h2>%s</h2>', $this->translate('Ok') ) )
+                ->appendBody( sprintf('<p><a href="%s">%s</a></p>', $url, $this->translate('Continue') ) );
+        } else {
+            $this->noRender();
+            $this->_redirector->gotoUrl($url, array('prependBase' => false));
+        }
+    }
+
     // Legacy
 
     function _setTitle($title) { return $this->setTitle($title); }
