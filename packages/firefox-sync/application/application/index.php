@@ -91,19 +91,22 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
           <?php endif ?>
 
           <h2>Notes</h2>
-          <ul>
-              <li>Firefox Sync extension is available on
-                  <a href="https://addons.mozilla.org/fr/firefox/addon/10868">addons.mozilla.org</a></li>
-              <li>When initialising, choose:
-                  <ol>
-                      <li>"<strong>I'm already using Sync on another computer</strong>"</li>
-                      <li>"<strong>Use a custom server</strong>"</li>
-                      <li>Then, <strong>Enter a new synchronization key</strong></li>
-                  </ol>
-              </li>
-              <li>registration is not possible from Firefox extension</li>
-              <li>password change is not possible from Firefox extension</li>
-          </ul>
+
+          <p>Firefox Sync is directly integrated into Firefox 4. For Firefox 3, an extension is available on
+                  <a href="https://addons.mozilla.org/fr/firefox/addon/10868">addons.mozilla.org</a></p>
+
+          <p>To initialise it:
+              <ol>
+                  <li>Find the "<strong>Set Up Sync</strong>" menu entry</li>
+                  <li>Choose "I already have a Firefox Sync account", "<strong>Connect</strong>"</li>
+                  <li>Then "<strong>I don't have the device with me</strong>"</li>
+                  <li>Enter your La Distribution username/password</li>
+                  <li>Choose "<strong>Use a custom server</strong>", enter your server URL</li>
+                  <li>Enter a new "<strong>Sync Key</strong>", it's like a password, you'll have to remember it</li>
+              </ol>
+          </p>
+
+          <p>You can't register or change your password from Firefox.</p>
 
           <?php else : ?>
 

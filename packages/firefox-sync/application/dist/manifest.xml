@@ -2,13 +2,17 @@
   <id>firefox-sync</id>
   <name>Firefox Sync</name>
   <description>Browser Synchronization</description>
-  <version>1.5-15</version>
+  <version>1.5-16</version>
   <type>application</type>
   <db>mysql</db>
   <deploy>
       <origin>auth</origin>
       <destination path="public">./sync/1.1/weave_user/</destination>
   </deploy>
+  <install>
+      <preference type="text" label="Title" name="title" defaultValue="Firefox Sync"/>
+      <preference type="text" label="Path" name="path" defaultValue="sync"/>
+  </install>
   <configuration>
       <preference type="text" label="App Name" name="name"/>
   </configuration>
