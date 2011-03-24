@@ -240,7 +240,7 @@ class Ld_Files
 
     public static $jsonPrefix = '<?php /* ';
 
-    public static function putJson($file, $content, $protect = true)
+    public static function putJson($file, $content, $protect = false)
     {
         if ($protect) {
             self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
