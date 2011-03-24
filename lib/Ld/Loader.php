@@ -97,7 +97,7 @@ class Ld_Loader
         defined('LD_BREADCRUMBS') OR define('LD_BREADCRUMBS', false);
         defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
 
-        defined('LD_SVN') OR define('LD_SVN', Ld_Files::exists($dir . '/.svn'));
+        defined('LD_SVN') OR define('LD_SVN', Ld_Files::exists($dir . '/.svn') || Ld_Files::exists($dir . '/.git'));
         if (!constant('LD_SVN')) {
             defined('LD_COMPRESS_JS') OR define('LD_COMPRESS_JS', true);
             defined('LD_COMPRESS_CSS') OR define('LD_COMPRESS_CSS', true);
