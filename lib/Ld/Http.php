@@ -60,6 +60,9 @@ class Ld_Http
     public static function download($url, $filename)
     {
         $local = fopen($filename, "w+");
+        if (!$local) {
+            return false;
+        }
         if (function_exists('curl_init')) {
             $ch = curl_init();
             self::curl_context($ch);
@@ -71,7 +74,7 @@ class Ld_Http
             curl_close($ch);
         } else {
             $remote = fopen($url, "r", false, self::context());
-            if (!$local || !$remote) {
+            if (!$remote) {
                 return false;
             }
             while ( ($buffer = fread($remote, 8192)) != '' ) {
