@@ -354,7 +354,12 @@ class Ld_Cli
             }
             switch ($pref['type']) {
                 case 'hidden':
-                    $preferences[ $pref['name'] ] = $pref['defaultValue'];
+                    if (isset($pref['defaultValue'])) {
+                        $preferences[ $pref['name'] ] = $pref['defaultValue'];
+                    }
+                    if (isset($pref['value'])) {
+                        $preferences[ $pref['name'] ] = $pref['value'];
+                    }
                     break;
                 case 'list':
                     if (isset($pref['options'][0]['value'])) {
