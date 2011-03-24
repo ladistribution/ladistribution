@@ -73,10 +73,8 @@
     <?php $newDbUrl = $this->url(array('controller' => 'databases', 'action' => 'new')); ?>
 
     <p><strong><?php echo $this->translate("Notice:") ?></strong>
-    <?php echo $this->translate("There is no database connection registered yet. A database is often needed to install new applications.") ?>
-    <!--
-    <a href="<?php echo $newDbUrl ?>"><?php echo $this->translate("Add a database connection") ?></a>
-    -->
+    <?php echo $this->translate("There is no database registered yet. A database is often needed to install new applications.") ?>
+    <a href="<?php echo $newDbUrl ?>"><?php echo $this->translate("Register a database.") ?></a>
     </p>
 
 <?php endif ?>
