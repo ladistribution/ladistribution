@@ -118,21 +118,21 @@ class Ld_Auth
     public static function getIdentities()
     {
         $site = Zend_Registry::get('site');
+        $identities = array();
         if (isset($_COOKIE['ld-identities'])) {
-            $identities = explode(";", $_COOKIE['ld-identities']);
+            $cookieIdentities = explode(";", $_COOKIE['ld-identities']);
             $usernames = array();
-            $result = array();
-            foreach ($identities as $identity) {
+            foreach ($cookieIdentities as $identity) {
                 $user = $site->getUser($identity);
                 if (empty($user) || in_array($user['username'], $usernames)) {
                     continue;
                 } else {
-                    $result[$identity] = $user;
+                    $identities[$identity] = $user;
                     $usernames[] = $user['username'];
                 }
             }
-            return $result;
         }
+        return $identities;
     }
 
     public static function rememberIdentity($identity)
