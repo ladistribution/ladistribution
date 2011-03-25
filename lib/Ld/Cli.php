@@ -163,7 +163,7 @@ class Ld_Cli
         $host = $this->_prompt('host');
         $path = '/' . Ld_Files::cleanpath($this->_prompt('path'));
 
-        $name = $this->_prompt('name', 'Ma Distribution');
+        $name = $this->_prompt('name', "Ma Distrib'");
 
         $site = new Ld_Site_Local(compact('dir', 'host', 'path', 'name'));
         $site->init();

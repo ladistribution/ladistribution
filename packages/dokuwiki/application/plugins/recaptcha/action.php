@@ -35,7 +35,7 @@ class action_plugin_recaptcha extends DokuWiki_Action_Plugin {
      * register an event hook
      *
      */
-    function register(&$controller)
+    function register($controller)
     {
         global $ld_recaptcha_service;
         if ($ld_recaptcha_service) {

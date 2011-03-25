@@ -65,4 +65,7 @@
       <preference type="boolean" label="Enable XML-RPC" name="enable_xmlrpc"/>
       -->
   </configuration>
+  <build>
+      <ignore>wp-content/uploads</ignore>
+  </build>
 </package>

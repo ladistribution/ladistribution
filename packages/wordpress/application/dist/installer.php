@@ -114,13 +114,13 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 		$this->_fixDatabasePrefix();
 
-		if (file_exists($this->getRestoreFolder() . '/uploads')) {
+		if (Ld_Files::exists($this->getRestoreFolder() . '/uploads')) {
 			Ld_Files::copy($this->getRestoreFolder() . '/uploads', $this->getAbsolutePath() . '/wp-content/uploads');
 		}
 
 		$this->serviceRequest('updateUrl');
 
-		Ld_Files::unlink($this->getRestoreFolder());
+		Ld_Files::rm($this->getRestoreFolder());
 	}
 
 	private function _fixDatabasePrefix()
