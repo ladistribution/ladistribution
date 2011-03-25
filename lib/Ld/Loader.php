@@ -102,9 +102,6 @@ class Ld_Loader
             defined('LD_COMPRESS_JS') OR define('LD_COMPRESS_JS', true);
             defined('LD_COMPRESS_CSS') OR define('LD_COMPRESS_CSS', true);
         }
-        if (constant('LD_SVN')) {
-            defined('LD_UNIX_PERMS') OR define('LD_UNIX_PERMS', 0777);
-        }
 
         // Legacy CSS Constant
         defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));
