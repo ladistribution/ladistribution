@@ -107,6 +107,7 @@ class Ld_Cli_Package extends Ld_Cli
         $archive = $package->getId() . '.zip';
 
         $httpClient = new Zend_http_Client($url);
+        $httpClient->setConfig(array('useragent' => 'ladis (La Distribution CLI)'));
         $httpClient->setAuth($username, $password);
         $httpClient->setFileUpload($archive, 'file');
         $httpClient->setParameterPost('upload', 1);
