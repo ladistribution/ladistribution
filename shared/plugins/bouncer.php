@@ -67,7 +67,7 @@ class Ld_Plugin_Bouncer
         Ld_Plugin::addAction('Ui:beforeTopBar', array($this, 'challenge'));
     }
 
-    public function id()
+    public function namespaces()
     {
         $site = Zend_Registry::get('site');
         $id = $site->getConfig('bouncer_id');
@@ -75,7 +75,8 @@ class Ld_Plugin_Bouncer
             $id = Ld_Auth::generatePhrase(16);
             $site->setConfig('bouncer_id', $id);
         }
-        return $id;
+        $namespaces = explode(";", $id);
+        return $namespaces;
     }
 
     public function options()
@@ -84,7 +85,7 @@ class Ld_Plugin_Bouncer
         $backend = $site->getConfig('bouncer_backend', 'redis');
         $server = $site->getConfig('bouncer_server', '127.0.0.1');
         $servers = explode(";", $server);
-        $namespaces = Ld_Plugin::applyFilters('Bouncer:namespaces', array( self::id() ) ); ;
+        $namespaces = Ld_Plugin::applyFilters('Bouncer:namespaces', self::namespaces() ); ;
         $options = array('namespaces' => $namespaces, 'backend' => $backend, 'servers' => $servers);
         return $options;
     }
@@ -110,8 +111,11 @@ class Ld_Plugin_Bouncer
 
     public function challenge()
     {
-        if (class_exists('Bouncer')) {
-            Bouncer::challenge();
+        try {
+            if (class_exists('Bouncer')) {
+                Bouncer::challenge();
+            }
+        } catch (Exception $e) {
         }
     }
 
