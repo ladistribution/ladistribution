@@ -181,7 +181,7 @@ class Ld_Installer_Bbpress extends Ld_Installer
 
 	// Roles
 
-	public $roles = array('keymaster', 'administrator', 'moderator', 'member');
+	public $roles = array('member', 'moderator', 'administrator', 'keymaster');
 
 	public $defaultRole = 'member';
 

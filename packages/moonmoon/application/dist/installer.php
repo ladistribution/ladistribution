@@ -61,7 +61,7 @@ class Ld_Installer_Moonmoon extends Ld_Installer
 		return $config;
 	}
 
-	public $roles = array('administrator', 'visitor');
+	public $roles = array('visitor', 'administrator');
 
 	public $defaultRole = 'visitor';
 

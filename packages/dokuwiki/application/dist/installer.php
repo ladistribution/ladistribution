@@ -229,7 +229,7 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
         return $css;
     }
 
-    public $roles = array('admin', 'user');
+    public $roles = array('user', 'admin');
 
     public $defaultRole = 'user';
 

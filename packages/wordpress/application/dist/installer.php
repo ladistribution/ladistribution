@@ -242,7 +242,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	// Users and Roles
 
-	public $roles = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
+	public $roles = array('subscriber', 'contributor', 'author', 'editor', 'administrator');
 
 	public $defaultRole = 'subscriber';
 

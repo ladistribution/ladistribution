@@ -141,7 +141,7 @@ class Ld_Installer_Statusnet extends Ld_Installer
 
 	/* Roles */
 
-	public $roles = array('moderator', 'user');
+	public $roles = array('user', 'moderator');
 
 	public $defaultRole = 'user';
 
