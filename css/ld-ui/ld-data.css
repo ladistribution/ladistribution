@@ -1,3 +1,13 @@
+/* --------------------------------------------------------------
+
+   LD UI: Data
+
+-------------------------------------------------------------- */
+
+.h6e-data-container {
+  overflow:auto;
+}
+
 table.h6e-data {
   width:auto;
   border-collapse:collapse;
