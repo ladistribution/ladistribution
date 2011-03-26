@@ -71,7 +71,7 @@ class Ld_Installer_Admin extends Ld_Installer
 		return $links;
 	}
 
-	public $roles = array('admin', 'user');
+	public $roles = array('user', 'admin');
 
 	public $defaultRole = 'user';
 
