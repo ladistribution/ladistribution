@@ -31,7 +31,6 @@ class Slotter_SettingsController extends Slotter_BaseController
             }
             $this->getSite()->setConfig($configuration);
             $this->view->notification = $this->translate("Settings updated");
-            $this->_updateAdminBaseUrl($configuration);
         }
 
         if ($this->getRequest()->isPost() && $this->_hasParam('locales')) {
@@ -45,17 +44,6 @@ class Slotter_SettingsController extends Slotter_BaseController
         $this->view->locales = $this->getSite()->getLocales();
 
         $this->view->canManageLocales = $this->_acl->isAllowed($this->userRole, 'locales', 'manage');
-    }
-
-    protected function _updateAdminBaseUrl($configuration)
-    {
-        $frontController = Zend_Controller_Front::getInstance();
-        if ($configuration['root_admin']) {
-            $baseUrl = $this->site->getPath();
-        } else {
-            $baseUrl = $this->site->getPath() . '/' . $this->admin->getPath();
-        }
-        $frontController->setBaseUrl($baseUrl);
     }
 
     protected function _getPreferences()
