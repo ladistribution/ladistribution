@@ -13,6 +13,9 @@ class Ld_Installer_Statusnet extends Ld_Installer
 			$this->setConfiguration(array('theme' => $preferences['theme']));
 			$this->setTheme($preferences['theme']);
 		}
+		if (isset($preferences['lang'])) {
+			$this->getInstance()->setInfos(array('locale' => $preferences['lang']))->save();
+		}
 		$this->hit();
 	}
 
@@ -69,6 +72,7 @@ class Ld_Installer_Statusnet extends Ld_Installer
 		if (empty($configuration['theme'])) {
 			$configuration['theme'] = 'ld';
 		}
+		$configuration['locale'] = $this->getInstance()->getLocale();
 		return $configuration;
 	}
 

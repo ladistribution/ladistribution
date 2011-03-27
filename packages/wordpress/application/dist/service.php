@@ -127,6 +127,9 @@ class Ld_Service_Wordpress
 		if (empty($configuration['name']) && isset($application)) {
 			$configuration['name'] = $application->getName();
 		}
+		if (empty($configuration['lang']) && $application) {
+			$configuration['lang'] = $application->getLocale();
+		}
 
 		return $configuration;
 	}

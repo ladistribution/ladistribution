@@ -26,7 +26,7 @@ if ($locale == 'auto') {
 }
 
 if (isset($locale) && $locale != 'auto') {
-	define('WPLANG', $locale);	
+	define('WPLANG', $locale);
 }
 
 if (!defined('WP_CONTENT_URL')) {

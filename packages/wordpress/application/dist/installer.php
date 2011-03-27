@@ -188,7 +188,8 @@ class Ld_Installer_Wordpress extends Ld_Installer
 
 	public function getConfiguration()
 	{
-		return $this->serviceRequest('getOptions');
+		$configuration = $this->serviceRequest('getOptions');
+		return $configuration;
 	}
 
 	public function setConfiguration($configuration, $type = 'general')

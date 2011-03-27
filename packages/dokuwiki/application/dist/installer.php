@@ -151,6 +151,8 @@ class Ld_Installer_Dokuwiki extends Ld_Installer
             $conf['name'] = $this->instance->getName();
         }
 
+        $conf['lang'] = $this->instance->getLocale();
+
         return $conf;
     }
 
