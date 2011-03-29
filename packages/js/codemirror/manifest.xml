@@ -1,7 +1,7 @@
 <package>
   <id>js-codemirror</id>
   <name>CodeMirror</name>
-  <version>0.94-1</version>
+  <version>1.0-1</version>
   <type>js</type>
   <deploy>
       <origin>js</origin>
