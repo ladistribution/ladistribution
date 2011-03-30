@@ -10,7 +10,7 @@ class Ld_Plugin_Bouncer
             'url' => 'http://ladistribution.net/en/wiki/plugins/#bouncer',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.97',
+            'version' => '0.5.106',
             'description' => Ld_Translate::translate('Track and block agents using the Bouncer library.'),
             'license' => 'MIT / GPL'
         );
@@ -24,19 +24,24 @@ class Ld_Plugin_Bouncer
         if (file_exists(LD_LIB_DIR . '/Bouncer/Bouncer.php')) {
             try {
                 $options = self::options();
-                if ($options['backend'] == 'memcache' && !class_exists('Memcache')) {
+                if ($options['backend'] == 'memcache' && !class_exists('Memcache') && !class_exists('Memcached')) {
                     return array(self::STATUS_ERROR, Ld_Translate::translate('Memcache PHP extension is needed to run this plugin.'));
                 }
                 require_once 'Bouncer/Bouncer.php';
+                Ld_Plugin::doAction('Bouncer:load');
                 Bouncer::setOptions($options);
                 Bouncer::load();
-                Bouncer::getAgentsIndex();
+                $namespace = self::namespaces();
+                $test = Bouncer::getAgentsIndex($namespace[0]);
+                if ($test === false || $test === null) {
+                    return array(0, sprintf(Ld_Translate::translate('%s is not properly configured.'), 'Bouncer'));
+                }
                 return array(1, sprintf(Ld_Translate::translate('%s is running.'), 'Bouncer'));
             } catch (Exception $e) {
                 return array(0, $e->getMessage());
             }
         }
-        return array(0, sprintf(Ld_Translate::translate('%s library not available.'), 'Bouncer'));
+        return array(0, sprintf(Ld_Translate::translate('%s library is not available.'), 'Bouncer'));
     }
 
     public function preferences()
