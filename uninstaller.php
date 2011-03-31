@@ -115,7 +115,7 @@ $directories = array('js', 'css', 'shared', 'lib', 'dist', 'repositories', 'tmp'
 foreach ($directories as $id) {
     $path = $site->getDirectory($id);
     if (Ld_Files::exists($path)) {
-        Ld_Files::rm($path);
+        Ld_Files::unlink($path);
         out("Folder '$id' removed.");
     }
 }
@@ -123,7 +123,7 @@ foreach ($directories as $id) {
 $files = array('.htaccess', 'index.php');
 foreach ($files as $file) {
     if (Ld_Files::exists($file)) {
-        Ld_Files::rm($file);
+        Ld_Files::unlink($file);
         out("File '$file' removed.");
     }
 }
