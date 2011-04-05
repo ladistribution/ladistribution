@@ -48,7 +48,7 @@ function is_update()
     return is_installed();
 }
 
-function http_get($url, $user_agent = "La Distribution Installer")
+function ld_http_get($url, $user_agent = "La Distribution Installer")
 {
     if (function_exists('curl_init')) {
         $ch = curl_init();
@@ -73,7 +73,7 @@ function http_get($url, $user_agent = "La Distribution Installer")
 function download_and_require($file, $source, $force = false)
 {
     if (!file_exists($file) || $force) {
-        $content = http_get($source);
+        $content = ld_http_get($source);
         if (empty($content)) {
             error("Can't retrieve file $source.");
         }
