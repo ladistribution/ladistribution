@@ -46,7 +46,7 @@ echo "# Get wordpress-importer with svn"
 svn export http://plugins.svn.wordpress.org/wordpress-importer/trunk/ plugins/wordpress-importer --force --quiet
 
 echo "# Get memcached with svn"
-svn export http://svn.wp-plugins.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force --quiet
+svn export http://plugins.svn.wordpress.org/memcached/trunk/object-cache.php content/object-cache-memcached.php --force --quiet
 
 # Apply patches
 # patch -p0 -d $FOLDER < patches/menu-header.diff
