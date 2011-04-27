@@ -13,7 +13,7 @@ svn export "$SOURCE/js/ld" js --force --quiet
 # cp -R /Web/ld/js/ld js/ld
 
 echo "# Compress JS"
-java -jar ../../../bin/yuicompressor-2.4.2.jar --charset UTF-8 "js/ld.js" -o "js/ld.c.js"
+java -jar ../../../bin/yuicompressor.jar --charset UTF-8 "js/ld.js" -o "js/ld.c.js"
 
 # Export from SVN
 svn export "$SOURCE/shared/modules" modules --force --quiet

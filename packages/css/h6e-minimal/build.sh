@@ -16,7 +16,7 @@ cat h6e-reset.css h6e-typography.css h6e-colors.css h6e-forms.css h6e-layout.css
 cd ..
 
 echo "# Compressing"
-java -jar ../../../bin/yuicompressor-2.4.2.jar --charset UTF-8 "$FOLDER/h6e-minimal.merged.css" -o "$FOLDER/h6e-minimal.compressed.css"
+java -jar ../../../bin/yuicompressor.jar --charset UTF-8 "$FOLDER/h6e-minimal.merged.css" -o "$FOLDER/h6e-minimal.compressed.css"
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete

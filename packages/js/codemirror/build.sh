@@ -17,13 +17,12 @@ rm $ZIP
 mv $BUILD/js $FOLDER
 
 # echo "# Compressing"
-# java -jar ../../../bin/yuicompressor-2.4.2.jar --charset UTF-8 "$FOLDER/codemirror.js" -o "$FOLDER/codemirror.js"
+# java -jar ../../../bin/yuicompressor.jar --charset UTF-8 "$FOLDER/codemirror.js" -o "$FOLDER/codemirror.js"
 
 # CSS
 mv $BUILD/css css
 
 rm css/baboon.png
-rm css/baboon_vector.ai
 rm css/font.js
 rm css/people.jpg
 

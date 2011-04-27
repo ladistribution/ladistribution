@@ -16,7 +16,7 @@ cat ld-slotter.css ld-merger.css ld-login.css ld-data.css ld-bars.css ld-panel.c
 cd ..
 
 echo "# Compressing"
-java -jar ../../../bin/yuicompressor-2.4.2.jar --charset UTF-8 "$FOLDER/ld-ui.merged.css" -o "$FOLDER/ld-ui.compressed.css"
+java -jar ../../../bin/yuicompressor.jar --charset UTF-8 "$FOLDER/ld-ui.merged.css" -o "$FOLDER/ld-ui.compressed.css"
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
