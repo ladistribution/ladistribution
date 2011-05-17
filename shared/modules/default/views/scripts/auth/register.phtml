@@ -29,6 +29,15 @@
             ?>"/>
         <?php endif ?>
 
+        <label for="ld-register-fullname"><?php echo $this->translate("Full Name:") ?></label>
+        <?php if (FALSE && isset($this->finish, $this->user, $this->user['fullname'])) : ?>
+            <span class="text"><?php echo $this->escape($this->user['fullname']); ?></span>
+        <?php else : ?>
+            <input id="ld-register-fullname" class="text" type="text" name="ld_register_fullname" value="<?php
+                if (isset($this->user, $this->user['fullname'])) echo $this->escape($this->user['fullname']);
+            ?>"/>
+        <?php endif ?>
+
         <label for="ld-register-email"><?php echo $this->translate("Email:") ?></label>
         <?php if (FALSE && isset($this->finish, $this->user, $this->user['email'])) : ?>
             <span class="text"><?php echo $this->escape($this->user['email']); ?></span>

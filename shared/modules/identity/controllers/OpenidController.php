@@ -71,10 +71,16 @@ class Identity_OpenidController extends Ld_Controller_Action
 
                 if ($this->getRequest()->isPost()) {
                     if (isset($_POST['allow'])) {
+                        $sreg = new Zend_OpenId_Extension_Sreg(array(
+                            'nickname' => $this->user['username'],
+                            'fullname' => $this->user['fullname'],
+                            'email'    => $this->user['email']
+                        ));
                         if (isset($_POST['forever'])) {
+                            $this->_server->allowSite($siteRoot, $sreg);
                             $this->_server->allowSite($siteRoot);
                         }
-                        $this->_server->respondToConsumer($params);
+                        $this->_server->respondToConsumer($params, $sreg);
                     } else if (isset($_POST['deny'])) {
                         Zend_OpenId::redirect($this->_getParam('openid_return_to'), array('openid.mode' => 'cancel'));
                     }
@@ -84,7 +90,8 @@ class Identity_OpenidController extends Ld_Controller_Action
                 break;
             default:
                 $this->_server = $this->admin->getOpenidProvider();
-                $ret = $this->_server->handle();
+                $sreg = new Zend_OpenId_Extension_Sreg();
+                $ret = $this->_server->handle(null, $sreg);
                 if ($ret) {
                     echo $ret;
                     exit;

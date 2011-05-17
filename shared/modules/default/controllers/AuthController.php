@@ -111,6 +111,7 @@ class AuthController extends Ld_Controller_Action
                     'agent'            => $this->getRequest()->getServer('HTTP_USER_AGENT'),
                     'ip'               => $this->getRequest()->getServer('REMOTE_ADDR'),
                     'username'         => trim($this->_getParam('ld_register_username', '')),
+                    'fullname'         => trim($this->_getParam('ld_register_fullname', '')),
                     'password'         => trim($this->_getParam('ld_register_password', '')),
                     'password_again'   => trim($this->_getParam('ld_register_password_again', '')),
                     'email'            => trim($this->_getParam('ld_register_email', ''))
