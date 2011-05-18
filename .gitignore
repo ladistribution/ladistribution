@@ -1,4 +1,6 @@
 .htaccess
+.svn
+
 dist
 repositories
 tmp
@@ -33,3 +35,5 @@ lib/limonade.php
 lib/Rediska
 lib/Rediska.php
 lib/Zend
+
+packages/*.zip
