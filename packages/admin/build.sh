@@ -1,6 +1,6 @@
 NAME="admin"
 # SOURCE="http://ladistribution.net/svn/trunk/"
-SOURCE="git@github.com:ladistribution/ladistribution.git"
+SOURCE="git://github.com/ladistribution/ladistribution.git"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 

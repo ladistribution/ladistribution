@@ -1,6 +1,6 @@
 NAME="lib-admin"
 # SOURCE="http://ladistribution.net/svn/trunk/"
-SOURCE="git@github.com:ladistribution/ladistribution.git"
+SOURCE="git://github.com/ladistribution/ladistribution.git"
 PACKAGE="$NAME.zip"
 
 echo "# Building $NAME package"

@@ -1,6 +1,6 @@
 NAME="lib-ld"
 # SOURCE="http://ladistribution.net/svn/trunk/lib/Ld"
-SOURCE="git@github.com:ladistribution/ladistribution.git"
+SOURCE="git://github.com/ladistribution/ladistribution.git"
 FOLDER="lib"
 PACKAGE="$NAME.zip"
 

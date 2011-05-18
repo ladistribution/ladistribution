@@ -1,6 +1,6 @@
 NAME="css-ld-ui"
 # SOURCE="http://ladistribution.net/svn/trunk/css/ld-ui"
-SOURCE="git@github.com:ladistribution/ladistribution.git"
+SOURCE="git://github.com/ladistribution/ladistribution.git"
 FOLDER="css"
 PACKAGE="$NAME.zip"
 
