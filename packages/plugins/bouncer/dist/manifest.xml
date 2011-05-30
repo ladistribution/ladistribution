@@ -1,0 +1,12 @@
+<package>
+  <id>plugin-bouncer</id>
+  <name>Bouncer plugin</name>
+  <version>0.6-5</version>
+  <type>lib</type>
+  <need>lib-bouncer</need>
+  <need>lib-rediska</need>
+  <deploy>
+      <origin>plugin/bouncer.php</origin>
+      <destination path="shared">plugins/bouncer.php</destination>
+  </deploy>
+</package>

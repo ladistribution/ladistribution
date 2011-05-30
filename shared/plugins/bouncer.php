@@ -10,7 +10,7 @@ class Ld_Plugin_Bouncer
             'url' => 'http://ladistribution.net/en/wiki/plugins/#bouncer',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.106',
+            'version' => '0.6-5',
             'description' => Ld_Translate::translate('Track and block agents using the Bouncer library.'),
             'license' => 'MIT / GPL'
         );

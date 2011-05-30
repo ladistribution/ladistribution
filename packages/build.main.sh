@@ -161,3 +161,11 @@ cd lib
   cd ..
 
 cd ..
+
+cd plugins
+
+  cd bouncer
+  ./build.sh
+  cd ..
+
+cd ..
