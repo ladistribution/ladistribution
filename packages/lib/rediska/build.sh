@@ -1,11 +1,11 @@
-VERSION="0.5.1"
+VERSION="0.5.6"
 FOLDER="lib"
 NAME="rediska"
 # SOURCE="http://rediska.geometria-lab.ru/download/Rediska-0-5-1.zip"
-SOURCE="https://github.com/Shumkov/Rediska/zipball/release-0-5-1"
+SOURCE="https://github.com/Shumkov/Rediska/zipball/release-0-5-6"
 ZIP="$NAME.zip"
 PACKAGE="lib-$NAME.zip"
-BUILD="Shumkov-Rediska-bd7b445"
+BUILD="Shumkov-Rediska-497afe5"
 
 echo "# Building $NAME package"
 
