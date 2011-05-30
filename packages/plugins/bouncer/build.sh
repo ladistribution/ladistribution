@@ -1,5 +1,5 @@
 SOURCE="http://ladistribution.net/svn/trunk/shared/plugins/bouncer.php"
-FOLDER="lib"
+FOLDER="plugin"
 FILE="bouncer.php"
 PACKAGE="plugin-bouncer.zip"
 

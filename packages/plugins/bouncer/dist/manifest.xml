@@ -1,7 +1,7 @@
 <package>
   <id>plugin-bouncer</id>
   <name>Bouncer plugin</name>
-  <version>0.6-5</version>
+  <version>0.6.10-1</version>
   <type>lib</type>
   <need>lib-bouncer</need>
   <need>lib-rediska</need>

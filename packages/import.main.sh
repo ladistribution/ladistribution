@@ -19,6 +19,8 @@ $IMPORT lib-limonade.zip
 $IMPORT lib-rediska.zip
 $IMPORT lib-bouncer.zip
 
+$IMPORT plugin-bouncer.zip
+
 $IMPORT css-h6e-minimal.zip
 $IMPORT css-ld-ui.zip
 
