@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-24 09:33+0100\n"
+"POT-Creation-Date: 2011-06-04 11:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: translate\n"
-"X-Poedit-Basepath: /Web/ld-clean/\n"
+"X-Poedit-Basepath: /Users/znarfor/Dev/ld-master\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -18,12 +18,12 @@ msgstr ""
 "X-Poedit-SearchPath-1: shared/modules\n"
 "X-Poedit-SearchPath-2: shared/plugins\n"
 
-#: shared/modules/default/views/layouts/layout.phtml:51
+#: shared/modules/default/views/layouts/layout.phtml:50
 #, php-format
 msgid "Powered by <a href=\"%s\">La Distribution</a>, a community project initiated by <a href=\"%s\">h6e</a>."
 msgstr "Propulsé par <a href=\"%s\">La Distribution</a>, un projet communautaire initié par <a href=\"%s\">h6e</a>."
 
-#: shared/modules/default/views/layouts/layout.phtml:56
+#: shared/modules/default/views/layouts/layout.phtml:55
 msgid "Language:"
 msgstr "Langue :"
 
@@ -54,7 +54,7 @@ msgid "Username (or OpenID):"
 msgstr "Nom d'utilisateur (ou OpenID) :"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:39
-#: shared/modules/default/views/scripts/auth/register.phtml:41
+#: shared/modules/default/views/scripts/auth/register.phtml:50
 msgid "Password:"
 msgstr "Mot de passe :"
 
@@ -72,7 +72,7 @@ msgstr "Se connecter avec une autre identité"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:99
 #: shared/modules/default/views/scripts/auth/register.phtml:8
-#: shared/modules/default/views/scripts/auth/register.phtml:55
+#: shared/modules/default/views/scripts/auth/register.phtml:64
 msgid "Register"
 msgstr "S'enregistrer"
 
@@ -137,10 +137,14 @@ msgid "Username:"
 msgstr "Nom d'utilisateur :"
 
 #: shared/modules/default/views/scripts/auth/register.phtml:32
+msgid "Full Name:"
+msgstr "Nom Complet :"
+
+#: shared/modules/default/views/scripts/auth/register.phtml:41
 msgid "Email:"
 msgstr "Email :"
 
-#: shared/modules/default/views/scripts/auth/register.phtml:44
+#: shared/modules/default/views/scripts/auth/register.phtml:53
 msgid "Password again:"
 msgstr "Mot de passe à nouveau :"
 
@@ -1114,33 +1118,33 @@ msgstr "Ajouter un nouvel utilisateur"
 msgid "Registration is closed."
 msgstr "L'enregistrement est fermé."
 
-#: shared/modules/default/controllers/AuthController.php:128
-#: shared/modules/default/controllers/AuthController.php:193
+#: shared/modules/default/controllers/AuthController.php:129
+#: shared/modules/default/controllers/AuthController.php:194
 msgid "Username can't be empty."
 msgstr "Le nom d'utilisateur ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:130
-#: shared/modules/default/controllers/AuthController.php:198
+#: shared/modules/default/controllers/AuthController.php:131
+#: shared/modules/default/controllers/AuthController.php:199
 msgid "Email can't be empty."
 msgstr "L'email ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:132
-#: shared/modules/default/controllers/AuthController.php:200
-#: shared/modules/default/controllers/AuthController.php:295
+#: shared/modules/default/controllers/AuthController.php:133
+#: shared/modules/default/controllers/AuthController.php:201
+#: shared/modules/default/controllers/AuthController.php:296
 msgid "Password can't be empty."
 msgstr "Le mot de passe ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:134
-#: shared/modules/default/controllers/AuthController.php:202
-#: shared/modules/default/controllers/AuthController.php:297
+#: shared/modules/default/controllers/AuthController.php:135
+#: shared/modules/default/controllers/AuthController.php:203
+#: shared/modules/default/controllers/AuthController.php:298
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
 
-#: shared/modules/default/controllers/AuthController.php:196
+#: shared/modules/default/controllers/AuthController.php:197
 msgid "User with this username already exists."
 msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"
 
-#: shared/modules/default/controllers/AuthController.php:324
+#: shared/modules/default/controllers/AuthController.php:325
 msgid "Identity not found."
 msgstr "Identité non trouvée."
 
@@ -1153,43 +1157,35 @@ msgid "Configuration updated"
 msgstr "Configuration mise à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:27
-#: shared/modules/slotter/controllers/InstanceController.php:255
 msgid "Colors updated"
 msgstr "Couleurs mises à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:44
-#: shared/modules/slotter/controllers/InstanceController.php:277
 msgid "CSS updated"
 msgstr "CSS mise à jour"
 
 #: shared/modules/slotter/controllers/BackupsController.php:16
 #: shared/modules/slotter/controllers/BaseController.php:44
-#: shared/modules/slotter/views/helpers/InstanceNavigation.php:44
 msgid "Backups"
 msgstr "Sauvegardes"
 
 #: shared/modules/slotter/controllers/BackupsController.php:24
-#: shared/modules/slotter/controllers/InstanceController.php:294
 msgid "Backup generated"
 msgstr "Sauvegarde générée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:44
-#: shared/modules/slotter/controllers/InstanceController.php:319
 msgid "Backup deleted"
 msgstr "Sauvegarde supprimée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:54
-#: shared/modules/slotter/controllers/InstanceController.php:325
 msgid "Backup restored"
 msgstr "Sauvegarde restaurée"
 
 #: shared/modules/slotter/controllers/BaseController.php:29
-#: shared/modules/slotter/views/helpers/InstanceNavigation.php:28
 msgid "General"
 msgstr "Général"
 
 #: shared/modules/slotter/controllers/BaseController.php:34
-#: shared/modules/slotter/views/helpers/InstanceNavigation.php:36
 msgid "CSS"
 msgstr "CSS"
 
@@ -1202,7 +1198,7 @@ msgid "New"
 msgstr "Nouveau"
 
 #: shared/modules/slotter/controllers/DomainsController.php:172
-#: shared/modules/slotter/controllers/SettingsController.php:88
+#: shared/modules/slotter/controllers/SettingsController.php:76
 msgid "None"
 msgstr "Aucune"
 
@@ -1239,15 +1235,15 @@ msgstr "Greffons"
 msgid "Settings updated"
 msgstr "Paramètres mis à jour"
 
-#: shared/modules/slotter/controllers/SettingsController.php:66
+#: shared/modules/slotter/controllers/SettingsController.php:54
 msgid "Site Name"
 msgstr "Nom du site"
 
-#: shared/modules/slotter/controllers/SettingsController.php:80
+#: shared/modules/slotter/controllers/SettingsController.php:68
 msgid "Anyone can register?"
 msgstr "Tout le monde peut s'enregistrer ?"
 
-#: shared/modules/slotter/controllers/SettingsController.php:114
+#: shared/modules/slotter/controllers/SettingsController.php:102
 msgid "Timezone"
 msgstr "Fuseau horaire"
 
@@ -1326,9 +1322,10 @@ msgstr "Détecte et bloque automatiquement les accès suspects au site."
 
 #: shared/plugins/bad-behavior.php:23
 #: shared/plugins/bad-behavior.php:25
-#: shared/plugins/bouncer.php:34
+#: shared/plugins/bouncer.php:39
 #: shared/plugins/gloss.php:24
 #: shared/plugins/gravatar.php:21
+#: shared/plugins/wordpress-unlocker.php:39
 #, php-format
 msgid "%s is running."
 msgstr "%s fonctionne."
@@ -1354,10 +1351,15 @@ msgstr ""
 msgid "Memcache PHP extension is needed to run this plugin."
 msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greffon."
 
-#: shared/plugins/bouncer.php:39
+#: shared/plugins/bouncer.php:37
 #, php-format
-msgid "%s library not available."
-msgstr "bibliothèque %s non disponible."
+msgid "%s is not properly configured."
+msgstr ""
+
+#: shared/plugins/bouncer.php:44
+#, php-format
+msgid "%s library is not available."
+msgstr "la bibliothèque %s n'est pas disponible."
 
 #: shared/plugins/development.php:14
 msgid "Customise configuration, enable debugging, new features..."

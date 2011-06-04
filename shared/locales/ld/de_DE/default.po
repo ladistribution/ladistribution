@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-04 11:29+0100\n"
+"POT-Creation-Date: 2011-06-04 11:27+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -11,40 +11,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: translate\n"
 "X-Poedit-Basepath: /Users/znarfor/Dev/ladistribution\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: lib/Ld\n"
 
 #: lib/Ld/Ui/scripts/top-bar.phtml:31
 #: lib/Ld/Ui/scripts/top-bar.phtml:37
 msgid "Log Out"
-msgstr "Se Déconnecter"
+msgstr ""
 
 #: lib/Ld/Ui/scripts/top-bar.phtml:41
 msgid "Log In"
-msgstr "Se Connecter"
+msgstr ""
 
 #: lib/Ld/Ui/scripts/top-bar.phtml:43
 msgid "Register"
-msgstr "S'enregistrer"
+msgstr ""
 
 #: lib/Ld/Ui/scripts/top-menu.phtml:21
 msgid "Applications"
-msgstr "Applications"
+msgstr ""
 
 #: lib/Ld/Ui/scripts/top-menu.phtml:78
 #: lib/Ld/Ui/scripts/top-nav.phtml:4
 msgid "Admin"
-msgstr "Administration"
+msgstr ""
 
 #: lib/Ld/Ui/scripts/top-menu.phtml:84
 #: lib/Ld/Ui/scripts/top-nav.phtml:6
 msgid "Settings"
-msgstr "Paramètres"
+msgstr ""
 
 #: lib/Ld/Controller/Action.php:148
 msgid "Ok"
-msgstr "Ok"
+msgstr ""
 
 #: lib/Ld/Controller/Action.php:149
 msgid "Continue"
-msgstr "Continuer"
+msgstr ""
 

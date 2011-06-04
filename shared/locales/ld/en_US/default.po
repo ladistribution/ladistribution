@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-18 14:16+0100\n"
+"POT-Creation-Date: 2011-06-04 11:30+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: François Hodierne <francois@upian.com>\n"
+"Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,18 +13,24 @@ msgstr ""
 "X-Poedit-Basepath: /Web/ld\n"
 "X-Poedit-SearchPath-0: lib/Ld\n"
 
-#: lib/Ld/Ui/scripts/super-bar.phtml:59
+#: lib/Ld/Ui/scripts/super-bar.phtml:60
 msgid "Admin"
-msgstr "Admin"
+msgstr ""
 
-#: lib/Ld/Ui/scripts/super-bar.phtml:67
+#: lib/Ld/Ui/scripts/super-bar.phtml:71
 msgid "Settings"
-msgstr "Settings"
+msgstr ""
 
-#: lib/Ld/Ui/scripts/top-bar.phtml:23
+#: lib/Ld/Ui/scripts/top-bar.phtml:24
+#: lib/Ld/Ui/scripts/top-bar.phtml:30
 msgid "Log Out"
-msgstr "Log Out"
+msgstr ""
 
-#: lib/Ld/Ui/scripts/top-bar.phtml:25
+#: lib/Ld/Ui/scripts/top-bar.phtml:34
 msgid "Log In"
-msgstr "Log In"
+msgstr ""
+
+#: lib/Ld/Ui/scripts/top-bar.phtml:36
+msgid "Register"
+msgstr ""
+
