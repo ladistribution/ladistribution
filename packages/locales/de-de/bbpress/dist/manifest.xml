@@ -1,0 +1,12 @@
+<package>
+  <id>bbpress-locale-de-de</id>
+  <name>bbPress in Deutsch</name>
+  <version>1.0.2-2011-06-04</version>
+  <type>locale</type>
+  <extend>bbpress</extend>
+  <directory>dist/locales/de_DE</directory>
+  <deploy>
+      <origin>languages/de_DE.mo</origin>
+      <destination path="public">../../../my-languages/de_DE.mo</destination>
+  </deploy>
+</package>

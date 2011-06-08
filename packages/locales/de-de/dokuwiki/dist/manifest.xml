@@ -1,0 +1,8 @@
+<package>
+  <id>dokuwiki-locale-fr-fr</id>
+  <name>Dokuwiki in Deutsch</name>
+  <version>2011-05-25-1</version>
+  <type>locale</type>
+  <extend>dokuwiki</extend>
+  <directory>inc/lang/de</directory>
+</package>

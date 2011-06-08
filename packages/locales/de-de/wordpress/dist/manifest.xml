@@ -1,0 +1,20 @@
+<package>
+  <id>wordpress-locale-de-de</id>
+  <name>Wordpress in Deutsch</name>
+  <version>3.1.3-1</version>
+  <type>locale</type>
+  <extend>wordpress</extend>
+  <directory>dist/locales/de_DE</directory>
+  <deploy>
+      <origin>languages/de_DE.mo</origin>
+      <destination path="public">../../../wp-content/languages/de_DE.mo</destination>
+  </deploy>
+  <deploy>
+      <origin>languages/continents-cities-de_DE.mo</origin>
+      <destination path="public">../../../wp-content/languages/continents-cities-de_DE.mo</destination>
+  </deploy>
+  <deploy>
+      <origin>themes/twentyten/de_DE.mo</origin>
+      <destination path="public">../../../wp-content/themes/twentyten/languages/de_DE.mo</destination>
+  </deploy>
+</package>

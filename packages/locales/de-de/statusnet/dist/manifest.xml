@@ -1,0 +1,8 @@
+<package>
+  <id>statusnet-locale-de-de</id>
+  <name>Status.net in Deutsch</name>
+  <version>0.9.1-1</version>
+  <type>locale</type>
+  <extend>statusnet</extend>
+  <directory>locale/de_DE</directory>
+</package>

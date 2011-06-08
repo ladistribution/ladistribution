@@ -1,0 +1,10 @@
+<package>
+  <id>ld-locale-de-de</id>
+  <name>De locales</name>
+  <version>0.6-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>locale</origin>
+      <destination path="shared">locales/ld/de_DE</destination>
+  </deploy>
+</package>

@@ -1,0 +1,12 @@
+<package>
+  <id>admin-locale-de-de</id>
+  <name>De locales</name>
+  <version>0.6-1</version>
+  <type>locale</type>
+  <extend>admin</extend>
+  <directory>dist/locales/de_DE</directory>
+  <deploy>
+      <origin>locale</origin>
+      <destination path="shared">locales/admin/de_DE</destination>
+  </deploy>
+</package>
