@@ -1,0 +1,11 @@
+<package>
+  <id>plugin-bad-behavior</id>
+  <name>Bad Behavior plugin</name>
+  <version>0.6.10-1</version>
+  <type>lib</type>
+  <need>lib-bad-behavior</need>
+  <deploy>
+      <origin>plugin/bad-behavior.php</origin>
+      <destination path="shared">plugins/bad-behavior.php</destination>
+  </deploy>
+</package>

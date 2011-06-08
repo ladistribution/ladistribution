@@ -36,6 +36,7 @@ cp -R tmp/shared/plugins plugins
 # cp -R /Web/ld/shared/plugins plugins
 
 # Remove some plugins
+rm plugins/bad-behavior.php
 rm plugins/bouncer.php
 
 # Export from SVN

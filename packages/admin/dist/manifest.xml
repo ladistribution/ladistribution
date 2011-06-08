@@ -1,11 +1,10 @@
 <package>
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.5-105</version>
+  <version>0.6-1</version>
   <type>application</type>
   <need>lib-admin</need>
   <need>lib-ld</need>
-  <need>lib-bad-behavior</need>
   <need>css-h6e-minimal</need>
   <need>css-ld-ui</need>
   <need>js-jquery</need>

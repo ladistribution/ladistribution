@@ -10,7 +10,7 @@ class Ld_Plugin_BadBehavior
             'url' => 'http://ladistribution.net/wiki/plugins/#bad-behavior',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.91',
+            'version' => '0.6.10',
             'description' => Ld_Translate::translate('Detects and automatically blocks suspicious accesses to site.'),
             'license' => 'MIT / GPL'
         );
