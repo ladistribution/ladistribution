@@ -1,6 +1,6 @@
 NAME="dokuwiki"
-VERSION="2010-11-07"
-SUB_VERSION="a"
+VERSION="2011-05-25"
+SUB_VERSION=""
 GZ="$NAME.tgz"
 SOURCE="http://www.splitbrain.org/_media/projects/$NAME/$NAME-$VERSION$SUB_VERSION.tgz"
 TMP="$NAME-$VERSION$SUB_VERSION"
@@ -47,7 +47,6 @@ rm $FOLDER/conf/acl.auth.php.dist
 rm $FOLDER/conf/local.php.dist
 rm $FOLDER/conf/mysql.conf.php.example
 rm $FOLDER/conf/users.auth.php.dist
-rm $FOLDER/conf/words.aspell.dist
 
 # Remove some default plugins
 rm -rf $FOLDER/lib/plugins/importoldchangelog
