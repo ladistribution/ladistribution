@@ -1,6 +1,6 @@
 NAME="wordpress"
 LOCALE="fr_FR"
-VERSION="3.1"
+VERSION="3.2"
 SOURCE="http://svn.automattic.com/wordpress-i18n/$LOCALE/branches/$VERSION/"
 PACKAGE="$NAME-locale-fr-fr.zip"
 
@@ -14,6 +14,8 @@ svn export "$SOURCE/messages/$LOCALE.mo" "languages/$LOCALE.mo" --quiet
 svn export "$SOURCE/messages/continents-cities-$LOCALE.mo" "languages/continents-cities-$LOCALE.mo" --quiet
 mkdir themes/twentyten
 svn export "$SOURCE/messages/twentyten/$LOCALE.mo" "themes/twentyten/$LOCALE.mo" --quiet
+mkdir themes/twentyeleven
+svn export "$SOURCE/messages/twentyeleven/$LOCALE.mo" "themes/twentyeleven/$LOCALE.mo" --quiet
 
 # Remove some unwanted files (mac)
 find . -name '*.DS_Store' -type f -delete
@@ -25,3 +27,4 @@ mv $PACKAGE ../../
 # Clean
 rm -rf languages
 rm -rf themes/twentyten
+rm -rf themes/twentyeleven

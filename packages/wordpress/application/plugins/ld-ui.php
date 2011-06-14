@@ -26,6 +26,7 @@ function ld_admin_head()
 #wpcontent { padding-top:31px !important; }
 #backtoblog { margin-top:31px !important; }
 #wphead, #user_info { display:none; }
+#adminmenuwrap { top:30px; }
 <?php endif ?>
 </style>
 <?php
@@ -61,6 +62,10 @@ function ld_template_head()
 	if ($current_theme == 'Twenty Ten' || $current_theme == 'Coraline') {
 		$colors = Ld_Ui::getApplicationColors();
 		echo '#wrapper { border:1px solid #' . $colors['ld-colors-border-2'] . '; margin-bottom:30px; }' . "\n";
+	}
+	if ($current_theme == 'Twenty Eleven') {
+		$colors = Ld_Ui::getApplicationColors();
+		echo '#page { border:1px solid #' . $colors['ld-colors-border-2'] . '; margin-bottom:30px; }' . "\n";
 	}
 	echo '</style>'."\n";
 }
