@@ -1,39 +1,45 @@
-.htaccess
 .svn
 
-dist
-repositories
-tmp
+/.htaccess
+/dist
+/log
+/repositories
+/tmp
 
-bbpress
-dokuwiki
-dotclear
-firefox-sync
-gallery
-habari
-moonmoon
-roundcube
-statusnet
-wordpress
+/bbpress
+/dokuwiki
+/dotclear
+/firefox-sync
+/gallery
+/habari
+/moonmoon
+/roundcube
+/statusnet
+/wordpress
 
-css/codemirror
-css/h6e-minimal
-css/jquery
+/admin/.htaccess
+/admin/dist
+/admin/openid
 
-js/codemirror
-js/jquery
+/css/codemirror
+/css/h6e-minimal
+/css/jquery
 
-lib/.htaccess
-lib/Auth
-lib/bad-behavior
-lib/Bouncer
-lib/clearbricks
-lib/HTMLPurifier
-lib/geshi
-lib/limonade
-lib/limonade.php
-lib/Rediska
-lib/Rediska.php
-lib/Zend
+/js/codemirror
+/js/jquery
 
-packages/*.zip
+/lib/.htaccess
+/lib/Auth
+/lib/bad-behavior
+/lib/Bouncer
+/lib/clearbricks
+/lib/HTMLPurifier
+/lib/geshi
+/lib/limonade
+/lib/limonade.php
+/lib/Rediska
+/lib/Rediska.php
+/lib/Zend
+
+/packages/*.zip
+/packages/locales/*.zip
