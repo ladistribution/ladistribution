@@ -1,5 +1,5 @@
 NAME="pilcrow"
-VERSION="1.0"
+VERSION="1.1"
 SOURCE="http://wordpress.org/extend/themes/download/$NAME.$VERSION.zip"
 FOLDER="theme"
 BUILD="build"
