@@ -1,7 +1,7 @@
 <package>
   <id>lib-admin</id>
   <name>La Distribution Admin Dependencies</name>
-  <version>0.5-105</version>
+  <version>0.6-3</version>
   <type>lib</type>
   <deploy>
       <origin>modules/default</origin>
@@ -18,6 +18,10 @@
   <deploy>
       <origin>modules/merger</origin>
       <destination path="shared">modules/merger</destination>
+  </deploy>
+  <deploy>
+      <origin>modules/api</origin>
+      <destination path="shared">modules/api</destination>
   </deploy>
   <deploy>
       <origin>plugins</origin>

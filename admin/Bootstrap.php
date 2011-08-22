@@ -29,8 +29,6 @@ class Bootstrap
 
         self::setupRoutes();
         self::setupMvc();
-        // self::setupCache();
-        // self::setupLocales();
 
         if ( get_magic_quotes_gpc() ) {
             $fn = array('self', '_stripslashesDeep');
@@ -81,7 +79,7 @@ class Bootstrap
             $view->js()->append('/ld/ld.js', 'lib-admin');
         }
 
-        $modules = array('slotter', 'merger', 'identity', 'default');
+        $modules = array('slotter', 'merger', 'identity', 'api', 'default');
 
         if (isset($configuration['default_module'])) {
             if (in_array($configuration['default_module'], $modules)) {
@@ -138,39 +136,6 @@ class Bootstrap
         $router->addConfig($config);
     }
 
-    // public static function setupLocales()
-    // {
-    //     if (Zend_Registry::isRegistered('Zend_Translate')) {
-    //         $site = self::getSite();
-    //         $adapter = Zend_Registry::get('Zend_Translate');
-    //         $locales = Ld_Files::getDirectories($site->getDirectory('shared') . '/locales/admin/');
-    //         foreach ($locales as $locale) {
-    //             $adapter->addTranslation($site->getDirectory('shared') . "/locales/admin/$locale/default.mo", $locale);
-    //         }
-    //     }
-    // }
-
-    // public static function setupCache()
-    // {
-    //     $cacheDirectory = LD_TMP_DIR . '/cache/';
-    // 
-    //     Ld_Files::createDirIfNotExists($cacheDirectory);
-    // 
-    //     if (file_exists($cacheDirectory) && is_writable($cacheDirectory)) {
-    //         $frontendOptions = array(
-    //            'lifetime' => 60, // cache lifetime of 1 minute
-    //            'automatic_serialization' => true
-    //         );
-    //         $backendOptions = array(
-    //             'cache_dir' => $cacheDirectory
-    //         );
-    //         self::$_registry['cache'] = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-    //     }
-    // }
-
-    /**
-     * Dispatch the request.
-     */
     public static function dispatch()
     {
         self::$_front->dispatch();
