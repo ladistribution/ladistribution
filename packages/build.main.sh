@@ -160,6 +160,10 @@ cd lib
   ./build.sh
   cd ..
 
+  cd sabredav
+  ./build.sh
+  cd ..
+
 cd ..
 
 cd plugins

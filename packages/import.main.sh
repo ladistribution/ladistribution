@@ -18,6 +18,7 @@ $IMPORT lib-bad-behavior.zip
 $IMPORT lib-limonade.zip
 $IMPORT lib-rediska.zip
 $IMPORT lib-bouncer.zip
+$IMPORT lib-sabredav.zip
 
 $IMPORT plugin-bouncer.zip
 

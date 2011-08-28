@@ -1,0 +1,16 @@
+<package>
+  <id>lib-sabredav</id>
+  <name>SabreDAV</name>
+  <version>1.5.1-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">Sabre</destination>
+  </deploy>
+  <!--
+  <deploy>
+      <origin>Sabre.includes.php</origin>
+      <destination path="lib">Sabre.includes.php</destination>
+  </deploy>
+  -->
+</package>
