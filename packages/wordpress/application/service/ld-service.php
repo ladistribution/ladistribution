@@ -26,16 +26,7 @@ function bad($message)
 
 if (isset($_GET['method'])) {
 
-    $method = $_GET['method'];
-
-    $input = file_get_contents('php://input');
-    if (!empty($input)) {
-        $params = Zend_Json::decode($input);
-    } else {
-        $params = array();
-    }
-
-    if ($method == 'init') {
+    if ($_GET['method'] == 'init') {
         define('WP_INSTALLING', true);
     }
 
@@ -57,6 +48,15 @@ if (isset($_GET['method'])) {
         }
     }
 
+    $method = $_GET['method'];
+
+    $input = file_get_contents('php://input');
+    if (!empty($input)) {
+        $params = Zend_Json::decode($input);
+    } else {
+        $params = array();
+    }
+
     if (method_exists('Ld_Service_Wordpress', $method)) {
         $result = call_user_func(array('Ld_Service_Wordpress', $method), $params);
         header("Content-Type:application/json");
@@ -64,4 +64,5 @@ if (isset($_GET['method'])) {
     } else {
         bad('Unknown method');
     }
+
 }
