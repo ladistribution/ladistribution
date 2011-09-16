@@ -59,10 +59,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
         );
 
         $config = $this->getConfig();
-        if (isset($config['host'])) {
+        if (empty($this->host) && isset($config['host'])) {
             $this->host = $config['host'];
         }
-        if (isset($config['path'])) {
+        if (empty($this->path) && isset($config['path'])) {
             $this->path = $config['path'];
         }
 
@@ -99,11 +99,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _checkConfig()
     {
+        // Create site.php file when it doesn't exists
         if (!Ld_Files::exists($this->getDirectory('dist') . '/site.php')) {
             $cfg  = "<?php\n";
 
             if (defined('LD_REWRITE') && constant('LD_REWRITE') == false) {
                 $cfg .= "define('LD_REWRITE', false);\n";
+            }
+            if (defined('LD_NGINX') && constant('LD_NGINX')) {
+                $cfg .= "define('LD_NGINX', true);\n";
             }
             // if (defined('LD_UNIX_PERMS')) {
             //     $cfg .= "define('LD_UNIX_PERMS', " . LD_UNIX_PERMS . ");\n";
@@ -139,6 +143,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             Ld_Files::put($this->getDirectory('dist') . "/site.php", $cfg);
         }
 
+        // Create config file when it doesn't exists
         if (!Ld_Files::exists($this->getDirectory('dist') . '/config.json')) {
             $config = array();
             foreach (array('host', 'path', 'name', 'owner') as $key) {

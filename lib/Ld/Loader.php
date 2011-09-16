@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Loader
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -71,8 +71,8 @@ class Ld_Loader
         if (empty($config['dir'])) {
             $config['dir'] = $dir;
         }
-        if (empty($config['host']) && isset($_SERVER['SERVER_NAME'])) {
-            $config['host'] = $_SERVER['SERVER_NAME'];
+        if (empty($config['host']) && isset($_SERVER['HTTP_HOST'])) {
+            $config['host'] = $_SERVER['HTTP_HOST'];
             if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80') {
                 $config['host'] .= ':' . $_SERVER['SERVER_PORT'];
             }
@@ -120,8 +120,8 @@ class Ld_Loader
         if (empty(self::$config['dir'])) {
             self::$config['dir'] = $dir;
         }
-        if (empty(self::$config['host']) && isset($_SERVER['SERVER_NAME'])) {
-            self::$config['host'] = $_SERVER['SERVER_NAME'];
+        if (empty(self::$config['host']) && isset($_SERVER['HTTP_HOST'])) {
+            self::$config['host'] = $_SERVER['HTTP_HOST'];
         }
 
         // Site object
