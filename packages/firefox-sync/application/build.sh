@@ -1,7 +1,7 @@
 NAME="firefox-sync"
 VERSION="1.5.20101206a"
 REVISION_SYNC="6a26681f4dd292a0f45405e39d3f95bc1a6c9c66"
-SOURCE_SYNC="http://hg.mozilla.org/services/sync-server/"
+SOURCE_SYNC="http://hg.mozilla.org/services/deprecated/sync-server/"
 FOLDER="application"
 PACKAGE="$NAME.zip"
 
