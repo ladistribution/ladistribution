@@ -162,7 +162,7 @@ class Ld_Site_Users_Simple
     {
         // Username
         $validateUsername = new Zend_Validate();
-        $validateUsername->addValidator( new Zend_Validate_StringLength(array('min' => 1, 'max' => 64)) );
+        $validateUsername->addValidator( new Zend_Validate_StringLength(array('min' => 1, 'max' => 64, 'encoding' => 'utf-8')) );
         if (!$validateUsername->isValid($user['username'])) {
             $messages = array_values($validateUsername->getMessages());
             throw new Exception($messages[0]);
@@ -171,7 +171,7 @@ class Ld_Site_Users_Simple
         // Password
         if (empty($user['hash']) && isset($user['password'])) {
             $validatePassword = new Zend_Validate();
-            $validatePassword->addValidator( new Zend_Validate_StringLength(array('min' => 4, 'max' => 64)) );
+            $validatePassword->addValidator( new Zend_Validate_StringLength(array('min' => 4, 'max' => 64, 'encoding' => 'utf-8')) );
             if (!$validatePassword->isValid($user['password'])) {
                 throw new Exception('Password should be betwen 6 and 64 characters.');
             }
