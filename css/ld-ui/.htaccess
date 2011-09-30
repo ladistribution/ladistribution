@@ -1,7 +1,3 @@
-<ifModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/css
-</ifModule>
-
 <ifModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 seconds"

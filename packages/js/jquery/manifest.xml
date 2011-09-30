@@ -1,7 +1,7 @@
 <package>
   <id>js-jquery</id>
   <name>jQuery</name>
-  <version>1.6.1-1</version>
+  <version>1.6.1-2</version>
   <type>js</type>
   <deploy>
       <origin>js</origin>
