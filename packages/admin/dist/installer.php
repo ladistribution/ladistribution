@@ -12,30 +12,21 @@ class Ld_Installer_Admin extends Ld_Installer
 
 	public function postUpdate()
 	{
-		$site = $this->getSite();
-
-		$endpoints = array();
-		$repositories = $site->getRepositoriesConfiguration();
-		foreach ($repositories as $id => $repository) {
+		foreach ($this->getSite()->getRawRepositories() as $id => $repository) {
 			if (isset($repository['endpoint'])) {
 				// upgrade old/deprecated releases
 				$old_releases = array('barbes', 'concorde', 'danube');
 				foreach ($old_releases as $release) {
 					if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
-						$repositories[$id]['endpoint'] = str_replace(
+						$repository['endpoint'] = str_replace(
 							LD_SERVER . 'repositories/' . $release,
 							LD_SERVER . 'repositories/' . LD_RELEASE,
 							$repository['endpoint']
 						);
-						$repository_upgrade = true;
+						$this->getSite()->getModel('repositories')->update($id, $repository);
 					}
 				}
-				$endpoints[] = $repositories[$id]['endpoint'];
 			}
-		}
-
-		if (isset($repository_upgrade)) {
-			$site->saveRepositoriesConfiguration($repositories);
 		}
 	}
 

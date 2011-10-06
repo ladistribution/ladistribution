@@ -369,11 +369,11 @@ class Slotter_UsersController extends Slotter_BaseController
             } else {
                 preg_match_all($this->emailRegexp(), $emails, $matches);
                 if (!empty($matches[0])) {
-                    $usersBackend = $this->site->getUsersBackend();
+                    $usersModel = $this->site->getModel('users');
                     $this->view->emails = array();
                     $this->view->usernames = array();
                     foreach ($matches[0] as $email) {
-                        $this->view->emails[$email] = $usersBackend->getUserByEmail($email);
+                        $this->view->emails[$email] = $this->site->getModel('users')->getUserBy('email', $email);
                         $explode = explode('@', $email);
                         $this->view->usernames[$email] = $explode[0];
                     }
@@ -412,7 +412,7 @@ class Slotter_UsersController extends Slotter_BaseController
             $user = $this->site->getUser($user);
         }
 
-        $test = $this->site->getUserByUrl($identity);
+        $test = $this->site->getModel('users')->getUserByUrl($identity);
         if (isset($test)) {
             throw new Exception("This OpenID is already used.");
         }

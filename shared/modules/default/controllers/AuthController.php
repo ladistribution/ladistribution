@@ -164,7 +164,7 @@ class AuthController extends Ld_Controller_Action
             throw new Exception("No token given.");
         }
 
-        $tokenUser = $this->site->getUsersBackend()->getUserBy('token', $this->_getParam('token'));
+        $tokenUser = $this->site->getModel('users')->getUserBy('token', $this->_getParam('token'));
         if (empty($tokenUser)) {
             throw new Exception("Invalid token");
         }
@@ -193,7 +193,7 @@ class AuthController extends Ld_Controller_Action
                 if (empty($username)) {
                     throw new Exception( $this->translate("Username can't be empty.") );
                 } else if ($tokenUser['username'] != $username
-                    && $exists = $this->site->getUsersBackend()->getUserBy('username', $username)) {
+                    && $exists = $this->site->getModel('users')->getUserBy('username', $username)) {
                     throw new Exception( $this->translate("User with this username already exists.") );
                 } else if (empty($email)) {
                     throw new Exception( $this->translate("Email can't be empty.") );
@@ -280,7 +280,7 @@ class AuthController extends Ld_Controller_Action
         if ($this->_hasParam('token')) {
 
             $token = $this->_getParam('token');
-            $this->view->user = $user = $this->site->getUsersBackend()->getUserBy('lost_password_token', $token);
+            $this->view->user = $user = $this->site->getModel('users')->getUserBy('lost_password_token', $token);
             if (empty($user) || empty($token)) {
                 throw new Exception("Invalid token.");
             }

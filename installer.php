@@ -320,7 +320,7 @@ out('Site initialised');
 // Upgrade repositories (if needed)
 
 $endpoints = array();
-$repositories = $site->getRepositoriesConfiguration();
+$repositories = $site->getRawRepositories();
 foreach ($repositories as $id => $repository) {
     if (isset($repository['endpoint'])) {
         // upgrade to test/local repositories
@@ -328,6 +328,7 @@ foreach ($repositories as $id => $repository) {
         if (LD_SERVER != $default_server) {
             if (strpos($repository['endpoint'], $default_server) !== false) {
                 $repository['endpoint'] = str_replace($default_server, LD_SERVER, $repository['endpoint']);
+                $this->getSite()->getModel('repositories')->update($id, $repository);
                 $repository_upgrade = true;
             }
         }
@@ -335,19 +336,20 @@ foreach ($repositories as $id => $repository) {
         $old_releases = LD_RELEASE == 'danube' ? array('barbes', 'concorde') : array('barbes', 'concorde', 'danube');
         foreach ($old_releases as $release) {
             if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
-                $repositories[$id]['endpoint'] = str_replace(
+                $repository['endpoint'] = str_replace(
                     LD_SERVER . 'repositories/' . $release,
                     LD_SERVER . 'repositories/' . LD_RELEASE,
                     $repository['endpoint']
                 );
+                $this->getSite()->getModel('repositories')->update($id, $repository);
                 $repository_upgrade = true;
             }
         }
-        $endpoints[] = $repositories[$id]['endpoint'];
+        $endpoints[] = $repository['endpoint'];
     }
 }
+
 if (isset($repository_upgrade)) {
-    $site->saveRepositoriesConfiguration($repositories);
     out('Repositories upgraded');
 }
 
