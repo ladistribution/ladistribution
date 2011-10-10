@@ -153,7 +153,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             Ld_Files::put($this->getDirectory('dist') . "/site.php", $cfg);
         }
 
-        // Create config file when it doesn't exists
+        // Init config when it doesn't exists
         $config = $this->getModel('config')->getConfig();
         if (empty($config)) {
             $config = array();
@@ -313,35 +313,25 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $name;
     }
 
+    /* Instances */
+
+    public function getRawInstances()
+    {
+        return $this->getModel('instances')->getInstances();
+    }
+
+    /* deprecated: use getRawInstances */
     public function getInstances($filterValue = null, $filterKey = 'type')
     {
-        if (empty($this->_instances)) {
-            $this->_instances = Ld_Files::getJson($this->getDirectory('dist') . '/instances.json');
-        }
-
-        $instances = $this->_instances;
-
-        // Filter by type
-        if (isset($filterValue)) {
-            foreach ($instances as $key => $instance) {
-                if (empty($instance[$filterKey]) || $filterValue != $instance[$filterKey]) {
-                    unset($instances[$key]);
-                }
-            }
-        }
-
-        return $instances;
+        return $this->getModel('instances')->getInstancesBy($filterKey, $filterValue);
     }
 
     public function getApplication($package)
     {
-        $instances = $this->getInstances($package, 'package');
-        if (empty($instances)) {
-            return null;
+        $infos = $this->getModel('instances')->getOneInstanceBy('package', $package);
+        if ($infos) {
+            return $this->getInstance($infos['id']);
         }
-        $keys = array_keys($instances);
-        $id = $keys[0];
-        return $this->getInstance($id);
     }
 
     public function getAdmin()
@@ -351,24 +341,17 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getApplicationsInstances(array $ignore = array())
     {
-        $applications = array();
-        foreach ($this->getInstances('application') as $id => $application) {
-            if (!in_array($application['package'], $ignore)) {
-                $instance = $this->getInstance($id);
-                if (isset($instance)) {
-                    $applications[$id] = $instance;
-                }
+        $result = array();
+        $applications = $this->getModel('instances')->getInstancesBy('type', 'application');
+        foreach ($applications as $id => $application) {
+            if (in_array($application['package'], $ignore)) {
+                continue;
+            }
+            if ($instance = $this->getInstance($id)) {
+                $result[$id] = $instance;
             }
         }
-        return $applications;
-    }
-
-    public function updateInstances($instances)
-    {
-        uasort($instances, array("Ld_Utils", "sortByOrder"));
-        Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
-        // Reset stored instances list
-        unset($this->_instances);
+        return $result;
     }
 
     public function getAllLocales()
@@ -403,7 +386,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getInstance($id)
     {
-        $instances = $this->getInstances();
+        $instances = $this->getRawInstances();
 
         // by id
         if (isset($instances[$id]) && isset($instances[$id]['path'])) {
@@ -451,10 +434,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $installer = $package->getInstaller(true);
 
         if ($package->getType() == 'application') {
-            foreach ($this->getInstances('application') as $application) {
-                if ($application['path'] == $preferences['path']) {
-                    throw new Exception(sprintf('An application is already installed on this path (%s).', $application['path']));
-                }
+            $application = $this->getModel('instances')->getOneInstanceBy('path', $preferences['path']);
+            if ($application) {
+                throw new Exception(sprintf('An application is already installed on this path (%s).', $preferences['path']));
             }
         }
 
@@ -545,25 +527,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
               $instance->setInfos($params)->save();
           }
 
-          // Site registration
-
-          $instances = $this->getInstances();
-
-          $id = $this->getUniqId();
-          $instances[$id] = array();
-          foreach (array('package', 'version', 'type', 'path', 'name', 'domain', 'order') as $key) {
-              if (isset($params[$key])) {
-                  $instances[$id][$key] = $params[$key];
+          // Filter params
+          $filterKeys = array('package', 'version', 'type', 'path', 'name', 'domain', 'order');
+          foreach ($params as $key => $value) {
+              if (in_array($key, $filterKeys)) {
+                  continue;
               }
+              unset($params[$key]);
           }
 
-          $this->updateInstances($instances);
+          // Add to Model
+          $this->getModel('instances')->addInstance($params);
 
-          $instance = $this->getInstance($id);
-          if (isset($instance)) {
-              $instance->id = $id;
-              return $instance;
-          }
+          // Return object (not array)
+          return $this->getInstance($params['path']);
     }
 
     public function checkDependencies($package)
@@ -621,13 +598,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // Update global registry (for libraries)
         } else {
-            $registeredInstances = $this->getInstances();
-            foreach ($registeredInstances as $key => $registeredInstance) {
-                if ($package->id == $registeredInstance['package']) {
-                    $registeredInstances[$key]['version'] = $package->version;
-                }
-            }
-            $this->updateInstances($registeredInstances);
+            $instanceInfos = $this->getModel('instances')->getOneInstanceBy('package', $package->id);
+            $id = $instanceInfos['id'];
+            $this->getModel('instances')->updateInstance($id, array('version' => $package->version));
         }
 
         if (isset($instance)) {
@@ -661,14 +634,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Post Move
         $installer->postMove();
 
-        // God, this should be refactorised
-        $registeredInstances = $this->getInstances();
-        foreach ($registeredInstances as $key => $registeredInstance) {
-            if (isset($registeredInstance['path']) && $oldPath == $registeredInstance['path']) {
-                $registeredInstances[$key]['path'] = $path;
-            }
-        }
-        $this->updateInstances($registeredInstances);
+        // Update model
+        $this->getModel('instances')->updateInstance($instance->getId(), array('path' => $path));
 
         return $instance;
     }
@@ -688,15 +655,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $installer->uninstall();
         $installer->postUninstall();
 
-        // Unregister
-        $instances = $this->getInstances();
-        foreach ($instances as $key => $registeredInstance) {
-            if (isset($registeredInstance['path']) && $instance->getPath() == $registeredInstance['path']) {
-                unset($instances[$key]);
-            }
-        }
-
-        $this->updateInstances($instances);
+        // Update model
+        $id = $instance->getId();
+        $this->getModel('instances')->deleteInstance($id);
 
         // Empty Registry cache
         $dir = $instance->getAbsolutePath();

@@ -50,13 +50,13 @@ class Ld_Model_Backend_Json
         $id = uniqid();
         $items[$id] = $params;
         $this->updateAll($items);
+        $params['id'] = $id;
+        return $params;
     }
 
     public function read($id)
     {
         $items = $this->getAll();
-        var_dump($id);
-        var_dump($items);
         if (isset($items[$id])) {
             return $items[$id];
         }

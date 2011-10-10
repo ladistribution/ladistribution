@@ -77,11 +77,14 @@ class Slotter_IndexController extends Slotter_BaseController
     public function orderAction()
     {
         if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->isPost() && $this->_hasParam('app')) {
-            $instances = $this->site->getInstances();
+            $instances = $this->site->getRawInstances();
             foreach ($this->_getParam('app') as $order => $id) {
-                $instances[$id]['order'] = $order;
+                if (isset($instances[$id])) {
+                    if (empty($instances[$id]['order']) || $instances[$id]['order'] != $order) {
+                        $this->getSite()->getModel('instances')->update($id, array('order' => $order));
+                    }
+                }
             }
-            $this->site->updateInstances($instances);
             $this->noRender();
             $this->getResponse()->appendBody('ok');
         }

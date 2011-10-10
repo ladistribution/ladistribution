@@ -67,8 +67,8 @@ class Ld_Model_Collection
       $items = $this->getBackend()->getAll();
       if (empty($items) && defined('LD_MONGO_BACKEND') && constant('LD_MONGO_BACKEND') && class_exists('Mongo')) {
           $items = Ld_Files::getJson($this->getSite()->getDirectory('dist') . '/' . $this->_collectionId . '.json');
-          foreach ($items as $item) {
-              $item['json_id'] = $item['id'];
+          foreach ($items as $id => $item) {
+              $item['json_id'] = $id;
               unset($item['id']);
               $this->getBackend()->create($item);
           }
@@ -80,7 +80,13 @@ class Ld_Model_Collection
 
   public function read($id) { return $this->getBackend()->read($id); }
 
-  public function update($id, $params) { return $this->getBackend()->update($id, $params); }
+  public function update($id, $params, $merge = true)
+  {
+      if ($merge) {
+          $params = array_merge($this->read($id), $params);
+      }
+      return $this->getBackend()->update($id, $params);
+  }
 
   public function delete($id) { return $this->getBackend()->delete($id); }
 

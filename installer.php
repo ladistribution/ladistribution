@@ -362,10 +362,9 @@ if (empty($instances)) {
         $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
         $manifest = Ld_Manifest::loadFromDirectory($targetDirectory);
         $infos = $manifest->getInfos();
-        $instances[$site->getUniqId()] = array('package' => $manifest->getId(), 'type' => 'lib', 'version' => $infos['version']);
+        $site->getModel('instances')->addInstance(array('package' => $manifest->getId(), 'type' => 'lib', 'version' => $infos['version']));
         Ld_Files::unlink($targetDirectory);
     }
-    $site->updateInstances($instances);
     out('Registry updated');
 }
 
