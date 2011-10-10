@@ -387,11 +387,9 @@ class Ld_Cli
 
         $package = Ld_Package::loadFromDirectory($directory);
 
-        $preferences = $this->_getInstallPreferences($package, array('title', 'path'));
+        $preferences = $this->_getInstallPreferences($package, array('path'));
 
-        $preferences['name'] = $package->getName();
         $preferences['path'] = $path;
-        $preferences['title'] = $preferences['name'];
 
         if (isset($preferences['administrator']) && is_string($preferences['administrator'])) {
             $preferences['administrator'] = $site->getUser($preferences['administrator']);
@@ -410,6 +408,16 @@ class Ld_Cli
 
         $this->_write(sprintf("%s v%s successfully registered on %s",
             $instance->getPackageId(), $instance->getVersion(), $instance->getPath() ));
+    }
+
+    public function unregister()
+    {
+        $instance = $this->getInstance();
+
+        $this->getSite()->getModel('instances')->deleteInstance( $instance->getId() );
+
+        $this->_write(sprintf("%s successfully unregistered on %s",
+            $instance->getPackageId(), $instance->getPath() ));
     }
 
     protected function getInstance()
