@@ -65,7 +65,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
               <strong class="nowrap">available for registered users only</strong>.</p>
 
           <p>The Custom Server URL is:
-              <strong class="nowrap"><?php echo Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
+              <strong class="nowrap"><?php echo $serverUrl = Ld_Plugin::applyFilters('Weave:serverUrl', $application->getUrl()); ?></strong></p>
 
           <h2>Your data</h2>
 
@@ -92,8 +92,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
 
           <h2>Notes</h2>
 
-          <p>Firefox Sync is directly integrated into Firefox 4. For Firefox 3, an extension is available on
-                  <a href="https://addons.mozilla.org/fr/firefox/addon/10868">addons.mozilla.org</a></p>
+          <p>Firefox Sync is directly integrated in Firefox since Firefox 4.</p>
 
           <p>To initialise it:
               <ol>
@@ -101,7 +100,7 @@ require_once dirname(__FILE__) . '/dist/prepend.php';
                   <li>Choose "I already have a Firefox Sync account", "<strong>Connect</strong>"</li>
                   <li>Then "<strong>I don't have the device with me</strong>"</li>
                   <li>Enter your La Distribution username/password</li>
-                  <li>Choose "<strong>Use a custom server</strong>", enter your server URL</li>
+                  <li>Choose "<strong>Use a custom server</strong>", enter your server URL: "<strong><?php echo $serverUrl; ?></strong>"</li>
                   <li>Enter a new "<strong>Sync Key</strong>", it's like a password, you'll have to remember it</li>
               </ol>
           </p>
