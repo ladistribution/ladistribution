@@ -22,6 +22,8 @@ cp -R tmp/shared/plugins plugins
 # Remove some plugins
 rm plugins/bad-behavior.php
 rm plugins/bouncer.php
+rm plugins/gloss.php
+rm plugins/ssl.php
 
 echo "# Copy 'locales' from tmp"
 mkdir locales
