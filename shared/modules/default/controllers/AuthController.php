@@ -6,6 +6,11 @@
 class AuthController extends Ld_Controller_Action
 {
 
+    public function preDispatch()
+    {
+        $this->view->noIndex = true;
+    }
+
     function loginAction()
     {
         if (Ld_Auth::isAuthenticated() && Ld_Auth::isOpenid() && Ld_Auth::isAnonymous()) {
