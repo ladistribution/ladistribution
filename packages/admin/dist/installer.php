@@ -37,6 +37,10 @@ class Ld_Installer_Admin extends Ld_Installer
 		if (isset($repository_upgrade)) {
 			$site->saveRepositoriesConfiguration($repositories);
 		}
+
+		// Update appearance version
+		$version = substr(md5(time()), 0, 10);
+		$site->setConfig('appearance_version', $version);
 	}
 
 	public function postMove()

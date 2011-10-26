@@ -11,7 +11,7 @@ class Ld_Plugin_Gloss
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
             'version' => '0.5.0',
-            'description' => Ld_Translate::translate('A bit of CSS3 bling bling to tune your website.'),
+            'description' => Ld_Translate::notranslate('A bit of CSS3 bling bling to tune your website.'),
             'license' => 'MIT / GPL'
         );
     }

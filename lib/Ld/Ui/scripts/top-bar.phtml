@@ -32,8 +32,10 @@
 
         <?php elseif (Ld_Auth::isAuthenticated() && $user = Ld_Auth::getUser()) : ?>
 
-            <a class="avatar" href="<?php echo $this->userUrl ?>"><?php echo Ld_Ui::getAvatar($user, 16) ?></a>
-            <a href="<?php echo $this->userUrl ?>"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></a>
+            <a class="user" href="<?php echo $this->userUrl ?>">
+                <?php echo Ld_Ui::getAvatar($user, 16) ?>
+                <span><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></span>
+            </a>
             <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate('Sign Out') ?></a>
 
         <?php else : ?>
