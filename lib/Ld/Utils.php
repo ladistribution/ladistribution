@@ -31,7 +31,12 @@ class Ld_Utils
         }
         switch ($type) {
             case 'php':
-                $con = new mysqli($db['host'], $db['user'], $db['password'], $db['name'], isset($db['port']) ? $db['port'] : null);
+                $con = mysqli_init();
+                $con->options(MYSQLI_OPT_CONNECT_TIMEOUT, 2.5);
+                $result = $con->real_connect($db['host'], $db['user'], $db['password'], $db['name'], isset($db['port']) ? $db['port'] : null);
+                if (!$result) {
+                    return null;
+                }
                 break;
              case 'zend':
              default:
