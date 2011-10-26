@@ -35,8 +35,8 @@
   background-image:none;
 }
 
-#wpadminbar .ab-top-menu > li.ld-site-name > a:hover span,
-#wpadminbar .ab-top-menu > li.ld-app-name > a:hover span {
+#wpadminbar .ab-top-menu > #wp-admin-bar-ld-site > a:hover span,
+#wpadminbar .ab-top-menu > #wp-admin-bar-ld-application > a:hover span {
   background:none;
 }
 
