@@ -1,6 +1,6 @@
 NAME="wordpress"
 LOCALE="fr_FR"
-VERSION="3.2"
+VERSION="3.3"
 SOURCE="http://svn.automattic.com/wordpress-i18n/$LOCALE/branches/$VERSION/"
 PACKAGE="$NAME-locale-fr-fr.zip"
 

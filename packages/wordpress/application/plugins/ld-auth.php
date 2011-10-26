@@ -3,7 +3,7 @@
 Plugin Name: LD auth
 Plugin URI: http://h6e.net/wordpress/plugins/ld-auth
 Description: Handle authentification through La Distribution backend
-Version: 0.5.5
+Version: 0.6.1
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -30,7 +30,7 @@ class Ld_Wordpress_Auth
 	function authenticate_username_password($user, $username, $password)
 	{
 		if ( is_a($user, 'WP_User') ) { return $user; }
-		
+
 		if ( !empty($username) && !empty($password) ) {
 			$result = Ld_Auth::authenticate($username, $password);
 			if ($result->isValid()) {
@@ -79,7 +79,9 @@ class Ld_Wordpress_Auth
 	{
 		global $wpdb;
 
-		if ( !$wp_user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE ID = %d LIMIT 1", $user_id)) )
+		$wp_user = new WP_User($user_id);
+
+		if ( !$wp_user )
 			return false;
 
 		$user = array(
@@ -188,7 +190,9 @@ function get_userdata( $user_id )
 	if ( $user_id == 0 )
 		return false;
 
-	if ( !$wp_user = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->users WHERE ID = %d LIMIT 1", $user_id)) )
+	$wp_user = new WP_User($user_id);
+
+	if ( !$wp_user )
 		return false;
 
 	$ld_user = Ld_Wordpress_Auth::get_ld_user($wp_user->user_login);
@@ -201,7 +205,6 @@ function get_userdata( $user_id )
 		$wp_user->display_name		= !empty($ld_user['fullname']) ? $ld_user['fullname'] : $ld_user['username'];
 	}
 
-	_fill_user($wp_user);
 	return $wp_user;
 }
 endif;

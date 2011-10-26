@@ -45,7 +45,7 @@
   -webkit-border-bottom-right-radius:5px;
   border-bottom-left-radius:5px;
   border-bottom-right-radius:5px;
-  height:29px;
+  height:28px;
 }
 
 .h6e-super-bar-inner {
@@ -79,7 +79,7 @@
 }
 
 .h6e-top-bar-inner .a a.ld-site-name {
-  background:url(img/star.png) 10px 50% no-repeat;
+  background:url(img/star.png) 10px 5px no-repeat;
   padding-left:35px;
   padding-right:10px;
   height:29px;
@@ -196,7 +196,7 @@ ul.instances li.moonmoon { padding-left:25px; background-image:url(img/moonmoon-
   padding-left:15px;
   position:absolute;
   left:0;
-  top:29px;
+  top:28px;
   z-index:9991;
 }
 

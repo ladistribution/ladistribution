@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-04 11:31+0100\n"
+"POT-Creation-Date: 2011-10-26 13:49+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: translate\n"
-"X-Poedit-Basepath: /Users/znarfor/Dev/ld-master\n"
+"X-Poedit-Basepath: /Users/znarfor/Dev/ladistribution\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -18,18 +18,18 @@ msgstr ""
 "X-Poedit-SearchPath-1: shared/modules\n"
 "X-Poedit-SearchPath-2: shared/plugins\n"
 
-#: shared/modules/default/views/layouts/layout.phtml:50
+#: shared/modules/default/views/layouts/layout.phtml:51
 #, php-format
 msgid "Powered by <a href=\"%s\">La Distribution</a>, a community project initiated by <a href=\"%s\">h6e</a>."
 msgstr "Propulsé par <a href=\"%s\">La Distribution</a>, un projet communautaire initié par <a href=\"%s\">h6e</a>."
 
-#: shared/modules/default/views/layouts/layout.phtml:55
+#: shared/modules/default/views/layouts/layout.phtml:56
 msgid "Language:"
 msgstr "Langue :"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:5
 #: shared/modules/default/views/scripts/auth/login.phtml:90
-msgid "Log In"
+msgid "Sign In"
 msgstr "Se Connecter"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:14
@@ -50,8 +50,9 @@ msgstr "Mot de passe incorrect"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:34
 #: shared/modules/default/views/scripts/auth/login.phtml:57
-msgid "Username (or OpenID):"
-msgstr "Nom d'utilisateur (ou OpenID) :"
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:45
+msgid "Username (or Email, or OpenID):"
+msgstr "Nom d'utilisateur (ou Email, ou OpenID) :"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:39
 #: shared/modules/default/views/scripts/auth/register.phtml:50
@@ -67,13 +68,11 @@ msgid "Forget"
 msgstr "Oublier"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:96
-msgid "Log In with another identity"
+msgid "Sign In with another identity"
 msgstr "Se connecter avec une autre identité"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:99
-#: shared/modules/default/views/scripts/auth/register.phtml:8
-#: shared/modules/default/views/scripts/auth/register.phtml:64
-msgid "Register"
+msgid "Sign Up"
 msgstr "S'enregistrer"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:102
@@ -116,10 +115,6 @@ msgstr "Nouveau mot de passe à nouveau:"
 msgid "Update my password"
 msgstr "Mettre à jour mon mot de passe"
 
-#: shared/modules/default/views/scripts/auth/lost-password.phtml:45
-msgid "Username (or Email, or OpenID):"
-msgstr "Nom d'utilisateur (ou Email, ou OpenID) :"
-
 #: shared/modules/default/views/scripts/auth/lost-password.phtml:48
 msgid "An email will be sent with instructions on how to reset your password."
 msgstr "Un email contenant les instructions pour mettre à jour votre mot de passe vous sera envoyé."
@@ -131,6 +126,11 @@ msgstr "Réinitialiser mon mot de passe"
 #: shared/modules/default/views/scripts/auth/register.phtml:6
 msgid "Complete Registration"
 msgstr "Finir l'enregistrement"
+
+#: shared/modules/default/views/scripts/auth/register.phtml:8
+#: shared/modules/default/views/scripts/auth/register.phtml:64
+msgid "Register"
+msgstr "S'enregistrer"
 
 #: shared/modules/default/views/scripts/auth/register.phtml:23
 msgid "Username:"
@@ -1114,37 +1114,37 @@ msgstr "Ajouter les utilisateurs et envoyer les invitations"
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
 
-#: shared/modules/default/controllers/AuthController.php:101
+#: shared/modules/default/controllers/AuthController.php:106
 msgid "Registration is closed."
 msgstr "L'enregistrement est fermé."
 
-#: shared/modules/default/controllers/AuthController.php:129
-#: shared/modules/default/controllers/AuthController.php:194
+#: shared/modules/default/controllers/AuthController.php:134
+#: shared/modules/default/controllers/AuthController.php:199
 msgid "Username can't be empty."
 msgstr "Le nom d'utilisateur ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:131
-#: shared/modules/default/controllers/AuthController.php:199
+#: shared/modules/default/controllers/AuthController.php:136
+#: shared/modules/default/controllers/AuthController.php:204
 msgid "Email can't be empty."
 msgstr "L'email ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:133
-#: shared/modules/default/controllers/AuthController.php:201
-#: shared/modules/default/controllers/AuthController.php:296
+#: shared/modules/default/controllers/AuthController.php:138
+#: shared/modules/default/controllers/AuthController.php:206
+#: shared/modules/default/controllers/AuthController.php:301
 msgid "Password can't be empty."
 msgstr "Le mot de passe ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:135
-#: shared/modules/default/controllers/AuthController.php:203
-#: shared/modules/default/controllers/AuthController.php:298
+#: shared/modules/default/controllers/AuthController.php:140
+#: shared/modules/default/controllers/AuthController.php:208
+#: shared/modules/default/controllers/AuthController.php:303
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
 
-#: shared/modules/default/controllers/AuthController.php:197
+#: shared/modules/default/controllers/AuthController.php:202
 msgid "User with this username already exists."
 msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"
 
-#: shared/modules/default/controllers/AuthController.php:325
+#: shared/modules/default/controllers/AuthController.php:330
 msgid "Identity not found."
 msgstr "Identité non trouvée."
 
@@ -1153,14 +1153,17 @@ msgid "Identity"
 msgstr "Identité"
 
 #: shared/modules/merger/controllers/SettingsController.php:38
+#: shared/modules/slotter/controllers/InstanceController.php:189
 msgid "Configuration updated"
 msgstr "Configuration mise à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:27
+#: shared/modules/slotter/controllers/InstanceController.php:255
 msgid "Colors updated"
 msgstr "Couleurs mises à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:44
+#: shared/modules/slotter/controllers/InstanceController.php:277
 msgid "CSS updated"
 msgstr "CSS mise à jour"
 
@@ -1170,14 +1173,17 @@ msgid "Backups"
 msgstr "Sauvegardes"
 
 #: shared/modules/slotter/controllers/BackupsController.php:24
+#: shared/modules/slotter/controllers/InstanceController.php:294
 msgid "Backup generated"
 msgstr "Sauvegarde générée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:44
+#: shared/modules/slotter/controllers/InstanceController.php:319
 msgid "Backup deleted"
 msgstr "Sauvegarde supprimée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:54
+#: shared/modules/slotter/controllers/InstanceController.php:325
 msgid "Backup restored"
 msgstr "Sauvegarde restaurée"
 
@@ -1219,7 +1225,6 @@ msgid "Instance updated"
 msgstr "Instance mise à jour"
 
 #: shared/modules/slotter/controllers/InstanceController.php:371
-#: shared/modules/slotter/controllers/UsersController.php:175
 msgid "Roles updated"
 msgstr "Rôles mis à jour"
 
@@ -1296,8 +1301,6 @@ msgid "Checks user submitted content to see if it look like spam."
 msgstr "Vérifie le contenu soumis par les utilisateurs pour voir si ça ressemble à du spam."
 
 #: shared/plugins/akismet.php:27
-#: shared/plugins/memcache.php:36
-#: shared/plugins/recaptcha.php:29
 #, php-format
 msgid "%s is configured and running."
 msgstr "%s est configuré et fonctionne."
@@ -1307,7 +1310,6 @@ msgid "Akismet API key is invalid."
 msgstr "La clé d'API Akismet est invalide."
 
 #: shared/plugins/akismet.php:31
-#: shared/plugins/recaptcha.php:26
 #, php-format
 msgid "%s is not running. Complete your configuration to enable it."
 msgstr "%s ne fonctionne pas. Complétez votre configuration pour l'activer."
@@ -1325,7 +1327,6 @@ msgstr "Détecte et bloque automatiquement les accès suspects au site."
 #: shared/plugins/bouncer.php:39
 #: shared/plugins/gloss.php:24
 #: shared/plugins/gravatar.php:21
-#: shared/plugins/wordpress-unlocker.php:39
 #, php-format
 msgid "%s is running."
 msgstr "%s fonctionne."
@@ -1344,17 +1345,16 @@ msgstr "Clé d'API Http:BL"
 
 #: shared/plugins/bouncer.php:14
 msgid "Track and block agents using the Bouncer library."
-msgstr ""
+msgstr "Piste et bloque des agents en utilisant la bibliothèque Bouncer."
 
 #: shared/plugins/bouncer.php:28
-#: shared/plugins/memcache.php:25
 msgid "Memcache PHP extension is needed to run this plugin."
 msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greffon."
 
 #: shared/plugins/bouncer.php:37
 #, php-format
 msgid "%s is not properly configured."
-msgstr ""
+msgstr "%s n'est pas correctement configuré."
 
 #: shared/plugins/bouncer.php:44
 #, php-format
@@ -1365,17 +1365,13 @@ msgstr "la bibliothèque %s n'est pas disponible."
 msgid "Customise configuration, enable debugging, new features..."
 msgstr "Personnaliser la configuration, activer le débugage, de nouvelles fonctionnalités ..."
 
-#: shared/plugins/gloss.php:14
-msgid "A bit of CSS3 bling bling to tune your website."
-msgstr ""
-
 #: shared/plugins/gravatar.php:14
 msgid "Display avatars using the Gravatar service."
 msgstr "Affiche des avatars en utilisant le service Gravatar."
 
 #: shared/plugins/mail.php:14
-msgid "Make Mail backend configurable."
-msgstr ""
+msgid "Allow email delivery configuration."
+msgstr "Permet de configurer l'envoi d'emails."
 
 #: shared/plugins/mail.php:45
 msgid "Backend"
@@ -1456,6 +1452,30 @@ msgstr "Déverrouiller les plugins"
 msgid "Unlock users"
 msgstr "Déverrouiller les utilisateurs"
 
+#~ msgid "Make mail backend configurable."
+#~ msgstr "Permet de configurer l'envoi d'emails."
+
+#, fuzzy
+#~ msgid "Pause"
+#~ msgstr "Base"
+
+#, fuzzy
+#~ msgid "No site registered yet."
+#~ msgstr "Pas encore enregistré"
+
+#, fuzzy
+#~ msgid "Create a new website."
+#~ msgstr "Créer un nouveau site"
+
+#, fuzzy
+#~ msgid "Register an existing website."
+#~ msgstr "Référencer une base de donnée existante"
+
+#, fuzzy
+#~ msgid "Register a site"
+#~ msgstr "Référencer une base de donnée"
+#~ msgid "Username (or OpenID):"
+#~ msgstr "Nom d'utilisateur (ou OpenID) :"
 #~ msgid "Add a database connection"
 #~ msgstr "Ajouter une connexion à une base de donnée"
 #~ msgid "Add a new site"
@@ -1550,8 +1570,6 @@ msgstr "Déverrouiller les utilisateurs"
 #~ "n'importe quel thème Wordpress."
 #~ msgid "%s is configured and enabled."
 #~ msgstr "%s est configuré et activé."
-#~ msgid "Memcache is configured and enabled."
-#~ msgstr "Memcache est configuré et activé."
 #~ msgid "Allow caching using the Memcache backend."
 #~ msgstr "Permet la mise en cache en utilisant le backend Memcache."
 #~ msgid "Upload & clone"

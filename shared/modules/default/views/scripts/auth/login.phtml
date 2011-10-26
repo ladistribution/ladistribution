@@ -2,7 +2,7 @@
 
   <div id="ld-login-box">
 
-    <h2><?php echo $this->translate("Log In") ?></h2>
+    <h2><?php echo $this->translate("Sign In") ?></h2>
 
     <?php
     if (isset($this->authentication)) {
@@ -87,16 +87,16 @@
         <?php endif ?>
 
         <input type="hidden" name="openid_action" value="login"/>
-        <input id="ld-auth-login" class="button" type="submit" value="<?php echo $this->translate("Log In") ?>"/>
+        <input id="ld-auth-login" class="button" type="submit" value="<?php echo $this->translate("Sign In") ?>"/>
 
     </form>
 
     <div class="links">
       <a id="ld-auth-another-identity-link" style="display:none" href="?another-identity=1"><?php
-            echo $this->translate("Log In with another identity") ?></a>
+            echo $this->translate("Sign In with another identity") ?></a>
       <?php if ($this->open_registration && empty($this->ld_auth_user)) : ?>
           <a id="ld-auth-register-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php
-            echo $this->translate("Register") ?></a><br/>
+            echo $this->translate("Sign Up") ?></a><br/>
       <?php endif ?>
       <a id="ld-auth-lost-password-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'lostPassword', 'controller' => 'auth')); ?>"><?php
         echo $this->translate("Lost Password?") ?></a>

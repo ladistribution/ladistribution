@@ -197,6 +197,14 @@ class Ld_Ui
         return $view->render('top-nav.phtml');
     }
 
+    public static function getTopMenu($options = array())
+    {
+        $view = self::getView();
+        $view->site = self::getSite();
+        $out = $view->render('top-menu.phtml');
+        return $out;
+    }
+
     public static function getCssUrl($file, $package)
     {
         $infos = self::getPackageInfos($package, 'css');
@@ -359,6 +367,17 @@ class Ld_Ui
         }
 
         return "$diff $term ago";
+    }
+
+    public static function contrastColor($color, $diff = 20)
+    {
+        $rgb = '';
+        for ($x=0; $x<3; $x++) {
+            $c = hexdec(substr($color,(2*$x),2)) - $diff;
+            $c = ($c < 0) ? 0 : ( ($c > 255) ? 'ff' : dechex($c) );
+            $rgb .= (strlen($c) < 2) ? '0'.$c : $c;
+        }
+        return $rgb;
     }
 
     /* Deprecated */

@@ -22,7 +22,7 @@ class AuthController extends Ld_Controller_Action
             return;
         }
 
-        $this->appendTitle( $this->translate('Log In') );
+        $this->appendTitle( $this->translate('Sign In') );
 
         $this->view->postParams = array();
         foreach ($_POST as $key => $value) {
@@ -84,7 +84,7 @@ class AuthController extends Ld_Controller_Action
 
     function registerAction()
     {
-        $this->appendTitle( $this->translate('Register') );
+        $this->appendTitle( $this->translate('Sign Up') );
 
         // get the referer
         $this->view->referer = $this->_getReferer();

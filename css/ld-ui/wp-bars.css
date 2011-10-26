@@ -1,0 +1,77 @@
+#wpadminbar {
+  background-color:#ededed;
+  background-image:none;
+  border-bottom:1px solid #ccc;
+}
+
+#wpadminbar a:hover { text-decoration:underline; }
+
+#wp-admin-bar-ld-user a:hover { text-decoration:none; }
+#wp-admin-bar-ld-user a:hover span { text-decoration:underline; }
+
+#wpadminbar .quicklinks {
+  border:0;
+}
+
+#wpadminbar .ab-top-menu * {
+  font-size: 12px;
+  line-height: 2.35em;
+}
+
+.ld-top-menu {
+  position:fixed;
+}
+
+#wpadminbar *, #wpadminbar * a,
+#wpadminbar .ab-top-menu > li > a:hover,
+#wpadminbar .ab-top-menu > li > a:hover span,
+#wpadminbar .ab-top-menu > li.over > a > span,
+#wpadminbar #adminbarsearch .adminbar-input {
+  color:#4E5368;
+  text-shadow:none;
+}
+
+#wpadminbar .ab-top-menu > li:hover {
+  background-image:none;
+}
+
+#wpadminbar .ab-top-menu > li.ld-site-name > a:hover span,
+#wpadminbar .ab-top-menu > li.ld-app-name > a:hover span {
+  background:none;
+}
+
+/* Placeholder in search input */
+#wpadminbar #adminbarsearch .adminbar-input::-webkit-input-placeholder {
+  color:#ccc;
+}
+#wpadminbar #adminbarsearch .adminbar-input:-moz-placeholder {
+  color:#ccc;
+}
+
+#wpadminbar .quicklinks > ul > li,
+#wpadminbar .quicklinks > ul > li.opposite {
+  border-color:#ccc;
+}
+
+#wpadminbar .quicklinks > ul > li > a,
+#wpadminbar .quicklinks > ul > li.opposite > a {
+  border:0;
+}
+
+#wpadminbar li.ld-site-name a {
+  background:url(img/star.png) 10px 5px no-repeat;
+  padding-left:35px;
+  padding-right:10px;
+  border-right:1px solid #ccc;
+}
+
+#wpadminbar li.ld-app-name a {
+  background:7px 6px no-repeat url(img/wp16.png);
+  padding-left: 28px;
+  padding-right: 1em;
+}
+
+#wpadminbar li img.avatar {
+  vertical-align:middle;
+  padding-right:5px;
+}
