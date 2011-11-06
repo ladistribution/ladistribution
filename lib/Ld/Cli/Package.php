@@ -140,6 +140,11 @@ class Ld_Cli_Package extends Ld_Cli
         $this->push();
     }
 
+    public function release()
+    {
+        $this->bbp();
+    }
+
     public function addRemote()
     {
         $path = $this->_getPath();

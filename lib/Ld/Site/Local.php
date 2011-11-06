@@ -875,15 +875,24 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function testDatabase($dbParameters, $throwException = true)
     {
         try {
-            $con = Ld_Utils::getDbConnection($dbParameters, 'zend');
+            $con = Ld_Utils::getDbConnection($dbParameters, 'php');
+            if (!$con) {
+                return false;
+            }
             if ($dbParameters['type'] == 'mysql-master') {
                 $dbName = "ld_test_" . uniqid();
-                $con->query("CREATE DATABASE $dbName");
+                $result = $con->query("CREATE DATABASE $dbName");
+                if (!$result) {
+                    return false;
+                }
                 $con->query("DROP DATABASE $dbName");
             } else if ($dbParameters['type'] == 'mysql') {
-                $con->fetchCol('SHOW TABLES');
+                $result = $con->query('SHOW TABLES');
+                if (!$result) {
+                    return false;
+                }
             }
-            $con->closeConnection();
+            unset($con);
             return true;
         } catch (Exception $e) {
             if ($throwException) {

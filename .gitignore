@@ -6,6 +6,8 @@
 /repositories
 /tmp
 
+/apps
+
 /bbpress
 /dokuwiki
 /dotclear
@@ -21,10 +23,13 @@
 /admin/dist
 /admin/openid
 
+/css/bootstrap
 /css/codemirror
 /css/h6e-minimal
 /css/jquery
 
+/js/bootstrap
+/js/ld/ld.c.js
 /js/codemirror
 /js/jquery
 
@@ -39,7 +44,11 @@
 /lib/limonade.php
 /lib/Rediska
 /lib/Rediska.php
+/lib/Sabre
+/lib/Sabre.includes.php
 /lib/Zend
+
+/shared/bouncer
 
 /packages/*.zip
 /packages/locales/*.zip

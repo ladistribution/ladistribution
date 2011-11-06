@@ -369,8 +369,8 @@ if (empty($instances)) {
 }
 
 // Handle locales
-
-if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_RELEASE') != 'barbes') {
+$supported_locales = array('fr_FR', 'de_DE');
+if (defined('LD_LOCALE') && in_array(constant('LD_LOCALE'), $supported_locales) && constant('LD_RELEASE') != 'barbes') {
     Ld_Files::createDirIfNotExists($site->getDirectory('shared') . '/locales');
     $dir = $site->getDirectory('shared') . '/locales/ld/' . LD_LOCALE;
     $repository = LD_SERVER . 'repositories/' . LD_RELEASE . '/' . substr(LD_LOCALE, 0, 2);

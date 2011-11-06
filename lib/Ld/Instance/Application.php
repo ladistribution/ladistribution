@@ -149,7 +149,6 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
                 return $this->id = $id;
             }
         }
-        return null;
     }
 
     public function getDb()
