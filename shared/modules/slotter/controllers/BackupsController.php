@@ -96,7 +96,7 @@ class Slotter_BackupsController extends Slotter_BaseController
 
     protected function _doBackup()
     {
-        $backup = $site->doBackup();
+        $backup = $this->site->doBackup();
 
         return $backup['filename'];
     }
