@@ -1338,7 +1338,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $zip->addExclusion('/' . preg_quote($value, '/') . '/');
         }
         $zip->addDirectory($this->getDirectory('dist'), 'dist', true);
+
         $zip->write();
+        fclose($fp);
+        Ld_Files::updatePermissions($absoluteFilename);
 
         // Delete instances backups
         foreach ($archives as $archive) {
