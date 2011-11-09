@@ -1328,8 +1328,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $zip = new fileZip($fp);
 
         // Add instances backups to zip
-        foreach ($archives as $name => $filename) {
-            $zip->addFile($filename, $name);
+        foreach ($archives as $name => $archive) {
+            $zip->addFile($archive, $name);
         }
 
         // Add dist directory to zip

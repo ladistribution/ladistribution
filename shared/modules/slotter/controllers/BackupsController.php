@@ -20,7 +20,7 @@ class Slotter_BackupsController extends Slotter_BaseController
     {
         // Do backup
         if ($this->getRequest()->isPost() && $this->_hasParam('dobackup')) {
-            $this->_doBackup();
+            $this->site->doBackup();
             $this->view->notification = $this->translate("Backup generated");
         }
 
@@ -65,18 +65,12 @@ class Slotter_BackupsController extends Slotter_BaseController
 
         foreach ($this->_getBackups() as $backup) {
             if (time() - filemtime($backup['absoluteFilename']) < $freshness) {
-                $siteBackupFilename = $backup['filename'];
-                $siteBackupAbsoluteFilename = $backup['absoluteFilename'];
-                break;
+                return $this->_sendBackup($backup['absoluteFilename'], $backup['filename']);
             }
         }
 
-        if (empty($siteBackupFilename)) {
-            $siteBackupFilename = $this->_doBackup();
-            $siteBackupAbsoluteFilename = $backupsPath . '/' . $siteBackupFilename;
-        }
-
-        $this->_sendBackup($siteBackupAbsoluteFilename, $siteBackupFilename);
+        $backup = $this->site->doBackup();
+        return $this->_sendBackup($backup['absoluteFilename'], $backup['filename']);
     }
 
     protected function _getBackups()
@@ -92,13 +86,6 @@ class Slotter_BackupsController extends Slotter_BaseController
         }
         ksort($backups);
         return $backups;
-    }
-
-    protected function _doBackup()
-    {
-        $backup = $this->site->doBackup();
-
-        return $backup['filename'];
     }
 
     protected function _restoreBackup($backupFilename)
