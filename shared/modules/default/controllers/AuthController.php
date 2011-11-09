@@ -187,7 +187,8 @@ class AuthController extends Ld_Controller_Action
             try {
 
                 $user = $tokenUser;
-                $user['username'] = $username = $this->_getParam('ld_register_username');
+                $user['username'] = $username = trim($this->_getParam('ld_register_username', ''));
+                $user['fullname'] = $fullname = trim($this->_getParam('ld_register_fullname', ''));
                 if ($this->_hasParam('ld_register_email')) {
                     $user['email'] = $email = $this->_getParam('ld_register_email');
                 }
