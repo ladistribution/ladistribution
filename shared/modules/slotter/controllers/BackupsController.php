@@ -140,6 +140,7 @@ class Slotter_BackupsController extends Slotter_BaseController
             echo $buffer;
         }
         fclose($handle);
+        exit;
     }
 
 }
