@@ -96,6 +96,7 @@ class Ld_Loader
         defined('LD_REWRITE') OR define('LD_REWRITE', true);
         defined('LD_BREADCRUMBS') OR define('LD_BREADCRUMBS', false);
         defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
+        defined('LD_NEWS_FEED') OR define('LD_NEWS_FEED', false);
 
         defined('LD_SVN') OR define('LD_SVN', Ld_Files::exists($dir . '/.svn') || Ld_Files::exists($dir . '/.git'));
         if (!constant('LD_SVN')) {
