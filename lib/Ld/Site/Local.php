@@ -1312,6 +1312,45 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $this->setConfig('appearance_version', $version);
     }
 
+    // Backups
+
+    public function doBackup()
+    {
+        // Generate instances backups
+        $archives = array();
+        foreach ($this->getApplicationsInstances() as $id => $instance) {
+            $archives["$id.zip"] = $instance->doBackup();
+        }
+
+        $filename = 'site-' . date("Y-m-d-H-i-s") .'.zip';
+        $absoluteFilename = $this->getDirectory('dist') . '/backups/' . $filename;
+        $fp = fopen($absoluteFilename, 'wb');
+        $zip = new fileZip($fp);
+
+        // Add instances backups to zip
+        foreach ($archives as $name => $filename) {
+            $zip->addFile($filename, $name);
+        }
+
+        // Add dist directory to zip
+        $exclusions = array('dist/.htaccess', 'dist/.DS_Store', 'dist/backups');
+        foreach ($exclusions as $value) {
+            $zip->addExclusion('/' . preg_quote($value, '/') . '/');
+        }
+        $zip->addDirectory($this->getDirectory('dist'), 'dist', true);
+
+        $zip->write();
+        fclose($fp);
+        Ld_Files::updatePermissions($absoluteFilename);
+
+        // Delete instances backups
+        foreach ($archives as $archive) {
+            Ld_Files::rm($archive);
+        }
+
+        return compact('filename', 'absoluteFilename');
+    }
+
     // Legacy
 
     public function getBasePath() { return $this->getPath(); }
