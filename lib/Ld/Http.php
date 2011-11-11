@@ -68,7 +68,7 @@ class Ld_Http
             self::curl_context($ch);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FILE, $local); 
+            curl_setopt($ch, CURLOPT_FILE, $local);
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_exec($ch);
             curl_close($ch);
@@ -93,7 +93,12 @@ class Ld_Http
 
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $adapter->setDestination($dir);
-        $result = $adapter->receive();
+
+        if (!$adapter->receive()) {
+            foreach ($adapter->getMessages() as $code => $message) {
+                throw new Exception($message);
+            }
+        }
 
         return $adapter->getFileName();
     }

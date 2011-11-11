@@ -10,7 +10,7 @@ class Ld_Plugin_Development
             'url' => 'http://ladistribution.net/wiki/plugins/#development',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.3',
+            'version' => '0.6.9',
             'description' => Ld_Translate::translate('Customise configuration, enable debugging, new features...'),
             'license' => 'MIT / GPL'
         );
@@ -43,30 +43,18 @@ class Ld_Plugin_Development
             'name' => 'nocompress_js_css', 'label' => ('Use non-compressed JS & CSS'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
-        // $preferences[] = array(
-        //     'name' => 'include_path', 'label' => ('Include Path'),
-        //     'type' => 'text', 'defaultValue' => str_replace(LD_LIB_DIR . PATH_SEPARATOR, '', ini_get('include_path'))
-        // );
-        // $preferences[] = array(
-        //     'name' => 'active_ajax_users', 'label' => ('Active ajax style user management'),
-        //     'type' => 'boolean', 'defaultValue' => '0'
-        // );
         $preferences[] = array(
-            'name' => 'active_multi_sites', 'label' => ('Active Multi Sites'),
+            'name' => 'active_multi_sites', 'label' => ('Activate Multi Sites'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
         $preferences[] = array(
-            'name' => 'active_multi_domains', 'label' => ('Active Multi Domains'),
+            'name' => 'active_multi_domains', 'label' => ('Activate Multi Domains'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
-        // $preferences[] = array(
-        //     'name' => 'active_appearance', 'label' => ('Active Appearance'),
-        //     'type' => 'boolean', 'defaultValue' => '0'
-        // );
-        // $preferences[] = array(
-        //     'name' => 'active_merger', 'label' => ('Active Merger'),
-        //     'type' => 'boolean', 'defaultValue' => '0'
-        // );
+        $preferences[] = array(
+            'name' => 'active_news_feed', 'label' => ('Activate News Feed'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
         return $preferences;
     }
 
@@ -90,11 +78,6 @@ class Ld_Plugin_Development
         if ($time_limit) {
             set_time_limit($time_limit);
         }
-        // $include_path = $site->getConfig('include_path');
-        // if ($include_path) {
-        //     $path = empty($include_path) ? LD_LIB_DIR : LD_LIB_DIR . PATH_SEPARATOR . $include_path;
-        //     set_include_path($path);
-        // }
         $no_rewrite = $site->getConfig('no_rewrite');
         if ($no_rewrite) {
             defined('LD_REWRITE') OR define('LD_REWRITE', false);
@@ -104,10 +87,6 @@ class Ld_Plugin_Development
             defined('LD_COMPRESS_JS') OR define('LD_COMPRESS_JS', false);
             defined('LD_COMPRESS_CSS') OR define('LD_COMPRESS_CSS', false);
         }
-        // $active_ajax_users = $site->getConfig('active_ajax_users');
-        // if ($active_ajax_users) {
-        //     defined('LD_AJAX_USERS') OR define('LD_AJAX_USERS', true);
-        // }
         $active_multi_sites = $site->getConfig('active_multi_sites');
         if ($active_multi_sites) {
             defined('LD_MULTI_SITES') OR define('LD_MULTI_SITES', true);
@@ -116,14 +95,10 @@ class Ld_Plugin_Development
         if ($active_multi_domains) {
             defined('LD_MULTI_DOMAINS') OR define('LD_MULTI_DOMAINS', true);
         }
-        // $active_appearance = $site->getConfig('active_appearance');
-        // if ($active_appearance) {
-        //     defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
-        // }
-        // $active_merger = $site->getConfig('active_merger');
-        // if ($active_merger) {
-        //     defined('LD_MERGER') OR define('LD_MERGER', true);
-        // }
+        $active_news_feed = $site->getConfig('active_news_feed');
+        if ($active_news_feed) {
+            defined('LD_NEWS_FEED') OR define('LD_NEWS_FEED', true);
+        }
     }
 
 }
