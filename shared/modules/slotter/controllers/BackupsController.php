@@ -20,7 +20,7 @@ class Slotter_BackupsController extends Slotter_BaseController
     {
         // Do backup
         if ($this->getRequest()->isPost() && $this->_hasParam('dobackup')) {
-            $this->_doBackup();
+            $this->site->doBackup();
             $this->view->notification = $this->translate("Backup generated");
         }
 
@@ -65,18 +65,12 @@ class Slotter_BackupsController extends Slotter_BaseController
 
         foreach ($this->_getBackups() as $backup) {
             if (time() - filemtime($backup['absoluteFilename']) < $freshness) {
-                $siteBackupFilename = $backup['filename'];
-                $siteBackupAbsoluteFilename = $backup['absoluteFilename'];
-                break;
+                return $this->_sendBackup($backup['absoluteFilename'], $backup['filename']);
             }
         }
 
-        if (empty($siteBackupFilename)) {
-            $siteBackupFilename = $this->_doBackup();
-            $siteBackupAbsoluteFilename = $backupsPath . '/' . $siteBackupFilename;
-        }
-
-        $this->_sendBackup($siteBackupAbsoluteFilename, $siteBackupFilename);
+        $backup = $this->site->doBackup();
+        return $this->_sendBackup($backup['absoluteFilename'], $backup['filename']);
     }
 
     protected function _getBackups()
@@ -92,45 +86,6 @@ class Slotter_BackupsController extends Slotter_BaseController
         }
         ksort($backups);
         return $backups;
-    }
-
-    protected function _doBackup()
-    {
-        $backupsPath = $this->site->getDirectory('dist') . '/backups';
-
-        $instances = $this->site->getApplicationsInstances();
-        $archives = array();
-        foreach ($instances as $id => $instance) {
-            $filename = $instance->doBackup();
-            $archives["$id.zip"] = $filename;
-        }
-
-        $siteBackupFilename = 'site-' . date("Y-m-d-H-i-s") .'.zip';
-        $siteBackupAbsoluteFilename = $backupsPath . '/' . $siteBackupFilename;
-        $fp = fopen($siteBackupAbsoluteFilename, 'wb');
-        $zip = new fileZip($fp);
-        foreach ($archives as $name => $filename) {
-            $zip->addFile($filename, $name);
-        }
-
-        $exclusions = array(
-            'dist/.htaccess',
-            'dist/.DS_Store',
-            'dist/backups'
-        );
-
-        foreach ($exclusions as $value) {
-            $zip->addExclusion('/' . preg_quote($value, '/') . '/');
-        }
-
-        $zip->addDirectory($this->site->getDirectory('dist'), 'dist', true);
-        $zip->write();
-
-        foreach ($archives as $filename) {
-            Ld_Files::rm($filename);
-        }
-
-        return $siteBackupFilename;
     }
 
     protected function _restoreBackup($backupFilename)
@@ -179,11 +134,13 @@ class Slotter_BackupsController extends Slotter_BaseController
         ob_end_clean();
         header('Content-Type: application/zip', true);
         header('Content-Disposition: attachment; filename="' . $filename . '"', true);
+        header("Content-Length: ". filesize($absoluteFileName), true);
         $handle = fopen($absoluteFileName, "rb");
         while ( ($buffer = fread($handle, 8192)) != '' ) {
             echo $buffer;
         }
         fclose($handle);
+        exit;
     }
 
 }

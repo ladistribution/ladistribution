@@ -7,7 +7,7 @@
  * @package    Ld_Instance
  * @subpackage Ld_Instance_Application
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2010 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -79,15 +79,13 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
     {
         $site = $this->getSite();
 
-        // $baseUrl = $this->getSite()->getPath();
         $baseUrl = 'http://' . $site->getHost($this->domain) . $site->getPath();
 
-        if (constant('LD_REWRITE') == false || $site->getConfig('root_admin') != 1) {
+        $noRewrite = defined('LD_REWRITE') && constant('LD_REWRITE') == false;
+        if ($noRewrite || $site->getConfig('root_admin') != 1) {
             $baseUrl .=  '/' . $this->getPath();
         }
-        // $baseUrl .=  '/' . $this->getPath();
-
-        if (constant('LD_REWRITE') == false) {
+        if ($noRewrite) {
             $baseUrl .= '/index.php';
         }
 

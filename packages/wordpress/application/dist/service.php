@@ -109,6 +109,13 @@ class Ld_Service_Wordpress
 		return $site->getBaseUrl() . $application->getPath();
 	}
 
+	public function flushCache()
+	{
+		wp_cache_flush();
+
+		return 'ok';
+	}
+
 	// Configuration
 
 	public function getOptions()

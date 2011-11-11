@@ -119,6 +119,7 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		}
 
 		$this->serviceRequest('updateUrl');
+		$this->serviceRequest('flushCache');
 
 		Ld_Files::rm($this->getRestoreFolder());
 	}

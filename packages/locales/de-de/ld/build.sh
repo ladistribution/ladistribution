@@ -1,17 +1,20 @@
 NAME="ld"
 LOCALE="de_DE"
-SOURCE="http://ladistribution.net/svn/trunk/shared/locales/$NAME/$LOCALE/"
+SOURCE="git://github.com/ladistribution/ladistribution.git"
 FOLDER="locale"
-PACKAGE="$NAME-locale-de-de.zip"
+PACKAGE="$NAME-locale-fr-fr.zip"
 
-# Get source
-svn export $SOURCE $FOLDER --quiet
+echo "# Get source from $SOURCE with git"
+git clone $SOURCE tmp --quiet
 
-# Remove some unwanted files (mac)
-find . -name '*.DS_Store' -type f -delete
+echo "# Copy '$NAME/$LOCALE' from tmp"
+cp -R "tmp/shared/locales/$NAME/$LOCALE/" $FOLDER
+
+# Clean tmp
+rm -rf tmp
 
 # Create zip package
-zip -r $PACKAGE $FOLDER manifest.xml -q -x \*.svn/\* \*.preserve
+zip -qr $PACKAGE $FOLDER manifest.xml -q -x \*.svn/\* \*.preserve \*.DS_Store
 mv $PACKAGE ../../
 
 # Clean

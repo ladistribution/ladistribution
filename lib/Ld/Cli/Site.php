@@ -54,6 +54,15 @@ class Ld_Cli_Site extends Ld_Cli
         $this->_write("OK.");
     }
 
+    public function backup()
+    {
+        $site = $this->getSite();
+
+        $backup = $site->doBackup();
+
+        $this->_write(sprintf("Backup generated on %s", $backup['absoluteFilename']));
+    }
+
     public function restore()
     {
         $site = $this->getSite();
