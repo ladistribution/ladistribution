@@ -248,7 +248,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (empty($config)) {
             $config = $this->_config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
         }
+        // Deprecated
         $config = Ld_Plugin::applyFilters('Site:getConfig', $config);
+        // Current Syntax
+        $config = Ld_Plugin::applyFilters('Site:config', $config);
         if (isset($key)) {
             $value = isset($config[$key]) ? $config[$key] : $default;
             return $value;
