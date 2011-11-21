@@ -53,4 +53,9 @@ class Ld_Utils
         return $con;
     }
 
+    public function getUniqId()
+    {
+        return uniqid();
+    }
+
 }
