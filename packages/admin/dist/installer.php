@@ -12,7 +12,16 @@ class Ld_Installer_Admin extends Ld_Installer
 
 	public function postUpdate()
 	{
-		foreach ($this->getSite()->getRawRepositories() as $id => $repository) {
+		$site = $this->getSite();
+
+		// Re-generate secret if missing/empty
+		$secret = $site->getConfig('secret');
+		if (empty($secret)) {
+			$site->setConfig('secret', Ld_Auth::generatePhrase());
+		}
+
+		$endpoints = array();
+		foreach ($site->getRawRepositories() as $id => $repository) {
 			if (isset($repository['endpoint'])) {
 				// upgrade old/deprecated releases
 				$old_releases = array('barbes', 'concorde', 'danube');

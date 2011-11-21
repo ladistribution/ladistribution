@@ -227,11 +227,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return false;
     }
 
-    public function getUniqId()
-    {
-        return uniqid();
-    }
-
     public function getHost($domain = null)
     {
         if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
@@ -257,7 +252,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (empty($config)) {
             $config = $this->_config = $this->getModel('config')->getConfig();
         }
+        // Deprecated
         $config = Ld_Plugin::applyFilters('Site:getConfig', $config);
+        // Current Syntax
+        $config = Ld_Plugin::applyFilters('Site:config', $config);
         if (isset($key)) {
             $value = isset($config[$key]) ? $config[$key] : $default;
             return $value;
@@ -1194,5 +1192,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     // Legacy
 
     public function getBasePath() { return $this->getPath(); }
+
+    public function getUniqId() { return Ld_Utils::getUniqId(); }
 
 }
