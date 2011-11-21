@@ -137,6 +137,7 @@ class Slotter_SettingsController extends Slotter_BaseController
             }
             $mainEndpoints = array(
                 'http://ladistribution.net/repositories/edge/main',
+                'http://ladistribution.net/repositories/europe/main',
                 'http://ladistribution.net/repositories/danube/main',
                 'http://ladistribution.net/repositories/concorde/main');
             foreach ($mainEndpoints as $endpoint) {
