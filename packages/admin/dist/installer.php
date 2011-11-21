@@ -14,6 +14,12 @@ class Ld_Installer_Admin extends Ld_Installer
 	{
 		$site = $this->getSite();
 
+		// Re-generate secret if missing/empty
+		$secret = $site->getConfig('secret');
+		if (empty($secret)) {
+			$site->setConfig('secret', Ld_Auth::generatePhrase());
+		}
+
 		$endpoints = array();
 		$repositories = $site->getRepositoriesConfiguration();
 		foreach ($repositories as $id => $repository) {
