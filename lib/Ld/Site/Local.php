@@ -821,7 +821,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function addDatabase($params)
     {
-        $this->testDatabase($params);
+        if (!$this->testDatabase($params)) {
+             throw new Exception("Can't connect to database with given params.");
+        }
         $this->getModel('databases')->add($params);
     }
 
@@ -861,7 +863,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $database = $this->getModel('databases')->get($id);
         $database = array_merge($database, $params);
-        $this->testDatabase($database);
+        if (!$this->testDatabase($database)) {
+             throw new Exception("Can't connect to database with given params.");
+        }
         $this->getModel('databases')->update($id, $database);
     }
 
