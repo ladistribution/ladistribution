@@ -35,7 +35,7 @@ class Slotter_LocalesController extends Slotter_BaseController
 
             // Collect remote endpoints
             $allEndpoints = array();
-            foreach ($this->getSite()->getRepositoriesConfiguration() as $repository) {
+            foreach ($this->getSite()->getRawRepositories() as $repository) {
                 if ($repository['type'] == 'remote') {
                     $allEndpoints[] = $repository['endpoint'];
                 }

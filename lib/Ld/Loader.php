@@ -66,20 +66,11 @@ class Ld_Loader
             self::registerAutoload();
         }
 
-        // Site configuration
-        $config = self::$config = Ld_Files::getJson($dir . '/dist/config.json');
-        if (empty($config['dir'])) {
-            $config['dir'] = $dir;
-        }
-        if (empty($config['host']) && isset($_SERVER['HTTP_HOST'])) {
-            $config['host'] = $_SERVER['HTTP_HOST'];
-            if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80') {
-                $config['host'] .= ':' . $_SERVER['SERVER_PORT'];
-            }
-        }
+        // Root Directory
+        Zend_Registry::set('dir', $dir);
 
         // Site object
-        $site = self::$site = new Ld_Site_Local($config);
+        $site = self::$site = new Ld_Site_Local(array('dir' => $dir));
         Zend_Registry::set('site', $site);
 
         self::setupPlugins();
@@ -97,6 +88,7 @@ class Ld_Loader
         defined('LD_BREADCRUMBS') OR define('LD_BREADCRUMBS', false);
         defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
         defined('LD_NEWS_FEED') OR define('LD_NEWS_FEED', false);
+        defined('LD_MONGO_BACKEND') OR define('LD_MONGO_BACKEND', false);
 
         defined('LD_SVN') OR define('LD_SVN', Ld_Files::exists($dir . '/.svn') || Ld_Files::exists($dir . '/.git'));
         if (!constant('LD_SVN')) {
@@ -152,7 +144,7 @@ class Ld_Loader
             self::loadPlugin($plugin);
         }
     }
-    
+
     public static function loadPlugin($plugin)
     {
         $plugin = strtolower($plugin);

@@ -114,7 +114,7 @@ class Ld_Site_Child extends Ld_Site_Local
     {
         $config = $this->_config;
         if (empty($config)) {
-            $config = $this->_config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
+            $config = $this->_config = $this->getModel('config')->getConfig();
         }
 
         if ($this->hasParentSite()) {
@@ -164,11 +164,6 @@ class Ld_Site_Child extends Ld_Site_Local
     public function getUser($username)
     {
         return $this->getParentSite()->getUser($username);
-    }
-
-    public function getUserByUrl($url)
-    {
-        return $this->getParentSite()->getUserByUrl($url);
     }
 
     public function getDomains()

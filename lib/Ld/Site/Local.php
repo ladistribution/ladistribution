@@ -38,6 +38,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected $_config = array();
 
+    protected $_models = array();
+
     public function __construct($params = array())
     {
         $properties = array('id', 'dir', 'host', 'path', 'type', 'name', 'slots', 'domain', 'owner');
@@ -59,6 +61,14 @@ class Ld_Site_Local extends Ld_Site_Abstract
         );
 
         $config = $this->getConfig();
+
+        if (empty($config['host']) && isset($_SERVER['HTTP_HOST'])) {
+            $config['host'] = $_SERVER['HTTP_HOST'];
+            if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80') {
+                $config['host'] .= ':' . $_SERVER['SERVER_PORT'];
+            }
+        }
+
         if (empty($this->host) && isset($config['host'])) {
             $this->host = $config['host'];
         }
@@ -143,8 +153,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
             Ld_Files::put($this->getDirectory('dist') . "/site.php", $cfg);
         }
 
-        // Create config file when it doesn't exists
-        if (!Ld_Files::exists($this->getDirectory('dist') . '/config.json')) {
+        // Init config when it doesn't exists
+        $config = $this->getModel('config')->getConfig();
+        if (empty($config)) {
             $config = array();
             foreach (array('host', 'path', 'name', 'owner') as $key) {
                 if (isset($this->$key)) {
@@ -153,19 +164,17 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
             $config['root_admin'] = 1;
             $config['secret'] = Ld_Auth::generatePhrase();
-            Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
+            $this->getModel('config')->setConfig($config);
         }
     }
 
     protected function _checkRepositories()
     {
-        if (!Ld_Files::exists($this->getDirectory('dist') . '/repositories.json')) {
-            $cfg = array();
-            $cfg['repositories'] = array(
-                'main' => array('id' => 'main', 'name' => 'Main', 'type' => 'remote',
-                'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/main')
-            );
-            Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
+        $respositories = $this->getRawRepositories();
+        if (empty($respositories)) {
+            $this->addRepository(array(
+                'id' => 'main', 'name' => 'Main', 'type' => 'remote',
+                'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/main'));
         }
     }
 
@@ -218,11 +227,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return false;
     }
 
-    public function getUniqId()
-    {
-        return uniqid();
-    }
-
     public function getHost($domain = null)
     {
         if (defined('LD_MULTI_DOMAINS') && constant('LD_MULTI_DOMAINS')) {
@@ -246,9 +250,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $config = $this->_config;
         if (empty($config)) {
-            $config = $this->_config = Ld_Files::getJson($this->getDirectory('dist') . "/config.json");
+            $config = $this->_config = $this->getModel('config')->getConfig();
         }
+        // Deprecated
         $config = Ld_Plugin::applyFilters('Site:getConfig', $config);
+        // Current Syntax
+        $config = Ld_Plugin::applyFilters('Site:config', $config);
         if (isset($key)) {
             $value = isset($config[$key]) ? $config[$key] : $default;
             return $value;
@@ -266,7 +273,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         } else if (is_string($param)) {
             $config[$param] = $value;
         }
-        Ld_Files::putJson($this->getDirectory('dist') . "/config.json", $config);
+        $this->getModel('config')->setConfig($config);
         $this->_config = $config;
         return $config;
     }
@@ -304,35 +311,25 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $name;
     }
 
+    /* Instances */
+
+    public function getRawInstances()
+    {
+        return $this->getModel('instances')->getInstances();
+    }
+
+    /* deprecated: use getRawInstances */
     public function getInstances($filterValue = null, $filterKey = 'type')
     {
-        if (empty($this->_instances)) {
-            $this->_instances = Ld_Files::getJson($this->getDirectory('dist') . '/instances.json');
-        }
-
-        $instances = $this->_instances;
-
-        // Filter by type
-        if (isset($filterValue)) {
-            foreach ($instances as $key => $instance) {
-                if (empty($instance[$filterKey]) || $filterValue != $instance[$filterKey]) {
-                    unset($instances[$key]);
-                }
-            }
-        }
-
-        return $instances;
+        return $this->getModel('instances')->getInstancesBy($filterKey, $filterValue);
     }
 
     public function getApplication($package)
     {
-        $instances = $this->getInstances($package, 'package');
-        if (empty($instances)) {
-            return null;
+        $infos = $this->getModel('instances')->getOneInstanceBy('package', $package);
+        if ($infos) {
+            return $this->getInstance($infos['id']);
         }
-        $keys = array_keys($instances);
-        $id = $keys[0];
-        return $this->getInstance($id);
     }
 
     public function getAdmin()
@@ -342,24 +339,17 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getApplicationsInstances(array $ignore = array())
     {
-        $applications = array();
-        foreach ($this->getInstances('application') as $id => $application) {
-            if (!in_array($application['package'], $ignore)) {
-                $instance = $this->getInstance($id);
-                if (isset($instance)) {
-                    $applications[$id] = $instance;
-                }
+        $result = array();
+        $applications = $this->getModel('instances')->getInstancesBy('type', 'application');
+        foreach ($applications as $id => $application) {
+            if (in_array($application['package'], $ignore)) {
+                continue;
+            }
+            if ($instance = $this->getInstance($id)) {
+                $result[$id] = $instance;
             }
         }
-        return $applications;
-    }
-
-    public function updateInstances($instances)
-    {
-        uasort($instances, array("Ld_Utils", "sortByOrder"));
-        Ld_Files::putJson($this->getDirectory('dist') . '/instances.json', $instances);
-        // Reset stored instances list
-        unset($this->_instances);
+        return $result;
     }
 
     public function getAllLocales()
@@ -373,7 +363,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getLocales()
     {
-        $locales = Ld_Files::getJson($this->getDirectory('dist') . '/locales.json');
+        $locales = $this->getModel('config')->getLocales();
         if (empty($locales)) {
             $locales = array('en_US');
         }
@@ -389,12 +379,12 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function updateLocales($locales)
     {
-        Ld_Files::putJson($this->getDirectory('dist') . '/locales.json', $locales);
+        $this->getModel('config')->setLocales($locales);
     }
 
     public function getInstance($id)
     {
-        $instances = $this->getInstances();
+        $instances = $this->getRawInstances();
 
         // by id
         if (isset($instances[$id]) && isset($instances[$id]['path'])) {
@@ -442,10 +432,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $installer = $package->getInstaller(true);
 
         if ($package->getType() == 'application') {
-            foreach ($this->getInstances('application') as $application) {
-                if ($application['path'] == $preferences['path']) {
-                    throw new Exception(sprintf('An application is already installed on this path (%s).', $application['path']));
-                }
+            $application = $this->getModel('instances')->getOneInstanceBy('path', $preferences['path']);
+            if ($application) {
+                throw new Exception(sprintf('An application is already installed on this path (%s).', $preferences['path']));
             }
         }
 
@@ -536,25 +525,20 @@ class Ld_Site_Local extends Ld_Site_Abstract
               $instance->setInfos($params)->save();
           }
 
-          // Site registration
-
-          $instances = $this->getInstances();
-
-          $id = $this->getUniqId();
-          $instances[$id] = array();
-          foreach (array('package', 'version', 'type', 'path', 'name', 'domain', 'order') as $key) {
-              if (isset($params[$key])) {
-                  $instances[$id][$key] = $params[$key];
+          // Filter params
+          $filterKeys = array('package', 'version', 'type', 'path', 'name', 'domain', 'order');
+          foreach ($params as $key => $value) {
+              if (in_array($key, $filterKeys)) {
+                  continue;
               }
+              unset($params[$key]);
           }
 
-          $this->updateInstances($instances);
+          // Add to Model
+          $this->getModel('instances')->addInstance($params);
 
-          $instance = $this->getInstance($id);
-          if (isset($instance)) {
-              $instance->id = $id;
-              return $instance;
-          }
+          // Return object (not array)
+          return $this->getInstance($params['path']);
     }
 
     public function checkDependencies($package)
@@ -612,13 +596,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // Update global registry (for libraries)
         } else {
-            $registeredInstances = $this->getInstances();
-            foreach ($registeredInstances as $key => $registeredInstance) {
-                if ($package->id == $registeredInstance['package']) {
-                    $registeredInstances[$key]['version'] = $package->version;
-                }
-            }
-            $this->updateInstances($registeredInstances);
+            $instanceInfos = $this->getModel('instances')->getOneInstanceBy('package', $package->id);
+            $id = $instanceInfos['id'];
+            $this->getModel('instances')->updateInstance($id, array('version' => $package->version));
         }
 
         if (isset($instance)) {
@@ -652,14 +632,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
         // Post Move
         $installer->postMove();
 
-        // God, this should be refactorised
-        $registeredInstances = $this->getInstances();
-        foreach ($registeredInstances as $key => $registeredInstance) {
-            if (isset($registeredInstance['path']) && $oldPath == $registeredInstance['path']) {
-                $registeredInstances[$key]['path'] = $path;
-            }
-        }
-        $this->updateInstances($registeredInstances);
+        // Update model
+        $this->getModel('instances')->updateInstance($instance->getId(), array('path' => $path));
 
         return $instance;
     }
@@ -679,15 +653,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $installer->uninstall();
         $installer->postUninstall();
 
-        // Unregister
-        $instances = $this->getInstances();
-        foreach ($instances as $key => $registeredInstance) {
-            if (isset($registeredInstance['path']) && $instance->getPath() == $registeredInstance['path']) {
-                unset($instances[$key]);
-            }
-        }
-
-        $this->updateInstances($instances);
+        // Update model
+        $id = $instance->getId();
+        $this->getModel('instances')->deleteInstance($id);
 
         // Empty Registry cache
         $dir = $instance->getAbsolutePath();
@@ -812,11 +780,29 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $preferences;
     }
 
+    // Models
+
+    public function getModel($model)
+    {
+        $model = strtolower($model);
+        if (empty($this->models[$model])) {
+            $fileName = $this->getDirectory('lib') . '/Ld/Model/' . ucfirst($model) . '.php';
+            $className = 'Ld_Model_' . ucfirst($model);
+            if (file_exists($fileName) && class_exists($className)) {
+                $this->models[$model] = new $className();
+            } else {
+                $this->models[$model] = new Ld_Model_Collection($model);
+            }
+            $this->models[$model]->setSite($this);
+        }
+        return $this->models[$model];
+    }
+
     // Databases
 
     public function getDatabases($type = null)
     {
-        $databases = Ld_Files::getJson($this->getDirectory('dist') . '/databases.json');
+        $databases = $this->getModel('databases')->getAll();
         // Filter
         if (isset($type)) {
             foreach ($databases as $key => $db) {
@@ -830,18 +816,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getDatabase($id)
     {
-        $databases = $this->getDatabases();
-        if (isset($databases[$id])) {
-            return $databases[$id];
-        }
+        return $this->getModel('databases')->get($id);
     }
 
     public function addDatabase($params)
     {
-        $this->testDatabase($params);
-        $databases = $this->getDatabases();
-        $databases[$this->getUniqId()] = $params;
-        $this->_writeDatabases($databases);
+        if (!$this->testDatabase($params)) {
+             throw new Exception("Can't connect to database with given params.");
+        }
+        $this->getModel('databases')->add($params);
     }
 
     public function createDatabase($params)
@@ -873,29 +856,22 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
         unset($params['master']);
 
-        $databases = $this->getDatabases();
-        $databases[$this->getUniqId()] = $params;
-        $this->_writeDatabases($databases);
+        $this->getModel('databases')->add($params);
     }
 
     public function updateDatabase($id, $params)
     {
-        $databases = $this->getDatabases();
-        $databases[$id] = array_merge($databases[$id], $params);
-        $this->testDatabase($databases[$id]);
-        $this->_writeDatabases($databases);
+        $database = $this->getModel('databases')->get($id);
+        $database = array_merge($database, $params);
+        if (!$this->testDatabase($database)) {
+             throw new Exception("Can't connect to database with given params.");
+        }
+        $this->getModel('databases')->update($id, $database);
     }
 
     public function deleteDatabase($id)
     {
-        $databases = $this->getDatabases();
-        unset($databases[$id]);
-        $this->_writeDatabases($databases);
-    }
-
-    protected function _writeDatabases($databases)
-    {
-        Ld_Files::putJson($this->getDirectory('dist') . '/databases.json', $databases);
+        $this->getModel('databases')->delete($id);
     }
 
     public function testDatabase($dbParameters, $throwException = true)
@@ -944,66 +920,22 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     // Users
 
-    public function getUsersBackend()
-    {
-        if (empty($this->_usersBackend)) {
-            $this->_usersBackend = new Ld_Site_Users_Simple();
-            $this->_usersBackend->setSite($this);
-        }
-        return $this->_usersBackend;
-    }
-
-    public function setUsersBackend($usersBackend)
-    {
-        $this->_usersBackend = $usersBackend;
-    }
+    /* deprecated */
+    public function getUsersBackend() { return $this->getModel('users'); }
 
     public function getUsers($params = array())
     {
-        $users = $this->getUsersBackend()->getUsers($params);
-        return $users;
-    }
-
-    public function getUsersByUsername()
-    {
-        $users = array();
-        foreach ($this->getUsers() as $user) {
-            $username = $user['username'];
-            $users[$username] = $user;
-        }
-        return $users;
+        return $this->getModel('users')->getUsers($params);
     }
 
     public function getUser($username)
     {
-        // by username
-        $user = $this->getUsersBackend()->getUserBy('username', $username);
-        // by url
-        if (empty($user) && Zend_Uri_Http::check($username)) {
-            $user = $this->getUsersBackend()->getUserByUrl($username);
-        }
-        // by email
-        $validator = new Zend_Validate_EmailAddress();
-        if (empty($user) && $validator->isValid($username)) {
-            $user = $this->getUsersBackend()->getUserBy('email', $username);
-        }
-        // what was the use case for this ? sounds unsecure
-        // if (empty($user)) {
-        //     $user = $this->getUsersBackend()->getUserBy('fullname', $username);
-        // }
-        return $user;
-    }
-
-    public function getUserByUrl($url)
-    {
-        $user = $this->getUsersBackend()->getUserByUrl($url);
-        return $user;
+        return $this->getModel('users')->getUser($username);
     }
 
     public function addUser($user, $validate = true)
     {
-        $this->getUsersBackend()->addUser($user, $validate);
-        Ld_Plugin::doAction('Site:addUser', $user);
+        $this->getModel('users')->addUser($user, $validate);
 
         // Register User in Admin (may be plugged as an app plugin)
         if ($admin = $this->getAdmin()) {
@@ -1023,19 +955,27 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function updateUser($username, $infos = array())
     {
-        $result = $this->getUsersBackend()->updateUser($username, $infos);
-        Ld_Plugin::doAction('Site:updateUser', $username, $infos);
-        return $result;
+        return $this->getModel('users')->updateUser($username, $infos);
     }
 
     public function deleteUser($username)
     {
-        $result = $this->getUsersBackend()->deleteUser($username);
-        Ld_Plugin::doAction('Site:deleteUser', $username);
-        return $result;
+        return $this->getModel('users')->deleteUser($username);
     }
 
     // Repositories
+
+    public function getRawRepositories()
+    {
+        $rawRepositories = $this->getModel('repositories')->getAll();
+        $rawRepositories = Ld_Plugin::applyFilters('Site:getRawRepositories', $rawRepositories);
+        /* deprecated */
+        $rawRepositories = Ld_Plugin::applyFilters('Site:getRepositoriesConfiguration', $rawRepositories);
+        return $rawRepositories;
+    }
+
+    /* deprecated */
+    public function getRepositoriesConfiguration() { return $this->getRawRepositories(); }
 
     public function getRepositories($type = null)
     {
@@ -1045,7 +985,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         $repositories = array();
 
-        foreach ($this->getRepositoriesConfiguration() as $id => $config) {
+        foreach ($this->getRawRepositories() as $id => $config) {
+            $config['id'] = $id;
             if (empty($type) || $config['type'] == $type) {
                 $repositories[$id] = $this->_getRepository($config);
             }
@@ -1054,25 +995,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $repositories = Ld_Plugin::applyFilters('Site:getRepositories', $repositories);
 
         return $this->_repositories = $repositories;
-    }
-
-    public function getRepositoriesConfiguration()
-    {
-        $cfg = Ld_Files::getJson($this->getDirectory('dist') . '/repositories.json');
-
-        // LEGACY: transitional code
-        if (isset($cfg['repositories'])) { $cfg = $cfg['repositories']; }
-
-        $cfg = Ld_Plugin::applyFilters('Site:getRepositoriesConfiguration', $cfg);
-
-        return $cfg;
-    }
-
-    public function saveRepositoriesConfiguration($cfg)
-    {
-        uasort($cfg, array("Ld_Utils", "sortByOrder"));
-        Ld_Files::putJson($this->getDirectory('dist') . '/repositories.json', $cfg);
-        unset($this->_repositories); // empty local cache
     }
 
     protected function _getRepository($config)
@@ -1099,26 +1021,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function addRepository($params)
     {
-        $repositories = $this->getRepositoriesConfiguration();
-        $id = $this->getUniqId();
-        $repositories[$id] = array(
-            'id'        => $id,
-            'type'      => $params['type'],
-            'name'      => $params['name'],
-            'endpoint'  => $params['endpoint']
-        );
-        $this->_testRepository($repositories[$id]);
-        $this->saveRepositoriesConfiguration($repositories);
+        $this->_testRepository($params);
+        $this->getModel('repositories')->add($params);
     }
 
-    public function removeRepository($id)
-    {
-        $repositories = $this->getRepositoriesConfiguration();
-        if (isset($repositories[$id])) {
-            unset($repositories[$id]);
-        }
-        $this->saveRepositoriesConfiguration($repositories);
-    }
+    public function removeRepository($id) { $this->getModel('repositories')->delete($id); }
 
     // Packages
 
@@ -1177,56 +1084,21 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     // Sites
 
-    public function getSites($type = null)
-    {
-        $sites = Ld_Files::getJson($this->getDirectory('dist') . '/sites.json');
-        if (empty($sites)) {
-            $sites = array();
-        }
-        return $sites;
-    }
+    public function getSites() { return $this->getModel('sites')->getAll(); }
 
-    public function getSite($id)
-    {
-        $sites = $this->getSites();
-        if (isset($sites[$id])) {
-          return $sites[$id];
-        }
-        return null;
-    }
+    public function getSite($id) { return $this->getModel('sites')->get($id); }
 
-    public function addSite($params)
-    {
-        $sites = $this->getSites();
-        $sites[$this->getUniqId()] = $params;
-        $this->_writeSites($sites);
-    }
+    public function addSite($id) { return $this->getModel('sites')->add($id); }
 
-    public function updateSite($id, $params)
-    {
-        $sites = $this->getSites();
-        $sites[$id] = array_merge($sites[$id], $params);
-        $this->_writeSites($sites);
-        return $sites[$id];
-    }
+    public function updateSite($id, $params) { return $this->getModel('sites')->update($id, $params); }
 
-    public function deleteSite($id)
-    {
-        $sites = $this->getSites();
-        unset($sites[$id]);
-        $this->_writeSites($sites);
-    }
-
-    protected function _writeSites($sites)
-    {
-        Ld_Files::putJson($this->getDirectory('dist') . '/sites.json', $sites);
-    }
+    public function deleteSite($id) { return $this->getModel('sites')->delete($id); }
 
     // Domains
 
     public function getDomains()
     {
-        $domains = Ld_Files::getJson($this->getDirectory('dist') . '/domains.json');
+        $domains = $this->getModel('domains')->getAll();
         // transitional code
         if (empty($domains)) {
             $domains = array();
@@ -1240,57 +1112,27 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $domains;
     }
 
-    public function getDomain($id)
-    {
-        $domains = $this->getDomains();
-        if (isset($domains[$id])) {
-            return $domains[$id];
-        }
-        return null;
-    }
+    public function getDomain($id) { return $this->getModel('domains')->get($id); }
 
-    public function addDomain($params)
-    {
-        $domains = $this->getDomains();
-        $id = $this->getUniqId();
-        $domains[$id] = $params;
-        $this->writeDomains($domains);
-    }
+    public function addDomain($params) { return $this->getModel('domains')->add($params); }
 
-    public function updateDomain($id, $params)
-    {
-        $domains = $this->getDomains();
-        $domains[$id] = array_merge($domains[$id], $params);
-        $this->writeDomains($domains);
-    }
+    public function updateDomain($id, $params) { return $this->getModel('domains')->update($id, $params); }
 
-    public function deleteDomain($id)
-    {
-        $domains = $this->getDomains();
-        unset($domains[$id]);
-        $this->writeDomains($domains);
-    }
-
-    public function writeDomains($domains)
-    {
-        uasort($domains, array("Ld_Utils", "sortByOrder"));
-        Ld_Files::putJson($this->getDirectory('dist') . '/domains.json', $domains);
-    }
+    public function deleteDomain($id) { return $this->getModel('domains')->delete($id); }
 
     // Colors
 
     public function getColors()
     {
         $default = Ld_Ui::getDefaultSiteColors();
-        $stored = Ld_Files::getJson($this->getDirectory('dist') . '/colors.json');
+        $stored = $this->getModel('config')->getColors();
         $colors = Ld_Ui::computeColors($default, $stored);
         return $colors;
     }
 
     public function setColors($colors = array())
     {
-        $filename = $this->getDirectory('dist') . '/colors.json';
-        Ld_Files::putJson($filename, $colors);
+        $this->getModel('config')->setColors($colors);
         $this->_updateAppearanceVersion();
     }
 
@@ -1354,5 +1196,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     // Legacy
 
     public function getBasePath() { return $this->getPath(); }
+
+    public function getUniqId() { return Ld_Utils::getUniqId(); }
 
 }

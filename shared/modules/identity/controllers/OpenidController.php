@@ -11,6 +11,7 @@ class Identity_OpenidController extends Ld_Controller_Action
         parent::init();
 
         $this->appendTitle( $this->translate('Identity') );
+        $this->view->layoutTitle = $this->translate('Identity');
 
         if (isset($this->user)) {
             $this->username = $this->user['username'];

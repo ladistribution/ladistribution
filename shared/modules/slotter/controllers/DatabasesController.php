@@ -76,13 +76,18 @@ class Slotter_DatabasesController extends Slotter_BaseController
                 'user' => $this->_getParam('user'),
                 'password' => $this->_getParam('password')
             );
-            $this->site->addDatabase($db);
-            $this->_redirector->goto('index');
+            try {
+                $this->site->addDatabase($db);
+                $this->_flashMessenger->addMessage( $this->translate("Database connection added.") );
+                $this->_redirector->goto('index');
+            } catch (Exception $e) {
+                $this->view->notification = $e->getMessage();
+            }
         }
     }
 
     /**
-     * Create action.
+     * Master action.
      */
     public function masterAction()
     {
@@ -93,8 +98,13 @@ class Slotter_DatabasesController extends Slotter_BaseController
                 'user' => $this->_getParam('user'),
                 'password' => $this->_getParam('password')
             );
-            $this->site->addDatabase($db);
-            $this->_redirector->goto('index');
+            try {
+                $this->site->addDatabase($db);
+                $this->_flashMessenger->addMessage( $this->translate("Master database connection added.") );
+                $this->_redirector->goto('index');
+            } catch (Exception $e) {
+                $this->view->notification = $e->getMessage();
+            }
         }
     }
 
@@ -147,8 +157,13 @@ class Slotter_DatabasesController extends Slotter_BaseController
             if (!empty($password)) {
                 $params['password'] = $password;
             }
-            $this->site->updateDatabase($id, $params);
-            $this->_redirector->goto('index');
+            try {
+                $this->site->updateDatabase($id, $params);
+                $this->_flashMessenger->addMessage( $this->translate("Database connection updated.") );
+                $this->_redirector->goto('index');
+            } catch (Exception $e) {
+                $this->view->notification = $e->getMessage();
+            }
         }
     }
 

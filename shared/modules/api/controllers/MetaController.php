@@ -26,13 +26,13 @@ class Api_MetaController extends Ld_Controller_Action
         }
         $validator = new Zend_Validate_EmailAddress();
         if ($validator->isValid($q)) {
-            $user = $this->site->getUsersBackend()->getUserBy('email', $q);
+            $user = $this->site->getModel('users')->getUserBy('email', $q);
         }
         if (empty($user)) {
             $host = $this->site->getHost();
             if (strpos($q, '@' . $host)) {
                 $username = str_replace('@' . $host, '', $q);
-                $user = $this->site->getUsersBackend()->getUserBy('username', $username);
+                $user = $this->site->getModel('users')->getUserBy('username', $username);
             }
         }
         $this->noRender();

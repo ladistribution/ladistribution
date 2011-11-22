@@ -235,7 +235,7 @@ class Ld_Files
             throw new Exception("Can't write $file.");
         }
         $result = file_put_contents($file, $content);
-        if (!$result) {
+        if ($result === false) {
             throw new Exception("Write failed on $file");
         }
         self::updatePermissions($file);

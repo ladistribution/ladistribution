@@ -17,8 +17,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
 
         if ($this->_hasParam('id')) {
             $id = $this->_getParam('id');
-            $repositories = $this->site->getRepositories();
-            $this->view->repository = $this->repository = $repositories[$id];
+            $this->view->repository = $this->repository = $this->getSite()->getModel('repositories')->get($id);
         }
     }
 
@@ -78,7 +77,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
      */
     public function indexAction()
     {
-        $this->view->repositories = $this->site->getRepositories();
+        $this->view->repositories = $this->getSite()->getRepositories();
     }
 
     /**
@@ -88,15 +87,17 @@ class Slotter_RepositoriesController extends Slotter_BaseController
     {
         if ($this->getRequest()->isXmlHttpRequest() && $this->getRequest()->isPost() && $this->_hasParam('repositories')) {
 
-            $repositories = $this->site->getRepositoriesConfiguration();
+            $repositories = $this->getSite()->getRawRepositories();
             $order = 0;
             foreach ($this->_getParam('repositories') as $id) {
                 if (isset($repositories[$id])) {
-                    $repositories[$id]['order'] = $order;
+                    if (empty($repositories[$id]['order']) || $repositories[$id]['order'] != $order) {
+                        $repositories[$id]['order'] = $order;
+                        $this->getSite()->getModel('repositories')->update($id, $repositories[$id]);
+                    }
                     $order ++;
                 }
             }
-            $this->site->saveRepositoriesConfiguration($repositories);
 
             $this->noRender();
             $this->getResponse()->appendBody('ok');
@@ -130,7 +131,8 @@ class Slotter_RepositoriesController extends Slotter_BaseController
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-            $this->site->removeRepository($this->repository->id);
+            $id = $this->repository->id;
+            $this->getSite()->getModel('repositories')->delete($id);
             $this->_redirector->setGotoSimple('index');
             $this->_redirector->redirectAndExit();
         }

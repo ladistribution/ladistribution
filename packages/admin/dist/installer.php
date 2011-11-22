@@ -14,33 +14,33 @@ class Ld_Installer_Admin extends Ld_Installer
 	{
 		$site = $this->getSite();
 
-		$endpoints = array();
-		$repositories = $site->getRepositoriesConfiguration();
-		foreach ($repositories as $id => $repository) {
-			if (isset($repository['endpoint'])) {
-				// upgrade old/deprecated releases
-				$old_releases = array('barbes', 'concorde', 'danube');
-				foreach ($old_releases as $release) {
-					if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
-						$repositories[$id]['endpoint'] = str_replace(
-							LD_SERVER . 'repositories/' . $release,
-							LD_SERVER . 'repositories/' . LD_RELEASE,
-							$repository['endpoint']
-						);
-						$repository_upgrade = true;
-					}
-				}
-				$endpoints[] = $repositories[$id]['endpoint'];
-			}
-		}
-
-		if (isset($repository_upgrade)) {
-			$site->saveRepositoriesConfiguration($repositories);
+		// Re-generate secret if missing/empty
+		$secret = $site->getConfig('secret');
+		if (empty($secret)) {
+			$site->setConfig('secret', Ld_Auth::generatePhrase());
 		}
 
 		// Update appearance version
 		$version = substr(md5(time()), 0, 10);
 		$site->setConfig('appearance_version', $version);
+
+		$endpoints = array();
+		foreach ($site->getRawRepositories() as $id => $repository) {
+			if (isset($repository['endpoint'])) {
+				// upgrade old/deprecated releases
+				$old_releases = array('barbes', 'concorde', 'danube');
+				foreach ($old_releases as $release) {
+					if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
+						$repository['endpoint'] = str_replace(
+							LD_SERVER . 'repositories/' . $release,
+							LD_SERVER . 'repositories/' . LD_RELEASE,
+							$repository['endpoint']
+						);
+						$this->getSite()->getModel('repositories')->update($id, $repository);
+					}
+				}
+			}
+		}
 	}
 
 	public function postMove()

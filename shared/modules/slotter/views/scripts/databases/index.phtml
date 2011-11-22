@@ -6,6 +6,8 @@
 
 <div class="ld-panel-content h6e-block">
 
+<?php echo $this->notification() ?>
+
 <h3><?php echo $this->translate("Databases") ?></h3>
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
@@ -14,7 +16,7 @@
 
 <?php else : ?>
 
-    <table class="h6e-data">
+    <table class="h6e-data ld-data">
 
     <tr>
        <th><?php echo $this->translate("Type") ?></th>
@@ -27,8 +29,9 @@
 
     <tbody>
 
-    <?php foreach ($this->databases as $id => $database) : ?>
+    <?php $i = 0; foreach ($this->databases as $id => $database) : ?>
         <?php if ($database['type'] == 'mysql-master') { $master = $database; $master['id'] = $id; continue; } ?>
+        <?php $i ++ ?>
         <?php $used = $this->site->isDatabaseUsed($id); ?>
         <?php $test = $this->site->testDatabase($database, false); ?>
         <tr>
@@ -55,7 +58,14 @@
 
     <?php endforeach ?>
 
+    <?php if ($i == 0) : ?>
+        <tr>
+            <td colspan="7">None</td>
+        </tr>
+    <?php endif ?>
+
     </tbody>
+
 
     </table>
 

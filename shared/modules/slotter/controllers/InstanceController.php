@@ -82,7 +82,7 @@ class Slotter_InstanceController extends Slotter_BaseController
 
             $this->view->instance = $this->instance = $this->site->createInstance($packageId, $preferences);
 
-            if (isset($this->instance->id)) {
+            if ($this->instance->getType() == 'application') {
                 $this->_redirectTo( $this->instance->getUrl() );
             } else {
                 $this->_redirector->gotoSimple('index', 'index', 'slotter');
