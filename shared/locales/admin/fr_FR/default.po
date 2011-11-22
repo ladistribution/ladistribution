@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-04 11:31+0100\n"
+"POT-Creation-Date: 2011-11-22 12:42+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: translate\n"
-"X-Poedit-Basepath: /Users/znarfor/Dev/ld-master\n"
+"X-Poedit-Basepath: /Users/znarfor/Dev/ld-blogmarks\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -18,12 +18,12 @@ msgstr ""
 "X-Poedit-SearchPath-1: shared/modules\n"
 "X-Poedit-SearchPath-2: shared/plugins\n"
 
-#: shared/modules/default/views/layouts/layout.phtml:50
+#: shared/modules/default/views/layouts/layout.phtml:51
 #, php-format
 msgid "Powered by <a href=\"%s\">La Distribution</a>, a community project initiated by <a href=\"%s\">h6e</a>."
 msgstr "Propulsé par <a href=\"%s\">La Distribution</a>, un projet communautaire initié par <a href=\"%s\">h6e</a>."
 
-#: shared/modules/default/views/layouts/layout.phtml:55
+#: shared/modules/default/views/layouts/layout.phtml:56
 msgid "Language:"
 msgstr "Langue :"
 
@@ -50,8 +50,9 @@ msgstr "Mot de passe incorrect"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:34
 #: shared/modules/default/views/scripts/auth/login.phtml:57
-msgid "Username (or OpenID):"
-msgstr "Nom d'utilisateur (ou OpenID) :"
+#: shared/modules/default/views/scripts/auth/lost-password.phtml:45
+msgid "Username (or Email, or OpenID):"
+msgstr "Nom d'utilisateur (ou Email, ou OpenID) :"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:39
 #: shared/modules/default/views/scripts/auth/register.phtml:50
@@ -115,10 +116,6 @@ msgstr "Nouveau mot de passe à nouveau:"
 #: shared/modules/default/views/scripts/auth/lost-password.phtml:41
 msgid "Update my password"
 msgstr "Mettre à jour mon mot de passe"
-
-#: shared/modules/default/views/scripts/auth/lost-password.phtml:45
-msgid "Username (or Email, or OpenID):"
-msgstr "Nom d'utilisateur (ou Email, ou OpenID) :"
 
 #: shared/modules/default/views/scripts/auth/lost-password.phtml:48
 msgid "An email will be sent with instructions on how to reset your password."
@@ -292,76 +289,82 @@ msgstr "Êtes-vous sûrs de vouloir supprimer cette connexion à une base de don
 msgid "Delete"
 msgstr "Supprimer"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:9
-msgid "Update a connection"
-msgstr "Mettre à jour une connexion"
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:11
+msgid "Update connection to an existing database"
+msgstr "Mettre à jour une connexion à une base de donnée existante"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:26
-#: shared/modules/slotter/views/scripts/databases/index.phtml:21
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:28
+#: shared/modules/slotter/views/scripts/databases/index.phtml:23
 #: shared/modules/slotter/views/scripts/databases/master.phtml:23
-#: shared/modules/slotter/views/scripts/databases/new.phtml:26
+#: shared/modules/slotter/views/scripts/databases/new.phtml:28
 #: shared/modules/slotter/views/scripts/domains/index.phtml:23
 msgid "Host"
 msgstr "Hôte"
 
-#: shared/modules/slotter/views/scripts/databases/edit.phtml:30
-#: shared/modules/slotter/views/scripts/databases/index.phtml:22
+#: shared/modules/slotter/views/scripts/databases/edit.phtml:32
+#: shared/modules/slotter/views/scripts/databases/index.phtml:24
 #: shared/modules/slotter/views/scripts/domains/index.phtml:100
 msgid "Name"
 msgstr "Nom"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:9
+#: shared/modules/slotter/views/scripts/databases/index.phtml:11
 msgid "Databases"
 msgstr "Bases de données"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:13
+#: shared/modules/slotter/views/scripts/databases/index.phtml:15
 msgid "No database connection registered."
 msgstr "Aucune base de donnée enregistrée."
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:23
+#: shared/modules/slotter/views/scripts/databases/index.phtml:25
 msgid "Usage"
 msgstr "Utilisation"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:24
+#: shared/modules/slotter/views/scripts/databases/index.phtml:26
 msgid "Status"
 msgstr "Statut"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:25
+#: shared/modules/slotter/views/scripts/databases/index.phtml:27
 #: shared/modules/slotter/views/scripts/domains/index.phtml:25
 msgid "Actions"
 msgstr "Actions"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:38
+#: shared/modules/slotter/views/scripts/databases/index.phtml:40
 #, php-format
 msgid "used by %1$d applications"
 msgstr "utilisée par %1$d application"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:38
+#: shared/modules/slotter/views/scripts/databases/index.phtml:40
 msgid "unused"
 msgstr "inutilisé"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:46
+#: shared/modules/slotter/views/scripts/databases/index.phtml:48
 #: shared/modules/slotter/views/scripts/domains/index.phtml:57
 msgid "edit"
 msgstr "éditer"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:51
+#: shared/modules/slotter/views/scripts/databases/index.phtml:53
 msgid "delete"
 msgstr "supprimer"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:64
+#: shared/modules/slotter/views/scripts/databases/index.phtml:66
 msgid "You can:"
 msgstr "Vous pouvez :"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:68
-#: shared/modules/slotter/views/scripts/databases/new.phtml:9
+#: shared/modules/slotter/views/scripts/databases/index.phtml:70
 msgid "Register an existing database"
 msgstr "Référencer une base de donnée existante"
 
-#: shared/modules/slotter/views/scripts/databases/index.phtml:76
-#: shared/modules/slotter/views/scripts/databases/master.phtml:9
+#: shared/modules/slotter/views/scripts/databases/index.phtml:78
 msgid "Register master credentials"
 msgstr "Enregistrer les"
+
+#: shared/modules/slotter/views/scripts/databases/master.phtml:9
+msgid "Register master database connection"
+msgstr "Référencer une connexion maître à une base de donnée"
+
+#: shared/modules/slotter/views/scripts/databases/new.phtml:11
+msgid "Register connection to an existing database"
+msgstr "Référencer une connexion à une base de donnée existante"
 
 #: shared/modules/slotter/views/scripts/domains/delete.phtml:1
 #: shared/modules/slotter/views/scripts/domains/edit.phtml:1
@@ -1114,37 +1117,37 @@ msgstr "Ajouter les utilisateurs et envoyer les invitations"
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
 
-#: shared/modules/default/controllers/AuthController.php:101
+#: shared/modules/default/controllers/AuthController.php:106
 msgid "Registration is closed."
 msgstr "L'enregistrement est fermé."
 
-#: shared/modules/default/controllers/AuthController.php:129
-#: shared/modules/default/controllers/AuthController.php:194
+#: shared/modules/default/controllers/AuthController.php:134
+#: shared/modules/default/controllers/AuthController.php:200
 msgid "Username can't be empty."
 msgstr "Le nom d'utilisateur ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:131
-#: shared/modules/default/controllers/AuthController.php:199
+#: shared/modules/default/controllers/AuthController.php:136
+#: shared/modules/default/controllers/AuthController.php:205
 msgid "Email can't be empty."
 msgstr "L'email ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:133
-#: shared/modules/default/controllers/AuthController.php:201
-#: shared/modules/default/controllers/AuthController.php:296
+#: shared/modules/default/controllers/AuthController.php:138
+#: shared/modules/default/controllers/AuthController.php:207
+#: shared/modules/default/controllers/AuthController.php:302
 msgid "Password can't be empty."
 msgstr "Le mot de passe ne peut être vide."
 
-#: shared/modules/default/controllers/AuthController.php:135
-#: shared/modules/default/controllers/AuthController.php:203
-#: shared/modules/default/controllers/AuthController.php:298
+#: shared/modules/default/controllers/AuthController.php:140
+#: shared/modules/default/controllers/AuthController.php:209
+#: shared/modules/default/controllers/AuthController.php:304
 msgid "Passwords must match."
 msgstr "Les mots de passe doivent correspondre."
 
-#: shared/modules/default/controllers/AuthController.php:197
+#: shared/modules/default/controllers/AuthController.php:203
 msgid "User with this username already exists."
 msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"
 
-#: shared/modules/default/controllers/AuthController.php:325
+#: shared/modules/default/controllers/AuthController.php:331
 msgid "Identity not found."
 msgstr "Identité non trouvée."
 
@@ -1153,14 +1156,17 @@ msgid "Identity"
 msgstr "Identité"
 
 #: shared/modules/merger/controllers/SettingsController.php:38
+#: shared/modules/slotter/controllers/InstanceController.php:189
 msgid "Configuration updated"
 msgstr "Configuration mise à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:27
+#: shared/modules/slotter/controllers/InstanceController.php:255
 msgid "Colors updated"
 msgstr "Couleurs mises à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:44
+#: shared/modules/slotter/controllers/InstanceController.php:277
 msgid "CSS updated"
 msgstr "CSS mise à jour"
 
@@ -1170,14 +1176,17 @@ msgid "Backups"
 msgstr "Sauvegardes"
 
 #: shared/modules/slotter/controllers/BackupsController.php:24
+#: shared/modules/slotter/controllers/InstanceController.php:294
 msgid "Backup generated"
 msgstr "Sauvegarde générée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:44
+#: shared/modules/slotter/controllers/InstanceController.php:319
 msgid "Backup deleted"
 msgstr "Sauvegarde supprimée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:54
+#: shared/modules/slotter/controllers/InstanceController.php:325
 msgid "Backup restored"
 msgstr "Sauvegarde restaurée"
 
@@ -1192,6 +1201,18 @@ msgstr "CSS"
 #: shared/modules/slotter/controllers/BaseController.php:57
 msgid "Home"
 msgstr "Accueil"
+
+#: shared/modules/slotter/controllers/DatabasesController.php:81
+msgid "Database connection added."
+msgstr "Connexion à une base de donnée ajoutée."
+
+#: shared/modules/slotter/controllers/DatabasesController.php:103
+msgid "Master database connection added."
+msgstr "Connexion maître à une base de donnée ajoutée."
+
+#: shared/modules/slotter/controllers/DatabasesController.php:162
+msgid "Database connection updated."
+msgstr "Connexion à une base de donnée mise à jour."
 
 #: shared/modules/slotter/controllers/DomainsController.php:28
 msgid "New"
@@ -1248,7 +1269,6 @@ msgid "Timezone"
 msgstr "Fuseau horaire"
 
 #: shared/modules/slotter/controllers/UsersController.php:59
-#: shared/modules/slotter/views/helpers/InstanceNavigation.php:42
 msgid "Roles"
 msgstr "Roles"
 
@@ -1296,8 +1316,6 @@ msgid "Checks user submitted content to see if it look like spam."
 msgstr "Vérifie le contenu soumis par les utilisateurs pour voir si ça ressemble à du spam."
 
 #: shared/plugins/akismet.php:27
-#: shared/plugins/memcache.php:36
-#: shared/plugins/recaptcha.php:29
 #, php-format
 msgid "%s is configured and running."
 msgstr "%s est configuré et fonctionne."
@@ -1307,7 +1325,6 @@ msgid "Akismet API key is invalid."
 msgstr "La clé d'API Akismet est invalide."
 
 #: shared/plugins/akismet.php:31
-#: shared/plugins/recaptcha.php:26
 #, php-format
 msgid "%s is not running. Complete your configuration to enable it."
 msgstr "%s ne fonctionne pas. Complétez votre configuration pour l'activer."
@@ -1325,7 +1342,6 @@ msgstr "Détecte et bloque automatiquement les accès suspects au site."
 #: shared/plugins/bouncer.php:39
 #: shared/plugins/gloss.php:24
 #: shared/plugins/gravatar.php:21
-#: shared/plugins/wordpress-unlocker.php:39
 #, php-format
 msgid "%s is running."
 msgstr "%s fonctionne."
@@ -1347,7 +1363,6 @@ msgid "Track and block agents using the Bouncer library."
 msgstr ""
 
 #: shared/plugins/bouncer.php:28
-#: shared/plugins/memcache.php:25
 msgid "Memcache PHP extension is needed to run this plugin."
 msgstr "L'extension PHP Memcache est nécessaire pour faire fonctionner ce greffon."
 
@@ -1456,8 +1471,10 @@ msgstr "Déverrouiller les plugins"
 msgid "Unlock users"
 msgstr "Déverrouiller les utilisateurs"
 
-#~ msgid "Add a database connection"
-#~ msgstr "Ajouter une connexion à une base de donnée"
+#~ msgid "Update a connection"
+#~ msgstr "Mettre à jour une connexion"
+#~ msgid "Username (or OpenID):"
+#~ msgstr "Nom d'utilisateur (ou OpenID) :"
 #~ msgid "Add a new site"
 #~ msgstr "Ajouter un nouveau site"
 #~ msgid "Appearance"
