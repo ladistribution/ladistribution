@@ -20,7 +20,8 @@ class Slotter_UsersController extends Slotter_BaseController
             case 'add-identity':
             case 'remove-identity':
             case 'remove-trusted':
-                if (empty($this->currentUser) || $this->_getParam('id') != $this->currentUser['username']) {
+                $this->user = $this->site->getUser( $this->_getParam('id') );
+                if (empty($this->currentUser) || $this->user['username'] != $this->currentUser['username']) {
                     if (!$this->_acl->isAllowed($this->userRole, null, 'admin')) {
                         $this->_disallow();
                     }
