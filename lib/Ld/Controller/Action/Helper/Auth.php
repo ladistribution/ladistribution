@@ -63,7 +63,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
                     $this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'), $this->_getParam('ld_auth_remember')
                 );
                 if ($result->isValid()) {
-                    Ld_Auth::rememberIdentity( $result->getIdentity() );
+                    Ld_Auth::rememberIdentity( $this->_getParam('ld_auth_username') );
                     if (isset($referer)) {
                         $this->_redirect($referer);
                     }

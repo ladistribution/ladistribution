@@ -41,12 +41,16 @@ class AuthController extends Ld_Controller_Action
         $this->view->referer = $this->_session->referer = $this->_getReferer();
 
         if ($this->_hasParam('ld_auth_username')) {
+            $this->view->ld_auth_username = $this->_getParam('ld_auth_username');
             $this->view->ld_auth_user = $this->getSite()->getUser($this->_getParam('ld_auth_username'));
             if (empty($this->view->ld_auth_user)) {
                 $this->view->authentication = new Zend_Auth_Result(
                     Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
                     $this->_getParam('ld_auth_username'),
-                    array("Identity not found."));
+                    array(
+                        $this->translate("Identity not found.")
+                    )
+                );
             }
         }
 
