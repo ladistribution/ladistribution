@@ -16,6 +16,9 @@
             case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
                 echo '<div class="ld-error"><b>' . $this->translate("Error:") . '</b> ' . $this->translate("Incorrect password.") . '</div>';
                 break;
+            case Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS:
+                echo '<div class="ld-error"><b>' . $this->translate("Error:") . '</b> ' . $this->translate("Identity ambigous.") . '</div>';
+                break;
             default:
                 $messages = $this->authentication->getMessages();
                 foreach ($messages as $message)
@@ -25,7 +28,7 @@
     }
     ?>
 
-    <form id="ld-auth-form" method="post" action="">
+    <form id="ld-auth-form" method="post" action="<?php echo $this->loginUrl ?>">
 
         <?php if (isset($this->ld_auth_user)) : ?>
 
@@ -54,17 +57,16 @@
             }
             ?>
 
-            <label for="ld-auth-username"><?php echo $this->translate("Username (or Email, or OpenID):") ?></label>
+            <label for="ld-auth-username"><?php echo $this->translate("Username (or Email, or URL):") ?></label>
             <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value=""/>
 
             <script type="text/javascript">jQuery('#ld-auth-username').focus();</script>
 
             <div id="ld-identities" style="display:none">
-                <?php
-                foreach ($identities as $identity => $user) :
-                ?>
+                <?php if (!empty($identities)) : ?>
+                <?php foreach ($identities as $identity => $user) : ?>
                 <a href="?forget-identity=<?php echo urlencode($identity) ?>" class="forget"><?php echo $this->translate("Forget") ?></a>
-                <a href="#" class="identity">
+                <a href="<?php echo $this->admin->getIdentityUrl($user) ?>" class="identity">
                     <?php echo Ld_Ui::getAvatar($user, 32) ?>
                     <?php $displayname = empty($user['fullname']) ? $user['username'] : $user['fullname']; ?>
                     <span class="fullname"><?php echo $displayname ?></span>
@@ -72,27 +74,19 @@
                     <span class="identity"><?php echo $identity ?></span>
                 </a>
                 <?php endforeach ?>
+                <?php endif ?>
             </div>
 
         <?php endif ?>
 
-        <?php foreach ($this->postParams as $key => $value) : ?>
-            <input type="hidden" name="<?php echo $key ?>" value="<?php echo $this->escape($value) ?>"/>
-        <?php endforeach ?>
-
         <input type="hidden" name="ld_auth_action" value="login"/>
 
-        <?php if (isset($this->referer)) : ?>
-            <input type="hidden" name="ld_referer" value="<?php echo $this->escape($this->referer) ?>"/>
-        <?php endif ?>
-
-        <input type="hidden" name="openid_action" value="login"/>
         <input id="ld-auth-login" class="button" type="submit" value="<?php echo $this->translate("Log In") ?>"/>
 
     </form>
 
     <div class="links">
-      <a id="ld-auth-another-identity-link" style="display:none" href="?another-identity=1"><?php
+      <a id="ld-auth-another-identity-link" style="display:none" href="<?php echo $this->loginUrl ?>?another-identity=1"><?php
             echo $this->translate("Log In with another identity") ?></a>
       <?php if ($this->open_registration && empty($this->ld_auth_user)) : ?>
           <a id="ld-auth-register-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php

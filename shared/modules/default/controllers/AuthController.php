@@ -11,35 +11,37 @@ class AuthController extends Ld_Controller_Action
         $this->view->noIndex = true;
     }
 
-    function loginAction()
+    public function loginAction()
     {
-        if (Ld_Auth::isAuthenticated() && Ld_Auth::isOpenid() && Ld_Auth::isAnonymous()) {
-            $session = new Zend_Session_Namespace("ld_openid");
-            $session->username = $this->_getParam('openid_sreg_nickname');
-            $session->fullname = $this->_getParam('openid_sreg_fullname');
-            $session->email = $this->_getParam('openid_sreg_email');
-            $this->_redirector->goto('complete', 'auth', 'default');
-            return;
-        }
-
         $this->appendTitle( $this->translate('Log In') );
 
-        $this->view->postParams = array();
-        foreach ($_POST as $key => $value) {
-            $ignore = array(
-                'ld_auth_username', 'ld_auth_password', 'ld_auth_action', 'ld_auth_remember',
-                'ld_referer',
-                'openid_action', 'openid_identifier');
-            if (in_array($key, $ignore)) {
-                continue;
+        $session = new Zend_Session_Namespace("Ld_Auth_Login");
+
+        // If a referer is passed
+        if ($this->_hasParam('ref')) {
+            $referer = base64_decode($this->_getParam('ref'));
+            $pu = parse_url($referer);
+            if ($pu['host'] == $this->site->getHost() || $pu['host'] == $_SERVER['HTTP_HOST']) {
+                if (false === strpos($referer, 'auth/login')) {
+                    $session->referer = $referer;
+                }
             }
-            $this->view->postParams[$key] = $value;
+            return $this->_redirect( $this->admin->getLoginUrl() );
         }
 
-        // we register the referer in the session and pass to the view
-        $this->_session = new Zend_Session_Namespace("ld_auth");
-        $this->view->referer = $this->_session->referer = $this->_getReferer();
+        // If the login form is called from an non-login URL (forwarded)
+        $currentUrl = Ld_Utils::getCurrentUrl();
+        if (false === strpos($currentUrl, 'auth/login')) {
+            $session->referer = $currentUrl;
+        }
 
+        // Forget Identity
+        if ($this->_hasParam('forget-identity')) {
+            Ld_Auth::forgetIdentity($this->_getParam('forget-identity'));
+            return $this->redirectTo( $this->admin->getLoginUrl() );
+        }
+
+        // First Step (username/email/identifier)
         if ($this->_hasParam('ld_auth_username')) {
             $this->view->ld_auth_username = $this->_getParam('ld_auth_username');
             $this->view->ld_auth_user = $this->getSite()->getUser($this->_getParam('ld_auth_username'));
@@ -54,29 +56,11 @@ class AuthController extends Ld_Controller_Action
             }
         }
 
-        if (Ld_Auth::isAuthenticated()) {
-            if ($this->getRequest()->isPost() || $this->_hasParam('openid_mode')) {
-
-                $session = new Zend_Session_Namespace("ld_openid");
-
-                $this->_tryRedirect(array(
-                    $this->_getParam('ld_referer'),
-                    $session->referer,
-                    $this->view->url(array(), null, true)
-                ));
-
-            } else {
-                $this->_redirector->goto('index', 'index', 'default');
-            }
-        }
-
-        if (isset($_GET['forget-identity'])) {
-            Ld_Auth::forgetIdentity($_GET['forget-identity']);
-        }
-
         $this->view->identities = Ld_Auth::getIdentities();
 
-        $this->view->open_registration = $this->getSite()->getConfig('open_registration');
+        $this->view->open_registration = $this->site->getConfig('open_registration');
+
+        $this->view->loginUrl = $this->admin->getLoginUrl();
     }
 
     function logoutAction()
@@ -252,39 +236,6 @@ class AuthController extends Ld_Controller_Action
         }
     }
 
-    function completeAction()
-    {
-        if (!Ld_Auth::isAuthenticated()) {
-            $this->_redirector->goto('login', 'auth', 'default');
-            return true;
-        }
-
-        if (!Ld_Auth::isAnonymous()) {
-            $this->_redirector->goto('index', 'index', 'default');
-            return true;
-        }
-
-        $this->view->complete = true;
-
-        if ($this->getRequest()->isPost()) {
-
-            $this->_forward('register');
-
-        } elseif ($this->getRequest()->isGet()) {
-
-            $session = new Zend_Session_Namespace("ld_openid");
-
-            $this->view->user = $user = array(
-                'username'   => $session->username,
-                'fullname'   => $session->fullname,
-                'email'      => $session->email
-            );
-
-            $this->render('register');
-
-        }
-    }
-
     function lostpasswordAction()
     {
         if ($this->_hasParam('token')) {
@@ -373,10 +324,6 @@ class AuthController extends Ld_Controller_Action
         $mail->setBodyText($text);
         $mail = Ld_Plugin::applyFilters('Auth:resetPasswordEmail', $mail);
         $mail->send();
-    }
-
-    function disallowAction()
-    {
     }
 
     function _getReferer($auto = true)
