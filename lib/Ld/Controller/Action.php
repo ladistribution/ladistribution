@@ -36,12 +36,13 @@ class Ld_Controller_Action extends Zend_Controller_Action
 
         // Authentication
         $this->view->authentication = $this->authentication = $this->_helper->auth->authenticate();
-        $this->view->authenticated = $this->authenticated = $this->_helper->auth->isAuthenticated();
+
+        $this->view->authenticated = $this->authenticated = Ld_Auth::isAuthenticated();
         if ($this->authenticated) {
             // old, deprecated
-            $this->view->user = $this->user = $this->_helper->auth->getUser();
+            $this->view->user = $this->user = Ld_Auth::getUser();
             // new
-            $this->view->currentUser = $this->currentUser = $this->_helper->auth->getUser();
+            $this->view->currentUser = $this->currentUser = Ld_Auth::getUser();
         }
 
         // User Role
@@ -98,10 +99,12 @@ class Ld_Controller_Action extends Zend_Controller_Action
 
     function getSite()
     {
-        if (Zend_Registry::isRegistered('site')) {
-            return Zend_Registry::get('site');
+        if (isset($this->site)) {
+            return $this->site;
         }
-        return null;
+        if (Zend_Registry::isRegistered('site')) {
+            return $this->site = Zend_Registry::get('site');
+        }
     }
 
     function setTitle($title)

@@ -95,9 +95,10 @@
 
     <table class="h6e-data">
     <?php foreach ($this->user['identities'] as $identity) : ?>
+        <?php $url = is_string($identity) ? $identity : $identity['url'] ?>
         <tr>
-            <td><?php echo $this->escape($identity) ?></td>
-            <td><a href="<?php echo $this->url(array('action' => 'remove-identity', 'identity' => urlencode($identity))) ?>"><?php echo $this->translate("remove") ?></td>
+            <td><?php echo $this->escape($url) ?></td>
+            <td><a href="<?php echo $this->url(array('action' => 'remove-identity', 'identity' => urlencode($url))) ?>"><?php echo $this->translate("remove") ?></td>
         </tr>
     <?php endforeach ?>
     </table>

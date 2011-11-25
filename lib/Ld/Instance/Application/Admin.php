@@ -150,6 +150,23 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         return $openidDirectory;
     }
 
+    public function getLoginUrl($params = array())
+    {
+        return $this->getAuthUrl($params, 'login');
+    }
+
+    public function getAuthUrl($params = array(), $action = 'login')
+    {
+        $loginUrl = $this->buildUrl(array('module' => 'default', 'controller' => 'auth', 'action' => $action), 'default', false);
+        if (isset($params['referer']) && $params['referer']) {
+            $currentUrl = Ld_Utils::getCurrentUrl(array('ld_referer', 'ref'));
+            if (false === strpos($currentUrl, 'auth/login')) {
+                $loginUrl .= '?ref=' . base64_encode($currentUrl);
+            }
+        }
+        return $loginUrl;
+    }
+
     public function getOpenidAuthUrl()
     {
         return $this->buildUrl(array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);

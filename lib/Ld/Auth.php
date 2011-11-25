@@ -41,7 +41,7 @@ class Ld_Auth
             $storage = $auth->getStorage();
             $storage->setOptions(array('cookieExpire' => time()+60*60*24*30));
         }
-        $adapter = new Ld_Auth_Adapter_File();
+        $adapter = new Ld_Auth_Adapter_Password();
         $adapter->setCredentials($username, $password);
         $result = $auth->authenticate($adapter);
         return $result;

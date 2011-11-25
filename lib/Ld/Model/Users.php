@@ -41,6 +41,12 @@ class Ld_Model_Users extends Ld_Model_Collection
 
     public function getUserBy($key, $value)
     {
+        if ($key == 'id') {
+            return $this->get($value);
+        } else if ($key == 'url') {
+            return $this->getUserByUrl($value);
+        }
+
         foreach ($this->getUsers() as $id => $user) {
             if (!empty($user[$key]) && $user[$key] == $value) {
                 return $user;
@@ -48,18 +54,25 @@ class Ld_Model_Users extends Ld_Model_Collection
         }
     }
 
-    public function getUser($username)
+    public function getUser($id)
     {
+        // by id
+        $user = $this->getUserBy('id', $id);
+        if (isset($user)) {
+            $user['id'] = $id;
+        }
         // by username
-        $user = $this->getUserBy('username', $username);
+        if (empty($user)) {
+            $user = $this->getUserBy('username', $id);
+        }
         // by url
-        if (empty($user) && Zend_Uri_Http::check($username)) {
-            $user = $this->getUserByUrl($username);
+        if (empty($user) && Zend_Uri_Http::check($id)) {
+            $user = $this->getUserByUrl($id);
         }
         // by email
         $validator = new Zend_Validate_EmailAddress();
-        if (empty($user) && $validator->isValid($username)) {
-            $user = $this->getUserBy('email', $username);
+        if (empty($user) && $validator->isValid($id)) {
+            $user = $this->getUserBy('email', $id);
         }
         return $user;
     }
@@ -69,7 +82,10 @@ class Ld_Model_Users extends Ld_Model_Collection
         foreach ($this->getUsers() as $id => $user) {
             if (!empty($user['identities'])) {
                 foreach ($user['identities'] as $identity) {
-                    if ($identity == $url) {
+                    if (is_string($identity) && $identity == $url) {
+                        return $user;
+                    }
+                    if (is_array($identity) && $identity['url'] == $url) {
                         return $user;
                     }
                 }
@@ -101,10 +117,10 @@ class Ld_Model_Users extends Ld_Model_Collection
         $this->getBackend()->create($user);
     }
 
-    public function updateUser($username, $infos = array(), $validate = true)
+    public function updateUser($id, $infos = array(), $validate = true)
     {
-        if (!$user = $this->getUserBy('username', $username)) {
-            throw new Exception("User with this username doesn't exists.");
+        if (!$user = $this->getUser($id)) {
+            throw new Exception("No user match this id ($id).");
         }
 
         foreach ($infos as $key => $value) {
@@ -123,10 +139,10 @@ class Ld_Model_Users extends Ld_Model_Collection
         $this->getBackend()->update($user['id'], $user);
     }
 
-    public function deleteUser($username)
+    public function deleteUser($id)
     {
-        if (!$user = $this->getUserBy('username', $username)) {
-            throw new Exception("User with this username doesn't exists.");
+        if (!$user = $this->getUser($id)) {
+            throw new Exception("No user match this id ($id).");
         }
 
         $this->getBackend()->delete($user['id']);

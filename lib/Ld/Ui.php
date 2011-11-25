@@ -142,17 +142,13 @@ class Ld_Ui
         if (isset($options['loginUrl'])) {
             $view->loginUrl = $options['loginUrl'];
         } else {
-            $view->loginUrl = self::getAdminUrl(array(
-                  'module' => 'default', 'controller' => 'auth', 'action' => 'login'
-            ));
+            $view->loginUrl = $admin->getAuthUrl(array('referer' => true), 'login');
         }
 
         if (isset($options['logoutUrl'])) {
             $view->logoutUrl = $options['logoutUrl'];
         } else {
-            $view->logoutUrl = self::getAdminUrl(array(
-                  'module' => 'default', 'controller' => 'auth', 'action' => 'logout'
-            ));
+            $view->logoutUrl = $admin->getAuthUrl(array('referer' => true), 'logout');
         }
 
         $view->registerUrl = self::getAdminUrl(array(
