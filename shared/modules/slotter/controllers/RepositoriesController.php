@@ -16,8 +16,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
         parent::init();
 
         if ($this->_hasParam('id')) {
-            $id = $this->_getParam('id');
-            $this->view->repository = $this->repository = $this->getSite()->getModel('repositories')->get($id);
+            $this->view->repository = $this->repository = $this->getSite()->getRepository( $this->_getParam('id') );
         }
     }
 

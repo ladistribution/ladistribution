@@ -988,7 +988,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         foreach ($this->getRawRepositories() as $id => $config) {
             $config['id'] = $id;
             if (empty($type) || $config['type'] == $type) {
-                $repositories[$id] = $this->_getRepository($config);
+                $repositories[$id] = $this->getRepository($config);
             }
         }
 
@@ -997,13 +997,19 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $this->_repositories = $repositories;
     }
 
-    protected function _getRepository($config)
+    public function getRepository($repository)
     {
-        if (isset($config['type'])) {
-            $className = 'Ld_Repository_' . ucfirst(strtolower($config['type']));
-            return new $className($config);
+        if (is_string($repository)) {
+            $repository = $this->getModel('repositories')->get($repository);
+        }
+        if (isset($repository['type'])) {
+            $className = 'Ld_Repository_' . ucfirst(strtolower($repository['type']));
+            return new $className($repository);
         }
     }
+
+    /* deprecated */
+    protected function _getRepository($config) { return $this->getRepository($config); }
 
     public function _testRepository($config)
     {
@@ -1013,7 +1019,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             }
         }
         try {
-            $repository = $this->_getRepository($config);
+            $repository = $this->getRepository($config);
         } catch (Exception $e) {
             throw new Exception("Not a valid repository.");
         }
