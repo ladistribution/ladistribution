@@ -13,7 +13,7 @@ class AuthController extends Ld_Controller_Action
 
     public function loginAction()
     {
-        $this->appendTitle( $this->translate('Log In') );
+        $this->appendTitle( $this->translate('Sign In') );
 
         $session = new Zend_Session_Namespace("Ld_Auth_Login");
 
@@ -72,7 +72,7 @@ class AuthController extends Ld_Controller_Action
 
     function registerAction()
     {
-        $this->appendTitle( $this->translate('Register') );
+        $this->appendTitle( $this->translate('Sign Up') );
 
         // get the referer
         $this->view->referer = $this->_getReferer();

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-04 11:29+0100\n"
+"POT-Creation-Date: 2011-10-26 13:11+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: lib/Ld/Ui/scripts/top-bar.phtml:31
 #: lib/Ld/Ui/scripts/top-bar.phtml:37
-msgid "Log Out"
+msgid "Sign Out"
 msgstr "Se Déconnecter"
 
 #: lib/Ld/Ui/scripts/top-bar.phtml:41
-msgid "Log In"
+msgid "Sign In"
 msgstr "Se Connecter"
 
 #: lib/Ld/Ui/scripts/top-bar.phtml:43

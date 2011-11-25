@@ -20,6 +20,10 @@ class Ld_Installer_Admin extends Ld_Installer
 			$site->setConfig('secret', Ld_Auth::generatePhrase());
 		}
 
+		// Update appearance version
+		$version = substr(md5(time()), 0, 10);
+		$site->setConfig('appearance_version', $version);
+
 		$endpoints = array();
 		foreach ($site->getRawRepositories() as $id => $repository) {
 			if (isset($repository['endpoint'])) {

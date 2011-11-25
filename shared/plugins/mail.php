@@ -11,7 +11,7 @@ class Ld_Plugin_Mail
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
             'version' => '0.5.82',
-            'description' => Ld_Translate::translate('Make Mail backend configurable.'),
+            'description' => Ld_Translate::translate('Allow email delivery configuration.'),
             'license' => 'MIT / GPL'
         );
     }

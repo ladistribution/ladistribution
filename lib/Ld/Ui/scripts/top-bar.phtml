@@ -28,19 +28,21 @@
         <?php if (Ld_Auth::isAuthenticated() && Ld_Auth::isAnonymous() && $user = Ld_Auth::getUser()) : ?>
 
             <a href="<?php echo $this->completeUrl ?>"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></a>
-            <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>
+            <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate('Sign Out') ?></a>
 
         <?php elseif (Ld_Auth::isAuthenticated() && $user = Ld_Auth::getUser()) : ?>
 
-            <a class="avatar" href="<?php echo $this->userUrl ?>"><?php echo Ld_Ui::getAvatar($user, 16) ?></a>
-            <a href="<?php echo $this->userUrl ?>"><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></a>
-            <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate("Log Out") ?></a>
+            <a class="user" href="<?php echo $this->userUrl ?>">
+                <?php echo Ld_Ui::getAvatar($user, 16) ?>
+                <span><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></span>
+            </a>
+            <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate('Sign Out') ?></a>
 
         <?php else : ?>
 
-            <a class="h6e-login" href="<?php echo $this->loginUrl ?>"><?php echo $this->translate("Log In") ?></a>
+            <a class="h6e-login" href="<?php echo $this->loginUrl ?>"><?php echo $this->translate("Sign In") ?></a>
             <?php if ($this->site->getConfig('open_registration')) : ?>
-                <a href="<?php echo $this->registerUrl ?>"><?php echo $this->translate("Register") ?></a>
+                <a href="<?php echo $this->registerUrl ?>"><?php echo $this->translate('Sign Up') ?></a>
             <?php endif ?>
         <?php endif ?>
 

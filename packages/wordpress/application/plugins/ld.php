@@ -3,7 +3,7 @@
 Plugin Name: LD package
 Plugin URI: http://h6e.net/wordpress/plugins/ld-package
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.5.3
+Version: 0.6.1
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -11,9 +11,9 @@ Author URI: http://h6e.net/
 function ld_handle_capabilities()
 {    
 	global $wp_roles;
-	if (empty($wp_roles)) {
-		return;
-	}
+
+	if ( ! isset( $wp_roles ) )
+		$wp_roles = new WP_Roles();
 
 	$disable_admin_caps = array(
 		// 'activate_plugins', 'edit_themes',

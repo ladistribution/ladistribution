@@ -1,0 +1,96 @@
+#wpadminbar {
+  background-color:#ededed;
+  background-image:none;
+  border-bottom:1px solid #ccc;
+}
+
+#wpadminbar a:hover { text-decoration:underline; }
+
+#wp-admin-bar-ld-user a:hover { text-decoration:none; }
+#wp-admin-bar-ld-user a:hover span { text-decoration:underline; }
+
+#wpadminbar .quicklinks {
+  border:0;
+}
+
+#wpadminbar .ab-top-menu * {
+  font-size: 12px;
+  line-height: 30px;
+}
+
+.ld-top-menu {
+  position:fixed;
+}
+
+#wpadminbar *, #wpadminbar * a,
+#wpadminbar .ab-top-menu > li > .ab-item,
+#wpadminbar .ab-top-menu > li:hover > .ab-item,
+#wpadminbar .ab-top-menu > li.hover > .ab-item,
+#wpadminbar #adminbarsearch .adminbar-input {
+  color:#4E5368;
+  text-shadow:none;
+}
+
+/* Primary */
+
+#wpadminbar .ab-top-menu > li#wp-admin-bar-ld-site:hover > a.ab-item,
+#wpadminbar .ab-top-menu > li#wp-admin-bar-ld-application:hover > a.ab-item {
+  background:none;
+  background-image:none;
+}
+
+/* Secondary */
+
+#wpadminbar .ab-top-secondary {
+  background:none;
+  background-image:none;
+}
+
+#wpadminbar .ab-top-secondary > li:hover > a.ab-item {
+  background:none;
+}
+
+/* Placeholder in search input */
+#wpadminbar #adminbarsearch .adminbar-input::-webkit-input-placeholder {
+  color:#ccc;
+}
+#wpadminbar #adminbarsearch .adminbar-input:-moz-placeholder {
+  color:#ccc;
+}
+
+#wpadminbar .quicklinks > ul > li,
+#wpadminbar .quicklinks > ul.ab-top-secondary > li {
+  border-color:#ccc;
+}
+
+#wpadminbar .quicklinks > ul > li > a,
+#wpadminbar .quicklinks > ul.ab-top-secondary > li > a {
+  border:0;
+}
+
+#wpadminbar .ab-top-menu > li#wp-admin-bar-ld-site > a.ab-item,
+#wpadminbar .ab-top-menu > li#wp-admin-bar-ld-site:hover > a.ab-item {
+  background:url(img/star.png) 10px 5px no-repeat;
+  padding-left:35px;
+  padding-right:11px;
+}
+
+#wpadminbar .ab-top-menu > li#wp-admin-bar-ld-application > a.ab-item,
+#wpadminbar .ab-top-menu > li#wp-admin-bar-ld-application:hover > a.ab-item {
+  background:7px 6px no-repeat url(img/wp16.png);
+  padding-left:28px;
+  padding-right:9px;
+}
+
+#wpadminbar li img.avatar {
+  vertical-align:middle;
+  padding-right:5px;
+}
+
+#branding {
+  z-index:9990;
+}
+
+.ld-top-menu {
+  z-index:10000;
+}
