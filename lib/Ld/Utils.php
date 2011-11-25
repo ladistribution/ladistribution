@@ -84,10 +84,14 @@ class Ld_Utils
         $params = explode('&', $parts['query']);
         $retained_params = array();
         foreach ($params as $param) {
-            list($key, $value) = explode('=', $param);
-            if (!in_array($key, $ignoreParams)) {
-                $retained_params[] = $key . '=' . $value;
+            $explode = explode('=', $param);
+            if (count($explode) == 2) {
+                list($key, $value) = $explode;
+                if (in_array($key, $ignoreParams)) {
+                    continue;
+                }
             }
+            $retained_params[] = $param;
         }
         if (!empty($retained_params)) {
           $query = '?'. implode('&', $retained_params);
