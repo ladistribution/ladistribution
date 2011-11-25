@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: La Distribution\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-22 23:05+0100\n"
+"POT-Creation-Date: 2011-11-25 11:47+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: François Hodierne <francois@hodierne.net>\n"
 "Language-Team: \n"
@@ -28,13 +28,14 @@ msgid "Language:"
 msgstr "Langue :"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:5
-#: shared/modules/default/views/scripts/auth/login.phtml:90
+#: shared/modules/default/views/scripts/auth/login.phtml:84
 msgid "Sign In"
 msgstr "Se Connecter"
 
 #: shared/modules/default/views/scripts/auth/login.phtml:14
 #: shared/modules/default/views/scripts/auth/login.phtml:17
-#: shared/modules/default/views/scripts/auth/login.phtml:22
+#: shared/modules/default/views/scripts/auth/login.phtml:20
+#: shared/modules/default/views/scripts/auth/login.phtml:25
 #: shared/modules/default/views/scripts/auth/lost-password.phtml:14
 #: shared/modules/default/views/scripts/auth/register.phtml:15
 msgid "Error:"
@@ -48,34 +49,41 @@ msgstr "Nom d'utilisateur invalide."
 msgid "Incorrect password."
 msgstr "Mot de passe incorrect"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:34
-#: shared/modules/default/views/scripts/auth/login.phtml:57
+#: shared/modules/default/views/scripts/auth/login.phtml:20
+msgid "Identity ambigous."
+msgstr "Identité ambigue."
+
+#: shared/modules/default/views/scripts/auth/login.phtml:37
 #: shared/modules/default/views/scripts/auth/lost-password.phtml:45
 msgid "Username (or Email, or OpenID):"
 msgstr "Nom d'utilisateur (ou Email, ou OpenID) :"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:39
+#: shared/modules/default/views/scripts/auth/login.phtml:42
 #: shared/modules/default/views/scripts/auth/register.phtml:50
 msgid "Password:"
 msgstr "Mot de passe :"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:44
+#: shared/modules/default/views/scripts/auth/login.phtml:47
 msgid "Remember me"
 msgstr "Se souvenir de moi"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:66
+#: shared/modules/default/views/scripts/auth/login.phtml:60
+msgid "Username (or Email, or URL):"
+msgstr "Nom d'utilisateur (ou Email, ou URL) :"
+
+#: shared/modules/default/views/scripts/auth/login.phtml:68
 msgid "Forget"
 msgstr "Oublier"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:96
+#: shared/modules/default/views/scripts/auth/login.phtml:90
 msgid "Sign In with another identity"
 msgstr "Se connecter avec une autre identité"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:99
+#: shared/modules/default/views/scripts/auth/login.phtml:93
 msgid "Sign Up"
 msgstr "S'enregistrer"
 
-#: shared/modules/default/views/scripts/auth/login.phtml:102
+#: shared/modules/default/views/scripts/auth/login.phtml:96
 msgid "Lost Password?"
 msgstr "Mot de passe oublié ?"
 
@@ -243,7 +251,6 @@ msgstr "Mettre à jour"
 
 #: shared/modules/slotter/views/scripts/appearance/css.phtml:1
 #: shared/modules/slotter/views/scripts/appearance/index.phtml:1
-#: shared/modules/slotter/views/scripts/backups/index.phtml:1
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -308,7 +315,6 @@ msgstr "Êtes-vous sûrs de vouloir supprimer cette connexion à une base de don
 
 #: shared/modules/slotter/views/scripts/databases/delete.phtml:22
 #: shared/modules/slotter/views/scripts/domains/delete.phtml:16
-#: shared/modules/slotter/views/scripts/instance/configure.phtml:62
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -562,6 +568,7 @@ msgid "Update configuration"
 msgstr "Mettre à jour la configuration"
 
 #: shared/modules/slotter/views/scripts/instance/configure.phtml:42
+#: shared/modules/slotter/views/scripts/instance/move.phtml:20
 msgid "Move"
 msgstr "Déplacer"
 
@@ -574,10 +581,13 @@ msgid "New path"
 msgstr "Nouveau chemin"
 
 #: shared/modules/slotter/views/scripts/instance/configure.phtml:54
+#: shared/modules/slotter/views/scripts/instance/move.phtml:5
+#: shared/modules/slotter/views/scripts/instance/status.phtml:67
 msgid "Move this application"
 msgstr "Déplacer cette application"
 
 #: shared/modules/slotter/views/scripts/instance/configure.phtml:66
+#: shared/modules/slotter/views/scripts/instance/status.phtml:68
 msgid "Delete this application"
 msgstr "Supprimer cette application"
 
@@ -983,7 +993,6 @@ msgstr "Créer"
 
 #: shared/modules/slotter/views/scripts/users/add.phtml:1
 #: shared/modules/slotter/views/scripts/users/delete.phtml:1
-#: shared/modules/slotter/views/scripts/users/edit.phtml:1
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1056,11 +1065,11 @@ msgstr "Se connecter à ce site web en utilisant OpenID"
 msgid "You can log on this website using OpenID identities."
 msgstr "Vous pouvez vous connecter à ce site en utilisant des identités OpenID."
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:108
+#: shared/modules/slotter/views/scripts/users/edit.phtml:109
 msgid "You don't have any OpenID identity registered yet. You can add new identities with the form below."
 msgstr "Vous n'avez encore enregistré aucune identité OpenID. Vous pouvez ajoutez d'autres identités avec le formulaire ci-dessous."
 
-#: shared/modules/slotter/views/scripts/users/edit.phtml:117
+#: shared/modules/slotter/views/scripts/users/edit.phtml:118
 msgid "Add an identity:"
 msgstr "Ajouter une identité :"
 
@@ -1138,56 +1147,54 @@ msgstr "Ajouter les utilisateurs et envoyer les invitations"
 msgid "Add a new user"
 msgstr "Ajouter un nouvel utilisateur"
 
-#: shared/modules/api/controllers/OauthController.php:49
+#: shared/modules/api/controllers/OauthController.php:64
 msgid "Cancel"
 msgstr "Annuler"
 
-#: shared/modules/default/controllers/AuthController.php:106
-msgid "Registration is closed."
-msgstr "L'enregistrement est fermé."
-
-#: shared/modules/default/controllers/AuthController.php:134
-#: shared/modules/default/controllers/AuthController.php:200
-msgid "Username can't be empty."
-msgstr "Le nom d'utilisateur ne peut être vide."
-
-#: shared/modules/default/controllers/AuthController.php:136
-#: shared/modules/default/controllers/AuthController.php:205
-msgid "Email can't be empty."
-msgstr "L'email ne peut être vide."
-
-#: shared/modules/default/controllers/AuthController.php:138
-#: shared/modules/default/controllers/AuthController.php:207
-#: shared/modules/default/controllers/AuthController.php:302
-msgid "Password can't be empty."
-msgstr "Le mot de passe ne peut être vide."
-
-#: shared/modules/default/controllers/AuthController.php:140
-#: shared/modules/default/controllers/AuthController.php:209
-#: shared/modules/default/controllers/AuthController.php:304
-msgid "Passwords must match."
-msgstr "Les mots de passe doivent correspondre."
-
-#: shared/modules/default/controllers/AuthController.php:203
-msgid "User with this username already exists."
-msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"
-
-#: shared/modules/default/controllers/AuthController.php:331
+#: shared/modules/default/controllers/AuthController.php:53
+#: shared/modules/default/controllers/AuthController.php:286
 msgid "Identity not found."
 msgstr "Identité non trouvée."
 
+#: shared/modules/default/controllers/AuthController.php:94
+msgid "Registration is closed."
+msgstr "L'enregistrement est fermé."
+
+#: shared/modules/default/controllers/AuthController.php:122
+#: shared/modules/default/controllers/AuthController.php:188
+msgid "Username can't be empty."
+msgstr "Le nom d'utilisateur ne peut être vide."
+
+#: shared/modules/default/controllers/AuthController.php:124
+#: shared/modules/default/controllers/AuthController.php:193
+msgid "Email can't be empty."
+msgstr "L'email ne peut être vide."
+
+#: shared/modules/default/controllers/AuthController.php:126
+#: shared/modules/default/controllers/AuthController.php:195
+#: shared/modules/default/controllers/AuthController.php:257
+msgid "Password can't be empty."
+msgstr "Le mot de passe ne peut être vide."
+
+#: shared/modules/default/controllers/AuthController.php:128
+#: shared/modules/default/controllers/AuthController.php:197
+#: shared/modules/default/controllers/AuthController.php:259
+msgid "Passwords must match."
+msgstr "Les mots de passe doivent correspondre."
+
+#: shared/modules/default/controllers/AuthController.php:191
+msgid "User with this username already exists."
+msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"
+
 #: shared/modules/merger/controllers/SettingsController.php:38
-#: shared/modules/slotter/controllers/InstanceController.php:189
 msgid "Configuration updated"
 msgstr "Configuration mise à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:27
-#: shared/modules/slotter/controllers/InstanceController.php:255
 msgid "Colors updated"
 msgstr "Couleurs mises à jour"
 
 #: shared/modules/slotter/controllers/AppearanceController.php:44
-#: shared/modules/slotter/controllers/InstanceController.php:277
 msgid "CSS updated"
 msgstr "CSS mise à jour"
 
@@ -1197,17 +1204,14 @@ msgid "Backups"
 msgstr "Sauvegardes"
 
 #: shared/modules/slotter/controllers/BackupsController.php:24
-#: shared/modules/slotter/controllers/InstanceController.php:294
 msgid "Backup generated"
 msgstr "Sauvegarde générée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:44
-#: shared/modules/slotter/controllers/InstanceController.php:319
 msgid "Backup deleted"
 msgstr "Sauvegarde supprimée"
 
 #: shared/modules/slotter/controllers/BackupsController.php:54
-#: shared/modules/slotter/controllers/InstanceController.php:325
 msgid "Backup restored"
 msgstr "Sauvegarde restaurée"
 
@@ -1240,6 +1244,7 @@ msgid "New"
 msgstr "Nouveau"
 
 #: shared/modules/slotter/controllers/DomainsController.php:172
+#: shared/modules/slotter/controllers/SettingsController.php:76
 msgid "None"
 msgstr "Aucune"
 
@@ -1260,6 +1265,7 @@ msgid "Instance updated"
 msgstr "Instance mise à jour"
 
 #: shared/modules/slotter/controllers/InstanceController.php:371
+#: shared/modules/slotter/controllers/UsersController.php:176
 msgid "Roles updated"
 msgstr "Rôles mis à jour"
 
@@ -1287,24 +1293,24 @@ msgstr "Tout le monde peut s'enregistrer ?"
 msgid "Timezone"
 msgstr "Fuseau horaire"
 
-#: shared/modules/slotter/controllers/UsersController.php:59
+#: shared/modules/slotter/controllers/UsersController.php:60
 #: shared/modules/slotter/views/helpers/InstanceNavigation.php:42
 msgid "Roles"
 msgstr "Roles"
 
-#: shared/modules/slotter/controllers/UsersController.php:67
+#: shared/modules/slotter/controllers/UsersController.php:68
 msgid "Invite Users"
 msgstr "Inviter des utilisateurs"
 
-#: shared/modules/slotter/controllers/UsersController.php:70
+#: shared/modules/slotter/controllers/UsersController.php:71
 msgid "Add Users"
 msgstr "Ajouter des utilisateurs"
 
-#: shared/modules/slotter/controllers/UsersController.php:78
+#: shared/modules/slotter/controllers/UsersController.php:79
 msgid "Your Profile"
 msgstr "Votre profil"
 
-#: shared/modules/slotter/controllers/UsersController.php:294
+#: shared/modules/slotter/controllers/UsersController.php:295
 msgid "Profile updated"
 msgstr "Profil mis à jour"
 
@@ -1336,6 +1342,8 @@ msgid "Checks user submitted content to see if it look like spam."
 msgstr "Vérifie le contenu soumis par les utilisateurs pour voir si ça ressemble à du spam."
 
 #: shared/plugins/akismet.php:27
+#: shared/plugins/memcache.php:36
+#: shared/plugins/recaptcha.php:29
 #, php-format
 msgid "%s is configured and running."
 msgstr "%s est configuré et fonctionne."
@@ -1345,6 +1353,7 @@ msgid "Akismet API key is invalid."
 msgstr "La clé d'API Akismet est invalide."
 
 #: shared/plugins/akismet.php:31
+#: shared/plugins/recaptcha.php:26
 #, php-format
 msgid "%s is not running. Complete your configuration to enable it."
 msgstr "%s ne fonctionne pas. Complétez votre configuration pour l'activer."
