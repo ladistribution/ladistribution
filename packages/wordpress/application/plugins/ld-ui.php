@@ -96,9 +96,9 @@ $colors = Ld_Ui::getApplicationColors();
 }
 
 #wpadminbar *, #wpadminbar * a,
-#wpadminbar .ab-top-menu > li > a:hover,
-#wpadminbar .ab-top-menu > li > a:hover span,
-#wpadminbar .ab-top-menu > li.over > a > span,
+#wpadminbar .ab-top-menu > li > .ab-item,
+#wpadminbar .ab-top-menu > li:hover > .ab-item,
+#wpadminbar .ab-top-menu > li.hover > .ab-item,
 #wpadminbar #adminbarsearch .adminbar-input {
   color:#<?php echo $colors['ld-colors-text-2'] ?>;
 }
@@ -108,8 +108,8 @@ $colors = Ld_Ui::getApplicationColors();
 }
 
 #wpadminbar,
-#wpadminbar, #wpadminbar .quicklinks > ul > li,
-#wpadminbar .quicklinks > ul > li.opposite {
+#wpadminbar .quicklinks > ul > li,
+#wpadminbar .quicklinks > ul.ab-top-secondary > li {
   border-color:#<?php echo $colors['ld-colors-border-2'] ?>;
 }
 <?php
@@ -174,12 +174,10 @@ function ld_admin_bar_menu_before($wp_admin_bar)
     if (Ld_Auth::isAuthenticated() && $user = Ld_Auth::getUser()) {
 
         $wp_admin_bar->add_menu( array(
-            'id'    => 'ld-logout',
-            'title' => Ld_Translate::translate('Sign Out'),
-            'href'  => wp_logout_url($_SERVER["REQUEST_URI"]),
-            'meta'  => array(
-                'class' => 'opposite',
-            ),
+            'id'     => 'ld-logout',
+            'parent' => 'top-secondary',
+            'title'  => Ld_Translate::translate('Sign Out'),
+            'href'   => wp_logout_url($_SERVER["REQUEST_URI"])
         ) );
 
         $userUrl = Ld_Ui::getAdminUrl(array('module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => $user['username']));
@@ -187,12 +185,10 @@ function ld_admin_bar_menu_before($wp_admin_bar)
         $avatar = Ld_Ui::getAvatar($user, 16) . ' ';
 
         $wp_admin_bar->add_menu( array(
-            'id'    => 'ld-user',
-            'title' => $avatar . ' <span>' . $name . '</span>',
-            'href'  => $userUrl,
-            'meta'  => array(
-                'class' => 'opposite',
-            ),
+            'id'     => 'ld-user',
+            'parent' => 'top-secondary',
+            'title'  => $avatar . ' <span>' . $name . '</span>',
+            'href'   => $userUrl
         ) );
 
     }

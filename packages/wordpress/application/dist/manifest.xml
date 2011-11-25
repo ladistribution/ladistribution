@@ -2,7 +2,7 @@
   <id>wordpress</id>
   <name>WordPress</name>
   <description>Blog Tool and Publishing Platform</description>
-  <version>3.3.0-6-beta2</version>
+  <version>3.3.0-10-beta4</version>
   <type>application</type>
   <need>lib-ld</need>
   <need>css-h6e-minimal</need>
