@@ -39,6 +39,18 @@ class Ld_Model_Backend_Json
         return $items;
     }
 
+    public function searchByKey($key, $value)
+    {
+        $results = array();
+        $all = $this->getAll();
+        foreach ($all as $id => $item) {
+            if (isset($item[$key]) && $item[$key] == $value) {
+                $results[$id] = $item;
+            }
+        }
+        return $results;
+    }
+
     protected function updateAll($items)
     {
         Ld_Files::putJson($this->getFileName(), $items);
@@ -47,7 +59,7 @@ class Ld_Model_Backend_Json
     public function create($params = array())
     {
         $items = $this->getAll();
-        $id = uniqid();
+        $id = Ld_Utils::getUniqId();
         $items[$id] = $params;
         $this->updateAll($items);
         $params['id'] = $id;

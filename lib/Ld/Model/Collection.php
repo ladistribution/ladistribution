@@ -76,6 +76,16 @@ class Ld_Model_Collection
       return $items;
   }
 
+  public function getOneByKey($key, $value)
+  {
+      $results = $this->searchByKey($key, $value);
+      if (count($results) > 0) {
+          return array_shift($results);
+      }
+  }
+
+  public function searchByKey($key, $value) { return $this->getBackend()->searchByKey($key, $value); }
+
   public function create($params) { return $this->getBackend()->create($params); }
 
   public function read($id) { return $this->getBackend()->read($id); }
