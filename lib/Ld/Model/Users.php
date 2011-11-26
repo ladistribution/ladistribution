@@ -119,6 +119,11 @@ class Ld_Model_Users extends Ld_Model_Collection
 
     public function updateUser($id, $infos = array(), $validate = true)
     {
+        if (is_array($id) && empty($infos)) {
+            $infos = $id;
+            $id = isset($infos['id']) ? $infos['id'] : $infos['username'];
+        }
+
         if (!$user = $this->getUser($id)) {
             throw new Exception("No user match this id ($id).");
         }
