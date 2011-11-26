@@ -14,12 +14,6 @@ class Ld_Installer_Admin extends Ld_Installer
 	{
 		$site = $this->getSite();
 
-		// Re-generate secret if missing/empty
-		$secret = $site->getConfig('secret');
-		if (empty($secret)) {
-			$site->setConfig('secret', Ld_Auth::generatePhrase());
-		}
-
 		// Update appearance version
 		$version = substr(md5(time()), 0, 10);
 		$site->setConfig('appearance_version', $version);

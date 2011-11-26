@@ -162,8 +162,13 @@ class Ld_Loader
     public static function setupAuthentication()
     {
         // Setup Authentication
-        if (function_exists('mcrypt_ecb') && isset(self::$config['secret'])) {
-            $cookieManager = new Ld_Cookie(self::$config['secret']);
+        $secret = self::$site->getConfig('secret');
+        if (empty($secret)) {
+            $secret = Ld_Auth::generatePhrase();
+            self::$site->setConfig('secret', $secret);
+        }
+        if (function_exists('mcrypt_ecb')) {
+            $cookieManager = new Ld_Cookie($secret);
         } else {
             $cookieManager = new Ld_Cookie_Simple();
         }
