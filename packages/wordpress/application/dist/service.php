@@ -32,8 +32,13 @@ class Ld_Service_Wordpress
 				$user_id = wp_create_user($user_name, $user_password, $user_email);
 			}
 			// Update administrator password
-			$user = get_userdata($user_id);
-			$userdata = add_magic_quotes(get_object_vars($user));
+			// - see wp_update_user() for any syntax concern
+			$user_obj = get_userdata( $user_id );
+			$user = get_object_vars( $user_obj->data );
+			foreach ( _get_additional_user_keys( $user_obj ) as $key ) {
+				$user[ $key ] = get_user_meta( $user_id, $key, true );
+			}
+			$userdata = add_magic_quotes( $user );
 			$userdata['user_pass'] = $user_hash;
 			$user_id = wp_insert_user($userdata);
 			// Email

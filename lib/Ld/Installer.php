@@ -609,7 +609,7 @@ class Ld_Installer
 
 	public function serviceRequest($method, $params = array())
 	{
-		// Ld_Files::log("Installer:serviceRequest", "$method");
+		Ld_Files::log("Installer:serviceRequest", "$method");
 		if (empty($this->httpClient)) {
 			$this->httpClient = new Zend_Http_Client();
 			$this->httpClient->setConfig(array('timeout' => 10, 'useragent' => 'La Distribution Installer'));
