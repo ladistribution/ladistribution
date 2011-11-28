@@ -1,10 +1,11 @@
 <package>
   <id>admin</id>
   <name>La Distribution Admin</name>
-  <version>0.6-10</version>
+  <version>0.6-11</version>
   <type>application</type>
   <need>lib-admin</need>
   <need>lib-ld</need>
+  <need>lib-oauth2-php</need>
   <need>css-h6e-minimal</need>
   <need>css-ld-ui</need>
   <need>js-jquery</need>

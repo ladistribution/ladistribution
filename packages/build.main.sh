@@ -164,6 +164,10 @@ cd lib
   ./build.sh
   cd ..
 
+  cd oauth2-php
+  ./build.sh
+  cd ..
+
 cd ..
 
 cd plugins

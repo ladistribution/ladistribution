@@ -1,0 +1,10 @@
+<package>
+  <id>lib-oauth2-php</id>
+  <name>OAuth2</name>
+  <version>0.20-6182ed2-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">oauth2-php</destination>
+  </deploy>
+</package>

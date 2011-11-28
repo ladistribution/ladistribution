@@ -19,6 +19,7 @@ $IMPORT lib-limonade.zip
 $IMPORT lib-rediska.zip
 $IMPORT lib-bouncer.zip
 $IMPORT lib-sabredav.zip
+$IMPORT lib-oauth2-php.zip
 
 $IMPORT plugin-bouncer.zip
 
