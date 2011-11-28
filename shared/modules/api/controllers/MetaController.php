@@ -18,6 +18,23 @@ class Api_MetaController extends Ld_Controller_Action
         <?php
     }
 
+    function openidConfigurationAction()
+    {
+        $configuration = array(
+            'issuer' => $this->site->getUrl(),
+            'registration_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'register')),
+            'authorization_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'authorize')),
+            'token_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'token')),
+            'user_info_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'userinfo')),
+            'scopes_supported' => array('openid', 'profile', 'email'),
+            'flows_supported' => array('code')
+        );
+        $this->noRender();
+        $this->getResponse()->setHeader('Access-Control-Allow-Origin', '*');
+        $this->getResponse()->setHeader('Content-Type', 'application/json');
+        $this->getResponse()->setBody(Zend_Json::encode($configuration));
+    }
+
     function webfingerAction()
     {
         $q = $this->_getParam('q');
