@@ -103,4 +103,26 @@ class Ld_Http
         return $adapter->getFileName();
     }
 
+    public static function jsonRequest($url, $method = 'GET', $params = array())
+    {
+        $httpClient = new Zend_Http_Client($url);
+        if (!empty($params)) {
+            if ($method == 'POST') {
+                $httpClient->setParameterPost($params);
+            }
+        }
+        $response = $httpClient->request($method);
+        $body = $response->getBody();
+        if ($response->isError()) {
+            throw new Exception('An error occurred sending request. Status code: ' . $response->getStatus() );
+        }
+        $result = Zend_Json::decode($body);
+        if (isset($result['error'])) {
+            $error = $result['error'];
+            $error_description = $result['error_description'];
+            throw new Exception("$error_description ($error)");
+        }
+        return $result;
+    }
+
 }

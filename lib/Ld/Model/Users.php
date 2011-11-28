@@ -108,11 +108,17 @@ class Ld_Model_Users extends Ld_Model_Collection
         }
 
         if (isset($user['email']) && $exists = $this->getUserBy('email', $user['email'])) {
-            throw new Exception("An user with this email addresss is already registered.");
+            throw new Exception(sprintf(
+                Ld_Translate::translate("An user with this email address (%s) is already registered."),
+                $user['email']
+            ));
         }
 
         if ($exists = $this->getUserBy('username', $user['username'])) {
-            throw new Exception("User with this username already exists.");
+            throw new Exception(sprintf(
+                Ld_Translate::translate("An user with this username (%s) is already registered."),
+                $user['username']
+            ));
         }
 
         $this->getBackend()->create($user);

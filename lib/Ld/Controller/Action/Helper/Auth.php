@@ -22,6 +22,12 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
     public function authenticate()
     {
+        if ($this->_getParam('ld_auth_action') == 'connect') {
+            $auth = Zend_Auth::getInstance();
+            $adapter = new Ld_Auth_Adapter_Connect();
+            $result = $auth->authenticate($adapter);
+        }
+
         if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
 
             return Ld_Auth::authenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
@@ -32,20 +38,27 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
                 $this->_setParam('ld_auth_username', $this->_getParam('openid_identifier'));
             }
 
-            if ($this->_hasParam('ld_auth_username') && $this->_hasParam('ld_auth_password')) {
+            if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
+                $auth = Zend_Auth::getInstance();
+                $adapter = new Ld_Auth_Adapter_Connect();
+                $adapter->setIdentityUrl($this->_getParam('ld_auth_username'));
+                $result = $auth->authenticate($adapter);
+            }
 
+            if ($this->_hasParam('ld_auth_username') && $this->_hasParam('ld_auth_password')) {
                 $result = Ld_Auth::authenticate(
                     $this->_getParam('ld_auth_username'), $this->_getParam('ld_auth_password'), $this->_getParam('ld_auth_remember')
                 );
-
-                if ($result->isValid()) {
-                    Ld_Auth::rememberIdentity( $this->_getParam('ld_auth_username') );
-                    $this->_redirectToReferer();
-                }
-
-                return $result;
             }
 
+        }
+
+        if (isset($result)) {
+            if ($result->isValid()) {
+                Ld_Auth::rememberIdentity( $result->getIdentity() );
+                $this->_redirectToReferer();
+            }
+            return $result;
         }
     }
 
