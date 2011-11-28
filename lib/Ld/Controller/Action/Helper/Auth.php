@@ -29,8 +29,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
         } else if ($this->_getParam('ld_auth_action') == 'login') {
 
             if ($this->_hasParam('openid_identifier')) {
-                $openid_identifier = trim( $this->_getParam('openid_identifier') );
-                $this->_setParam('ld_auth_username', $openid_identifier);
+                $this->_setParam('ld_auth_username', $this->_getParam('openid_identifier'));
             }
 
             if ($this->_hasParam('ld_auth_username') && $this->_hasParam('ld_auth_password')) {

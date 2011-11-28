@@ -57,7 +57,7 @@
             }
             ?>
 
-            <label for="ld-auth-username"><?php echo $this->translate("Username (or Email, or URL):") ?></label>
+            <label for="ld-auth-username"><?php echo $this->translate("Username (or Email or URL):") ?></label>
             <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value=""/>
 
             <script type="text/javascript">jQuery('#ld-auth-username').focus();</script>
@@ -65,8 +65,9 @@
             <div id="ld-identities" style="display:none">
                 <?php if (!empty($identities)) : ?>
                 <?php foreach ($identities as $identity => $user) : ?>
-                <a href="?forget-identity=<?php echo urlencode($identity) ?>" class="forget"><?php echo $this->translate("Forget") ?></a>
-                <a href="<?php echo $this->admin->getIdentityUrl($user) ?>" class="identity">
+                <a href="<?php echo $this->loginUrl ?>?forget-identity=<?php echo urlencode($identity) ?>" class="forget"><?php
+                    echo $this->translate("Forget") ?></a>
+                <a href="<?php echo $this->loginUrl ?>?ld_identity=<?php echo urlencode($identity) ?>" class="identity">
                     <?php echo Ld_Ui::getAvatar($user, 32) ?>
                     <?php $displayname = empty($user['fullname']) ? $user['username'] : $user['fullname']; ?>
                     <span class="fullname"><?php echo $displayname ?></span>
@@ -87,7 +88,7 @@
 
     <div class="links">
       <a id="ld-auth-another-identity-link" style="display:none" href="<?php echo $this->loginUrl ?>?another-identity=1"><?php
-            echo $this->translate("Sign In with another identity") ?></a>
+            echo $this->translate("Sign in with another identity") ?></a>
       <?php if ($this->open_registration && empty($this->ld_auth_user)) : ?>
           <a id="ld-auth-register-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php
             echo $this->translate("Sign Up") ?></a><br/>

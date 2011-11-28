@@ -41,6 +41,10 @@ class AuthController extends Ld_Controller_Action
             return $this->redirectTo( $this->admin->getLoginUrl() );
         }
 
+        if ($this->_hasParam('ld_identity')) {
+            $this->_setParam('ld_auth_username', $this->_getParam('ld_identity'));
+        }
+
         // First Step (username/email/identifier)
         if ($this->_hasParam('ld_auth_username')) {
             $this->view->ld_auth_username = $this->_getParam('ld_auth_username');

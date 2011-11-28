@@ -56,6 +56,7 @@ class Ld_Model_Users extends Ld_Model_Collection
 
     public function getUser($id)
     {
+        $id = trim($id);
         // by id
         $user = $this->getUserBy('id', $id);
         if (isset($user)) {
