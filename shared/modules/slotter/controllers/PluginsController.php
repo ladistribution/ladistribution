@@ -50,9 +50,12 @@ class Slotter_PluginsController extends Slotter_BaseController
         $plugins = array();
         foreach ($site->getPlugins() as $id => $infos) {
             $className = $infos['className'];
-            $fileName = $site->getDirectory('shared') . '/plugins/' . $id . '.php';
-            if (Ld_Files::exists($fileName)) {
-                require_once $fileName;
+            $filename = $site->getDirectory('shared') . '/plugins/' . $id . '.php';
+            $alternativeFilename = $site->getDirectory('shared') . '/plugins/' . $id . '/' . $id . '.php';
+            if (Ld_Files::exists($filename)) {
+                require_once $filename;
+            } elseif (Ld_Files::exists($alternativeFilename)) {
+                require_once $alternativeFilename;
             }
             if (class_exists($className, false) && method_exists($className, 'infos')) {
                 $plugin = new $className;

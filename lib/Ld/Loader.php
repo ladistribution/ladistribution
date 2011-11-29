@@ -147,11 +147,15 @@ class Ld_Loader
 
     public static function loadPlugin($plugin)
     {
-        $plugin = strtolower($plugin);
-        $fileName = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
+        $filename = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
+        $alternativeFilename = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '/' . $plugin . '.php';
         $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
-        if (class_exists($className, false) == false && Ld_Files::exists($fileName)) {
-            require_once $fileName;
+        if (class_exists($className, false) == false) {
+            if (Ld_Files::exists($filename)) {
+                require_once $filename;
+            } elseif (Ld_Files::exists($alternativeFilename)) {
+                require_once $alternativeFilename;
+            }
         }
         if (class_exists($className) && method_exists($className, 'load')) {
             $class = new $className;

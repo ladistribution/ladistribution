@@ -1073,12 +1073,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getPlugins()
     {
         $plugins = array();
-        $plugin_files = Ld_Files::getFiles($this->getDirectory('shared') . '/plugins');
-        foreach ($plugin_files as $fileName) {
-            $id = strtolower(str_replace('.php', '', $fileName));
-            $plugins[$id] = array(
-                'className' => 'Ld_Plugin_' . Zend_Filter::filterStatic($id, 'Word_DashToCamelCase')
-            );
+        foreach (Ld_Files::scanDir($this->getDirectory('shared') . '/plugins') as $resultType => $results) {
+            foreach ($results as $name) {
+                $id = $resultType == 'files' ? str_replace('.php', '', $name) : $name;
+                $plugins[$id] = array(
+                    'className' => 'Ld_Plugin_' . Zend_Filter::filterStatic($id, 'Word_DashToCamelCase')
+                );
+            }
         }
 
         $plugins = Ld_Plugin::applyFilters('Site:plugins', $plugins);
