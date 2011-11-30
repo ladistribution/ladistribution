@@ -48,12 +48,12 @@
   padding-right:10px;
 }
 
-#ld-top-bar-inner .a a.ld-site-name {
+#ld-top-bar-inner a.ld-site-name {
   background:url(img/star.png) 10px 5px no-repeat;
   padding-left:35px;
 }
 
-#ld-top-bar-inner .a a.ld-subsite-name {
+#ld-top-bar-inner a.ld-subsite-name {
   padding-left:10px;
 }
 
@@ -63,8 +63,8 @@
   padding-right:10px;
 }
 
-#ld-top-bar-inner .b a.ld-userinfo:hover { text-decoration:none; }
-#ld-top-bar-inner .b a.ld-userinfo:hover span { text-decoration:underline; }
+#ld-top-bar-inner a.ld-userinfo:hover { text-decoration:none; }
+#ld-top-bar-inner a.ld-userinfo:hover span { text-decoration:underline; }
 
 #ld-top-bar-inner .b img.avatar {
   border:0;
@@ -73,26 +73,26 @@
   padding-left:1px;
 }
 
-#ld-top-bar .a a.ld-app-name {
+#ld-top-bar-inner a.ld-app-name {
   padding-left:10px;
   background:4px 6px no-repeat;
 }
 
-.ld-app-name.wordpress,
+#ld-top-bar-inner a.ld-app-name.wordpress,
 ul.instances li.wordpress { padding-left:25px; background-image:url(img/wp16.png); }
-.ld-app-name.dokuwiki,
+#ld-top-bar-inner a.ld-app-name.dokuwiki,
 ul.instances li.dokuwiki  { padding-left:25px; background-image:url(img/dw16.png); }
-.ld-app-name.bbpress,
+#ld-top-bar-inner a.ld-app-name.bbpress,
 ul.instances li.bbpress   { padding-left:25px; background-image:url(img/bp16.png); }
-.ld-app-name.gallery,
+#ld-top-bar-inner a.ld-app-name.gallery,
 ul.instances li.gallery   { padding-left:25px; background-image:url(img/ga16.png); }
-.ld-app-name.statusnet,
+#ld-top-bar-inner a.ld-app-name.statusnet,
 ul.instances li.statusnet { padding-left:25px; background-image:url(img/statusnet-16.png); }
-.ld-app-name.firefox-sync,
+#ld-top-bar-inner a.ld-app-name.firefox-sync,
 ul.instances li.firefox-sync { padding-left:25px; background-image:url(img/firefox-sync-16.png); }
-.ld-app-name.blogmarks,
+#ld-top-bar-inner a.ld-app-name.blogmarks,
 ul.instances li.blogmarks { padding-left:25px; background-image:url(img/blogmarks-16.png); }
-.ld-app-name.moonmoon,
+#ld-top-bar-inner a.ld-app-name.moonmoon,
 ul.instances li.moonmoon { padding-left:25px; background-image:url(img/moonmoon-16.png); }
 
 /* Top Menu
