@@ -1,167 +1,79 @@
 
-/* Top Bar & Super Bar
+/* Top Bar
 -------------------------------------------------------------- */
 
-.h6e-top-bar {
+#ld-top-bar {
   width:100%;
   position:absolute;
   top:0;
   left:0;
 }
 
-.h6e-super-bar {
-  width:100%;
-  position:fixed;
-  left:0;
-  bottom:0;
-  clear:both;
-  z-index:9990;
-  margin:auto;
-}
-
-.h6e-top-bar .a, .h6e-super-bar .a {
-  float:left;
-}
-
-.h6e-top-bar .b, .h6e-super-bar .b {
-  float:right;
-}
-
-.h6e-super-bar-inner, .h6e-top-bar-inner {
-  width:978px;
-  margin:auto;
+#ld-top-bar-inner {
   overflow:hidden;
   font:11px/12px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  border:1px solid #ccc;
+  border-bottom:1px solid #ccc;
   background:inherit;
-}
-
-.h6e-top-bar-inner {
   padding:0;
-  border-top:0;
-  -moz-border-radius-bottomleft:5px;
-  -moz-border-radius-bottomright:5px;
-  -webkit-border-bottom-left-radius:5px;
-  -webkit-border-bottom-right-radius:5px;
-  border-bottom-left-radius:5px;
-  border-bottom-right-radius:5px;
   height:28px;
 }
 
-.h6e-super-bar-inner {
-  padding:0.5em 0.5em 0;
-  border-bottom:0;
-  -moz-border-radius-topleft:5px;
-  -moz-border-radius-topright:5px;
-  -webkit-border-top-left-radius:5px;
-  -webkit-border-top-right-radius:5px;
-  border-top-left-radius:5px;
-  border-top-right-radius:5px;
+#ld-top-bar .a {
+  float:left;
 }
 
-.h6e-super-bar-inner a, .h6e-top-bar-inner a {
+#ld-top-bar .b {
+  float:right;
+}
+
+#ld-top-bar-inner .a,
+#ld-top-bar-inner .b {
+  font-size:12px;
+  line-height:28px;
+}
+
+#ld-top-bar-inner a {
+  display:inline-block;
   text-decoration:none;
   border-bottom:0;
   background:none;
 }
 
-.h6e-super-bar-inner a:hover, .h6e-top-bar-inner a:hover {
+#ld-top-bar-inner a:hover {
   text-decoration:underline;
 }
 
-.h6e-top-bar-inner .a, .h6e-top-bar-inner .b {
-  font-size:12px;
-  line-height:28px;
-}
-
-.h6e-top-bar-inner .a a,
-.h6e-top-bar-inner .b a {
-  display:inline-block;
-}
-
-.h6e-top-bar-inner .a a {
+#ld-top-bar-inner .a a {
   border-right:1px solid #ccc;
   padding-right:10px;
 }
 
-.h6e-top-bar-inner .b a {
+#ld-top-bar-inner .a a.ld-site-name {
+  background:url(img/star.png) 10px 5px no-repeat;
+  padding-left:35px;
+}
+
+#ld-top-bar-inner .a a.ld-subsite-name {
+  padding-left:10px;
+}
+
+#ld-top-bar-inner .b a {
   border-left:1px solid #ccc;
   padding-left:11px;
   padding-right:10px;
 }
 
-.h6e-top-bar-inner .a a.ld-site-name {
-  background:url(img/star.png) 10px 5px no-repeat;
-  padding-left:35px;
-}
+#ld-top-bar-inner .b a.ld-userinfo:hover { text-decoration:none; }
+#ld-top-bar-inner .b a.ld-userinfo:hover span { text-decoration:underline; }
 
-.h6e-top-bar-inner .a a.ld-subsite-name {
-  padding-left:10px;
-}
-
-.h6e-top-bar-inner .b {
-  margin-right:2px;
-}
-
-.h6e-top-bar-inner .b a.user:hover { text-decoration:none; }
-.h6e-top-bar-inner .b a.user:hover span { text-decoration:underline; }
-
-.h6e-top-bar-inner .b img.avatar {
+#ld-top-bar-inner .b img.avatar {
   border:0;
-  vertical-align:-16%;
+  vertical-align:-4px;
   padding-right:5px;
   padding-left:1px;
 }
 
-.h6e-top-bar.full-width .h6e-top-bar-inner,
-.h6e-super-bar.full-width .h6e-super-bar-inner {
-  width:auto;
-  border-left:0;
-  border-right:0;
-  -moz-border-radius:0;
-  border-radius:0;
-}
-
-/* Super Bar Instances
--------------------------------------------------------------- */
-
-.h6e-super-bar ul.instances {
-  width:100%;
-  overflow:hidden;
-  margin:0;
-  padding:0;
-  -moz-padding-start:0;
-}
-
-.h6e-super-bar ul.instances li {
-  display:block;
-  float:left;
-
-  width:auto;
-  height:auto;
-  margin:0 0 0.5em 0.5em;
-  padding:0.5em;
-
-  border:0;
-  border-radius:5px;
-  -moz-border-radius:5px;
-  -webkit-border-radius:5px;
-
-  font-size:11px;
-  height:1.2em;
-  line-height:1.2em;
-
-  background:4px 4px no-repeat;
-}
-
-.h6e-super-bar ul.instances li.extra-link {
-  font-size:10px;
-  line-height:1em;
-  margin-left:0;
-  margin-top:1px;
-}
-
-.h6e-top-bar .ld-app-name {
+#ld-top-bar .a a.ld-app-name {
   padding-left:10px;
   background:4px 6px no-repeat;
 }
@@ -261,10 +173,3 @@ ul.instances li.moonmoon { padding-left:25px; background-image:url(img/moonmoon-
 .ld-top-menu ul.instances li.admin    { background-image:url(iconic/pen_alt_fill_16x16_gray_dark.png); }
 .ld-top-menu ul.instances li.settings { background-image:url(iconic/cog_alt_16x16_gray_dark.png); }
 .ld-top-menu ul.instances li.users    { background-image:url(iconic/user_12x16_gray_dark.png); background-position:4px 5px; }
-
-/* Test New Things
--------------------------------------------------------------- */
-
-.h6e-super-bar {
-  z-index:100;
-}

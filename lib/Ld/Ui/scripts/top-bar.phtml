@@ -1,7 +1,7 @@
 <?php Ld_Plugin::doAction('Ui:beforeTopBar') ?>
 
-<div id="ld-top-bar" class="h6e-top-bar <?php echo $this->className ?>">
-    <div class="h6e-top-bar-inner">
+<div id="ld-top-bar" class="ld-top-bar <?php echo $this->className ?>">
+    <div id="ld-top-bar-inner" class="ld-top-bar-inner">
         <div class="a">
 <?php if (!$this->site->isChild()) : ?>
             <a class="ld-site-name" href="<?php echo $this->site->getUrl() ?>"><?php
@@ -32,17 +32,17 @@
 
         <?php elseif (Ld_Auth::isAuthenticated() && $user = Ld_Auth::getUser()) : ?>
 
-            <a class="user" href="<?php echo $this->userUrl ?>">
+            <a class="ld-userinfo" href="<?php echo $this->userUrl ?>">
                 <?php echo Ld_Ui::getAvatar($user, 16) ?>
                 <span><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></span>
             </a>
-            <a href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate('Sign Out') ?></a>
+            <a class="ld-signout"  href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate('Sign Out') ?></a>
 
         <?php else : ?>
 
-            <a class="h6e-login" href="<?php echo $this->loginUrl ?>"><?php echo $this->translate("Sign In") ?></a>
+            <a class="ld-signin" href="<?php echo $this->loginUrl ?>"><?php echo $this->translate("Sign In") ?></a>
             <?php if ($this->site->getConfig('open_registration')) : ?>
-                <a href="<?php echo $this->registerUrl ?>"><?php echo $this->translate('Sign Up') ?></a>
+                <a class="ld-signup" href="<?php echo $this->registerUrl ?>"><?php echo $this->translate('Sign Up') ?></a>
             <?php endif ?>
         <?php endif ?>
 

@@ -10,7 +10,7 @@ cp -R ../../../css/ld-ui $FOLDER
 echo "# Merging"
 cd $FOLDER
 cat ld-slotter.css ld-merger.css ld-login.css ld-data.css ld-bars.css ld-panel.css\
-    ld-instances.css ld-users.css ld-theme-base.css > ld-ui.merged.css
+    ld-instances.css ld-users.css ld-theme-base.css ld-devices.css > ld-ui.merged.css
 cd ..
 
 echo "# Compressing"

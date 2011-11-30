@@ -258,7 +258,7 @@ class Ld_Ui
     {
         return array(
             "ld-colors-background"   => "ffffff", "ld-colors-border"   => "cccccc", "ld-colors-title"   => "009dff", "ld-colors-text"   => "4a4a4a",
-            "ld-colors-background-2" => "ededed", "ld-colors-border-2" => "cccccc", "ld-colors-title-2" => "4a4a4a", "ld-colors-text-2" => "4a4a4a",
+            "ld-colors-background-2" => "1f1f1f", "ld-colors-border-2" => "3d3d3d", "ld-colors-title-2" => "f1f1f1", "ld-colors-text-2" => "f1f1f1",
             "ld-colors-background-3" => "fcfcfc", "ld-colors-border-3" => "cccccc", "ld-colors-title-3" => "4a4a4a", "ld-colors-text-3" => "4a4a4a",
         );
     }

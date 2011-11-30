@@ -12,6 +12,7 @@ echo $this->doctype('XHTML5') . "\n"
 <head>
 <?php echo $this->headTitle()->setIndent(2) . "\n" ?>
 <?php echo '  <meta charset="utf-8"/>' . "\n"  ?>
+<?php echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>' . "\n"  ?>
 <?php if (isset($this->noIndex)) echo '  <meta name="robots" content="noindex"/>' . "\n"  ?>
 <?php echo $this->headLink()->setIndent(2) . "\n" ?>
 <?php echo $this->headScript()->setIndent(2) . "\n" ?>

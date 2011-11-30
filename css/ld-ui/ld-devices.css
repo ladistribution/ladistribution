@@ -1,0 +1,40 @@
+/* Smartphones (portrait & landscape) Tested with Opera Mini / iPhone / Android */
+
+@media screen and (max-width:640px) {
+
+  /* General */
+  .h6e-main-content { width:auto; padding:0 10px; }
+  input.button, #ld-login-box input.button { font-size:16px; padding:5px 10px; }
+  .h6e-page-content > h2 { margin:15px 0; line-height:1em; font-size:22px; padding-left:3px; }
+  .ld-nav { top:20px; }
+  #ld-lang-switcher { display:none; }
+
+  /* Login Box */
+  #ld-login-box { width:auto; max-width:300px; padding:15px; margin-top:15px !important; }
+  #ld-login-box .links { margin-top:10px; }
+
+  /* Top Bar */
+  .h6e-top-bar { min-width:320px; }
+  .h6e-top-bar-inner, .h6e-top-bar-inner .a, .h6e-top-bar-inner .b { height: auto; }
+  .h6e-top-bar-inner .a a, .h6e-top-bar-inner .b a { padding-top:7px; height: 20px; font-size:11px; line-height:11px; }
+  .h6e-top-bar-inner .b img.avatar { vertical-align:middle; width:12px; height:12px; }
+
+  /* Merger */
+  .ld-merger .h6e-main { float:none; width:auto; }
+  .ld-merger .hentry .entry-inner { width:auto; float:none; display:inline; }
+  .ld-merger .hentry img.avatar { margin:0; padding:0 3px 3px 0; float:none; width:12px; height:12px; vertical-align:middle; }
+  .ld-merger .h6e-tabs { width:auto; font-size:11px; }
+  .ld-merger .h6e-sidebar { display:none; }
+  .ld-merger .h6e-block { padding:10px; }
+
+  /* Slotter */
+  ul.blocks.mini li { width:auto; float:none; margin:0 0 10px; }
+  ul.blocks.instance-list, ul.blocks.new-instance { width:auto; margin:5px 0; left:0; }
+
+  /* Fotomat */
+  .h6e-main-content .h6e-page-content { width:auto !important; }
+}
+
+@media screen and (max-width:319px) {
+
+}
