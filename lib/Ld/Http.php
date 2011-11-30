@@ -106,8 +106,11 @@ class Ld_Http
     public static function jsonRequest($url, $method = 'GET', $params = array())
     {
         $httpClient = new Zend_Http_Client($url);
+        $httpClient->setConfig(array('useragent' => self::$userAgent));
         if (!empty($params)) {
-            if ($method == 'POST') {
+            if ($method == 'GET') {
+                $httpClient->setParameterGet($params);
+            } else if ($method == 'POST') {
                 $httpClient->setParameterPost($params);
             }
         }

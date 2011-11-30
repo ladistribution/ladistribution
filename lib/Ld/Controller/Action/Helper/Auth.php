@@ -22,6 +22,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
     public function authenticate()
     {
+        // Callback from Connect adapter
         if ($this->_getParam('ld_auth_action') == 'connect') {
             $auth = Zend_Auth::getInstance();
             $adapter = new Ld_Auth_Adapter_Connect();
@@ -34,10 +35,18 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
         } else if ($this->_getParam('ld_auth_action') == 'login') {
 
+            // Parameter name in the login form
             if ($this->_hasParam('openid_identifier')) {
                 $this->_setParam('ld_auth_username', $this->_getParam('openid_identifier'));
             }
 
+            // New prefered parameter name
+            if ($this->_hasParam('ld_identity')) {
+                $this->_setParam('ld_auth_username', $this->_getParam('ld_identity'));
+            }
+
+            // Try to use "Connect" adapter if URL is submitted
+            // TODO: should also be triggered if submitted identity is set to delegate login to a "Connect" enabled website
             if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
                 $auth = Zend_Auth::getInstance();
                 $adapter = new Ld_Auth_Adapter_Connect();

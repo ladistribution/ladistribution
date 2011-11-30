@@ -67,8 +67,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
     public function getOpenidConfiguration()
     {
         if (empty($this->_openidConfiguration)) {
-            $issuer = 'http://' . $this->getHost();
-            $this->_openidConfiguration = Ld_Http::jsonRequest("$issuer/.well-known/openid-configuration");
+            $this->_openidConfiguration = Ld_Http::jsonRequest('http://' . $this->getHost() . '/.well-known/openid-configuration');
         }
         return $this->_openidConfiguration;
     }
@@ -79,8 +78,6 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
         $keys = $this->getSite()->getConfig('oauth_keys', array());
         if (empty($keys[$host])) {
             $configuration = $this->getOpenidConfiguration();
-            var_dump($configuration);
-            exit;
             $params = array(
                 'type' => 'client_associate',
                 'application_name' => sprintf('La Distribution (%s)', $this->getSite()->getHost()),
@@ -187,6 +184,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
             $identity = $this->getUserinfo();
             if (empty($identity)) {
                 // if authentication fails ...
+                return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
             }
 
             // Identity match

@@ -67,7 +67,7 @@
                 <?php foreach ($identities as $identity => $user) : ?>
                 <a href="<?php echo $this->loginUrl ?>?forget-identity=<?php echo urlencode($identity) ?>" class="forget"><?php
                     echo $this->translate("Forget") ?></a>
-                <a href="<?php echo $this->loginUrl ?>?ld_identity=<?php echo urlencode($identity) ?>" class="identity">
+                <a href="<?php echo $this->loginUrl ?>?ld_auth_action=login&amp;ld_identity=<?php echo urlencode($identity) ?>" class="identity">
                     <?php echo Ld_Ui::getAvatar($user, 32) ?>
                     <?php $displayname = empty($user['fullname']) ? $user['username'] : $user['fullname']; ?>
                     <span class="fullname"><?php echo $displayname ?></span>

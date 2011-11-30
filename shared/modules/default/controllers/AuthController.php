@@ -26,7 +26,6 @@ class AuthController extends Ld_Controller_Action
                     $session->referer = $referer;
                 }
             }
-            return $this->_redirect( $this->admin->getLoginUrl() );
         }
 
         // If the login form is called from an non-login URL (forwarded)
