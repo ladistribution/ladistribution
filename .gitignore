@@ -40,6 +40,8 @@
 /lib/clearbricks
 /lib/HTMLPurifier
 /lib/geshi
+/lib/google-api-php-client
+/lib/facebook-php-sdk
 /lib/limonade
 /lib/limonade.php
 /lib/oauth2-php

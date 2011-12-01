@@ -10,6 +10,7 @@ $IMPORT admin.zip
 $IMPORT lib-zend-framework.zip
 $IMPORT lib-clearbricks.zip
 $IMPORT lib-ld.zip
+$IMPORT lib-ld-services.zip
 $IMPORT lib-admin.zip
 $IMPORT lib-php-openid.zip
 $IMPORT lib-geshi.zip
@@ -20,8 +21,11 @@ $IMPORT lib-rediska.zip
 $IMPORT lib-bouncer.zip
 $IMPORT lib-sabredav.zip
 $IMPORT lib-oauth2-php.zip
+$IMPORT lib-google-api-php-client.zip
+$IMPORT lib-facebook-php-sdk.zip
 
 $IMPORT plugin-bouncer.zip
+$IMPORT plugin-services.zip
 
 $IMPORT css-h6e-minimal.zip
 $IMPORT css-ld-ui.zip

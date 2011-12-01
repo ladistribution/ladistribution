@@ -132,6 +132,10 @@ cd lib
   ./build.sh
   cd ..
 
+  cd ld-services
+  ./build.sh
+  cd ..
+
   cd php-openid
   ./build.sh
   cd ..
@@ -168,11 +172,23 @@ cd lib
   ./build.sh
   cd ..
 
+  cd google-api-php-client
+  ./build.sh
+  cd ..
+
+  cd facebook-php-sdk
+  ./build.sh
+  cd ..
+
 cd ..
 
 cd plugins
 
   cd bouncer
+  ./build.sh
+  cd ..
+
+  cd services
   ./build.sh
   cd ..
 

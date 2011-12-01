@@ -1,0 +1,11 @@
+<package>
+  <id>plugin-services</id>
+  <name>Services</name>
+  <version>0.6-14</version>
+  <type>lib</type>
+  <need>lib-ld-services</need>
+  <deploy>
+      <origin>plugin</origin>
+      <destination path="shared">plugins/services</destination>
+  </deploy>
+</package>

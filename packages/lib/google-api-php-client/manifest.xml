@@ -1,0 +1,10 @@
+<package>
+  <id>lib-google-api-php-client</id>
+  <name>Google APIs Client Library for PHP</name>
+  <version>0.4.7-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">google-api-php-client</destination>
+  </deploy>
+</package>

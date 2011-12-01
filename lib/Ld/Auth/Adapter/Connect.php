@@ -161,62 +161,82 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
         return Ld_Http::jsonRequest($configuration['user_info_endpoint'], 'POST', $params);
     }
 
-    public function authenticate()
+    public function getAuthResult()
     {
         $session = $this->getSession();
 
-        // Callback
-        if (isset($_GET['code']) && isset($_GET['state'])) {
-
-            // Check state
-            if ($session->state == $_GET['state']) {
-                // Ok
-                unset($session->state);
-            } else {
-                // Do Nothing
-                return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
-            }
-
-            // Get Token
-            $token = $this->getAccessToken($_GET['code']);
-            $this->setToken($token);
-
-            $identity = $this->getUserinfo();
-            if (empty($identity)) {
-                // if authentication fails ...
-                return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
-            }
-
-            // Identity match
-            if (isset($session->identity)) {
-                if ($identity['url'] == $session->identity['url']) {
-                    $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
-                } else if (isset($identity['url_alias']) && in_array($session->identity['url'], $identity['url_alias'])) {
-                    $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $session->identity['url']);
-                } else {
-                    $result = new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS, null);
-                }
-                unset($session->identity);
-            } else {
-                $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
-            }
-
-            if ($result->isValid()) {
-                // Already registered ?
-                $users = $this->getSite()->getModel('users');
-                if (!$exists = $users->getUserByUrl($identity['url'])) {
-                    $this->createUser($identity);
-                }
-            }
-
-            return $result;
+        // Check state
+        if ($session->state == $_GET['state']) {
+            // Ok
+            unset($session->state);
+        } else {
+            // Do Nothing
+            return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
         }
 
-        // Only trigger this if an identity is set
+        // Get Token
+        $token = $this->getAccessToken($_GET['code']);
+        $this->setToken($token);
+
+        $identity = $this->_identity = $this->getUserinfo();
+        if (empty($identity)) {
+            // if authentication fails ...
+            return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
+        }
+
+        // Identity match
+        if (isset($session->identity)) {
+            if ($identity['url'] == $session->identity['url']) {
+                unset($session->host);
+                unset($session->identity);
+                return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
+            } else if (isset($identity['url_alias']) && in_array($session->identity['url'], $identity['url_alias'])) {
+                unset($session->host);
+                unset($session->identity);
+                return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $session->identity['url']);
+            } else {
+                unset($session->host);
+                unset($session->identity);
+                return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS, null);
+            }
+        } else {
+            return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
+        }
+    }
+
+    public function callback()
+    {
+        $result = $this->getAuthResult();
+
+        $identity = $this->_identity;
+
+        if ($result->isValid()) {
+            $users = $this->getSite()->getModel('users');
+            if (!$exists = $users->getUserByUrl($identity['url'])) {
+                $this->createUser($identity);
+            }
+        }
+
+        return $result;
+    }
+
+    public function redirect()
+    {
+        $loginUrl = $this->getLoginUrl();
+        header("Location:" . $loginUrl);
+        exit;
+    }
+
+    public function authenticate()
+    {
+        // Callback
+        if (isset($_GET['code']) && isset($_GET['state'])) {
+            return $this->callback();
+        }
+
+        // Redirect. Only trigger this if an identity is set
         if (isset($this->_identity) && $this->isConnect()) {
-            $loginUrl = $this->getLoginUrl();
-            header("Location:" . $loginUrl);
-            exit;
+            return $this->redirect();
         }
 
         return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);

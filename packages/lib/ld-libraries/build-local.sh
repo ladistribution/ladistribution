@@ -7,6 +7,8 @@ echo "# Building $NAME package"
 echo "# Copy 'lib' from filesystem"
 cp -R ../../../lib/Ld $FOLDER
 
+rm -rf $FOLDER/Services
+
 echo "# Copy 'locales' from filesystem"
 cp -R ../../../shared/locales/ld locales
 

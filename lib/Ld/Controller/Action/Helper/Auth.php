@@ -22,7 +22,10 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
     public function authenticate()
     {
-        // Callback from Connect adapter
+        // Callback from Plugins
+        $result = Ld_Plugin::applyFilters('Ld_Controller_Action_Helper_Auth:callback', null, $this->getRequest());
+
+        // Callback from "Connect" adapter
         if ($this->_getParam('ld_auth_action') == 'connect') {
             $auth = Zend_Auth::getInstance();
             $adapter = new Ld_Auth_Adapter_Connect();
@@ -45,13 +48,18 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
                 $this->_setParam('ld_auth_username', $this->_getParam('ld_identity'));
             }
 
+            // Login with Plugins
+            $result = Ld_Plugin::applyFilters('Ld_Controller_Action_Helper_Auth:login', $result, $this->getRequest());
+
             // Try to use "Connect" adapter if URL is submitted
             // TODO: should also be triggered if submitted identity is set to delegate login to a "Connect" enabled website
-            if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
-                $auth = Zend_Auth::getInstance();
-                $adapter = new Ld_Auth_Adapter_Connect();
-                $adapter->setIdentityUrl($this->_getParam('ld_auth_username'));
-                $result = $auth->authenticate($adapter);
+            if (empty($result) || !$result->isValid()) {
+                if (Zend_Uri_Http::check($this->_getParam('ld_auth_username'))) {
+                    $auth = Zend_Auth::getInstance();
+                    $adapter = new Ld_Auth_Adapter_Connect();
+                    $adapter->setIdentityUrl($this->_getParam('ld_auth_username'));
+                    $result = $auth->authenticate($adapter);
+                }
             }
 
             if ($this->_hasParam('ld_auth_username') && $this->_hasParam('ld_auth_password')) {
@@ -62,13 +70,12 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
         }
 
-        if (isset($result)) {
-            if ($result->isValid()) {
-                Ld_Auth::rememberIdentity( $result->getIdentity() );
-                $this->_redirectToReferer();
-            }
-            return $result;
+        if ($result && $result->isValid()) {
+            Ld_Auth::rememberIdentity( $result->getIdentity() );
+            $this->_redirectToReferer();
         }
+
+        return $result;
     }
 
     protected function _redirectToReferer()

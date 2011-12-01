@@ -116,9 +116,6 @@ class Ld_Http
         }
         $response = $httpClient->request($method);
         $body = $response->getBody();
-        if ($response->isError()) {
-            throw new Exception('An error occurred sending request. Status code: ' . $response->getStatus() );
-        }
         $result = Zend_Json::decode($body);
         if (isset($result['error'])) {
             $error = $result['error'];

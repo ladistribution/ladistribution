@@ -1,0 +1,10 @@
+<package>
+  <id>lib-facebook-php-sdk</id>
+  <name>PHP SDK for the Facebook API</name>
+  <version>3.1.1-dafef11-1</version>
+  <type>lib</type>
+  <deploy>
+      <origin>lib</origin>
+      <destination path="lib">facebook-php-sdk</destination>
+  </deploy>
+</package>
