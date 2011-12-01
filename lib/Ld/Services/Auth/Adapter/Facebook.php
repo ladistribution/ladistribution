@@ -1,6 +1,6 @@
 <?php
 
-class Ld_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
+class Ld_Services_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
 {
 
     public function getFacebook()
