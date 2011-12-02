@@ -39,9 +39,14 @@ class Ld_Plugin_Gravatar
 
     public function getGravatarUrl($email, $size, $default)
     {
+        $scheme = Ld_Utils::getCurrentScheme();
         $hash = md5( strtolower( $email ) );
-        $host = sprintf( "%d.gravatar.com", ( hexdec( $hash{0} ) % 2 ) );
-        $url = "http://$host/avatar/{$hash}?s={$size}&d=" . urlencode( $default );
+        if ($scheme == 'https') {
+            $host = 'secure.gravatar.com';
+        } else {
+            $host = sprintf( "%d.gravatar.com", ( hexdec( $hash{0} ) % 2 ) );
+        }
+        $url = "$scheme://$host/avatar/{$hash}?s={$size}&d=" . urlencode( $default );
         return $url;
     }
 

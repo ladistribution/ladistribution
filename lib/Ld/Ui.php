@@ -160,9 +160,7 @@ class Ld_Ui
         ));
 
         if ($user = Ld_Auth::getUser()) {
-            $view->userUrl = self::getAdminUrl(array(
-                'module' => 'slotter', 'controller' => 'users', 'action' => 'edit', 'id' => $user['username']
-            ));
+            $view->userUrl = $admin->getIdentityUrl($user);
         }
 
         $view->className = isset($options['full-width']) ? 'full-width' : 'default-width';
@@ -204,14 +202,14 @@ class Ld_Ui
     public static function getCssUrl($file, $package)
     {
         $infos = self::getPackageInfos($package, 'css');
-        $url = self::getSite()->getUrl('css') . $file . '?v=' . $infos['version'];
+        $url = self::getSite()->getRelativeUrl('css') . $file . '?v=' . $infos['version'];
         return $url;
     }
 
     public static function getJsUrl($file, $package)
     {
         $infos = self::getPackageInfos($package, 'js');
-        $url = self::getSite()->getUrl('js') . $file . '?v=' . $infos['version'];
+        $url = self::getSite()->getRelativeUrl('js') . $file . '?v=' . $infos['version'];
         return $url;
     }
 

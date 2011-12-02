@@ -3,17 +3,16 @@
 class Api_MetaController extends Ld_Controller_Action
 {
 
-    function hostmetaAction()
+    function hostMetaAction()
     {
-        $lrddUrl = $this->admin->buildUrl(array('module' => 'api', 'controller' => 'meta', 'action' => 'webfinger'));
         $this->noRender();
-        header("Access-Control-Allow-Origin: *");
-        header("Content-Type: text/xml");
+        $this->getResponse()->setHeader('Access-Control-Allow-Origin', '*');
+        $this->getResponse()->setHeader('Content-Type', 'text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         ?>
         <XRD xmlns='http://docs.oasis-open.org/ns/xri/xrd-1.0' xmlns:hm='http://host-meta.net/xrd/1.0'>
             <hm:Host xmlns='http://host-meta.net/xrd/1.0'><?php echo $this->site->getHost() ?></hm:Host>
-            <Link rel='lrdd' template='<?php echo $lrddUrl ?>?q={uri}' type="application/xrd+xml"/>
+            <Link rel='lrdd' template='<?php echo $this->_getSecureUrl('webfinger') ?>?q={uri}' type="application/xrd+xml"/>
         </XRD>
         <?php
     }
@@ -21,11 +20,13 @@ class Api_MetaController extends Ld_Controller_Action
     function openidConfigurationAction()
     {
         $configuration = array(
-            'issuer' => $this->site->getUrl(),
-            'registration_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'register')),
-            'authorization_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'authorize')),
-            'token_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'token')),
-            'user_info_endpoint' => $this->admin->buildUrl(array('module' => 'api', 'controller' => 'oauth', 'action' => 'userinfo')),
+            'site_name' => $this->site->getName(),
+            'site_url' => $this->site->getAbsoluteUrl(),
+            'version' => '3.0',
+            'registration_endpoint' => $this->_getSecureUrl('register', 'oauth'),
+            'authorization_endpoint' => $this->_getSecureUrl('authorize', 'oauth'),
+            'token_endpoint' => $this->_getSecureUrl('token', 'oauth'),
+            'user_info_endpoint' => $this->_getSecureUrl('userinfo', 'oauth'),
             'scopes_supported' => array('openid', 'profile', 'email'),
             'flows_supported' => array('code')
         );
@@ -53,8 +54,8 @@ class Api_MetaController extends Ld_Controller_Action
             }
         }
         $this->noRender();
-        header("Access-Control-Allow-Origin: *");
-        header("Content-Type: text/xml");
+        $this->getResponse()->setHeader('Access-Control-Allow-Origin', '*');
+        $this->getResponse()->setHeader('Content-Type', 'text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         ?>
         <XRD xmlns='http://docs.oasis-open.org/ns/xri/xrd-1.0'>
@@ -71,6 +72,16 @@ class Api_MetaController extends Ld_Controller_Action
             <?php endif ?>
         </XRD>
         <?php
+    }
+
+    protected function _getUrl($action, $controller = 'meta', $module = 'api')
+    {
+        return $this->admin->buildAbsoluteUrl(array('module' => $module, 'controller' => $controller, 'action' => $action));
+    }
+
+    protected function _getSecureUrl($action, $controller = 'meta', $module = 'api')
+    {
+        return $this->admin->buildAbsoluteSecureUrl(array('module' => $module, 'controller' => $controller, 'action' => $action));
     }
 
 }

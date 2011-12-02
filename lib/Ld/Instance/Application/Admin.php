@@ -79,7 +79,7 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
     {
         $site = $this->getSite();
 
-        $baseUrl = 'http://' . $site->getHost($this->domain) . $site->getPath();
+        $baseUrl = $site->getPath();
 
         $noRewrite = defined('LD_REWRITE') && constant('LD_REWRITE') == false;
         if ($noRewrite || $site->getConfig('root_admin') != 1) {
@@ -98,6 +98,18 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
         $url = $baseUrl . '/' . $url;
 
         return $url;
+    }
+
+    public function buildAbsoluteSecureUrl($params = array(), $name = 'default', $reset = true)
+    {
+        $scheme = Ld_Plugin::applyFilters('Ld_Admin::scheme', Ld_Utils::getCurrentScheme(), 'secure');
+        return $scheme . '://' . $this->getSite()->getHost($this->domain) . $this->buildUrl($params, $name, $reset);
+    }
+
+    public function buildAbsoluteUrl($params = array(), $name = 'default', $reset = true)
+    {
+        $scheme = Ld_Plugin::applyFilters('Ld_Admin::scheme', Ld_Utils::getCurrentScheme(), 'normal');
+        return $scheme . '://' . $this->getSite()->getHost($this->domain) . $this->buildUrl($params, $name, $reset);
     }
 
     public function getUrl()
@@ -157,7 +169,7 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
 
     public function getAuthUrl($params = array(), $action = 'login')
     {
-        $loginUrl = $this->buildUrl(array('module' => 'default', 'controller' => 'auth', 'action' => $action), 'default', false);
+        $loginUrl = $this->buildAbsoluteSecureUrl(array('module' => 'default', 'controller' => 'auth', 'action' => $action), 'default', false);
         if (isset($params['referer']) && $params['referer']) {
             $currentUrl = Ld_Utils::getCurrentUrl(array('ld_referer', 'ref'));
             if (false === strpos($currentUrl, 'auth/login')) {
@@ -169,12 +181,16 @@ class Ld_Instance_Application_Admin extends Ld_Instance_Application
 
     public function getOpenidAuthUrl()
     {
-        return $this->buildUrl(array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
+        return $this->buildAbsoluteSecureUrl(array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'), 'default', false);
     }
 
-    public function getIdentityUrl($username)
+    public function getIdentityUrl($user)
     {
-        return Zend_OpenId::absoluteURL($this->buildUrl(array('module' => 'identity', 'controller' => 'openid', 'id' => $username), 'identity'));
+        if (is_string($user)) {
+            $user = $this->getSite()->getUser($user);
+        }
+        $id = isset($user['username']) ? $user['username'] : $user['id'];
+        return $this->buildAbsoluteUrl(array('id' => $id), 'vanity');
     }
 
     public function getOpenidProvider($username = null, $login = false)

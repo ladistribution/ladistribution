@@ -1,0 +1,35 @@
+<h2>
+    <img style="vertical-align:-4px;padding:0 8px 0 4px" width="24" height="24" src="<?php echo Ld_Ui::getAvatarUrl($this->user, 24) ?>"/>
+    <?php echo $this->escape( $this->user['fullname'] ) ?>
+</h2>
+
+<?php
+$identity = $this->navigation()->getContainer()->findOneByLabel( $this->translate('Identity') );
+if ($identity) {
+    echo $this->navigation()->menu()->renderMenu($identity, array('ulClass' => 'ld-instance-menu h6e-tabs', 'maxDepth' => 0));
+}
+?>
+
+<div class="ld-panel">
+
+    <div class="ld-panel-content h6e-block <?php if (!Ld_Auth::isAuthenticated()) echo 'no-tab' ?>">
+
+        <h3>Profile</h3>
+
+        <p>To be completed.</p>
+
+        <!--
+        <h4>General</h4>
+
+        <h4>Avatar</h4>
+
+        <h4>Accounts</h4>
+
+        <h4>Emails</h4>
+
+        <h4>Location</h4>
+        -->
+
+    </div>
+
+</div>

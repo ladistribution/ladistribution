@@ -19,7 +19,6 @@ cp -R ../../../shared/plugins plugins
 rm plugins/bad-behavior.php
 rm plugins/bouncer.php
 rm plugins/gloss.php
-rm plugins/ssl.php
 rm -rf plugins/services
 
 echo "# Copy 'locales' from filesystem"

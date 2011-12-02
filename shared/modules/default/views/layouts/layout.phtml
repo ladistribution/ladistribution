@@ -1,8 +1,7 @@
 <?php
 
 if (isset($this->admin)) {
-    $authUrl = $this->admin->buildUrl(array('module' => 'identity', 'controller' => 'openid', 'action' => 'auth'));
-    $this->headLink(array('rel' => 'openid2.provider', 'href' => Zend_OpenId::absoluteURL($authUrl)));
+    $this->headLink(array('rel' => 'openid2.provider', 'href' => $this->admin->getOpenidAuthUrl()));
 }
 
 echo $this->doctype('XHTML5') . "\n"

@@ -74,13 +74,6 @@ class Slotter_UsersController extends Slotter_BaseController
 
         }
 
-        if (isset($this->currentUser) && $usersPage) {
-            $usersPage->addPage(array(
-                'label' => $this->translate('Your Profile'), 'module'=> 'slotter', 'controller' => 'users', 'action' => 'edit',
-                'params' => array('id' => $this->currentUser['username'])
-            ));
-        }
-
         if (isset($this->currentUser) && $this->_hasParam('id') && $this->_getParam('id') != $this->currentUser['username']) {
             $indexPage = $usersPage->findOneByLabel( $this->translate('Users') );
             $action = $this->getRequest()->action;

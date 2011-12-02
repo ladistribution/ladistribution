@@ -18,7 +18,9 @@ class Ld_Plugin_Ssl
 
     public function load()
     {
-        // $this->force_ssl();
+        $this->force_ssl();
+        Ld_Plugin::addFilter('Site::scheme', array($this, 'scheme'), 10, 2);
+        Ld_Plugin::addFilter('Ld_Admin::scheme', array($this, 'scheme'), 10, 2);
         Ld_Plugin::addAction('Statusnet:config', array($this, 'statusnet_config'));
         Ld_Plugin::addAction('Wordpress:prepend', array($this, 'wordpress_prepend'));
         Ld_Plugin::addAction('Wordpress:plugin', array($this, 'wordpress_plugin'));
@@ -46,12 +48,24 @@ class Ld_Plugin_Ssl
         return $site->getConfig('ssl_support', 'never');
     }
 
+    public function scheme($scheme = 'http', $type = 'normal')
+    {
+         $ssl_support = $this->config();
+         if ($ssl_support == 'always') {
+             return 'https';
+         }
+         if ($ssl_support == 'sometimes') {
+             return $type == 'secure' ? 'https' : $scheme;
+         }
+         return $scheme;
+    }
+
     public function force_ssl()
     {
         $ssl_support = $this->config();
-        if ($ssl_support == 'always' && (empty($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] != "on")) {
-            $newurl = "https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-            header('Location:' . $newurl);
+        if ($ssl_support == 'always' && Ld_Utils::getCurrentScheme() != 'https') {
+            $redirectUrl = "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+            header('Location:' . $redirectUrl);
             exit();
         }
     }

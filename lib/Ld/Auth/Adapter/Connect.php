@@ -81,9 +81,9 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
             $params = array(
                 'type' => 'client_associate',
                 'application_name' => sprintf('La Distribution (%s)', $this->getSite()->getHost()),
-                'application_url' => $this->getSite()->getUrl(),
+                'application_url' => $this->getSite()->getAbsoluteSecureUrl(),
                 'application_type' => 'web',
-                'redirect_uri' => $this->getSite()->getUrl()
+                'redirect_uri' => $this->getSite()->getAbsoluteSecureUrl()
             );
             $result = Ld_Http::jsonRequest($configuration['registration_endpoint'], 'POST', $params);
             $keys[$host] = array('client_id' => $result['client_id'], 'client_secret' => $result['client_secret']);

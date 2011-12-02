@@ -64,7 +64,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         if (empty($config['host']) && isset($_SERVER['HTTP_HOST'])) {
             $config['host'] = $_SERVER['HTTP_HOST'];
-            if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80') {
+            if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443') {
                 $config['host'] .= ':' . $_SERVER['SERVER_PORT'];
             }
         }
@@ -278,11 +278,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $config;
     }
 
-    public function getBaseUrl($domain = null)
-    {
-        return $this->getUrl(null, $domain);
-    }
-
     public function getDirectory($dir = null)
     {
         if (isset($dir)) {
@@ -293,13 +288,37 @@ class Ld_Site_Local extends Ld_Site_Abstract
         return $directory;
     }
 
-    public function getUrl($dir = null, $domain = null)
+    // URLs
+
+    public function getAbsoluteSecureUrl($dir = null, $domain = null)
     {
-        $url = 'http://' . $this->getHost($domain) . $this->getPath() . '/';
+        $scheme = Ld_Plugin::applyFilters('Site::scheme', Ld_Utils::getCurrentScheme(), 'secure');
+        return $scheme . ':' . $this->getUrl($dir, $domain);
+    }
+
+    public function getAbsoluteUrl($dir = null, $domain = null)
+    {
+        $scheme = Ld_Plugin::applyFilters('Site::scheme', Ld_Utils::getCurrentScheme(), 'normal');
+        return $scheme . ':' . $this->getUrl($dir, $domain);
+    }
+
+    public function getRelativeUrl($dir = null)
+    {
+        $url = $this->getPath() . '/';
         if (isset($dir)) {
              $url .= $this->directories[$dir];
         }
         return $url;
+    }
+
+    public function getUrl($dir = null, $domain = null)
+    {
+        return '//' . $this->getHost($domain) . $this->getRelativeUrl($dir);
+    }
+
+    public function getBaseUrl($domain = null)
+    {
+        return $this->getAbsoluteUrl(null, $domain);
     }
 
     public function getName()

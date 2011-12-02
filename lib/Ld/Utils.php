@@ -65,16 +65,20 @@ class Ld_Utils
         return uniqid();
     }
 
+    public function getCurrentScheme()
+    {
+        if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) {
+            return 'https';
+        } else if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+            return 'https';
+        }
+        return 'http';
+    }
+
     public function getCurrentUrl($ignoreParams = array())
     {
-      if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)
-        || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'
-      ) {
-        $protocol = 'https://';
-      }
-      else {
-        $protocol = 'http://';
-      }
+      $protocol = self::getCurrentScheme() . '://';
+
       $currentUrl = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
       $parts = parse_url($currentUrl);
 
