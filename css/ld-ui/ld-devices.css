@@ -14,10 +14,10 @@
   #ld-login-box .links { margin-top:10px; }
 
   /* Top Bar */
-  .h6e-top-bar { min-width:320px; }
-  .h6e-top-bar-inner, .h6e-top-bar-inner .a, .h6e-top-bar-inner .b { height: auto; }
-  .h6e-top-bar-inner .a a, .h6e-top-bar-inner .b a { padding-top:7px; height: 20px; font-size:11px; line-height:11px; }
-  .h6e-top-bar-inner .b img.avatar { vertical-align:middle; width:12px; height:12px; }
+  #ld-top-bar { min-width:320px; }
+  #ld-top-bar-inner, #ld-top-bar-inner .a, #ld-top-bar-inner .b { height: auto; }
+  #ld-top-bar-inner .a a, #ld-top-bar-inner .b a { padding-top:7px; height: 20px; font-size:11px; line-height:11px; }
+  #ld-top-bar-inner .b img.avatar { vertical-align:middle; width:12px; height:12px; }
 
   /* Merger */
   .ld-merger .h6e-main { float:none; width:auto; }

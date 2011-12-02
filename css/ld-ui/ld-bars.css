@@ -67,6 +67,7 @@
 #ld-top-bar-inner a.ld-userinfo:hover span { text-decoration:underline; }
 
 #ld-top-bar-inner .b img.avatar {
+  display:inline;
   border:0;
   vertical-align:-4px;
   padding-right:5px;

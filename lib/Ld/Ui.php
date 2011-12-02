@@ -87,39 +87,14 @@ class Ld_Ui
         }
     }
 
+    /* Deprecated */
     public static function superBar($options = array())
     {
-        return;
-        echo self::getSuperBar($options);
     }
 
+    /* Deprecated */
     public static function super_bar($options = array())
     {
-        self::superBar($options);
-    }
-
-    public static function getSuperBar($params = array())
-    {
-        $site = self::getSite();
-        $admin = self::getSite()->getAdmin();
-
-        $applications = $site->getApplicationsInstances(array('admin'));
-
-        if (self::isAdmin()) {
-            $applications = array_merge(array('admin' => $admin), $applications);
-        }
-
-        $view = self::getView();
-
-        $view->site = $site;
-        $view->params = $params;
-        $view->applications = $applications;
-
-        $view->isAdmin = self::isAdmin();
-
-        $view->className = 'full-width';
-
-        return $view->render('super-bar.phtml');
     }
 
     public static function topBar($options = array())
@@ -162,9 +137,6 @@ class Ld_Ui
         if ($user = Ld_Auth::getUser()) {
             $view->userUrl = $admin->getIdentityUrl($user);
         }
-
-        $view->className = isset($options['full-width']) ? 'full-width' : 'default-width';
-        $view->className = 'full-width';
 
         $out  = $view->render('top-bar.phtml');
 

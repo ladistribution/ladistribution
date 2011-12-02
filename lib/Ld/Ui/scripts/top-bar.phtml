@@ -36,7 +36,7 @@
                 <?php echo Ld_Ui::getAvatar($user, 16) ?>
                 <span><?php echo empty($user['fullname']) ? $user['username'] : $user['fullname'] ?></span>
             </a>
-            <a class="ld-signout"  href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate('Sign Out') ?></a>
+            <a class="ld-signout" href="<?php echo $this->logoutUrl ?>"><?php echo $this->translate('Sign Out') ?></a>
 
         <?php else : ?>
 
