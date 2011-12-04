@@ -6,14 +6,14 @@
         "There is no user registered yet. Registering a first user is necessary to password protect this admin and install others applications."
     ) ?></p>
 
-    <p><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'register')) ?>"><?php
+    <p><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'register'), 'default') ?>"><?php
         echo $this->translate("Register the first user now.") ?></a></p>
 
 <?php return; endif ?>
 
 <?php if ($this->canAdmin) : ?>
 <ul class="ld-nav">
-    <li><a href="<?php echo $this->url(array('module' => 'slotter', 'controller' => 'settings')) ?>"><?php echo $this->translate("Settings") ?></a></li>
+    <li><a href="<?php echo $this->url(array('module' => 'slotter', 'controller' => 'settings'), 'default') ?>"><?php echo $this->translate("Settings") ?></a></li>
 </ul>
 <?php endif ?>
 
