@@ -12,12 +12,12 @@ class Ld_Model_Backend_Json
 
     public function getSite()
     {
-        if (isset($this->_site)) {
-            return $this->_site;
-        }
-        if (Zend_Registry::isRegistered('site')) {
-            return Zend_Registry::get('site');
-        }
+        return isset($this->_site) ? $this->_site : $this->_site = Zend_Registry::get('site');
+    }
+
+    public function setSite($site)
+    {
+        $this->_site = $site;
     }
 
     protected function getFileName()

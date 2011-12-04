@@ -6,12 +6,12 @@ echo "# Building $NAME package"
 
 echo "# Copy 'admin' from filesystem"
 cp -R ../../admin $FOLDER
-
-# Remove some unwanted files (mac)
-find . -name '*.DS_Store' -type f -delete
+rm -rf $FOLDER/.htaccess
+rm -rf $FOLDER/dist
+rm -rf $FOLDER/openid
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist -q -x \*.svn/\* \*.preserve
+zip -r $PACKAGE $FOLDER dist -x \*.svn/\* \*.preserve \*.DS_Store
 mv $PACKAGE ..
 
 # Clean

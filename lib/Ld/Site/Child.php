@@ -16,6 +16,14 @@ class Ld_Site_Child extends Ld_Site_Local
 
     protected $_parent = null;
 
+    public function __construct($params = array(), $parent = null)
+    {
+        if ($parent) {
+            $this->setParentSite($parent);
+        }
+        parent::__construct($params);
+    }
+
     public function init()
     {
         $this->_checkDirectories();
@@ -67,15 +75,14 @@ class Ld_Site_Child extends Ld_Site_Local
         return $host;
     }
 
-    public function getUrl($dir = null)
+    public function getRelativeUrl($dir = null)
     {
-        $domain = !empty($this->domain) ? $this->domain : null;
         switch ($dir) {
             case 'js':
             case 'css':
-                return $this->getParentSite()->getUrl($dir, $domain);
+                return $this->getParentSite()->getRelativeUrl($dir);
             default:
-                return parent::getUrl($dir, $domain);
+                return parent::getRelativeUrl($dir);
         }
     }
 
@@ -127,6 +134,16 @@ class Ld_Site_Child extends Ld_Site_Local
         }
 
         return $config;
+    }
+
+    public function getModel($model)
+    {
+        switch ($model) {
+            case 'users':
+                return $this->getParentSite()->getModel($model);
+            default:
+                return parent::getModel($model);
+        }
     }
 
     /* Users */

@@ -118,8 +118,8 @@ class Ld_Loader
         }
 
         // Site object
-        $site = self::$site = new Ld_Site_Child(self::$config);
-        $site->setParentSite( Zend_Registry::get('site') );
+        $parent = Zend_Registry::get('site');
+        $site = self::$site = new Ld_Site_Child(self::$config, $parent);
         Zend_Registry::set('site', $site);
 
         self::loadPlugin('subsite');
@@ -147,16 +147,17 @@ class Ld_Loader
 
     public static function loadPlugin($plugin)
     {
-        $filename = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
-        $alternativeFilename = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '/' . $plugin . '.php';
         $className = 'Ld_Plugin_' . Zend_Filter::filterStatic($plugin, 'Word_DashToCamelCase');
         if (class_exists($className, false) == false) {
+            $filename = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '.php';
+            $alternativeFilename = self::$site->getDirectory('shared') . '/plugins/' . $plugin . '/' . $plugin . '.php';
             if (Ld_Files::exists($filename)) {
                 require_once $filename;
             } elseif (Ld_Files::exists($alternativeFilename)) {
                 require_once $alternativeFilename;
             }
         }
+        // Autoload is useful for Plugins located in Ld/Plugin/{Name}.php
         if (class_exists($className) && method_exists($className, 'load')) {
             $class = new $className;
             $class->load();

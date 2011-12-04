@@ -20,8 +20,8 @@ class Slotter_SitesController extends Slotter_BaseController
 
             $config = $this->_getParams();
 
-            $subsite = new Ld_Site_Child($config);
-            $subsite->setParentSite( Zend_Registry::get('site') );
+            $parent = Zend_Registry::get('site');
+            $subsite = new Ld_Site_Child($config, $parent);
             $subsite->init();
 
             $this->getSite()->addSite($config);
@@ -51,8 +51,7 @@ class Slotter_SitesController extends Slotter_BaseController
         $id = $this->_getParam('id');
 
         $siteConfig = $this->site->getSite( $this->_getParam('id') );
-        $subsite = new Ld_Site_Child($siteConfig);
-        $subsite->setParentSite( $this->site );
+        $subsite = new Ld_Site_Child($siteConfig, $this->site);
 
         $this->view->configuration = $siteConfig;
         $this->view->preferences = $this->_getPreferences();

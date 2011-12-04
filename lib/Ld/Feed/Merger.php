@@ -19,8 +19,7 @@ class Ld_Feed_Merger
         $mainsite = self::getSite();
         $sites = array($mainsite);
         foreach ($mainsite->getSites() as $id => $config) {
-            $subsite = new Ld_Site_Child($config);
-            $subsite->setParentSite($mainsite);
+            $subsite = new Ld_Site_Child($config, $mainsite);
             $sites[] = $subsite;
         }
         return $sites;

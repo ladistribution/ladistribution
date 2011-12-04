@@ -28,20 +28,20 @@
 <div class="ld-instance-list">
 
     <ul class="blocks mini is-admin instance-list">
-        <?php foreach ($this->site->getSites() as $id => $config) : $subsite = new Ld_Site_Child($config); $subsite->setParentSite($this->site); ?>
+        <?php foreach ($this->site->getSites() as $id => $config) : $subsite = new Ld_Site_Child($config, $this->site); ?>
         <li class="">
             <div class="name">
                 <a href="<?php echo $subsite->getUrl() ?>"><?php echo $subsite->getName() ?></a><br/>
             </div>
             <?php if ($this->userRole == 'admin') :?>
-                <?php $manageUrl = $this->url(array('controller' => 'sites', 'action' => 'edit', 'id' => $id)); ?>
+                <?php $manageUrl = $this->url(array('module' => 'slotter', 'controller' => 'sites', 'action' => 'edit', 'id' => $id), 'default'); ?>
                 <?php printf('<a class="settings" href="%s">%s</a>', $manageUrl, $this->translate("Settings")); ?>
             <?php endif ?>
         </li>
         <?php endforeach ?>
         <?php if ($this->canManageSites) : ?>
             <li class="empty new">
-                <?php $newSiteUrl = $this->url(array('controller' => 'sites', 'action' => 'new')); ?>
+                <?php $newSiteUrl = $this->url(array('module' => 'slotter', 'controller' => 'sites', 'action' => 'new'), 'default'); ?>
                 <a href="<?php echo $newSiteUrl ?>"><?php echo $this->translate("Create a new site") ?></a>
             </li>
         <?php endif ?>
@@ -70,7 +70,7 @@
 
 <?php if (empty($this->databases) || count($this->databases) == 0) : ?>
 
-    <?php $newDbUrl = $this->url(array('controller' => 'databases', 'action' => 'new')); ?>
+    <?php $newDbUrl = $this->url(array('module' => 'slotter', 'controller' => 'databases', 'action' => 'new'), 'default'); ?>
 
     <p><strong><?php echo $this->translate("Notice:") ?></strong>
     <?php echo $this->translate("There is no database registered yet. A database is often needed to install new applications.") ?>

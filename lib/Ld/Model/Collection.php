@@ -37,8 +37,10 @@ class Ld_Model_Collection
       if (empty($this->_backend)) {
           if (defined('LD_MONGO_BACKEND') && constant('LD_MONGO_BACKEND') && class_exists('Mongo')) {
               $this->_backend = new Ld_Model_Backend_Mongo($this->_collectionId);
+              // Subsite no supported
           } else {
               $this->_backend = new Ld_Model_Backend_Json($this->_collectionId);
+              $this->_backend->setSite( $this->getSite() );
           }
       }
       return $this->_backend;
@@ -51,10 +53,7 @@ class Ld_Model_Collection
 
   public function getSite()
   {
-      if (empty($this->_site)) {
-          return Zend_Registry::get('site');
-      }
-      return $this->_site;
+      return isset($this->_site) ? $this->_site : $this->_site = Zend_Registry::get('site');
   }
 
   public function setSite($site)
