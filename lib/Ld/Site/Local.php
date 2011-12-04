@@ -313,7 +313,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function getUrl($dir = null, $domain = null)
     {
-        return '//' . $this->getHost($domain) . $this->getRelativeUrl($dir);
+        return $this->getAbsoluteUrl($dir, $domain);
     }
 
     public function getBaseUrl($domain = null)

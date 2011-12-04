@@ -10,7 +10,7 @@ class Ld_Plugin_Akismet
             'url' => 'http://ladistribution.net/wiki/plugins/#akismet',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.0.4',
+            'version' => '0.6.22',
             'description' => Ld_Translate::translate('Checks user submitted content to see if it look like spam.'),
             'license' => 'MIT / GPL'
         );
@@ -22,7 +22,7 @@ class Ld_Plugin_Akismet
     public function status()
     {
         if ($api_key = $this->get_api_key()) {
-            $service_akismet = new Zend_Service_Akismet($api_key, Zend_Registry::get('site')->getUrl());
+            $service_akismet = new Zend_Service_Akismet($api_key, Zend_Registry::get('site')->getAbsoluteUrl());
             if ($service_akismet->verifyKey()) {
                 return array(self::STATUS_OK, sprintf(Ld_Translate::translate('%s is configured and running.'), 'Akismet'));
             }
