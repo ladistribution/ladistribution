@@ -34,7 +34,7 @@
 
             <div style="display:none">
 
-            <label for="ld-auth-username"><?php echo $this->translate("Sign with your username (or Email):") ?></label>
+            <label for="ld-auth-username"><?php echo $this->translate("with your Username (or Email):") ?></label>
             <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value="<?php echo $this->ld_auth_username ?>"/>
 
             </div>
@@ -61,7 +61,7 @@
 
                 <?php Ld_Plugin::doAction("Ld_Auth_Login::input", $this); ?>
 
-                <label for="ld-auth-username"><?php echo $this->translate("Sign with your username (or Email):") ?></label>
+                <label for="ld-auth-username"><?php echo $this->translate("with your Username (or Email):") ?></label>
                 <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value=""/>
 
                 <script type="text/javascript">jQuery('#ld-auth-username').focus();</script>
