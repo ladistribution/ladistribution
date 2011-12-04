@@ -1,7 +1,5 @@
 <?php
 
-require_once 'BaseController.php';
-
 class Identity_IndexController extends Ld_Controller_Action
 {
 
