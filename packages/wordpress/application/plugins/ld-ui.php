@@ -3,7 +3,7 @@
 Plugin Name: LD Ui
 Plugin URI: http://h6e.net/wordpress/plugins#ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.6.20
+Version: 0.6.22
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -97,14 +97,14 @@ function ld_template_head()
 	if (ld_display_bar('topbar')) {
 		echo 'body { padding-top:30px !important; }' . "\n";
 	}
-	// if ($current_theme == 'Twenty Ten' || $current_theme == 'Coraline') {
-	// 	$colors = Ld_Ui::getApplicationColors();
-	// 	echo '#wrapper { border:1px solid #' . $colors['ld-colors-border-2'] . '; margin-bottom:30px; }' . "\n";
-	// }
-	// if ($current_theme == 'Twenty Eleven') {
-	// 	$colors = Ld_Ui::getApplicationColors();
-	// 	echo '#page { border:1px solid #' . $colors['ld-colors-border-2'] . '; margin-bottom:30px; }' . "\n";
-	// }
+	if ($current_theme == 'Twenty Ten' || $current_theme == 'Coraline') {
+		$colors = Ld_Ui::getApplicationColors();
+		echo '#wrapper { border:1px solid #' . $colors['ld-colors-border-2'] . '; margin-bottom:30px; }' . "\n";
+	}
+	if ($current_theme == 'Twenty Eleven') {
+		$colors = Ld_Ui::getApplicationColors();
+		echo '#page { border:1px solid #' . $colors['ld-colors-border-2'] . '; margin-bottom:30px; }' . "\n";
+	}
 	if (defined('LD_APPEARANCE') && constant('LD_APPEARANCE')) {
 		ld_admin_bar_colors();
 	}
