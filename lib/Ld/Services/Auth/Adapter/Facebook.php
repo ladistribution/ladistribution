@@ -32,6 +32,16 @@ class Ld_Services_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         return isset($session->identity);
     }
 
+    public function isFacebookCallback()
+    {
+        if (isset($_GET['code']) && strlen($_GET['code']) == '195') {
+            if (isset($_GET['state']) && strlen($_GET['state']) == '32') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getCallbackUrl()
     {
         return $this->_callbackUrl;
@@ -48,22 +58,26 @@ class Ld_Services_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         $session = $this->getSession();
 
         // Callback
-        if (isset($_GET['code']) && isset($_GET['state']) && $this->isActive()) {
+        if ($this->isFacebookCallback()) {
             $identity = $facebook->getIdentity();
             if (empty($identity)) {
                 // if facebook authentication fails ...
                 return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
             }
             // Identity match
-            if ($identity['url'] == $session->identity['url']) {
-                $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
-            } else if (isset($identity['url_alias']) && in_array($session->identity['url'], $identity['url_alias'])) {
-                $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $session->identity['url']);
+            if (isset($session->identity)) {
+                if ($identity['url'] == $session->identity['url']) {
+                    $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
+                } else if (isset($identity['url_alias']) && in_array($session->identity['url'], $identity['url_alias'])) {
+                    $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $session->identity['url']);
+                } else {
+                    $result = new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS, null);
+                }
+                unset($session->identity);
+                return $result;
             } else {
-                $result = new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS, null);
+                return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
             }
-            unset($session->identity);
-            return $result;
         }
 
         // Only trigger this if an identity is set

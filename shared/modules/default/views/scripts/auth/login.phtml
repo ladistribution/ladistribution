@@ -34,7 +34,7 @@
 
             <div style="display:none">
 
-            <label for="ld-auth-username"><?php echo $this->translate("Username (or Email, or OpenID):") ?></label>
+            <label for="ld-auth-username"><?php echo $this->translate("Sign with your username (or Email):") ?></label>
             <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value="<?php echo $this->ld_auth_username ?>"/>
 
             </div>
@@ -57,10 +57,16 @@
             }
             ?>
 
-            <label for="ld-auth-username"><?php echo $this->translate("Username (or Email or URL):") ?></label>
-            <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value=""/>
+            <div id="ld-auth-login-input">
 
-            <script type="text/javascript">jQuery('#ld-auth-username').focus();</script>
+                <?php Ld_Plugin::doAction("Ld_Auth_Login::input", $this); ?>
+
+                <label for="ld-auth-username"><?php echo $this->translate("Sign with your username (or Email):") ?></label>
+                <input id="ld-auth-username" class="text" type="text" name="openid_identifier" value=""/>
+
+                <script type="text/javascript">jQuery('#ld-auth-username').focus();</script>
+
+            </div>
 
             <div id="ld-identities" style="display:none">
                 <?php if (!empty($identities)) : ?>
@@ -82,7 +88,7 @@
 
         <input type="hidden" name="ld_auth_action" value="login"/>
 
-        <input id="ld-auth-login" class="button" type="submit" value="<?php echo $this->translate("Sign In") ?>"/>
+        <input id="ld-auth-login-button" class="button" type="submit" value="<?php echo $this->translate("Sign In") ?>"/>
 
     </form>
 
@@ -90,11 +96,15 @@
       <a id="ld-auth-another-identity-link" style="display:none" href="<?php echo $this->loginUrl ?>?another-identity=1"><?php
             echo $this->translate("Sign in with another identity") ?></a>
       <?php if ($this->open_registration && empty($this->ld_auth_user)) : ?>
-          <a id="ld-auth-register-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php
+          <a id="ld-auth-register-link" href="<?php echo $this->url(array(
+              'module' => 'default', 'action' => 'register', 'controller' => 'auth')); ?>"><?php
             echo $this->translate("Sign Up") ?></a><br/>
       <?php endif ?>
-      <a id="ld-auth-lost-password-link" href="<?php echo $this->url(array('module' => 'default', 'action' => 'lostPassword', 'controller' => 'auth')); ?>"><?php
-        echo $this->translate("Lost Password?") ?></a>
+      <?php if (isset($this->ld_auth_user)) : ?>
+          <a id="ld-auth-lost-password-link" href="<?php echo $this->url(array(
+              'module' => 'default', 'action' => 'lostPassword', 'controller' => 'auth')); ?>"><?php
+            echo $this->translate("Lost Password?") ?></a>
+      <?php endif ?>
     </div>
 
   </div>

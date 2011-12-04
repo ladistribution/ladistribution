@@ -12,7 +12,7 @@ if ($identity) {
 
 <div class="ld-panel">
 
-    <div class="ld-panel-content h6e-block <?php if (!Ld_Auth::isAuthenticated()) echo 'no-tab' ?>">
+    <div class="ld-panel-content h6e-block <?php if (!$identity) echo 'no-tab' ?>">
 
         <h3>Profile</h3>
 

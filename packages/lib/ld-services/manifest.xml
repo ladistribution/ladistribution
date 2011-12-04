@@ -1,12 +1,11 @@
 <package>
   <id>lib-ld-services</id>
   <name>La Distribution Services</name>
-  <version>0.6-14</version>
+  <version>0.6-16</version>
   <type>lib</type>
   <need>lib-ld</need>
   <need>lib-google-api-php-client</need>
   <need>lib-facebook-php-sdk</need>
-  <need>plugin-services</need>
   <deploy>
       <origin>lib</origin>
       <destination path="lib">Ld/Services</destination>

@@ -64,7 +64,7 @@ jQuery(function($) {
 
     var identities = $('#ld-identities a.identity');
     if (identities.size() > 0) {
-        $('#ld-auth-username, label[for="ld-auth-username"], #ld-auth-login, #ld-auth-register-link, #ld-auth-lost-password-link').hide();
+        $('#ld-auth-login-input, #ld-auth-login-button, #ld-auth-register-link').hide();
         $('#ld-identities, #ld-auth-another-identity-link').show();
         identities.click(function() {
             $('#ld-auth-username').val( $(this).children('span.identity').text() );
@@ -72,6 +72,13 @@ jQuery(function($) {
             return false;
         });
     }
+
+    $('#ld-auth-another-identity-link').click(function() {
+        $('#ld-auth-login-input, #ld-auth-login-button, #ld-auth-register-link').show();
+        $('#ld-identities, #ld-auth-another-identity-link').hide();
+        $('#ld-auth-username').focus();
+        return false;
+    });
 
 });
 

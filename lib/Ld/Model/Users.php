@@ -26,7 +26,7 @@ class Ld_Model_Users extends Ld_Model_Collection
             $users = $this->getAll();
         }
 
-        foreach ((array)$users as $key => $user) {
+        foreach ($users as $key => $user) {
             $users[$key]['id'] = $key;
             if (isset($params['query'])) {
                 $q = $params['query'];
@@ -86,7 +86,7 @@ class Ld_Model_Users extends Ld_Model_Collection
                     if (is_string($identity) && $identity == $url) {
                         return $user;
                     }
-                    if (is_array($identity) && $identity['url'] == $url) {
+                    if (is_array($identity) && isset($identity['url']) && $identity['url'] == $url) {
                         return $user;
                     }
                 }
@@ -121,7 +121,13 @@ class Ld_Model_Users extends Ld_Model_Collection
             ));
         }
 
+        if (empty($user['created_at'])) {
+            $user['created_at'] = date(DATE_ATOM);
+        }
+
         $this->getBackend()->create($user);
+
+        $this->_users = null;
     }
 
     public function updateUser($id, $infos = array(), $validate = true)
@@ -149,6 +155,8 @@ class Ld_Model_Users extends Ld_Model_Collection
         }
 
         $this->getBackend()->update($user['id'], $user);
+
+        $this->_users = null;
     }
 
     public function deleteUser($id)
@@ -158,6 +166,8 @@ class Ld_Model_Users extends Ld_Model_Collection
         }
 
         $this->getBackend()->delete($user['id']);
+
+        $this->_users = null;
     }
 
     public function validateUser($user)

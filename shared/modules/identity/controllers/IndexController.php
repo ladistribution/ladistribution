@@ -17,10 +17,12 @@ class Identity_IndexController extends Ld_Controller_Action
 
         $user = Ld_Auth::getUser();
         if ($user && $user['id'] == $this->targetUser['id']) {
+            $this->_setParam('action', 'edit');
             $this->_forward('edit', 'users', 'slotter');
         }
 
         if (Ld_Auth::isAdmin()) {
+            $this->_setParam('action', 'edit');
             $this->_forward('edit', 'users', 'slotter');
         }
     }

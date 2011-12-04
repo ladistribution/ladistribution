@@ -19,6 +19,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
     public function setIdentityUrl($url)
     {
         $session = $this->getSession();
+        $url = str_replace('https://', 'http://', $url); // normalise to http://
         $this->_identity = $session->identity = array('url' => $url);
         $pu = parse_url($url);
         $this->_host = $session->host = $pu['host'];
@@ -76,6 +77,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
     {
         $host = $this->getHost();
         $keys = $this->getSite()->getConfig('oauth_keys', array());
+        // TODO: client should also be recreated automatically when needed
         if (empty($keys[$host])) {
             $configuration = $this->getOpenidConfiguration();
             $params = array(
@@ -183,6 +185,9 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
             // if authentication fails ...
             return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
         }
+
+        // normalise to http://
+        $identity['url'] = $this->_identity['url'] = str_replace('https://', 'http://', $identity['url']);
 
         // Identity match
         if (isset($session->identity)) {

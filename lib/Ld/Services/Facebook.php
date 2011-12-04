@@ -89,10 +89,11 @@ class Ld_Services_Facebook extends Ld_Services_Base
         //     $redirect_uri = $this->getCallbackUrl();
         // }
         $facebook = $this->_getConsumer();
-        $params = array(
-            'scope' => $this->_getScope(),
-            'redirect_uri' => $redirect_uri
-        );
+        $params = array();
+        $params['scope'] = $this->_getScope();
+        if ($redirect_uri) {
+            $params['redirect_uri'] = $redirect_uri;
+        }
         return $facebook->getLoginUrl($params);
     }
 

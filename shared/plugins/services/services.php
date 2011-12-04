@@ -53,7 +53,7 @@ class Ld_Plugin_Services
         if (isset($params['code']) && isset($params['state'])) {
             $auth = Zend_Auth::getInstance();
             $adapter = new Ld_Services_Auth_Adapter_Facebook();
-            if ($adapter->isActive()) {
+            if ($adapter->isFacebookCallback()) {
                 return $auth->authenticate($adapter);
             }
         }
