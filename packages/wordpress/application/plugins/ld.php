@@ -3,7 +3,7 @@
 Plugin Name: LD package
 Plugin URI: http://h6e.net/wordpress/plugins/ld-package
 Description: Disable various update mechanisms & Plugins/Themes/Users panels
-Version: 0.6.1
+Version: 0.6.20
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -19,7 +19,7 @@ function ld_handle_capabilities()
 		// 'activate_plugins', 'edit_themes',
 		'edit_plugins', 'install_plugins', 'delete_plugins', 'update_plugins',
 		'install_themes', 'delete_themes', 'update_themes',
-		'create_users', 'edit_users', 'delete_users',
+		'create_users', 'edit_users', 'delete_users', 'promote_users',
 		'update_core'
 	);
 	$disable_admin_caps = apply_filters('ld_disable_admin_caps', $disable_admin_caps);
@@ -215,12 +215,10 @@ add_filter('option_siteurl', 'ld_option_siteurl');
 function ld_template_redirect()
 {
 	if ( is_404() ) {
-		if ( !$requested_url ) {
-			// build the URL in the address bar
-			$requested_url  = is_ssl() ? 'https://' : 'http://';
-			$requested_url .= $_SERVER['HTTP_HOST'];
-			$requested_url .= $_SERVER['REQUEST_URI'];
-		}
+		// build the URL in the address bar
+		$requested_url  = is_ssl() ? 'https://' : 'http://';
+		$requested_url .= $_SERVER['HTTP_HOST'];
+		$requested_url .= $_SERVER['REQUEST_URI'];
 		$application = Zend_Registry::isRegistered('application') ? Zend_Registry::get('application') : null;
 		if ($application && $application->isRoot() && strpos($requested_url, site_url()) !== false) {
 			$redirect_url = str_replace(site_url(), home_url(), $requested_url);

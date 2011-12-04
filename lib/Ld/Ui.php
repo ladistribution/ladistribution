@@ -14,15 +14,22 @@
 class Ld_Ui
 {
 
+    protected static $_site = null;
+
     protected static $_admin = null;
 
     protected static $_isAdmin = null;
 
     protected static $_applications = array();
 
-    public static function getSite()
+    public function getSite()
     {
-        return Zend_Registry::get('site');
+        return isset(self::$_site) ? self::$_site : self::$_site = Zend_Registry::get('site');
+    }
+
+    public function getAdmin()
+    {
+        return isset(self::$_admin) ? self::$_admin : self::$_admin = self::getSite()->getAdmin();
     }
 
     public static function getView()
@@ -38,10 +45,9 @@ class Ld_Ui
             return self::$_isAdmin;
         }
 
-        $site = self::getSite();
-        $admin = $site->getAdmin();
+        $admin = self::getAdmin();
 
-        if ($admin && $admin->getUserRole() == 'admin') {
+        if ($admin->getUserRole() == 'admin') {
             return self::$_isAdmin = true;
         }
 
@@ -69,11 +75,12 @@ class Ld_Ui
 
     public static function getAdminUrl($params = array(), $name = 'default')
     {
-        $admin = self::getSite()->getAdmin();
-        if (empty($admin)) {
-            return null;
-        }
-        return $admin->buildUrl($params, $name);
+        return self::getAdmin()->buildUrl($params, $name);
+    }
+
+    public static function getIdentityUrl($user)
+    {
+        return self::getAdmin()->getIdentityUrl($user);
     }
 
     public static function getApplicationSettingsUrl($application = null, $action = null)
@@ -112,7 +119,7 @@ class Ld_Ui
         $view = self::getView();
 
         $view->site = $site = self::getSite();
-        $view->admin = $admin = self::getSite()->getAdmin();
+        $view->admin = $admin = self::getAdmin();
 
         if (isset($options['loginUrl'])) {
             $view->loginUrl = $options['loginUrl'];
@@ -185,7 +192,7 @@ class Ld_Ui
         return $url;
     }
 
-    protected static function getPackageInfos($package, $type)
+    public static function getPackageInfos($package, $type)
     {
         $infos = self::getSite()->getLibraryInfos($package);
         if (empty($infos)) {
@@ -272,31 +279,32 @@ class Ld_Ui
 
     public static function getSiteStyleUrl($parts = null)
     {
-        $colors = self::getSite()->getColors();
         $version = self::getSite()->getConfig('appearance_version');
-        $siteStyleUrl = self::getAdminUrl(array(
+        $url = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
-            'parts' => $parts, 'v' => $version), 'default', false);
-        return $siteStyleUrl;
+            'parts' => $parts
+        ));
+        return $url . '?v=' . $version;
     }
 
     public static function getApplicationStyleUrl($parts = null, $application = null)
     {
-        if (empty($application) && Zend_Registry::isRegistered('application')) {
+        if (empty($application)) {
             $application = Zend_Registry::get('application');
         }
         $colors = $application->getColors();
         $appearance_version = self::getSite()->getConfig('appearance_version');
         $version = substr(md5($appearance_version . serialize($colors)), 0, 10);
-        $applicationStyleUrl = self::getAdminUrl(array(
+        $url = self::getAdminUrl(array(
             'module' => 'slotter', 'controller' => 'appearance', 'action' => 'style',
-            'id' => $application->getId(), 'parts' => $parts, 'v' => $version), 'default', false);
-        return $applicationStyleUrl;
+            'id' => $application->getId(), 'parts' => $parts
+        ));
+        return $url . '?v=' . $version;
     }
 
     public static function getApplicationColors($application = null)
     {
-        if (empty($application) && Zend_Registry::isRegistered('application')) {
+        if (empty($application)) {
             $application = Zend_Registry::get('application');
         }
         return $application->getColors();

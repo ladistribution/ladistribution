@@ -10,7 +10,7 @@ class Ld_Plugin_WordpressUnlocker
             'url' => 'http://ladistribution.net/wiki/plugins/#wordpress-unlocker',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.2',
+            'version' => '0.6.20',
             'description' => Ld_Translate::translate('Unlock WordPress native themes/plugins/users mechanisms.'),
             'license' => 'MIT / GPL'
         );
@@ -119,7 +119,7 @@ class Ld_Plugin_WordpressUnlocker
 
     public function wordpress_get_users_caps()
     {
-        return array('create_users', 'edit_users', 'delete_users');
+        return array('create_users', 'edit_users', 'delete_users', 'promote_users');
     }
 
     public function wordpress_get_enabled_caps()
