@@ -293,13 +293,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getAbsoluteSecureUrl($dir = null, $domain = null)
     {
         $scheme = Ld_Plugin::applyFilters('Site::scheme', Ld_Utils::getCurrentScheme(), 'secure');
-        return $scheme . ':' . $this->getUrl($dir, $domain);
+        return $scheme . '://' . $this->getHost($domain) . $this->getRelativeUrl($dir);
     }
 
     public function getAbsoluteUrl($dir = null, $domain = null)
     {
         $scheme = Ld_Plugin::applyFilters('Site::scheme', Ld_Utils::getCurrentScheme(), 'normal');
-        return $scheme . ':' . $this->getUrl($dir, $domain);
+        return $scheme . '://' . $this->getHost($domain) . $this->getRelativeUrl($dir);
     }
 
     public function getRelativeUrl($dir = null)
