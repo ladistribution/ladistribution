@@ -55,6 +55,10 @@ class Ld_Plugin_Development
             'name' => 'active_news_feed', 'label' => ('Activate News Feed'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
+        $preferences[] = array(
+            'name' => 'active_services', 'label' => ('Activate Services'),
+            'type' => 'boolean', 'defaultValue' => '0'
+        );
         return $preferences;
     }
 
@@ -98,6 +102,10 @@ class Ld_Plugin_Development
         $active_news_feed = $site->getConfig('active_news_feed');
         if ($active_news_feed) {
             defined('LD_NEWS_FEED') OR define('LD_NEWS_FEED', true);
+        }
+        $active_services = $site->getConfig('active_services');
+        if ($active_services) {
+            defined('LD_SERVICES') OR define('LD_SERVICES', true);
         }
     }
 

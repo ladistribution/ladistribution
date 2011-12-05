@@ -89,6 +89,7 @@ class Ld_Loader
         defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
         defined('LD_NEWS_FEED') OR define('LD_NEWS_FEED', false);
         defined('LD_MONGO_BACKEND') OR define('LD_MONGO_BACKEND', false);
+        defined('LD_SERVICES') OR define('LD_SERVICES', false);
 
         defined('LD_SVN') OR define('LD_SVN', Ld_Files::exists($dir . '/.svn') || Ld_Files::exists($dir . '/.git'));
         if (!constant('LD_SVN')) {

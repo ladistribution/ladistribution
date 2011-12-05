@@ -1,0 +1,69 @@
+<h2>
+    <img style="vertical-align:-4px;padding:0 8px 0 4px" width="24" height="24" src="<?php echo Ld_Ui::getAvatarUrl($this->user, 24) ?>"/>
+    <?php echo $this->escape( $this->user['fullname'] ) ?>
+</h2>
+
+<?php
+$identity = $this->navigation()->getContainer()->findOneByLabel( $this->translate('Identity') );
+if ($identity) {
+    echo $this->navigation()->menu()->renderMenu($identity, array('ulClass' => 'ld-instance-menu h6e-tabs', 'maxDepth' => 0));
+}
+?>
+
+<div class="ld-panel">
+
+<div class="ld-panel-content h6e-block">
+
+<h3>Authorizations</h3>
+
+<!--
+<p>See <a href="https://twitter.com/settings/applications">Twitter</a>
+or <a href="https://www.facebook.com/settings?tab=applications">Facebook</a> for design inspiration.</p>
+-->
+
+<!-- Twitter:
+<p>You've allowed the following applications to access your account</p>
+-->
+
+<!-- Facebook:
+<p>You have authorized these apps to interact with your account:</p>
+-->
+
+<p>You have authorized these apps to interact with your account:</p>
+
+<table class="h6e-data ld-data">
+<tr>
+    <th><?php echo $this->translate("Name") ?></th>
+    <th><?php echo $this->translate("URL") ?></th>
+    <th><?php echo $this->translate("Authorized on") ?></th>
+    <!--
+    <th>Scope</th>
+    -->
+    <th><?php echo $this->translate("Actions") ?></th>
+</tr>
+<?php if (empty($this->applications)) : ?>
+<tr>
+    <td colspan="4"><?php echo $this->translate("None") ?></td>
+</tr>
+<?php else : ?>
+<?php foreach ($this->applications as $id => $application) : ?>
+<tr>
+    <td><?php echo $application['client']['application_name'] ?></td>
+    <td><?php echo $application['client']['application_url'] ?></td>
+    <td><?php echo date("d/m/Y H:i", $application['token']['expires']) ?></td>
+    <!--
+    <td><?php echo $application['token']['scope'] ?></td>
+    -->
+    <td>
+        <form method="post" action="<?php echo $this->url() ?>?revoke=<?php echo $application['token']['id'] ?>">
+            <input type="submit" class="submit" value="<?php echo $this->translate('Revoke') ?>" />
+        </form>
+    </td>
+</tr>
+<?php endforeach ?>
+<?php endif ?>
+</table>
+
+</div>
+
+</div>

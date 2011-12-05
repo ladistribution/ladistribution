@@ -1,7 +1,7 @@
 <package>
   <id>plugin-services</id>
   <name>Services</name>
-  <version>0.6-14</version>
+  <version>0.6-26</version>
   <type>lib</type>
   <need>lib-ld-services</need>
   <deploy>

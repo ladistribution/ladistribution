@@ -4,19 +4,21 @@ if ($this->currentUser['username'] != $this->user['username']) : ?>
     <?php $this->partialNavigationMenu('Users'); ?>
     <div class="ld-panel-content h6e-block">
 <?php else : ?>
-    <h2><?php echo empty($this->currentUser['fullname']) ?
-        $this->currentUser['username'] : $this->currentUser['fullname'] ?></h2>
+    <h2>
+    <img class="avatar" width="24" height="24" src="<?php echo Ld_Ui::getAvatarUrl($this->targetUser, 24) ?>"/>
+    <?php echo $this->escape( empty($this->targetUser['fullname']) ? $this->targetUser['username'] : $this->targetUser['fullname'] ) ?>
+    </h2>
     <div class="ld-panel-content h6e-block no-tab">
 <?php endif ?>
 
-<form method="post" action="<?php $this->url() ?>" autocomplete="off">
+<form method="post" action="<?php $this->url() ?>">
 
     <?php if ($this->currentUser['username'] != $this->user['username']) : ?>
         <h3><?php printf($this->translate("Edit profile: %s"), '<strong>' . $this->user['username'] . '</strong>') ?></h3>
     <?php endif ?>
 
     <h3><?php echo $this->translate("Infos") ?></h3>
-    
+
     <?php $this->notification() ?>
 
     <table class="ld-form">
@@ -39,12 +41,6 @@ if ($this->currentUser['username'] != $this->user['username']) : ?>
     <p><em><?php echo $this->translate("If you would like to change the password type a new one. Otherwise leave this blank.") ?></em></p>
 
     <table class="ld-form">
-    <!--
-    <tr>
-        <td><label>Current password</label></td>
-        <td><input type="password" name="current_password" class="text" value=""/></td>
-    </tr>
-    -->
     <tr>
         <th><label for="edit-user-password"><?php echo $this->translate("New password") ?></label></td>
         <td><input id="edit-user-password" type="password" name="new_password" class="text" value="" autocomplete="off"/></td>
@@ -89,44 +85,6 @@ if ($this->currentUser['username'] != $this->user['username']) : ?>
 <?php endif ?>
 
 <?php endif ?>
-
-<hr/>
-
-<h3><?php echo $this->translate("Connect to this website using OpenID") ?></h3>
-
-<p><?php echo $this->translate("You can log on this website using OpenID identities.") ?></p>
-
-<?php if (isset($this->user['identities']) && count($this->user['identities']) > 0) : ?>
-
-    <table class="h6e-data">
-    <?php foreach ($this->user['identities'] as $identity) : ?>
-        <?php $url = is_string($identity) ? $identity : $identity['url'] ?>
-        <tr>
-            <td><?php echo $this->escape($url) ?></td>
-            <td><a href="<?php echo $this->url(array('action' => 'remove-identity', 'identity' => urlencode($url))) ?>"><?php echo $this->translate("remove") ?></td>
-        </tr>
-    <?php endforeach ?>
-    </table>
-
-<?php else : ?>
-
-    <p><em><?php echo $this->translate(
-        "You don't have any OpenID identity registered yet. You can add new identities with the form below."
-    ) ?></em></p>
-
-<?php endif ?>
-
-<form method="post" action="<?php echo $this->url(array('action' => 'add-identity')) ?>">
-
-    <table class="ld-form">
-        <tr>
-            <th><label for="add_new_identity"><?php echo $this->translate("Add an identity:") ?></label></th>
-            <td><input id="add_new_identity" type="text" name="openid_identifier" value="" size="50" /></td>
-            <td><input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add") ?>"/></td>
-        </tr>
-    </table>
-
-</form>
 
 <?php endif ?>
 

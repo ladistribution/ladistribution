@@ -59,9 +59,14 @@ abstract class Ld_Services_Base
         $this->_clientSecret = $clientSecret;
     }
 
+    public function isConfigured()
+    {
+        return $this->getClientId() && $this->getClientSecret();
+    }
+
     public function getCallbackUrl()
     {
-        $baseUrl = $this->getSite()->getAdmin()->buildUrl(array(
+        $baseUrl = $this->getSite()->getAdmin()->buildAbsoluteSecureUrl(array(
             'module' => 'identity', 'controller' => 'accounts', 'action' => 'callback'));
         return $baseUrl . '?service=' . $this->getServiceName();
     }

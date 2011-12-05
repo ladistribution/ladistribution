@@ -1,0 +1,140 @@
+<h2>
+    <img style="vertical-align:-4px;padding:0 8px 0 4px" width="24" height="24" src="<?php echo Ld_Ui::getAvatarUrl($this->user, 24) ?>"/>
+    <?php echo $this->escape( $this->user['fullname'] ) ?>
+</h2>
+
+<?php
+$identity = $this->navigation()->getContainer()->findOneByLabel( $this->translate('Identity') );
+if ($identity) {
+    echo $this->navigation()->menu()->renderMenu($identity, array('ulClass' => 'ld-instance-menu h6e-tabs', 'maxDepth' => 0));
+}
+
+function out_identity($identity)
+{
+?>
+<?php if (isset($identity['avatar_url'])) : ?>
+    <img style="vertical-align:-4px;padding:0 4px" width="16" height="16" src="<?php echo $identity['avatar_url'] ?>"/>
+<?php endif ?>
+<?php if (isset($identity['url'])) : ?><a href="<?php echo $identity['url'] ?>"><?php endif ?>
+<?php echo isset($identity['fullname']) ? $identity['fullname'] : $identity['username'] ?>
+<?php if (isset($identity['url'])) : ?></a><?php endif ?>
+<?php
+}
+
+?>
+
+<div class="ld-panel">
+
+<div class="ld-panel-content h6e-block">
+
+    <?php echo $this->notification() ?>
+
+    <h3><?php echo $this->translate("Identities") ?></h3>
+
+    <!--
+    <p>See <a href="http://readmill.com/settings/connections">Readmill</a> for design inspiration.</p>
+    -->
+
+    <p>You have linked these identities with your account:</p>
+
+    <table class="h6e-data ld-data">
+    <tr>
+        <th colspan="5">Main Services</th>
+    </tr>
+    <tr class="th2">
+        <th>Service Name</th>
+        <th>Identity</th>
+        <th colspan="1">Actions</th>
+        <?php if (defined('LD_DEBUG') && constant('LD_DEBUG')) : ?>
+        <th colspan="2">Debug</th>
+        <?php endif ?>
+    </tr>
+    <?php foreach ($this->services as $service) : ?>
+        <?php
+        $id = $service['id'];
+        $name = $service['name'];
+        ?>
+        <tr>
+            <td><?php echo $this->escape($name); ?></td>
+            <?php if (isset($this->user['identities'][$id])) : ?>
+                <?php $identity = $this->user['identities'][$id]; ?>
+                <td><?php out_identity($identity); ?>
+                <td>
+                   <form method="post" action="<?php echo $this->url() ?>/disconnect?service=<?php echo $id ?>">
+                       <input type="submit" class="submit" value="<?php echo $this->translate('Disconnect') ?>" />
+                   </form>
+               </td>
+               <?php if (defined('LD_DEBUG') && constant('LD_DEBUG')) : ?>
+               <td>
+                   <form method="post" action="<?php echo $this->url() ?>/connect?service=<?php echo $id ?>">
+                       <input type="submit" class="submit" value="<?php echo $this->translate('Refresh') ?>" />
+                   </form>
+               </td>
+               <td><a href="<?php echo $this->url() ?>/details?service=<?php echo $id ?>">Details</a></td>
+               <?php endif ?>
+            <?php else : ?>
+                <td>&nbsp;</td>
+                <td>
+                    <form method="post" action="<?php echo $this->url() ?>/connect?service=<?php echo $id ?>">
+                        <input type="submit" class="submit" value="<?php echo $this->translate('Connect') ?>" />
+                    </form>
+                </td>
+                <?php if (defined('LD_DEBUG') && constant('LD_DEBUG')) : ?>
+                <td colspan="2"></td>
+                <?php endif ?>
+            <?php endif ?>
+        </tr>
+    <?php endforeach ?>
+    <?php if (!empty($this->otherIdentities)) : ?>
+    <tr>
+        <th class="th2" colspan="5">Other Identities</th>
+    </tr>
+    <tr class="th2">
+        <th>Site URL</th>
+        <th>Identity</th>
+        <th colspan="1">Actions</th>
+        <?php if (defined('LD_DEBUG') && constant('LD_DEBUG')) : ?>
+        <th colspan="2">Debug</th>
+        <?php endif ?>
+    </tr>
+    <?php foreach ($this->otherIdentities as $id => $identity) : ?>
+        <tr>
+        <?php if (is_array($identity)) : $pu = parse_url($identity['url']);  ?>
+            <td><?php echo $pu['host'] ?></td>
+            <td><?php out_identity($identity); ?>
+            <td>
+                <form method="post" action="<?php echo $this->url() ?>/disconnect?service=<?php echo $id ?>">
+                    <input type="submit" class="submit" value="<?php echo $this->translate('Remove') ?>" />
+                </form>
+            </td>
+        <?php else : ?>
+             <td></td>
+             <td><a href="<?php echo $identity ?>"><?php echo $identity ?></a></td>
+             <td>
+                 <form method="post" action="<?php echo $this->url() ?>/remove?id=<?php echo $id ?>">
+                     <input type="submit" class="submit" value="<?php echo $this->translate('Remove') ?>" />
+                 </form>
+             </td>
+        <?php endif ?>
+        <?php if (defined('LD_DEBUG') && constant('LD_DEBUG')) : ?>
+        <td colspan="2"></td>
+        <?php endif ?>
+        </tr>
+    <?php endforeach ?>
+    <?php endif ?>
+    </table>
+
+    <hr/>
+
+    <h4><?php echo $this->translate("Add an <em>Instant Connect</em> identity") ?></h4>
+
+    <p>All <em>La Distribution</em> accounts can be used as <em>Instant Connect</em> identities.</p>
+
+    <form method="post" action="/identity/accounts/add">
+        <input id="add_new_identity" type="text" name="openid_identifier" value="" size="50" />
+        <input type="submit" class="submit button ld-button" value="<?php echo $this->translate("Add") ?>"/>
+    </form>
+
+</div>
+
+</div>

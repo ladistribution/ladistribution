@@ -45,12 +45,15 @@ class Api_IdentityController extends Ld_Controller_Action
     protected function _formatUser($user)
     {
         $formatedUser = array(
-            'id' => $user['id'],
             'username' => $user['username'],
             'fullname' => $user['fullname'],
             'email' => $user['email'],
-            'url' => $this->getSite()->getAdmin()->getIdentityUrl($user['username']),
-            'created_at' => null
+            'url' => Ld_Ui::getIdentityUrl($user),
+            'avatar_url' => Ld_Ui::getAvatarUrl($user),
+            'url_alias' => array(
+                $this->getSite()->getAbsoluteUrl() . '/' . $user['id'],
+                $this->getSite()->getAbsoluteUrl() . '/identity/' . $user['username']
+            )
         );
         return $formatedUser;
     }

@@ -52,6 +52,13 @@ class Ld_Services_Twitter extends Ld_Services_Base
         $this->_accessToken = $consumer->getAccessToken($_GET, $_SESSION['twitter_request_token']);
     }
 
+    public function getLoginUrl()
+    {
+        $consumer = $this->_getConsumer();
+        $_SESSION['twitter_request_token'] = $consumer->getRequestToken();
+        return $consumer->getRedirectUrl();
+    }
+
     public function _getUser()
     {
         $token = $this->_getAccessToken();

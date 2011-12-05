@@ -11,9 +11,9 @@ class Ld_Services_Ladistribution extends Ld_Services_Base
 
     protected $_dataStore = null;
 
-    protected $_host = 'ladistribution.com';
+    protected $_host = 'ladistribution.net';
 
-    protected $_baseUrl = 'http://ladistribution.com';
+    protected $_baseUrl = 'http://ladistribution.net';
 
     public function _getDataStore()
     {

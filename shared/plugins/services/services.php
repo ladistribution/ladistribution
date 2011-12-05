@@ -19,8 +19,8 @@ class Ld_Plugin_Services
     public function load()
     {
         Ld_Plugin::addFilter('Identity:services', array($this, 'services'));
-        Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:callback', array($this, 'callback'), 10, 2);
-        Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:login', array($this, 'login'), 10, 2);
+        // Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:callback', array($this, 'callback'), 10, 2);
+        // Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:login', array($this, 'login'), 10, 2);
     }
 
     public function getSite()

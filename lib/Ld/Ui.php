@@ -181,14 +181,14 @@ class Ld_Ui
     public static function getCssUrl($file, $package)
     {
         $infos = self::getPackageInfos($package, 'css');
-        $url = self::getSite()->getRelativeUrl('css') . $file . '?v=' . $infos['version'];
+        $url = self::getSite()->getUrl('css') . $file . '?v=' . $infos['version'];
         return $url;
     }
 
     public static function getJsUrl($file, $package)
     {
         $infos = self::getPackageInfos($package, 'js');
-        $url = self::getSite()->getRelativeUrl('js') . $file . '?v=' . $infos['version'];
+        $url = self::getSite()->getUrl('js') . $file . '?v=' . $infos['version'];
         return $url;
     }
 
