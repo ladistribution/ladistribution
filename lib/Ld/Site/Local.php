@@ -1127,13 +1127,10 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $domains = $this->getModel('domains')->getAll();
         // transitional code
         if (empty($domains)) {
-            $domains = array();
-            $id = $this->getUniqId();
-            $domains[$id] = array(
+            $this->addDomain(array(
                 'host' => $this->getConfig('host'),
                 'default_application' => $this->getConfig('root_application')
-            );
-            $this->writeDomains($domains);
+            ));
         }
         return $domains;
     }
