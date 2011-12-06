@@ -35,9 +35,13 @@ function out_identity($identity)
     <p>See <a href="http://readmill.com/settings/connections">Readmill</a> for design inspiration.</p>
     -->
 
+    <?php if (!empty($this->services) || !empty($this->otherIdentities)) : ?>
+
     <p>You have linked these identities with your account:</p>
 
     <table class="h6e-data ld-data">
+
+    <?php if (!empty($this->services)) : ?>
     <tr>
         <th colspan="5">Main Services</th>
     </tr>
@@ -85,6 +89,8 @@ function out_identity($identity)
             <?php endif ?>
         </tr>
     <?php endforeach ?>
+    <?php endif ?>
+
     <?php if (!empty($this->otherIdentities)) : ?>
     <tr>
         <th class="th2" colspan="5">Other Identities</th>
@@ -104,7 +110,7 @@ function out_identity($identity)
             <td><?php out_identity($identity); ?>
             <td>
                 <form method="post" action="<?php echo $this->url() ?>/disconnect?service=<?php echo $id ?>">
-                    <input type="submit" class="submit" value="<?php echo $this->translate('Remove') ?>" />
+                    <input type="submit" class="submit" value="<?php echo $this->translate('Disconnect') ?>" />
                 </form>
             </td>
         <?php else : ?>
@@ -112,7 +118,7 @@ function out_identity($identity)
              <td><a href="<?php echo $identity ?>"><?php echo $identity ?></a></td>
              <td>
                  <form method="post" action="<?php echo $this->url() ?>/remove?id=<?php echo $id ?>">
-                     <input type="submit" class="submit" value="<?php echo $this->translate('Remove') ?>" />
+                     <input type="submit" class="submit" value="<?php echo $this->translate('Disconnect') ?>" />
                  </form>
              </td>
         <?php endif ?>
@@ -123,6 +129,12 @@ function out_identity($identity)
     <?php endforeach ?>
     <?php endif ?>
     </table>
+
+    <?php else : ?>
+
+    <p>You currently have no identity linked with this account.</p>
+
+    <?php endif ?>
 
     <hr/>
 

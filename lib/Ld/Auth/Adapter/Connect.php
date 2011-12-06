@@ -82,7 +82,8 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
             $configuration = $this->getOpenidConfiguration();
             $params = array(
                 'type' => 'client_associate',
-                'application_name' => sprintf('La Distribution (%s)', $this->getSite()->getHost()),
+                'application_name' => 'La Distribution',
+                // 'application_name' => sprintf('La Distribution (%s)', $this->getSite()->getHost()),
                 'application_url' => $this->getSite()->getAbsoluteSecureUrl(),
                 'application_type' => 'web',
                 'redirect_uri' => $this->getSite()->getAbsoluteSecureUrl()
@@ -186,8 +187,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
             return new Zend_Auth_Result(Zend_Auth_Result::FAILURE, null);
         }
 
-        // normalise to http://
-        $identity['url'] = $this->_identity['url'] = str_replace('https://', 'http://', $identity['url']);
+        $identity['url'] = $this->_identity['url'] = $this->_normaliseUrl($identity['url']);
 
         // Identity match
         if (isset($session->identity)) {
@@ -277,6 +277,12 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
             $user['username'] = 'acct:' . $userinfo['username'] . '@' . $namespace;
         }
         return $users->addUser($user);
+    }
+
+    protected function _normaliseUrl($url)
+    {
+        $url = str_ireplace('https://', 'http://', $url);
+        return $url;
     }
 
 }

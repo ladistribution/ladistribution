@@ -15,7 +15,7 @@ class Identity_AccountsController extends Identity_BaseController
 
         $this->view->identities = $this->targetUser['identities'];
 
-        $services = array('ladistribution' => array('id' => 'ladistribution', 'name' => 'La Distribution'));
+        $services = array();
         $services = Ld_Plugin::applyFilters('Identity:services', $services);
 
         $this->view->services = $services;
@@ -206,9 +206,7 @@ class Identity_AccountsController extends Identity_BaseController
 
     protected function _normaliseUrl($url)
     {
-        // $url = str_ireplace('http://', '', $url);
-        // $url = str_ireplace('https://', '', $url);
-        // $url = str_ireplace('www.', '', $url);
+        $url = str_ireplace('https://', 'http://', $url);
         return $url;
     }
 

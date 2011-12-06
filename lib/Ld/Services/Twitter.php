@@ -82,7 +82,7 @@ class Ld_Services_Twitter extends Ld_Services_Base
             'username' => $tUser['screen_name'],
             'fullname' => $tUser['name'],
             'location' => $tUser['location'],
-            'avatar_url' => $tUser['profile_image_url'],
+            'avatar_url' => $tUser['profile_image_url_https'],
         );
         return $identity;
     }

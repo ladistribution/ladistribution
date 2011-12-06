@@ -6,11 +6,11 @@ class Ld_Plugin_Services
     public function infos()
     {
         return array(
-            'name' => 'Social Services',
+            'name' => 'Services',
             'url' => 'http://ladistribution.net/wiki/plugins/#services',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.6-14',
+            'version' => '0.6.28',
             'description' => Ld_Translate::notranslate('No description yet.'),
             'license' => 'MIT / GPL'
         );
@@ -61,11 +61,14 @@ class Ld_Plugin_Services
 
     public function services($services = array())
     {
+        $services['ladistribution'] = array(
+            'id' => 'ladistribution', 'name' => 'La Distribution (.net)'
+        );
         $supportedServices = array(
-            'google'    => 'Google',
-            'facebook'  => 'Facebook',
-            'twitter'   => 'Twitter',
-            'github'    => 'Github'
+            'google'   => 'Google',
+            'facebook' => 'Facebook',
+            'twitter'  => 'Twitter',
+            'github'   => 'Github'
         );
         foreach ($supportedServices as $service => $name) {
             $key = 'sservices_' . $service . '_enabled';
