@@ -3,7 +3,7 @@
 Plugin Name: LD Ui
 Plugin URI: http://h6e.net/wordpress/plugins#ld-ui
 Description: Enable some La Distribution UI elements
-Version: 0.6.22
+Version: 0.6.23
 Author: h6e.net
 Author URI: http://h6e.net/
 */
@@ -225,6 +225,7 @@ function ld_admin_bar_menu_after($wp_admin_bar)
     $wp_admin_bar->remove_menu('wp-logo');
     $wp_admin_bar->remove_menu('site-name');
     $wp_admin_bar->remove_menu('my-account');
+    $wp_admin_bar->remove_menu('search');
 }
 
 function ld_admin_bar_after()
