@@ -19,7 +19,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
     public function setIdentityUrl($url)
     {
         $session = $this->getSession();
-        $url = str_replace('https://', 'http://', $url); // normalise to http://
+        $url = $this->_normaliseUrl($url);
         $this->_identity = $session->identity = array('url' => $url);
         $pu = parse_url($url);
         $this->_host = $session->host = $pu['host'];
@@ -82,7 +82,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
             $configuration = $this->getOpenidConfiguration();
             $params = array(
                 'type' => 'client_associate',
-                'application_name' => 'La Distribution',
+                'application_name' => $this->getSite()->getName(),
                 // 'application_name' => sprintf('La Distribution (%s)', $this->getSite()->getHost()),
                 'application_url' => $this->getSite()->getAbsoluteSecureUrl(),
                 'application_type' => 'web',
@@ -213,9 +213,8 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
     {
         $result = $this->getAuthResult();
 
-        $identity = $this->_identity;
-
         if ($result->isValid()) {
+            $identity = $this->_identity;
             $users = $this->getSite()->getModel('users');
             if (!$exists = $users->getUserByUrl($identity['url'])) {
                 $this->createUser($identity);

@@ -10,7 +10,7 @@ class Ld_Plugin_Services
             'url' => 'http://ladistribution.net/wiki/plugins/#services',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.6.28',
+            'version' => '0.6.30',
             'description' => Ld_Translate::notranslate('No description yet.'),
             'license' => 'MIT / GPL'
         );
@@ -59,17 +59,31 @@ class Ld_Plugin_Services
         }
     }
 
+    public function getSupportedServices()
+    {
+        $supportedServices = array(
+            'google'     => 'Google',
+            'facebook'   => 'Facebook',
+            'twitter'    => 'Twitter',
+            'github'     => 'GitHub',
+            'linkedin'   => 'LinkedIn',
+            'flickr'     => 'Flickr',
+            'tumblr'     => 'Tumblr',
+            'identica'   => 'Identi.ca',
+            'soundcloud' => 'SoundCloud',
+            'foursquare' => 'Foursquare',
+            'vimeo'      => 'Vimeo',
+            'readmill'   => 'Readmill'
+        );
+        return $supportedServices;
+    }
+
     public function services($services = array())
     {
         $services['ladistribution'] = array(
             'id' => 'ladistribution', 'name' => 'La Distribution (.net)'
         );
-        $supportedServices = array(
-            'google'   => 'Google',
-            'facebook' => 'Facebook',
-            'twitter'  => 'Twitter',
-            'github'   => 'Github'
-        );
+        $supportedServices = $this->getSupportedServices();
         foreach ($supportedServices as $service => $name) {
             $key = 'sservices_' . $service . '_enabled';
             if ($this->getSite()->getConfig($key, false)) {
@@ -83,90 +97,35 @@ class Ld_Plugin_Services
     {
         $preferences = array();
 
+        foreach ($this->getSupportedServices() as $id => $name) {
+            $preferences[] = array(
+                'name' => "sservices_" . $id . "_enabled", 'label' => Ld_Translate::notranslate("Enable $name support"),
+                'type' => 'boolean', 'defaultValue' => false
+            );
+            if ($this->getSite()->getConfig("sservices_" . $id . "_enabled", false)) {
+                $preferences[] = array(
+                    'name' => $id . "_consumer_key", 'label' => Ld_Translate::notranslate("$name ID/Key"),
+                    'type' => 'text', 'defaultValue' => ''
+                );
+                $preferences[] = array(
+                    'name' => $id . '_consumer_secret', 'label' => Ld_Translate::notranslate("$name secret"),
+                    'type' => 'text', 'defaultValue' => ''
+                );
+            }
+        }
+
         // https://code.google.com/apis/console
-
-        $preferences[] = array(
-            'name' => 'sservices_google_enabled', 'label' => Ld_Translate::notranslate('Enable Google support'),
-            'type' => 'boolean', 'defaultValue' => false
-        );
-        if ($this->getSite()->getConfig('sservices_google_enabled', false)) {
-            $preferences[] = array(
-                'name' => 'google_consumer_key', 'label' => Ld_Translate::notranslate('Google Client ID'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-            $preferences[] = array(
-                'name' => 'google_consumer_secret', 'label' => Ld_Translate::notranslate('Google Client secret:'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-        }
-
         // https://developers.facebook.com/apps
-
-        $preferences[] = array(
-            'name' => 'sservices_facebook_enabled', 'label' => Ld_Translate::notranslate('Enable Facebook support'),
-            'type' => 'boolean', 'defaultValue' => false
-        );
-        if ($this->getSite()->getConfig('sservices_facebook_enabled', false)) {
-            $preferences[] = array(
-                'name' => 'facebook_consumer_key', 'label' => Ld_Translate::notranslate('Facebook App ID'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-            $preferences[] = array(
-                'name' => 'facebook_consumer_secret', 'label' => Ld_Translate::notranslate('Facebook App Secret'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-        }
-
         // https://dev.twitter.com/apps/new
-
-        $preferences[] = array(
-            'name' => 'sservices_twitter_enabled', 'label' => Ld_Translate::notranslate('Enable Twitter support'),
-            'type' => 'boolean', 'defaultValue' => false
-        );
-        if ($this->getSite()->getConfig('sservices_twitter_enabled', false)) {
-            $preferences[] = array(
-                'name' => 'twitter_consumer_key', 'label' => Ld_Translate::notranslate('Twitter Consumer Key'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-            $preferences[] = array(
-                'name' => 'twitter_consumer_secret', 'label' => Ld_Translate::notranslate('Twitter Consumer Secret'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-        }
-
-        // http://www.tumblr.com/oauth/register
-
-        // $preferences[] = array(
-        //     'name' => 'sservices_tumblr_enabled', 'label' => Ld_Translate::notranslate('Enable Tumblr support'),
-        //     'type' => 'boolean', 'defaultValue' => false
-        // );
-        // if ($this->getSite()->getConfig('sservices_tumblr_enabled', false)) {
-        //     $preferences[] = array(
-        //         'name' => 'tumblr_consumer_key', 'label' => Ld_Translate::notranslate('Tumblr Consumer Key'),
-        //         'type' => 'text', 'defaultValue' => ''
-        //     );
-        //     $preferences[] = array(
-        //         'name' => 'tumblr_consumer_secret', 'label' => Ld_Translate::notranslate('Tumblr Secret Key'),
-        //         'type' => 'text', 'defaultValue' => ''
-        //     );
-        // }
-
-        // https://github.com/account/applications/new
-
-        $preferences[] = array(
-            'name' => 'sservices_github_enabled', 'label' => Ld_Translate::notranslate('Enable Github support'),
-            'type' => 'boolean', 'defaultValue' => false
-        );
-        if ($this->getSite()->getConfig('sservices_github_enabled', false)) {
-            $preferences[] = array(
-                'name' => 'github_consumer_key', 'label' => Ld_Translate::notranslate('Github Client ID'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-            $preferences[] = array(
-                'name' => 'github_consumer_secret', 'label' => Ld_Translate::notranslate('Github Secret'),
-                'type' => 'text', 'defaultValue' => ''
-            );
-        }
+        // http://www.tumblr.com/oauth/apps
+        // https://github.com/account/applications
+        // https://www.linkedin.com/secure/developer
+        // http://www.flickr.com/services/apps/create
+        // http://www.flickr.com/services/apps/create
+        // http://soundcloud.com/you/apps
+        // https://foursquare.com/oauth/
+        // http://vimeo.com/api/applications
+        // http://readmill.com/you/apps
 
         return $preferences;
     }

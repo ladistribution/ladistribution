@@ -36,6 +36,10 @@ class Ld_Plugin_Development
             'type' => 'text', 'defaultValue' => '30'
         );
         $preferences[] = array(
+            'name' => 'cache_lifetime', 'label' => ('Cache Lifetime'),
+            'type' => 'text', 'defaultValue' => '300'
+        );
+        $preferences[] = array(
             'name' => 'no_rewrite', 'label' => ('URL Rewriting not available'),
             'type' => 'boolean', 'defaultValue' => '0'
         );

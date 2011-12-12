@@ -51,8 +51,8 @@ class Api_IdentityController extends Ld_Controller_Action
             'url' => Ld_Ui::getIdentityUrl($user),
             'avatar_url' => Ld_Ui::getAvatarUrl($user),
             'url_alias' => array(
-                $this->getSite()->getAbsoluteUrl() . '/' . $user['id'],
-                $this->getSite()->getAbsoluteUrl() . '/identity/' . $user['username']
+                $this->admin->buildAbsoluteUrl(array('id' => $user['id']), 'vanity'),
+                $this->admin->buildAbsoluteUrl(array('id' => $user['username']), 'identity')
             )
         );
         return $formatedUser;

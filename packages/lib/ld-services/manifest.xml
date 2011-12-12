@@ -1,7 +1,7 @@
 <package>
   <id>lib-ld-services</id>
   <name>La Distribution Services</name>
-  <version>0.6-27</version>
+  <version>0.6-30</version>
   <type>lib</type>
   <need>lib-ld</need>
   <need>lib-google-api-php-client</need>

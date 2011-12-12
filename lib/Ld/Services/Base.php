@@ -9,6 +9,8 @@ abstract class Ld_Services_Base
 
     protected $_clientSecret = null;
 
+    protected $_tokenName = 'Bearer';
+
     public function __construct($params = array())
     {
         if (isset($params['clientId'])) {
@@ -104,35 +106,43 @@ abstract class Ld_Services_Base
     {
         $httpClient = new Zend_Http_Client();
         $httpClient->setConfig(array('timeout' => 10, 'useragent' => 'La Distribution SServices'));
-        $httpClient->setHeaders('Authorization', "Bearer " . $this->getAccessToken());
+        $httpClient->setHeaders('Authorization', $this->_tokenName . ' ' . $this->getAccessToken());
         return $httpClient;
     }
 
     public function _makeRequest($url, $method = 'GET', $params = array())
     {
-        $client = $this->_getHttpClient();
-        $client->setUri($url);
-        foreach ($params as $key => $value) {
-            $client->setParameterGet($key, $value);
+        echo "_makeRequest:$method:$url<br>\n";
+        $httpClient = $this->_getHttpClient();
+        $httpClient->setUri($url);
+        if (!empty($params)) {
+            if ($method == 'GET') {
+                $httpClient->setParameterGet($params);
+            } else if ($method == 'POST') {
+                $httpClient->setParameterPost($params);
+            }
         }
-        $response = $client->request($method);
+        $response = $httpClient->request($method);
         $body = $response->getBody();
-        $result = Zend_Json::decode($body, Zend_Json::TYPE_ARRAY);
-        if (isset($result->error)) {
-            throw new Exception($result->error);
+        $result = Zend_Json::decode($body);
+        if (isset($result['error'])) {
+            $error = $result['error'];
+            $error_description = $result['error_description'];
+            throw new Exception("$error_description ($error)");
         }
         return $result;
     }
 
     public function request($url, $method = 'GET', $params = array())
     {
+        // echo "request:GET:$url<br>\n";
         if (Zend_Registry::isRegistered('cache')) {
             $cache = Zend_Registry::get('cache');
-            $cacheKey = $this->_getCacheKey($url);
+            $cacheKey = $this->_getCacheKey($url, $method, $params);
             $result = $cache->load($cacheKey);
         }
         if (empty($result)) {
-            $result = $this->_makeRequest($url);
+            $result = $this->_makeRequest($url, $method, $params);
             if ($cache) {
                 $cache->save($result, $cacheKey);
             }

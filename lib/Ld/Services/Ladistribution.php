@@ -1,55 +1,30 @@
 <?php
 
-require_once 'Ld/Services/oauth2.php';
-
-class Ld_Services_Ladistribution extends Ld_Services_Base
+class Ld_Services_Ladistribution extends Ld_Services_Oauth2
 {
 
     protected $_serviceName = 'ladistribution';
 
-    protected $_consumer = null;
-
-    protected $_dataStore = null;
-
-    protected $_host = 'ladistribution.net';
+    protected $_serviceHost = 'ladistribution.net';
 
     protected $_baseUrl = 'http://ladistribution.net';
 
-    public function _getDataStore()
-    {
-        if (empty($this->_dataStore)) {
-            $this->_dataStore = $dataStore = new OAuth2_DataStore_Session();
-        }
-        return $this->_dataStore;
-    }
+    protected $_scope = 'openid profile email';
 
-    public function _getConsumer()
+    public function __construct()
     {
-        if (empty($this->_consumer)) {
-            $client = new OAuth2_Client(
-                $this->getClientId(),
-                $this->getClientSecret(),
-                $this->getCallbackUrl()
-            );
-            $configuration = new OAuth2_Service_Configuration(
-                $this->_baseUrl . '/api/oauth/authorize',
-                $this->_baseUrl . '/api/oauth/token'
-            );
-            $dataStore = $this->_getDataStore();
-            $scope = "openid profile email";
-            $this->_consumer = new OAuth2_Service($client, $configuration, $dataStore, $scope);
-        }
-        return $this->_consumer;
+        $this->_authorizeUrl = $this->_baseUrl . '/api/oauth/authorize';
+        $this->_accessTokenUrl = $this->_baseUrl . '/api/oauth/token';
     }
 
     public function getOauthKeys()
     {
-        $host = $this->_host;
+        $host = $this->_serviceHost;
         $keys = $this->getSite()->getConfig('oauth_keys', array());
         if (empty($keys[$host])) {
             $params = array(
                 'type' => 'client_associate',
-                'application_name' => sprintf('La Distribution (%s)', $this->getSite()->getHost()),
+                'application_name' => $this->getSite()->getName(),
                 'application_url' => $this->getSite()->getUrl(),
                 'application_type' => 'web',
                 'redirect_uri' => $this->getSite()->getUrl()
@@ -73,18 +48,6 @@ class Ld_Services_Ladistribution extends Ld_Services_Base
         return $keys['client_secret'];
     }
 
-    public function authorize()
-    {
-        $consumer = $this->_getConsumer();
-        $consumer->authorize();
-    }
-
-    public function callback()
-    {
-        $consumer = $this->_getConsumer();
-        $consumer->getAccessToken();
-    }
-
     public function _getUser()
     {
         $consumer = $this->_getConsumer();
@@ -105,24 +68,6 @@ class Ld_Services_Ladistribution extends Ld_Services_Base
             'avatar_url' => $lUser['avatar_url'],
         );
         return $identity;
-    }
-
-    public function getToken()
-    {
-        $dataStore = $this->_getDataStore();
-        $token = $dataStore->retrieveAccessToken();
-        return array(
-            'accessToken' => $token->getAccessToken(),
-            'refreshToken' => $token->getRefreshToken(),
-            'lifeTime' => $token->getLifeTime(),
-            'tokenType' => 'Bearer'
-        );
-    }
-
-    public function setToken($token)
-    {
-        $dataStore = $this->_getDataStore();
-        $dataStore->storeAccessToken( new OAuth2_Token($token['accessToken'], $token['refreshToken'], $token['lifeTime']) );
     }
 
 }

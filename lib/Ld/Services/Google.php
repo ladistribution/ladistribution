@@ -12,6 +12,8 @@ class Ld_Services_Google extends Ld_Services_Base
 
     protected $_plusService = null;
 
+    protected $_tokenName = 'OAuth';
+
     public function _getApiClient()
     {
         if (empty($this->_apiClient)) {
@@ -72,12 +74,16 @@ class Ld_Services_Google extends Ld_Services_Base
         $apiClient->authenticate();
     }
 
-    public function _getHttpClient()
+    public function refresh()
     {
-        $httpClient = new Zend_Http_Client();
-        $httpClient->setConfig(array('timeout' => 10, 'useragent' => 'La Distribution SServices Google'));
-        $httpClient->setHeaders('Authorization', "OAuth " . $this->getAccessToken()); // OAuth 1
-        return $httpClient;
+        $plusUser = $this->_getPlusUser();
+        if ($user = Ld_Auth::getUser()) {
+            $token = $this->getToken();
+            if ($token['access_token'] != $user['identities'][$this->_serviceName]['oauth_access_token']['access_token']) {
+                $user['identities'][$this->_serviceName]['oauth_access_token'] = $token;
+                $this->getSite()->updateUser($user);
+            }
+        }
     }
 
     public function _getPlusUser($id = 'me')
@@ -144,6 +150,33 @@ class Ld_Services_Google extends Ld_Services_Base
             }
         }
         return $user;
+    }
+
+    public function _normaliseUser($gUser = array())
+    {
+        // if (isset($gUser['id'])) {
+        //     $gUser['guid'] = 'google:' . $gUser['id'];
+        // }
+        // if (isset($gUser['name'])) {
+        //     $gUser['fullname'] = $gUser['name'];
+        // }
+        if (isset($gUser['email'])) {
+            // check only gmail
+            if (strpos($gUser['email'], '@gmail.') || strpos($gUser['email'], '@googlemail.')) {
+                $x = explode('@', $gUser['email']);
+                $gUser['username'] = $x[0];
+            }
+        }
+        if (isset($gUser['email_alias']) && empty($gUser['username'])) {
+            foreach ($gUser['email_alias'] as $email) {
+                // check only gmail
+                if (strpos($email, '@gmail.') || strpos($email, '@googlemail.')) {
+                    $x = explode('@', $email);
+                    $gUser['username'] = $x[0];
+                }
+            }
+        }
+        return $gUser;
     }
 
 }

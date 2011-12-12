@@ -9,6 +9,16 @@ class Ld_Services_Facebook extends Ld_Services_Base
 
     protected $_consumer = null;
 
+    public function isCallback()
+    {
+        if (isset($_GET['code']) && strlen($_GET['code']) == '195') {
+            if (isset($_GET['state']) && strlen($_GET['state']) == '32') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function _getConsumer()
     {
         if (empty($this->_consumer)) {
@@ -17,9 +27,12 @@ class Ld_Services_Facebook extends Ld_Services_Base
               'secret' => $this->getClientSecret()
             ));
             // Automatic Refresh Callback
-            if (isset($_GET['code']) && !Ld_Auth::isAnonymous() && $user = Ld_Auth::getUser()) {
-                $user['identities']['facebook']['oauth_access_token'] = $this->getToken();
-                $this->getSite()->updateUser($user);
+            if ($this->isCallback()) {
+                if ($user = Ld_Auth::getUser()) {
+                    $user['identities']['facebook']['oauth_access_token'] = $this->getToken();
+                    $this->getSite()->updateUser($user);
+                    // and redirect after ?
+                }
             }
         }
         return $this->_consumer;
@@ -34,7 +47,7 @@ class Ld_Services_Facebook extends Ld_Services_Base
             'user_hometown', 'friends_hometown',
             'user_website', 'friends_website',
             'read_friendlists',
-            // 'offline_access',
+            'offline_access',
             // 'email',
         );
     }
@@ -100,6 +113,11 @@ class Ld_Services_Facebook extends Ld_Services_Base
     public function getIdentity()
     {
         $fbUser = $this->_getUser();
+        return $this->_normaliseUser($fbUser);
+    }
+
+    public function _normaliseUser($fbUser = array())
+    {
         $user = array(
             'guid' => 'facebook:' . $fbUser['id'],
             'url' => $fbUser['link'],
@@ -117,9 +135,9 @@ class Ld_Services_Facebook extends Ld_Services_Base
         if (isset($fbUser['location'])) {
             $user['location'] = $fbUser['location']['name'];
         }
-        $user['alias_url'] = array(
-            'http://www.facebook.com/' . $fbUser['id']
-        );
+        // $user['alias_url'] = array(
+        //     'http://www.facebook.com/' . $fbUser['id']
+        // );
         $user['avatar_url'] = 'https://graph.facebook.com/' . $fbUser['id'] . '/picture?type=square';
         return $user;
     }
@@ -129,14 +147,14 @@ class Ld_Services_Facebook extends Ld_Services_Base
         $facebook = $this->_getConsumer();
         try {
             $result = $facebook->api($query);
-        } catch (Exception $e) { // FacebookApiException
+        } catch (FacebookApiException $e) { // FacebookApiException
             $params = array(
               'scope' => $this->_getScope(),
             );
             header('Location:' . $facebook->getLoginUrl($params) );
             exit;
         }
-        return $result;
+        return isset($result['data']) ? $result['data'] : $result;
     }
 
 }

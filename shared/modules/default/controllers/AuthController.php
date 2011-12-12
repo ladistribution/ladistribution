@@ -63,7 +63,7 @@ class AuthController extends Ld_Controller_Action
 
         $this->view->open_registration = $this->site->getConfig('open_registration');
 
-        $this->view->loginUrl = $this->admin->getLoginUrl();
+        $this->view->loginUrl = $this->admin->buildUrl(array('module' => 'default', 'controller' => 'auth', 'action' => 'login'));
     }
 
     function logoutAction()

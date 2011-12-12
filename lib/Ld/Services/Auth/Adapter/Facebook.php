@@ -26,22 +26,6 @@ class Ld_Services_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         $session->identity = array('url' => $url);
     }
 
-    public function isActive()
-    {
-        $session = $this->getSession();
-        return isset($session->identity);
-    }
-
-    public function isFacebookCallback()
-    {
-        if (isset($_GET['code']) && strlen($_GET['code']) == '195') {
-            if (isset($_GET['state']) && strlen($_GET['state']) == '32') {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public function getCallbackUrl()
     {
         return $this->_callbackUrl;
@@ -58,7 +42,7 @@ class Ld_Services_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         $session = $this->getSession();
 
         // Callback
-        if ($this->isFacebookCallback()) {
+        if ($facebook->isCallback()) {
             $identity = $facebook->getIdentity();
             if (empty($identity)) {
                 // if facebook authentication fails ...

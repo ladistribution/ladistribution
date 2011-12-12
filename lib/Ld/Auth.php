@@ -106,7 +106,7 @@ class Ld_Auth
             if (self::isOpenid()) {
                 $user = Zend_Registry::get('site')->getModel('users')->getUserByUrl($identity);
                 if (empty($user)) {
-                    $user = array('fullname' => "Anonymous ($identity)", 'username' => 'anonymous');
+                    return null;
                 }
                 return $user;
             }

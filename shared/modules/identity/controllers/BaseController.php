@@ -32,7 +32,9 @@ class Identity_BaseController extends Ld_Controller_Action
 
     protected function _handleNavigation()
     {
-        if (isset($this->user)) {
+        $user = Ld_Auth::getUser();
+
+        if ($user && isset($this->targetUser) && $user['username'] == $this->targetUser['username']) {
 
             $id = isset($this->user['username']) ? $this->user['username'] : $this->user['id'];
 
@@ -42,7 +44,7 @@ class Identity_BaseController extends Ld_Controller_Action
                     'pages' => array(
                         array( 'label' => $this->translate('General'),
                                'route' => 'vanity', 'params' => array( 'id' => $id )),
-                        array( 'label' => $this->translate('Identities'),
+                        array( 'label' => $this->translate('Accounts'),
                                'module'=> 'identity', 'controller' => 'accounts', 'route' => 'identity-accounts'),
                         array( 'label' => $this->translate('Authorizations'),
                                'module' => 'identity', 'controller' => 'authorizations', 'route' => 'identity-authorizations')

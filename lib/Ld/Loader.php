@@ -221,7 +221,7 @@ class Ld_Loader
 
         if (Ld_Files::exists($cacheDirectory) && is_writable($cacheDirectory)) {
             $frontendOptions = array(
-               'lifetime' => 60, // cache lifetime of 1 minute
+               'lifetime' => self::$site->getConfig('cache_lifetime', 300), // cache lifetime of 5 minutes
                'automatic_serialization' => true
             );
             $backendOptions = array(
