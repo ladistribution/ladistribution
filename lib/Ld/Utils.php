@@ -60,12 +60,12 @@ class Ld_Utils
         return $con;
     }
 
-    public function getUniqId()
+    public static function getUniqId()
     {
         return uniqid();
     }
 
-    public function getCurrentScheme()
+    public static function getCurrentScheme()
     {
         if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) {
             return 'https';
@@ -75,7 +75,7 @@ class Ld_Utils
         return 'http';
     }
 
-    public function getCurrentUrl($ignoreParams = array())
+    public static function getCurrentUrl($ignoreParams = array())
     {
       $protocol = self::getCurrentScheme() . '://';
 

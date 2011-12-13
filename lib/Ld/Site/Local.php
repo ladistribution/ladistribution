@@ -805,7 +805,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $model = strtolower($model);
         if (empty($this->models[$model])) {
-            $fileName = $this->getDirectory('lib') . '/Ld/Model/' . ucfirst($model) . '.php';
+            // $fileName = $this->getDirectory('lib') . '/Ld/Model/' . ucfirst($model) . '.php';
+            $fileName = LD_LIB_DIR . '/Ld/Model/' . ucfirst($model) . '.php';
             $className = 'Ld_Model_' . ucfirst($model);
             if (file_exists($fileName) && class_exists($className)) {
                 $this->models[$model] = new $className();
@@ -987,6 +988,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getRawRepositories()
     {
         $rawRepositories = $this->getModel('repositories')->getAll();
+        uasort($rawRepositories, array("Ld_Utils", "sortByOrder"));
         $rawRepositories = Ld_Plugin::applyFilters('Site:getRawRepositories', $rawRepositories);
         /* deprecated */
         $rawRepositories = Ld_Plugin::applyFilters('Site:getRepositoriesConfiguration', $rawRepositories);
