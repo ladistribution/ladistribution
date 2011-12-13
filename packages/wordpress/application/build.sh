@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="3.3-RC3"
+VERSION="3.3"
 GZ="$NAME-$VERSION.tar.gz"
 SOURCE="http://wordpress.org/$GZ"
 FOLDER="application"
