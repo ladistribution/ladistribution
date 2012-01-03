@@ -170,8 +170,8 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     protected function _checkRepositories()
     {
-        $respositories = $this->getRawRepositories();
-        if (empty($respositories)) {
+        $repositories = $this->getRawRepositories();
+        if (empty($repositories)) {
             $this->addRepository(array(
                 'id' => 'main', 'name' => 'Main', 'type' => 'remote',
                 'endpoint' => LD_SERVER . 'repositories/' . LD_RELEASE . '/main'));
@@ -325,7 +325,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $name = $this->getConfig('name');
         if (empty($name)) {
-            $name = 'La Distribution';
+            $name = 'Ma Distribution';
         }
         return $name;
     }
@@ -805,7 +805,6 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $model = strtolower($model);
         if (empty($this->models[$model])) {
-            // $fileName = $this->getDirectory('lib') . '/Ld/Model/' . ucfirst($model) . '.php';
             $fileName = LD_LIB_DIR . '/Ld/Model/' . ucfirst($model) . '.php';
             $className = 'Ld_Model_' . ucfirst($model);
             if (file_exists($fileName) && class_exists($className)) {
@@ -988,9 +987,13 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getRawRepositories()
     {
         $rawRepositories = $this->getModel('repositories')->getAll();
+        // Transitional code
+        if (isset($rawRepositories['repositories'])) { $rawRepositories = $rawRepositories['repositories']; }
+        // Sort
         uasort($rawRepositories, array("Ld_Utils", "sortByOrder"));
+        // Plugin Hook
         $rawRepositories = Ld_Plugin::applyFilters('Site:getRawRepositories', $rawRepositories);
-        /* deprecated */
+        // Old Plugin Hook
         $rawRepositories = Ld_Plugin::applyFilters('Site:getRepositoriesConfiguration', $rawRepositories);
         return $rawRepositories;
     }
@@ -1009,7 +1012,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         foreach ($this->getRawRepositories() as $id => $config) {
             $config['id'] = $id;
             if (empty($type) || $config['type'] == $type) {
-                $repositories[$id] = $this->getRepository($config);
+                if ($repository = $this->getRepository($config)) {
+                    $repositories[$id] = $repository;
+                }
             }
         }
 
