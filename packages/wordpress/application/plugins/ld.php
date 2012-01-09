@@ -9,7 +9,7 @@ Author URI: http://h6e.net/
 */
 
 function ld_handle_capabilities()
-{    
+{
 	global $wp_roles;
 
 	if ( ! isset( $wp_roles ) )
@@ -23,7 +23,7 @@ function ld_handle_capabilities()
 		'update_core'
 	);
 	$disable_admin_caps = apply_filters('ld_disable_admin_caps', $disable_admin_caps);
-	
+
 	$enable_admin_caps = array(
 		'activate_plugins',
 		'edit_themes'
@@ -61,7 +61,7 @@ function ld_handle_registration()
 		$site = Zend_Registry::get('site');
 		$users_can_register = $site->getConfig('open_registration', 0);
 		update_option('users_can_register', $users_can_register);
-	}	
+	}
 }
 
 add_action('plugins_loaded', 'ld_handle_registration');
@@ -118,8 +118,7 @@ add_action('plugins_loaded', 'ld_disable_version_check');
 
 function ld_admin_menu_before()
 {
-	remove_action('admin_menu', 'akismet_config_page');
-	remove_action('admin_menu', 'akismet_stats_page');
+	remove_action('admin_menu', 'akismet_admin_menu');
 }
 
 add_action('init', 'ld_admin_menu_before', 102);
