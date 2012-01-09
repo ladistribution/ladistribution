@@ -60,18 +60,21 @@ class Ld_Http
     public static function download($url, $filename)
     {
         $local = fopen($filename, "w+");
+        if (!$local) {
+            return false;
+        }
         if (function_exists('curl_init')) {
             $ch = curl_init();
             self::curl_context($ch);
             curl_setopt($ch, CURLOPT_HEADER, false);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FILE, $local); 
+            curl_setopt($ch, CURLOPT_FILE, $local);
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_exec($ch);
             curl_close($ch);
         } else {
             $remote = fopen($url, "r", false, self::context());
-            if (!$local || !$remote) {
+            if (!$remote) {
                 return false;
             }
             while ( ($buffer = fread($remote, 8192)) != '' ) {
@@ -90,9 +93,36 @@ class Ld_Http
 
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $adapter->setDestination($dir);
-        $result = $adapter->receive();
+
+        if (!$adapter->receive()) {
+            foreach ($adapter->getMessages() as $code => $message) {
+                throw new Exception($message);
+            }
+        }
 
         return $adapter->getFileName();
+    }
+
+    public static function jsonRequest($url, $method = 'GET', $params = array())
+    {
+        $httpClient = new Zend_Http_Client($url);
+        $httpClient->setConfig(array('useragent' => self::$userAgent));
+        if (!empty($params)) {
+            if ($method == 'GET') {
+                $httpClient->setParameterGet($params);
+            } else if ($method == 'POST') {
+                $httpClient->setParameterPost($params);
+            }
+        }
+        $response = $httpClient->request($method);
+        $body = $response->getBody();
+        $result = Zend_Json::decode($body);
+        if (isset($result['error'])) {
+            $error = $result['error'];
+            $error_description = $result['error_description'];
+            throw new Exception("$error_description ($error)");
+        }
+        return $result;
     }
 
 }

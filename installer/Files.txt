@@ -145,7 +145,7 @@ class Ld_Files
     public static function move($old, $new)
     {
         self::log('move', "$old -> $new");
-        if (Ld_Files::exists($new) || strpos($new, $old) === 0) {
+        if (self::exists($new) || strpos($new, $old) === 0) {
             $tmp = LD_TMP_DIR . '/move-' . date("d-m-Y-H-i-s");
             self::copy($old, $tmp);
             self::unlink($old);
@@ -234,7 +234,10 @@ class Ld_Files
         if (self::exists($file) && !is_writable($file)) {
             throw new Exception("Can't write $file.");
         }
-        file_put_contents($file, $content);
+        $result = file_put_contents($file, $content);
+        if ($result === false) {
+            throw new Exception("Write failed on $file");
+        }
         self::updatePermissions($file);
     }
 
@@ -242,7 +245,7 @@ class Ld_Files
 
     public static function putJson($file, $content, $protect = false)
     {
-        if ($protect) {
+        if ($protect || self::exists($file . '.php')) {
             self::put($file . '.php', self::$jsonPrefix . Zend_Json::encode($content));
             if (self::exists($file)) {
                 self::rm($file);
@@ -292,6 +295,9 @@ class Ld_Files
     {
         if (defined('LD_UNIX_USER')) {
             chown($target, LD_UNIX_USER);
+        }
+        if (defined('LD_UNIX_GROUP')) {
+            chgrp($target, LD_UNIX_GROUP);
         }
         if (defined('LD_UNIX_PERMS')) {
             chmod($target, LD_UNIX_PERMS);
@@ -352,13 +358,13 @@ class Ld_Files
     public static function denyAccess($directory, $addIndex = false)
     {
         $htaccess = $directory . '/.htaccess';
-        if (!Ld_Files::exists($htaccess)) {
-            Ld_Files::put($htaccess, "Deny from all");
+        if (!self::exists($htaccess)) {
+            self::put($htaccess, "Deny from all");
         }
         if ($addIndex) {
             $index = $directory . '/index.php';
-            if (!Ld_Files::exists($index)) {
-                Ld_Files::put($index, "<?php // Silence is golden.");
+            if (!self::exists($index)) {
+                self::put($index, "<?php // Silence is golden.");
             }
         }
         if (class_exists('Ld_Plugin')) {

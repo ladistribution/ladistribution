@@ -48,7 +48,7 @@ function is_update()
     return is_installed();
 }
 
-function http_get($url, $user_agent = "La Distribution Installer")
+function ld_http_get($url, $user_agent = "La Distribution Installer")
 {
     if (function_exists('curl_init')) {
         $ch = curl_init();
@@ -73,7 +73,7 @@ function http_get($url, $user_agent = "La Distribution Installer")
 function download_and_require($file, $source, $force = false)
 {
     if (!file_exists($file) || $force) {
-        $content = http_get($source);
+        $content = ld_http_get($source);
         if (empty($content)) {
             error("Can't retrieve file $source.");
         }
@@ -87,6 +87,9 @@ function fix_perms($target)
 {
     if (defined('LD_UNIX_USER')) {
         chown($target, LD_UNIX_USER);
+    }
+    if (defined('LD_UNIX_GROUP')) {
+        chgrp($target, LD_UNIX_GROUP);
     }
     if (defined('LD_UNIX_PERMS')) {
         chmod($target, LD_UNIX_PERMS);
@@ -320,7 +323,7 @@ out('Site initialised');
 // Upgrade repositories (if needed)
 
 $endpoints = array();
-$repositories = $site->getRepositoriesConfiguration();
+$repositories = $site->getRawRepositories();
 foreach ($repositories as $id => $repository) {
     if (isset($repository['endpoint'])) {
         // upgrade to test/local repositories
@@ -328,6 +331,7 @@ foreach ($repositories as $id => $repository) {
         if (LD_SERVER != $default_server) {
             if (strpos($repository['endpoint'], $default_server) !== false) {
                 $repository['endpoint'] = str_replace($default_server, LD_SERVER, $repository['endpoint']);
+                $this->getSite()->getModel('repositories')->update($id, $repository);
                 $repository_upgrade = true;
             }
         }
@@ -335,19 +339,20 @@ foreach ($repositories as $id => $repository) {
         $old_releases = LD_RELEASE == 'danube' ? array('barbes', 'concorde') : array('barbes', 'concorde', 'danube');
         foreach ($old_releases as $release) {
             if (strpos($repository['endpoint'], LD_SERVER . 'repositories/' . $release) !== false) {
-                $repositories[$id]['endpoint'] = str_replace(
+                $repository['endpoint'] = str_replace(
                     LD_SERVER . 'repositories/' . $release,
                     LD_SERVER . 'repositories/' . LD_RELEASE,
                     $repository['endpoint']
                 );
+                $this->getSite()->getModel('repositories')->update($id, $repository);
                 $repository_upgrade = true;
             }
         }
-        $endpoints[] = $repositories[$id]['endpoint'];
+        $endpoints[] = $repository['endpoint'];
     }
 }
+
 if (isset($repository_upgrade)) {
-    $site->saveRepositoriesConfiguration($repositories);
     out('Repositories upgraded');
 }
 
@@ -360,16 +365,15 @@ if (empty($instances)) {
         $targetDirectory = $directories['tmp'] . '/' . $name . '-' . LD_RELEASE;
         $manifest = Ld_Manifest::loadFromDirectory($targetDirectory);
         $infos = $manifest->getInfos();
-        $instances[$site->getUniqId()] = array('package' => $manifest->getId(), 'type' => 'lib', 'version' => $infos['version']);
+        $site->getModel('instances')->addInstance(array('package' => $manifest->getId(), 'type' => 'lib', 'version' => $infos['version']));
         Ld_Files::unlink($targetDirectory);
     }
-    $site->updateInstances($instances);
     out('Registry updated');
 }
 
 // Handle locales
-
-if (defined('LD_LOCALE') && constant('LD_LOCALE') == 'fr_FR' && constant('LD_RELEASE') != 'barbes') {
+$supported_locales = array('fr_FR', 'de_DE');
+if (defined('LD_LOCALE') && in_array(constant('LD_LOCALE'), $supported_locales) && constant('LD_RELEASE') != 'barbes') {
     Ld_Files::createDirIfNotExists($site->getDirectory('shared') . '/locales');
     $dir = $site->getDirectory('shared') . '/locales/ld/' . LD_LOCALE;
     $repository = LD_SERVER . 'repositories/' . LD_RELEASE . '/' . substr(LD_LOCALE, 0, 2);

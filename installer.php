@@ -88,6 +88,9 @@ function fix_perms($target)
     if (defined('LD_UNIX_USER')) {
         chown($target, LD_UNIX_USER);
     }
+    if (defined('LD_UNIX_GROUP')) {
+        chgrp($target, LD_UNIX_GROUP);
+    }
     if (defined('LD_UNIX_PERMS')) {
         chmod($target, LD_UNIX_PERMS);
     }
