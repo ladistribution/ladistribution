@@ -35,6 +35,7 @@ class Ld_Services_Twitter extends Ld_Services_Oauth1
     public function _normaliseUser($tUser = array())
     {
         $user = array(
+            'id' => $tUser['id'],
             'guid' => $this->_serviceName . ':' . $tUser['id'],
             'url' => 'http://' . $this->_serviceHost . '/' . $tUser['screen_name'],
             'username' => $tUser['screen_name'],

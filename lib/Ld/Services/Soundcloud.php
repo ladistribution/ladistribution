@@ -27,6 +27,7 @@ class Ld_Services_Soundcloud extends Ld_Services_Oauth2
     public function normaliseUser($sUser = array())
     {
         $user = array(
+            'id' => $sUser['id'],
             'guid' => 'soundcloud:' . $sUser['id'],
             'url' => $sUser['permalink_url'],
             'username' => isset($sUser['permalink']) ? $sUser['permalink'] : $sUser['username'],

@@ -68,9 +68,10 @@ abstract class Ld_Services_Base
 
     public function getCallbackUrl()
     {
-        $baseUrl = $this->getSite()->getAdmin()->buildAbsoluteSecureUrl(array(
-            'module' => 'identity', 'controller' => 'accounts', 'action' => 'callback'));
-        return $baseUrl . '?service=' . $this->getServiceName();
+        $params = array('service' => $this->getServiceName());
+        $baseUrl = $this->getSite()->getAdmin()->buildAbsoluteSecureUrl($params, 'identity-accounts-callback');
+        return $baseUrl;
+        // return $baseUrl . '?service=' . $this->getServiceName();
     }
 
     abstract public function authorize();
@@ -148,6 +149,11 @@ abstract class Ld_Services_Base
             }
         }
         return $result;
+    }
+
+    public function getRawUser()
+    {
+        return $this->_getUser();
     }
 
 }

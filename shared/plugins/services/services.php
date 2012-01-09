@@ -62,18 +62,19 @@ class Ld_Plugin_Services
     public function getSupportedServices()
     {
         $supportedServices = array(
-            'google'     => 'Google',
             'facebook'   => 'Facebook',
             'twitter'    => 'Twitter',
-            'github'     => 'GitHub',
+            'google'     => 'Google',
             'linkedin'   => 'LinkedIn',
             'flickr'     => 'Flickr',
             'tumblr'     => 'Tumblr',
+            'github'     => 'GitHub',
             'identica'   => 'Identi.ca',
             'soundcloud' => 'SoundCloud',
             'foursquare' => 'Foursquare',
             'vimeo'      => 'Vimeo',
-            'readmill'   => 'Readmill'
+            'readmill'   => 'Readmill',
+            'angellist'  => 'AngelList'
         );
         return $supportedServices;
     }

@@ -29,23 +29,30 @@ abstract class Ld_Services_Contacts_Abstract
 
     public function getCache()
     {
-        if (empty($_cache)) {
-            $options = array('servers' => array(array('host' => 'natty', 'timeout' => 1, 'readTimeout' => 1)));
-            $this->_cache = new Rediska($options);
-        }
-        return $this->_cache;
+        // if (empty($_cache)) {
+        //     $options = array('servers' => array(array('host' => 'natty', 'timeout' => 1, 'readTimeout' => 1)));
+        //     $this->_cache = new Rediska($options);
+        // }
+        // return $this->_cache;
     }
 
     public function getValue($key)
     {
+        $this->getCache();
         $key = new Rediska_Key($key);
         return $key->getValue();
     }
 
     public function setValue($key, $value)
     {
+        $this->getCache();
         $key = new Rediska_Key($key);
-        return $key->setValue($value);
+        return $key->setAndExpire($value, 300 /* seconds */);
+    }
+
+    public function getRawUser()
+    {
+        return $this->getService()->getRawUser();
     }
 
 }

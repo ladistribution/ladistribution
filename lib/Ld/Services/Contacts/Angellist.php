@@ -1,17 +1,22 @@
 <?php
 
-class Ld_Services_Contacts_Soundcloud extends Ld_Services_Contacts_Abstract
+class Ld_Services_Contacts_Angellist extends Ld_Services_Contacts_Abstract
 {
 
     public function getContacts($type, $normalised = true)
     {
-        foreach (array('followings', 'followers') as $relationType) {
-          $$relationType = $result = $this->request("https://api.soundcloud.com/me/$relationType.json");
+        $raw_user = $this->getService()->getRawUser();
+        $user_id = $raw_user['id'];
+
+        foreach (array('following', 'followers') as $relationType) {
+          $result = $this->request("https://api.angel.co/1/users/$user_id/$relationType");
+          $$relationType = $result['users'];
         }
 
         // Merge
         $allContacts = array();
-        foreach (array('followings', 'followers') as $relationType) {
+        foreach (array('following', 'followers') as $relationType) {
+            // var_dump($$relationType);
             foreach ($$relationType as $contact) {
                 $id = $contact['id'];
                 if (empty($allContacts[$id])) {
@@ -19,11 +24,14 @@ class Ld_Services_Contacts_Soundcloud extends Ld_Services_Contacts_Abstract
                 }
                 if ($relationType == 'followers') {
                     $allContacts[$id]['follower'] = true;
-                } elseif ($relationType == 'followings') {
+                } elseif ($relationType == 'following') {
                     $allContacts[$id]['following'] = true;
                 }
             }
         }
+
+        // Me
+        // $allContacts[$user_id] = $raw_user;
 
         // Normalise
         $return = array();
@@ -40,6 +48,13 @@ class Ld_Services_Contacts_Soundcloud extends Ld_Services_Contacts_Abstract
         }
 
         return $return;
+    }
+
+    public function follow($id)
+    {
+        $params = array('type' => 'user', 'id' => $id);
+        $result = $this->request("https://api.angel.co/1/follows", 'POST', $params);
+        // update cache ...
     }
 
 }
