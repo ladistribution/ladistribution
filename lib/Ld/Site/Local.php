@@ -154,18 +154,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
         }
 
         // Init config when it doesn't exists
-        $config = $this->getModel('config')->getConfig();
-        if (empty($config)) {
-            $config = array();
-            foreach (array('host', 'path', 'name', 'owner') as $key) {
-                if (isset($this->$key)) {
-                    $config[$key] = $this->$key;
-                }
+        $config = array();
+        foreach (array('host', 'path', 'name', 'owner') as $key) {
+            if (isset($this->$key)) {
+                $config[$key] = $this->$key;
             }
-            $config['root_admin'] = 1;
-            $config['secret'] = Ld_Auth::generatePhrase();
-            $this->getModel('config')->setConfig($config);
         }
+        $config['root_admin'] = 1;
+        $config['secret'] = Ld_Auth::generatePhrase();
+        $this->setConfig($config);
     }
 
     protected function _checkRepositories()
@@ -557,7 +554,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
           $this->getModel('instances')->addInstance($params);
 
           // Return object (not array)
-          return $this->getInstance($params['path']);
+          if ($params['type'] == 'application') {
+              return $this->getInstance($params['path']);
+          }
     }
 
     public function checkDependencies($package)
