@@ -226,6 +226,7 @@ function ld_admin_bar_menu_after($wp_admin_bar)
     $wp_admin_bar->remove_menu('site-name');
     $wp_admin_bar->remove_menu('my-account');
     $wp_admin_bar->remove_menu('search');
+    $wp_admin_bar->remove_menu('updates');
 }
 
 function ld_admin_bar_after()
