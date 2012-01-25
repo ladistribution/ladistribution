@@ -32,6 +32,21 @@ class Ld_Services_Twitter extends Ld_Services_Oauth1
         return $this->_normaliseUser($tUser);
     }
 
+    public function getLoginUrl($redirect_uri = null)
+    {
+        $config = $this->_getConfig();
+        if ($redirect_uri) {
+            $config['callbackUrl'] = $redirect_uri;
+        }
+        $this->_consumer = $consumer = new Zend_Oauth_Consumer($config);
+
+        $token = $consumer->getRequestToken();
+        $session = $this->getSession();
+        $session->token = serialize($token);
+
+        return $consumer->getRedirectUrl();
+    }
+
     public function _normaliseUser($tUser = array())
     {
         $user = array(

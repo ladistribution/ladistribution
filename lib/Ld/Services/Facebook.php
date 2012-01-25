@@ -119,6 +119,7 @@ class Ld_Services_Facebook extends Ld_Services_Base
     public function _normaliseUser($fbUser = array())
     {
         $user = array(
+            'id' => $fbUser['id'],
             'guid' => 'facebook:' . $fbUser['id'],
             'url' => $fbUser['link'],
             'fullname' => $fbUser['name'],

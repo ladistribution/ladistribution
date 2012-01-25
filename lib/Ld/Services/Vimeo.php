@@ -48,4 +48,18 @@ class Ld_Services_Vimeo extends Ld_Services_Oauth1
         return $httpClient;
     }
 
+    public function authorize()
+    {
+        $consumer = $this->_getConsumer();
+        $token = $consumer->getRequestToken();
+
+        $session = $this->getSession();
+        $session->token = serialize($token);
+
+        $redirectUrl = $consumer->getRedirectUrl();
+        $redirectUrl .= '&permission=write';
+        header('Location: ' . $redirectUrl);
+        exit(1);
+    }
+
 }

@@ -113,7 +113,8 @@ abstract class Ld_Services_Base
 
     public function _makeRequest($url, $method = 'GET', $params = array())
     {
-        echo "_makeRequest:$method:$url<br>\n";
+        // echo "_makeRequest:$method:$url<br>\n";
+
         $httpClient = $this->_getHttpClient();
         $httpClient->setUri($url);
         if (!empty($params)) {
@@ -128,27 +129,53 @@ abstract class Ld_Services_Base
         $result = Zend_Json::decode($body);
         if (isset($result['error'])) {
             $error = $result['error'];
-            $error_description = $result['error_description'];
-            throw new Exception("$error_description ($error)");
+            if (isset($result['error_description'])) {
+                $error_description = $result['error_description'];
+                throw new Exception("$error_description ($error)");
+            } else {
+                throw new Exception("$error");
+            }
         }
+
         return $result;
     }
 
-    public function request($url, $method = 'GET', $params = array())
+    public function request($url, $method = 'GET', $params = array(), $fromCache = null)
     {
-        // echo "request:GET:$url<br>\n";
+        // echo "request:$method:$url<br>\n";
+
+        if ($fromCache === null) {
+            $fromCache = $method == 'GET' ? true : false;
+        }
+
         if (Zend_Registry::isRegistered('cache')) {
             $cache = Zend_Registry::get('cache');
             $cacheKey = $this->_getCacheKey($url, $method, $params);
+        }
+
+        if (isset($cache) && $fromCache) {
             $result = $cache->load($cacheKey);
         }
+
         if (empty($result)) {
             $result = $this->_makeRequest($url, $method, $params);
-            if ($cache) {
+            if (isset($cache)) {
                 $cache->save($result, $cacheKey);
             }
         }
+
         return $result;
+    }
+
+    public function cleanCache($url, $method = 'GET', $params = array())
+    {
+        if (Zend_Registry::isRegistered('cache')) {
+            $cache = Zend_Registry::get('cache');
+            $cacheKey = $this->_getCacheKey($url, $method, $params);
+        }
+        if (isset($cache)) {
+            $result = $cache->remove($cacheKey);
+        }
     }
 
     public function getRawUser()

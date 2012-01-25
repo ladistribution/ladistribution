@@ -20,6 +20,9 @@ class Ld_Services_Contacts_Identica extends Ld_Services_Contacts_Twitter
                     if ($relationType == 'followers') {
                         $contact['follower'] = true;
                     }
+                    // if ($relationType == 'friends') {
+                    //     $contact['following'] = true;
+                    // }
                     $allContacts[$id] = $contact;
                 }
             }
@@ -31,6 +34,7 @@ class Ld_Services_Contacts_Identica extends Ld_Services_Contacts_Twitter
                 $nContact = $this->getService()->_normaliseUser($contact);
                 $nContact['follower'] = isset($contact['follower']) ? $contact['follower'] : false;
                 $nContact['following'] = isset($contact['following']) ? $contact['following'] : false;
+                $nContact['mutual'] = $nContact['following'] && $nContact['follower'];
                 $return[] = $nContact;
             } else {
                 $return[] = $contact;
@@ -38,6 +42,13 @@ class Ld_Services_Contacts_Identica extends Ld_Services_Contacts_Twitter
         }
 
         return $return;
+    }
+
+    public function follow($id, $username)
+    {
+        parent::follow($id, $username);
+        // clean cache
+        $this->getService()->cleanCache($baseApiUrl . '/statuses/friends.json');
     }
 
 }

@@ -1,3 +1,22 @@
+<?php
+
+$sharedUrl = $this->site->getRelativeUrl('shared');
+
+function getIconUrl($service, $size = '32')
+{
+    if ($service == 'angellist') {
+        return '/services/' . $service . '-' . $size . 'px.png';
+    } elseif ($service == 'identica' || $service == 'facebook' || $service == 'twitter') {
+        return '/services/paulrobertlloyd-social-media-icons/' . $service . '-' . $size . 'x' . $size .'.png';
+    } elseif ($service == 'soundcloud' || $service == 'github') {
+        return '/services/icondock-social-media-icons/' . $size .'px/' . $service . '.png';
+    } else {
+        return '/services/icondock-social-media-icons/' . $size . 'px/' . $service . '.png';
+    }
+}
+
+?>
+
 <h2>
 <img class="avatar" width="24" height="24" src="<?php echo Ld_Ui::getAvatarUrl($this->targetUser, 24) ?>"/>
 <?php echo $this->escape( empty($this->targetUser['fullname']) ? $this->targetUser['username'] : $this->targetUser['fullname'] ) ?>
@@ -14,9 +33,18 @@ if ($identity) {
 
     <div class="ld-panel-content h6e-block <?php if (!$identity) echo 'no-tab' ?>">
 
-        <h3>Profile</h3>
+        <h3>Connected Accounts</h3>
 
+        <?php foreach ($this->services as $id => $service) : ?>
+        <?php if (isset($this->targetUser['identities'][$id])) : $identity = $this->user['identities'][$id]; ?>
+            <a href="<?php echo $identity['url'] ?>"><img class="icon" width="32" height="32" src="<?php
+                echo $sharedUrl . getIconUrl($id, 32) ?>" alt="<?php echo $service['name'] ?>"/></a>
+        <?php endif ?>
+        <?php endforeach ?>
+
+        <!--
         <p>To be completed.</p>
+        -->
 
         <!--
         <h4>General</h4>

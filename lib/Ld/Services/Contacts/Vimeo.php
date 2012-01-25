@@ -6,10 +6,10 @@ class Ld_Services_Contacts_Vimeo extends Ld_Services_Contacts_Abstract
     public function getContacts($list = null, $normalised = true)
     {
         $result = $this->request('http://vimeo.com/api/rest/v2', 'GET', array('method' => 'vimeo.contacts.getAll', 'per_page' => 50));
-        $friends = $result['contacts']['contact'];
+        $friends =  isset($result['contacts']['contact']) ? $result['contacts']['contact'] : array();
 
         $result = $this->request('http://vimeo.com/api/rest/v2', 'GET', array('method' => 'vimeo.contacts.getWhoAdded', 'per_page' => 50));
-        $followers = $result['contacts']['contact'];
+        $followers = isset($result['contacts']['contact']) ? $result['contacts']['contact'] : array();
 
         // Merge
         $allContacts = array();
@@ -21,7 +21,7 @@ class Ld_Services_Contacts_Vimeo extends Ld_Services_Contacts_Abstract
                 }
                 if ($relationType == 'followers') {
                     $allContacts[$id]['follower'] = true;
-                } elseif ($relationType == 'followings') {
+                } elseif ($relationType == 'friends') {
                     $allContacts[$id]['following'] = true;
                 }
             }
@@ -42,6 +42,14 @@ class Ld_Services_Contacts_Vimeo extends Ld_Services_Contacts_Abstract
         }
 
         return $contacts;
+    }
+
+    public function follow($id, $username)
+    {
+        // follow
+        $result = $this->request('http://vimeo.com/api/rest/v2', 'GET', array('method' => 'vimeo.people.addContact', 'user_id' => $id), false);
+        // clean cache
+        $this->getService()->cleanCache('http://vimeo.com/api/rest/v2', 'GET', array('method' => 'vimeo.contacts.getAll', 'per_page' => 50));
     }
 
 }

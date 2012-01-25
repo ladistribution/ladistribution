@@ -16,7 +16,8 @@ class Ld_Services_Contacts_Linkedin extends Ld_Services_Contacts_Abstract
         foreach ($connections as $index => $connection) {
             if ($normalised) {
                 $contact = $this->getService()->_normaliseUser($connection);
-                $contact['mutual'] = true;
+                $contact['mutual'] = $contact['following'] = $contact['follower'] = true;
+                $contact['label'] = 'contact';
                 $contacts[] = $contact;
             } else {
                 $contacts[] = $connection;

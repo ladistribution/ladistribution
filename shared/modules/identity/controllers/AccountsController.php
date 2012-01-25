@@ -13,29 +13,15 @@ class Identity_AccountsController extends Identity_BaseController
 
         $this->view->user = $this->targetUser;
 
-        $this->view->identities = $this->targetUser['identities'];
+        $this->view->identities = isset($this->targetUser['identities']) ? $this->targetUser['identities'] : array();
 
-        $services = array();
-        $services = Ld_Plugin::applyFilters('Identity:services', $services);
-
-        $this->view->services = $services;
+        $this->view->services = $services = $this->_getServices();
 
         $this->view->otherIdentities = array();
-        foreach ($this->targetUser['identities'] as $id => $identity) {
+        foreach ($this->view->identities as $id => $identity) {
             if (!isset($services[$id])) {
                 $this->view->otherIdentities[$id] = $identity;
             }
-        }
-    }
-
-    protected function _getService($service)
-    {
-        switch ($service) {
-            default:
-                $classFile = 'Ld/Services/' . ucfirst($service) . '.php';
-                $className = 'Ld_Services_' . ucfirst($service);
-                require_once $classFile;
-                return new $className();
         }
     }
 
@@ -48,6 +34,18 @@ class Identity_AccountsController extends Identity_BaseController
         $service = $this->_getParam('service');
 
         $user = Ld_Auth::getUser();
+
+        // store referer, if passed
+        $session = new Zend_Session_Namespace("Ld_Identity_Connect");
+        if ($this->_hasParam('ref')) {
+            $referer = base64_decode($this->_getParam('ref'));
+            $pu = parse_url($referer);
+            if ($pu['host'] == $this->getSite()->getHost() || $pu['host'] == $_SERVER['HTTP_HOST']) {
+                $session->referer = $referer;
+            }
+        } else {
+            unset($session->referer);
+        }
 
         $consumer = $this->_getService($service);
         $consumer->authorize();
@@ -112,14 +110,15 @@ class Identity_AccountsController extends Identity_BaseController
         $identity['confirmed'] = true;
         $this->_addIdentity($identity, $service);
 
-        if (empty($_SESSION['redirect_url'])) {
-            $user = $this->currentUser;
-            $url = $this->view->url(array('module' => 'identity', 'controller' => 'accounts'), 'identity-accounts', false);
+        $session = new Zend_Session_Namespace("Ld_Identity_Connect");
+        if (isset($session->referer)) {
+            $redirectUrl = $session->referer;
+            unset($session->referer);
         } else {
-            $url = $_SESSION['redirect_url'];
-            unset($_SESSION['redirect_url']);
+            $redirectUrl = $this->view->url(array('module' => 'identity', 'controller' => 'accounts'), 'identity-accounts', false);
         }
-        $this->redirectTo($url);
+
+        $this->redirectTo($redirectUrl);
     }
 
     public function addAction()

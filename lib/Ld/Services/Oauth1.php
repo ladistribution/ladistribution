@@ -46,11 +46,11 @@ abstract class Ld_Services_Oauth1 extends Ld_Services_Base
 
     public function _getHttpClient()
     {
-        if (empty($this->_httpClient)) {
+        // if (empty($this->_httpClient)) {
             $token = $this->_getAccessToken();
             $config = $this->_getConfig();
             $this->_httpClient = $token->getHttpClient($config);
-        }
+        // }
         return $this->_httpClient;
     }
 

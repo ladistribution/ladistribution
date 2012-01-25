@@ -13,6 +13,7 @@ class Ld_Services_Contacts_Flickr extends Ld_Services_Contacts_Abstract
             if ($normalised) {
                 $contacts[] = $this->normaliseUser($fContact);
             } else {
+                $contact['following'] = true;
                 $contacts[] = $fContact;
             }
         }
@@ -38,8 +39,19 @@ class Ld_Services_Contacts_Flickr extends Ld_Services_Contacts_Abstract
         if (isset($fContact['location'])) {
             $user['location'] = $fContact['location'];
         }
+
+        if ($fContact['family']) {
+            $user['label'] = 'Family';
+        } else if ($fContact['friend']) {
+            $user['label'] = 'Friend';
+        } else {
+            $user['label'] = 'Contact';
+        }
+
         $user['_friend'] = $fContact['friend'];
         $user['_family'] = $fContact['family'];
+
+        $user['following'] = true;
         return $user;
     }
 

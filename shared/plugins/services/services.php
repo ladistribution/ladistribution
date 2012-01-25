@@ -10,7 +10,7 @@ class Ld_Plugin_Services
             'url' => 'http://ladistribution.net/wiki/plugins/#services',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.6.30',
+            'version' => '0.6.33',
             'description' => Ld_Translate::notranslate('No description yet.'),
             'license' => 'MIT / GPL'
         );
@@ -19,8 +19,10 @@ class Ld_Plugin_Services
     public function load()
     {
         Ld_Plugin::addFilter('Identity:services', array($this, 'services'));
-        // Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:callback', array($this, 'callback'), 10, 2);
-        // Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:login', array($this, 'login'), 10, 2);
+        Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:callback', array($this, 'callback'), 10, 2);
+        Ld_Plugin::addFilter('Ld_Controller_Action_Helper_Auth:login', array($this, 'loginHelper'), 10, 2);
+        Ld_Plugin::addAction('Ld_Auth_Login::input', array($this, 'loginForm'), 10, 1);
+        Ld_Plugin::addAction('Ld_Auth_Controller:login', array($this, 'loginController'), 10, 1);
     }
 
     public function getSite()
@@ -28,7 +30,7 @@ class Ld_Plugin_Services
         return isset($this->_site) ? $this->_site : $this->_site = Zend_Registry::get('site');
     }
 
-    public function login($result = null, $request = null)
+    public function loginHelper($result = null, $request = null)
     {
         $params = $request->getParams();
         if (isset($params['ld_auth_username'])) {
@@ -47,15 +49,35 @@ class Ld_Plugin_Services
         }
     }
 
-    public function callback($result = null, $request = null)
+    public function loginController($request = null)
     {
         $params = $request->getParams();
-        if (isset($params['code']) && isset($params['state'])) {
-            $auth = Zend_Auth::getInstance();
-            $adapter = new Ld_Services_Auth_Adapter_Facebook();
-            if ($adapter->isFacebookCallback()) {
-                return $auth->authenticate($adapter);
+        // Redirect ...
+        if (isset($params['ld_auth_service'])) {
+            if ($params['ld_auth_service'] == 'facebook') {
+                $loginUrl = $this->getSite()->getAdmin()->getLoginUrl();
+                $service = new Ld_Services_Facebook();
+                $redirectUrl = $service->getLoginUrl($loginUrl);
+                header("Location:" . $redirectUrl);
+                exit;
             }
+        }
+    }
+
+    public function callback($result = null, $request = null)
+    {
+        // whitelist certain pages?
+        // if (strpos($_SERVER['REQUEST_URI'], '/auth/login') === false) {
+        //     return $result;
+        // }
+        // or better blacklist?
+        if (strpos($_SERVER['REQUEST_URI'], '/identity/accounts') !== false) {
+            return $result;
+        }
+        $auth = Zend_Auth::getInstance();
+        $facebook = new Ld_Services_Auth_Adapter_Facebook();
+        if ($facebook->isCallback()) {
+            return $auth->authenticate($facebook);
         }
     }
 
@@ -81,9 +103,9 @@ class Ld_Plugin_Services
 
     public function services($services = array())
     {
-        $services['ladistribution'] = array(
-            'id' => 'ladistribution', 'name' => 'La Distribution (.net)'
-        );
+        // $services['ladistribution'] = array(
+        //     'id' => 'ladistribution', 'name' => 'La Distribution (.net)'
+        // );
         $supportedServices = $this->getSupportedServices();
         foreach ($supportedServices as $service => $name) {
             $key = 'sservices_' . $service . '_enabled';
@@ -92,6 +114,22 @@ class Ld_Plugin_Services
             }
         }
         return $services;
+    }
+
+    public function loginForm($view = null)
+    {
+        $baseUrl = $this->getSite()->getUrl('shared') . '/plugins/services';
+        $view->headLink()->appendStylesheet($baseUrl . '/auth-buttons/auth-buttons.css', 'screen');
+        $user = isset($view->ld_auth_user) ? $view->ld_auth_user : null;
+        if (empty($user)) {
+            echo '<div id="ld-login-services-buttons">';
+            $loginUrl = $this->getSite()->getAdmin()->getLoginUrl();
+            if ($this->getSite()->getConfig('sservices_facebook_enabled', false)) {
+                echo '<a style="display:block;margin:10px auto 20px" class="btn-auth btn-facebook" href="' .
+                    $loginUrl . '?ld_auth_service=facebook">with <b>Facebook</b></a>';
+            }
+            echo '</div>';
+        }
     }
 
     public function preferences()

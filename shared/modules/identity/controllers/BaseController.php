@@ -57,4 +57,35 @@ class Identity_BaseController extends Ld_Controller_Action
         }
     }
 
+    protected function _getServices()
+    {
+        $services = array();
+        $services = Ld_Plugin::applyFilters('Identity:services', $services);
+        return $services;
+    }
+
+    protected function _getService($service)
+    {
+        $services = $this->_getServices();
+
+        $service = strtolower($service);
+        if (!isset($services[$service])) {
+            throw new Exception("Unknown service ($service).");
+        }
+
+        switch ($service) {
+            default:
+                $className = 'Ld_Services_' . ucfirst($service);
+                if (class_exists($className, false) == false) {
+                    $filename = $this->getSite()->getDirectory('lib') . '/Ld/Services/' . ucfirst($service) . '.php';
+                    if (Ld_Files::exists($filename)) {
+                        require_once $filename;
+                    }
+                }
+                if (class_exists($className)) {
+                    return new $className();
+                }
+        }
+    }
+
 }

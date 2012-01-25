@@ -20,9 +20,9 @@ abstract class Ld_Services_Contacts_Abstract
         $this->_service = $service;
     }
 
-    public function request($url, $method = 'GET', $params = array())
+    public function request($url, $method = 'GET', $params = array(), $fromCache = null)
     {
-        return $this->getService()->request($url, $method, $params);
+        return $this->getService()->request($url, $method, $params, $fromCache);
     }
 
     protected $_cache;
@@ -43,11 +43,22 @@ abstract class Ld_Services_Contacts_Abstract
         return $key->getValue();
     }
 
-    public function setValue($key, $value)
+    public function setValue($key, $value, $expire = false)
     {
         $this->getCache();
         $key = new Rediska_Key($key);
-        return $key->setAndExpire($value, 300 /* seconds */);
+        if ($expire) {
+            return $key->setAndExpire($value, $expire /* seconds */);
+        } else {
+            return $key->setValue($value);
+        }
+    }
+
+    public function deleteKey($key)
+    {
+        $this->getCache();
+        $key = new Rediska_Key($key);
+        $key->delete();
     }
 
     public function getRawUser()

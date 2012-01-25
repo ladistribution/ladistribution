@@ -3,6 +3,12 @@
 class Ld_Services_Contacts_Twitter extends Ld_Services_Contacts_Abstract
 {
 
+    function getBaseCacheId()
+    {
+        $service = $this->getService();
+        return $service->getServiceName();
+    }
+
     function getScreenName()
     {
         $tUser = $this->getService()->_getUser();
@@ -13,17 +19,16 @@ class Ld_Services_Contacts_Twitter extends Ld_Services_Contacts_Abstract
     {
         $user = $this->getRawUser();
         $userId = $user['id'];
-        $screenName = $user['screen_name'];
         // From Cache
-        $cacheKey = "twitter-$userId-$relationType";
+        $cacheKey = $this->getBaseCacheId() . "-$userId-$relationType";
         if ($value = $this->getValue($cacheKey)) {
             return $value;
         }
         // Fallback
-        $params = array('cursor' => '-1', 'screen_name' => $screenName);
+        $params = array('cursor' => '-1', 'user_id' => $userId);
         $result = $this->request($this->getService()->getBaseApiUrl() . '/' . $relationType . '/ids.json', 'GET', $params);
         $ids = isset($result['ids']) ? $result['ids'] : $result;
-        $this->setValue($cacheKey, $ids);
+        $this->setValue($cacheKey, $ids, 300); /* should be less than feed cache */
         return $ids;
     }
 
@@ -39,7 +44,7 @@ class Ld_Services_Contacts_Twitter extends Ld_Services_Contacts_Abstract
         foreach (array('followers', 'friends') as $relationType) {
           $ids = $$relationType = $this->getIds($relationType);
           foreach ($ids as $id) {
-            if ($value = $this->getValue("twitter-$id")) {
+            if ($value = $this->getValue($this->getBaseCacheId() . "-$id")) {
               $users[$id] = $value;
             } else {
               $lookup[] = $id;
@@ -98,12 +103,20 @@ class Ld_Services_Contacts_Twitter extends Ld_Services_Contacts_Abstract
         return $return;
     }
 
-    function follow($id)
+    function follow($id, $username)
     {
+        // user infos
+        $user = $this->getRawUser();
+        $userId = $user['id'];
+        // follow request
         $baseApiUrl = $this->getService()->getBaseApiUrl();
         $params = array('user_id' => $id);
         $result = $this->request($baseApiUrl . '/friendships/create.json', 'POST', $params);
         // update cache ...
+        $cacheKey = $this->getBaseCacheId() . "-$userId-friends";
+        $ids = $this->getIds('friends');
+        $ids[] = $id;
+        $this->setValue($cacheKey, $ids);
     }
 
 }

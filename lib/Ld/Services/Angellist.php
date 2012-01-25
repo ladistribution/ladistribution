@@ -30,9 +30,14 @@ class Ld_Services_Angellist extends Ld_Services_Oauth2
             'guid' => 'angellist:' . $aUser['id'],
             'url' => $url,
             'username' => $username,
-            'fullname' => $aUser['name'],
-            'avatar_url' => $aUser['image'],
+            'fullname' => $aUser['name']
         );
+        if (isset($aUser['image'])) {
+            $user['avatar_url'] = $aUser['image'];
+        }
+        if (isset($aUser['thumb_url'])) {
+            $user['avatar_url'] = $aUser['thumb_url'];
+        }
         return $user;
     }
 

@@ -13,9 +13,13 @@ class Ld_Services_Contacts_Angellist extends Ld_Services_Contacts_Abstract
           $$relationType = $result['users'];
         }
 
+        // $result = $this->request("https://api.angel.co/1/users/$user_id/following?type=startup");
+        // $startups = $result['startups'];
+        $startups = array();
+
         // Merge
         $allContacts = array();
-        foreach (array('following', 'followers') as $relationType) {
+        foreach (array('following', 'followers', 'startups') as $relationType) {
             // var_dump($$relationType);
             foreach ($$relationType as $contact) {
                 $id = $contact['id'];
@@ -25,6 +29,8 @@ class Ld_Services_Contacts_Angellist extends Ld_Services_Contacts_Abstract
                 if ($relationType == 'followers') {
                     $allContacts[$id]['follower'] = true;
                 } elseif ($relationType == 'following') {
+                    $allContacts[$id]['following'] = true;
+                } elseif ($relationType == 'startups') {
                     $allContacts[$id]['following'] = true;
                 }
             }
@@ -50,11 +56,15 @@ class Ld_Services_Contacts_Angellist extends Ld_Services_Contacts_Abstract
         return $return;
     }
 
-    public function follow($id)
+    public function follow($id, $username)
     {
+        // follow
         $params = array('type' => 'user', 'id' => $id);
         $result = $this->request("https://api.angel.co/1/follows", 'POST', $params);
-        // update cache ...
+        // clean cache ...
+        $raw_user = $this->getService()->getRawUser();
+        $user_id = $raw_user['id'];
+        $this->getService()->cleanCache("https://api.angel.co/1/users/$user_id/following");
     }
 
 }

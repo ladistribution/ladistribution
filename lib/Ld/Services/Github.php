@@ -25,6 +25,7 @@ class Ld_Services_Github extends Ld_Services_Oauth2
     public function _normaliseUser($gUser = array())
     {
         $user = array(
+            'id' => $gUser['id'],
             'guid' => 'github:' . $gUser['id'],
             'url' => $gUser['html_url'],
             'username' => $gUser['login'],
@@ -37,6 +38,9 @@ class Ld_Services_Github extends Ld_Services_Oauth2
         }
         if (isset($gUser['email'])) {
             $user['email'] = $gUser['email'];
+        }
+        if (empty($user['avatar_url'])) {
+            $user['avatar_url'] = 'https://assets.github.com/images/gravatars/gravatar-140.png';
         }
         return $user;
     }

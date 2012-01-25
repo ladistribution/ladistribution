@@ -62,7 +62,8 @@ class Ld_Services_Contacts_Facebook extends Ld_Services_Contacts_Abstract
             if ($normalised) {
                 $contact = $this->getService()->_normaliseUser($friend);
                 $contact['top'] = in_array($friend['id'], $topFriendsIds);
-                $contact['mutual'] = true;
+                $contact['mutual'] = $contact['following'] = $contact['follower'] = true;
+                $contact['label'] = 'Friend';
                 $contacts[] = $contact;
             } else {
                 $contacts[] = $friend;

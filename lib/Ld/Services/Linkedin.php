@@ -41,6 +41,7 @@ class Ld_Services_Linkedin extends Ld_Services_Oauth1
     public function _normaliseUser($lUser = array())
     {
         $user = array(
+            'id' => $lUser['id'],
             'guid' => 'linkedin:' . $lUser['id'],
             'fullname' => $lUser['firstName'] . ' ' . $lUser['lastName']
         );
@@ -52,6 +53,8 @@ class Ld_Services_Linkedin extends Ld_Services_Oauth1
         }
         if (isset($lUser['pictureUrl'])) {
             $user['avatar_url'] = $lUser['pictureUrl'];
+        } else {
+            $user['avatar_url'] = 'http://static02.linkedin.com/scds/common/u/img/icon/icon_no_photo_40x40.png';
         }
         if (isset($lUser['location'])) {
             $user['location'] = $lUser['location']['name'];

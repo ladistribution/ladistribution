@@ -3,19 +3,37 @@
 class Ld_Services_Contacts_Github extends Ld_Services_Contacts_Abstract
 {
 
+    public function getLogins($relationType = 'followers')
+    {
+        $user = $this->getRawUser();
+        $userId = $user['id'];
+        // From Cache
+        $cacheKey = "github-$userId-$relationType";
+        if ($value = $this->getValue($cacheKey)) {
+            return $value;
+        }
+        // Fallback
+        $result = $this->getService()->request("https://api.github.com/user/$relationType");
+        $logins = array();
+        foreach ($result as $user) {
+            $logins[] = $user['login'];
+        }
+        $this->setValue($cacheKey, $logins, 300); /* should be less than feed cache */
+        return $logins;
+    }
+
     public function getContacts($type = 'all', $normalised = true)
     {
         $users = array();
         $lookup = array();
 
         foreach (array('followers', 'following') as $relationType) {
-           $$relationType = $this->getService()->request("https://api.github.com/user/$relationType");
-           foreach ($$relationType as $user) {
-             $id = $user['login'];
-             if ($value = $this->getValue("github-user-$id")) {
-               $users[$id] = $value;
+           $logins = $$relationType = $this->getLogins($relationType);
+           foreach ($logins as $login) {
+             if ($value = $this->getValue("github-$login")) {
+               $users[$login] = $value;
              } else {
-               $lookup[] = $id;
+               $lookup[] = $login;
              }
            }
         }
@@ -23,35 +41,26 @@ class Ld_Services_Contacts_Github extends Ld_Services_Contacts_Abstract
         $lookup = array_unique($lookup);
 
         if (!empty($lookup)) {
-            foreach ($lookup as $id) {
-                $user = $this->getService()->request("https://api.github.com/users/$id");
-                $this->setValue("github-user-$id", $user);
-                $users[$id] = $user;
+            foreach ($lookup as $login) {
+                $user = $this->getService()->request("https://api.github.com/users/$login");
+                $this->setValue("github-$login", $user);
+                $users[$login] = $user;
             }
-        }
-
-        $followers_ids = array();
-        foreach ($followers as $user) {
-            $followers_ids[] = $user['login'];
-        }
-        $following_ids = array();
-        foreach ($following as $user) {
-            $following_ids[] = $user['login'];
         }
 
         switch ($type) {
             case 'friends':
-                $ids = $following_ids; break;
+                $ids = $following; break;
             case 'followers':
-                $ids = $followers_ids; break;
+                $ids = $followers; break;
             case 'followers_not_friends':
-                $ids = array_diff($followers_ids, $following_ids); break;
+                $ids = array_diff($followers, $following); break;
             case 'friends_not_followers':
-                $ids = array_diff($following_ids, $followers_ids); break;
+                $ids = array_diff($following, $followers); break;
             case 'mutual_friends':
-                $ids = array_intersect($following_ids, $followers_ids); break;
+                $ids = array_intersect($following, $followers); break;
             default:
-                $ids = array_merge($following_ids, $followers_ids); break;
+                $ids = array_merge($following, $followers); break;
         }
 
         $ids = array_unique($ids);
@@ -60,8 +69,8 @@ class Ld_Services_Contacts_Github extends Ld_Services_Contacts_Abstract
         foreach ($ids as $id) {
             if ($normalised) {
                 $nUser = $this->getService()->_normaliseUser($users[$id]);
-                $nUser['following'] = in_array($id, $following_ids);
-                $nUser['follower'] = in_array($id, $followers_ids);
+                $nUser['following'] = in_array($id, $following);
+                $nUser['follower'] = in_array($id, $followers);
                 $nUser['mutual'] = $nUser['following'] && $nUser['follower'];
                 $return[] = $nUser;
             } else {
@@ -69,6 +78,18 @@ class Ld_Services_Contacts_Github extends Ld_Services_Contacts_Abstract
             }
         }
         return $return;
+    }
+
+    public function follow($id, $username)
+    {
+        $result = $this->request('https://api.github.com/user/following/' . $username, 'PUT');
+        // update cache ...
+        $user = $this->getRawUser();
+        $userId = $user['id'];
+        $cacheKey = "github-$userId-following";
+        $logins = $this->getLogins('following');
+        $logins[] = $username;
+        $this->setValue($cacheKey, $logins);
     }
 
 }

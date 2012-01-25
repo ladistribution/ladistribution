@@ -20,6 +20,7 @@ class Identity_IndexController extends Identity_BaseController
             }
         }
 
+        $this->view->services = $services = $this->_getServices();
     }
 
 }

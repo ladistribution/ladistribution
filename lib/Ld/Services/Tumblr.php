@@ -20,6 +20,8 @@ class Ld_Services_Tumblr extends Ld_Services_Oauth1
     public function getIdentity()
     {
         $tUser = $this->_getUser();
+        $user['id'] = $tUser['name'];
+        $user['guid'] = 'tumblr:' . $tUser['name'];
         $user['username'] = $tUser['name'];
         foreach ($tUser['blogs'] as $blog) {
             if (empty($user['url']) || $user['username'] == $blog['name'] || $blog['primary'] == true) {

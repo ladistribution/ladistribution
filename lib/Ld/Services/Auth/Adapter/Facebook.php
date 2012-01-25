@@ -36,6 +36,12 @@ class Ld_Services_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         $this->_callbackUrl = $url;
     }
 
+    public function isCallback()
+    {
+        $facebook = $this->getFacebook();
+        return $facebook->isCallback();
+    }
+
     public function authenticate()
     {
         $facebook = $this->getFacebook();

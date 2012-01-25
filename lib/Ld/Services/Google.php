@@ -176,6 +176,9 @@ class Ld_Services_Google extends Ld_Services_Base
                 }
             }
         }
+        if (empty($gUser['avatar_url'])) {
+            $gUser['avatar_url'] = 'http://www.gstatic.com/s2/profiles/images/silhouette32.png';
+        }
         return $gUser;
     }
 

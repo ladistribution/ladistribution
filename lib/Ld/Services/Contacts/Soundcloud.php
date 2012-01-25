@@ -42,4 +42,12 @@ class Ld_Services_Contacts_Soundcloud extends Ld_Services_Contacts_Abstract
         return $return;
     }
 
+    public function follow($id, $username)
+    {
+        // follow
+        $result = $this->request("https://api.soundcloud.com/me/followings/$id.json", 'PUT');
+        // clean cache
+        $this->getService()->cleanCache("https://api.soundcloud.com/me/followings.json");
+    }
+
 }
