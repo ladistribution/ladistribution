@@ -6,7 +6,7 @@ PACKAGE="$NAME.zip"
 echo "# Building $NAME package"
 
 echo "# Get source from $SOURCE with svn"
-svn export -r 248 $SOURCE $FOLDER --quiet
+svn export -r 260 $SOURCE $FOLDER --quiet
 
 echo "# Apply patches"
 patch -p0 -d $FOLDER < patches/empty-directory.diff
