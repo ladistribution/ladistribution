@@ -1,4 +1,4 @@
-VERSION="1.8.16"
+VERSION="1.8.17"
 FOLDER="js"
 NAME="jquery-ui"
 ZIP="$NAME-$VERSION.custom.zip"
