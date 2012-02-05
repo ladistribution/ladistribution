@@ -10,7 +10,7 @@ class Ld_Plugin_Mail
             'url' => 'http://ladistribution.net/wiki/plugins/#mail',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.5.82',
+            'version' => '0.6.33',
             'description' => Ld_Translate::translate('Allow email delivery configuration.'),
             'license' => 'MIT / GPL'
         );
@@ -71,6 +71,7 @@ class Ld_Plugin_Mail
 
     public function wordpress_phpmailer_init($phpmailer)
     {
+        $site = Zend_Registry::get('site');
         $server = $site->getConfig('mail_server', 'localhost');
         $username = $site->getConfig('mail_username', '');
         $password = $site->getConfig('mail_password', '');
