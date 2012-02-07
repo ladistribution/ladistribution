@@ -17,6 +17,9 @@ class Slotter_RepositoriesController extends Slotter_BaseController
 
         if ($this->_hasParam('id')) {
             $this->view->repository = $this->repository = $this->getSite()->getRepository( $this->_getParam('id') );
+            if (empty($this->repository)) {
+                throw new Exception('Unknown repository.');
+            }
         }
     }
 

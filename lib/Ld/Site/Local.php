@@ -1025,7 +1025,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function getRepository($repository)
     {
         if (is_string($repository)) {
-            $repository = $this->getModel('repositories')->get($repository);
+            $id = $repository;
+            $repository = $this->getModel('repositories')->get($id);
+            if (empty($repository)) {
+                $repository = $this->getModel('repositories')->getOneByKey('id', $id);
+            }
         }
         if (isset($repository['type'])) {
             $className = 'Ld_Repository_' . ucfirst(strtolower($repository['type']));
