@@ -381,7 +381,7 @@ class Slotter_UsersController extends Slotter_BaseController
 
     public function sendInvitationEmail($user)
     {
-        $activationUrl = $this->admin->buildUrl(array(
+        $activationUrl = $this->admin->buildAbsoluteSecureUrl(array(
             'module' => 'default', 'controller' => 'auth', 'action' => 'activate', 'token' => $user['token']));
 
         $text =
