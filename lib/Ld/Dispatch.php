@@ -99,6 +99,7 @@ class Ld_Dispatch
             if ($site->getConfig('root_admin') == 1) {
                 $modules = Ld_Files::getDirectories($site->getDirectory('shared') . '/modules');
                 $modules[] = 'auth';
+                $modules[] = '.well-known';
                 if (in_array($part, $modules)) {
                     return true;
                 }
