@@ -95,7 +95,7 @@ class Ld_Installer
     {
         if (isset($this->path)) {
             return $this->path;
-        } else if (isset($this->instance)) {
+        } elseif (isset($this->instance)) {
             return $this->instance->getPath();
         }
         throw new Exception("path is undefined.");
@@ -105,7 +105,7 @@ class Ld_Installer
     {
         if (isset($this->absolutePath)) {
             return $this->absolutePath;
-        } else if (isset($this->instance)) {
+        } elseif (isset($this->instance)) {
             return $this->instance->getAbsolutePath();
         }
         throw new Exception("absolutePath is undefined.");
@@ -590,53 +590,53 @@ class Ld_Installer
         return $this->defaultRole;
     }
 
-	// Service
+    // Service
 
-	public function getSecret()
-	{
-		$infos = $this->instance->getInfos();
-		if (empty($infos['secret'])) {
-			$infos['secret'] = Ld_Auth::generatePhrase(32);
-			$this->instance->setInfos(array('secret' => $infos['secret']))->save();
-		}
-		return $infos['secret'];
-	}
+    public function getSecret()
+    {
+        $infos = $this->instance->getInfos();
+        if (empty($infos['secret'])) {
+            $infos['secret'] = Ld_Auth::generatePhrase(32);
+            $this->instance->setInfos(array('secret' => $infos['secret']))->save();
+        }
+        return $infos['secret'];
+    }
 
-	public function getServiceUri($method)
-	{
-		return $this->getInstance()->getAbsoluteUrl("/ld-service.php?method=$method");
-	}
+    public function getServiceUri($method)
+    {
+        return $this->getInstance()->getAbsoluteUrl("/ld-service.php?method=$method");
+    }
 
-	public function serviceRequest($method, $params = array())
-	{
-		Ld_Files::log("Installer:serviceRequest", "$method");
-		if (empty($this->httpClient)) {
-			$this->httpClient = new Zend_Http_Client();
-			$this->httpClient->setConfig(array('timeout' => 10, 'useragent' => 'La Distribution Installer'));
-			if (isset($_COOKIE['ld-auth'])) {
-				$this->httpClient->setCookie('ld-auth', stripslashes($_COOKIE['ld-auth']));
-			}
-			$this->httpClient->setCookie('ld-secret', $this->getSecret());
-		}
+    public function serviceRequest($method, $params = array())
+    {
+        Ld_Files::log("Installer:serviceRequest", "$method");
+        if (empty($this->httpClient)) {
+            $this->httpClient = new Zend_Http_Client();
+            $this->httpClient->setConfig(array('timeout' => 10, 'useragent' => 'La Distribution Installer'));
+            if (isset($_COOKIE['ld-auth'])) {
+                $this->httpClient->setCookie('ld-auth', stripslashes($_COOKIE['ld-auth']));
+            }
+            $this->httpClient->setCookie('ld-secret', $this->getSecret());
+        }
 
-		$this->httpClient->setUri( $this->getServiceUri($method) );
-		if (!empty($params)) {
-			$this->httpClient->setRawData(Zend_Json::encode($params),' application/json');
-			$this->httpClient->setMethod('POST');
-		}
-		$response = $this->httpClient->request();
+        $this->httpClient->setUri( $this->getServiceUri($method) );
+        if (!empty($params)) {
+            $this->httpClient->setRawData(Zend_Json::encode($params), ' application/json');
+            $this->httpClient->setMethod('POST');
+        }
+        $response = $this->httpClient->request();
 
-		$body = $response->getBody();
-		if (empty($body)) {
-			return true;
-		}
-		try {
-			$result = Zend_Json::decode($body);
-			return $result;
-		} catch (Exception $e) {
-			echo htmlspecialchars('<response>' . $body . '</response>');
-		}
-	}
+        $body = $response->getBody();
+        if (empty($body)) {
+            return true;
+        }
+        try {
+            $result = Zend_Json::decode($body);
+            return $result;
+        } catch (Exception $e) {
+            echo htmlspecialchars('<response>' . $body . '</response>');
+        }
+    }
 
     // Legacy
     public function getDependencies() { return $this->getManifest()->getDependencies(); }

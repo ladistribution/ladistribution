@@ -267,7 +267,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             foreach ($param as $key => $value) {
                 $config[$key] = $value;
             }
-        } else if (is_string($param)) {
+        } elseif (is_string($param)) {
             $config[$param] = $value;
         }
         $this->getModel('config')->setConfig($config);
@@ -312,7 +312,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         $url = $this->getPath() . '/';
         if (isset($dir)) {
-             $url .= $this->directories[$dir];
+            $url .= $this->directories[$dir];
         }
         return $url;
     }
@@ -417,11 +417,11 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
         // by global path
         // TODO: check if it seems to be a global path. with (strpos($id, '/') !== false)
-        } else if (Ld_Files::exists($id) && Ld_Files::exists($id . '/dist')) {
+        } elseif (Ld_Files::exists($id) && Ld_Files::exists($id . '/dist')) {
             $dir = $id;
 
         // by local path
-        } else if (Ld_Files::exists($this->getDirectory() . '/' . $id) && Ld_Files::exists($this->getDirectory() . '/' . $id . '/dist')) {
+        } elseif (Ld_Files::exists($this->getDirectory() . '/' . $id) && Ld_Files::exists($this->getDirectory() . '/' . $id . '/dist')) {
             $dir = $this->getDirectory() . '/' . $id;
 
         }
@@ -470,7 +470,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $availableDbs = $this->getDatabases($neededDb);
             if (empty($availableDbs)) {
                 throw new Exception('No database available.');
-            } else if (count($availableDbs) == 1) {
+            } elseif (count($availableDbs) == 1) {
                 $keys = array_keys($availableDbs);
                 $preferences['db'] = $keys[0];
             } else {
@@ -516,56 +516,56 @@ class Ld_Site_Local extends Ld_Site_Abstract
 
     public function registerInstance($package, $preferences = array())
     {
-          $installer = $package->getInstaller();
+        $installer = $package->getInstaller();
 
-          $params = array(
-              'package'   => $package->getId(),
-              'type'      => $package->getType(),
-              'version'   => $package->getVersion()
-          );
+        $params = array(
+            'package'   => $package->getId(),
+            'type'      => $package->getType(),
+            'version'   => $package->getVersion()
+        );
 
-          if (isset($preferences['title'])) {
-              $params['name'] = $preferences['title'];
-          }
+        if (isset($preferences['title'])) {
+            $params['name'] = $preferences['title'];
+        }
 
-          if (isset($preferences['domain'])) {
-              $params['domain'] = $preferences['domain'];
-          }
+        if (isset($preferences['domain'])) {
+            $params['domain'] = $preferences['domain'];
+        }
 
-          if (isset($preferences['order'])) {
-              $params['order'] = $preferences['order'];
-          }
+        if (isset($preferences['order'])) {
+            $params['order'] = $preferences['order'];
+        }
 
-          if (isset($preferences['db'])) {
-              $params['db'] = $preferences['db'];
-              $params['db_prefix'] = $installer->getDbPrefix();
-          }
+        if (isset($preferences['db'])) {
+            $params['db'] = $preferences['db'];
+            $params['db_prefix'] = $installer->getDbPrefix();
+        }
 
-          // Only create an instance file for applications
-          if ($params['type'] == 'application') {
-              $params['path'] = $installer->getPath();
-              $instance = new Ld_Instance_Application();
-              $instance->setSite($this);
-              $instance->setPath($params['path']);
-              $instance->setInfos($params)->save();
-          }
+        // Only create an instance file for applications
+        if ($params['type'] == 'application') {
+            $params['path'] = $installer->getPath();
+            $instance = new Ld_Instance_Application();
+            $instance->setSite($this);
+            $instance->setPath($params['path']);
+            $instance->setInfos($params)->save();
+        }
 
-          // Filter params
-          $filterKeys = array('package', 'version', 'type', 'path', 'name', 'domain', 'order');
-          foreach ($params as $key => $value) {
-              if (in_array($key, $filterKeys)) {
-                  continue;
-              }
-              unset($params[$key]);
-          }
+        // Filter params
+        $filterKeys = array('package', 'version', 'type', 'path', 'name', 'domain', 'order');
+        foreach ($params as $key => $value) {
+            if (in_array($key, $filterKeys)) {
+                continue;
+            }
+            unset($params[$key]);
+        }
 
-          // Add to Model
-          $this->getModel('instances')->addInstance($params);
+        // Add to Model
+        $this->getModel('instances')->addInstance($params);
 
-          // Return object (not array)
-          if ($params['type'] == 'application') {
-              return $this->getInstance($params['path']);
-          }
+        // Return object (not array)
+        if ($params['type'] == 'application') {
+            return $this->getInstance($params['path']);
+        }
     }
 
     public function checkDependencies($package)
@@ -595,9 +595,9 @@ class Ld_Site_Local extends Ld_Site_Abstract
         if (is_string($params) && Ld_Files::exists($this->getDirectory() . '/' . $params)) { // for applications (by path)
             $instance = $this->getInstance($params);
             $packageId = $instance->getPackageId();
-        } else if (is_string($params)) { // for libraries
+        } elseif (is_string($params)) { // for libraries
             $packageId = $params;
-        } else if (is_object($params)) { // for applications (by object)
+        } elseif (is_object($params)) { // for applications (by object)
             $instance = $params;
             $packageId = $instance->getPackageId();
         }
@@ -789,7 +789,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
             $availableDbs = $this->getDatabases($neededDb);
             if (empty($availableDbs)) {
                 throw new Exception('No database available.');
-            } else if (count($availableDbs) == 1) {
+            } elseif (count($availableDbs) == 1) {
                 $keys = array_keys($availableDbs);
                 $id = $keys[0];
                 $preference = array('name' => 'db', 'type' => 'hidden', 'defaultValue' => $id);
@@ -849,7 +849,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     public function addDatabase($params)
     {
         if (!$this->testDatabase($params)) {
-             throw new Exception("Can't connect to database with given params.");
+            throw new Exception("Can't connect to database with given params.");
         }
         $this->getModel('databases')->add($params);
     }
@@ -891,7 +891,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
         $database = $this->getModel('databases')->get($id);
         $database = array_merge($database, $params);
         if (!$this->testDatabase($database)) {
-             throw new Exception("Can't connect to database with given params.");
+            throw new Exception("Can't connect to database with given params.");
         }
         $this->getModel('databases')->update($id, $database);
     }
@@ -915,7 +915,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
                     return false;
                 }
                 $con->query("DROP DATABASE $dbName");
-            } else if ($dbParameters['type'] == 'mysql') {
+            } elseif ($dbParameters['type'] == 'mysql') {
                 $result = $con->query('SHOW TABLES');
                 if (!$result) {
                     return false;
@@ -1053,7 +1053,7 @@ class Ld_Site_Local extends Ld_Site_Abstract
     {
         if ($config['type'] == 'remote') {
             if (!Zend_Uri_Http::check($config['endpoint'])) {
-                 throw new Exception("Not a valid URL.");
+                throw new Exception("Not a valid URL.");
             }
         }
         try {

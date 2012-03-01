@@ -11,10 +11,6 @@
  * @version    $Id$
  */
 
-/**
- * @see Zend_Controller_Action
- */
-require_once 'Zend/Controller/Action.php';
 
 class Ld_Controller_Action extends Zend_Controller_Action
 {
@@ -73,8 +69,8 @@ class Ld_Controller_Action extends Zend_Controller_Action
             $path = $this->getSite()->getPath();
             $cookiePath = empty($path) ? '/' : $path;
             $locale = $_COOKIE['ld-lang'] = $this->_getParam('ld-lang');
-            setCookie('ld-lang', $locale, time() + 365 * 24 * 60 * 60, $cookiePath);
-        } else if ($this->getRequest()->getCookie('ld-lang')) {
+            setcookie('ld-lang', $locale, time() + 365 * 24 * 60 * 60, $cookiePath);
+        } elseif ($this->getRequest()->getCookie('ld-lang')) {
             $locale = $this->getRequest()->getCookie('ld-lang');
         }
         if (isset($locale) &&  Zend_Registry::isRegistered('Zend_Translate')) {
@@ -137,10 +133,10 @@ class Ld_Controller_Action extends Zend_Controller_Action
     function disallow()
     {
         if ($this->authenticated) {
-             $this->_forward('disallow', 'auth', 'default');
-         } else {
-             $this->_forward('login', 'auth', 'default');
-         }
+            $this->_forward('disallow', 'auth', 'default');
+        } else {
+            $this->_forward('login', 'auth', 'default');
+        }
     }
 
     function redirectTo($url)

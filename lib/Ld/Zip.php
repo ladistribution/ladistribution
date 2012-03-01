@@ -78,8 +78,7 @@ class Ld_Zip
 
 }
 
-if (class_exists('ZipArchive'))
-{
+if (class_exists('ZipArchive')) {
 
     class Ld_Zip_Archive extends ZipArchive
     {

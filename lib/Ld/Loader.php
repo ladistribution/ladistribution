@@ -26,13 +26,13 @@ class Ld_Loader
     {
         date_default_timezone_set('UTC');
 
-        defined('LD_TMP_DIR') OR define('LD_TMP_DIR', realpath( $dir ) . '/tmp');
+        defined('LD_TMP_DIR') or define('LD_TMP_DIR', realpath( $dir ) . '/tmp');
 
         defined('LD_LIB_DIR') or define('LD_LIB_DIR', realpath( $dir ) . '/lib' );
 
-        defined('LD_SERVER') OR define('LD_SERVER', 'http://ladistribution.net/');
+        defined('LD_SERVER') or define('LD_SERVER', 'http://ladistribution.net/');
 
-        defined('LD_RELEASE') OR define('LD_RELEASE', 'edge');
+        defined('LD_RELEASE') or define('LD_RELEASE', 'edge');
 
         set_include_path( LD_LIB_DIR . PATH_SEPARATOR . get_include_path() );
 
@@ -83,22 +83,22 @@ class Ld_Loader
         }
 
         // This constants should bet set after plugins are loaded
-        defined('LD_DEBUG') OR define('LD_DEBUG', false);
-        defined('LD_REWRITE') OR define('LD_REWRITE', true);
-        defined('LD_BREADCRUMBS') OR define('LD_BREADCRUMBS', false);
-        defined('LD_APPEARANCE') OR define('LD_APPEARANCE', true);
-        defined('LD_NEWS_FEED') OR define('LD_NEWS_FEED', false);
-        defined('LD_MONGO_BACKEND') OR define('LD_MONGO_BACKEND', false);
-        defined('LD_SERVICES') OR define('LD_SERVICES', false);
+        defined('LD_DEBUG') or define('LD_DEBUG', false);
+        defined('LD_REWRITE') or define('LD_REWRITE', true);
+        defined('LD_BREADCRUMBS') or define('LD_BREADCRUMBS', false);
+        defined('LD_APPEARANCE') or define('LD_APPEARANCE', true);
+        defined('LD_NEWS_FEED') or define('LD_NEWS_FEED', false);
+        defined('LD_MONGO_BACKEND') or define('LD_MONGO_BACKEND', false);
+        defined('LD_SERVICES') or define('LD_SERVICES', false);
 
-        defined('LD_SVN') OR define('LD_SVN', Ld_Files::exists($dir . '/.svn') || Ld_Files::exists($dir . '/.git'));
+        defined('LD_SVN') or define('LD_SVN', Ld_Files::exists($dir . '/.svn') || Ld_Files::exists($dir . '/.git'));
         if (!constant('LD_SVN')) {
-            defined('LD_COMPRESS_JS') OR define('LD_COMPRESS_JS', true);
-            defined('LD_COMPRESS_CSS') OR define('LD_COMPRESS_CSS', true);
+            defined('LD_COMPRESS_JS') or define('LD_COMPRESS_JS', true);
+            defined('LD_COMPRESS_CSS') or define('LD_COMPRESS_CSS', true);
         }
 
         // Legacy CSS Constant
-        defined('H6E_CSS') OR define('H6E_CSS', $site->getUrl('css'));
+        defined('H6E_CSS') or define('H6E_CSS', $site->getUrl('css'));
 
         Ld_Plugin::doAction("Site:loaded", $site);
 
@@ -221,8 +221,8 @@ class Ld_Loader
 
         if (Ld_Files::exists($cacheDirectory) && is_writable($cacheDirectory)) {
             $frontendOptions = array(
-               'lifetime' => self::$site->getConfig('cache_lifetime', 300), // cache lifetime of 5 minutes
-               'automatic_serialization' => true
+                'lifetime' => self::$site->getConfig('cache_lifetime', 300), // cache lifetime of 5 minutes
+                'automatic_serialization' => true
             );
             $backendOptions = array(
                 'cache_dir' => $cacheDirectory

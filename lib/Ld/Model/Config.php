@@ -42,16 +42,34 @@ class Ld_Model_Config extends Ld_Model_Collection
         }
     }
 
-    public function getConfig() { return $this->_getRessource('config'); }
+    public function getConfig()
+    {
+        return $this->_getRessource('config');
+    }
 
-    public function setConfig($config) { $this->_setRessource('config', $config); }
+    public function setConfig($config)
+    {
+        $this->_setRessource('config', $config);
+    }
 
-    public function getColors() { return $this->_getRessource('colors'); }
+    public function getColors()
+    {
+        return $this->_getRessource('colors');
+    }
 
-    public function setColors($colors) { $this->_setRessource('colors', $colors); }
+    public function setColors($colors)
+    {
+        $this->_setRessource('colors', $colors);
+    }
 
-    public function getLocales() { return $this->_getRessource('locales'); }
+    public function getLocales()
+    {
+        return $this->_getRessource('locales');
+    }
 
-    public function setLocales($locales) { $this->_setRessource('locales', $locales); }
+    public function setLocales($locales)
+    {
+        $this->_setRessource('locales', $locales);
+    }
 
 }

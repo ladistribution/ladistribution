@@ -68,20 +68,20 @@ abstract class Ld_Instance_Abstract
 
     public function setInfos($infos = array())
     {
-       $this->infos = array_merge($this->infos, $infos);
+        $this->infos = array_merge($this->infos, $infos);
 
-       if ($this->infos['package'] == 'weave') {
-           $this->infos['package'] = 'firefox-sync';
-       }
+        if ($this->infos['package'] == 'weave') {
+            $this->infos['package'] = 'firefox-sync';
+        }
 
-       // temporary
-       foreach (array('package', 'name', 'path', 'type', 'version', 'url', 'db', 'db_prefix', 'domain') as $key) {
-           if (isset($this->infos[$key])) {
-               $this->$key = $this->infos[$key];
-           }
-       }
+        // temporary
+        foreach (array('package', 'name', 'path', 'type', 'version', 'url', 'db', 'db_prefix', 'domain') as $key) {
+            if (isset($this->infos[$key])) {
+                $this->$key = $this->infos[$key];
+            }
+        }
 
-       return $this;
+        return $this;
     }
 
     public function setSite($site)
@@ -134,7 +134,7 @@ abstract class Ld_Instance_Abstract
                 $className = 'Ld_Installer';
             } else {
                 if (!class_exists($className, false)) {
-                    require_once($classFile);
+                    require_once $classFile;
                 }
             }
             $this->_installer = new $className(array('instance' => $this));

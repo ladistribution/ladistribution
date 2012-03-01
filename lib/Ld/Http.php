@@ -110,7 +110,7 @@ class Ld_Http
         if (!empty($params)) {
             if ($method == 'GET') {
                 $httpClient->setParameterGet($params);
-            } else if ($method == 'POST') {
+            } elseif ($method == 'POST') {
                 $httpClient->setParameterPost($params);
             }
         }

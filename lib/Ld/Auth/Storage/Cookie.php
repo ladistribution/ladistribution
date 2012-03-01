@@ -46,7 +46,7 @@ class Ld_Auth_Storage_Cookie implements Zend_Auth_Storage_Interface
      * (see native setcookie() documentation for more details)
      *
      * @param Ld_Cookie $cookieManager the secure cookie manager
-     * @param array|Zend_Config $config configuration
+     * @param array|Zend_Config $config        configuration
      */
     public function __construct($cookieManager, $config = array())
     {
@@ -58,7 +58,7 @@ class Ld_Auth_Storage_Cookie implements Zend_Auth_Storage_Interface
 
         $this->setOptions($config);
     }
-    
+
     public function setOptions($options)
     {
         if (is_array($options)) {
@@ -81,12 +81,12 @@ class Ld_Auth_Storage_Cookie implements Zend_Auth_Storage_Interface
     public function isEmpty()
     {
         if ($this->_cache) {
-            return (false);
+            return false;
         } elseif ($content = $this->_cookieManager->getCookieValue($this->_cookieName)) {
             $this->_cache = unserialize($content);
-            return (false);
+            return false;
         } else {
-            return (true);
+            return true;
         }
     }
 
@@ -98,22 +98,22 @@ class Ld_Auth_Storage_Cookie implements Zend_Auth_Storage_Interface
     public function read()
     {
         if ($this->_cache) {
-            return ($this->_cache);
+            return $this->_cache;
         } elseif ($this->_cookieManager->cookieExists($this->_cookieName)) {
             if ($content = $this->_cookieManager->getCookieValue($this->_cookieName)) {
                 $this->_cache = unserialize($content);
-                return ($this->_cache);
+                return $this->_cache;
             }
         } else {
-            return (null);
+            return null;
         }
     }
 
     /**
      * Defined by Zend_Auth_Storage_Interface
      *
-     * @param  mixed $contents
      * @return void
+     * @param mixed   $contents
      */
     public function write($contents)
     {

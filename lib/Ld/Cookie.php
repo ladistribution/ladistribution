@@ -38,8 +38,8 @@ class Ld_Cookie
      * Initialize cookie manager and mcrypt module.
      *
      *
-     * @param string $secret  server's secret key
-     * @param array $config
+     * @param string  $secret server's secret key
+     * @param array   $config
      */
     public function __construct($secret, $config = null)
     {
@@ -89,19 +89,20 @@ class Ld_Cookie
      */
     public function getHighConfidentiality()
     {
-        return ($this->_highConfidentiality);
+        return $this->_highConfidentiality;
     }
 
     /**
      * Set the high confidentiality mode
      * Enable or disable cookie data encryption
      *
-     * @param bool $enable  TRUE to enable, FALSE to disable
+     * @param bool    $enable TRUE to enable, FALSE to disable
+     * @return unknown
      */
     public function setHighConfidentiality($enable)
     {
         $this->_highConfidentiality = $enable;
-        return ($this);
+        return $this;
     }
 
     /**
@@ -111,7 +112,7 @@ class Ld_Cookie
      */
     public function getSSL()
     {
-        return ($this->_ssl);
+        return $this->_ssl;
     }
 
     /**
@@ -119,25 +120,26 @@ class Ld_Cookie
      * pro: protect against replay attack
      * con: cookie's lifetime is limited to SSL session's lifetime
      *
-     * @param bool $enable TRUE to enable, FALSE to disable
+     * @param bool    $enable TRUE to enable, FALSE to disable
+     * @return unknown
      */
     public function setSSL($enable)
     {
         $this->_ssl = $enable;
-        return ($this);
+        return $this;
     }
 
     /**
      * Send a secure cookie
      *
-     * @param string $name cookie name
-     * @param string $value cookie value
-     * @param string $username user name (or ID)
-     * @param integer $expire expiration time
-     * @param string $path cookie path
-     * @param string $domain cookie domain
-     * @param bool $secure when TRUE, send the cookie only on a secure connection
-     * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
+     * @param unknown $cookiename
+     * @param string  $value      cookie value
+     * @param string  $username   user name (or ID)
+     * @param integer $expire     (optional) expiration time
+     * @param string  $path       (optional) cookie path
+     * @param string  $domain     (optional) cookie domain
+     * @param bool    $secure     (optional) when TRUE, send the cookie only on a secure connection
+     * @param bool    $httponly   (optional) when TRUE the cookie will be made accessible only through the HTTP protocol
      */
     public function setCookie($cookiename, $value, $username, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
     {
@@ -148,11 +150,11 @@ class Ld_Cookie
     /**
      * Delete a cookie
      *
-     * @param string $name cookie name
-     * @param string $path cookie path
-     * @param string $domain cookie domain
-     * @param bool $secure when TRUE, send the cookie only on a secure connection
-     * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
+     * @param string  $name     cookie name
+     * @param string  $path     (optional) cookie path
+     * @param string  $domain   (optional) cookie domain
+     * @param bool    $secure   (optional) when TRUE, send the cookie only on a secure connection
+     * @param bool    $httponly (optional) when TRUE the cookie will be made accessible only through the HTTP protocol
      */
     public function deleteCookie($name, $path = '/', $domain = '', $secure = false, $httponly = null)
     {
@@ -171,8 +173,9 @@ class Ld_Cookie
      * Verify the integrity of cookie data and decrypt it.
      * If the cookie is invalid, it can be automatically destroyed (default behaviour)
      *
-     * @param string $cookiename cookie name
-     * @param bool $deleteIfInvalid destroy the cookie if invalid
+     * @param string  $cookiename      cookie name
+     * @param bool    $deleteIfInvalid (optional) destroy the cookie if invalid
+     * @return unknown
      */
     public function getCookieValue($cookiename, $deleteIfInvalid = true)
     {
@@ -192,26 +195,26 @@ class Ld_Cookie
                     $verifKey = hash_hmac('sha1', $cookieValues[0].$cookieValues[1].$data, $key);
                 }
                 if ($verifKey == $cookieValues[3]) {
-                    return ($data);
+                    return $data;
                 }
             }
         }
         if ($deleteIfInvalid) {
             $this->deleteCookie($cookiename);
         }
-        return (false);
+        return false;
     }
 
     /**
      * Send a classic (unsecure) cookie
      *
-     * @param string $name cookie name
-     * @param string $value cookie value
-     * @param integer $expire expiration time
-     * @param string $path cookie path
-     * @param string $domain cookie domain
-     * @param bool $secure when TRUE, send the cookie only on a secure connection
-     * @param bool $httponly when TRUE the cookie will be made accessible only through the HTTP protocol
+     * @param unknown $cookiename
+     * @param string  $value      cookie value
+     * @param integer $expire     (optional) expiration time
+     * @param string  $path       (optional) cookie path
+     * @param string  $domain     (optional) cookie domain
+     * @param bool    $secure     (optional) when TRUE, send the cookie only on a secure connection
+     * @param bool    $httponly   (optional) when TRUE the cookie will be made accessible only through the HTTP protocol
      */
     public function setClassicCookie($cookiename, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
     {
@@ -226,12 +229,12 @@ class Ld_Cookie
     /**
      * Verify if a cookie exists
      *
-     * @param string $cookiename
+     * @param string  $cookiename
      * @return bool TRUE if cookie exist, or FALSE if not
      */
     public function cookieExists($cookiename)
     {
-        return (isset($_COOKIE[$cookiename]));
+        return isset($_COOKIE[$cookiename]);
     }
 
     /**
@@ -244,12 +247,11 @@ class Ld_Cookie
      *  and sk is server's secret key
      *  (value)k,md5(expire) is the result an cryptographic function (ex: AES256) on "value" with key k and initialisation vector = md5(expire)
      *
-     * @param string $value unsecure value
-     * @param string $username user name (or ID)
-     * @param integer $expire expiration time
+     * @param string  $value    unsecure value
+     * @param string  $username user name (or ID)
+     * @param integer $expire   expiration time
      * @return string secured value
-    */
-
+     */
     protected function _secureCookieValue($value, $username, $expire)
     {
         $key = hash_hmac('sha1', $username.$expire, $this->_secret);
@@ -264,15 +266,15 @@ class Ld_Cookie
             $verifKey = hash_hmac('sha1', $username . $expire . $value, $key);
         }
         $result = array($username, $expire, $encryptedValue, $verifKey);
-        return(implode('|', $result));
+        return implode('|', $result);
     }
 
     /**
      * Encrypt a given data with a given key and a given initialisation vector
      *
-     * @param string $data data to crypt
-     * @param string $key secret key
-     * @param string $iv initialisation vector
+     * @param string  $data data to crypt
+     * @param string  $key  secret key
+     * @param string  $iv   initialisation vector
      * @return string encrypted data
      */
     protected function _encrypt($data, $key, $iv)
@@ -282,15 +284,15 @@ class Ld_Cookie
         mcrypt_generic_init($this->_cryptModule, $key, $iv);
         $res = mcrypt_generic($this->_cryptModule, $data);
         mcrypt_generic_deinit($this->_cryptModule);
-        return ($res);
+        return $res;
     }
 
     /**
      * Decrypt a given data with a given key and a given initialisation vector
      *
-     * @param string $data data to crypt
-     * @param string $key secret key
-     * @param string $iv initialisation vector
+     * @param string  $data data to crypt
+     * @param string  $key  secret key
+     * @param string  $iv   initialisation vector
      * @return string encrypted data
      */
     protected function _decrypt($data, $key, $iv)
@@ -301,7 +303,7 @@ class Ld_Cookie
         $decryptedData = mdecrypt_generic($this->_cryptModule, $data);
         $res = str_replace("\x0", '', $decryptedData);
         mcrypt_generic_deinit($this->_cryptModule);
-        return ($res);
+        return $res;
     }
 
     /**
@@ -309,7 +311,8 @@ class Ld_Cookie
      *
      * If given IV is too long for the selected mcrypt algorithm, it will be truncated
      *
-     * @param string $iv Initialization vector
+     * @param string  $iv Initialization vector
+     * @return unknown
      */
     protected function _validateIv($iv)
     {
@@ -317,7 +320,7 @@ class Ld_Cookie
         if (strlen($iv) > $ivSize) {
             $iv = substr($iv, 0, $ivSize);
         }
-        return ($iv);
+        return $iv;
     }
 
     /**
@@ -325,7 +328,8 @@ class Ld_Cookie
      *
      * If given key is too long for the selected mcrypt algorithm, it will be truncated
      *
-     * @param string $key key
+     * @param string  $key key
+     * @return unknown
      */
     protected function _validateKey($key)
     {
@@ -333,7 +337,7 @@ class Ld_Cookie
         if (strlen($key) > $keySize) {
             $key = substr($key, 0, $keySize);
         }
-        return ($key);
+        return $key;
     }
 
 }

@@ -157,7 +157,7 @@ class Ld_Package
                 $className = 'Ld_Installer';
             } else {
                 if (!class_exists($className, false)) {
-                    require_once($classFile);
+                    require_once $classFile;
                 }
             }
             $this->_installer = new $className(array('package' => $this));
@@ -218,11 +218,11 @@ class Ld_Package
     public function getRawIcon($type = 'ld-icon')
     {
         foreach ($this->getManifest()->getLinks() as $link) {
-              if ($link['rel'] == $type) {
-                  // this does the job but it's not ideal
-                  $filename = $this->getDir() . '/application' . $link['href'];
-                  return Ld_Files::get($filename);
-              }
+            if ($link['rel'] == $type) {
+                // this does the job but it's not ideal
+                $filename = $this->getDir() . '/application' . $link['href'];
+                return Ld_Files::get($filename);
+            }
         }
     }
 

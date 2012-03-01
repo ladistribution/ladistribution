@@ -201,7 +201,7 @@ class Ld_Ui
         if ($infos['type'] == 'application') {
             $instances = self::getSite()->getInstances($package, 'package');
             if (is_array($instances) && isset($instances[0])) {
-                 $infos = $instances[0]->getInfos();
+                $infos = $instances[0]->getInfos();
             }
         }
         return $infos;
@@ -347,7 +347,7 @@ class Ld_Ui
     {
         $rgb = '';
         for ($x=0; $x<3; $x++) {
-            $c = hexdec(substr($color,(2*$x),2)) - $diff;
+            $c = hexdec(substr($color, (2*$x), 2)) - $diff;
             $c = ($c < 0) ? 0 : ( ($c > 255) ? 'ff' : dechex($c) );
             $rgb .= (strlen($c) < 2) ? '0'.$c : $c;
         }

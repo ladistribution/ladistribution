@@ -27,7 +27,7 @@ class Ld_Manifest
         $alternateFilename = $dir . '/manifest.xml';
         if (Ld_Files::exists($filename)) {
             return self::parse($filename);
-        } else if (Ld_Files::exists($alternateFilename)) {
+        } elseif (Ld_Files::exists($alternateFilename)) {
             return self::parse($alternateFilename);
         } else {
             throw new Exception("manifest.xml doesn't exists or is unreadable in $dir");

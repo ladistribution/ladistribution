@@ -118,7 +118,7 @@ class Ld_Cli
 
         foreach ($configs as $config) {
             if (file_exists($config)) {
-                require_once($config);
+                require_once $config;
                 $this->_log('config', $config);
                 $site = Zend_Registry::get('site');
                 $this->_log('site', $site->getDirectory() . '/');

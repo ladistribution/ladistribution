@@ -43,7 +43,7 @@ class Ld_Model_Users extends Ld_Model_Collection
     {
         if ($key == 'id') {
             return $this->get($value);
-        } else if ($key == 'url') {
+        } elseif ($key == 'url') {
             return $this->getUserByUrl($value);
         }
 

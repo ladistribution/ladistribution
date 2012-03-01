@@ -243,7 +243,7 @@ class Ld_Repository_Local extends Ld_Repository_Abstract
         if (isset($type)) {
             if (in_array($type, $this->types['libraries'])) {
                 return "$type/$id";
-            } else if (in_array($type, $this->types['extensions'])) {
+            } elseif (in_array($type, $this->types['extensions'])) {
                 if (empty($extend)) {
                     throw new Exception("Can't determine directory without application parameter.");
                 }

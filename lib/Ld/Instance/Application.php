@@ -248,18 +248,18 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
     public function getAdminUrl()
     {
         foreach ($this->getLinks() as $link) {
-              if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
-                  return $link['href'];
-              }
+            if ($link['type'] == 'text/html' && $link['title'] == 'admin') {
+                return $link['href'];
+            }
         }
     }
 
     public function getIcon($type = 'ld-icon')
     {
         foreach ($this->getLinks() as $link) {
-              if ($link['rel'] == $type) {
-                  return $link['href'];
-              }
+            if ($link['rel'] == $type) {
+                return $link['href'];
+            }
         }
     }
 
@@ -391,7 +391,7 @@ class Ld_Instance_Application extends Ld_Instance_Abstract
     {
         foreach ($this->getExtensions() as $extension) {
             if ($id == $extension->getPath() || $id == $extension->getPackageId()) {
-                 return $extension;
+                return $extension;
             }
         }
         throw new Exception("Can't find extension with criteria '$id'.");

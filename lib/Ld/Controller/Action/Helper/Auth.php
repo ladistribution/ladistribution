@@ -12,11 +12,6 @@
  * @version    $Id$
  */
 
-/**
- * @see Zend_Controller_Action_Helper_Abstract
- */
-require_once 'Zend/Controller/Action/Helper/Abstract.php';
-
 class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstract
 {
 
@@ -36,7 +31,7 @@ class Ld_Controller_Action_Helper_Auth extends Ld_Controller_Action_Helper_Abstr
 
             return Ld_Auth::authenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 
-        } else if ($this->_getParam('ld_auth_action') == 'login') {
+        } elseif ($this->_getParam('ld_auth_action') == 'login') {
 
             // Parameter name in the login form
             if ($this->_hasParam('openid_identifier')) {

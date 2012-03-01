@@ -17,8 +17,8 @@ class Ld_Files
     /**
      * Include all files in a given directory
      *
-     * @param string $dir Directory name
      * @return null
+     * @param string  $dir Directory name
      */
     public static function includes($dir)
     {
@@ -33,8 +33,9 @@ class Ld_Files
      *
      * Original: http://fr.php.net/manual/en/function.unlink.php#87045
      *
-     * @param string $dir Directory name
-     * @param boolean $deleteRootToo Delete the directory itself or not
+     * @param string  $dir           Directory name
+     * @param boolean $deleteRootToo (optional) Delete the directory itself or not
+     * @param unknown $initial       (optional)
      * @return null
      */
     public static function rm($dir, $deleteRootToo = true, $initial = true)
@@ -79,8 +80,9 @@ class Ld_Files
     /**
      * Copy files recursively from $source to $target
      *
-     * @param string $source Directory name
-     * @param string $target Directory name
+     * @param string  $source  Directory name
+     * @param string  $target  Directory name
+     * @param unknown $initial (optional)
      * @return null
      */
     public static function copy($source, $target, $initial = true)
@@ -187,7 +189,7 @@ class Ld_Files
                 }
                 if (is_file($dir . '/' . $obj)) {
                     $files[] = $obj;
-                } else if (is_dir($dir . '/' . $obj)) {
+                } elseif (is_dir($dir . '/' . $obj)) {
                     $directories[] = $obj;
                 }
             }
@@ -379,8 +381,8 @@ class Ld_Files
 
     public static function sha1($filename)
     {
-         $content = self::get($filename);
-         return sha1($content);
+        $content = self::get($filename);
+        return sha1($content);
     }
 
     public static function check($filename, $size = null, $sha1 = null)

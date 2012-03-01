@@ -42,7 +42,7 @@ class Ld_Repository_Remote extends Ld_Repository_Abstract
         try {
             $json = Ld_Http::get($this->endpoint . '/packages.json');
             if ($json) {
-               return Zend_Json::decode($json);
+                return Zend_Json::decode($json);
             }
         } catch (Exception $e) {
             // output warning in debug mode ?

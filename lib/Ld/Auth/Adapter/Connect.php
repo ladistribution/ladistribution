@@ -195,7 +195,7 @@ class Ld_Auth_Adapter_Connect implements Zend_Auth_Adapter_Interface
                 unset($session->host);
                 unset($session->identity);
                 return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity['url']);
-            } else if (isset($identity['url_alias']) && in_array($session->identity['url'], $identity['url_alias'])) {
+            } elseif (isset($identity['url_alias']) && in_array($session->identity['url'], $identity['url_alias'])) {
                 unset($session->host);
                 unset($session->identity);
                 return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $session->identity['url']);

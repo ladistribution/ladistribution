@@ -20,7 +20,7 @@ class Ld_Auth
         $i = 0;
         $phrase = "";
         while ($i < $length) {
-            $phrase .= $chars{mt_rand(0,strlen($chars)-1)};
+            $phrase .= $chars{mt_rand(0, strlen($chars)-1)};
             $i++;
         }
         return $phrase;
@@ -149,7 +149,7 @@ class Ld_Auth
         $path = $site->getPath();
         $cookiePath = empty($path) ? '/' : $path;
         $_COOKIE['ld-identities'] = implode(";", $identities);
-        setCookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
+        setcookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
     }
 
     public static function forgetIdentity($identity)
@@ -163,7 +163,7 @@ class Ld_Auth
                 $path = $site->getPath();
                 $cookiePath = empty($path) ? '/' : $path;
                 $_COOKIE['ld-identities'] = implode(";", $identities);
-                setCookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
+                setcookie('ld-identities', implode(";", $identities), time() + 365 * 24 * 60 * 60, $cookiePath);
             }
         }
     }

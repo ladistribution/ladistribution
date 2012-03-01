@@ -32,7 +32,7 @@ class Ld_Cookie_Simple
             $value = html_entity_decode($value); // issue spotted with habari
             return $value;
         }
-        return (false);
+        return false;
     }
 
     public function setCookie($cookiename, $value, $username, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = null)
@@ -47,7 +47,7 @@ class Ld_Cookie_Simple
 
     public function cookieExists($cookiename)
     {
-        return (isset($_COOKIE[$cookiename]));
+        return isset($_COOKIE[$cookiename]);
     }
 
 }

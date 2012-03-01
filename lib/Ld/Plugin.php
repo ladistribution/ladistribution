@@ -69,7 +69,7 @@ class Ld_Plugin
         }
 
         do {
-            foreach( (array) current(self::$ld_filter[$tag]) as $the_ )
+            foreach ( (array) current(self::$ld_filter[$tag]) as $the_ )
                 if ( !is_null($the_['function']) ) {
                     $args[1] = $value;
                     $value = call_user_func_array($the_['function'], array_slice($args, 1, (int) $the_['accepted_args']));
@@ -86,7 +86,7 @@ class Ld_Plugin
         static $filter_id_count = 0;
         if ( is_string($function) ) {
             return $function;
-        } else if (is_object($function[0]) ) {
+        } elseif (is_object($function[0]) ) {
             // Object Class Calling
             if ( function_exists('spl_object_hash') ) {
                 return spl_object_hash($function[0]) . $function[1];
@@ -103,7 +103,7 @@ class Ld_Plugin
                 }
                 return $obj_idx;
             }
-        } else if ( is_string($function[0]) ) {
+        } elseif ( is_string($function[0]) ) {
             // Static Calling
             return $function[0].$function[1];
         }

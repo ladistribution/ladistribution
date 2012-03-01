@@ -18,7 +18,7 @@ class Ld_Utils
     {
         if (isset($a['order']) && isset($b['order'])) {
             return ($a['order'] < $b['order']) ? -1 : 1;
-        } else if (isset($a['order'])) {
+        } elseif (isset($a['order'])) {
             return -1;
         }
         return 1;
@@ -69,7 +69,7 @@ class Ld_Utils
     {
         if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) {
             return 'https';
-        } else if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
             return 'https';
         }
         return 'http';
