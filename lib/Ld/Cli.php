@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Cli
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2012 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -91,7 +91,9 @@ class Ld_Cli
 
     protected function _log($action, $message)
     {
-        $this->_write("# $action: $message");
+        if (defined('LD_DEBUG') && constant('LD_DEBUG')) {
+            $this->_write("# $action: $message");
+        }
     }
 
     public function getAction()
@@ -236,7 +238,7 @@ class Ld_Cli
     {
         $this->getSite();
         $this->_write("La Distribution '" . LD_RELEASE . "'");
-        $this->_write("Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)");
+        $this->_write("Copyright (c) 2009-2012 h6e.net / François Hodierne (http://h6e.net/)");
         $this->_write("Licensed under the GPL and MIT licences.");
     }
 

@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Site
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2012 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -270,6 +270,15 @@ class Ld_Site_Local extends Ld_Site_Abstract
         } else if (is_string($param)) {
             $config[$param] = $value;
         }
+        $this->getModel('config')->setConfig($config);
+        $this->_config = $config;
+        return $config;
+    }
+
+    public function deleteConfig($key = null)
+    {
+        $config = $this->getConfig();
+        unset($config[$key]);
         $this->getModel('config')->setConfig($config);
         $this->_config = $config;
         return $config;

@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Cli
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2012 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -97,14 +97,14 @@ class Ld_Cli_Package extends Ld_Cli
 
         $name = empty($this->_args[1]) ? 'default' : $this->_args[1];
 
+        $archive = empty($this->_args[2]) ? $package->getId() . '.zip' : $this->_args[2];
+
         $ladis = Ld_Files::getJson($path . '/.ladis');
         if (empty($ladis['repositories'][$name])) {
             throw new Exception("Repository not registered yet. Use 'ladis package add-remote' to register a repository.");
         }
 
         extract($ladis['repositories'][$name]);
-
-        $archive = $package->getId() . '.zip';
 
         $httpClient = new Zend_http_Client($url);
         $httpClient->setConfig(array('useragent' => 'ladis (La Distribution CLI)'));
@@ -121,6 +121,15 @@ class Ld_Cli_Package extends Ld_Cli
         $path = $this->_getPath();
 
         $filename = $path . '/dist/manifest.xml';
+        if (!Ld_Files::exists($filename)) {
+            $alternateFilename = $path . '/manifest.xml';
+            if (Ld_Files::exists($alternateFilename)) {
+                $filename = $alternateFilename;
+            } else {
+                throw new Exception("manifest.xml doesn't exists or is unreadable in $path");
+            }
+        }
+
         $manifest = new DOMDocument();
         $manifest->load($filename);
         foreach ($manifest->getElementsByTagName('version') as $element) {
@@ -148,7 +157,6 @@ class Ld_Cli_Package extends Ld_Cli
     public function addRemote()
     {
         $path = $this->_getPath();
-        $package = $this->_getPackage();
 
         if (empty($this->_args[1])) {
             $name = $this->_prompt('Remote name', 'default');
