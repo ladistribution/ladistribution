@@ -6,7 +6,7 @@
  * @category   Ld
  * @package    Ld_Loader
  * @author     François Hodierne <francois@hodierne.net>
- * @copyright  Copyright (c) 2009-2011 h6e.net / François Hodierne (http://h6e.net/)
+ * @copyright  Copyright (c) 2009-2012 h6e.net / François Hodierne (http://h6e.net/)
  * @license    Dual licensed under the MIT and GPL licenses.
  * @version    $Id$
  */
@@ -77,10 +77,6 @@ class Ld_Loader
         self::setupAuthentication();
         self::setupLocales();
         self::setupCache();
-
-        if (!empty($config['timezone'])) {
-            date_default_timezone_set($config['timezone']);
-        }
 
         // This constants should bet set after plugins are loaded
         defined('LD_DEBUG') or define('LD_DEBUG', false);
@@ -190,9 +186,12 @@ class Ld_Loader
 
     public static function setupLocales()
     {
-        $site = self::$site;
+        $timezone = self::$site->getConfig('timezone');
+        if (!empty($timezone)) {
+            date_default_timezone_set($timezone);
+        }
 
-        $dir = $site->getDirectory('shared') . '/locales';
+        $dir = self::$site->getDirectory('shared') . '/locales';
 
         $default_mo = $dir . '/ld/en_US/default.mo';
         if (Ld_Files::exists($default_mo)) {
