@@ -42,6 +42,27 @@
   background-color:#666;
 }
 
+/* New Default Black Theme
+-------------------------------------------------------------- */
+
+#ld-top-bar-inner, .ld-top-menu-inner, #ld-login-box {
+  color:#f1f1f1;
+  border-color:#3d3d3d;
+  background-color:#1f1f1f;
+}
+
+#ld-top-bar-inner .a a, #ld-top-bar-inner .b a {
+  border-color:#3d3d3d;
+}
+
+#ld-top-bar-inner a, .ld-top-menu-inner a, .ld-top-menu-inner h3, #ld-login-box .links a {
+  color:#f1f1f1;
+}
+
+#ld-login-box h2 {
+  color:#f1f1f1;
+}
+
 /* Data */
 
 table.h6e-data th, table.h6e-data td {
@@ -74,4 +95,3 @@ input.button {
 input.button:hover {
   background-color:rgba(0,0,0,0.8);
 }
-

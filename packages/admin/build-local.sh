@@ -11,7 +11,7 @@ rm -rf $FOLDER/dist
 rm -rf $FOLDER/openid
 
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist -x \*.svn/\* \*.preserve \*.DS_Store
+zip -qr $PACKAGE $FOLDER dist -x \*.svn/\* \*.preserve \*.DS_Store
 mv $PACKAGE ..
 
 # Clean

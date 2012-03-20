@@ -14,11 +14,8 @@ cp -R tmp/admin $FOLDER
 # Clean tmp
 rm -rf tmp
 
-# Remove some unwanted files (mac)
-find . -name '*.DS_Store' -type f -delete
-
 echo "# Packing $PACKAGE"
-zip -r $PACKAGE $FOLDER dist -q -x \*.svn/\* \*.preserve
+zip -qr $PACKAGE $FOLDER dist -x \*.svn/\* \*.preserve \*.DS_Store
 mv $PACKAGE ..
 
 # Clean

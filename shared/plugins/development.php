@@ -10,7 +10,7 @@ class Ld_Plugin_Development
             'url' => 'http://ladistribution.net/wiki/plugins/#development',
             'author' => 'h6e.net',
             'author_url' => 'http://h6e.net/',
-            'version' => '0.6.9',
+            'version' => '0.6.42',
             'description' => Ld_Translate::translate('Customise configuration, enable debugging, new features...'),
             'license' => 'MIT / GPL'
         );
@@ -47,6 +47,10 @@ class Ld_Plugin_Development
             'name' => 'nocompress_js_css', 'label' => ('Use non-compressed JS & CSS'),
             'type' => 'boolean', 'defaultValue' => '0'
         );
+      $preferences[] = array(
+          'name' => 'disable_appearance', 'label' => ('Disable Appearance'),
+          'type' => 'boolean', 'defaultValue' => '0'
+      );
         $preferences[] = array(
             'name' => 'active_multi_sites', 'label' => ('Activate Multi Sites'),
             'type' => 'boolean', 'defaultValue' => '0'
@@ -94,6 +98,10 @@ class Ld_Plugin_Development
         if ($nocompress_js_css) {
             defined('LD_COMPRESS_JS') OR define('LD_COMPRESS_JS', false);
             defined('LD_COMPRESS_CSS') OR define('LD_COMPRESS_CSS', false);
+        }
+        $disable_appearance = $site->getConfig('disable_appearance');
+        if ($disable_appearance) {
+            defined('LD_APPEARANCE') OR define('LD_APPEARANCE', false);
         }
         $active_multi_sites = $site->getConfig('active_multi_sites');
         if ($active_multi_sites) {
