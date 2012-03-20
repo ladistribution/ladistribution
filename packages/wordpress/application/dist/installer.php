@@ -242,6 +242,11 @@ class Ld_Installer_Wordpress extends Ld_Installer
 		return $this->serviceRequest('setCustomCss', $css);
 	}
 
+	public function getColorSchemes()
+	{
+		return array('base', 'bars', 'panels');
+	}
+
 	// Users and Roles
 
 	public $roles = array('subscriber', 'contributor', 'author', 'editor', 'administrator');

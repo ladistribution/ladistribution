@@ -179,6 +179,11 @@ class Ld_Installer_Bbpress extends Ld_Installer
 		return $this->serviceRequest('setCustomCss', $css);
 	}
 
+	public function getColorSchemes()
+	{
+		return array('bars');
+	}
+
 	// Roles
 
 	public $roles = array('member', 'moderator', 'administrator', 'keymaster');
