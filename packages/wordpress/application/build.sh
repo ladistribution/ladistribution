@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="3.3.2"
+VERSION="3.4"
 GZ="$NAME-$VERSION.tar.gz"
 SOURCE="http://wordpress.org/$GZ"
 FOLDER="application"
@@ -20,7 +20,6 @@ mv $NAME $FOLDER
 # Remove some useless (or not desired) files
 
 rm $FOLDER/wp-config-sample.php
-rm $FOLDER/wp-register.php
 rm $FOLDER/wp-content/plugins/hello.php
 
 echo "# Get minimal theme with git"
