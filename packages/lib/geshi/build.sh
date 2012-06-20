@@ -1,4 +1,4 @@
-VERSION="1.0.8.9"
+VERSION="1.0.8.10"
 FOLDER="lib"
 NAME="geshi"
 SOURCE="http://freefr.dl.sourceforge.net/project/geshi/geshi/GeSHi%20{$VERSION}/GeSHi-{$VERSION}.tar.gz"
