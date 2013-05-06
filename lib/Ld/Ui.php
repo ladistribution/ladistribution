@@ -22,12 +22,12 @@ class Ld_Ui
 
     protected static $_applications = array();
 
-    public function getSite()
+    public static function getSite()
     {
         return isset(self::$_site) ? self::$_site : self::$_site = Zend_Registry::get('site');
     }
 
-    public function getAdmin()
+    public static function getAdmin()
     {
         return isset(self::$_admin) ? self::$_admin : self::$_admin = self::getSite()->getAdmin();
     }
