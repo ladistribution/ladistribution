@@ -1,5 +1,5 @@
 NAME="jquery"
-VERSION="1.7.1"
+VERSION="1.10.2"
 FOLDER="js"
 SOURCE="http://code.jquery.com/$NAME-$VERSION.min.js"
 PACKAGE="js-$NAME.zip"

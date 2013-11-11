@@ -133,7 +133,7 @@ class Slotter_RepositoriesController extends Slotter_BaseController
     public function deleteAction()
     {
         if ($this->getRequest()->isPost()) {
-            $id = $this->repository->id;
+            $id = $this->_getParam('id');
             $this->getSite()->getModel('repositories')->delete($id);
             $this->_redirector->setGotoSimple('index');
             $this->_redirector->redirectAndExit();

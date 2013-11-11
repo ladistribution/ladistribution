@@ -1,9 +1,9 @@
 FOLDER="lib"
 PACKAGE="lib-zend-framework.zip"
-VERSION="ZendFramework-1.11.11"
+VERSION="ZendFramework-1.12.3"
 NAME="$VERSION-minimal"
 ZIP="$NAME.zip"
-SOURCE="http://framework.zend.com/releases/$VERSION/$ZIP"
+SOURCE="https://packages.zendframework.com/releases/$VERSION/$ZIP"
 
 echo "# Building zend-framework package"
 

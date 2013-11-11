@@ -1,5 +1,5 @@
 cd admin
-./build.sh
+./build-local.sh
 cd ..
 
 cd css
@@ -9,7 +9,7 @@ cd css
   cd ..
 
   cd ld-ui
-  ./build.sh
+  ./build-local.sh
   cd ..
 
 cd ..
@@ -48,17 +48,9 @@ cd wordpress
   #
   # cd ..
 
-  cd theme
-  
-    cd coraline
-    ./build.sh
-    cd ..
-
-    cd pilcrow
-    ./build.sh
-    cd ..
-
-  cd ..
+  # cd theme
+  #
+  # cd ..
 
 cd ..
 
@@ -86,26 +78,6 @@ cd bbpress
 
 cd ..
 
-cd statusnet
-
-  cd application
-  ./build.sh
-  cd ..
-
-  cd plugin/ostatus
-  ./build.sh
-  cd ../..
-
-cd ..
-
-cd firefox-sync
-
-  cd application
-  ./build.sh
-  cd ..
-
-cd ..
-
 cd moonmoon
 
   cd application
@@ -125,15 +97,15 @@ cd lib
   cd ..
 
   cd admin
-  ./build.sh
+  ./build-local.sh
   cd ..
 
   cd ld-libraries
-  ./build.sh
+  ./build-local.sh
   cd ..
 
   cd ld-services
-  ./build.sh
+  ./build-local.sh
   cd ..
 
   cd php-openid

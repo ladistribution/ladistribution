@@ -1,4 +1,4 @@
-VERSION="4.4.0"
+VERSION="4.5.0"
 FOLDER="lib"
 NAME="htmlpurifier-$VERSION-lite"
 SOURCE="http://htmlpurifier.org/releases/$NAME.zip"

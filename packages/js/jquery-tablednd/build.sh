@@ -1,28 +1,18 @@
-VERSION="0.5"
+VERSION="0.7"
 FOLDER="js"
 NAME="jquery-tablednd"
-ZIP="jquery.tablednd_0_5.js.zip"
-SOURCE="http://www.isocra.com/articles/$ZIP"
+SOURCE="https://raw.github.com/isocra/TableDnD/70790e6a6e4d17d2a8ba247065bcb6fc2c49462a/js/jquery.tablednd.js"
 PACKAGE="js-$NAME.zip"
 BUILD="build"
 
 echo "# Building $NAME package"
 
 echo "# Get source from $SOURCE with curl"
-curl $SOURCE -# > $ZIP
-unzip -q $ZIP -d $BUILD
-rm $ZIP
-
-# Copy the files we really want
 mkdir $FOLDER
-cp "$BUILD/jquery.tablednd_0_5.js" "$FOLDER/tablednd.js"
-rm -rf $BUILD
+curl $SOURCE -# > $FOLDER/tablednd.js
 
 echo "# Compressing"
 java -jar ../../../bin/yuicompressor.jar --charset UTF-8 "$FOLDER/tablednd.js" -o "$FOLDER/tablednd.js"
-
-# Remove some unwanted files (mac)
-find . -name '*.DS_Store' -type f -delete
 
 echo "# Packing $PACKAGE"
 zip -r $PACKAGE $FOLDER manifest.xml -q
