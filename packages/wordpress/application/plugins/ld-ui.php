@@ -69,7 +69,8 @@ function ld_enqueue_scripts()
 	// ld_enqueue_script('jquery', '/jquery/jquery.js', 'js-jquery');
 	ld_enqueue_script('ld', '/ld/ld.js', 'lib-admin', array('jquery'));
 	// CSS
-	$current_theme = get_current_theme();
+	$theme = wp_get_theme();
+	$current_theme = $theme->name;
 	if ($current_theme == 'Minimal' || $current_theme == 'Minimal (with blocks)') {
 		ld_enqueue_style('h6e-minimal', '/h6e-minimal/h6e-minimal.css', 'css-h6e-minimal');
 	}
@@ -92,10 +93,16 @@ add_action('wp_enqueue_scripts', 'ld_enqueue_scripts');
 
 function ld_template_head()
 {
-	$current_theme = get_current_theme();
+	$theme = wp_get_theme();
+	$current_theme = $theme->name;
 	echo '<style type="text/css">' . "\n";
 	if (ld_display_bar('topbar')) {
 		echo 'body { padding-top:30px !important; }' . "\n";
+		if ($current_theme == 'Twenty Fourteen') {
+			echo '#ld-top-bar { position:fixed; z-index:5; }' . "\n";
+			echo '#masthead { margin-top:29px; }' . "\n";
+			echo '#main { margin-top:47px; }' . "\n";
+		}
 	}
 	if ($current_theme == 'Twenty Ten' || $current_theme == 'Coraline') {
 		$colors = Ld_Ui::getApplicationColors();

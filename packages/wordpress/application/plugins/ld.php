@@ -242,10 +242,10 @@ add_filter('locale', 'ld_locale');
 function ld_fix_globals_plugins_loaded()
 {
 	if (empty($GLOBALS['wp_rewrite'])) {
-		$GLOBALS['wp_rewrite'] =& new WP_Rewrite();
+		$GLOBALS['wp_rewrite'] = new WP_Rewrite();
 	}
 	if (empty($GLOBALS['wp_widget_factory'])) {
-		$GLOBALS['wp_widget_factory'] =& new WP_Widget_Factory();
+		$GLOBALS['wp_widget_factory'] = new WP_Widget_Factory();
 	}
 }
 
@@ -254,7 +254,7 @@ add_action('plugins_loaded', 'ld_fix_globals_plugins_loaded', 0);
 function ld_fix_globals_after_setup_theme()
 {
 	if (empty($GLOBALS['wp_locale'])) {
-		$GLOBALS['wp_locale'] =& new WP_Locale();
+		$GLOBALS['wp_locale'] = new WP_Locale();
 	}
 }
 

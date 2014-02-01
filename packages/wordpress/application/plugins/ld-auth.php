@@ -11,12 +11,12 @@ Author URI: http://h6e.net/
 class Ld_Wordpress_Auth
 {
 
-	function site()
+	static function site()
 	{
 		return Zend_Registry::get('site');
 	}
 
-	function auto_login()
+	static function auto_login()
 	{
 		if (empty($_COOKIE[LOGGED_IN_COOKIE]) && Ld_Auth::isAuthenticated()) {
 			$wp_user = wp_get_current_user();
@@ -27,7 +27,7 @@ class Ld_Wordpress_Auth
 		}
 	}
 
-	function authenticate_username_password($user, $username, $password)
+	static function authenticate_username_password($user, $username, $password)
 	{
 		if ( is_a($user, 'WP_User') ) { return $user; }
 
@@ -41,7 +41,7 @@ class Ld_Wordpress_Auth
 		return $user;
 	}
 
-	function authenticate_ld_cookie($user, $username, $password)
+	static function authenticate_ld_cookie($user, $username, $password)
 	{
 		if ( is_a($user, 'WP_User') ) { return $user; }
 
@@ -54,12 +54,12 @@ class Ld_Wordpress_Auth
 		return $user;
 	}
 
-	function logout()
+	static function logout()
 	{
 		Ld_Auth::logout();
 	}
 
-	function get_user_by_openid( $openid , $id = null )
+	static function get_user_by_openid( $openid , $id = null )
 	{
 		$ld_user = self::site()->getUserByUrl($openid);
 		if ($ld_user) {
@@ -69,13 +69,13 @@ class Ld_Wordpress_Auth
 		return $id;
 	}
 
-	function get_ld_user($user_login)
+	static function get_ld_user($user_login)
 	{
 		$ld_user = self::site()->getUser($user_login);
 		return $ld_user;
 	}
 
-	function get_wp_user($user_id)
+	static function get_wp_user($user_id)
 	{
 		global $wpdb;
 
@@ -94,20 +94,20 @@ class Ld_Wordpress_Auth
 		return $user;
 	}
 
-	function user_register($user_id)
+	static function user_register($user_id)
 	{
 		$user = self::get_wp_user($user_id);
 		$user['origin'] = 'Wordpress:register';
 		self::site()->addUser($user, false);
 	}
 
-	function profile_update($user_id)
+	static function profile_update($user_id)
 	{
 		$user = self::get_wp_user($user_id);
 		self::site()->updateUser($user['username'], $user);
 	}
 
-	function login_url($login_url = '', $redirect = '')
+	static function login_url($login_url = '', $redirect = '')
 	{
 		if (class_exists('Ld_Ui')) {
 			$login_url = Ld_Ui::getAdminUrl(array(

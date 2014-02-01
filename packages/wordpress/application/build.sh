@@ -1,5 +1,5 @@
 NAME="wordpress"
-VERSION="3.4"
+VERSION="3.8.1"
 GZ="$NAME-$VERSION.tar.gz"
 SOURCE="http://wordpress.org/$GZ"
 FOLDER="application"
@@ -25,6 +25,10 @@ rm $FOLDER/wp-content/plugins/hello.php
 echo "# Get minimal theme with git"
 git clone git://github.com/znarf/wordpress-minimal.git themes/minimal --quiet
 rm -rf themes/minimal/.git themes/minimal/Makefile
+
+echo "# Get twentyten & twentyeleven themes with svn"
+svn export http://themes.svn.wordpress.org/twentyten/1.6/ themes/twentyten --force --quiet
+svn export http://themes.svn.wordpress.org/twentyeleven/1.7/ themes/twentyeleven --force --quiet
 
 echo "# Get akismet with svn"
 svn export http://plugins.svn.wordpress.org/akismet/trunk/ plugins/akismet --force --quiet
