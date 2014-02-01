@@ -1,4 +1,4 @@
-VERSION="2.2.14"
+VERSION="2.2.15"
 FOLDER="lib"
 NAME="bad-behavior"
 SOURCE="http://downloads.wordpress.org/plugin/$NAME.$VERSION.zip"
